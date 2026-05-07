@@ -1,0 +1,14 @@
+# Flutter
+frontend/build/
+frontend/.dart_tool/
+frontend/.packages
+
+# Node.js
+backend/node_modules/
+backend/.env
+
+# Logs
+*.log
+
+# VS Code
+.vscode/
