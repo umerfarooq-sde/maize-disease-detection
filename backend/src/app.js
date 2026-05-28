@@ -1,15 +1,19 @@
 const express = require("express");
-const db = require("./config/db");
-
 const app = express();
+const authRoutes = require("./routes/authRoutes");
+const errorMiddleware = require("./middlewares/errorMiddleware");
 
-app.get("/users", (req, res) => {
-    db.query("SELECT * FROM users", (err, result) => {
-        if (err) {
-            return res.status(500).json(err);
-        }
-        res.json(result);
-    });
+
+
+app.use(express.json());
+
+//Routes
+app.use("/api/auth", authRoutes);
+
+app.use(errorMiddleware);
+
+app.get("/test", (req, res) => {
+    res.json({ message: "API is working!" });
 });
 
 module.exports = app;
