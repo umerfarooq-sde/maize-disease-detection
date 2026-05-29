@@ -3,9 +3,6 @@ const hashPassword = require('../utils/hashPassword');
 const comparePassword = require('../utils/comparePassword');
 
 
-console.log("comparePassword:", comparePassword);
-
-
 const generateToken = require('../utils/generateToken');
 
 
