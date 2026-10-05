@@ -1,0 +1,2 @@
+# Bootstrap tooling only; application dependencies live in the component lockfiles.
+uv==0.12.23

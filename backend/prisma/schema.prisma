@@ -1,0 +1,512 @@
+generator client {
+  provider               = "prisma-client"
+  output                 = "../src/generated/prisma"
+  moduleFormat           = "esm"
+  generatedFileExtension = "ts"
+  importFileExtension    = "js"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+enum UserRole {
+  FARMER
+  ADMIN
+}
+
+enum UserStatus {
+  ACTIVE
+  SUSPENDED
+  DEACTIVATED
+}
+
+enum RecordStatus {
+  DRAFT
+  ACTIVE
+  INACTIVE
+}
+
+enum DiseaseSeverity {
+  LOW
+  MODERATE
+  HIGH
+}
+
+enum ScanStatus {
+  PENDING
+  PROCESSING
+  COMPLETED
+  FAILED
+}
+
+enum KnowledgeStatus {
+  DRAFT
+  ACTIVE
+  ARCHIVED
+}
+
+enum KnowledgeTopic {
+  DISEASE
+  FERTILIZER
+  CALCULATOR
+  GENERAL
+}
+
+enum EmbeddingStatus {
+  PENDING
+  READY
+  FAILED
+}
+
+enum CalculatorKind {
+  FERTILIZER
+  YIELD
+}
+
+enum ModelStatus {
+  DRAFT
+  VALIDATED
+  PRODUCTION
+  RETIRED
+}
+
+enum MetricSplit {
+  TRAIN
+  VALIDATION
+  TEST
+}
+
+enum AiQueryKind {
+  GENERAL
+  DISEASE
+  FERTILIZER
+  YIELD
+}
+
+enum AiQueryStatus {
+  PENDING
+  COMPLETED
+  FAILED
+}
+
+enum AiResponseStatus {
+  GROUNDED
+  INSUFFICIENT_INFORMATION
+  FAILED
+}
+
+enum AuditAction {
+  CREATE
+  UPDATE
+  ACTIVATE
+  DEACTIVATE
+  DELETE
+  MODEL_PROMOTION
+}
+
+enum NotificationKind {
+  SYSTEM
+  SCAN_READY
+  KNOWLEDGE_UPDATE
+}
+
+enum HistoryKind {
+  SCAN
+  AI_QUESTION
+  FERTILIZER_CALCULATION
+  YIELD_CALCULATION
+}
+
+model User {
+  id           String     @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  email        String     @unique @db.VarChar(254)
+  passwordHash String     @map("password_hash") @db.VarChar(255)
+  role         UserRole   @default(FARMER)
+  status       UserStatus @default(ACTIVE)
+  createdAt    DateTime   @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt    DateTime   @default(now()) @updatedAt @map("updated_at") @db.Timestamptz(6)
+
+  farmerProfile      FarmerProfile?
+  scans              Scan[]
+  aiQueries          AiQuery[]
+  auditLogs          AuditLog[]
+  notifications      Notification[]
+  history            History[]
+  knowledgeDocuments KnowledgeDocument[]
+  calculatorConfigs  CalculatorConfig[]
+
+  @@index([role, status, createdAt])
+  @@map("users")
+}
+
+model FarmerProfile {
+  id                String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  userId            String   @unique @map("user_id") @db.Uuid
+  displayName       String   @map("display_name") @db.VarChar(120)
+  phone             String?  @db.VarChar(32)
+  region            String?  @db.VarChar(120)
+  countryCode       String?  @map("country_code") @db.Char(2)
+  fieldAreaHectares Decimal? @map("field_area_hectares") @db.Decimal(12, 4)
+  avatarUrl         String?  @map("avatar_url") @db.Text
+  avatarPublicId    String?  @unique @map("avatar_public_id") @db.VarChar(255)
+  preferredLanguage String   @default("en") @map("preferred_language") @db.VarChar(16)
+  createdAt         DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt         DateTime @default(now()) @updatedAt @map("updated_at") @db.Timestamptz(6)
+  user              User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@map("farmer_profiles")
+}
+
+model Disease {
+  id                   String              @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  slug                 String              @unique @db.VarChar(120)
+  name                 String              @db.VarChar(160)
+  scientificName       String?             @map("scientific_name") @db.VarChar(200)
+  description          String              @db.Text
+  symptoms             String[]            @default([])
+  causes               String[]            @default([])
+  treatments           String[]            @default([])
+  precautions          String[]            @default([])
+  favorableConditions  String[]            @default([]) @map("favorable_conditions")
+  affectedGrowthStages String[]            @default([]) @map("affected_growth_stages")
+  severity             DiseaseSeverity?
+  status               RecordStatus        @default(DRAFT)
+  createdAt            DateTime            @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt            DateTime            @default(now()) @updatedAt @map("updated_at") @db.Timestamptz(6)
+  images               DiseaseImage[]
+  sources              DiseaseSource[]
+  predictions          ScanPrediction[]
+  knowledgeDocuments   KnowledgeDocument[]
+  aiQueries            AiQuery[]
+
+  @@index([status, name])
+  @@map("diseases")
+}
+
+model DiseaseImage {
+  id                 String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  diseaseId          String   @map("disease_id") @db.Uuid
+  imageUrl           String   @map("image_url") @db.Text
+  cloudinaryPublicId String   @unique @map("cloudinary_public_id") @db.VarChar(255)
+  altText            String   @map("alt_text") @db.VarChar(255)
+  sortOrder          Int      @default(0) @map("sort_order")
+  createdAt          DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt          DateTime @default(now()) @updatedAt @map("updated_at") @db.Timestamptz(6)
+  disease            Disease  @relation(fields: [diseaseId], references: [id], onDelete: Cascade)
+
+  @@index([diseaseId, sortOrder])
+  @@map("disease_images")
+}
+
+model DiseaseSource {
+  id          String       @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  diseaseId   String       @map("disease_id") @db.Uuid
+  title       String       @db.VarChar(255)
+  url         String?      @db.Text
+  citation    String?      @db.Text
+  publisher   String?      @db.VarChar(255)
+  publishedAt DateTime?    @map("published_at") @db.Date
+  status      RecordStatus @default(DRAFT)
+  createdAt   DateTime     @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt   DateTime     @default(now()) @updatedAt @map("updated_at") @db.Timestamptz(6)
+  disease     Disease      @relation(fields: [diseaseId], references: [id], onDelete: Cascade)
+
+  @@index([diseaseId, status])
+  @@map("disease_sources")
+}
+
+model Scan {
+  id                 String           @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  userId             String?          @map("user_id") @db.Uuid
+  imageUrl           String           @map("image_url") @db.Text
+  cloudinaryPublicId String           @unique @map("cloudinary_public_id") @db.VarChar(255)
+  imageMimeType      String           @map("image_mime_type") @db.VarChar(64)
+  imageBytes         Int              @map("image_bytes")
+  status             ScanStatus       @default(PENDING)
+  processingTimeMs   Int?             @map("processing_time_ms")
+  errorCode          String?          @map("error_code") @db.VarChar(64)
+  finishedAt         DateTime?        @map("finished_at") @db.Timestamptz(6)
+  expiresAt          DateTime?        @map("expires_at") @db.Timestamptz(6)
+  createdAt          DateTime         @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt          DateTime         @default(now()) @updatedAt @map("updated_at") @db.Timestamptz(6)
+  user               User?            @relation(fields: [userId], references: [id], onDelete: Restrict)
+  predictions        ScanPrediction[]
+  aiQueries          AiQuery[]
+  notifications      Notification[]
+  history            History[]
+
+  // Composite target enforces ownership in history and notification foreign keys.
+  @@unique([id, userId])
+  @@index([userId, createdAt(sort: Desc)])
+  @@index([status, createdAt])
+  @@index([expiresAt])
+  @@map("scans")
+}
+
+model ScanPrediction {
+  id             String       @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  scanId         String       @map("scan_id") @db.Uuid
+  modelVersionId String       @map("model_version_id") @db.Uuid
+  diseaseId      String?      @map("disease_id") @db.Uuid
+  predictedClass String       @map("predicted_class") @db.VarChar(120)
+  confidence     Float        @db.DoublePrecision
+  probabilities  Json         @db.JsonB
+  createdAt      DateTime     @default(now()) @map("created_at") @db.Timestamptz(6)
+  scan           Scan         @relation(fields: [scanId], references: [id], onDelete: Restrict)
+  modelVersion   ModelVersion @relation(fields: [modelVersionId], references: [id], onDelete: Restrict)
+  disease        Disease?     @relation(fields: [diseaseId], references: [id], onDelete: Restrict)
+
+  @@unique([scanId, modelVersionId])
+  @@index([modelVersionId, createdAt])
+  @@index([diseaseId, createdAt])
+  @@map("scan_predictions")
+}
+
+model KnowledgeDocument {
+  id              String           @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  documentKey     String           @map("document_key") @db.VarChar(160)
+  version         Int
+  title           String           @db.VarChar(255)
+  content         String           @db.Text
+  contentHash     String           @map("content_hash") @db.Char(64)
+  sourceReference String           @map("source_reference") @db.Text
+  topic           KnowledgeTopic
+  language        String           @default("en") @db.VarChar(16)
+  status          KnowledgeStatus  @default(DRAFT)
+  diseaseId       String?          @map("disease_id") @db.Uuid
+  fertilizerId    String?          @map("fertilizer_id") @db.Uuid
+  createdById     String?          @map("created_by_id") @db.Uuid
+  createdAt       DateTime         @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt       DateTime         @default(now()) @updatedAt @map("updated_at") @db.Timestamptz(6)
+  disease         Disease?         @relation(fields: [diseaseId], references: [id], onDelete: Restrict)
+  fertilizer      Fertilizer?      @relation(fields: [fertilizerId], references: [id], onDelete: Restrict)
+  createdBy       User?            @relation(fields: [createdById], references: [id], onDelete: SetNull)
+  chunks          KnowledgeChunk[]
+
+  @@unique([documentKey, version])
+  @@index([status, topic, language])
+  @@index([diseaseId])
+  @@index([fertilizerId])
+  @@index([createdById])
+  @@map("knowledge_documents")
+}
+
+model KnowledgeChunk {
+  id                  String                 @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  documentId          String                 @map("document_id") @db.Uuid
+  chunkIndex          Int                    @map("chunk_index")
+  content             String                 @db.Text
+  contentHash         String                 @map("content_hash") @db.Char(64)
+  tokenCount          Int?                   @map("token_count")
+  embedding           Unsupported("vector")?
+  embeddingModel      String?                @map("embedding_model") @db.VarChar(160)
+  embeddingDimensions Int?                   @map("embedding_dimensions")
+  embeddingStatus     EmbeddingStatus        @default(PENDING) @map("embedding_status")
+  createdAt           DateTime               @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt           DateTime               @default(now()) @updatedAt @map("updated_at") @db.Timestamptz(6)
+  document            KnowledgeDocument      @relation(fields: [documentId], references: [id], onDelete: Restrict)
+
+  @@unique([documentId, chunkIndex])
+  @@index([embeddingStatus, embeddingModel])
+  @@map("knowledge_chunks")
+}
+
+model Fertilizer {
+  id                 String              @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  slug               String              @unique @db.VarChar(120)
+  name               String              @db.VarChar(160)
+  description        String              @db.Text
+  nitrogenPercent    Decimal             @map("nitrogen_percent") @db.Decimal(5, 2)
+  phosphorusPercent  Decimal             @map("phosphorus_percent") @db.Decimal(5, 2)
+  potassiumPercent   Decimal             @map("potassium_percent") @db.Decimal(5, 2)
+  applicationMethod  String?             @map("application_method") @db.Text
+  precautions        String[]            @default([])
+  sourceReference    String              @map("source_reference") @db.Text
+  status             RecordStatus        @default(DRAFT)
+  createdAt          DateTime            @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt          DateTime            @default(now()) @updatedAt @map("updated_at") @db.Timestamptz(6)
+  rules              FertilizerRule[]
+  knowledgeDocuments KnowledgeDocument[]
+
+  @@index([status, name])
+  @@map("fertilizers")
+}
+
+model FertilizerRule {
+  id              String       @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  fertilizerId    String       @map("fertilizer_id") @db.Uuid
+  ruleKey         String       @map("rule_key") @db.VarChar(120)
+  version         Int
+  growthStage     String?      @map("growth_stage") @db.VarChar(80)
+  parameters      Json         @db.JsonB
+  unit            String       @db.VarChar(80)
+  sourceReference String       @map("source_reference") @db.Text
+  status          RecordStatus @default(DRAFT)
+  createdAt       DateTime     @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt       DateTime     @default(now()) @updatedAt @map("updated_at") @db.Timestamptz(6)
+  fertilizer      Fertilizer   @relation(fields: [fertilizerId], references: [id], onDelete: Restrict)
+
+  @@unique([fertilizerId, ruleKey, version])
+  @@index([status, growthStage])
+  @@map("fertilizer_rules")
+}
+
+model CalculatorConfig {
+  id              String         @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  kind            CalculatorKind
+  configKey       String         @map("config_key") @db.VarChar(120)
+  version         Int
+  parameters      Json           @db.JsonB
+  unit            String         @db.VarChar(80)
+  sourceReference String         @map("source_reference") @db.Text
+  status          RecordStatus   @default(DRAFT)
+  createdById     String?        @map("created_by_id") @db.Uuid
+  createdAt       DateTime       @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt       DateTime       @default(now()) @updatedAt @map("updated_at") @db.Timestamptz(6)
+  createdBy       User?          @relation(fields: [createdById], references: [id], onDelete: SetNull)
+  history         History[]
+
+  @@unique([kind, configKey, version])
+  @@index([kind, status])
+  @@index([createdById])
+  @@map("calculator_configs")
+}
+
+model ModelVersion {
+  id                   String           @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  version              String           @unique @db.VarChar(80)
+  architecture         String           @db.VarChar(120)
+  artifactUri          String           @unique @map("artifact_uri") @db.Text
+  artifactSha256       String           @map("artifact_sha256") @db.Char(64)
+  datasetVersion       String           @map("dataset_version") @db.VarChar(120)
+  preprocessingVersion String           @map("preprocessing_version") @db.VarChar(120)
+  classLabels          String[]         @map("class_labels")
+  trainingConfig       Json             @map("training_config") @db.JsonB
+  status               ModelStatus      @default(DRAFT)
+  createdAt            DateTime         @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt            DateTime         @default(now()) @updatedAt @map("updated_at") @db.Timestamptz(6)
+  metrics              ModelMetric[]
+  predictions          ScanPrediction[]
+
+  @@index([status, createdAt])
+  @@map("model_versions")
+}
+
+model ModelMetric {
+  id              String       @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  modelVersionId  String       @map("model_version_id") @db.Uuid
+  split           MetricSplit
+  datasetVersion  String       @map("dataset_version") @db.VarChar(120)
+  sampleCount     Int          @map("sample_count")
+  accuracy        Float        @db.DoublePrecision
+  precision       Float        @db.DoublePrecision
+  recall          Float        @db.DoublePrecision
+  f1              Float        @db.DoublePrecision
+  loss            Float?       @db.DoublePrecision
+  confusionMatrix Json         @map("confusion_matrix") @db.JsonB
+  perClassMetrics Json         @map("per_class_metrics") @db.JsonB
+  learningCurves  Json         @default("{}") @map("learning_curves") @db.JsonB
+  evaluatedAt     DateTime     @map("evaluated_at") @db.Timestamptz(6)
+  createdAt       DateTime     @default(now()) @map("created_at") @db.Timestamptz(6)
+  modelVersion    ModelVersion @relation(fields: [modelVersionId], references: [id], onDelete: Restrict)
+
+  @@unique([modelVersionId, split, evaluatedAt])
+  @@map("model_metrics")
+}
+
+model AiQuery {
+  id        String        @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  userId    String?       @map("user_id") @db.Uuid
+  scanId    String?       @map("scan_id") @db.Uuid
+  diseaseId String?       @map("disease_id") @db.Uuid
+  kind      AiQueryKind   @default(GENERAL)
+  question  String        @db.Text
+  status    AiQueryStatus @default(PENDING)
+  createdAt DateTime      @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt DateTime      @default(now()) @updatedAt @map("updated_at") @db.Timestamptz(6)
+  user      User?         @relation(fields: [userId], references: [id], onDelete: Restrict)
+  scan      Scan?         @relation(fields: [scanId], references: [id], onDelete: Restrict)
+  disease   Disease?      @relation(fields: [diseaseId], references: [id], onDelete: Restrict)
+  responses AiResponse[]
+  history   History[]
+
+  @@unique([id, userId])
+  @@index([userId, createdAt(sort: Desc)])
+  @@index([scanId])
+  @@index([diseaseId])
+  @@index([status, createdAt])
+  @@map("ai_queries")
+}
+
+model AiResponse {
+  id            String           @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  queryId       String           @map("query_id") @db.Uuid
+  status        AiResponseStatus
+  answer        String           @db.Text
+  providerModel String           @map("provider_model") @db.VarChar(160)
+  citations     Json             @default("[]") @db.JsonB
+  processingMs  Int              @map("processing_ms")
+  inputTokens   Int?             @map("input_tokens")
+  outputTokens  Int?             @map("output_tokens")
+  errorCode     String?          @map("error_code") @db.VarChar(64)
+  createdAt     DateTime         @default(now()) @map("created_at") @db.Timestamptz(6)
+  query         AiQuery          @relation(fields: [queryId], references: [id], onDelete: Restrict)
+
+  @@index([queryId, createdAt])
+  @@map("ai_responses")
+}
+
+model AuditLog {
+  id         String      @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  actorId    String?     @map("actor_id") @db.Uuid
+  action     AuditAction
+  entityType String      @map("entity_type") @db.VarChar(80)
+  entityId   String      @map("entity_id") @db.Uuid
+  requestId  String?     @map("request_id") @db.VarChar(128)
+  changes    Json        @default("{}") @db.JsonB
+  createdAt  DateTime    @default(now()) @map("created_at") @db.Timestamptz(6)
+  actor      User?       @relation(fields: [actorId], references: [id], onDelete: SetNull)
+
+  // Polymorphic entity reference is a retained identity, not a foreign key.
+  @@index([actorId, createdAt(sort: Desc)])
+  @@index([entityType, entityId, createdAt])
+  @@map("audit_logs")
+}
+
+model Notification {
+  id        String           @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  userId    String           @map("user_id") @db.Uuid
+  scanId    String?          @map("scan_id") @db.Uuid
+  kind      NotificationKind @default(SYSTEM)
+  title     String           @db.VarChar(160)
+  message   String           @db.Text
+  readAt    DateTime?        @map("read_at") @db.Timestamptz(6)
+  createdAt DateTime         @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt DateTime         @default(now()) @updatedAt @map("updated_at") @db.Timestamptz(6)
+  user      User             @relation(fields: [userId], references: [id], onDelete: Cascade)
+  scan      Scan?            @relation(fields: [scanId, userId], references: [id, userId], onDelete: Restrict)
+
+  @@index([userId, readAt, createdAt(sort: Desc)])
+  @@index([scanId, userId])
+  @@map("notifications")
+}
+
+model History {
+  id                 String            @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  userId             String            @map("user_id") @db.Uuid
+  kind               HistoryKind
+  scanId             String?           @unique @map("scan_id") @db.Uuid
+  aiQueryId          String?           @unique @map("ai_query_id") @db.Uuid
+  calculatorConfigId String?           @map("calculator_config_id") @db.Uuid
+  snapshot           Json              @default("{}") @db.JsonB
+  createdAt          DateTime          @default(now()) @map("created_at") @db.Timestamptz(6)
+  user               User              @relation(fields: [userId], references: [id], onDelete: Cascade)
+  scan               Scan?             @relation(fields: [scanId, userId], references: [id, userId], onDelete: Restrict)
+  aiQuery            AiQuery?          @relation(fields: [aiQueryId, userId], references: [id, userId], onDelete: Restrict)
+  calculatorConfig   CalculatorConfig? @relation(fields: [calculatorConfigId], references: [id], onDelete: Restrict)
+
+  @@index([userId, createdAt(sort: Desc)])
+  @@index([calculatorConfigId])
+  @@map("history")
+}

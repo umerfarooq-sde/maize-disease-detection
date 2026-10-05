@@ -1,17 +1,74 @@
 # Environment and secrets
+.cache/
 .env
 .env.*
 !.env.example
+*.pem
+*.key
 
 # Python
 __pycache__/
 *.py[cod]
 .venv/
 venv/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.coverage
+.coverage.*
+htmlcov/
+*.egg-info/
 
 # Node.js
 node_modules/
 dist/
+backend/src/generated/
+coverage/
+*.tsbuildinfo
+
+# Flutter / Dart generated files (keep application source and lockfiles)
+.dart_tool/
+.flutter-plugins
+.flutter-plugins-dependencies
+.pub-cache/
+.pub/
+build/
+mobile/android/.gradle/
+mobile/android/local.properties
+mobile/android/key.properties
+mobile/ios/Pods/
+mobile/ios/.symlinks/
+mobile/ios/Flutter/ephemeral/
+mobile/ios/Flutter/Generated.xcconfig
+mobile/ios/Flutter/flutter_export_environment.sh
+mobile/macos/Pods/
+mobile/macos/Flutter/ephemeral/
+mobile/windows/flutter/ephemeral/
+mobile/linux/flutter/ephemeral/
+*.jks
+*.keystore
+
+# Local runtime output and ML binaries; keep version/experiment metadata
+*.log
+logs/
+backend/uploads/
+ai-service/uploads/
+ai-service/.cache/
+ml-training/datasets/raw/
+ml-training/datasets/processed/
+ml-training/datasets/splits/
+*.pt
+*.pth
+*.ckpt
+*.onnx
+*.safetensors
+mlruns/
+wandb/
+
+# Local infrastructure data and database dumps
+infrastructure/data/
+*.dump
+*.sql.gz
 
 # Editor and OS
 .vscode/

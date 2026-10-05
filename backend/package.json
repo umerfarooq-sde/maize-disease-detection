@@ -1,0 +1,41 @@
+{
+  "name": "maizedoctor-backend",
+  "version": "0.1.0",
+  "private": true,
+  "description": "MAIZEDOCTOR backend development environment; no business API yet",
+  "type": "module",
+  "engines": {
+    "node": ">=24.12.0 <25"
+  },
+  "scripts": {
+    "typecheck": "tsc -p tsconfig.database.json",
+    "build": "tsc",
+    "check": "npm run typecheck && npm run build && node dist/environment-check.js",
+    "check:database": "npm run build && node dist/database-check.js",
+    "db:format": "prisma format",
+    "db:validate": "prisma validate",
+    "db:generate": "prisma generate",
+    "db:migrate": "prisma migrate deploy",
+    "db:status": "prisma migrate status",
+    "db:seed": "prisma db seed",
+    "db:diff": "prisma migrate diff --from-config-datasource --to-schema prisma/schema.prisma --exit-code",
+    "db:check:migrations": "tsx tests/migration-replay.ts",
+    "db:check": "npm run db:validate && npm run db:generate && npm run typecheck && tsx --test tests/database.integration.test.ts"
+  },
+  "dependencies": {
+    "@prisma/adapter-pg": "7.10.0",
+    "@prisma/client": "7.10.0",
+    "dotenv": "18.0.5",
+    "express": "5.2.1",
+    "pg": "8.23.1",
+    "zod": "4.6.5"
+  },
+  "devDependencies": {
+    "@types/express": "5.0.6",
+    "@types/node": "24.19.1",
+    "@types/pg": "8.23.1",
+    "prisma": "7.10.0",
+    "tsx": "4.23.15",
+    "typescript": "7.0.2"
+  }
+}

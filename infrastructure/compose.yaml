@@ -1,0 +1,24 @@
+name: maizedoctor-dev
+
+services:
+  postgres:
+    # Maintainer image adds the extension required by the Phase 2 migration.
+    image: pgvector/pgvector:0.8.7-pg18-bookworm
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB:-maizedoctor}
+      POSTGRES_USER: ${POSTGRES_USER:?Set POSTGRES_USER in infrastructure/.env}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?Set POSTGRES_PASSWORD in infrastructure/.env}
+    ports:
+      - "127.0.0.1:${POSTGRES_PORT:-5433}:5432"
+    volumes:
+      # PostgreSQL 18 official images use version-specific PGDATA beneath this mount.
+      - postgres_data:/var/lib/postgresql
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U \"$$POSTGRES_USER\" -d \"$$POSTGRES_DB\""]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+      start_period: 10s
+
+volumes:
+  postgres_data:
