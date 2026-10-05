@@ -5,15 +5,16 @@ with administrative tools for maintaining knowledge and monitoring the system.
 
 ## Current status
 
-Phase 3 implements the Node.js + TypeScript backend foundation and `/api/v1/health`,
-with startup/request validation, standardized errors, middleware and graceful shutdown.
+Phase 4 implements FARMER registration, FARMER/ADMIN login, JWT access authentication,
+rotating/revocable refresh sessions, logout and reusable RBAC on the Phase 3 backend.
 Phase 2 PostgreSQL + Prisma persistence and Phase 1 development environments remain
-available. Business APIs, authentication, AI services,
+available. Disease/calculator APIs, AI services,
 trained models, and farmer/admin screens are not implemented.
 See [project state](docs/PROJECT_STATE.md) for verified progress and outstanding decisions.
 Use the [development setup guide](docs/15-development-environment.md) for commands and limitations.
 Use [database operations](docs/16-database-operations.md) for migration and verification commands.
 Use [backend foundation](docs/17-backend-foundation.md) for server setup and HTTP contracts.
+Use [authentication](docs/18-authentication.md) for credentials, cookies, endpoints and admin provisioning.
 
 ## Planned architecture
 
@@ -88,5 +89,5 @@ This does not change the machine's persistent execution policy.
 
 ## Next step
 
-Stop after Phase 3 backend foundation. Wait for an explicit instruction before
+Stop after Phase 4 authentication. Wait for an explicit instruction before
 implementing business features. See the [roadmap](docs/14-roadmap.md).

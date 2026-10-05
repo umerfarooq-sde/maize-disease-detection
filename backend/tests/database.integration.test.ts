@@ -7,7 +7,7 @@ import { applicationTables, assertSqlRejects, rollbackFixture } from './database
 const hash = (content: string): string => createHash('sha256').update(content, 'utf8').digest('hex');
 
 test('database catalog matches the committed relational and SQL invariants', async () => {
-  const prisma = createDatabaseClient();
+  const prisma = createDatabaseClient(undefined, 30000);
   const schema = databaseConnectionUrl().searchParams.get('schema') ?? 'public';
   try {
     const tables = await prisma.$queryRaw<{ tablename: string }[]>`
@@ -23,12 +23,12 @@ test('database catalog matches the committed relational and SQL invariants', asy
       SELECT count(*) FROM pg_constraint c JOIN pg_namespace n ON n.oid=c.connamespace
       WHERE n.nspname=${schema} AND c.contype='c'
     `;
-    assert.equal(checks[0]?.count, 19n);
+    assert.equal(checks[0]?.count, 20n);
     const triggers = await prisma.$queryRaw<{ count: bigint }[]>`
       SELECT count(*) FROM pg_trigger t JOIN pg_class c ON c.oid=t.tgrelid
       JOIN pg_namespace n ON n.oid=c.relnamespace WHERE n.nspname=${schema} AND NOT t.tgisinternal
     `;
-    assert.equal(triggers[0]?.count, 33n);
+    assert.equal(triggers[0]?.count, 35n);
     const indexes = await prisma.$queryRaw<{ indexname: string }[]>`
       SELECT indexname FROM pg_indexes WHERE schemaname=${schema} AND indexdef LIKE '% WHERE %'
     `;
@@ -47,7 +47,7 @@ test('database catalog matches the committed relational and SQL invariants', asy
 
 test('Prisma round trips all 19 tables and PostgreSQL rejects invalid data; fixtures roll back',
   { timeout: 180000 }, async (t) => {
-    const prisma = createDatabaseClient();
+    const prisma = createDatabaseClient(undefined, 30000);
     const fixture = randomUUID();
     let userId: string | undefined;
     try {

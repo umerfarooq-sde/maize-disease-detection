@@ -109,7 +109,7 @@ test('CORS enforces exact allowlists, rejects wildcard defaults and supports pre
     async (url) => {
       const allowed = await fetch(`${url}/api/v1/health`, { headers: { Origin: origin } });
       assert.equal(allowed.headers.get('access-control-allow-origin'), origin);
-      assert.equal(allowed.headers.get('access-control-allow-credentials'), null);
+      assert.equal(allowed.headers.get('access-control-allow-credentials'), 'true');
       const preflight = await fetch(`${url}/api/v1/health`, {
         method: 'OPTIONS',
         headers: { Origin: origin, 'Access-Control-Request-Method': 'GET' },

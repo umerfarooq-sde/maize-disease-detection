@@ -36,7 +36,20 @@ See [database design](05-database-design.md) and [project state](PROJECT_STATE.m
 | Bounded shutdown drains HTTP before disconnecting Prisma | Signals and fatal errors share an idempotent path; deadline prevents indefinitely stalled cleanup. Fatal failures exit nonzero. |
 | Biome and built-in Node tests through tsx | One maintained formatter/linter with an explicit any ban; reuse existing Node test tooling without a new test framework. Preserve applied SQL and generated client formatting. |
 
-Pending decisions: refresh-token persistence/rotation contracts during authentication,
+## Phase 4 authentication decisions (2026-10-06)
+
+| Decision | Rationale and boundary |
+|---|---|
+| One additional AuthSession table | Stateful revocation is required now; preserve the 19 domain tables and add only the necessary session persistence with an additive fourth migration. |
+| Argon2id: 64 MiB, three passes, one lane, random salts | Memory-hard password hashing; support 15-128 code-point registration passwords without trimming/composition rules. Store only hashes. |
+| Independent required base64url keys; HS256 with fixed purpose/audiences | No hardcoded credentials; verify issuer/type/claims/expiry. Access defaults to 15 minutes, refresh session to 7 days with a fixed absolute end. |
+| Digest rotation through transactional conditional UPDATE | Atomic token consumption works across replicas. Reuse revokes the family; commit revocation before throwing. Clients serialize refresh; no grace window or sliding lifetime. |
+| Access checks live session/user state | Logout and replay revoke access immediately; current database roles/status avoid stale token privileges. JWT subject is an opaque session handle; account IDs/roles/email are not JWT claims. |
+| Refresh only in host-bound HttpOnly cookies | Keep refresh tokens out of JSON. Secure/SameSite Strict in production plus exact credentialed CORS, JSON and custom-header POST guard. Native clients retain a secure cookie jar; arbitrary cross-site browser hosting is unsupported. |
+| Registration FARMER only, ADMIN through operator stdin CLI | Reject role injection; no public admin creation, default credentials, silent promotion or user overwrite. No automatic admin is provisioned. |
+| Explicit duplicate registration, generic failed login | Return required 409 conflicts; login hides account/status distinction and incurs work for unknown identities. Auth endpoints have additional per-IP limits. |
+
+Pending decisions:
 curated source licensing and taxonomy, full JSON validation contracts, retention and
 Cloudinary deletion, production least-privilege roles, shared preprocessing package,
 actual model artifacts, and embedding model/dimensions/distance/indexes. Address these

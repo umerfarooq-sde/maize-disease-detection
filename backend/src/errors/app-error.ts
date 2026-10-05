@@ -6,9 +6,14 @@ const errorDefinitions = {
   AUTHORIZATION_ERROR: { status: 403, message: 'Access is forbidden.' },
   NOT_FOUND: { status: 404, message: 'Resource not found.' },
   CONFLICT: { status: 409, message: 'The request conflicts with the current state.' },
+  ACCOUNT_EXISTS: { status: 409, message: 'An account with this email already exists.' },
+  INVALID_CREDENTIALS: { status: 401, message: 'Email or password is incorrect.' },
   RATE_LIMITED: { status: 429, message: 'Too many requests. Please try again later.' },
   PAYLOAD_TOO_LARGE: { status: 413, message: 'Request body is too large.' },
-  UNSUPPORTED_MEDIA_TYPE: { status: 415, message: 'Request encoding is not supported.' },
+  UNSUPPORTED_MEDIA_TYPE: {
+    status: 415,
+    message: 'Request content type or encoding is not supported.',
+  },
   INTERNAL_SERVER_ERROR: { status: 500, message: 'An unexpected error occurred.' },
 } as const;
 

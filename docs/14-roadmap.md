@@ -10,7 +10,7 @@ checks, fix failures, and update [project state](PROJECT_STATE.md).
 | 1 | Development infrastructure (scope updated by the user's instruction) |
 | 2 | PostgreSQL + Prisma (scope updated by the user's instruction) |
 | 3 | Node.js + TypeScript backend foundation (scope updated by the user's instruction) |
-| 4 | Flutter foundation and design system |
+| 4 | Backend authentication and authorization (scope updated by the user's instruction) |
 | 5 | Farmer UI |
 | 6 | Disease knowledge base |
 | 7 | Image upload and Cloudinary |
@@ -62,3 +62,11 @@ versioned health, shared Prisma access, lifecycle, scripts and tests. Authentica
 and RBAC remain future work and need an explicitly authorized phase; they were
 removed from this phase's scope. Later roadmap entries are planning guidance only.
 Stop after Phase 3; no next phase starts automatically.
+
+## Phase 4 scope clarification
+
+The user authorized backend authentication for FARMER/ADMIN: registration, login,
+JWT access, stateful refresh rotation/revocation, logout, RBAC, controlled admin
+creation, validation/rate limits, migrations and tests. Flutter foundation/auth
+screens, disease APIs and AI/ML/RAG remain deferred. Later phase scopes must follow
+the next explicit instruction. Stop after Phase 4.

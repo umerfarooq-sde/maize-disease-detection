@@ -2,6 +2,11 @@
 
 > **Status:** Security requirements baseline; implementation controls must be verified before release.
 
+Phase 4 implements password hashing, independent JWT keys, bounded token lifetimes,
+rotating/revocable database sessions, role middleware, auth limits and cookie/CSRF
+controls. See [implementation and remaining boundaries](18-authentication.md).
+Upload/provider/AI controls below still describe future work.
+
 ## Identity and access
 
 - Use JWT access tokens and refresh tokens with defined expiry, rotation, revocation, and secure storage.

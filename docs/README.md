@@ -25,6 +25,7 @@ The remaining feature documents describe intended behavior.
 | [Development environment](15-development-environment.md) | Phase 1 toolchains, setup, independent checks, and runtime limitations |
 | [Database operations](16-database-operations.md) | Phase 2 Prisma configuration, migrations, seed, verification, and database prerequisites |
 | [Backend foundation](17-backend-foundation.md) | Phase 3 layout, startup settings, middleware, health, response contracts and lifecycle |
+| [Authentication](18-authentication.md) | Phase 4 endpoints, Argon2id, JWT/cookie/session flow, replay revocation, CSRF, RBAC and admin CLI |
 
 Finalize detailed API contracts, screen map/design system, and preprocessing package
 location in the appropriate phases. Do not treat

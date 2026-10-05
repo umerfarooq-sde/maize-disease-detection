@@ -34,4 +34,5 @@ foreach ($component in @('backend', 'ai-service')) {
         [IO.File]::WriteAllText($destination, $template, $utf8)
     }
 }
+& (Join-Path $PSScriptRoot 'initialize-auth-env.ps1')
 Write-Output 'Local environment files are ready. Existing files were preserved; credentials were not printed.'

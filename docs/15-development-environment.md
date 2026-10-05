@@ -114,8 +114,10 @@ powershell -NoProfile -ExecutionPolicy Bypass -File scripts/initialize-dev-env.p
 
 This creates ignored `infrastructure/.env`, `backend/.env`, and `ai-service/.env`
 when missing, generating a random local password without printing it. Existing
-files are preserved. Template credentials remain blank. Provider and JWT settings
-remain unused and blank because those features are not implemented.
+files are preserved. Template credentials remain blank. Phase 4 fills only missing
+local JWT keys using initialize-auth-env.ps1; supplied keys are preserved and never
+printed. Provider settings remain unused. See [authentication](18-authentication.md)
+for required keys, cookies, endpoints and controlled admin provisioning.
 
 Newly generated database URLs point to `127.0.0.1:5433/maizedoctor`. Existing custom
 URLs are preserved; Phase 2 used the user's configured Neon development database.

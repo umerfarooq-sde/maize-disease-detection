@@ -6,6 +6,7 @@ export const applicationTables = [
   'scans', 'scan_predictions', 'knowledge_documents', 'knowledge_chunks',
   'fertilizers', 'fertilizer_rules', 'calculator_configs', 'model_versions',
   'model_metrics', 'ai_queries', 'ai_responses', 'audit_logs', 'notifications', 'history',
+  'auth_sessions',
 ] as const;
 
 export async function assertSqlRejects(

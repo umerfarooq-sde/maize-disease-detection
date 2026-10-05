@@ -1,3 +1,4 @@
+import { randomBytes } from 'node:crypto';
 import { createServer } from 'node:http';
 import type { AddressInfo } from 'node:net';
 import type { Express } from 'express';
@@ -8,6 +9,8 @@ export const testEnvironment = parseEnvironment({
   NODE_ENV: 'test',
   DATABASE_URL: 'postgresql://localhost/maizedoctor',
   LOG_LEVEL: 'silent',
+  JWT_SECRET: randomBytes(32).toString('base64url'),
+  JWT_REFRESH_SECRET: randomBytes(32).toString('base64url'),
 });
 export const silentLogger = pino({ level: 'silent' });
 

@@ -8,7 +8,12 @@ export { databaseConnectionUrl } from './connection-url.js';
 config({ quiet: true });
 
 // Isolated seed/test clients use the factory; the application uses the shared getter.
-export function createDatabaseClient(connectionString = process.env['DATABASE_URL']): PrismaClient {
+export function createDatabaseClient(
+  connectionString = process.env['DATABASE_URL'],
+  queryTimeoutMillis = 5000,
+): PrismaClient {
+  if (!Number.isInteger(queryTimeoutMillis) || queryTimeoutMillis <= 0)
+    throw new Error('Database query timeout must be a positive integer.');
   const url = databaseConnectionUrl(connectionString);
   const schema = url.searchParams.get('schema') ?? 'public';
   const adapter = new PrismaPg(
@@ -17,7 +22,7 @@ export function createDatabaseClient(connectionString = process.env['DATABASE_UR
       max: 2,
       connectionTimeoutMillis: 10000,
       idleTimeoutMillis: 10000,
-      query_timeout: 5000,
+      query_timeout: queryTimeoutMillis,
     },
     { schema },
   );

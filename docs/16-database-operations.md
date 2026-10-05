@@ -7,6 +7,8 @@ Runtime construction is in
 [client.ts](../backend/src/database/client.ts). Phase 3 health repositories use its
 reusable application client; standalone checks/seed retain isolated clients.
 See [backend foundation](17-backend-foundation.md). Business routes remain future work.
+Phase 4 adds [authentication](18-authentication.md), one session table and a fourth
+additive migration. Runtime authentication and health reuse the same Prisma client.
 Generated client source is ignored and must be regenerated after install/schema changes.
 
 ## Prerequisites and setup
@@ -59,6 +61,7 @@ There is no default user/password or automatic model download.
 
 ```powershell
 npm.cmd run db:check
+npm.cmd run test:auth:database
 npm.cmd run db:check:migrations
 npm.cmd run db:diff
 npm.cmd run check:database
@@ -66,17 +69,23 @@ npm.cmd run check:database
 
 | Command | What it verifies |
 |---|---|
-| `db:check` | Schema validation, generation, strict source/config/seed/test compilation, database catalog, all 19 Prisma models, relationships, ownership, invalid records, versions, vector round trip, timestamps and deletion policies |
+| `db:check` | Schema validation, generation, strict source/config/seed/test compilation, 20-table database catalog, all 19 domain model round trips, relationships, ownership, invalid records, versions, vector round trip, timestamps and deletion policies |
 | `db:check:migrations` | All committed SQL migrations replay into a uniquely named temporary schema; verifies tables/checks/triggers, then removes only that schema |
 | `db:diff` | Actual configured schema versus Prisma structural model; exit 0 means no difference, 2 means drift |
 | `db:status` | Applied migration history versus migration directory |
 | `check:database` | Authenticated PostgreSQL connection and temporary-table SQL round trip with rollback |
+| `test:auth:database` | Real auth/HTTP, hashed session storage, concurrent rotation/replay revocation and SQL session guards; removes only its newly created fixture user/sessions |
 
 Integration writes run in a transaction that intentionally rolls back; invalid cases
 use savepoints. No cloud images, model weights, agricultural data, or provider calls
 are needed. The tests verify that the synthetic user is absent afterward. They never
 reset the database or overwrite an existing production model selection. Keep these
 checks on development databases because transaction locks can briefly block concurrent writers.
+
+Domain regression clients explicitly allow 30 seconds per query to accommodate
+observed remote latency; HTTP/runtime keeps the 5-second bound. Auth integration
+uses the runtime bound. Authentication fixtures use targeted cleanup as described
+above rather than a long outer transaction, so independent connections can test races.
 
 Replay requires CREATE/DROP SCHEMA privileges. It preserves application tables and
 other schemas. If the process is forcibly killed, a schema named
@@ -106,7 +115,7 @@ Neon development database or the pgvector Compose container for the complete sch
 Starting/stopping the native cluster does not change `backend/.env` to a different database.
 
 Migration roles need DDL privileges; future application/AI roles should receive only
-the tables/operations they need. Authentication, row access in APIs, connection
+the tables/operations they need. Resource ownership in future APIs, connection
 deployment policies, backup/retention automation, and production secrets are later work.
 
 References: [Prisma connection configuration](https://docs.prisma.io/docs/orm/prisma-client/setup-and-configuration/databases-connections),

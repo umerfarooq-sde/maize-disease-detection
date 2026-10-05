@@ -1,9 +1,14 @@
 import assert from 'node:assert/strict';
+import { randomBytes } from 'node:crypto';
 import { test } from 'node:test';
 import { parseEnvironment } from '../../src/config/environment.js';
 import { databaseConnectionUrl } from '../../src/database/connection-url.js';
 
-const database = { DATABASE_URL: 'postgresql://localhost/maizedoctor' };
+const signingKeys = {
+  JWT_SECRET: randomBytes(32).toString('base64url'),
+  JWT_REFRESH_SECRET: randomBytes(32).toString('base64url'),
+};
+const database = { DATABASE_URL: 'postgresql://localhost/maizedoctor', ...signingKeys };
 
 test('startup settings require a database and validate supplied operational settings', () => {
   assert.throws(() => parseEnvironment({}), /DATABASE_URL/);
@@ -22,12 +27,11 @@ test('startup settings require a database and validate supplied operational sett
   }
 });
 
-test('CORS requires exact origins and future feature secrets are not required', () => {
+test('CORS requires exact origins and unused provider secrets are not required', () => {
   assert.deepEqual(
     parseEnvironment({
       ...database,
       CORS_ORIGINS: 'https://example.com, http://localhost:5173',
-      JWT_SECRET: '',
       CLOUDINARY_API_SECRET: '',
     }).CORS_ORIGINS,
     ['https://example.com', 'http://localhost:5173'],
@@ -48,7 +52,7 @@ test('invalid configuration never echoes connection secrets', () => {
     'postgresql://user:sensitive-password@example.com/',
   ]) {
     assert.throws(
-      () => parseEnvironment({ DATABASE_URL }),
+      () => parseEnvironment({ DATABASE_URL, ...signingKeys }),
       (error: unknown) => {
         assert.ok(error instanceof Error);
         assert.ok(error.message.includes('DATABASE_URL'));
@@ -70,4 +74,25 @@ test('PostgreSQL URL normalization preserves verified TLS and explicit compatibi
     ).searchParams.get('sslmode'),
     'require',
   );
+});
+
+test('JWT keys are required, independent and strong-format; TTLs are bounded', () => {
+  for (const changes of [
+    { JWT_SECRET: '' },
+    { JWT_REFRESH_SECRET: '' },
+    { JWT_SECRET: 'short' },
+    { JWT_REFRESH_SECRET: signingKeys.JWT_SECRET },
+    { JWT_ACCESS_TTL_SECONDS: '3600' },
+    { JWT_REFRESH_TTL_SECONDS: '999999999' },
+  ]) {
+    assert.throws(
+      () => parseEnvironment({ ...database, ...changes }),
+      (error: unknown) => {
+        assert.ok(error instanceof Error);
+        assert.ok(!error.message.includes(signingKeys.JWT_SECRET));
+        assert.ok(!error.message.includes(signingKeys.JWT_REFRESH_SECRET));
+        return true;
+      },
+    );
+  }
 });

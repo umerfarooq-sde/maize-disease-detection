@@ -2,9 +2,9 @@ import type { RequestHandler } from 'express';
 import { rateLimit } from 'express-rate-limit';
 import { AppError } from '../errors/app-error.js';
 
-export function requestRateLimit(limit: number): RequestHandler {
+export function requestRateLimit(limit: number, windowMs = 60000): RequestHandler {
   return rateLimit({
-    windowMs: 60000,
+    windowMs,
     limit,
     standardHeaders: 'draft-8',
     legacyHeaders: false,

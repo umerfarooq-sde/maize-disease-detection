@@ -32,6 +32,18 @@ $architectureDocs = @(
     '11-security.md', '12-testing.md', '13-deployment.md'
 )
 $requiredFiles += @(
+    'backend/prisma/migrations/20261006000000_auth_sessions/migration.sql',
+    'backend/src/middleware/authentication.ts', 'backend/src/middleware/authorization.ts',
+    'backend/src/modules/auth/auth.types.ts', 'backend/src/modules/auth/auth.repository.ts',
+    'backend/src/modules/auth/auth.service.ts', 'backend/src/modules/auth/auth.controller.ts',
+    'backend/src/modules/auth/auth.routes.ts', 'backend/src/modules/auth/auth.validators.ts',
+    'backend/src/modules/auth/auth.tokens.ts', 'backend/src/modules/auth/auth.password.ts',
+    'backend/src/modules/auth/auth.cookies.ts', 'backend/src/cli/create-admin.ts',
+    'backend/tests/auth/helpers.ts', 'backend/tests/auth/http.test.ts',
+    'backend/tests/auth/service.test.ts', 'backend/tests/auth.database.integration.ts',
+    'scripts/initialize-auth-env.ps1', 'scripts/create-admin.ps1', 'docs/18-authentication.md'
+)
+$requiredFiles += @(
     'backend/biome.json', 'backend/src/app.ts', 'backend/src/application.ts',
     'backend/src/server.ts', 'backend/src/config/environment.ts', 'backend/src/config/logger.ts',
     'backend/src/database/connection-url.ts', 'backend/src/errors/app-error.ts',
@@ -63,7 +75,7 @@ foreach ($file in $requiredFiles) {
 Write-Output 'PASS: Required directories, documentation, and templates exist.'
 
 $templateKeys = @{
-    'backend' = @('NODE_ENV', 'PORT', 'HOST', 'CORS_ORIGINS', 'LOG_LEVEL', 'SHUTDOWN_TIMEOUT_MS', 'RATE_LIMIT_MAX', 'DATABASE_URL', 'DIRECT_DATABASE_URL', 'JWT_SECRET', 'JWT_REFRESH_SECRET', 'CLOUDINARY_CLOUD_NAME', 'CLOUDINARY_API_KEY', 'CLOUDINARY_API_SECRET', 'AI_SERVICE_URL', 'AI_SERVICE_TOKEN')
+    'backend' = @('NODE_ENV', 'PORT', 'HOST', 'CORS_ORIGINS', 'LOG_LEVEL', 'SHUTDOWN_TIMEOUT_MS', 'RATE_LIMIT_MAX', 'AUTH_RATE_LIMIT_MAX', 'DATABASE_URL', 'DIRECT_DATABASE_URL', 'JWT_SECRET', 'JWT_REFRESH_SECRET', 'JWT_ISSUER', 'JWT_ACCESS_TTL_SECONDS', 'JWT_REFRESH_TTL_SECONDS', 'CLOUDINARY_CLOUD_NAME', 'CLOUDINARY_API_KEY', 'CLOUDINARY_API_SECRET', 'AI_SERVICE_URL', 'AI_SERVICE_TOKEN')
     'ai-service' = @('ENVIRONMENT', 'PORT', 'DATABASE_URL', 'GEMINI_API_KEY', 'AI_SERVICE_TOKEN', 'MODEL_PATH', 'MODEL_VERSION', 'PREPROCESSING_VERSION')
     'infrastructure' = @('POSTGRES_DB', 'POSTGRES_USER', 'POSTGRES_PASSWORD', 'POSTGRES_PORT')
     'mobile' = @('API_BASE_URL')

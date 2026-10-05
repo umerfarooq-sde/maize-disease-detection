@@ -1,5 +1,11 @@
 # Backend foundation
 
+This document records the Phase 3 baseline. Phase 4 extends it with
+[authentication](18-authentication.md), required independent JWT signing keys,
+credentialed exact-origin CORS, auth-specific limits and additional tests.
+The setup/token contract in that document supersedes the baseline's optional JWT
+placeholders and health-only endpoint inventory.
+
 Phase 3 implements the Node.js transport and development foundation. The only
 application endpoint is `GET /api/v1/health`. Authentication, disease APIs, provider
 integrations, ML, RAG, calculators and Flutter functionality remain future work.

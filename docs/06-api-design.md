@@ -1,6 +1,6 @@
 # API Design
 
-> **Status:** Phase 3 implements only `GET /api/v1/health` and the response conventions below. The candidate business routes remain design guidance.
+> **Status:** Health and Phase 4 authentication are implemented. Candidate disease/business routes remain design guidance.
 
 ## Conventions
 
@@ -21,10 +21,13 @@
 | List farmer scan history | `GET /api/v1/scans` | Authenticated farmer, owner-scoped |
 | Read service health | `GET /api/v1/health` | Public or restricted details |
 
-Only health exists: 200 when the database is reachable, 503 with a safe degraded
+Health returns 200 when the database is reachable, 503 with a safe degraded
 report otherwise. See [backend foundation](17-backend-foundation.md) for its exact
 data shape, validation, security settings and lifecycle. Other candidate names
-are examples to confirm in their feature phases.
+for disease/business capabilities are examples to confirm in their feature phases.
+Implemented authentication: POST `/api/v1/auth/register`, `/login`, `/refresh`,
+`/logout`, and GET `/api/v1/auth/me`. See [auth contracts](18-authentication.md)
+for validation, safe DTOs, cookie transport, expiry, CSRF protection and RBAC.
 
 ## Scan contract considerations
 

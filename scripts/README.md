@@ -10,6 +10,8 @@ Phase 1 adds these scripts, invoked from the repository root:
 | Script | Purpose |
 |---|---|
 | `initialize-dev-env.ps1` | Generate ignored local database credentials and component `.env` files without overwriting existing files |
+| `initialize-auth-env.ps1` | Fill only missing/blank local JWT keys without printing secrets; also invoked by dev initialization |
+| `create-admin.ps1` | Trusted operator prompt for a new ADMIN; masked password sent as UTF-8 stdin, no default account |
 | `postgres-local.ps1 -Action Start/Check/Stop` | Operate an isolated native Windows development cluster using PostgreSQL 18 tools |
 | `setup-python.ps1 -Component ai-service/ml-training/All` | Install locked dependencies into separate component virtual environments |
 | `check-development.ps1 -Component Backend/AI/Training/Flutter/Database/Prisma/Docker/All` | Run checks independently; aggregate failures when checking all |

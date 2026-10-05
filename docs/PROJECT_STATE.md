@@ -1,17 +1,19 @@
 # Project state
 
-Updated: 2026-10-05 (Asia/Karachi).
+Updated: 2026-10-06 (Asia/Karachi).
 
 ## Current phase
 
-Phase 3 Node.js + TypeScript backend foundation is complete: versioned health,
-validated environment, centralized errors/responses, request validation, security
-middleware, reusable Prisma access, graceful lifecycle, scripts and tests.
-All 20 foundation tests and 13 existing database tests pass. The compiled executable
-serves health against Neon and shuts down cleanly. Phase 2's 19-table schema and all
-three applied migrations are preserved, valid, and free of structural drift.
-Phase scopes follow the user's updated instructions. Stop after Phase 3; authentication
-and business features are not authorized by this phase.
+Phase 4 backend authentication and authorization is complete: FARMER registration,
+login, stateful rotating refresh sessions, logout, access authentication and reusable
+FARMER/ADMIN authorization. Passwords use Argon2id; separate validated signing keys
+come from the environment. Admin creation is an operator-only CLI, with no public
+role selection or default account. See [authentication](18-authentication.md).
+All 36 isolated backend tests, 6 database-backed auth tests and 13 existing database
+regression tests pass. Prisma validation/generation, all four applied migrations,
+temporary-schema replay and structural drift checks pass. The original 19 domain
+tables and three migrations are preserved; one required auth session table is added.
+Stop after Phase 4. Flutter auth, disease/business APIs and AI/ML/RAG remain outside scope.
 
 ## Initial workspace findings
 
@@ -42,14 +44,14 @@ and business features are not authorized by this phase.
 | Component | Verified implementation |
 |---|---|
 | Mobile | Minimal Flutter Android scaffold, Provider, analyzer rules, dependency lock, and widget smoke test |
-| Backend | Express 5 versioned health, strict TypeScript, validated startup/input, safe response/error contracts, security/logging middleware, graceful lifecycle, shared Prisma 7.10.0, 20 foundation tests, preserved 19-model schema/three migrations and 13 rollback tests |
+| Backend | Express 5 versioned health/auth, strict TypeScript/Zod, safe responses/errors, Argon2id, separate-key JWTs, rotating/revocable sessions, live-account RBAC, operator admin CLI, security/logging middleware, graceful lifecycle, shared Prisma 7.10.0; 20 tables/four migrations and 55 passing tests across three suites |
 | AI service | Python 3.11 manifest/lock, isolated virtual environment, and dependency/ASGI smoke tests; no production service |
 | ML training | Python 3.11 manifest/lock, isolated virtual environment, and synthetic dependency tests; no dataset or model |
 | Infrastructure | Neon PostgreSQL 18.6 with pgvector 0.8.6 migrated; pgvector 0.8.7/PostgreSQL 18 Compose configuration; preserved native 18.4 cluster; private local settings ignored |
-| Documentation | Architecture drafts, database design/ERD/operations, implemented backend foundation/API contracts, decisions register, revised roadmap, development guide, and state/verification history |
-| Scripts | Repository checks, environment initialization, native PostgreSQL management, locked Python setup, and independent development/Prisma checks |
+| Documentation | Architecture drafts, database design/ERD/operations, implemented backend foundation/auth API contracts, decisions register, revised roadmap, development guide, and state/verification history |
+| Scripts | Repository checks, environment/random JWT-key initialization, secure admin provisioning, native PostgreSQL management, locked Python setup, and independent development/Prisma checks |
 
-No authentication, disease detection, ML pipeline, RAG, calculator execution,
+No Flutter authentication screens, disease detection, ML pipeline, RAG, calculator execution,
 notification delivery, or farmer/admin UI has been implemented. The Flutter label and FastAPI
 test route are scaffold fixtures, not business functionality.
 
@@ -447,6 +449,107 @@ were persisted and no database reset, new migration or automatic seed was perfor
 Git handoff: Phase 3 changes are committed/pushed separately from the completed
 Phase 2 checkpoint; commit identifier and push result are reported in the final response.
 
+## Phase 4 authentication and authorization
+
+### Implementation
+
+- Inspected `AGENTS.md`, current state/decisions, Prisma schema, migrations and existing
+  backend layers before modification. Preserved the Phase 3 foundation and all three
+  Phase 2 migrations. Auth follows route -> controller -> service -> repository -> Prisma.
+- Added FARMER-only registration, normalized email, strict Zod inputs, clean duplicate
+  409 responses, generic failed-login 401 responses and safe user DTOs without account IDs,
+  password hashes, statuses or refresh credentials. Registration does not auto-login.
+- Pinned Argon2 0.45.1, jose 6.2.12 and cookie 2.0.1. Argon2id uses a random salt,
+  64 MiB memory, three iterations and one lane; plaintext passwords are never persisted.
+- Required independent canonical base64url signing keys of at least 32 bytes. Local
+  initialization generates 64 random bytes per missing key and preserves existing keys.
+  Access defaults to 15 minutes; refresh sessions have a fixed seven-day lifetime.
+- JWT verification pins HS256, issuer, separate audiences, purpose, required claims and
+  expiry. JWTs contain an opaque session handle, not an account ID, email or role.
+- Added `auth_sessions` and an additive fourth migration. Only the current SHA-256
+  refresh digest is stored. Atomic conditional updates consume tokens once; replay or
+  concurrent reuse commits whole-session revocation. Logout immediately invalidates that
+  session's access and refresh tokens. Other independent login sessions remain active.
+- Access authentication checks the session and current active account in PostgreSQL.
+  Reusable authorization reads current FARMER/ADMIN roles rather than stale token roles.
+  Farmer/admin-only routes used to verify authorization exist only as test fixtures.
+- Refresh credentials use HttpOnly, SameSite=Strict cookies; production additionally
+  requires Secure and a host-prefixed name. Refresh tokens are never JSON fields.
+  POSTs require JSON and `X-Auth-Request: 1`; CORS uses exact credentialed origins.
+  Auth responses are not cached. Logging redacts tokens, hashes, keys and Set-Cookie.
+- Added credential and refresh/logout rate limits. Controlled admin provisioning reads
+  credentials from stdin through a masked PowerShell prompt; no public ADMIN registration,
+  automatic admin, default password or promotion of an existing account.
+
+Available auth endpoints:
+
+- `POST /api/v1/auth/register`
+- `POST /api/v1/auth/login`
+- `POST /api/v1/auth/refresh`
+- `POST /api/v1/auth/logout`
+- `GET /api/v1/auth/me`
+
+`GET /api/v1/health` and the existing response/error envelope remain available.
+
+### Important files
+
+Created:
+
+- `backend/src/modules/auth/`: types, repository, password/token helpers, validators,
+  cookie handling, service, controller and routes.
+- `backend/src/middleware/authentication.ts`, `authorization.ts`
+- `backend/src/cli/create-admin.ts`
+- `backend/prisma/migrations/20261006000000_auth_sessions/migration.sql`
+- `backend/tests/auth/`: helpers, service, HTTP and credential-log tests.
+- `backend/tests/auth.database.integration.ts`
+- `scripts/initialize-auth-env.ps1`, `scripts/create-admin.ps1`
+- `docs/18-authentication.md`
+
+Updated backend schema/package/lock/template, environment/logger/app/routes/error/types,
+reusable rate limiter, shared database client, Biome coverage, existing foundation and
+database tests/catalog expectations, development/repository scripts, README files,
+database/API/security/setup/roadmap documentation, decisions and this state file.
+No Flutter, Python, ML or deployment feature code was changed. Generated Prisma/build
+output, one-off probes and private database/signing credentials remain ignored.
+
+### Verification and commands
+
+| Check | Result |
+|---|---|
+| `npm.cmd run format`, `format:check`, `lint` | Passed; no formatting/lint errors |
+| `npm.cmd run typecheck`, `build` | Passed with strict TypeScript |
+| `npm.cmd test` / `npm.cmd run check` | 36 passed: 21 foundation and 15 auth tests; dependency probe passes |
+| `npm.cmd run test:auth:database` | 6 passed including suite parent: real Prisma/HTTP, digest storage, duplicate handling, rotation races, committed revocation and SQL guards |
+| `npm.cmd run db:check` | Schema validation/generation/types plus all 13 domain/catalog regressions passed |
+| `npm.cmd run db:format`, `db:validate`, `db:generate` | Passed; current client generated |
+| `npm.cmd run db:migrate`, `db:status` | Fourth migration applied; all four applied and none pending |
+| `npm.cmd run db:check:migrations` | All four migrations replayed in an isolated schema: 20 tables, 20 CHECKs, 35 custom triggers; temporary schema removed |
+| `npm.cmd run db:diff` | No structural difference |
+| Compiled application/server probe | Real database health, safe startup failure and graceful SIGTERM exit verified |
+| Compiled admin CLI invalid-input probe | Rejects bad credentials/role injection safely without writing accounts or printing input |
+| PowerShell syntax/repository/environment checks | Scripts parse; structure/templates/ignores pass; rerunning key initialization preserves credentials |
+| Source review/credential scan/Markdown links/`git diff --check` | No authored `any`, redundant Prisma construction, leaked private credentials, unresolved local links or whitespace errors |
+
+Coverage includes registration, duplicates, invalid inputs, login/wrong password,
+missing/invalid/expired access, protected endpoint access, refresh/rotation/replay,
+logout/revocation, FARMER/ADMIN permissions, CSRF/CORS, rate limits, production cookie
+flags, safe DTOs/logging, live account status/roles and database constraints.
+
+Resolved verification issues: the current Argon2 encoder orders PHC parameters
+differently, so the test now compares parameter values without assuming order.
+Two remote domain checks hit the five-second query timeout; development-only domain
+test clients now allow 30 seconds. HTTP/runtime retains its five-second query bound.
+Final reruns pass. Auth database fixtures remove only their own new UUID/email and
+cascading sessions; domain/constraint probes roll back. No existing account/data was
+overwritten, no automatic admin created and no database reset performed.
+The compiled startup probe also caught pre-existing local signing values incompatible
+with the new key format. Replaced those unused Phase 3 values with independent 64-byte
+random keys in ignored `.env`, preserving every other setting. Startup/shutdown then
+passed; rerunning the committed initializer preserves the valid keys.
+
+Git handoff: the verified Phase 4 change is committed/pushed with a relevant message;
+the commit identifier and push result are reported in the final response. Stop at Phase 4.
+
 ## Current limitations and pending decisions
 
 - Dependency audit reports four high-severity entries (`prisma`, `@prisma/config`,
@@ -458,11 +561,17 @@ Phase 2 checkpoint; commit identifier and push result are reported in the final 
   automatic remediation downgrades Prisma to 6.19.3, conflicting with the verified
   Prisma 7 architecture; no forced downgrade or unverified major transitive override.
   Audit also reports these with omit-dev due to the dependency/peer graph. The
-  implemented PostgreSQL health path does not use MySQL or merge client-supplied
+  implemented PostgreSQL health/auth paths do not use MySQL or merge client-supplied
   object graphs, but dependency remediation remains a follow-up maintenance issue.
 - Rate-limit counters are per-process/in-memory. Shared storage, proxy trust and
   least-privilege database roles must be chosen for an actual deployment. Default
   binding is loopback; LAN/container hosting needs explicit HOST/CORS configuration.
+- Production auth requires HTTPS and same-site browser hosting for Strict cookies.
+  Clients must serialize refresh calls; parallel/retried token reuse requires login again.
+  Hashing throughput and native Argon2 deployment compatibility need deployment checks.
+  Email verification, password recovery/change, MFA, security-event auditing, session
+  management and expired-session cleanup remain future work. Future password/status
+  management must revoke affected sessions; current access checks already reject inactive accounts.
 
 - Review outstanding Android SDK licenses locally before Android build verification;
   command-line tools are installed and instructions are in the development guide.
@@ -482,6 +591,6 @@ Phase 2 checkpoint; commit identifier and push result are reported in the final 
 
 ## Next step
 
-Stop after Phase 3 backend foundation. Wait for the next explicit instruction and reconcile its scope
-with the [roadmap](14-roadmap.md). Do not start authentication, business APIs,
+Stop after Phase 4 authentication and authorization. Wait for the next explicit instruction and reconcile its scope
+with the [roadmap](14-roadmap.md). Do not start Flutter authentication, business APIs,
 AI/ML/RAG/calculator functionality, or UI implementation automatically.
