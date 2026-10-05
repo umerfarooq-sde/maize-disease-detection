@@ -31,6 +31,20 @@ $architectureDocs = @(
     '08-ai-architecture.md', '09-ml-pipeline.md', '10-rag-architecture.md',
     '11-security.md', '12-testing.md', '13-deployment.md'
 )
+$requiredFiles += @(
+    'backend/biome.json', 'backend/src/app.ts', 'backend/src/application.ts',
+    'backend/src/server.ts', 'backend/src/config/environment.ts', 'backend/src/config/logger.ts',
+    'backend/src/database/connection-url.ts', 'backend/src/errors/app-error.ts',
+    'backend/src/middleware/error-handler.ts', 'backend/src/middleware/request-context.ts',
+    'backend/src/middleware/rate-limit.ts', 'backend/src/validators/request.ts',
+    'backend/src/routes/index.ts', 'backend/src/modules/health/health.routes.ts',
+    'backend/src/modules/health/health.controller.ts', 'backend/src/modules/health/health.service.ts',
+    'backend/src/modules/health/health.repository.ts', 'backend/src/types/api.ts',
+    'backend/src/types/express.d.ts', 'backend/src/utils/respond.ts',
+    'backend/tests/foundation/helpers.ts', 'backend/tests/foundation/environment.test.ts',
+    'backend/tests/foundation/http.test.ts', 'backend/tests/foundation/lifecycle.test.ts',
+    'docs/17-backend-foundation.md'
+)
 foreach ($directory in $requiredDirectories) {
     if (-not (Test-Path -LiteralPath (Join-Path $repositoryRoot $directory) -PathType Container)) {
         throw "Missing directory: $directory"
@@ -49,7 +63,7 @@ foreach ($file in $requiredFiles) {
 Write-Output 'PASS: Required directories, documentation, and templates exist.'
 
 $templateKeys = @{
-    'backend' = @('NODE_ENV', 'PORT', 'DATABASE_URL', 'DIRECT_DATABASE_URL', 'JWT_SECRET', 'JWT_REFRESH_SECRET', 'CLOUDINARY_CLOUD_NAME', 'CLOUDINARY_API_KEY', 'CLOUDINARY_API_SECRET', 'AI_SERVICE_URL', 'AI_SERVICE_TOKEN')
+    'backend' = @('NODE_ENV', 'PORT', 'HOST', 'CORS_ORIGINS', 'LOG_LEVEL', 'SHUTDOWN_TIMEOUT_MS', 'RATE_LIMIT_MAX', 'DATABASE_URL', 'DIRECT_DATABASE_URL', 'JWT_SECRET', 'JWT_REFRESH_SECRET', 'CLOUDINARY_CLOUD_NAME', 'CLOUDINARY_API_KEY', 'CLOUDINARY_API_SECRET', 'AI_SERVICE_URL', 'AI_SERVICE_TOKEN')
     'ai-service' = @('ENVIRONMENT', 'PORT', 'DATABASE_URL', 'GEMINI_API_KEY', 'AI_SERVICE_TOKEN', 'MODEL_PATH', 'MODEL_VERSION', 'PREPROCESSING_VERSION')
     'infrastructure' = @('POSTGRES_DB', 'POSTGRES_USER', 'POSTGRES_PASSWORD', 'POSTGRES_PORT')
     'mobile' = @('API_BASE_URL')

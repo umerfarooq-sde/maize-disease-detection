@@ -1,6 +1,6 @@
 # API Design
 
-> **Status:** Contract guidance, not an implemented endpoint inventory. Finalize schemas and routes before client/server integration.
+> **Status:** Phase 3 implements only `GET /api/v1/health` and the response conventions below. The candidate business routes remain design guidance.
 
 ## Conventions
 
@@ -21,7 +21,10 @@
 | List farmer scan history | `GET /api/v1/scans` | Authenticated farmer, owner-scoped |
 | Read service health | `GET /api/v1/health` | Public or restricted details |
 
-These names are examples to be confirmed; they are not claimed to exist.
+Only health exists: 200 when the database is reachable, 503 with a safe degraded
+report otherwise. See [backend foundation](17-backend-foundation.md) for its exact
+data shape, validation, security settings and lifecycle. Other candidate names
+are examples to confirm in their feature phases.
 
 ## Scan contract considerations
 
@@ -31,19 +34,27 @@ Define synchronous completion versus asynchronous status polling before implemen
 
 ## Error response shape
 
-Adopt a consistent envelope such as:
+The implemented error envelope is:
 
 ```json
 {
+  "success": false,
   "error": {
     "code": "VALIDATION_ERROR",
-    "message": "The submitted image is not supported.",
-    "requestId": "..."
-  }
+    "message": "Request validation failed.",
+    "details": [{ "path": "query", "code": "unrecognized_keys" }]
+  },
+  "requestId": "..."
 }
 ```
 
 Messages must be safe for clients; detailed diagnostics belong in protected server logs. Specify status codes consistently (for example, 400/422 validation, 401 unauthenticated, 403 unauthorized, 404 not found, 429 rate-limited, and 5xx server/dependency failures).
+
+Successful responses use `{ "success": true, "data": ..., "requestId": "..." }`.
+Validation uses HTTP 400. Details are optional field paths/issue codes without
+submitted values. Both envelopes include the server-generated ID also returned
+in `X-Request-Id`; no additional response wrapping is used. Health retains its
+report envelope at HTTP 503 so monitoring can inspect `data.status` and checks.
 
 ## Authorization
 

@@ -4,7 +4,9 @@ Phase 2 uses stable Prisma **7.10.0**, matching client/pg-adapter versions, and 
 for TypeScript seed/test commands. `prisma.config.ts` reads server-only
 `DIRECT_DATABASE_URL` (falling back to `DATABASE_URL` for unpooled servers).
 Runtime construction is in
-[client.ts](../backend/src/database/client.ts); no feature repositories or HTTP routes exist.
+[client.ts](../backend/src/database/client.ts). Phase 3 health repositories use its
+reusable application client; standalone checks/seed retain isolated clients.
+See [backend foundation](17-backend-foundation.md). Business routes remain future work.
 Generated client source is ignored and must be regenerated after install/schema changes.
 
 ## Prerequisites and setup

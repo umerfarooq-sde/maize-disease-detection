@@ -9,7 +9,7 @@ checks, fix failures, and update [project state](PROJECT_STATE.md).
 | 0 | Repository, documentation, ignore rules, and environment templates |
 | 1 | Development infrastructure (scope updated by the user's instruction) |
 | 2 | PostgreSQL + Prisma (scope updated by the user's instruction) |
-| 3 | Authentication and RBAC |
+| 3 | Node.js + TypeScript backend foundation (scope updated by the user's instruction) |
 | 4 | Flutter foundation and design system |
 | 5 | Farmer UI |
 | 6 | Disease knowledge base |
@@ -53,3 +53,12 @@ constraints/indexes/enums, pgvector storage, migrations, seed structure, checks,
 database documentation. Node backend feature foundations and authentication services
 remain future work. Later phase scopes above retain the original roadmap and must
 be reconciled with the next explicit instruction. Stop after Phase 2.
+
+## Phase 3 scope clarification
+
+The user explicitly authorized the backend foundation for Phase 3: strict TypeScript,
+validated environment, middleware, standard responses/errors, Zod validation,
+versioned health, shared Prisma access, lifecycle, scripts and tests. Authentication
+and RBAC remain future work and need an explicitly authorized phase; they were
+removed from this phase's scope. Later roadmap entries are planning guidance only.
+Stop after Phase 3; no next phase starts automatically.

@@ -4,12 +4,14 @@ Updated: 2026-10-05 (Asia/Karachi).
 
 ## Current phase
 
-Phase 2 PostgreSQL + Prisma implements all 19 tables explicitly requested by the user,
-with relationships, indexes, enums, timestamps, constraints, migrations, and seed structure.
-The Phase 2 audit is complete: all three migrations are applied to the configured Neon
-development database, Prisma validation passes, and all 13 database tests pass.
-Phase 1 infrastructure remains available. Phase scopes follow the user's updated instructions.
-No later phase is authorized or started.
+Phase 3 Node.js + TypeScript backend foundation is complete: versioned health,
+validated environment, centralized errors/responses, request validation, security
+middleware, reusable Prisma access, graceful lifecycle, scripts and tests.
+All 20 foundation tests and 13 existing database tests pass. The compiled executable
+serves health against Neon and shuts down cleanly. Phase 2's 19-table schema and all
+three applied migrations are preserved, valid, and free of structural drift.
+Phase scopes follow the user's updated instructions. Stop after Phase 3; authentication
+and business features are not authorized by this phase.
 
 ## Initial workspace findings
 
@@ -40,11 +42,11 @@ No later phase is authorized or started.
 | Component | Verified implementation |
 |---|---|
 | Mobile | Minimal Flutter Android scaffold, Provider, analyzer rules, dependency lock, and widget smoke test |
-| Backend | Locked Prisma 7.10.0/client/pg adapter, strict TypeScript, generated client factory, 19-model schema, three migrations, seed structure, and 13 rollback-based database tests |
+| Backend | Express 5 versioned health, strict TypeScript, validated startup/input, safe response/error contracts, security/logging middleware, graceful lifecycle, shared Prisma 7.10.0, 20 foundation tests, preserved 19-model schema/three migrations and 13 rollback tests |
 | AI service | Python 3.11 manifest/lock, isolated virtual environment, and dependency/ASGI smoke tests; no production service |
 | ML training | Python 3.11 manifest/lock, isolated virtual environment, and synthetic dependency tests; no dataset or model |
 | Infrastructure | Neon PostgreSQL 18.6 with pgvector 0.8.6 migrated; pgvector 0.8.7/PostgreSQL 18 Compose configuration; preserved native 18.4 cluster; private local settings ignored |
-| Documentation | Architecture drafts, implemented database design/ERD, decisions register, database operations, revised roadmap, development guide, and this audit/state record |
+| Documentation | Architecture drafts, database design/ERD/operations, implemented backend foundation/API contracts, decisions register, revised roadmap, development guide, and state/verification history |
 | Scripts | Repository checks, environment initialization, native PostgreSQL management, locked Python setup, and independent development/Prisma checks |
 
 No authentication, disease detection, ML pipeline, RAG, calculator execution,
@@ -354,7 +356,113 @@ audit fixes; local credentials, dependencies, generated client/build output, cac
 and database data are excluded. The existing AGENTS.md instruction content is preserved.
 Commit/push outcome is reported in the final audit handoff.
 
+## Phase 3 backend foundation (2026-10-05)
+
+Inspected `AGENTS.md`, project state, decisions, backend source/configuration and
+Prisma schema before implementation. The existing strict NodeNext TypeScript
+settings and Phase 2 database design remain intact. No schema/migration/seed change.
+
+### Implementation
+
+- Added separate Express app factory, startup/shutdown lifecycle and executable.
+  Health uses route -> controller -> service -> repository -> shared Prisma -> PostgreSQL.
+  Health's module contains its own layers; no empty generic directories or DI container.
+- Added startup Zod validation for DATABASE_URL and used operational settings.
+  Templates document loopback binding, exact CORS allowlist, log level, shutdown
+  deadline and request limit. Existing private settings are preserved; unused
+  JWT/provider placeholders are optional. Invalid values are never echoed.
+- Added typed success/error envelopes, server-generated request IDs and application
+  errors for validation/authentication/authorization/not-found/conflict/internal
+  failures, plus parser/encoding/size/rate-limit errors. Authentication itself is absent.
+- Added reusable async Zod validation for body, params and query. Parsed values
+  are stored in Express locals; request.query is not reassigned. Client details
+  contain paths/codes only; internal errors cannot expose details or raw exceptions.
+- Added Helmet, explicit CORS, in-memory per-IP rate limiting, 100 KiB JSON limit
+  and compressed-body rejection. Request logs omit headers/bodies/query/param values
+  and client IDs. Errors after headers are sent delegate only a sanitized error.
+- Added one shared application Prisma client; isolated seed/test clients remain
+  available. Extracted URL normalization for reuse by startup validation, preserving
+  TLS behavior. Added a 5-second query timeout; existing database checks still pass.
+- Startup performs a database round trip before HTTP listens. Shutdown drains HTTP
+  before Prisma disconnect, is idempotent, and has a configurable deadline. Signals
+  and fatal process/server errors use the same path, with failure exit codes when needed.
+- Added dev/start/lint/format/test scripts with pinned Helmet 8.3.0, CORS 2.8.6,
+  Pino 10.4.0, express-rate-limit 8.7.0 and Biome 2.5.15; reused built-in Node tests/tsx.
+  Preserved strict TypeScript configuration rather than replacing it.
+- Updated root/backend README, LLD/API guidance, roadmap scope, environment/database
+  operations, docs index, repository/development checks and actual architectural decisions.
+
+Endpoint: **GET `/api/v1/health`**. Reports service, time, uptime and database up/down;
+HTTP 200 or degraded 503, without sensitive infrastructure details. Both use the
+same health-report envelope; monitoring must inspect HTTP status and data.status.
+Express also provides HEAD handling; CORS handles OPTIONS preflight. No business routes.
+
+### Important files
+
+Created:
+
+- `backend/biome.json`
+- `backend/src/app.ts`, `application.ts`, `server.ts`
+- `backend/src/config/environment.ts`, `logger.ts`
+- `backend/src/database/connection-url.ts`, `errors/app-error.ts`
+- `backend/src/middleware/request-context.ts`, `rate-limit.ts`, `error-handler.ts`
+- `backend/src/modules/health/health.routes.ts`, `health.controller.ts`,
+  `health.service.ts`, `health.repository.ts`
+- `backend/src/routes/index.ts`, `types/api.ts`, `types/express.d.ts`,
+  `utils/respond.ts`, `validators/request.ts`
+- `backend/tests/foundation/helpers.ts`, `environment.test.ts`, `http.test.ts`,
+  `lifecycle.test.ts`
+- `docs/17-backend-foundation.md` (complete directory tree and operational contracts)
+
+Changed: backend package/lock/template/README, shared database client, formatting
+of the existing SQL probe, root README, docs 04/06/14/15/16/index/decisions/state,
+and repository/development check scripts. No Flutter/Python/ML/infrastructure changes.
+Generated client, compiled output, live-check helpers and credentials remain ignored.
+
+### Verification and commands
+
+| Check | Result |
+|---|---|
+| `npm.cmd run format`, `format:check`, `lint` | Passed: authored source/foundation tests formatted; no lint errors |
+| `npm.cmd run typecheck`, `build` (through `check`) | Passed: strict source/config/seed/test types and emitted build |
+| `npm.cmd test` (through `check`) | 20 passed: health/outages, contracts, CORS/headers, parser limits, Zod body/params/query, logging, rate limiting, singleton, startup failures, draining/idempotence/deadline |
+| `npm.cmd run check` | Passed: all foundation checks and preserved dependency probe |
+| `npm.cmd run db:check` | Prisma validation/generation/types and all 13 database integration tests passed; fixtures rolled back |
+| `npm.cmd run db:status`, `db:diff` | Three migrations applied, none pending; no structural difference |
+| `node ../.cache/phase3-live-check.mjs` from backend | Compiled app connects through Prisma/Neon and serves health; executable rejects bad settings safely and exits 0 through SIGTERM shutdown |
+| PowerShell repository check | Passed: complete structure/templates, blank secrets, Git root and ignore rules |
+| Source/commit credential scan | Passed: no actual private environment credentials in commit candidates |
+| Local Markdown links, `git diff --check` | Passed; existing CRLF conversion notices remain informational |
+| Source review | No authored TypeScript `any`, duplicate query logic, extra client construction, dead feature code or speculative abstractions found |
+| `npm.cmd audit --json`, `--omit=dev --json` | Four high-severity package reports in the pre-existing Prisma dependency graph; unresolved, details below |
+
+An initial strict-type error in a test tuple was corrected. Biome configuration was
+updated to its current preset syntax. A final review restricted error details to
+validation errors and ensured after-header exceptions delegate a sanitized error.
+Live Windows signal verification uses a test-only IPC preload to emit SIGTERM
+because Windows child.kill does not deliver a POSIX signal; production has no IPC hook.
+The server and test listeners are stopped after verification. No application rows
+were persisted and no database reset, new migration or automatic seed was performed.
+
+Git handoff: Phase 3 changes are committed/pushed separately from the completed
+Phase 2 checkpoint; commit identifier and push result are reported in the final response.
+
 ## Current limitations and pending decisions
+
+- Dependency audit reports four high-severity entries (`prisma`, `@prisma/config`,
+  `deepmerge-ts` 7.1.5, and `mysql2` 3.15.3), including propagated reports from
+  [recursive merging](https://github.com/advisories/GHSA-ggr8-5vv4-36mx),
+  [MySQL authentication](https://github.com/advisories/GHSA-3f6p-5ww8-9rcr), and
+  [MySQL decompression](https://github.com/advisories/GHSA-rgwj-5xj2-c3m3).
+  Both vulnerable versions already existed in the Phase 2 lock. npm's suggested
+  automatic remediation downgrades Prisma to 6.19.3, conflicting with the verified
+  Prisma 7 architecture; no forced downgrade or unverified major transitive override.
+  Audit also reports these with omit-dev due to the dependency/peer graph. The
+  implemented PostgreSQL health path does not use MySQL or merge client-supplied
+  object graphs, but dependency remediation remains a follow-up maintenance issue.
+- Rate-limit counters are per-process/in-memory. Shared storage, proxy trust and
+  least-privilege database roles must be chosen for an actual deployment. Default
+  binding is loopback; LAN/container hosting needs explicit HOST/CORS configuration.
 
 - Review outstanding Android SDK licenses locally before Android build verification;
   command-line tools are installed and instructions are in the development guide.
@@ -374,6 +482,6 @@ Commit/push outcome is reported in the final audit handoff.
 
 ## Next step
 
-Stop after the Phase 2 audit. Wait for the next explicit instruction and reconcile its scope
+Stop after Phase 3 backend foundation. Wait for the next explicit instruction and reconcile its scope
 with the [roadmap](14-roadmap.md). Do not start authentication, business APIs,
 AI/ML/RAG/calculator functionality, or UI implementation automatically.

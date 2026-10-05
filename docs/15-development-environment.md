@@ -45,10 +45,13 @@ npm.cmd run check
 Set-Location ..
 ```
 
-`check` performs strict compilation and executes the compiled dependency probe.
-No server listens on port 3000 yet. `pg` is an infrastructure probe dependency;
-Prisma 7.10.0 and its pg adapter now provide database client construction; future
-application queries belong in repositories. See the database operations guide.
+`check` now verifies formatting, lint, strict compilation, build, foundation tests
+and the compiled dependency probe. Phase 3 adds `npm.cmd run dev` and
+`npm.cmd start` (after build), listening on loopback port 3000 by default after
+database readiness succeeds. See [backend foundation](17-backend-foundation.md)
+for environment settings, health responses and shutdown. Application queries
+belong in repositories using the shared Prisma client; `pg` also serves the
+preserved SQL infrastructure probe. See the database operations guide.
 
 ### Python and ML
 

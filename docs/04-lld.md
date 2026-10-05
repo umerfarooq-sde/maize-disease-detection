@@ -1,6 +1,6 @@
 # Low-Level Design (LLD)
 
-> **Status:** Implementation guidance. No application source was present when this baseline was written.
+> **Status:** Feature implementation guidance. Phase 3 now implements the backend transport foundation; see [actual layout and lifecycle](17-backend-foundation.md). Workflows below remain future work.
 
 ## Backend layering
 

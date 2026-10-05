@@ -14,7 +14,7 @@ foreach ($target in $components) {
                 Push-Location (Join-Path $repositoryRoot 'backend')
                 try {
                     & npm.cmd run check
-                    if ($LASTEXITCODE -ne 0) { throw 'Backend compilation/dependency check failed.' }
+                    if ($LASTEXITCODE -ne 0) { throw 'Backend formatting/lint/type/build/test/dependency checks failed.' }
                 } finally { Pop-Location }
             }
             { $_ -in @('AI', 'Training') } {

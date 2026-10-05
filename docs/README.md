@@ -13,7 +13,7 @@ The remaining feature documents describe intended behavior.
 | [HLD](03-hld.md) | Runtime interactions and failures |
 | [LLD](04-lld.md) | Layering and contract guidance |
 | [Database design](05-database-design.md) | Implemented 19-table schema, ERD, ownership, constraints, versions, and vectors |
-| [API design](06-api-design.md) | Versioning, candidate routes, and error conventions |
+| [API design](06-api-design.md) | Implemented health/response contracts and future candidate routes |
 | [Flutter architecture](07-flutter-architecture.md) | MVVM and farmer experience |
 | [AI architecture](08-ai-architecture.md) | Python ownership, inference, and grounding |
 | [ML pipeline](09-ml-pipeline.md) | Shared preprocessing, dataset hygiene, and evaluation |
@@ -24,6 +24,7 @@ The remaining feature documents describe intended behavior.
 | [Roadmap](14-roadmap.md) | Phase boundaries and next implementation step |
 | [Development environment](15-development-environment.md) | Phase 1 toolchains, setup, independent checks, and runtime limitations |
 | [Database operations](16-database-operations.md) | Phase 2 Prisma configuration, migrations, seed, verification, and database prerequisites |
+| [Backend foundation](17-backend-foundation.md) | Phase 3 layout, startup settings, middleware, health, response contracts and lifecycle |
 
 Finalize detailed API contracts, screen map/design system, and preprocessing package
 location in the appropriate phases. Do not treat

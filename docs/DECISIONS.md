@@ -23,6 +23,19 @@ See [database design](05-database-design.md) and [project state](PROJECT_STATE.m
 | Empty, typed seed groups until reviewed data exists | Repeat upserts preserve existing records. No invented agricultural advice, production models, or default credentials. |
 | Neon verifies the complete development schema | The configured Neon database provides pgvector. Local Compose includes pgvector but cannot be started without Docker Engine; native Windows PostgreSQL needs pgvector installed. |
 
+## Phase 3 backend foundation decisions (2026-10-05)
+
+| Decision | Rationale and boundary |
+|---|---|
+| Express app factory, separate executable/lifecycle, feature modules | Preserve the required route/controller/service/repository chain. Health keeps its layers together; shared infrastructure stays at root. No DI container or empty generic layers. |
+| One runtime Prisma client; standalone factory retained | Avoid per-request pools while keeping seed and database verification isolated. A startup query verifies connectivity before HTTP listens. No schema or migration change. |
+| Single JSON envelope with server-generated correlation ID | Success returns data, errors return stable safe codes/messages; validation exposes paths/codes only. Reject arbitrary client IDs and keep secrets out of request logs. |
+| Database-aware health is a readiness report | 200 when reachable, 503 with the same safe report when down. The health envelope's success flag means the report was produced; monitoring uses HTTP status/data.status for readiness. No provider/ML health checks yet. |
+| Zod validation stores parsed input in Express locals | Supports body/params/query including coercion without assigning Express 5's query getter. Only operational settings are validated at startup; unused provider/auth secrets remain optional. |
+| Loopback binding, exact CORS allowlist, bounded JSON and per-process rate limits | Secure, explicit local defaults; originless mobile/server clients remain supported. Proxy trust and shared rate-limit storage require actual deployment topology. |
+| Bounded shutdown drains HTTP before disconnecting Prisma | Signals and fatal errors share an idempotent path; deadline prevents indefinitely stalled cleanup. Fatal failures exit nonzero. |
+| Biome and built-in Node tests through tsx | One maintained formatter/linter with an explicit any ban; reuse existing Node test tooling without a new test framework. Preserve applied SQL and generated client formatting. |
+
 Pending decisions: refresh-token persistence/rotation contracts during authentication,
 curated source licensing and taxonomy, full JSON validation contracts, retention and
 Cloudinary deletion, production least-privilege roles, shared preprocessing package,
