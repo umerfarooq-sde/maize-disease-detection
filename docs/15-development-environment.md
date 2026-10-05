@@ -2,8 +2,9 @@
 
 Phase 1 configures independent toolchains and infrastructure probes. Phase 2 adds
 [Prisma schema/migrations and database checks](16-database-operations.md). No
-business API, preprocessing, model training, RAG, or farmer UI exists.
-The Flutter label and in-memory FastAPI test route are development fixtures.
+disease API, preprocessing, model training or RAG exists. Later completed phases add
+the [auth backend](18-authentication.md) and [Flutter farmer foundation](19-flutter-foundation.md).
+The in-memory FastAPI test route remains a development fixture.
 
 ## Toolchains and locks
 
@@ -94,9 +95,11 @@ Set-Location ..
 ```
 
 Android platform files were generated using the minimal empty app template. The
-single widget test checks rendering and Provider availability. `.env.example` is
-public configuration documentation; it is not bundled as an asset or loaded by the scaffold.
-Later API configuration can use `--dart-define=API_BASE_URL=...` after client code exists.
+Phase 5 widget/unit tests verify navigation, responsive/accessibility states,
+ViewModels and the API client. `.env.example` is public build configuration documentation;
+it is not bundled as an asset or automatically loaded. Configure the API with
+`--dart-define=API_BASE_URL=...`; omit it to explore the offline shell. Release URLs
+must use HTTPS. See [Flutter setup and live check](19-flutter-foundation.md).
 
 Analyzer and widget tests work without a complete Android SDK. On this workstation,
 the missing Android command-line tools were downloaded from Google's official source,

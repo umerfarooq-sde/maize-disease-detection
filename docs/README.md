@@ -14,7 +14,7 @@ The remaining feature documents describe intended behavior.
 | [LLD](04-lld.md) | Layering and contract guidance |
 | [Database design](05-database-design.md) | Implemented 19-table schema, ERD, ownership, constraints, versions, and vectors |
 | [API design](06-api-design.md) | Implemented health/response contracts and future candidate routes |
-| [Flutter architecture](07-flutter-architecture.md) | MVVM and farmer experience |
+| [Flutter architecture](07-flutter-architecture.md) | Implemented MVVM foundation and future farmer workflows |
 | [AI architecture](08-ai-architecture.md) | Python ownership, inference, and grounding |
 | [ML pipeline](09-ml-pipeline.md) | Shared preprocessing, dataset hygiene, and evaluation |
 | [RAG architecture](10-rag-architecture.md) | Source-grounded retrieval and generation |
@@ -26,7 +26,8 @@ The remaining feature documents describe intended behavior.
 | [Database operations](16-database-operations.md) | Phase 2 Prisma configuration, migrations, seed, verification, and database prerequisites |
 | [Backend foundation](17-backend-foundation.md) | Phase 3 layout, startup settings, middleware, health, response contracts and lifecycle |
 | [Authentication](18-authentication.md) | Phase 4 endpoints, Argon2id, JWT/cookie/session flow, replay revocation, CSRF, RBAC and admin CLI |
+| [Flutter foundation](19-flutter-foundation.md) | Phase 5 structure, Provider/MVVM, farmer routes, design system, API configuration and checks |
 
-Finalize detailed API contracts, screen map/design system, and preprocessing package
+Finalize detailed business API contracts, feature screen workflows, and preprocessing package
 location in the appropriate phases. Do not treat
 candidate designs as approved implementation details.

@@ -11,7 +11,7 @@ checks, fix failures, and update [project state](PROJECT_STATE.md).
 | 2 | PostgreSQL + Prisma (scope updated by the user's instruction) |
 | 3 | Node.js + TypeScript backend foundation (scope updated by the user's instruction) |
 | 4 | Backend authentication and authorization (scope updated by the user's instruction) |
-| 5 | Farmer UI |
+| 5 | Flutter foundation and reusable UX/design system (scope updated by the user's instruction) |
 | 6 | Disease knowledge base |
 | 7 | Image upload and Cloudinary |
 | 8 | Python FastAPI foundation |
@@ -70,3 +70,12 @@ JWT access, stateful refresh rotation/revocation, logout, RBAC, controlled admin
 creation, validation/rate limits, migrations and tests. Flutter foundation/auth
 screens, disease APIs and AI/ML/RAG remain deferred. Later phase scopes must follow
 the next explicit instruction. Stop after Phase 4.
+
+## Phase 5 scope clarification
+
+The user authorized the Flutter application foundation: MVVM/Provider structure,
+centralized light theme/design tokens, responsive farmer shell, routing, safe API
+infrastructure, loading/empty/error patterns and appropriate tests. The existing
+health endpoint provides an integration check. Feature areas have honest foundation
+views; mobile authentication, complete scanning, calculations, disease/AI/RAG workflows
+and the admin dashboard remain future work. Stop after Phase 5.

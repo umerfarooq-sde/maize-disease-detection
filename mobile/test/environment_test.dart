@@ -1,16 +1,16 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:maizedoctor/main.dart';
-import 'package:provider/provider.dart';
 
 void main() {
-  testWidgets('Flutter and Provider can render the development scaffold', (
-    tester,
-  ) async {
-    await tester.pumpWidget(
-      Provider<String>(create: (_) => 'environment', child: const MainApp()),
-    );
+  testWidgets(
+    'Flutter renders the offline farmer foundation without network calls',
+    (tester) async {
+      await tester.pumpWidget(const MainApp());
+      await tester.pumpAndSettle();
 
-    expect(find.text('MAIZEDOCTOR development scaffold'), findsOneWidget);
-    expect(tester.takeException(), isNull);
-  });
+      expect(find.text('MAIZEDOCTOR'), findsOneWidget);
+      expect(find.text('Scan Leaf'), findsOneWidget);
+      expect(tester.takeException(), isNull);
+    },
+  );
 }

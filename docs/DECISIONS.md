@@ -49,6 +49,16 @@ See [database design](05-database-design.md) and [project state](PROJECT_STATE.m
 | Registration FARMER only, ADMIN through operator stdin CLI | Reject role injection; no public admin creation, default credentials, silent promotion or user overwrite. No automatic admin is provisioned. |
 | Explicit duplicate registration, generic failed login | Return required 409 conflicts; login hides account/status distinction and incurs work for unknown identities. Auth endpoints have additional per-IP limits. |
 
+## Phase 5 Flutter foundation decisions (2026-10-06)
+
+| Decision | Rationale and boundary |
+|---|---|
+| core/data/features with scoped MVVM state | Respect View -> ViewModel -> Repository -> API client; stateless dependencies are app-scoped, Home ChangeNotifier is route-scoped. Create other feature layers when workflows exist. |
+| Compatible go_router stateful shell with five farmer branches | Preserve navigation/scroll state and nested back behavior; bottom bar changes to scrollable rail on wide screens. Keep reserved Admin boundary separate. |
+| Material 3 light theme with centralized tokens | Forest scan accents, ivory surfaces, blue knowledge and amber tools, readable Roboto typography, scalable spacing/radii and minimum 48-point interactions. |
+| Public dart-define URL, optional offline shell, HTTPS in release | No hardcoded production URL or bundled .env/secrets. Validate configuration and provide bounded JSON transport/safe errors. Secure token persistence and refresh integration are deferred. |
+| Existing health API is the concrete integration example | Verify the entire MVVM/transport chain without inventing agricultural data or implementing business/AI features. Other areas expose honest foundation views only. |
+
 Pending decisions:
 curated source licensing and taxonomy, full JSON validation contracts, retention and
 Cloudinary deletion, production least-privilege roles, shared preprocessing package,

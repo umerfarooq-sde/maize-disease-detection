@@ -4,16 +4,16 @@ Updated: 2026-10-06 (Asia/Karachi).
 
 ## Current phase
 
-Phase 4 backend authentication and authorization is complete: FARMER registration,
-login, stateful rotating refresh sessions, logout, access authentication and reusable
-FARMER/ADMIN authorization. Passwords use Argon2id; separate validated signing keys
-come from the environment. Admin creation is an operator-only CLI, with no public
-role selection or default account. See [authentication](18-authentication.md).
-All 36 isolated backend tests, 6 database-backed auth tests and 13 existing database
-regression tests pass. Prisma validation/generation, all four applied migrations,
-temporary-schema replay and structural drift checks pass. The original 19 domain
-tables and three migrations are preserved; one required auth session table is added.
-Stop after Phase 4. Flutter auth, disease/business APIs and AI/ML/RAG remain outside scope.
+Phase 5 Flutter application foundation is complete: MVVM/Provider structure,
+centralized light theme/design tokens, responsive farmer shell, preserved tab routing,
+safe API infrastructure and reusable loading/empty/error UI. Home, Scan, Knowledge,
+Tools and Profile are available; feature destinations show their current availability.
+All 37 isolated mobile tests pass; one optional live test is skipped by default and
+passes separately against the actual Node/Prisma/PostgreSQL health endpoint. Formatting,
+Flutter analysis and repository checks pass. See [Flutter foundation](19-flutter-foundation.md).
+The verified Phase 4 auth backend and Phase 2 database/migrations are preserved.
+Stop after Phase 5. Mobile auth workflows, camera/disease detection, calculations,
+complete admin UI and AI/ML/RAG remain outside scope.
 
 ## Initial workspace findings
 
@@ -43,17 +43,18 @@ Stop after Phase 4. Flutter auth, disease/business APIs and AI/ML/RAG remain out
 
 | Component | Verified implementation |
 |---|---|
-| Mobile | Minimal Flutter Android scaffold, Provider, analyzer rules, dependency lock, and widget smoke test |
+| Mobile | Flutter 3.41.9/Dart 3.11.5 Android foundation, Material 3 light tokens/theme, five-area responsive farmer shell, go_router 17.5.0, scoped Provider/ChangeNotifier MVVM, http 1.6.0 API client, state UI, 37 isolated tests and one separately verified live health integration |
 | Backend | Express 5 versioned health/auth, strict TypeScript/Zod, safe responses/errors, Argon2id, separate-key JWTs, rotating/revocable sessions, live-account RBAC, operator admin CLI, security/logging middleware, graceful lifecycle, shared Prisma 7.10.0; 20 tables/four migrations and 55 passing tests across three suites |
 | AI service | Python 3.11 manifest/lock, isolated virtual environment, and dependency/ASGI smoke tests; no production service |
 | ML training | Python 3.11 manifest/lock, isolated virtual environment, and synthetic dependency tests; no dataset or model |
 | Infrastructure | Neon PostgreSQL 18.6 with pgvector 0.8.6 migrated; pgvector 0.8.7/PostgreSQL 18 Compose configuration; preserved native 18.4 cluster; private local settings ignored |
-| Documentation | Architecture drafts, database design/ERD/operations, implemented backend foundation/auth API contracts, decisions register, revised roadmap, development guide, and state/verification history |
+| Documentation | Architecture drafts, database design/ERD/operations, backend foundation/auth contracts, implemented Flutter foundation/design/routes/setup, decisions, roadmap, development guide, and verification history |
 | Scripts | Repository checks, environment/random JWT-key initialization, secure admin provisioning, native PostgreSQL management, locked Python setup, and independent development/Prisma checks |
 
-No Flutter authentication screens, disease detection, ML pipeline, RAG, calculator execution,
-notification delivery, or farmer/admin UI has been implemented. The Flutter label and FastAPI
-test route are scaffold fixtures, not business functionality.
+Mobile authentication workflows, disease detection, ML pipeline, RAG, calculator
+execution, notification delivery and the admin dashboard remain future work. Flutter
+feature introduction/empty screens are foundation UI; the FastAPI test route remains
+a scaffold fixture.
 
 ## Phase 0 verification history
 
@@ -550,6 +551,78 @@ passed; rerunning the committed initializer preserves the valid keys.
 Git handoff: the verified Phase 4 change is committed/pushed with a relevant message;
 the commit identifier and push result are reported in the final response. Stop at Phase 4.
 
+## Phase 5 Flutter foundation
+
+### Changes and scope
+
+- Read `AGENTS.md`, project state/decisions, Flutter/LLD/API architecture and the
+  current mobile scaffold, dependencies and Android configuration before modification.
+- Preserved Flutter 3.41.9/Dart 3.11.5 and Provider; locked compatible go_router
+  17.5.0 and http 1.6.0. Created meaningful core/data/feature modules without empty
+  files, speculative data or extra unused layers.
+- Added centralized agricultural Material 3 light theme: forest scan accents,
+  ivory/white surfaces, dark ink, wheat/amber tools and blue knowledge accents;
+  explicit Roboto typography, spacing/radii and 48-point interaction minimums.
+- Added five-area farmer shell, prominent Scan Leaf, nested/back-safe navigation,
+  preserved feature state and scroll positions, safe unknown-route fallback and a
+  reserved separate Admin boundary that reveals no privileged UI/data.
+- Added honest foundation views for all requested feature areas. Mobile sign-in,
+  camera/uploads, diagnoses, calculations, charts, assistant responses and dashboard
+  operations are not simulated or implemented.
+- Added API configuration through public Dart defines, optional offline shell,
+  release HTTPS enforcement, origin-contained relative resource paths, redirect
+  rejection, JSON/UTF-8/envelope handling, safe typed errors, 15-second request bound
+  with supported transport abortion and 1 MiB response cap.
+- Added optional access-token source contract for future secure-storage integration;
+  no token persistence, mobile login/refresh implementation or secrets in Flutter.
+  Main Android INTERNET permission is present; cleartext permission is debug-only.
+- Home's scoped ChangeNotifier drives an explicit connection check through typed
+  repository/datasource/API layers. It suppresses duplicate requests and handles
+  error/retry/disposal safely. Shared dependencies are stateless app-level Providers;
+  future screen state remains scoped. Widgets never call HTTP or use business setState.
+- Added reusable loading/empty/error patterns, scalable safe scrolling pages, responsive
+  card pairs, bottom bar/scrollable wide rail and constrained content. Large text,
+  keyboard insets, long labels and small/landscape/tablet screens are verified.
+
+### Important files
+
+Created `mobile/lib/app.dart` and implementations under `core/{constants,theme,routes,
+network,storage,exceptions,utils,widgets}`, `data/{models,datasources,repositories}`,
+and all requested feature areas plus `shell` and `tools`. Every feature has a routed
+view; only Home currently needs a ViewModel and concrete data workflow.
+
+Added `mobile/test/core/api_client_test.dart`, `test/features/home_view_model_test.dart`,
+`test/widgets/foundation_test.dart`, `test/integration/backend_connection_test.dart`
+and `docs/19-flutter-foundation.md`. Updated existing entrypoint/scaffold test,
+pubspec/lock, public template, Android manifests, mobile/root README, Flutter/setup/
+roadmap/docs index, actual decisions, repository checker and this state file.
+Backend application, Prisma schema/migrations, Python/ML and infrastructure code are
+unchanged. Generated preview PNGs/test artifacts and one-off live helper stay ignored.
+
+### Checks and outcomes
+
+| Check | Result |
+|---|---|
+| `flutter --version`, `dart --version`, `flutter pub add go_router http` | Existing SDK preserved; compatible dependencies resolved and locked |
+| `dart format lib test`; format with `--output=none --set-exit-if-changed` | Passed; 40 authored Dart files formatted |
+| `flutter analyze --no-pub` | Passed; no issues |
+| `flutter doctor -v` | SDK, network and connected emulator available; some Android licenses remain unaccepted |
+| `flutter test --no-pub` | 37 passed: 17 API/repository, 4 ViewModel, 15 widget and one offline smoke test; optional live test skipped |
+| Opt-in `backend_connection_test.dart` through local compiled Node server | Passed separately: full Flutter MVVM chain reaches actual Prisma/PostgreSQL-backed health; read-only, server/client stopped afterward |
+| Responsive/navigation | Seven sizes: 320x568, 360x800, 412x915, 640x360, 768x1024, 1024x768 and 1024x360; primary small-phone action, 200% text, nested/back/state preservation, unknown/admin boundaries pass |
+| State/accessibility | Loading/error/retry, safe keyboard/insets/long text, Android tap/label/contrast guidelines pass |
+| Rendered visual review | Reviewed actual 320/360/1024 screenshots with SDK fonts; previews are ignored build artifacts |
+| Repository/templates/PowerShell/Markdown/credential/whitespace checks | Passed; no actual secrets in source/commit candidates, no empty feature files or widget HTTP/business setState |
+
+Initial checks caught brace-style lint issues, realistic font selection and semantics
+handle cleanup in tests. Added SDK font loading and explicit theme typography,
+ensured short rails scroll to every destination and corrected preview image capture
+to run in real asynchronous execution. Final checks pass. No SDK license agreement
+was accepted, Android device/APK validation or deployment performed.
+
+Git handoff: the verified Phase 5 change is committed/pushed with a relevant message;
+its identifier/result is reported in the final response. Stop after Phase 5.
+
 ## Current limitations and pending decisions
 
 - Dependency audit reports four high-severity entries (`prisma`, `@prisma/config`,
@@ -573,6 +646,10 @@ the commit identifier and push result are reported in the final response. Stop a
   management and expired-session cleanup remain future work. Future password/status
   management must revoke affected sessions; current access checks already reject inactive accounts.
 
+- Mobile authentication/secure token persistence, session-aware admin navigation,
+  localization, dark theme, camera/uploads and actual business workflows are future
+  work. Only Android scaffolding exists; emulator/physical-device interaction and APK
+  packaging remain unverified. Public API configuration is required for connection checks.
 - Review outstanding Android SDK licenses locally before Android build verification;
   command-line tools are installed and instructions are in the development guide.
 - Docker Engine/Desktop is not installed. Compose configuration passes validation;
@@ -584,13 +661,14 @@ the commit identifier and push result are reported in the final response. Stop a
 - CPU ML environment is the baseline; GPU/CUDA and model/experiment choices remain future work.
 - Shared preprocessing package location, actual sourced agricultural data/rules, trained
   model artifacts, embedding model/dimensions/indexes, provider credentials, detailed
-  APIs, retention/Cloudinary deletion, and the design system remain pending.
+  business APIs and retention/Cloudinary deletion remain pending. The initial light
+  design system is implemented; domain workflow designs remain future work.
 - Seed data is intentionally empty. Database checks enforce structure/provenance presence;
   future services must validate full JSON contracts, agricultural sources, hashes, authorization,
   uploads, and deterministic formula semantics. Separate least-privilege runtime roles remain future work.
 
 ## Next step
 
-Stop after Phase 4 authentication and authorization. Wait for the next explicit instruction and reconcile its scope
-with the [roadmap](14-roadmap.md). Do not start Flutter authentication, business APIs,
-AI/ML/RAG/calculator functionality, or UI implementation automatically.
+Stop after Phase 5 Flutter foundation. Wait for the next explicit instruction and
+reconcile its scope with the [roadmap](14-roadmap.md). Do not start mobile authentication,
+complete disease/business APIs, AI/ML/RAG/calculators or admin functionality automatically.

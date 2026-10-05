@@ -57,6 +57,18 @@ $requiredFiles += @(
     'backend/tests/foundation/http.test.ts', 'backend/tests/foundation/lifecycle.test.ts',
     'docs/17-backend-foundation.md'
 )
+$requiredFiles += @(
+    'mobile/lib/app.dart', 'mobile/lib/core/theme/design_tokens.dart',
+    'mobile/lib/core/theme/app_theme.dart', 'mobile/lib/core/routes/app_router.dart',
+    'mobile/lib/core/network/api_client.dart', 'mobile/lib/core/network/app_config.dart',
+    'mobile/lib/core/exceptions/app_exception.dart', 'mobile/lib/core/storage/access_token_source.dart',
+    'mobile/lib/data/repositories/backend_repository.dart',
+    'mobile/lib/features/home/view_models/home_view_model.dart',
+    'mobile/lib/features/shell/views/farmer_shell.dart',
+    'mobile/test/core/api_client_test.dart', 'mobile/test/features/home_view_model_test.dart',
+    'mobile/test/widgets/foundation_test.dart', 'mobile/test/integration/backend_connection_test.dart',
+    'docs/19-flutter-foundation.md'
+)
 foreach ($directory in $requiredDirectories) {
     if (-not (Test-Path -LiteralPath (Join-Path $repositoryRoot $directory) -PathType Container)) {
         throw "Missing directory: $directory"

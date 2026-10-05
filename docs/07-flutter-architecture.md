@@ -1,6 +1,8 @@
 # Flutter Architecture
 
-> **Status:** Target mobile architecture; implementation details remain to be confirmed.
+> **Status:** Phase 5 implements the mobile foundation, design system and farmer shell.
+> See [actual structure/configuration/checks](19-flutter-foundation.md). Scanning,
+> mobile authentication and business/AI workflows below remain future work.
 
 ## Pattern
 
@@ -14,24 +16,30 @@ Widgets render state and dispatch intent. ViewModels coordinate screen state and
 
 ## Feature organization
 
-Organize by feature where it fits existing conventions, for example:
+The current implementation uses:
 
 ```text
+core/               constants, theme, routes, network, storage contract, errors, responsive utilities, widgets
+data/               typed models, remote datasources, repository interfaces/implementations
 features/
-  scan/
-    view/
-    view_model/
-    repository/
-    models/
-  history/
-  auth/
-shared/
-  api/
-  widgets/
-  theme/
+  home/             views and scoped ChangeNotifier ViewModel
+  shell/            farmer navigation shell
+  tools/            tool navigation hub
+  auth/             reserved sign-in introduction
+  disease_detection/
+  disease_knowledge/
+  ai_assistant/
+  fertilizer_calculator/
+  yield_calculator/
+  scan_history/
+  analytics/
+  profile/
+  admin/            reserved access boundary; no privileged dashboard
 ```
 
-This is illustrative; avoid creating layers that add no value to the current app.
+Other features contain routed foundation views only. Add ViewModels/models/repositories
+when their actual workflows exist; do not create empty layers. The connection check is
+the current concrete MVVM example and calls the existing Node health API only on intent.
 
 ## Scan experience
 
