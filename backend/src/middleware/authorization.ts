@@ -10,3 +10,11 @@ export function authorize(...roles: UserRole[]): RequestHandler {
     next();
   };
 }
+
+export function optionallyAuthorize(...roles: UserRole[]): RequestHandler {
+  const required = authorize(...roles);
+  return (request, response, next) => {
+    if (!response.locals.principal) return next();
+    return required(request, response, next);
+  };
+}

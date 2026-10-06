@@ -28,7 +28,7 @@ export async function startApplication(
 ): Promise<RunningApplication> {
   const repository = createHealthRepository(database);
   const server = createServer(
-    { requestTimeout: 15000, headersTimeout: 10000, keepAliveTimeout: 5000 },
+    { requestTimeout: 60000, headersTimeout: 10000, keepAliveTimeout: 5000 },
     createApp(environment, logger, repository),
   );
   try {

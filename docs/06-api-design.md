@@ -1,6 +1,6 @@
 # API Design
 
-> **Status:** Health and Phase 4 authentication are implemented. Candidate disease/business routes remain design guidance.
+> **Status:** Health, authentication and Phase 7 pending-scan upload are implemented. Other candidate business routes remain design guidance.
 
 ## Conventions
 
@@ -31,7 +31,16 @@ for validation, safe DTOs, cookie transport, expiry, CSRF protection and RBAC.
 
 ## Scan contract considerations
 
-The create-scan request should define accepted image formats, maximum byte size, and whether upload is multipart or uses a separately issued upload reference. The response should define scan ID/status, predicted class, confidence semantics, model version, and grounded guidance/provenance. Include an explicit unavailable/insufficient-evidence representation; do not invent agricultural facts when retrieval is weak.
+`POST /api/v1/scans` is now implemented with exactly one multipart image,
+JPEG/PNG/WebP validation, 5 MiB/16-megapixel bounds and required idempotency/custom
+headers. Returns 201 for new PENDING scans or 200 for a completed retry. No diagnosis
+is returned. See [scan upload contract](20-scan-uploads.md) for the full implementation,
+safe errors, ownership, retries, provider privacy and failure recovery. Scan read,
+history, status polling and predictions remain candidate future routes.
+
+Future inference responses must define predicted class, confidence semantics, model
+version, and grounded guidance/provenance. Include an unavailable/insufficient-evidence
+representation; do not invent agricultural facts when retrieval is weak.
 
 Define synchronous completion versus asynchronous status polling before implementing the route. Include idempotency behavior if clients may retry a submission after a timeout.
 

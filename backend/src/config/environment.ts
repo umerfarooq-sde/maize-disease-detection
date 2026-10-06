@@ -58,12 +58,42 @@ const environmentSchema = z
     SHUTDOWN_TIMEOUT_MS: z.coerce.number().int().min(1000).max(60000).default(10000),
     RATE_LIMIT_MAX: z.coerce.number().int().min(1).max(10000).default(120),
     AUTH_RATE_LIMIT_MAX: z.coerce.number().int().min(1).max(1000).default(10),
+    SCAN_RATE_LIMIT_MAX: z.coerce.number().int().min(1).max(100).default(10),
+    CLOUDINARY_CLOUD_NAME: z
+      .string()
+      .regex(/^[a-zA-Z0-9_-]*$/)
+      .max(100)
+      .default(''),
+    CLOUDINARY_API_KEY: z
+      .string()
+      .regex(/^[0-9]*$/)
+      .max(64)
+      .default(''),
+    CLOUDINARY_API_SECRET: z.string().max(256).default(''),
     JWT_SECRET: signingSecret,
     JWT_REFRESH_SECRET: signingSecret,
     JWT_ISSUER: z.string().min(1).max(160).default('maizedoctor'),
     JWT_ACCESS_TTL_SECONDS: z.coerce.number().int().min(60).max(900).default(900),
     JWT_REFRESH_TTL_SECONDS: z.coerce.number().int().min(3600).max(2592000).default(604800),
   })
+  .refine(
+    (value) => {
+      const credentials = [
+        value.CLOUDINARY_CLOUD_NAME,
+        value.CLOUDINARY_API_KEY,
+        value.CLOUDINARY_API_SECRET,
+      ];
+      return (
+        credentials.every((key) => key === '') ||
+        credentials.every((key) => key.trim().length > 0 && key === key.trim())
+      );
+    },
+    {
+      path: ['CLOUDINARY_CLOUD_NAME'],
+      message:
+        'Supply all three Cloudinary credentials together, or leave all blank to disable uploads.',
+    },
+  )
   .refine((value) => value.JWT_SECRET !== value.JWT_REFRESH_SECRET, {
     path: ['JWT_REFRESH_SECRET'],
     message: 'Access and refresh signing keys must be different.',

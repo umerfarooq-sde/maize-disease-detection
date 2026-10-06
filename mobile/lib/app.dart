@@ -8,6 +8,10 @@ import 'core/network/app_config.dart';
 import 'core/routes/app_router.dart';
 import 'core/routes/app_routes.dart';
 import 'core/theme/app_theme.dart';
+import 'core/storage/access_token_source.dart';
+import 'data/datasources/leaf_image_datasource.dart';
+import 'data/datasources/scan_datasource.dart';
+import 'data/repositories/scan_repository.dart';
 import 'data/datasources/backend_datasource.dart';
 import 'data/repositories/backend_repository.dart';
 
@@ -16,12 +20,16 @@ class MainApp extends StatefulWidget {
     this.config,
     this.httpClient,
     this.repository,
+    this.scanRepository,
+    this.tokenSource,
     this.initialLocation = AppRoutes.home,
     super.key,
   });
   final AppConfig? config;
   final http.Client? httpClient;
   final BackendRepository? repository;
+  final ScanRepository? scanRepository;
+  final AccessTokenSource? tokenSource;
   final String initialLocation;
   @override
   State<MainApp> createState() => _MainAppState();
@@ -48,7 +56,11 @@ class _MainAppState extends State<MainApp> {
     providers: [
       Provider<AppConfig>.value(value: _config),
       Provider<ApiClient>(
-        create: (_) => ApiClient(config: _config, client: widget.httpClient),
+        create: (_) => ApiClient(
+          config: _config,
+          client: widget.httpClient,
+          tokenSource: widget.tokenSource,
+        ),
         dispose: (_, api) => api.close(),
       ),
       Provider<BackendDatasource>(
@@ -58,6 +70,14 @@ class _MainAppState extends State<MainApp> {
         create: (context) =>
             widget.repository ??
             ApiBackendRepository(context.read<BackendDatasource>()),
+      ),
+      Provider<ScanRepository>(
+        create: (context) =>
+            widget.scanRepository ??
+            ApiScanRepository(
+              PickerLeafImageDatasource(),
+              ScanDatasource(context.read<ApiClient>()),
+            ),
       ),
     ],
     child: MaterialApp.router(

@@ -99,7 +99,7 @@ class _ScanHero extends StatelessWidget {
           ),
           const SizedBox(height: AppSpacing.sm),
           Text(
-            'Leaf scanning is coming soon. Explore your starting point.',
+            'Choose a leaf photo and save your scan. Disease analysis is coming later.',
             style: text.bodyMedium?.copyWith(color: Colors.white),
           ),
           const SizedBox(height: AppSpacing.lg),

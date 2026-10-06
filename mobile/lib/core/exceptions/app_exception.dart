@@ -10,6 +10,10 @@ enum AppErrorKind {
   rateLimited,
   server,
   invalidResponse,
+  invalidImage,
+  imageTooLarge,
+  imageAccess,
+  uploadInProgress,
 }
 
 class AppException implements Exception {
@@ -35,6 +39,14 @@ class AppException implements Exception {
       'The service is temporarily unavailable. Please try again.',
     AppErrorKind.invalidResponse =>
       'We could not read the response. Please try again.',
+    AppErrorKind.invalidImage =>
+      'Choose a clear, still JPEG, PNG or WebP photo of a maize leaf.',
+    AppErrorKind.imageTooLarge =>
+      'Choose a photo up to 5 MB and 16 megapixels.',
+    AppErrorKind.imageAccess =>
+      'We could not open your photos or camera. Check app permissions and try again.',
+    AppErrorKind.uploadInProgress =>
+      'Your photo is still being saved. Please wait a moment and retry.',
   };
 
   @override

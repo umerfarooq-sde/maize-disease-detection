@@ -1,5 +1,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android">
     <uses-permission android:name="android.permission.INTERNET"/>
+    <!-- image_picker uses system gallery/camera intents; no broad storage permission. -->
+    <uses-feature android:name="android.hardware.camera" android:required="false"/>
     <application
         android:label="MAIZEDOCTOR"
         android:name="${applicationName}"

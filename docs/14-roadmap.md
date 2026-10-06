@@ -79,3 +79,11 @@ infrastructure, loading/empty/error patterns and appropriate tests. The existing
 health endpoint provides an integration check. Feature areas have honest foundation
 views; mobile authentication, complete scanning, calculations, disease/AI/RAG workflows
 and the admin dashboard remain future work. Stop after Phase 5.
+
+## Phase 7 scope clarification
+
+The user explicitly authorized leaf selection/capture, preview, authoritative image
+validation, backend Cloudinary storage, anonymous/farmer pending scan records, error
+compensation, durable cleanup, progress/retry UI, tests and documentation. Phase 6 is
+not inferred from this request. No ML inference, disease knowledge APIs, mobile login,
+AI/RAG or other business features are implemented. Stop after Phase 7.

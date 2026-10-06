@@ -27,6 +27,7 @@ The remaining feature documents describe intended behavior.
 | [Backend foundation](17-backend-foundation.md) | Phase 3 layout, startup settings, middleware, health, response contracts and lifecycle |
 | [Authentication](18-authentication.md) | Phase 4 endpoints, Argon2id, JWT/cookie/session flow, replay revocation, CSRF, RBAC and admin CLI |
 | [Flutter foundation](19-flutter-foundation.md) | Phase 5 structure, Provider/MVVM, farmer routes, design system, API configuration and checks |
+| [Scan uploads](20-scan-uploads.md) | Phase 7 gallery/camera/preview, multipart contract, validation, Cloudinary, pending scans, retries, compensation and cleanup |
 
 Finalize detailed business API contracts, feature screen workflows, and preprocessing package
 location in the appropriate phases. Do not treat

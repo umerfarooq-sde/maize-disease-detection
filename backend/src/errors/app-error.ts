@@ -15,6 +15,19 @@ const errorDefinitions = {
     message: 'Request content type or encoding is not supported.',
   },
   INTERNAL_SERVER_ERROR: { status: 500, message: 'An unexpected error occurred.' },
+  INVALID_IMAGE: {
+    status: 400,
+    message: 'The image is invalid, damaged, animated or too large in dimensions.',
+  },
+  UPLOAD_UNAVAILABLE: {
+    status: 503,
+    message: 'Image upload is temporarily unavailable. Please try again later.',
+  },
+  UPLOAD_FAILED: { status: 502, message: 'The image could not be stored. Please try again.' },
+  UPLOAD_IN_PROGRESS: {
+    status: 409,
+    message: 'This upload is already being processed. Please retry shortly.',
+  },
 } as const;
 
 export type ErrorCode = keyof typeof errorDefinitions;

@@ -4,16 +4,19 @@ Updated: 2026-10-06 (Asia/Karachi).
 
 ## Current phase
 
-Phase 5 Flutter application foundation is complete: MVVM/Provider structure,
-centralized light theme/design tokens, responsive farmer shell, preserved tab routing,
-safe API infrastructure and reusable loading/empty/error UI. Home, Scan, Knowledge,
-Tools and Profile are available; feature destinations show their current availability.
-All 37 isolated mobile tests pass; one optional live test is skipped by default and
-passes separately against the actual Node/Prisma/PostgreSQL health endpoint. Formatting,
-Flutter analysis and repository checks pass. See [Flutter foundation](19-flutter-foundation.md).
-The verified Phase 4 auth backend and Phase 2 database/migrations are preserved.
-Stop after Phase 5. Mobile auth workflows, camera/disease detection, calculations,
-complete admin UI and AI/ML/RAG remain outside scope.
+Phase 7 secure leaf image upload and pending-scan foundation is implemented and
+verified. Flutter supports gallery/supported camera selection, bounded validation,
+preview, upload progress, safe retry/errors and saved-scan confirmation. Node validates
+original images, stores them in Cloudinary and creates anonymous/farmer PENDING scans
+through Prisma/PostgreSQL, with durable retry/compensation and cleanup operations.
+See [scan uploads](20-scan-uploads.md) for flow, contracts, configuration and recovery.
+All 52 isolated Flutter tests and 77 backend tests across isolated/database/provider
+suites pass. Two Flutter live tests are opt-in; the new complete upload chain also
+passed separately against actual Node, Cloudinary and PostgreSQL, with fixture cleanup.
+Formatting, analysis, backend checks, five migrations and debug Android APK build pass.
+The original domain schema, auth and Flutter foundation are preserved. Phase 6 was
+not implemented implicitly. Stop after Phase 7; inference, mobile sign-in, disease
+knowledge/business APIs, calculations, admin dashboard and AI/ML/RAG remain deferred.
 
 ## Initial workspace findings
 
@@ -43,13 +46,13 @@ complete admin UI and AI/ML/RAG remain outside scope.
 
 | Component | Verified implementation |
 |---|---|
-| Mobile | Flutter 3.41.9/Dart 3.11.5 Android foundation, Material 3 light tokens/theme, five-area responsive farmer shell, go_router 17.5.0, scoped Provider/ChangeNotifier MVVM, http 1.6.0 API client, state UI, 37 isolated tests and one separately verified live health integration |
-| Backend | Express 5 versioned health/auth, strict TypeScript/Zod, safe responses/errors, Argon2id, separate-key JWTs, rotating/revocable sessions, live-account RBAC, operator admin CLI, security/logging middleware, graceful lifecycle, shared Prisma 7.10.0; 20 tables/four migrations and 55 passing tests across three suites |
+| Mobile | Flutter 3.41.9/Dart 3.11.5, Material 3 farmer shell, scoped Provider MVVM, go_router 17.5.0/http 1.6.0/image_picker 1.2.2, gallery/camera/preview/progress/retry/pending confirmation; 52 isolated tests, two optional live tests and separately verified real upload; debug Android APK builds |
+| Backend | Express 5 health/auth/scans, strict TS/Zod, Argon2id, rotating/revocable JWT sessions/RBAC, upload signature/full decode validation, Cloudinary authenticated assets, durable scan-upload retry/cleanup; shared Prisma 7.10.0, 21 tables/five migrations, 77 passing tests across five suites |
 | AI service | Python 3.11 manifest/lock, isolated virtual environment, and dependency/ASGI smoke tests; no production service |
 | ML training | Python 3.11 manifest/lock, isolated virtual environment, and synthetic dependency tests; no dataset or model |
 | Infrastructure | Neon PostgreSQL 18.6 with pgvector 0.8.6 migrated; pgvector 0.8.7/PostgreSQL 18 Compose configuration; preserved native 18.4 cluster; private local settings ignored |
-| Documentation | Architecture drafts, database design/ERD/operations, backend foundation/auth contracts, implemented Flutter foundation/design/routes/setup, decisions, roadmap, development guide, and verification history |
-| Scripts | Repository checks, environment/random JWT-key initialization, secure admin provisioning, native PostgreSQL management, locked Python setup, and independent development/Prisma checks |
+| Documentation | Architecture, database/operations, auth, Flutter foundation, implemented upload API/UX/validation/privacy/compensation/cleanup, decisions, roadmap and verification history |
+| Scripts | Repository/environment/auth/admin/PostgreSQL/Python/development checks; full live Flutter scan-upload harness and backend cleanup CLI |
 
 Mobile authentication workflows, disease detection, ML pipeline, RAG, calculator
 execution, notification delivery and the admin dashboard remain future work. Flutter
@@ -623,6 +626,93 @@ was accepted, Android device/APK validation or deployment performed.
 Git handoff: the verified Phase 5 change is committed/pushed with a relevant message;
 its identifier/result is reported in the final response. Stop after Phase 5.
 
+## Phase 7 implementation and verification (2026-10-06)
+
+Scope: secure maize leaf image storage and scan-record foundation only. The workspace
+started clean at e5f1949 (Phase 5). AGENTS.md, project state/decisions, relevant
+architecture, schema/migrations, auth/backend layers and mobile foundation were read
+before edits. The explicit Phase 7 request does not authorize Phase 6 or inference.
+
+- Added the layered scans module, strict multipart/header/Zod validation, optional
+  session auth and FARMER ownership. Invalid supplied credentials return 401; ADMIN
+  returns 403; request-supplied ownership/provider fields are rejected.
+- Accepted still JPEG/PNG/WebP with matching MIME/signature/extension, at most 5 MiB
+  and 16 million pixels. Security decoding validates full content with five-second
+  processing timeout; original bytes are uploaded unchanged. Python's future shared
+  ML preprocessing remains untouched. Two concurrent upload slots and additional
+  rate limits protect parsing/decoding/storage work.
+- Integrated server-only Cloudinary SDK, authenticated assets, generated IDs,
+  overwrite protection and signed HTTPS delivery. Required partial provider
+  configuration is rejected; all blank cleanly disables uploads. No provider secrets
+  or internal journal/owner fields are returned or included in mobile source.
+- Added fifth migration 20261006010000_scan_uploads: one necessary durable upload
+  journal and immutable uploaded_at timestamp. Preserve all prior migrations;
+  backfill existing scans under the atomic migration lock. Database: 21 application
+  tables, 21 CHECK constraints, 37 custom triggers and unchanged partial indexes.
+- Added exact-payload, owner-scoped retry identity; atomic scan/journal completion,
+  confirmed-upload compensation, lost-commit protection, delayed unknown-outcome and
+  crash recovery. `scans:cleanup` processes bounded stale attempts and prunes cleaned
+  FAILED journals after 24 hours, preserving all completed scans.
+- Added image_picker datasource, typed scan/photo models, repository/datasource,
+  route-scoped Scan ViewModel, preview component and upload UI. Gallery/camera
+  cancellation, native permission errors, Android lost picker data, upload progress,
+  saving state, errors/retry/new selection/disposal are handled. Selected original
+  bytes and retry key remain in memory, without plaintext token persistence.
+- Added maintained locked backend provider/parser/decoder packages. image_picker
+  1.2.3 archive download stalled; compatible cached 1.2.2 resolved and is locked.
+  Native Kotlin compilation reported its cross-drive incremental-cache error;
+  project kotlin.incremental=false fixed it. Rebuild passed without that error in 32.5s.
+- Final camera-style EXIF regression found that Cloudinary reports portrait JPEG
+  dimensions after orientation while Sharp reports original dimensions. Fixed the
+  provider consistency check to accept the EXIF-authorized swap without modifying
+  bytes. Unit and real-provider JPEG/PNG upload regression pass; original bytes remain intact.
+
+New API: POST /api/v1/scans, 201 new PENDING scan, 200 same-key replay.
+Existing health/auth endpoints remain available; no inference/read/history API added.
+
+| Check | Result |
+|---|---|
+| Backend `npm run check` | Formatting, Biome lint, strict typecheck, build, 50 isolated tests and compiled dependency probe pass |
+| Image/security/service/HTTP tests | Format signatures/decoding/EXIF portrait metadata, MIME/extension spoofing, size/pixel/animation/multipart bounds, farmer/guest/admin behavior, limits, disconnected-client slot retention, safe replies and idempotency pass |
+| Recovery tests | Database failure deletion, uncertain provider outcome, lost commit, failed cleanup, crashed upload, completed-scan protection, retry and failed-journal pruning pass |
+| Original database regression `db:check` | 13 catalog/domain/constraint/relationship/ownership/vector/version/timestamp tests pass; synthetic writes roll back |
+| Auth database regression | Six tests pass, including real HTTP auth and refresh locking/revocation |
+| Scan database integration | Seven tests pass for metadata, null/owned scans, parallel claims, transaction rollback, cleanup exclusion and immutable/state SQL invariants |
+| Real Cloudinary integration | One test passes: Node multipart PNG and portrait EXIF JPEG -> authenticated Cloudinary -> PostgreSQL, replay, signed delivery and unsigned denial; exact fixture assets/journals/scans removed |
+| Prisma | Format/validation/client generation pass; all five SQL migrations replay in a temporary schema; fifth migration deployed; status up to date; diff has no changes |
+| PostgreSQL probe | Real authenticated PG 18.6 temporary-table round trip passes and rolls back |
+| Flutter formatting/analyzer | Pass, no issues |
+| Flutter isolated tests | 52 pass; both live tests skipped by default |
+| Flutter live upload harness | Scan ViewModel -> repository -> datasource -> ApiClient -> real Node/Cloudinary/PostgreSQL passes; only own synthetic asset/SQL rows removed |
+| Android APK | `flutter build apk --debug --no-pub` passes with gallery/camera plugin after cross-drive Kotlin cache fix; generated APK ignored |
+| Android emulator | APK installation/activity launch succeed on emulator-5554; interactive picker/capture could not be verified because Android System UI repeatedly reports not responding |
+| Cleanup command | Ran successfully: zero stale assets/failures/expired journals; no unrelated assets enumerated |
+
+Commands/checks performed from appropriate component directories:
+
+- npm view/install locked Cloudinary 2.11.0, Multer 2.4.0, Sharp 0.35.5 and
+  @types/multer 2.3.0; npm audit confirmed the four already-known Prisma graph findings.
+- `npm run format`, `npm run check`, `npm run db:format`, `db:validate`, `db:generate`,
+  `db:check:migrations`, `db:migrate`, `db:status`, `db:diff`, `db:check`,
+  `test:auth:database`, `test:scans:database`, `check:database`, `test:scans:live`
+  with explicit live opt-in, `test:scans:mobile`, and `scans:cleanup`.
+- `flutter pub get --offline`, `dart fix --apply` for new braces/import issues,
+  `dart format lib test`, final format check, `flutter analyze --no-pub`,
+  `flutter test --no-pub --reporter expanded`, targeted new/widget tests and
+  `flutter build apk --debug --no-pub`.
+- Repository structure/template/ignore checks, local Markdown links, actual-secret
+  scan, whitespace/source review and Git diff/status checks are recorded at handoff.
+
+Important new files: backend/src/modules/scans/{routes,controller,service,repository,
+storage,validation,types} (scan.*.ts), cleanup-scan-uploads CLI, fifth migration,
+scan isolated/database/live tests; mobile upload request, image/scan datasources and
+models, scan repository/ViewModel/preview, scan unit/widget/live tests;
+scripts/check-scan-upload.mjs and docs/20-scan-uploads.md. Configuration/app/routes,
+dependency locks, native Android settings, existing catalog counts and docs updated.
+
+Git handoff: verified Phase 7 work is committed/pushed with a relevant message;
+its identifier/result is reported in the final response. Stop after Phase 7.
+
 ## Current limitations and pending decisions
 
 - Dependency audit reports four high-severity entries (`prisma`, `@prisma/config`,
@@ -647,11 +737,19 @@ its identifier/result is reported in the final response. Stop after Phase 5.
   management must revoke affected sessions; current access checks already reject inactive accounts.
 
 - Mobile authentication/secure token persistence, session-aware admin navigation,
-  localization, dark theme, camera/uploads and actual business workflows are future
-  work. Only Android scaffolding exists; emulator/physical-device interaction and APK
-  packaging remain unverified. Public API configuration is required for connection checks.
-- Review outstanding Android SDK licenses locally before Android build verification;
-  command-line tools are installed and instructions are in the development guide.
+  localization, dark theme and remaining business workflows are future work. Upload
+  supports guest mode and an injected farmer token source; no mobile login is invented.
+  Android debug APK builds; physical devices, iOS scaffolding/permissions and release
+  packaging/signing remain unverified. Public API configuration is required for upload.
+- Interactive Android gallery/capture needs a responsive emulator or physical device;
+  emulator-5554's System UI ANR blocked these checks. APK/plugin compilation, picker
+  routing/error tests and complete live Flutter upload through a synthetic image source pass.
+- Schedule `npm run scans:cleanup` from backend every five minutes for crash/unknown
+  outcome recovery. No OS task/deployment worker was installed. Recovery depends on
+  database/provider availability; completed-scan retention and deletion are deferred.
+- Signed Cloudinary URLs are persistent bearer capabilities; avoid publishing/logging
+  them. Original photos can retain EXIF/location data. Future owner-checked delivery
+  policy and successful-scan retention require an explicit later decision.
 - Docker Engine/Desktop is not installed. Compose configuration passes validation;
   container startup is unverified. The complete schema and pgvector are verified on Neon.
 - The preserved native Windows PostgreSQL installation lacks pgvector binaries;
@@ -660,8 +758,8 @@ its identifier/result is reported in the final response. Stop after Phase 5.
   queries; verified transactions pass. Keep the current lock until future adapter/pg compatibility is checked.
 - CPU ML environment is the baseline; GPU/CUDA and model/experiment choices remain future work.
 - Shared preprocessing package location, actual sourced agricultural data/rules, trained
-  model artifacts, embedding model/dimensions/indexes, provider credentials, detailed
-  business APIs and retention/Cloudinary deletion remain pending. The initial light
+  model artifacts, embedding model/dimensions/indexes, AI provider credentials, detailed
+  business APIs and completed-scan retention/Cloudinary deletion remain pending. The initial light
   design system is implemented; domain workflow designs remain future work.
 - Seed data is intentionally empty. Database checks enforce structure/provenance presence;
   future services must validate full JSON contracts, agricultural sources, hashes, authorization,
@@ -669,6 +767,6 @@ its identifier/result is reported in the final response. Stop after Phase 5.
 
 ## Next step
 
-Stop after Phase 5 Flutter foundation. Wait for the next explicit instruction and
+Stop after Phase 7 upload and scan-record foundation. Wait for the next explicit instruction and
 reconcile its scope with the [roadmap](14-roadmap.md). Do not start mobile authentication,
 complete disease/business APIs, AI/ML/RAG/calculators or admin functionality automatically.

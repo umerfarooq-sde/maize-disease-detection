@@ -1,5 +1,11 @@
 # Backend
 
+Phase 7 adds `POST /api/v1/scans`: validated multipart images, server-only Cloudinary
+storage, anonymous/farmer PENDING scans, idempotent retries and durable compensation.
+The fifth migration adds only the required upload journal and upload timestamp.
+See [scan uploads](../docs/20-scan-uploads.md) for the contract, limits, tests and
+`npm.cmd run scans:cleanup`, which must be scheduled for crash recovery.
+
 Phase 4 adds FARMER registration, FARMER/ADMIN login, Argon2id passwords, JWT access,
 database-backed rotating refresh cookies, logout/revocation and reusable RBAC.
 Phase 3 provides the Express 5 application, validated startup settings, versioned health,
@@ -53,4 +59,4 @@ ignored and regenerated with `db:generate`. The pgvector extension is required f
 migrations. Seed groups are empty until reviewed project data is supplied.
 See [database operations](../docs/16-database-operations.md) for checks and permissions,
 and [development setup](../docs/15-development-environment.md) for other toolchains.
-No disease APIs or provider/AI/ML/RAG/UI functionality is implemented.
+No inference, disease knowledge, calculator, AI/ML/RAG functionality is implemented.

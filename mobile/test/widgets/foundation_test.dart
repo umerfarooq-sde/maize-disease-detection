@@ -17,6 +17,7 @@ import 'package:maizedoctor/data/models/backend_health.dart';
 import 'package:maizedoctor/data/repositories/backend_repository.dart';
 import 'package:maizedoctor/features/home/view_models/home_view_model.dart';
 import 'package:maizedoctor/features/home/views/home_view.dart';
+import '../scans/helpers.dart';
 
 class WidgetRepository implements BackendRepository {
   final Completer<BackendHealth> result = Completer();
@@ -40,7 +41,11 @@ Future<void> pumpApp(
     tester.view.resetPhysicalSize();
     tester.platformDispatcher.clearTextScaleFactorTestValue();
   });
-  final app = MainApp(initialLocation: route, repository: repository);
+  final app = MainApp(
+    initialLocation: route,
+    repository: repository,
+    scanRepository: FakeScanRepository(),
+  );
   await tester.pumpWidget(wrapper?.call(app) ?? app);
   await tester.pumpAndSettle();
 }
@@ -74,7 +79,7 @@ void main() {
     await tester.tap(action);
     await tester.pumpAndSettle();
     expect(find.text('Scan a maize leaf'), findsOneWidget);
-    expect(find.text('Coming soon'), findsOneWidget);
+    expect(find.text('Choose from gallery'), findsOneWidget);
     expect(tester.takeException(), isNull);
   });
 

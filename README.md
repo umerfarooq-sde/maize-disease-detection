@@ -5,18 +5,19 @@ with administrative tools for maintaining knowledge and monitoring the system.
 
 ## Current status
 
-Phase 5 adds the Flutter farmer shell, reusable design system, responsive navigation,
-MVVM/Provider structure and a typed API client with a real backend health check.
-The Phase 4 authentication backend and Phase 2 PostgreSQL + Prisma persistence remain
-available. Mobile sign-in, scanning, disease/calculator APIs, AI services, trained
-models and the admin dashboard remain future work; feature foundation screens show
-their availability honestly.
+Phase 7 adds gallery/supported camera selection, preview, secure backend Cloudinary
+upload, anonymous/farmer PENDING scans, safe retries and durable failed-upload cleanup.
+The Flutter MVVM/design foundation, authentication backend and PostgreSQL + Prisma
+persistence are preserved. Mobile sign-in, disease inference, calculators, AI/RAG,
+trained models and the admin dashboard remain future work. Phase 6 was not implemented
+implicitly. Stop after Phase 7.
 See [project state](docs/PROJECT_STATE.md) for verified progress and outstanding decisions.
 Use the [development setup guide](docs/15-development-environment.md) for commands and limitations.
 Use [database operations](docs/16-database-operations.md) for migration and verification commands.
 Use [backend foundation](docs/17-backend-foundation.md) for server setup and HTTP contracts.
 Use [authentication](docs/18-authentication.md) for credentials, cookies, endpoints and admin provisioning.
 Use [Flutter foundation](docs/19-flutter-foundation.md) for mobile setup, design tokens, routes and tests.
+Use [scan uploads](docs/20-scan-uploads.md) for request contracts, validation, privacy and cleanup operations.
 
 ## Planned architecture
 

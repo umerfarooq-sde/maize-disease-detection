@@ -23,12 +23,12 @@ test('database catalog matches the committed relational and SQL invariants', asy
       SELECT count(*) FROM pg_constraint c JOIN pg_namespace n ON n.oid=c.connamespace
       WHERE n.nspname=${schema} AND c.contype='c'
     `;
-    assert.equal(checks[0]?.count, 20n);
+    assert.equal(checks[0]?.count, 21n);
     const triggers = await prisma.$queryRaw<{ count: bigint }[]>`
       SELECT count(*) FROM pg_trigger t JOIN pg_class c ON c.oid=t.tgrelid
       JOIN pg_namespace n ON n.oid=c.relnamespace WHERE n.nspname=${schema} AND NOT t.tgisinternal
     `;
-    assert.equal(triggers[0]?.count, 35n);
+    assert.equal(triggers[0]?.count, 37n);
     const indexes = await prisma.$queryRaw<{ indexname: string }[]>`
       SELECT indexname FROM pg_indexes WHERE schemaname=${schema} AND indexdef LIKE '% WHERE %'
     `;

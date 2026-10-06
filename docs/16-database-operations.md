@@ -9,6 +9,10 @@ reusable application client; standalone checks/seed retain isolated clients.
 See [backend foundation](17-backend-foundation.md). Business routes remain future work.
 Phase 4 adds [authentication](18-authentication.md), one session table and a fourth
 additive migration. Runtime authentication and health reuse the same Prisma client.
+Phase 7 adds a fifth atomic migration, upload journal and scan upload timestamp.
+The complete schema now has 21 tables, 21 checks and 37 custom triggers. Upload
+repositories also reuse the shared client. Run `scans:cleanup` periodically as
+described in [upload operations](20-scan-uploads.md); completed scans are preserved.
 Generated client source is ignored and must be regenerated after install/schema changes.
 
 ## Prerequisites and setup
@@ -69,7 +73,7 @@ npm.cmd run check:database
 
 | Command | What it verifies |
 |---|---|
-| `db:check` | Schema validation, generation, strict source/config/seed/test compilation, 20-table database catalog, all 19 domain model round trips, relationships, ownership, invalid records, versions, vector round trip, timestamps and deletion policies |
+| `db:check` | Schema validation, generation, strict source/config/seed/test compilation, 21-table database catalog, all 19 original domain model round trips, relationships, ownership, invalid records, versions, vector round trip, timestamps and deletion policies |
 | `db:check:migrations` | All committed SQL migrations replay into a uniquely named temporary schema; verifies tables/checks/triggers, then removes only that schema |
 | `db:diff` | Actual configured schema versus Prisma structural model; exit 0 means no difference, 2 means drift |
 | `db:status` | Applied migration history versus migration directory |

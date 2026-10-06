@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 import '../../data/repositories/backend_repository.dart';
+import '../../data/repositories/scan_repository.dart';
+import '../../features/disease_detection/view_models/scan_view_model.dart';
 import '../../features/admin/views/admin_access_view.dart';
 import '../../features/ai_assistant/views/assistant_view.dart';
 import '../../features/analytics/views/analytics_view.dart';
@@ -40,7 +42,15 @@ GoRouter createAppRouter({String initialLocation = AppRoutes.home}) => GoRouter(
         ),
         StatefulShellBranch(
           routes: [
-            GoRoute(path: AppRoutes.scan, builder: (_, _) => const ScanView()),
+            GoRoute(
+              path: AppRoutes.scan,
+              builder: (context, _) => ChangeNotifierProvider(
+                create: (_) =>
+                    ScanViewModel(context.read<ScanRepository>())
+                      ..recoverSelection(),
+                child: const ScanView(),
+              ),
+            ),
           ],
         ),
         StatefulShellBranch(

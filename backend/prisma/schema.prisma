@@ -40,6 +40,14 @@ enum ScanStatus {
   FAILED
 }
 
+enum ScanUploadState {
+  UPLOADING
+  COMPLETED
+  CLEANUP_PENDING
+  CLEANING
+  FAILED
+}
+
 enum KnowledgeStatus {
   DRAFT
   ACTIVE
@@ -239,6 +247,7 @@ model Scan {
   cloudinaryPublicId String           @unique @map("cloudinary_public_id") @db.VarChar(255)
   imageMimeType      String           @map("image_mime_type") @db.VarChar(64)
   imageBytes         Int              @map("image_bytes")
+  uploadedAt         DateTime         @default(now()) @map("uploaded_at") @db.Timestamptz(6)
   status             ScanStatus       @default(PENDING)
   processingTimeMs   Int?             @map("processing_time_ms")
   errorCode          String?          @map("error_code") @db.VarChar(64)
@@ -251,6 +260,7 @@ model Scan {
   aiQueries          AiQuery[]
   notifications      Notification[]
   history            History[]
+  upload             ScanUpload?
 
   // Composite target enforces ownership in history and notification foreign keys.
   @@unique([id, userId])
@@ -258,6 +268,22 @@ model Scan {
   @@index([status, createdAt])
   @@index([expiresAt])
   @@map("scans")
+}
+
+// Durable compensation and idempotency; stores no image bytes or raw request key.
+model ScanUpload {
+  id             String          @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  requestKeyHash String          @unique @map("request_key_hash") @db.Char(64)
+  imageHash      String          @map("image_hash") @db.Char(64)
+  publicId       String          @unique @map("public_id") @db.VarChar(255)
+  state          ScanUploadState @default(UPLOADING)
+  scanId         String?         @unique @map("scan_id") @db.Uuid
+  createdAt      DateTime        @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt      DateTime        @default(now()) @updatedAt @map("updated_at") @db.Timestamptz(6)
+  scan           Scan?           @relation(fields: [scanId], references: [id], onDelete: Restrict)
+
+  @@index([state, updatedAt])
+  @@map("scan_uploads")
 }
 
 model ScanPrediction {

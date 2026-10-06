@@ -1,5 +1,11 @@
 # Scripts
 
+Phase 7 adds [check-scan-upload.mjs](check-scan-upload.mjs), invoked from backend
+with `npm.cmd run test:scans:mobile`. It starts a private ephemeral Node test server,
+runs the opt-in Flutter upload ViewModel against real Cloudinary/PostgreSQL, and
+removes only its synthetic asset/journal/scan. Requires Flutter on PATH and backend
+server-only environment configuration. It does not deploy a server or print secrets.
+
 Run `./scripts/check-repository.ps1` from any working directory using PowerShell and Git.
 It resolves the repository relative to the script, verifies foundation and development configuration files/directories,
 checks that templates contain no credentials, and checks Git ignore behavior without

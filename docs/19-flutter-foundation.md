@@ -3,6 +3,8 @@
 Phase 5 implements the farmer application shell and reusable UX/engineering foundation.
 Flutter 3.41.9 / Dart 3.11.5 and Provider 6.1.5+1 are preserved. The resolver added
 compatible go_router 17.5.0 and http 1.6.0; the lockfile records exact versions.
+Phase 7 extends the Scan branch with scoped MVVM selection/preview/upload state and
+multipart transport; see [scan uploads](20-scan-uploads.md) for current behavior.
 
 ## Important structure
 
@@ -87,7 +89,7 @@ rails retain tooltips/semantic destination names while omitting visual labels.
 | Area | Route | Current behavior |
 |---|---|---|
 | Home | /home | Scan action, exploration cards, optional connection check |
-| Scan | /scan | Camera/analysis-unavailable state |
+| Scan | /scan | Gallery/supported camera, review, secure upload, progress/error/retry and pending confirmation; no analysis |
 | Knowledge | /knowledge | Reviewed-library-unavailable state |
 | Tools | /tools | Navigation to prepared tool areas |
 | Profile | /profile | Guest foundation and navigation to account/history/insights |
@@ -155,10 +157,11 @@ long content, plus Android tap/label/contrast guidelines. Widget tests load SDK 
 and Material icon fonts for realistic layout. Rendered 320/360/1024 previews are
 written to ignored mobile/build for review. The live test is skipped unless enabled.
 
-APK/device verification is not claimed: Android SDK licenses need local review. Only
-Android platform scaffolding exists. Localization, dark theme, secure mobile auth,
-persistence, camera/uploads, complete business/admin workflows and AI/ML/RAG remain
-future phases. Stop after Phase 5.
+Phase 5 did not include APK/device verification. Phase 7 subsequently verified the
+debug Android APK and implemented camera/gallery uploads; interactive picker checks
+remain blocked by emulator System UI errors. See [scan uploads](20-scan-uploads.md).
+Only Android platform scaffolding exists. Localization, dark theme, secure mobile
+auth, persistence, complete business/admin workflows and AI/ML/RAG remain future work.
 
 References: [Flutter architecture guide](https://docs.flutter.dev/app-architecture/guide),
 [stateful routing](https://pub.dev/documentation/go_router/17.5.0/go_router/StatefulShellRoute-class.html),

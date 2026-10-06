@@ -59,8 +59,19 @@ See [database design](05-database-design.md) and [project state](PROJECT_STATE.m
 | Public dart-define URL, optional offline shell, HTTPS in release | No hardcoded production URL or bundled .env/secrets. Validate configuration and provide bounded JSON transport/safe errors. Secure token persistence and refresh integration are deferred. |
 | Existing health API is the concrete integration example | Verify the entire MVVM/transport chain without inventing agricultural data or implementing business/AI features. Other areas expose honest foundation views only. |
 
+## Phase 7 upload decisions (2026-10-06)
+
+| Decision | Rationale and boundary |
+|---|---|
+| One durable ScanUpload journal, plus explicit scan uploadedAt | Required for cross-provider compensation, interrupted-upload recovery and safe retries. Preserve existing domain tables and applied SQL; add only a fifth migration. Original bytes stay outside PostgreSQL. |
+| Owner-scoped UUIDv4 request digest and exact image SHA256 | Conditional claims prevent parallel uploaders; completed same-key retries return the same scan. Anonymous keys act as private retry capabilities, with no unrestricted read endpoint. |
+| Upload first, atomic scan + journal completion, bounded compensation CLI | No scan row exists before accepted storage. Reread completion on uncertain commits; delay uncertain provider cleanup 15 minutes. Scheduled cleanup never claims completed scans and prunes cleaned failed attempts after 24 hours. |
+| JPEG/PNG/WebP, 5 MiB and 16 million pixels, still frames only | Security decode original bytes on Node with strict decoder/time/concurrency limits; no separate ML preprocessing implementation. Python still owns training/inference preprocessing. |
+| Cloudinary authenticated assets with server-signed HTTPS URLs | Avoid unsigned public delivery and keep provider credentials server-only. Signed URLs are persistent bearer capabilities; saved-scan retention and owner-checked future delivery remain unresolved. |
+| Scoped Flutter Scan ChangeNotifier and unchanged-byte multipart upload | Explicit preview before upload, genuine transfer progress followed by saving state, retry uses the same in-memory key. Gallery/camera business logic stays in datasource/repository/ViewModel layers. |
+
 Pending decisions:
 curated source licensing and taxonomy, full JSON validation contracts, retention and
-Cloudinary deletion, production least-privilege roles, shared preprocessing package,
+completed-scan retention/delivery/deletion, production least-privilege roles, shared preprocessing package,
 actual model artifacts, and embedding model/dimensions/distance/indexes. Address these
 only in a phase explicitly authorized by the user.

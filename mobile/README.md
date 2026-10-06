@@ -1,5 +1,11 @@
 # Mobile
 
+Phase 7 adds leaf gallery/supported camera selection, security preview validation,
+photo review, upload progress, safe error/retry and PENDING scan confirmation.
+See [scan uploads](../docs/20-scan-uploads.md). Default uploads are anonymous; the
+API client supports a securely supplied farmer AccessTokenSource without implementing
+mobile login. Cloudinary credentials remain entirely in the backend.
+
 Phase 5 provides the Flutter 3.41.9 / Dart 3.11.5 farmer foundation: Home, Scan,
 Knowledge, Tools and Profile, centralized light theme/tokens, responsive shell,
 reusable state UI and scoped Provider/ChangeNotifier state. go_router 17.5.0 and
@@ -15,8 +21,9 @@ See [implementation/setup/tests](../docs/19-flutter-foundation.md).
 The environment example contains public build configuration only; it is not bundled
 or loaded automatically. Omit API_BASE_URL to explore the offline shell. The existing
 health API demonstrates the full MVVM data flow through an explicit connection check.
-No mobile authentication, camera, disease analysis, calculator, AI or admin dashboard
-workflow is implemented.
+No mobile authentication screen, disease analysis, calculator, AI or admin dashboard
+workflow is implemented. Camera uses the configured platform picker; unsupported
+platforms hide that action. Only Android platform scaffolding currently exists.
 
 ```powershell
 flutter pub get
@@ -32,6 +39,7 @@ environment files or provider/signing secrets in Dart defines or Flutter assets.
 
 The Android namespace/application ID is currently `com.maizedoctor.maizedoctor`;
 confirm the organization ID before release. Only Android platform files were generated.
-Android command-line tools are installed on this workstation; some SDK licenses
-still require interactive review before Android builds. See the
+Android debug APK packaging is verified with the installed SDK. Kotlin incremental
+caching is disabled to avoid the Windows C:/E: plugin-path cache failure. Physical
+devices, release signing and other platforms remain future checks. See the
 [development setup](../docs/15-development-environment.md).

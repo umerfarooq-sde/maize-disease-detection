@@ -16,3 +16,11 @@ export function authenticate(service: AuthService): RequestHandler {
     next();
   };
 }
+
+export function optionallyAuthenticate(service: AuthService): RequestHandler {
+  const required = authenticate(service);
+  return (request, response, next) => {
+    if (request.get('authorization') === undefined) return next();
+    return required(request, response, next);
+  };
+}

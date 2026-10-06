@@ -27,7 +27,7 @@ test('startup settings require a database and validate supplied operational sett
   }
 });
 
-test('CORS requires exact origins and unused provider secrets are not required', () => {
+test('CORS requires exact origins and blank provider configuration disables uploads', () => {
   assert.deepEqual(
     parseEnvironment({
       ...database,
@@ -44,6 +44,29 @@ test('CORS requires exact origins and unused provider secrets are not required',
   ]) {
     assert.throws(() => parseEnvironment({ ...database, CORS_ORIGINS: origin }));
   }
+});
+
+test('Cloudinary credentials must be complete and errors never echo provider secrets', () => {
+  assert.equal(parseEnvironment(database).CLOUDINARY_CLOUD_NAME, '');
+  const credentials = {
+    CLOUDINARY_CLOUD_NAME: 'test-cloud',
+    CLOUDINARY_API_KEY: '123456',
+    CLOUDINARY_API_SECRET: 'synthetic-private-key',
+  };
+  assert.equal(
+    parseEnvironment({ ...database, ...credentials }).CLOUDINARY_CLOUD_NAME,
+    'test-cloud',
+  );
+  assert.throws(
+    () =>
+      parseEnvironment({ ...database, CLOUDINARY_API_SECRET: credentials.CLOUDINARY_API_SECRET }),
+    (error: unknown) => {
+      assert.ok(error instanceof Error);
+      assert.ok(error.message.includes('CLOUDINARY'));
+      assert.ok(!error.message.includes(credentials.CLOUDINARY_API_SECRET));
+      return true;
+    },
+  );
 });
 
 test('invalid configuration never echoes connection secrets', () => {

@@ -25,6 +25,25 @@ $requiredFiles += @(
     'backend/tests/database-support.ts', 'backend/tests/database.integration.test.ts',
     'backend/tests/migration-replay.ts', 'docs/16-database-operations.md'
 )
+$requiredFiles += @(
+    'docs/20-scan-uploads.md', 'scripts/check-scan-upload.mjs',
+    'backend/prisma/migrations/20261006010000_scan_uploads/migration.sql',
+    'backend/src/modules/scans/scan.routes.ts', 'backend/src/modules/scans/scan.controller.ts',
+    'backend/src/modules/scans/scan.service.ts', 'backend/src/modules/scans/scan.repository.ts',
+    'backend/src/modules/scans/scan.storage.ts', 'backend/src/modules/scans/scan.validation.ts',
+    'backend/src/modules/scans/scan.types.ts', 'backend/src/cli/cleanup-scan-uploads.ts',
+    'backend/tests/scans/upload.test.ts', 'backend/tests/scans/http.test.ts',
+    'backend/tests/scans.database.integration.ts', 'backend/tests/scans.live.integration.ts',
+    'mobile/lib/core/network/upload_request.dart',
+    'mobile/lib/data/datasources/leaf_image_datasource.dart',
+    'mobile/lib/data/datasources/scan_datasource.dart', 'mobile/lib/data/models/scan_record.dart',
+    'mobile/lib/data/models/selected_leaf_image.dart', 'mobile/lib/data/repositories/scan_repository.dart',
+    'mobile/lib/features/disease_detection/view_models/scan_view_model.dart',
+    'mobile/lib/features/disease_detection/widgets/scan_preview.dart',
+    'mobile/test/scans/selection_test.dart', 'mobile/test/scans/transport_test.dart',
+    'mobile/test/scans/view_model_test.dart', 'mobile/test/scans/widget_test.dart',
+    'mobile/test/integration/scan_upload_test.dart'
+)
 $architectureDocs = @(
     '01-system-overview.md', '02-hla.md', '03-hld.md', '04-lld.md',
     '05-database-design.md', '06-api-design.md', '07-flutter-architecture.md',
@@ -87,7 +106,7 @@ foreach ($file in $requiredFiles) {
 Write-Output 'PASS: Required directories, documentation, and templates exist.'
 
 $templateKeys = @{
-    'backend' = @('NODE_ENV', 'PORT', 'HOST', 'CORS_ORIGINS', 'LOG_LEVEL', 'SHUTDOWN_TIMEOUT_MS', 'RATE_LIMIT_MAX', 'AUTH_RATE_LIMIT_MAX', 'DATABASE_URL', 'DIRECT_DATABASE_URL', 'JWT_SECRET', 'JWT_REFRESH_SECRET', 'JWT_ISSUER', 'JWT_ACCESS_TTL_SECONDS', 'JWT_REFRESH_TTL_SECONDS', 'CLOUDINARY_CLOUD_NAME', 'CLOUDINARY_API_KEY', 'CLOUDINARY_API_SECRET', 'AI_SERVICE_URL', 'AI_SERVICE_TOKEN')
+    'backend' = @('NODE_ENV', 'PORT', 'HOST', 'CORS_ORIGINS', 'LOG_LEVEL', 'SHUTDOWN_TIMEOUT_MS', 'RATE_LIMIT_MAX', 'AUTH_RATE_LIMIT_MAX', 'SCAN_RATE_LIMIT_MAX', 'DATABASE_URL', 'DIRECT_DATABASE_URL', 'JWT_SECRET', 'JWT_REFRESH_SECRET', 'JWT_ISSUER', 'JWT_ACCESS_TTL_SECONDS', 'JWT_REFRESH_TTL_SECONDS', 'CLOUDINARY_CLOUD_NAME', 'CLOUDINARY_API_KEY', 'CLOUDINARY_API_SECRET', 'AI_SERVICE_URL', 'AI_SERVICE_TOKEN')
     'ai-service' = @('ENVIRONMENT', 'PORT', 'DATABASE_URL', 'GEMINI_API_KEY', 'AI_SERVICE_TOKEN', 'MODEL_PATH', 'MODEL_VERSION', 'PREPROCESSING_VERSION')
     'infrastructure' = @('POSTGRES_DB', 'POSTGRES_USER', 'POSTGRES_PASSWORD', 'POSTGRES_PORT')
     'mobile' = @('API_BASE_URL')
