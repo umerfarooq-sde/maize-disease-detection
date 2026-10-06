@@ -1,22 +1,23 @@
 # Project state
 
-Updated: 2026-10-06 (Asia/Karachi).
+Updated: 2026-10-07 (Asia/Karachi).
 
 ## Current phase
 
-Phase 7 secure leaf image upload and pending-scan foundation is implemented and
-verified. Flutter supports gallery/supported camera selection, bounded validation,
-preview, upload progress, safe retry/errors and saved-scan confirmation. Node validates
-original images, stores them in Cloudinary and creates anonymous/farmer PENDING scans
-through Prisma/PostgreSQL, with durable retry/compensation and cleanup operations.
-See [scan uploads](20-scan-uploads.md) for flow, contracts, configuration and recovery.
-All 52 isolated Flutter tests and 77 backend tests across isolated/database/provider
-suites pass. Two Flutter live tests are opt-in; the new complete upload chain also
-passed separately against actual Node, Cloudinary and PostgreSQL, with fixture cleanup.
-Formatting, analysis, backend checks, five migrations and debug Android APK build pass.
-The original domain schema, auth and Flutter foundation are preserved. Phase 6 was
-not implemented implicitly. Stop after Phase 7; inference, mobile sign-in, disease
-knowledge/business APIs, calculations, admin dashboard and AI/ML/RAG remain deferred.
+Phase 8 Python/FastAPI foundation is implemented and verified: actual application
+factory/lifespan, validated settings, safe JSON logging/errors, typed health/query/error
+contracts, local entrypoint and future shared-token authorization dependency.
+All 49 AI tests pass, including 46 new foundation tests and three preserved dependency
+probes. Ruff formatting/lint, strict mypy, compilation, locked dependency checks and
+actual CLI/local HTTP verification pass. See [AI foundation](21-ai-service-foundation.md).
+
+Phase 7 uploads/pending scans, existing backend authentication, Flutter MVVM/design and
+PostgreSQL/Prisma remain preserved. Their previously verified 52 isolated Flutter tests,
+77 backend tests, live upload chain and five migrations are recorded below; these suites
+were not rerun for this isolated Python phase. No backend/mobile/database implementation
+was changed. Phase 6 was not implemented implicitly. Stop after Phase 8; preprocessing,
+training/inference, Node/FastAPI orchestration, mobile sign-in, disease knowledge/business
+APIs, calculations, admin dashboard and AI/ML/RAG remain deferred.
 
 ## Initial workspace findings
 
@@ -48,16 +49,16 @@ knowledge/business APIs, calculations, admin dashboard and AI/ML/RAG remain defe
 |---|---|
 | Mobile | Flutter 3.41.9/Dart 3.11.5, Material 3 farmer shell, scoped Provider MVVM, go_router 17.5.0/http 1.6.0/image_picker 1.2.2, gallery/camera/preview/progress/retry/pending confirmation; 52 isolated tests, two optional live tests and separately verified real upload; debug Android APK builds |
 | Backend | Express 5 health/auth/scans, strict TS/Zod, Argon2id, rotating/revocable JWT sessions/RBAC, upload signature/full decode validation, Cloudinary authenticated assets, durable scan-upload retry/cleanup; shared Prisma 7.10.0, 21 tables/five migrations, 77 passing tests across five suites |
-| AI service | Python 3.11 manifest/lock, isolated virtual environment, and dependency/ASGI smoke tests; no production service |
+| AI service | Python 3.11/FastAPI 0.142.2/Uvicorn 0.54.0 factory/lifespan, typed process health, Pydantic settings, safe logs/errors, internal bearer preparation, private-network defaults; 49 tests, Ruff/mypy, live CLI verified; no AI operations |
 | ML training | Python 3.11 manifest/lock, isolated virtual environment, and synthetic dependency tests; no dataset or model |
 | Infrastructure | Neon PostgreSQL 18.6 with pgvector 0.8.6 migrated; pgvector 0.8.7/PostgreSQL 18 Compose configuration; preserved native 18.4 cluster; private local settings ignored |
-| Documentation | Architecture, database/operations, auth, Flutter foundation, implemented upload API/UX/validation/privacy/compensation/cleanup, decisions, roadmap and verification history |
-| Scripts | Repository/environment/auth/admin/PostgreSQL/Python/development checks; full live Flutter scan-upload harness and backend cleanup CLI |
+| Documentation | Architecture, database/operations, auth, Flutter foundation, scan uploads/recovery, FastAPI startup/contracts/network, decisions, roadmap and verification history |
+| Scripts | Repository/environment/auth/admin/PostgreSQL/Python/development checks; FastAPI start/check scripts, full live Flutter scan-upload harness and backend cleanup CLI |
 
 Mobile authentication workflows, disease detection, ML pipeline, RAG, calculator
 execution, notification delivery and the admin dashboard remain future work. Flutter
-feature introduction/empty screens are foundation UI; the FastAPI test route remains
-a scaffold fixture.
+feature introduction/empty screens are foundation UI; FastAPI exposes only real process
+health and development docs, without prediction/retrieval/generation endpoints.
 
 ## Phase 0 verification history
 
@@ -713,7 +714,88 @@ dependency locks, native Android settings, existing catalog counts and docs upda
 Git handoff: verified Phase 7 work is committed/pushed with a relevant message;
 its identifier/result is reported in the final response. Stop after Phase 7.
 
+## Phase 8 implementation and verification (2026-10-07)
+
+Read AGENTS.md, project state, AI/RAG/security architecture, decisions, existing Python
+manifests/locks/tests, environment template and setup/check scripts before changes.
+Workspace started clean on main at 7a7ec71. Two agents independently implemented
+foundation tests and reviewed application security/architecture; root implemented
+the application, configuration/tooling and documentation. No Phase 9 work was started.
+
+- Added app factory/lifespan and configured Uvicorn entrypoint. Startup loads/validates
+  settings before listening, does not import torch/image libraries or load models,
+  and creates no database/provider connections. Lifespan marks start/stop explicitly.
+- Added Pydantic typed health/query/error/metadata contracts. GET /health reports
+  process status, uptime, service version, unimplemented capabilities and unloaded
+  model with null model version. It accepts no query fields; 200 follows startup,
+  503 is a safe pre-start report. No fake diagnosis/model readiness or business API.
+  Final inspection corrected OpenAPI's default validation/error schema to match the
+  actual envelope; the generated-contract regression assertion passes.
+- Added fixed application/HTTP/validation/unexpected error handling, server-generated
+  UUID correlation and no-store/nosniff headers. Validation exposes bounded source/code
+  pairs only, without raw input/field names/context. Unknown failures contain no trace.
+- Added allowlisted JSON stdout events for lifecycle, request status/route template/
+  latency and errors. No raw request URL/query, headers/body, dynamic path values,
+  exception/library messages or tracebacks are logged. Uvicorn access logging disabled.
+- Settings load from service-local ignored .env with OS precedence; ENVIRONMENT,
+  HOST, PORT, LOG_LEVEL and AI_SERVICE_TOKEN are validated. Loopback defaults and no
+  browser CORS preserve Flutter -> Node -> private FastAPI. Production/non-loopback
+  requires a random base64url shared server token; a reusable bearer dependency compares
+  credentials in constant time and future operations fail closed if unconfigured.
+  Health requires no token. No Node integration or deployment/firewall changes.
+- Added meaningful boundary READMEs for future preprocessing, inference, RAG and model
+  management, without placeholder processors/clients/loaders. Shared preprocessing
+  implementation/package location remains future work, identical for training/inference.
+- Preserved all original locked dependencies; added Pydantic settings 2.15.0/
+  python-dotenv 1.2.4 and dev Ruff 0.16.10/mypy 1.20.2 plus their required transitives.
+  Python 3.11, FastAPI 0.142.2, Uvicorn 0.54.0, PyTorch/torchvision/image versions remain.
+  Lock diff adds seven packages without upgrading existing entries. No global installs.
+- Added scripts/start-ai.ps1 and expanded only the AI development-check branch with
+  format/lint/types before pytest. Repository checks include the new structure/template
+  keys. Documented startup/API/network/logging boundaries and recorded actual decisions.
+
+| Check | Result |
+|---|---|
+| AI aggregate check | Ruff format (27 files), lint, strict mypy (17 application modules) and 49 pytest cases pass |
+| Foundation tests | 46 pass: actual lifecycle/health/correlation, capabilities absent, no heavy imports/external calls, docs/CORS boundaries, query/body/path validation, safe errors/logging, auth dependency and settings |
+| Preserved dependency tests | Three pass: isolated Python, in-memory dependency route, image libraries and compiled CPU torch/torchvision operators |
+| Live CLI/socket check | Actual python -m app.server on an ephemeral loopback port returns safe health, 404 and validation responses, no CORS/server header; JSON logs omit synthetic sensitive path/query values; only own child stopped |
+| Invalid CLI settings | Production startup with invalid synthetic token exits 1, fixed configuration_invalid JSON event, no rejected value |
+| uv lock/sync | Lock resolves and sync --locked installs seven additions; lock --check passes |
+| uv pip check | All 42 installed packages compatible |
+| Compilation | compileall app/tests passes |
+| Independent source review | No blocking defect: config/auth, lifespan, safe errors/logs, no heavy imports and phase boundaries verified |
+| Repository checks | Required structure/templates/blank secrets/ignore behavior pass; final local links, private-secret and whitespace checks recorded at Git handoff |
+
+Commands performed: component uv lock, sync --locked, lock --check, pip check;
+`.venv/Scripts/python.exe -m ruff format app`, `ruff check app`, `mypy`, `pytest`,
+`compileall -q app tests`; `scripts/check-development.ps1 -Component AI`,
+`scripts/check-repository.ps1`; an ignored temporary actual-CLI HTTP/error/log check;
+Git/source/Markdown/credential checks. No external AI provider, database or model is
+called by these tests or application startup. Temporary live server was stopped.
+
+Important new files: app/main.py, app/server.py, api middleware/security/health route,
+config/settings.py, schemas/common.py/health.py/errors.py, utils/errors.py/logging.py,
+four future-boundary READMEs and package markers; tests/conftest.py, test_health.py,
+test_settings.py, test_errors_and_logging.py, test_service_authentication.py;
+scripts/start-ai.ps1 and docs/21-ai-service-foundation.md. Updated manifest/lock,
+environment example, AI/architecture/development/root documentation, decisions and checks.
+Original dependency tests and all backend/mobile/ML/database feature files are preserved.
+
+Git handoff: Phase 8 is committed/pushed with a relevant message; identifier/result
+reported in the final response. Stop after Phase 8.
+
 ## Current limitations and pending decisions
+
+- Starlette TestClient emits one upstream deprecation warning recommending httpx2.
+  Existing HTTPX remains locked and tests pass; a test-client migration is maintenance
+  work rather than an unverified change to this phase's dependency baseline.
+- AI foundation does not provide ML readiness, artifact loading/version resolution,
+  preprocessing, predictions, retrieval/generation or Node integration. Production
+  requires private networking, TLS, coordinated token rotation and deployment-specific
+  limits. Generic library/server log events intentionally omit diagnostic messages
+  to protect secrets. Python 3.11.0 remains the workstation baseline; provision a
+  maintained 3.11 patch release for a new/production environment.
 
 - Dependency audit reports four high-severity entries (`prisma`, `@prisma/config`,
   `deepmerge-ts` 7.1.5, and `mysql2` 3.15.3), including propagated reports from
@@ -767,6 +849,7 @@ its identifier/result is reported in the final response. Stop after Phase 7.
 
 ## Next step
 
-Stop after Phase 7 upload and scan-record foundation. Wait for the next explicit instruction and
-reconcile its scope with the [roadmap](14-roadmap.md). Do not start mobile authentication,
-complete disease/business APIs, AI/ML/RAG/calculators or admin functionality automatically.
+Stop after Phase 8 FastAPI foundation. Wait for the next explicit instruction and
+reconcile its scope with the [roadmap](14-roadmap.md). Do not start shared preprocessing,
+training/inference, Node/FastAPI integration, mobile authentication, disease/business
+APIs, RAG/Gemini/calculators or admin functionality automatically.

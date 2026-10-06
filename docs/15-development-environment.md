@@ -4,7 +4,8 @@ Phase 1 configures independent toolchains and infrastructure probes. Phase 2 add
 [Prisma schema/migrations and database checks](16-database-operations.md). No
 disease API, preprocessing, model training or RAG exists. Later completed phases add
 the [auth backend](18-authentication.md) and [Flutter farmer foundation](19-flutter-foundation.md).
-The in-memory FastAPI test route remains a development fixture.
+Phase 8 adds the [actual FastAPI foundation](21-ai-service-foundation.md), preserving
+the independent image/CPU dependency smoke tests.
 
 ## Toolchains and locks
 
@@ -77,7 +78,15 @@ powershell -NoProfile -ExecutionPolicy Bypass -File scripts/check-development.ps
 powershell -NoProfile -ExecutionPolicy Bypass -File scripts/check-development.ps1 -Component Training
 ```
 
-FastAPI is tested through an in-memory ASGI app; no service entrypoint exists yet.
+The AI checks now run Ruff formatting/lint, strict mypy and actual FastAPI foundation
+tests as well as dependency probes. Start the configured local service with:
+
+```powershell
+powershell -NoProfile -ExecutionPolicy Bypass -File scripts/start-ai.ps1
+```
+
+It listens on loopback port 8000 by default and exposes `GET /health`; no model,
+database or Gemini access is needed. See [AI startup/settings](21-ai-service-foundation.md).
 ML checks use synthetic arrays and tensors, exercise autograd and compiled torchvision
 operators, and verify scikit-learn metrics. No weights or dataset are downloaded.
 
@@ -119,7 +128,8 @@ This creates ignored `infrastructure/.env`, `backend/.env`, and `ai-service/.env
 when missing, generating a random local password without printing it. Existing
 files are preserved. Template credentials remain blank. Phase 4 fills only missing
 local JWT keys using initialize-auth-env.ps1; supplied keys are preserved and never
-printed. Provider settings remain unused. See [authentication](18-authentication.md)
+printed. AI operational settings are loaded in Phase 8; database/Gemini/model settings
+remain unused by FastAPI. See [authentication](18-authentication.md)
 for required keys, cookies, endpoints and controlled admin provisioning.
 
 Newly generated database URLs point to `127.0.0.1:5433/maizedoctor`. Existing custom

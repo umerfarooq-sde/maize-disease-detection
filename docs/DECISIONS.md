@@ -70,6 +70,16 @@ See [database design](05-database-design.md) and [project state](PROJECT_STATE.m
 | Cloudinary authenticated assets with server-signed HTTPS URLs | Avoid unsigned public delivery and keep provider credentials server-only. Signed URLs are persistent bearer capabilities; saved-scan retention and owner-checked future delivery remain unresolved. |
 | Scoped Flutter Scan ChangeNotifier and unchanged-byte multipart upload | Explicit preview before upload, genuine transfer progress followed by saving state, retry uses the same in-memory key. Gallery/camera business logic stays in datasource/repository/ViewModel layers. |
 
+## Phase 8 AI foundation decisions (2026-10-07)
+
+| Decision | Rationale and boundary |
+|---|---|
+| FastAPI factory/lifespan and configured Uvicorn executable | Keep tests isolated and startup validation before listening; preserve locked Python 3.11 CPU/image setup without heavy imports or external calls in the application. |
+| Safe typed process health independently of model readiness | `/health` reports lifecycle, absent model and unimplemented capabilities; no fake model version or readiness. Future operations will use `/api/v1`; health remains an operational exception. |
+| Loopback/no browser CORS; future shared-token dependency | Node owns public authorization/orchestration. Production or non-loopback binding requires a random base64url server token; future protected routes fail closed. Health needs no local credentials. No Node integration, mTLS or deployment change yet. |
+| Pydantic settings, allowlisted JSON events and fixed error contracts | Service-local dotenv with OS precedence; never echo rejected values, arbitrary exception/library messages, headers/body/query or dynamic path values. Generic server events trade detail for secret protection. |
+| Ruff formatting/lint and strict mypy for service source | Extend existing pytest/HTTPX without a new test framework; dev tools stay in the locked environment. Future AI directories document boundaries rather than fake implementations. |
+
 Pending decisions:
 curated source licensing and taxonomy, full JSON validation contracts, retention and
 completed-scan retention/delivery/deletion, production least-privilege roles, shared preprocessing package,

@@ -23,8 +23,16 @@ foreach ($target in $components) {
                 try {
                     $python = Join-Path $PWD '.venv/Scripts/python.exe'
                     if (-not (Test-Path -LiteralPath $python)) { throw "Run setup-python.ps1 for $directory first." }
+                    if ($target -eq 'AI') {
+                        & $python -m ruff format --check app tests
+                        if ($LASTEXITCODE -ne 0) { throw 'AI formatting check failed.' }
+                        & $python -m ruff check app tests
+                        if ($LASTEXITCODE -ne 0) { throw 'AI lint check failed.' }
+                        & $python -m mypy
+                        if ($LASTEXITCODE -ne 0) { throw 'AI strict type check failed.' }
+                    }
                     & $python -m pytest
-                    if ($LASTEXITCODE -ne 0) { throw "$directory environment tests failed." }
+                    if ($LASTEXITCODE -ne 0) { throw "$directory tests failed." }
                 } finally { Pop-Location }
             }
             'Flutter' {

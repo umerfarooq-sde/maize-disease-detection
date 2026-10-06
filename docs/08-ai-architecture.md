@@ -1,6 +1,13 @@
 # AI Service Architecture
 
-> **Status:** Target architecture. Model, API, deployment, and dependency choices must be verified during implementation.
+> **Status:** Phase 8 FastAPI foundation is implemented. Preprocessing, model, retrieval/generation and deployment below remain target architecture.
+
+The current app exposes typed `GET /health`, safe configuration/logging/errors and
+lifespan state without loading a model or connecting to providers. It binds to loopback
+by default, enables no browser CORS and prepares shared-token authentication for future
+internal routes. See [AI foundation](21-ai-service-foundation.md) for implemented
+contracts, local startup, network policy and verification. Flutter calls Node; Node
+orchestration of FastAPI is still deferred to its authorized integration phase.
 
 ## Ownership boundary
 

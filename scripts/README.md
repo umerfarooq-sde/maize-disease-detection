@@ -1,5 +1,9 @@
 # Scripts
 
+Phase 8 adds [start-ai.ps1](start-ai.ps1) for the configured FastAPI entrypoint.
+`check-development.ps1 -Component AI` now runs Ruff format/lint, strict mypy and
+service/dependency tests. See [AI foundation](../docs/21-ai-service-foundation.md).
+
 Phase 7 adds [check-scan-upload.mjs](check-scan-upload.mjs), invoked from backend
 with `npm.cmd run test:scans:mobile`. It starts a private ephemeral Node test server,
 runs the opt-in Flutter upload ViewModel against real Cloudinary/PostgreSQL, and

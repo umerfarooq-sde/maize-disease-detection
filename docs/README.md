@@ -15,7 +15,7 @@ The remaining feature documents describe intended behavior.
 | [Database design](05-database-design.md) | Implemented 19-table schema, ERD, ownership, constraints, versions, and vectors |
 | [API design](06-api-design.md) | Implemented health/response contracts and future candidate routes |
 | [Flutter architecture](07-flutter-architecture.md) | Implemented MVVM foundation and future farmer workflows |
-| [AI architecture](08-ai-architecture.md) | Python ownership, inference, and grounding |
+| [AI architecture](08-ai-architecture.md) | Implemented service foundation and future Python inference/grounding ownership |
 | [ML pipeline](09-ml-pipeline.md) | Shared preprocessing, dataset hygiene, and evaluation |
 | [RAG architecture](10-rag-architecture.md) | Source-grounded retrieval and generation |
 | [Security](11-security.md) | Identity, uploads, credentials, and access controls |
@@ -28,6 +28,7 @@ The remaining feature documents describe intended behavior.
 | [Authentication](18-authentication.md) | Phase 4 endpoints, Argon2id, JWT/cookie/session flow, replay revocation, CSRF, RBAC and admin CLI |
 | [Flutter foundation](19-flutter-foundation.md) | Phase 5 structure, Provider/MVVM, farmer routes, design system, API configuration and checks |
 | [Scan uploads](20-scan-uploads.md) | Phase 7 gallery/camera/preview, multipart contract, validation, Cloudinary, pending scans, retries, compensation and cleanup |
+| [AI service foundation](21-ai-service-foundation.md) | Phase 8 app structure, settings, health, lifecycle, safe logs/errors, internal access, local startup and tests |
 
 Finalize detailed business API contracts, feature screen workflows, and preprocessing package
 location in the appropriate phases. Do not treat

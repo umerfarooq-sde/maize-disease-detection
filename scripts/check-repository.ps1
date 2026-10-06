@@ -51,6 +51,17 @@ $architectureDocs = @(
     '11-security.md', '12-testing.md', '13-deployment.md'
 )
 $requiredFiles += @(
+    'docs/21-ai-service-foundation.md', 'scripts/start-ai.ps1',
+    'ai-service/app/main.py', 'ai-service/app/server.py',
+    'ai-service/app/config/settings.py', 'ai-service/app/api/security.py',
+    'ai-service/app/api/middleware.py', 'ai-service/app/api/routes/health.py',
+    'ai-service/app/schemas/common.py', 'ai-service/app/schemas/health.py',
+    'ai-service/app/schemas/errors.py', 'ai-service/app/utils/logging.py',
+    'ai-service/app/utils/errors.py', 'ai-service/app/preprocessing/README.md',
+    'ai-service/app/inference/README.md', 'ai-service/app/rag/README.md',
+    'ai-service/app/model_management/README.md'
+)
+$requiredFiles += @(
     'backend/prisma/migrations/20261006000000_auth_sessions/migration.sql',
     'backend/src/middleware/authentication.ts', 'backend/src/middleware/authorization.ts',
     'backend/src/modules/auth/auth.types.ts', 'backend/src/modules/auth/auth.repository.ts',
@@ -107,7 +118,7 @@ Write-Output 'PASS: Required directories, documentation, and templates exist.'
 
 $templateKeys = @{
     'backend' = @('NODE_ENV', 'PORT', 'HOST', 'CORS_ORIGINS', 'LOG_LEVEL', 'SHUTDOWN_TIMEOUT_MS', 'RATE_LIMIT_MAX', 'AUTH_RATE_LIMIT_MAX', 'SCAN_RATE_LIMIT_MAX', 'DATABASE_URL', 'DIRECT_DATABASE_URL', 'JWT_SECRET', 'JWT_REFRESH_SECRET', 'JWT_ISSUER', 'JWT_ACCESS_TTL_SECONDS', 'JWT_REFRESH_TTL_SECONDS', 'CLOUDINARY_CLOUD_NAME', 'CLOUDINARY_API_KEY', 'CLOUDINARY_API_SECRET', 'AI_SERVICE_URL', 'AI_SERVICE_TOKEN')
-    'ai-service' = @('ENVIRONMENT', 'PORT', 'DATABASE_URL', 'GEMINI_API_KEY', 'AI_SERVICE_TOKEN', 'MODEL_PATH', 'MODEL_VERSION', 'PREPROCESSING_VERSION')
+    'ai-service' = @('ENVIRONMENT', 'HOST', 'PORT', 'LOG_LEVEL', 'DATABASE_URL', 'GEMINI_API_KEY', 'AI_SERVICE_TOKEN', 'MODEL_PATH', 'MODEL_VERSION', 'PREPROCESSING_VERSION')
     'infrastructure' = @('POSTGRES_DB', 'POSTGRES_USER', 'POSTGRES_PASSWORD', 'POSTGRES_PORT')
     'mobile' = @('API_BASE_URL')
 }

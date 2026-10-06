@@ -87,3 +87,12 @@ validation, backend Cloudinary storage, anonymous/farmer pending scan records, e
 compensation, durable cleanup, progress/retry UI, tests and documentation. Phase 6 is
 not inferred from this request. No ML inference, disease knowledge APIs, mobile login,
 AI/RAG or other business features are implemented. Stop after Phase 7.
+
+## Phase 8 scope clarification
+
+The user authorized the internal FastAPI foundation: app/lifespan, validated settings,
+structured safe logs, central errors and typed contracts, process health, private
+network/shared-token preparation, tests/tooling and startup documentation. Future
+preprocessing/inference/RAG/model areas contain ownership documentation only. There is
+no final preprocessing, model training/loading/inference, Gemini, retrieval or Node
+integration. Preserve existing phases and stop after Phase 8.
