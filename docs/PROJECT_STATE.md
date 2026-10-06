@@ -19,9 +19,10 @@ Phase 7 uploads/pending scans, existing backend authentication, Flutter MVVM/des
 PostgreSQL/Prisma remain preserved. Their previously verified 52 isolated Flutter tests,
 77 backend tests, live upload chain and five migrations are recorded below; these suites
 were not rerun for this isolated Python phase. Phase 9 changes no backend/mobile/database
-implementation. An unrelated local deletion of `backend/src/database/client.ts` blocks
-the complete repository structure check and one existing documentation link; it is
-preserved and excluded from this phase's commit. Phase 6 was not implemented implicitly.
+implementation. Following the user's recovery instruction, the required database client
+was restored from Git without changing its implementation. The repository check,
+all 139 local documentation links, backend checks/50 isolated tests and Prisma validation
+now pass; recovery details are recorded below. Phase 6 was not implemented implicitly.
 Stop after Phase 9; training/inference, Node/FastAPI orchestration, mobile sign-in, disease knowledge/business
 APIs, calculations, admin dashboard and AI/ML/RAG remain deferred.
 
@@ -889,6 +890,34 @@ Git handoff: verified Phase 9 work is committed/pushed with a relevant message;
 its identifier/result is reported in the final response. Unrelated local changes
 remain outside the commit. Stop after Phase 9.
 
+## Post-Phase 9 database client recovery (2026-10-07)
+
+The user authorized recovery of the locally deleted `backend/src/database/client.ts`
+if necessary. Inspection confirmed that backend startup, repositories, maintenance
+commands, seed and database tests still import its shared-client/factory exports.
+An independent read-only review confirmed that restoring the committed implementation
+was the appropriate minimal fix.
+
+Restored only this file with `git restore --source=HEAD --worktree`. Git's Windows
+checkout produced CRLF line endings rejected by Biome; formatting only the restored
+file returned it to the expected LF format. Its Git blob hash matches HEAD exactly,
+so no backend implementation change remains. Other existing ignore/ML scaffold/README
+changes were preserved and excluded from this documentation commit.
+
+| Check | Result |
+|---|---|
+| Repository foundation | Required structure, documentation, environment templates and Git ignore/source visibility checks pass |
+| Local documentation links | All 139 resolve; the previously missing database-client link is restored |
+| Backend aggregate | Formatting, lint, strict typecheck, build, all 50 isolated foundation/auth/upload tests and compiled dependency probe pass |
+| Prisma validation | Existing schema is valid; no migration/schema changes |
+| Source integrity | Restored client matches HEAD; Git whitespace checks pass |
+
+Commands: `git show HEAD:backend/src/database/client.ts`, import inspection with `rg`,
+`git restore --source=HEAD --worktree -- backend/src/database/client.ts`, local Biome
+formatting of that file, `scripts/check-repository.ps1`, `npm run check`,
+`npm run db:validate`, local Markdown link verification and Git content/diff checks.
+The Phase 9 repository/link failure is resolved. No later phase was started.
+
 ## Current limitations and pending decisions
 
 - Starlette TestClient emits one upstream deprecation warning recommending httpx2.
@@ -902,9 +931,6 @@ remain outside the commit. Stop after Phase 9.
   healthy/diseased samples before selecting model-compatible configuration. Future
   serving needs measured deployment concurrency/time/memory limits and cross-platform
   codec parity; current byte/pixel caps only bound individual inputs.
-- An unrelated local deletion of `backend/src/database/client.ts` remains unresolved
-  in the workspace. Full repository checks and its existing documentation link fail
-  until that separate change is addressed; it was not restored or committed here.
 - AI foundation does not provide ML readiness, artifact loading/version resolution,
   predictions, retrieval/generation or Node integration. Production
   requires private networking, TLS, coordinated token rotation and deployment-specific
