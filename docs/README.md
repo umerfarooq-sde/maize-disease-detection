@@ -29,7 +29,8 @@ The remaining feature documents describe intended behavior.
 | [Flutter foundation](19-flutter-foundation.md) | Phase 5 structure, Provider/MVVM, farmer routes, design system, API configuration and checks |
 | [Scan uploads](20-scan-uploads.md) | Phase 7 gallery/camera/preview, multipart contract, validation, Cloudinary, pending scans, retries, compensation and cleanup |
 | [AI service foundation](21-ai-service-foundation.md) | Phase 8 app structure, settings, health, lifecycle, safe logs/errors, internal access, local startup and tests |
+| [Shared preprocessing](22-shared-preprocessing.md) | Phase 9 one package, lesion-safe extraction/fallback, typed configuration, provenance, debug utilities, parity and pending field validation |
 
-Finalize detailed business API contracts, feature screen workflows, and preprocessing package
-location in the appropriate phases. Do not treat
+The shared preprocessing location is implemented; finalize detailed business API
+contracts, feature workflows and evaluated model compatibility in their phases. Do not treat
 candidate designs as approved implementation details.

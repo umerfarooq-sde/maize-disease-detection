@@ -1,5 +1,10 @@
 # AI service foundation
 
+Phase 9 adds the [shared preprocessing library](22-shared-preprocessing.md). The
+`app.preprocessing` module re-exports its exact functions; health reports library
+availability without claiming a ready model. No preprocessing/inference HTTP route
+is introduced; the Phase 8 service foundation below remains in place.
+
 Phase 8 implements the internal Python/FastAPI service foundation only. No model
 weights, preprocessing implementation, predictions, retrieval, Gemini requests,
 database connection or Node service call is added. The intended production flow is
@@ -21,18 +26,17 @@ ai-service/
     config/settings.py            validated operational settings
     schemas/                      metadata, health/query, error/validation contracts
     utils/                        safe errors and JSON logging
-    preprocessing/README.md       shared training/inference boundary
+    preprocessing/                shared API re-export and boundary README
     inference/README.md           future classifier boundary
     rag/README.md                 future retrieval/generation boundary
     model_management/README.md    immutable artifacts and readiness boundary
   tests/                          app foundation plus dependency smoke checks
 ```
 
-The four future feature directories contain ownership documentation, not placeholder
-processors, model loaders or retrieval clients. The shared preprocessing package
-location is still undecided; training and inference must import one implementation
-when Phase 9 is explicitly authorized. No new layer mirrors Node's repositories where
-there is no database work.
+Inference, RAG and model-management directories contain ownership documentation,
+without placeholder model loaders or clients. Preprocessing imports the installed
+package from `shared/preprocessing`; there is no separate serving transform. No new
+layer mirrors Node's repositories where there is no database work.
 
 ## Install and run
 
@@ -95,7 +99,7 @@ health, not ML readiness. Future model-dependent readiness must be separate.
     "status": "ok",
     "uptimeSeconds": 1.234,
     "capabilities": {
-      "preprocessing": "not_implemented",
+      "preprocessing": "library_available",
       "inference": "not_implemented",
       "rag": "not_implemented",
       "generation": "not_implemented"

@@ -12,7 +12,7 @@ class HealthQuery(BaseModel):
 
 
 class Capabilities(BaseModel):
-    preprocessing: Literal["not_implemented"] = "not_implemented"
+    preprocessing: Literal["library_available"] = "library_available"
     inference: Literal["not_implemented"] = "not_implemented"
     rag: Literal["not_implemented"] = "not_implemented"
     generation: Literal["not_implemented"] = "not_implemented"

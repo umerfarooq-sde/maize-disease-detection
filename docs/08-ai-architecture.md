@@ -1,6 +1,11 @@
 # AI Service Architecture
 
-> **Status:** Phase 8 FastAPI foundation is implemented. Preprocessing, model, retrieval/generation and deployment below remain target architecture.
+> **Status:** Phase 8 FastAPI foundation and Phase 9 shared preprocessing are implemented. Model, retrieval/generation and deployment below remain target architecture.
+
+Both Python environments now install the same [shared preprocessing package](22-shared-preprocessing.md).
+Serving and training re-export identical functions and must pin the same configuration
+and mask policy. Health distinguishes library availability from absent model readiness;
+no preprocessing/inference HTTP endpoint or Node orchestration is added.
 
 The current app exposes typed `GET /health`, safe configuration/logging/errors and
 lifespan state without loading a model or connecting to providers. It binds to loopback

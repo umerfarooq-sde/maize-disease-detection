@@ -4,6 +4,7 @@ version = "0.1.0"
 description = "ML experiment development dependencies; no training pipeline yet"
 requires-python = ">=3.11,<3.12"
 dependencies = [
+    "maizedoctor-preprocessing==1.0.0",
     "numpy>=2.4.2,<3",
     "opencv-python==4.13.0.92; sys_platform == 'win32'",
     "opencv-python-headless==4.13.0.92; sys_platform != 'win32'",
@@ -15,7 +16,7 @@ dependencies = [
 ]
 
 [dependency-groups]
-dev = ["pytest>=8.4,<10"]
+dev = ["pytest>=8.4,<10", "ruff>=0.15,<1", "mypy>=1.19,<2"]
 
 [tool.uv]
 package = false
@@ -26,9 +27,28 @@ url = "https://download.pytorch.org/whl/cpu"
 explicit = true
 
 [tool.uv.sources]
+maizedoctor-preprocessing = { path = "../shared/preprocessing", editable = true }
 torch = { index = "pytorch-cpu" }
 torchvision = { index = "pytorch-cpu" }
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]
 addopts = "-ra --strict-markers"
+pythonpath = ["."]
+
+[tool.ruff]
+target-version = "py311"
+line-length = 100
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "UP", "B", "SIM"]
+
+[tool.mypy]
+python_version = "3.11"
+strict = true
+files = ["preprocessing.py"]
+plugins = ["pydantic.mypy"]
+
+[tool.pydantic-mypy]
+init_typed = true
+init_forbid_extra = true

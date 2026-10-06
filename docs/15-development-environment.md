@@ -29,8 +29,11 @@ no global packages are inherited by either environment.
 
 Locks include transitive versions and integrity hashes. Regenerate them intentionally
 when upgrading dependencies; do not use an untracked global environment as the project environment.
-Training and inference dependencies match, but the shared preprocessing implementation
-and its package location remain future work.
+Phase 9 installs the same editable `maizedoctor-preprocessing` package from
+`shared/preprocessing` into both environments without replacing their existing CPU/
+image versions. It uses Pydantic configuration and shared Ruff/mypy standards. The
+[preprocessing guide](22-shared-preprocessing.md) explains the pipeline and pending
+real-image validation; no model or training run is introduced.
 
 ## Windows setup
 
@@ -76,6 +79,7 @@ Run each environment independently:
 ```powershell
 powershell -NoProfile -ExecutionPolicy Bypass -File scripts/check-development.ps1 -Component AI
 powershell -NoProfile -ExecutionPolicy Bypass -File scripts/check-development.ps1 -Component Training
+powershell -NoProfile -ExecutionPolicy Bypass -File scripts/check-development.ps1 -Component Preprocessing
 ```
 
 The AI checks now run Ruff formatting/lint, strict mypy and actual FastAPI foundation

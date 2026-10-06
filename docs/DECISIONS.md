@@ -80,8 +80,18 @@ See [database design](05-database-design.md) and [project state](PROJECT_STATE.m
 | Pydantic settings, allowlisted JSON events and fixed error contracts | Service-local dotenv with OS precedence; never echo rejected values, arbitrary exception/library messages, headers/body/query or dynamic path values. Generic server events trade detail for secret protection. |
 | Ruff formatting/lint and strict mypy for service source | Extend existing pytest/HTTPX without a new test framework; dev tools stay in the locked environment. Future AI directories document boundaries rather than fake implementations. |
 
+## Phase 9 preprocessing decisions (2026-10-07)
+
+| Decision | Rationale and boundary |
+|---|---|
+| One typed installable package in shared/preprocessing | Both Python manifests/locks install exactly the same local dependency, avoiding consumer-owned duplicate transforms. Existing seven component roots remain; shared hosts this requested cross-component implementation. |
+| Version 1.0.0 plus canonical configuration and supplied-mask hashes | Record source bytes, settings, mask provenance and library versions. Future models pin the evaluated version/configuration; default 224/RGB/neutral normalization is a foundation contract, not selected classifier hyperparameters. |
+| Full-color perimeter-connected extraction with conservative fallback | Preserve enclosed brown/yellow/gray/rust/dead tissue without a healthy-green assumption. Uniform-background gates, all-component retention and outward-only margin reduce loss; uncertain scenes preserve the full frame or explicitly fail by policy. No semantic leaf detector or random GrabCut. |
+| Explicit orientation/profile/alpha and unsigned16 grayscale handling | Standardize color before segmentation, preserve nonzero-alpha tissue and grayscale gradations; no per-image contrast enhancement/lesion cleaning. Provided masks describe the oriented frame and require identical training/serving policy. |
+| Aspect-preserving letterbox and RGB CHW float32 with unchanged optional tensor | One crop/resize/normalization implementation, no random augmentation or extra torch transforms. Debug artifacts and deterministic/cross-environment tests support review; real-image validation remains pending. |
+
 Pending decisions:
 curated source licensing and taxonomy, full JSON validation contracts, retention and
-completed-scan retention/delivery/deletion, production least-privilege roles, shared preprocessing package,
+completed-scan retention/delivery/deletion, production least-privilege roles, evaluated preprocessing/model compatibility,
 actual model artifacts, and embedding model/dimensions/distance/indexes. Address these
 only in a phase explicitly authorized by the user.

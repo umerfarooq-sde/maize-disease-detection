@@ -5,12 +5,12 @@ with administrative tools for maintaining knowledge and monitoring the system.
 
 ## Current status
 
-Phase 8 adds the internal FastAPI foundation: typed process health, validated settings,
-safe JSON logging/errors, lifecycle and future shared-token authentication. Existing
-Flutter scanning/upload, backend authentication and PostgreSQL/Prisma remain preserved.
-Mobile sign-in, preprocessing, disease inference, calculators, AI/RAG, trained models
-and the admin dashboard remain future work. Phase 6 was not implemented implicitly.
-Stop after Phase 8.
+Phase 9 adds one shared deterministic image-preprocessing package used by both Python
+environments: validation/color handling, conservative foreground extraction, crop/resize,
+normalization, model-ready arrays and inspection tools. Real maize-image validation
+remains pending because no dataset is supplied. Existing FastAPI, Flutter scanning,
+backend auth and PostgreSQL/Prisma are preserved. No training, inference, AI/RAG or
+other business features are added. Stop after Phase 9.
 See [project state](docs/PROJECT_STATE.md) for verified progress and outstanding decisions.
 Use the [development setup guide](docs/15-development-environment.md) for commands and limitations.
 Use [database operations](docs/16-database-operations.md) for migration and verification commands.
@@ -19,6 +19,7 @@ Use [authentication](docs/18-authentication.md) for credentials, cookies, endpoi
 Use [Flutter foundation](docs/19-flutter-foundation.md) for mobile setup, design tokens, routes and tests.
 Use [scan uploads](docs/20-scan-uploads.md) for request contracts, validation, privacy and cleanup operations.
 Use [AI service foundation](docs/21-ai-service-foundation.md) for Python startup, health, internal access and checks.
+Use [shared preprocessing](docs/22-shared-preprocessing.md) for the single training/serving pipeline and its limitations.
 
 ## Planned architecture
 
@@ -49,6 +50,7 @@ Flutter -> Node.js / TypeScript REST API -> PostgreSQL (Prisma)
 | [docs/](docs/README.md) | Architecture and technical documentation |
 | [scripts/](scripts/README.md) | Development and repository automation |
 | [infrastructure/](infrastructure/README.md) | Local PostgreSQL Compose and native development configuration |
+| [shared/preprocessing/](shared/preprocessing/README.md) | One reusable Python preprocessing package for training and serving |
 
 Read [AGENTS.md](AGENTS.md) before changing the project. Architecture drafts are
 design guidance, not evidence that features exist.
@@ -93,5 +95,5 @@ This does not change the machine's persistent execution policy.
 
 ## Next step
 
-Stop after Phase 8 FastAPI foundation. Wait for an explicit instruction before
+Stop after Phase 9 shared preprocessing. Wait for an explicit instruction before
 implementing business features. See the [roadmap](docs/14-roadmap.md).

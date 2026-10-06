@@ -74,6 +74,23 @@ $requiredFiles += @(
     'scripts/initialize-auth-env.ps1', 'scripts/create-admin.ps1', 'docs/18-authentication.md'
 )
 $requiredFiles += @(
+    'shared/preprocessing/README.md', 'shared/preprocessing/pyproject.toml',
+    'shared/preprocessing/configs/default.json', 'docs/22-shared-preprocessing.md',
+    'shared/preprocessing/src/maizedoctor_preprocessing/__init__.py',
+    'shared/preprocessing/src/maizedoctor_preprocessing/config.py',
+    'shared/preprocessing/src/maizedoctor_preprocessing/decoding.py',
+    'shared/preprocessing/src/maizedoctor_preprocessing/segmentation.py',
+    'shared/preprocessing/src/maizedoctor_preprocessing/pipeline.py',
+    'shared/preprocessing/src/maizedoctor_preprocessing/debug.py',
+    'shared/preprocessing/tests/test_contract.py',
+    'shared/preprocessing/tests/test_decoding.py',
+    'shared/preprocessing/tests/test_segmentation.py',
+    'shared/preprocessing/tests/test_debug.py',
+    'ai-service/app/preprocessing/__init__.py', 'ml-training/preprocessing.py',
+    'ai-service/tests/test_preprocessing.py', 'ml-training/tests/test_preprocessing.py',
+    'scripts/check-preprocessing-parity.py'
+)
+$requiredFiles += @(
     'backend/biome.json', 'backend/src/app.ts', 'backend/src/application.ts',
     'backend/src/server.ts', 'backend/src/config/environment.ts', 'backend/src/config/logger.ts',
     'backend/src/database/connection-url.ts', 'backend/src/errors/app-error.ts',

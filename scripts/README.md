@@ -1,5 +1,11 @@
 # Scripts
 
+Phase 9 adds [check-preprocessing-parity.py](check-preprocessing-parity.py).
+`check-development.ps1 -Component Preprocessing` checks shared format/lint/types,
+runs synthetic tests in both Python environments and verifies eight identical
+image/configuration cases through both installed consumer APIs. Training checks now
+include Ruff/mypy. See [shared preprocessing](../docs/22-shared-preprocessing.md).
+
 Phase 8 adds [start-ai.ps1](start-ai.ps1) for the configured FastAPI entrypoint.
 `check-development.ps1 -Component AI` now runs Ruff format/lint, strict mypy and
 service/dependency tests. See [AI foundation](../docs/21-ai-service-foundation.md).
@@ -24,7 +30,7 @@ Phase 1 adds these scripts, invoked from the repository root:
 | `create-admin.ps1` | Trusted operator prompt for a new ADMIN; masked password sent as UTF-8 stdin, no default account |
 | `postgres-local.ps1 -Action Start/Check/Stop` | Operate an isolated native Windows development cluster using PostgreSQL 18 tools |
 | `setup-python.ps1 -Component ai-service/ml-training/All` | Install locked dependencies into separate component virtual environments |
-| `check-development.ps1 -Component Backend/AI/Training/Flutter/Database/Prisma/Docker/All` | Run checks independently; aggregate failures when checking all |
+| `check-development.ps1 -Component Backend/AI/Training/Preprocessing/Flutter/Database/Prisma/Docker/All` | Run checks independently; aggregate failures when checking all |
 
 Example:
 

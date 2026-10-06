@@ -36,7 +36,7 @@ def test_health_reports_running_foundation_without_provider_details(client: Test
     assert payload["data"]["status"] == "ok"
     assert payload["data"]["uptimeSeconds"] >= 0
     assert payload["data"]["capabilities"] == {
-        "preprocessing": "not_implemented",
+        "preprocessing": "library_available",
         "inference": "not_implemented",
         "rag": "not_implemented",
         "generation": "not_implemented",

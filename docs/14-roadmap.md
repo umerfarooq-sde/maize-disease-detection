@@ -96,3 +96,12 @@ network/shared-token preparation, tests/tooling and startup documentation. Futur
 preprocessing/inference/RAG/model areas contain ownership documentation only. There is
 no final preprocessing, model training/loading/inference, Gemini, retrieval or Node
 integration. Preserve existing phases and stop after Phase 8.
+
+## Phase 9 scope clarification
+
+The user authorized one reusable deterministic preprocessing package for training and
+serving: bounded validation/color handling, non-green foreground preservation, explicit
+configuration/version, conservative segmentation/fallback, background removal/crop/
+resize/normalization, model-ready output, debug inspection and tests/parity. No real
+dataset was found, so real-image validation is pending. No random augmentation, model
+training, inference, RAG/Gemini or new business API. Stop after Phase 9.

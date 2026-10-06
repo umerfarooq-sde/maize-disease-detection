@@ -1,6 +1,12 @@
 # Machine-Learning Pipeline
 
-> **Status:** Required pipeline design; dataset, model, class taxonomy, and measured metrics are not yet documented.
+> **Status:** Phase 9 implements one deterministic shared preprocessing package. Dataset, training, model, taxonomy and measured metrics remain future work.
+
+See [implemented preprocessing](22-shared-preprocessing.md) for full-color conservative
+extraction, lesion preservation/fallback, explicit configuration and version/hash
+provenance, shared imports, synthetic checks and pending real-image validation. There
+is no separate training/serving transform or green-only mask. No project dataset is
+currently available.
 
 ## Training/inference parity
 

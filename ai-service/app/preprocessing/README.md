@@ -1,6 +1,7 @@
 # Shared preprocessing boundary
 
-Phase 8 contains no image processing implementation. Phase 9 must choose one shared,
-versioned package imported by both this service and `ml-training`; never implement
-separate training and inference pipelines. Validation, decoding, color conversion,
-segmentation, cropping, resizing, normalization and tensor conversion belong there.
+Phase 9 installs `maizedoctor_preprocessing` from `shared/preprocessing`. This module
+re-exports its exact public functions without serving-specific transformations. Future
+inference must use the same version/configuration/mask policy as training; augmentation
+stays outside this pipeline. No preprocessing or inference HTTP endpoint is added.
+See [shared preprocessing](../../../docs/22-shared-preprocessing.md).

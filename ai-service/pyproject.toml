@@ -4,6 +4,7 @@ version = "0.1.0"
 description = "Internal FastAPI AI service foundation for MAIZEDOCTOR"
 requires-python = ">=3.11,<3.12"
 dependencies = [
+    "maizedoctor-preprocessing==1.0.0",
     "fastapi>=0.128.5,<1",
     "uvicorn>=0.47.0,<1",
     "pydantic>=2.13,<3",
@@ -28,6 +29,7 @@ url = "https://download.pytorch.org/whl/cpu"
 explicit = true
 
 [tool.uv.sources]
+maizedoctor-preprocessing = { path = "../shared/preprocessing", editable = true }
 torch = { index = "pytorch-cpu" }
 torchvision = { index = "pytorch-cpu" }
 

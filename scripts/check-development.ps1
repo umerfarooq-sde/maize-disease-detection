@@ -1,11 +1,11 @@
 param(
-    [ValidateSet('Backend', 'AI', 'Training', 'Flutter', 'Database', 'Prisma', 'Docker', 'All')]
+    [ValidateSet('Backend', 'AI', 'Training', 'Preprocessing', 'Flutter', 'Database', 'Prisma', 'Docker', 'All')]
     [string]$Component = 'All'
 )
 
 $ErrorActionPreference = 'Stop'
 $repositoryRoot = Split-Path -Parent $PSScriptRoot
-$components = if ($Component -eq 'All') { @('Backend', 'AI', 'Training', 'Flutter', 'Database', 'Prisma', 'Docker') } else { @($Component) }
+$components = if ($Component -eq 'All') { @('Backend', 'AI', 'Training', 'Preprocessing', 'Flutter', 'Database', 'Prisma', 'Docker') } else { @($Component) }
 $failed = @()
 foreach ($target in $components) {
     try {
@@ -30,9 +30,38 @@ foreach ($target in $components) {
                         if ($LASTEXITCODE -ne 0) { throw 'AI lint check failed.' }
                         & $python -m mypy
                         if ($LASTEXITCODE -ne 0) { throw 'AI strict type check failed.' }
+                    } else {
+                        & $python -m ruff format --check preprocessing.py tests
+                        if ($LASTEXITCODE -ne 0) { throw 'Training formatting check failed.' }
+                        & $python -m ruff check preprocessing.py tests
+                        if ($LASTEXITCODE -ne 0) { throw 'Training lint check failed.' }
+                        & $python -m mypy
+                        if ($LASTEXITCODE -ne 0) { throw 'Training strict type check failed.' }
                     }
                     & $python -m pytest
                     if ($LASTEXITCODE -ne 0) { throw "$directory tests failed." }
+                } finally { Pop-Location }
+            }
+            'Preprocessing' {
+                Push-Location $repositoryRoot
+                try {
+                    $aiPython = Join-Path $repositoryRoot 'ai-service/.venv/Scripts/python.exe'
+                    $trainingPython = Join-Path $repositoryRoot 'ml-training/.venv/Scripts/python.exe'
+                    foreach ($python in @($aiPython, $trainingPython)) {
+                        if (-not (Test-Path -LiteralPath $python)) { throw 'Set up both Python environments first.' }
+                    }
+                    & $aiPython -m ruff format --check shared/preprocessing scripts/check-preprocessing-parity.py
+                    if ($LASTEXITCODE -ne 0) { throw 'Shared preprocessing formatting failed.' }
+                    & $aiPython -m ruff check shared/preprocessing scripts/check-preprocessing-parity.py
+                    if ($LASTEXITCODE -ne 0) { throw 'Shared preprocessing lint failed.' }
+                    & $aiPython -m mypy --config-file shared/preprocessing/pyproject.toml shared/preprocessing/src
+                    if ($LASTEXITCODE -ne 0) { throw 'Shared preprocessing strict type check failed.' }
+                    foreach ($python in @($aiPython, $trainingPython)) {
+                        & $python -m pytest shared/preprocessing/tests
+                        if ($LASTEXITCODE -ne 0) { throw 'Shared preprocessing tests failed.' }
+                    }
+                    & $aiPython scripts/check-preprocessing-parity.py
+                    if ($LASTEXITCODE -ne 0) { throw 'Training/serving preprocessing parity failed.' }
                 } finally { Pop-Location }
             }
             'Flutter' {

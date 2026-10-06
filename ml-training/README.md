@@ -3,8 +3,12 @@
 Phase 1 configures an isolated Python 3.11 environment for CPU PyTorch/torchvision,
 NumPy, OpenCV 4.13, Pillow, scikit-learn, and SciPy. Windows uses `opencv-python`;
 Linux uses the matching headless package. Dependencies and their resolution
-are recorded in `pyproject.toml` and `uv.lock`. No dataset, preprocessing, training
-pipeline, or model is supplied.
+are recorded in `pyproject.toml` and `uv.lock`. Phase 9 adds the single
+[shared preprocessing package](../shared/preprocessing/README.md), installed as a
+local dependency. `preprocessing.py` re-exports the exact same functions as FastAPI.
+No dataset, training/evaluation execution or model is supplied. See
+[pipeline behavior/versioning](../docs/22-shared-preprocessing.md); representative
+real-image validation remains pending.
 
 Import the same preprocessing implementation as production inference. Split before
 augmentation, augment only training data, and keep the test set out of training and
@@ -24,5 +28,8 @@ powershell -NoProfile -ExecutionPolicy Bypass -File scripts/check-development.ps
 ```
 
 The tests exercise synthetic tensor/autograd, compiled torchvision operators, image
-libraries, and metrics. They do not train a model or use project data.
+libraries, metrics and shared callable identity. Ruff and strict mypy check this
+consumer. `check-development.ps1 -Component Preprocessing` runs the shared suite in
+both environments plus exact cross-environment parity. These checks do not train a
+model or use project data.
 See the [development setup](../docs/15-development-environment.md).

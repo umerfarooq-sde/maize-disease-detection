@@ -4,19 +4,25 @@ Updated: 2026-10-07 (Asia/Karachi).
 
 ## Current phase
 
-Phase 8 Python/FastAPI foundation is implemented and verified: actual application
-factory/lifespan, validated settings, safe JSON logging/errors, typed health/query/error
-contracts, local entrypoint and future shared-token authorization dependency.
-All 49 AI tests pass, including 46 new foundation tests and three preserved dependency
-probes. Ruff formatting/lint, strict mypy, compilation, locked dependency checks and
-actual CLI/local HTTP verification pass. See [AI foundation](21-ai-service-foundation.md).
+Phase 9 shared preprocessing is implemented and verified. Both Python environments
+install the same `maizedoctor_preprocessing` 1.0.0 package: bounded validation/decoding,
+RGB standardization, conservative full-color foreground extraction with full-frame
+fallback, background replacement, padded crop, aspect-preserving resize, explicit
+normalization and model-ready RGB CHW float32 output. Configuration/provenance and
+opt-in debug artifacts are documented in [shared preprocessing](22-shared-preprocessing.md).
+All 78 shared tests pass independently in both environments; the AI suite has 50 passing
+tests and the training suite has five. Eight cross-environment cases have identical
+masks, arrays, tensors and metadata. Formatting, lint, strict types, locked dependencies
+and package builds pass. No maize-leaf dataset is available; real-image validation is pending.
 
 Phase 7 uploads/pending scans, existing backend authentication, Flutter MVVM/design and
 PostgreSQL/Prisma remain preserved. Their previously verified 52 isolated Flutter tests,
 77 backend tests, live upload chain and five migrations are recorded below; these suites
-were not rerun for this isolated Python phase. No backend/mobile/database implementation
-was changed. Phase 6 was not implemented implicitly. Stop after Phase 8; preprocessing,
-training/inference, Node/FastAPI orchestration, mobile sign-in, disease knowledge/business
+were not rerun for this isolated Python phase. Phase 9 changes no backend/mobile/database
+implementation. An unrelated local deletion of `backend/src/database/client.ts` blocks
+the complete repository structure check and one existing documentation link; it is
+preserved and excluded from this phase's commit. Phase 6 was not implemented implicitly.
+Stop after Phase 9; training/inference, Node/FastAPI orchestration, mobile sign-in, disease knowledge/business
 APIs, calculations, admin dashboard and AI/ML/RAG remain deferred.
 
 ## Initial workspace findings
@@ -49,13 +55,14 @@ APIs, calculations, admin dashboard and AI/ML/RAG remain deferred.
 |---|---|
 | Mobile | Flutter 3.41.9/Dart 3.11.5, Material 3 farmer shell, scoped Provider MVVM, go_router 17.5.0/http 1.6.0/image_picker 1.2.2, gallery/camera/preview/progress/retry/pending confirmation; 52 isolated tests, two optional live tests and separately verified real upload; debug Android APK builds |
 | Backend | Express 5 health/auth/scans, strict TS/Zod, Argon2id, rotating/revocable JWT sessions/RBAC, upload signature/full decode validation, Cloudinary authenticated assets, durable scan-upload retry/cleanup; shared Prisma 7.10.0, 21 tables/five migrations, 77 passing tests across five suites |
-| AI service | Python 3.11/FastAPI 0.142.2/Uvicorn 0.54.0 factory/lifespan, typed process health, Pydantic settings, safe logs/errors, internal bearer preparation, private-network defaults; 49 tests, Ruff/mypy, live CLI verified; no AI operations |
-| ML training | Python 3.11 manifest/lock, isolated virtual environment, and synthetic dependency tests; no dataset or model |
+| AI service | Python 3.11/FastAPI 0.142.2/Uvicorn 0.54.0 foundation and exact shared preprocessing exports; health reports preprocessing library available without importing heavy modules; 50 tests and Ruff/mypy pass; no inference operations |
+| Shared preprocessing | One independently buildable typed package at `shared/preprocessing`, version 1.0.0, explicit JSON configuration, file/byte entrypoints, conservative extraction/fallback, optional unchanged CPU tensor and debug CLI; 78 tests pass in each consumer environment and eight parity cases pass |
+| ML training | Python 3.11 manifest/lock and isolated environment using the same preprocessing package; five dependency/identity tests plus Ruff/strict mypy pass; no dataset, training execution or model |
 | Infrastructure | Neon PostgreSQL 18.6 with pgvector 0.8.6 migrated; pgvector 0.8.7/PostgreSQL 18 Compose configuration; preserved native 18.4 cluster; private local settings ignored |
-| Documentation | Architecture, database/operations, auth, Flutter foundation, scan uploads/recovery, FastAPI startup/contracts/network, decisions, roadmap and verification history |
-| Scripts | Repository/environment/auth/admin/PostgreSQL/Python/development checks; FastAPI start/check scripts, full live Flutter scan-upload harness and backend cleanup CLI |
+| Documentation | Architecture, database/operations, auth, Flutter foundation, scan uploads/recovery, FastAPI startup/contracts/network, shared preprocessing/configuration/versioning/limitations, decisions, roadmap and verification history |
+| Scripts | Repository/environment/auth/admin/PostgreSQL/Python/development checks including shared preprocessing and actual cross-environment parity; FastAPI start/check scripts, full live Flutter scan-upload harness and backend cleanup CLI |
 
-Mobile authentication workflows, disease detection, ML pipeline, RAG, calculator
+Mobile authentication workflows, disease detection, ML training/inference, RAG, calculator
 execution, notification delivery and the admin dashboard remain future work. Flutter
 feature introduction/empty screens are foundation UI; FastAPI exposes only real process
 health and development docs, without prediction/retrieval/generation endpoints.
@@ -785,13 +792,121 @@ Original dependency tests and all backend/mobile/ML/database feature files are p
 Git handoff: Phase 8 is committed/pushed with a relevant message; identifier/result
 reported in the final response. Stop after Phase 8.
 
+## Phase 9 implementation and verification (2026-10-07)
+
+Read AGENTS.md, project state/decisions, ML/AI/RAG architecture, existing Python
+configuration/tests, and local scaffold before implementation. Phase 8 was already
+committed at 2605164. Existing dataset ignore rules, documentation-only ML scaffold
+and its README/state additions were preserved. The unrelated deletion of the backend
+database client was also preserved; none of these changes belongs to the Phase 9 commit.
+Two agents supplied independent pipeline review and synthetic unit tests while the
+root agent implemented the shared package, consumer wiring and verification tooling.
+
+- Added one editable local package, `shared/preprocessing`, imported identically by
+  AI and training. Their local modules re-export the actual shared functions without
+  additional transforms. No API endpoint, model loader or training loop was added.
+- Configuration explicitly pins preprocessing version 1.0.0, dimensions, normalization,
+  segmentation thresholds/fallback, input limits, crop padding and resize behavior.
+  Immutable validated settings reject invalid/nonfinite/extra fields; canonical JSON
+  SHA-256 distinguishes configuration changes. Defaults are foundation values, not
+  evaluated classifier hyperparameters.
+- Validate bounded JPEG/PNG/WebP bytes, signatures, optional MIME/extensions, full
+  decoding, dimensions, animation and containers. Apply EXIF orientation, grayscale/
+  palette handling, valid ICC-to-sRGB conversion and configured alpha compositing.
+  Unsigned 16-bit grayscale uses fixed-range rounding instead of saturated conversion;
+  the regression preserves gradations from dark through white.
+- Foreground extraction accepts an oriented supplied mask or non-opaque alpha; otherwise
+  it uses full Lab color and removes only uniform-background components connected to
+  the perimeter. Enclosed brown/yellow/gray/rust/dead/background-colored lesions remain
+  selected. Coverage, border variation, boundary contact and significant component
+  gates preserve the full frame when uncertain; strict rejection is configurable.
+  There is no green-only threshold, random augmentation, semantic maize detector or
+  measured segmentation accuracy. All outputs warn that leaf identity is unverified.
+- Use outward-only mask margin, background replacement, padded crop, aspect-preserving
+  letterbox, explicit normalization and read-only contiguous RGB CHW float32 arrays.
+  Optional PyTorch conversion copies unchanged values. Metadata records image/config/
+  supplied-mask hashes, bounds, warnings, extraction status and library versions.
+  Supplied masks must follow the same provenance/policy in training and serving.
+- Independent review led to fixed-range 16-bit conversion, supplied-mask hashing,
+  explicit minimum crop padding and bounded crop coordinate allocations. Strict type
+  checks caught and resolved literal/nullable-library typing without adding `Any`.
+- Added safe errors and an opt-in debug CLI producing standardized/mask/prepared images,
+  a contact sheet and metadata in a new output directory. It refuses overwrite and
+  does not copy source EXIF/location metadata. Inspected a generated synthetic contact
+  sheet under ignored `.cache/phase9-debug-synthetic-current/`; internal lesion patches
+  and leaf silhouette were retained. These artifacts are not real maize validation.
+- AI health now truthfully reports preprocessing `library_available`; startup still
+  imports no heavy image/ML libraries and loads no model. Existing factory/security/
+  logging behavior is preserved. Both locks install the same local package with
+  existing scientific/AI dependency versions preserved; training gains matching dev tools.
+- Workspace image/data inventory found only launcher/UI graphics and documentation-only
+  dataset scaffold. No actual dataset paths, photos, model weights or downloads were
+  invented. Representative maize-leaf validation remains pending.
+
+| Check | Result |
+|---|---|
+| Shared package tests | 78 pass in the AI environment and the same 78 pass in the training environment |
+| Input/security coverage | Invalid/truncated/animated files, signature/MIME/extension, byte/pixel limits, orientation/ICC, grayscale 8/16-bit, alpha/palette and safe errors pass |
+| Extraction/output coverage | Diseased non-green regions, enclosed background-colored lesions, supplied masks/provenance, ambiguous-frame fallback/strict errors, crop/letterbox/math/layout/read-only outputs and repeated/concurrent determinism pass |
+| Tensor/debug coverage | Exact unchanged CPU tensor with independent storage, safe local inspection artifacts and no overwrite pass |
+| Cross-environment parity | Eight synthetic scene/configuration cases produce identical implementation identity, masks, array/tensor bytes, dtype/shape and metadata through the two consumer modules |
+| AI aggregate | Ruff format/lint (29 files), strict mypy (18 application modules) and 50 pytest tests pass; original foundation/dependency tests preserved |
+| Training aggregate | Ruff format/lint (three files), strict mypy (one consumer module) and five pytest tests pass; four original dependency probes preserved |
+| Shared source/tooling | Ruff format/lint (16 package files plus parity script) and strict mypy (nine source modules) pass |
+| Dependency configuration | Both `uv sync --locked`, `uv lock --check` and `uv pip check` pass; all 43 AI / 34 training installed packages compatible |
+| Distributable package | `uv build` successfully creates source archive and wheel under ignored `.cache/phase9-package-artifacts/` |
+| Compilation | Shared source and both consumer wrappers compile successfully |
+| Repository source safety | Git whitespace checks pass; 261 source/configuration candidates inspected without actual private credentials; intended artifacts remain ignored |
+| Documentation links | 138 of 139 local links resolve; the single pre-existing unresolved link targets the unrelated deleted backend database client; Phase 9 links resolve |
+| Full repository structure | Blocked by the unrelated local deletion of `backend/src/database/client.ts`; Phase 9 required files/configuration/typing/docs/tooling are present |
+| Real maize images | Not available; field validation pending |
+
+Commands/checks performed from the repository or appropriate component directories:
+
+- `uv lock`, `uv sync --locked`, `uv lock --check`, `uv pip check` for both consumers.
+- `powershell -NoProfile -ExecutionPolicy Bypass -File scripts/check-development.ps1`
+  with `-Component AI`, `-Component Training`, and `-Component Preprocessing`.
+- Shared Ruff format/lint, `mypy --config-file shared/preprocessing/pyproject.toml`
+  against shared source and pytest against shared tests using both environment executables.
+- `python scripts/check-preprocessing-parity.py`, synthetic debug generation/contact-sheet
+  inspection, and module compilation via the consumer environments.
+- `uv build shared/preprocessing --out-dir .cache/phase9-package-artifacts`, repository
+  structure/template/ignore checks, local Markdown links, credential/source inspection,
+  and `git diff --check`.
+
+Important created files: `shared/preprocessing/pyproject.toml`, `README.md`,
+`configs/default.json`, `src/maizedoctor_preprocessing/{config,decoding,segmentation,
+pipeline,types,errors,debug,__init__,__main__}.py`, `py.typed`, five shared test files;
+`ai-service/app/preprocessing/__init__.py`, `ai-service/tests/test_preprocessing.py`,
+`ml-training/preprocessing.py`, `ml-training/tests/test_preprocessing.py`,
+`scripts/check-preprocessing-parity.py`, and `docs/22-shared-preprocessing.md`.
+Updated Python manifests/locks, AI health contract/test, development/repository checks,
+root/component READMEs, relevant architecture/development docs, decisions and this file.
+No backend/mobile/schema changes, external provider calls, training, inference or
+dataset operations were performed by this phase.
+
+Git handoff: verified Phase 9 work is committed/pushed with a relevant message;
+its identifier/result is reported in the final response. Unrelated local changes
+remain outside the commit. Stop after Phase 9.
+
 ## Current limitations and pending decisions
 
 - Starlette TestClient emits one upstream deprecation warning recommending httpx2.
   Existing HTTPX remains locked and tests pass; a test-client migration is maintenance
   work rather than an unverified change to this phase's dependency baseline.
+- Shared preprocessing has only synthetic validation. Perimeter-camouflaged leaf edges
+  can be removed before uncertainty gates detect them; outward padding does not
+  guarantee recovery. Working-image reduction and final resizing can lose tiny lesions.
+  Ambiguous field backgrounds commonly produce full-frame fallback, and foreground
+  extraction does not identify maize. Preserve originals and inspect representative
+  healthy/diseased samples before selecting model-compatible configuration. Future
+  serving needs measured deployment concurrency/time/memory limits and cross-platform
+  codec parity; current byte/pixel caps only bound individual inputs.
+- An unrelated local deletion of `backend/src/database/client.ts` remains unresolved
+  in the workspace. Full repository checks and its existing documentation link fail
+  until that separate change is addressed; it was not restored or committed here.
 - AI foundation does not provide ML readiness, artifact loading/version resolution,
-  preprocessing, predictions, retrieval/generation or Node integration. Production
+  predictions, retrieval/generation or Node integration. Production
   requires private networking, TLS, coordinated token rotation and deployment-specific
   limits. Generic library/server log events intentionally omit diagnostic messages
   to protect secrets. Python 3.11.0 remains the workstation baseline; provision a
@@ -839,7 +954,7 @@ reported in the final response. Stop after Phase 8.
 - pg 8.23 can emit a query-queue deprecation warning during Prisma internal related
   queries; verified transactions pass. Keep the current lock until future adapter/pg compatibility is checked.
 - CPU ML environment is the baseline; GPU/CUDA and model/experiment choices remain future work.
-- Shared preprocessing package location, actual sourced agricultural data/rules, trained
+- Evaluated model-compatible preprocessing/mask policy, actual sourced agricultural data/rules, trained
   model artifacts, embedding model/dimensions/indexes, AI provider credentials, detailed
   business APIs and completed-scan retention/Cloudinary deletion remain pending. The initial light
   design system is implemented; domain workflow designs remain future work.
@@ -849,7 +964,7 @@ reported in the final response. Stop after Phase 8.
 
 ## Next step
 
-Stop after Phase 8 FastAPI foundation. Wait for the next explicit instruction and
-reconcile its scope with the [roadmap](14-roadmap.md). Do not start shared preprocessing,
-training/inference, Node/FastAPI integration, mobile authentication, disease/business
+Stop after Phase 9 shared preprocessing. Wait for the next explicit instruction and
+reconcile its scope with the [roadmap](14-roadmap.md). Do not start training/inference,
+Node/FastAPI integration, mobile authentication, disease/business
 APIs, RAG/Gemini/calculators or admin functionality automatically.

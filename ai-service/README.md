@@ -1,9 +1,16 @@
 # AI service
 
+Phase 9 adds the single [shared preprocessing package](../shared/preprocessing/README.md),
+installed by the existing setup script. `app.preprocessing` re-exports its exact API;
+health reports `preprocessing=library_available` independently of absent inference.
+See [preprocessing behavior/versioning](../docs/22-shared-preprocessing.md) and run
+`scripts/check-development.ps1 -Component Preprocessing` from the root. No model or
+preprocessing/inference endpoint is introduced; the Phase 8 foundation below is preserved.
+
 Phase 8 implements an internal FastAPI application with validated settings, typed
 health/error schemas, JSON request/lifecycle logs, safe errors and a reusable internal
 authentication dependency. `GET /health` reports process status separately from the
-unloaded model and unavailable AI capabilities. No preprocessing, classification,
+unloaded model and unavailable AI capabilities. No classification,
 model training, RAG, Gemini or Node orchestration is implemented.
 
 The isolated Python 3.11 environment and existing locked CPU/image dependencies are
