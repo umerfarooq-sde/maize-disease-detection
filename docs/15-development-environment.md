@@ -2,8 +2,9 @@
 
 Phase 1 configures independent toolchains and infrastructure probes. Phase 2 adds
 [Prisma schema/migrations and database checks](16-database-operations.md). No
-disease API, preprocessing, model training or RAG exists. Later completed phases add
-the [auth backend](18-authentication.md) and [Flutter farmer foundation](19-flutter-foundation.md).
+model training, inference, disease knowledge API or RAG exists. Later completed phases
+add the [auth backend](18-authentication.md), [Flutter farmer foundation](19-flutter-foundation.md),
+and [image uploads/pending scans](20-scan-uploads.md).
 Phase 8 adds the [actual FastAPI foundation](21-ai-service-foundation.md), preserving
 the independent image/CPU dependency smoke tests.
 
@@ -119,7 +120,9 @@ the missing Android command-line tools were downloaded from Google's official so
 SHA256 verified, and installed in the existing SDK without overwriting its packages.
 The final `flutter doctor` check identifies some outstanding SDK license agreements.
 Run `flutter doctor --android-licenses` interactively to review those agreements, then
-rerun `flutter doctor -v`. APK builds are not yet verified. On a new workstation,
+rerun `flutter doctor -v`. Android debug APK builds are verified through Phase 7 and
+the pre-Phase-10 audit; physical picker/camera and release signing remain unverified.
+On a new workstation,
 install **Android SDK Command-line Tools (latest)** through Android Studio's SDK Manager first.
 
 ### Local environment files

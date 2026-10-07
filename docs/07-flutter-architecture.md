@@ -1,8 +1,10 @@
 # Flutter Architecture
 
 > **Status:** Phase 5 implements the mobile foundation, design system and farmer shell.
-> See [actual structure/configuration/checks](19-flutter-foundation.md). Scanning,
-> mobile authentication and business/AI workflows below remain future work.
+> Phase 7 adds selection/capture, preview, upload and pending-scan states through
+> scoped Scan MVVM. See [foundation](19-flutter-foundation.md) and
+> [uploads](20-scan-uploads.md). Mobile authentication, disease analysis and other
+> business/AI workflows remain future work.
 
 ## Pattern
 
@@ -37,9 +39,10 @@ features/
   admin/            reserved access boundary; no privileged dashboard
 ```
 
-Other features contain routed foundation views only. Add ViewModels/models/repositories
-when their actual workflows exist; do not create empty layers. The connection check is
-the current concrete MVVM example and calls the existing Node health API only on intent.
+Home and Scan have concrete scoped ViewModels, repositories and datasources. Home
+calls the Node health API on intent; Scan selects/previews images and uploads them
+to the pending-scan API. Other features contain routed foundation views only. Add
+ViewModels/models/repositories when their workflows exist; do not create empty layers.
 
 ## Scan experience
 

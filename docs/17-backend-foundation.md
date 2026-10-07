@@ -155,7 +155,7 @@ trust configuration during deployment. Forwarded client headers are not trusted.
 
 Startup connects and executes the readiness query before opening HTTP. Failure
 cleans up the database and exits nonzero. HTTP request/header/keep-alive timeouts
-are 15/10/5 seconds. SIGINT, SIGTERM and Windows SIGBREAK stop accepting connections,
+are 60/10/5 seconds after Phase 7's upload foundation. SIGINT, SIGTERM and Windows SIGBREAK stop accepting connections,
 drain in-flight HTTP requests, then disconnect Prisma. Repeated shutdown calls
 share one promise. Fatal process/server errors use the same shutdown path with a
 failure exit code. The shutdown deadline closes remaining sockets and forces a

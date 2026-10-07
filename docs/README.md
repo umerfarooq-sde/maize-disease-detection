@@ -8,11 +8,13 @@ The remaining feature documents describe intended behavior.
 |---|---|
 | [Project state](PROJECT_STATE.md) | Verified repository status, checks, issues, and next step |
 | [Engineering decisions](DECISIONS.md) | Existing database decisions, audit corrections, and later-phase choices |
+| [Known issues](KNOWN_ISSUES.md) | Prioritized unresolved findings, external inputs and deployment requirements |
+| [Pre-Phase-10 audit](23-pre-phase-10-audit.md) | Phase 0–9 compatibility, APIs, environments, security, tests and specific user prerequisites |
 | [System overview](01-system-overview.md) | Purpose, users, boundaries, and primary flow |
 | [HLA](02-hla.md) | Logical components and trust boundaries |
 | [HLD](03-hld.md) | Runtime interactions and failures |
 | [LLD](04-lld.md) | Layering and contract guidance |
-| [Database design](05-database-design.md) | Implemented 19-table schema, ERD, ownership, constraints, versions, and vectors |
+| [Database design](05-database-design.md) | Implemented 21-table schema (19 domain plus auth/upload journals), ERD, ownership, constraints, versions, and vectors |
 | [API design](06-api-design.md) | Implemented health/response contracts and future candidate routes |
 | [Flutter architecture](07-flutter-architecture.md) | Implemented MVVM foundation and future farmer workflows |
 | [AI architecture](08-ai-architecture.md) | Implemented service foundation and future Python inference/grounding ownership |

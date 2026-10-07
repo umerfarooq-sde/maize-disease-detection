@@ -5,7 +5,10 @@
 Phase 4 implements password hashing, independent JWT keys, bounded token lifetimes,
 rotating/revocable database sessions, role middleware, auth limits and cookie/CSRF
 controls. See [implementation and remaining boundaries](18-authentication.md).
-Upload/provider/AI controls below still describe future work.
+Phase 7 implements upload validation, authenticated Cloudinary assets and recovery;
+Phase 8 implements safe internal-service configuration/logging/errors, and Phase 9
+implements bounded shared decoding/preprocessing. Remaining inference, deployment
+and release controls below are future requirements.
 
 ## Identity and access
 

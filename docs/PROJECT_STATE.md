@@ -4,27 +4,32 @@ Updated: 2026-10-07 (Asia/Karachi).
 
 ## Current phase
 
-Phase 9 shared preprocessing is implemented and verified. Both Python environments
-install the same `maizedoctor_preprocessing` 1.0.0 package: bounded validation/decoding,
-RGB standardization, conservative full-color foreground extraction with full-frame
-fallback, background replacement, padded crop, aspect-preserving resize, explicit
-normalization and model-ready RGB CHW float32 output. Configuration/provenance and
-opt-in debug artifacts are documented in [shared preprocessing](22-shared-preprocessing.md).
-All 78 shared tests pass independently in both environments; the AI suite has 50 passing
-tests and the training suite has five. Eight cross-environment cases have identical
-masks, arrays, tensors and metadata. Formatting, lint, strict types, locked dependencies
-and package builds pass. No maize-leaf dataset is available; real-image validation is pending.
+The complete Phase 0–9 audit is finished. **NOT READY FOR PHASE 10**: existing
+implemented foundations pass fresh checks, but no sourced raw maize dataset, confirmed
+taxonomy/label mapping, source/group/split provenance or representative real-leaf
+preprocessing review is available. No new P0/P1 application-code defect was found.
+Read the [full audit](23-pre-phase-10-audit.md) and [known issues](KNOWN_ISSUES.md)
+for the endpoint/environment/version inventories, actual coverage and exact user inputs.
 
-Phase 7 uploads/pending scans, existing backend authentication, Flutter MVVM/design and
-PostgreSQL/Prisma remain preserved. Their previously verified 52 isolated Flutter tests,
-77 backend tests, live upload chain and five migrations are recorded below; these suites
-were not rerun for this isolated Python phase. Phase 9 changes no backend/mobile/database
-implementation. Following the user's recovery instruction, the required database client
-was restored from Git without changing its implementation. The repository check,
-all 139 local documentation links, backend checks/50 isolated tests and Prisma validation
-now pass; recovery details are recorded below. Phase 6 was not implemented implicitly.
-Stop after Phase 9; training/inference, Node/FastAPI orchestration, mobile sign-in, disease knowledge/business
-APIs, calculations, admin dashboard and AI/ML/RAG remain deferred.
+Fresh verification includes 77 checked-in backend cases, a supplemental live farmer
+WebP/auth lifecycle probe, five migration replay/checksum checks, 52 isolated Flutter
+tests plus both live health/upload tests, and a debug Android APK. The AI suite has
+50 passing tests, training five, shared preprocessing 78 in each independent environment
+and eight exact cross-environment parity cases. Actual FastAPI startup/shutdown and
+six supplemental synthetic scenes pass. Real Cloudinary JPEG/PNG/WebP uploads and
+nullable/actual farmer ownership are verified. Every audit-created row/asset was removed;
+database counts/catalog/checksums match the pre-audit snapshot. Formatting/lint/types/
+build/locked dependencies, repository/template/ignore/links and source-secret checks pass.
+
+Both Python environments import the same `maizedoctor_preprocessing` 1.0.0 package;
+its default 224×224/neutral normalization and extraction policy remain unevaluated
+classifier settings. No actual maize dataset or model was invented. A reproduced Node/
+shared image-admission mismatch, four existing high npm aggregate advisory entries,
+native mobile refresh-cookie integration and deployment/platform limitations are recorded.
+The recovered backend database client matches HEAD and works. Phase 6 remains explicitly
+skipped. This audit corrects documentation only and makes no new architectural decision.
+Stop after the audit; Phase 10, inference, Node/FastAPI orchestration, mobile sign-in,
+disease/business APIs, calculators, admin functionality and RAG/Gemini remain deferred.
 
 ## Initial workspace findings
 
@@ -918,6 +923,78 @@ formatting of that file, `scripts/check-repository.ps1`, `npm run check`,
 `npm run db:validate`, local Markdown link verification and Git content/diff checks.
 The Phase 9 repository/link failure is resolved. No later phase was started.
 
+## Pre-Phase-10 audit (2026-10-07)
+
+Read the whole authored project across backend/database, mobile/native and Python/shared/
+training, including all configurations, environment templates, parsed dependency locks,
+SQL migrations and tests. Traced actual layering/contracts, not only file presence.
+The [full audit](23-pre-phase-10-audit.md) contains the required 18-section report,
+all seven Node APIs plus FastAPI health, complete environment-variable inventory,
+installed/required dependency matrix, coverage matrix and concrete user prerequisites.
+
+| Phase | Fresh audit status |
+|---|---|
+| 0 | PASS — required roots/docs/templates/ignore rules |
+| 1 | PASS WITH WARNINGS — environments work; optional Docker runtime absent and licenses/Python patch maintenance pending |
+| 2 | PASS — schema/client/five migrations/catalog/invariants/live queries |
+| 3 | PASS — strict backend architecture/health/errors/lifecycle |
+| 4 | PASS WITH WARNINGS — backend auth/RBAC/session checks; native Flutter sessions deferred |
+| 5 | PASS WITH WARNINGS — MVVM/design/routes/tests/debug APK; physical/iOS/release checks pending |
+| 6 | NOT FULLY TESTABLE — explicitly skipped, no disease knowledge APIs/reviewed seeds |
+| 7 | PASS WITH WARNINGS — live guest/farmer upload/replay/compensation; physical capture/scheduled cleanup pending |
+| 8 | PASS — FastAPI process foundation, no model/Node orchestration implied |
+| 9 | PASS WITH WARNINGS — shared source/parity/synthetic tests; field validation needs real data |
+
+| Check | Fresh result |
+|---|---|
+| Backend aggregate | Format/lint/strict types/build/dependency probe; 50 isolated tests pass |
+| Live backend database suites | 13 domain/catalog, six auth/session, seven scan/journal tests pass |
+| Prisma and SQL | Format no diff, validation/client generation pass; five applied checksum-matching migrations, no structural drift; all five replay in only an owned temporary schema |
+| Provider/Flutter integration | One checked-in live PNG/oriented-JPEG test, live Flutter upload and live Flutter health pass; additional farmer WebP ownership/replay/auth/logout probe passes |
+| Backend count | 77 checked-in cases; supplemental audit probes counted separately |
+| Database integrity | Neon PostgreSQL 18.6/vector0.8.6, 21 application tables, 21 checks/37 triggers/four partial indexes; before/after snapshots identical, all counts zero, no temporary schema |
+| Flutter | Locked offline dependencies, format54 files/no change, analyzer no issues; 52 isolated and two separately executed live tests pass; debug APK builds |
+| Python and shared | AI50/training5/shared78 in each venv/eight parity cases pass; Ruff/strict mypy/locked sync+checks+pip check/package build/compileall pass |
+| FastAPI live/synthetic stress | Safe actual test/production startup/health/errors/shutdown; six deterministic synthetic scene/gate probes pass |
+| Docker | Compose validation passes; Engine absent, no container runtime claim |
+| Security | No configured private values/pattern matches across source candidates or 501 unique historical text blobs; no committed non-template .env; fresh npm audits still report four high aggregate findings |
+| Repository/docs | Structure/templates/ignore/local links/Git whitespace pass after minimal documentation corrections |
+
+The live checks used the already configured **development** Neon/Cloudinary account,
+not production. Cleanup targeted only freshly generated fixtures/assets; no database
+reset, deployment, seed, broad provider cleanup, training or model download occurred.
+Remaining original workspace ignore/ML README/scaffold/state changes are preserved
+outside the audit commit. No dependency/package/source/schema/migration changes.
+
+Documentation corrections: current Flutter scanning, implemented provider/security
+controls and shared preprocessing, backend timeout60/10/5 seconds, testing scope and
+development debug packaging. Created this audit report and KNOWN_ISSUES.md; updated
+root/AI READMEs and documentation index. DECISIONS.md stays unchanged because no actual
+architecture/product decision was made.
+
+Readiness categories:
+
+- **Code:** no new P0/P1 defect; before inference define the reproduced Node/shared
+  1×1/trailing-PNG admission/failure contract. The native mobile cookie/session client
+  and Node→AI adapter remain deliberately unimplemented later work.
+- **Configuration/credentials:** current DB/JWT/Cloudinary settings are configured and
+  verified. Regular connected mobile builds still need public API_BASE_URL; no new
+  secret, Gemini key, model path or internal service token is needed for local CPU training.
+- **External data/files:** supply an actual raw original JPEG/PNG/WebP path, exact labels,
+  source/license, available official split/group/augmentation-parent metadata and real
+  representative images. Empty scaffold directories are not a dataset.
+- **User decisions:** approve actual taxonomy/ambiguous-label policy, independent grouping/
+  split provenance, CPU versus identified alternate target, and empirical shared mask
+  policy after real-image review. No class count/split ratio/model choice was fabricated.
+- **Manual/operational:** real-device camera/gallery checks and relevant Android licenses,
+  cleanup scheduler for persistent API use, least-privilege/deployment/privacy choices
+  at their proper phases. Docker/GPU/iOS are optional targets, not local CPU blockers.
+
+The training environment and shared implementation are stable, but model training cannot
+be justified until those data/empirical prerequisites are met. Training-only splitting,
+augmentation/seed/class-map/checkpoint/metrics/plots/run manifests are future Phase 10
+implementation, not completed files. Stop after this audit.
+
 ## Current limitations and pending decisions
 
 - Starlette TestClient emits one upstream deprecation warning recommending httpx2.
@@ -931,6 +1008,10 @@ The Phase 9 repository/link failure is resolved. No later phase was started.
   healthy/diseased samples before selecting model-compatible configuration. Future
   serving needs measured deployment concurrency/time/memory limits and cross-platform
   codec parity; current byte/pixel caps only bound individual inputs.
+- Node security decoding accepts valid 1×1 PNG and PNG trailing bytes that the shared
+  minimum-dimension/container policy rejects. Ordinary PNG agrees. Define common
+  admissibility or explicit accepted-scan preprocessing failure before inference/Node-AI
+  integration; do not duplicate preprocessing or silently relax Python validation.
 - AI foundation does not provide ML readiness, artifact loading/version resolution,
   predictions, retrieval/generation or Node integration. Production
   requires private networking, TLS, coordinated token rotation and deployment-specific
@@ -965,7 +1046,8 @@ The Phase 9 repository/link failure is resolved. No later phase was started.
   Android debug APK builds; physical devices, iOS scaffolding/permissions and release
   packaging/signing remain unverified. Public API configuration is required for upload.
 - Interactive Android gallery/capture needs a responsive emulator or physical device;
-  emulator-5554's System UI ANR blocked these checks. APK/plugin compilation, picker
+  a previously recorded emulator-5554 System UI ANR blocked historical checks and was
+  not reproduced or cleared by this audit. APK/plugin compilation, picker
   routing/error tests and complete live Flutter upload through a synthetic image source pass.
 - Schedule `npm run scans:cleanup` from backend every five minutes for crash/unknown
   outcome recovery. No OS task/deployment worker was installed. Recovery depends on
@@ -990,7 +1072,11 @@ The Phase 9 repository/link failure is resolved. No later phase was started.
 
 ## Next step
 
-Stop after Phase 9 shared preprocessing. Wait for the next explicit instruction and
-reconcile its scope with the [roadmap](14-roadmap.md). Do not start training/inference,
-Node/FastAPI integration, mobile authentication, disease/business
+Stop after the Phase 0–9 audit. Supply the **absolute raw-image path, exact labels and
+source/license reference**, with available official partitions/group/original-parent
+metadata, for inventory and real-image shared-preprocessing review. The current CPU
+environment works and no new external secret is required. Phase 10 is **not ready**
+until these data/validation prerequisites are satisfied and implementation is explicitly
+authorized. Reconcile the next instruction with the [roadmap](14-roadmap.md); do not
+start training/inference, Node/FastAPI integration, mobile authentication, disease/business
 APIs, RAG/Gemini/calculators or admin functionality automatically.

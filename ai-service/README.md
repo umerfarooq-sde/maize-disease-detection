@@ -18,8 +18,9 @@ preserved. `pyproject.toml` and `uv.lock` additionally configure Pydantic settin
 Ruff formatting/lint and strict mypy for application source.
 
 Training and production inference must import the exact same preprocessing
-implementation. Its package location and version contract must be settled before
-implementation; do not create independent pipelines in this directory and `ml-training/`.
+implementation in `shared/preprocessing`, version 1.0.0. Future model artifacts must
+pin the evaluated configuration and version; do not create independent pipelines
+in this directory and `ml-training/`.
 Gemini must explain retrieved agricultural evidence and report insufficient information.
 
 See [AI architecture](../docs/08-ai-architecture.md), [ML pipeline](../docs/09-ml-pipeline.md),

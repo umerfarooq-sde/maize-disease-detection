@@ -176,6 +176,7 @@ Reference patterns: [FastAPI settings](https://fastapi.tiangolo.com/advanced/set
 [Uvicorn options](https://uvicorn.dev/settings/) and
 [Ruff configuration](https://docs.astral.sh/ruff/configuration/).
 
-Stop after Phase 8. Model health/readiness implementation, immutable artifact loading,
-shared preprocessing, classification, retrieval/generation and Node orchestration
-belong to explicitly authorized later phases.
+The Phase 8 foundation is preserved; Phase 9 now supplies the shared preprocessing
+library described above. Stop after the Phase 0–9 audit. Model health/readiness,
+immutable artifact loading, training/classification, retrieval/generation and Node
+orchestration require their own explicitly authorized phases.

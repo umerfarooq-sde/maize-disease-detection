@@ -1,6 +1,9 @@
 # Testing Strategy
 
-> **Status:** Required validation baseline; no test suites were present for verification at documentation time.
+> **Status:** Validation baseline. Backend/database/auth/upload, Flutter foundation/scan,
+> FastAPI and shared preprocessing suites exist through Phase 9. The
+> [pre-Phase-10 audit](23-pre-phase-10-audit.md) records freshly executed checks and
+> identifies unimplemented-feature tests separately from coverage gaps.
 
 ## Flutter
 
