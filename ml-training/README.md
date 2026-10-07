@@ -8,10 +8,26 @@ are recorded in `pyproject.toml` and `uv.lock`. Phase 9 adds the single
 local dependency. `preprocessing.py` re-exports the exact same functions as FastAPI.
 Phase 9.5 adds configured, read-only dataset inventory and real-image comparison:
 8,040 supplied images were reviewed with both shared policies, and 160 real-image
-consumer parity cases pass. Source images remain unchanged. Training/evaluation
-execution and models remain deferred. See
+consumer parity cases pass. Source images remain unchanged. Phase 10 now implements
+immutable eligibility/grouped splits, a shared full-frame transfer-learning baseline,
+train-only augmentation, validation checkpoint selection and final held-out evaluation.
+Current use is non-commercial academic/FYP research, without raw redistribution. See
 [pipeline behavior/versioning](../docs/22-shared-preprocessing.md) and the
 [dataset readiness report](../docs/24-dataset-intake-preprocessing-review.md).
+
+The persisted [manifest summary](manifests/maize-research-20261007-v1/summary.json)
+records 4,170 eligible contents in 4,161 groups, with fixed 2,917/628/625 partitions.
+Future experiments consume its full manifest and continue resolving raw bytes via
+`DATASET_PATH`. See [training/evaluation](../docs/25-ml-training-evaluation.md) for commands,
+architecture, pinned preprocessing, artifacts and results.
+
+The evaluated first baseline scores **95.20% test accuracy / 0.9396 macro F1** on 625
+held-out contents. Its training process was externally interrupted during epoch 11:
+ten complete epochs (two warmup/eight fine-tune) out of twelve maximum. The original
+run is unchanged; separate immutable recovery strictly reloads the epoch-10 validation
+winner and evaluates test once, without further fitting. See the
+[saved aggregate report](reports/mobilenet-v3-small-20261007-01-recovery/README.md).
+No completed-budget/convergence, exact-resume, field-accuracy or production claim is made.
 
 Import the same preprocessing implementation as production inference. Split before
 augmentation, augment only training data, and keep the test set out of training and
@@ -51,8 +67,9 @@ It refuses output inside the dataset or an existing output directory. Inventory,
 duplicate candidates, sample bundles and contact sheets are development artifacts,
 not a manually preprocessed training dataset. The completed review is under
 `.cache/dataset-review/phase95-20261007/`; keep images and private provenance ignored.
-No split, augmentation or model training is performed. The full-frame policy is a
-recommendation awaiting approval; the canonical default is unchanged.
+The review command performs no split, augmentation or training. Phase 10 separately
+implements those workflows with the approved full-frame artifact configuration;
+the generic package default remains unchanged.
 
 From the repository root:
 
@@ -61,11 +78,11 @@ powershell -NoProfile -ExecutionPolicy Bypass -File scripts/setup-python.ps1 -Co
 powershell -NoProfile -ExecutionPolicy Bypass -File scripts/check-development.ps1 -Component Training
 ```
 
-The 29 training-project tests exercise configuration, read-only fixture intake,
-synthetic tensor/autograd, compiled torchvision operators, image libraries, metrics
-and shared callable identity. Ruff and strict mypy check the configuration and intake
-source as well as the preprocessing re-export. `check-development.ps1 -Component
-Preprocessing` runs the shared suite in both environments plus exact synthetic
+Training-project tests exercise configuration, intake, eligibility/deduplication/grouping,
+split invariants, metrics, shared preprocessing, augmentation isolation, checkpoint
+integrity/reload and smoke/final-test separation. Ruff and strict mypy cover all source.
+`check-development.ps1 -Component Preprocessing` runs the shared suite in both environments
+plus exact baseline-config synthetic
 cross-environment parity. These checks do not train a model or load the supplied
 dataset; the separate review command performs the real-image inspection.
 See the [development setup](../docs/15-development-environment.md).

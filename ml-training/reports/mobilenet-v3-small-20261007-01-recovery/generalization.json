@@ -1,0 +1,37 @@
+{
+  "comparison_source": "Selected checkpoint; deterministic training and validation only.",
+  "train_accuracy": 0.9958861844360645,
+  "validation_accuracy": 0.9570063694267515,
+  "accuracy_gap": 0.038879815009312924,
+  "train_macro_f1": 0.9948494681442921,
+  "validation_macro_f1": 0.9411364137870162,
+  "macro_f1_gap": 0.05371305435727591,
+  "train_majority_accuracy_reference": 0.3119643469317792,
+  "validation_majority_accuracy_reference": 0.31210191082802546,
+  "overfitting_signal": "train_validation_gap",
+  "underfitting_signal": "not_established",
+  "history": {
+    "epoch_count": 10,
+    "source": "Training/validation history only; no held-out test tuning or thresholds.",
+    "overfitting_signal": "no_clear_divergence",
+    "underfitting_signal": "not_established",
+    "observations": [
+      "Accuracy/loss gaps describe this split, not independent field or plant generalization.",
+      "Underfitting is not established without a task baseline, convergence evidence and capacity checks.",
+      "No final train/validation loss divergence was established."
+    ],
+    "final_epoch": 10,
+    "best_validation_loss_epoch": 10,
+    "final_accuracy_gap": 0.03133781980876438,
+    "final_loss_gap": 0.0928008070974428,
+    "train_loss_change": -0.2353895238927448,
+    "validation_loss_change": -0.05742940183463477
+  },
+  "observations": [
+    "These selected-model scores use deterministic, unaugmented train/validation inputs.",
+    "Distribution differences and finite-sample variation can also create accuracy gaps.",
+    "Independent field/plant generalization is not established by these internal splits.",
+    "Neither this comparison nor the held-out test chooses hyperparameters or thresholds.",
+    "Selected-model training accuracy exceeds validation accuracy; investigate the gap with history/per-class evidence rather than claiming overfitting from it alone."
+  ]
+}

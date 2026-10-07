@@ -1,0 +1,17 @@
+{
+  "seed": 20261007,
+  "threads": 4,
+  "batch_size": 16,
+  "warmup_epochs": 2,
+  "fine_tune_epochs": 10,
+  "warmup_lr": 0.001,
+  "feature_lr": 0.0001,
+  "classifier_lr": 0.0003,
+  "weight_decay": 0.0001,
+  "dropout": 0.2,
+  "patience": 3,
+  "smoke": false,
+  "smoke_train_size": 32,
+  "smoke_validation_size": 16,
+  "pretrained": true
+}

@@ -1,9 +1,11 @@
 # Testing Strategy
 
-> **Status:** Validation baseline. Backend/database/auth/upload, Flutter foundation/scan,
-> FastAPI and shared preprocessing suites exist through Phase 9. The
-> [pre-Phase-10 audit](23-pre-phase-10-audit.md) records freshly executed checks and
-> identifies unimplemented-feature tests separately from coverage gaps.
+> **Status:** Foundation suites exist through Phase 9.5. Phase 10 dataset preparation,
+> training/evaluation tests, shared baseline-config parity and the actual CPU smoke
+> have passed; the full training run is in progress. The
+> [historical foundation audit](23-pre-phase-10-audit.md) distinguishes implemented
+> checks from future feature tests. The
+> [dataset review](24-dataset-intake-preprocessing-review.md) records real-image evidence.
 
 ## Flutter
 
@@ -31,6 +33,47 @@
 - Prove augmentation is applied only to training data.
 - Assert training and serving use the same preprocessing implementation and parameters.
 - Evaluate held-out metrics, confusion matrix, per-class performance, and artifact compatibility.
+
+### Executed Phase 10 checks (2026-10-07)
+
+| Check | Actual result |
+|---|---|
+| Training-project aggregate | 92 tests passed in 77.75 seconds; Ruff formatting checks 19 files, lint passes, strict mypy passes for nine source files |
+| Synthetic training/AI parity | 12 cases pass with the pinned full-frame/ImageNet configuration; shared implementation, configuration/version, RGB geometry, dtype, normalization, model arrays and tensors agree |
+| Real training-image parity | 16 fixed TRAIN images, four per literal class, pass the same cross-environment comparison; validation/test images are not used for this check |
+| Immutable dataset index | 4,170 eligible contents in 4,161 verified groups; 2,917 train, 628 validation, 625 test samples; zero content/group overlap |
+| Exclusion and source integrity | Eleven invalid inputs and all members of three contradictory families excluded with reasons; all 8,040 original file hashes remain unchanged |
+| Actual CPU smoke | 32 TRAIN and 16 VALIDATION samples; checkpoint save/reload and prediction equality pass; no TEST evaluation |
+
+The [persisted index summary](../ml-training/manifests/maize-research-20261007-v1/summary.json)
+records literal class indices, seed `20261007`, grouped 70/15/15 target ratios and actual
+counts. The baseline imports the existing shared preprocessing package with extraction
+disabled and ImageNet mean/std at 224×224. Its configuration hash is
+`b142e59f458d27a2d3fddbfc86c2f2f802670ab4909f1275babbef92de9cb5c8`;
+the generic package default is unchanged.
+
+Preparation tests cover full-family exclusions, safe duplicate collapse, preservation
+of distinct alpha semantics, confirmed derivative/original grouping, split separation,
+literal label integrity, deterministic replay, changed source/evidence detection,
+output safety and manifest tampering. Training tests cover TRAIN-only augmentation,
+model output/finite values, checkpoint compatibility and smoke/final-test isolation.
+No raw images or machine-specific dataset paths are redistributed in the index,
+checkpoints or numerical reports. Raw input always resolves through `DATASET_PATH`.
+
+From repository root, repeat the automated checks when source or configuration changes:
+
+```powershell
+powershell -NoProfile -ExecutionPolicy Bypass -File scripts/check-development.ps1 -Component Training
+powershell -NoProfile -ExecutionPolicy Bypass -File scripts/check-development.ps1 -Component Preprocessing
+```
+
+The smoke is a pipeline check, not an accuracy claim. Training was externally interrupted
+during epoch 11 after ten completed epochs of a twelve-epoch maximum. Separate immutable
+evaluation recovery verifies the unchanged epoch-10 validation winner and evaluates TEST
+once: 95.20% accuracy, 0.9396 macro F1 on 625 contents. Independent saved-CSV metric/hash
+checks and zero-input checkpoint restores pass; all source names/bytes/sizes/mtimes remain
+unchanged. See [results and execution limitation](25-ml-training-evaluation.md).
+Do not tune from held-out results or treat these scores as independent field performance.
 
 ## RAG and calculator
 

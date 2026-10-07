@@ -1,0 +1,196 @@
+{
+  "python": "3.11.0",
+  "platform": "Windows",
+  "machine": "AMD64",
+  "logical_cpu_count": 8,
+  "torch_threads": 4,
+  "torch": "2.10.0+cpu",
+  "cuda_available": false,
+  "git_revision": "33ecb78224991e7fce5a8552498d8aca554d76cb",
+  "working_tree_dirty": true,
+  "source_hashes": {
+    "ml-training/configuration.py": "bf96f9ba15e790b4a573ed75592259d24f613baff940ce2cdbc2ac5457e854c4",
+    "ml-training/dataset_inventory.py": "89d17d99d796a58624b11001979eecababe222c2ffc67d471248c949d485feb0",
+    "ml-training/dataset_preparation.py": "9ccc078e42bda4be5f276b253893891ba73ebb71bfc567ce2e176d6d8c74a2fc",
+    "ml-training/dataset_review.py": "69eef903ed278ab1f0e92b7b641998d37b4110dec70dc5f4542f06e2d547aff8",
+    "ml-training/evaluation.py": "9a9120d9a27d72acd50051dfaddc9b762f4e0d42f598c9b0eccffdd4b08986c6",
+    "ml-training/model.py": "6db5c1fb4029700fdb690c34c4d7d54f38ddc782fb211c7706ccdbd5330ce6d7",
+    "ml-training/preprocessing.py": "f3bc746a60b865db20594fef33a09fcced19d24ecfea72eaa12d01dbae0ee8ca",
+    "ml-training/train.py": "6fc6ada91f068a05630af3f43fba53a58915e3499fe145da87c315a5b31c4d24",
+    "ml-training/training_data.py": "e6cc0c9e81da2b612da5b159b349d1130c399d624dd0c34049f33be6011d71ae"
+  },
+  "distributions": [
+    {
+      "name": "annotated-types",
+      "version": "0.8.0"
+    },
+    {
+      "name": "cloudpickle",
+      "version": "3.1.2"
+    },
+    {
+      "name": "colorama",
+      "version": "0.4.6"
+    },
+    {
+      "name": "contourpy",
+      "version": "1.3.3"
+    },
+    {
+      "name": "cycler",
+      "version": "0.12.1"
+    },
+    {
+      "name": "filelock",
+      "version": "4.0.11"
+    },
+    {
+      "name": "fonttools",
+      "version": "4.66.1"
+    },
+    {
+      "name": "fsspec",
+      "version": "2026.9.0"
+    },
+    {
+      "name": "iniconfig",
+      "version": "2.3.0"
+    },
+    {
+      "name": "Jinja2",
+      "version": "3.1.6"
+    },
+    {
+      "name": "joblib",
+      "version": "1.6.0"
+    },
+    {
+      "name": "kiwisolver",
+      "version": "1.5.1"
+    },
+    {
+      "name": "librt",
+      "version": "0.16.0"
+    },
+    {
+      "name": "maizedoctor-preprocessing",
+      "version": "1.0.0"
+    },
+    {
+      "name": "MarkupSafe",
+      "version": "3.0.4"
+    },
+    {
+      "name": "matplotlib",
+      "version": "3.11.2"
+    },
+    {
+      "name": "mpmath",
+      "version": "1.3.0"
+    },
+    {
+      "name": "mypy",
+      "version": "1.20.2"
+    },
+    {
+      "name": "mypy_extensions",
+      "version": "1.1.0"
+    },
+    {
+      "name": "networkx",
+      "version": "3.6.1"
+    },
+    {
+      "name": "numpy",
+      "version": "2.4.6"
+    },
+    {
+      "name": "opencv-python",
+      "version": "4.13.0.92"
+    },
+    {
+      "name": "packaging",
+      "version": "26.3"
+    },
+    {
+      "name": "pathspec",
+      "version": "1.1.1"
+    },
+    {
+      "name": "pillow",
+      "version": "12.3.0"
+    },
+    {
+      "name": "pluggy",
+      "version": "1.6.0"
+    },
+    {
+      "name": "pydantic",
+      "version": "2.13.5"
+    },
+    {
+      "name": "pydantic_core",
+      "version": "2.46.5"
+    },
+    {
+      "name": "Pygments",
+      "version": "2.21.0"
+    },
+    {
+      "name": "pyparsing",
+      "version": "3.3.3"
+    },
+    {
+      "name": "pytest",
+      "version": "9.1.1"
+    },
+    {
+      "name": "python-dateutil",
+      "version": "2.9.0.post0"
+    },
+    {
+      "name": "python-dotenv",
+      "version": "1.2.4"
+    },
+    {
+      "name": "ruff",
+      "version": "0.16.10"
+    },
+    {
+      "name": "scikit-learn",
+      "version": "1.8.0"
+    },
+    {
+      "name": "scipy",
+      "version": "1.17.1"
+    },
+    {
+      "name": "six",
+      "version": "1.17.0"
+    },
+    {
+      "name": "sympy",
+      "version": "1.14.0"
+    },
+    {
+      "name": "threadpoolctl",
+      "version": "3.7.0"
+    },
+    {
+      "name": "torch",
+      "version": "2.10.0+cpu"
+    },
+    {
+      "name": "torchvision",
+      "version": "0.25.0+cpu"
+    },
+    {
+      "name": "typing-inspection",
+      "version": "0.4.4"
+    },
+    {
+      "name": "typing_extensions",
+      "version": "4.16.0"
+    }
+  ]
+}

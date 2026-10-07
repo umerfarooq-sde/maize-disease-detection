@@ -1,0 +1,53 @@
+{
+  "experiment_id": "mobilenet-v3-small-20261007-01-recovery",
+  "mode": "full",
+  "architecture": "mobilenet_v3_small",
+  "pretrained_weights": "MobileNet_V3_Small_Weights.IMAGENET1K_V1",
+  "weights_url": "https://download.pytorch.org/models/mobilenet_v3_small-047dcff4.pth",
+  "weights_sha256": "047dcff4addef86ea5bc2eff13c9614dc11f47ab1160d0a71a25e7db994f4e1f",
+  "dataset_version": "maize-research-20261007-v1",
+  "research_policy": {
+    "commercial_clearance": false,
+    "commercial_use_requirement": "Obtain appropriate licensing or replace restricted source material before commercial use.",
+    "embedded_rights_notes": [
+      "CIMMYT non-commercial/share-alike notices are present in source metadata.",
+      "An all-rights-reserved stock-photo notice is present; research approval is not commercial or redistribution clearance."
+    ],
+    "limitations": [
+      "No complete independent plant, field or capture-session grouping is available.",
+      "Source archives overlap and are not independent evaluation domains.",
+      "Exact and confirmed derivative grouping reduces known leakage, but does not establish field-independent accuracy.",
+      "Raw images must not be bundled in the repository, model artifacts, reports or application."
+    ],
+    "permitted_use": "non-commercial academic/FYP research only",
+    "raw_image_redistribution": false,
+    "schema_version": 1,
+    "sources": [
+      {
+        "dataset_version_id": "967819/1637108",
+        "name": "Corn or Maize Leaf Disease Dataset",
+        "publisher_url": "https://www.kaggle.com/datasets/smaranjitghose/corn-or-maize-leaf-disease-dataset",
+        "rights": "Publisher describes a PlantVillage/PlantDoc merge and retains original-author rights; no uniform commercial clearance inferred."
+      },
+      {
+        "dataset_version_id": "277323/658267",
+        "license_declaration": "CC BY-NC-SA 4.0",
+        "name": "PlantVillage Dataset, color branch",
+        "publisher_url": "https://www.kaggle.com/datasets/abdallahalidev/plantvillage-dataset",
+        "rights": "Preserve attribution and applicable non-commercial/share-alike terms; publisher declaration does not override contrary individual notices."
+      }
+    ],
+    "user_approval": "Phase 10 research use and documented exclusions explicitly authorized"
+  },
+  "manifest_fingerprint": "e1abe6c4bba09080371345365ab92067f1f08bfba9f927f66cbc9e58af6b5e98",
+  "preprocessing_hash": "b142e59f458d27a2d3fddbfc86c2f2f802670ab4909f1275babbef92de9cb5c8",
+  "preprocessing_version": "1.0.0",
+  "test_selection_usage": "never",
+  "selection": "validation macro F1; validation loss breaks exact ties",
+  "augmentation": "TRAIN only: horizontal flip and small affine; normalized background fill",
+  "training_experiment_id": "mobilenet-v3-small-20261007-01",
+  "training_interrupted": true,
+  "completed_training_epochs": 10,
+  "planned_maximum_epochs": 12,
+  "recovery": "Evaluation only; no further fitting, thresholds or hyperparameter changes."
+}

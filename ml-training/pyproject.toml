@@ -1,10 +1,11 @@
 [project]
 name = "maizedoctor-ml-training"
 version = "0.1.0"
-description = "ML experiment development dependencies; no training pipeline yet"
+description = "Reproducible maize disease training and evaluation with shared preprocessing"
 requires-python = ">=3.11,<3.12"
 dependencies = [
     "maizedoctor-preprocessing==1.0.0",
+    "matplotlib>=3.10,<4",
     "numpy>=2.4.2,<3",
     "opencv-python==4.13.0.92; sys_platform == 'win32'",
     "opencv-python-headless==4.13.0.92; sys_platform != 'win32'",
@@ -47,7 +48,7 @@ select = ["E", "F", "I", "UP", "B", "SIM"]
 [tool.mypy]
 python_version = "3.11"
 strict = true
-files = ["preprocessing.py", "configuration.py", "dataset_inventory.py", "dataset_review.py"]
+files = ["preprocessing.py", "configuration.py", "dataset_inventory.py", "dataset_review.py", "dataset_preparation.py", "evaluation.py", "model.py", "training_data.py", "train.py"]
 plugins = ["pydantic.mypy"]
 
 [tool.pydantic-mypy]

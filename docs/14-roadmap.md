@@ -105,3 +105,15 @@ configuration/version, conservative segmentation/fallback, background removal/cr
 resize/normalization, model-ready output, debug inspection and tests/parity. No real
 dataset was found, so real-image validation is pending. No random augmentation, model
 training, inference, RAG/Gemini or new business API. Stop after Phase 9.
+
+## Phase 9.5 and Phase 10 scope clarification
+
+Phase 9.5 inspected the supplied dataset and compared the exact shared pipeline on
+real images. The user approved exclusions, deduplication/derivative grouping,
+academic/FYP non-commercial use without raw redistribution, and full-frame policy.
+Phase 10 is explicitly authorized: immutable eligibility/exclusion/class/split manifests,
+grouped stratified partitions, fixed seed, leakage checks, train-only augmentation,
+small smoke before full transfer-learning training, validation-only selection, final
+held-out test evaluation, versioned checkpoints/history/metrics/plots and fitting analysis.
+Read [training/evaluation](25-ml-training-evaluation.md). Stop after Phase 10; inference,
+application integration and all subsequent phases remain separate.

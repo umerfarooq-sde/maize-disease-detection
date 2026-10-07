@@ -4,8 +4,8 @@ Phase 9 implements one installed Python package, `maizedoctor_preprocessing`, at
 [`shared/preprocessing`](../shared/preprocessing/README.md). Both the AI service and
 ML workspace depend on this package through their manifests and lockfiles. Their
 local preprocessing modules only re-export the same callables; they contain no
-separate transforms. No model is trained or loaded, no inference endpoint is added,
-and no RAG or Gemini code is introduced.
+separate transforms. Phase 10 subsequently adds an offline classifier training workflow;
+inference endpoints, RAG and Gemini remain future work.
 
 This is a deterministic foreground-preparation pipeline, not a semantic maize-leaf
 detector. Every result includes `leaf_identity_unverified`. Synthetic tests verify
@@ -14,8 +14,11 @@ mechanics and parity; they do not establish field accuracy or disease recognitio
 Phase 9.5 subsequently exercised both unchanged policies on 8,040 configured real
 images, reviewed 81 filenames/78 contents and verified 160 real consumer parity cases.
 Conservative extraction falls back for 8,021 of 8,029 accepted files. Full-frame is
-recommended for the first baseline; canonical policy remains unchanged pending approval.
-See [dataset review](24-dataset-intake-preprocessing-review.md) for evidence and limits.
+approved for the first baseline. Phase 10 pins shared version 1.0.0, disabled extraction
+and ImageNet normalization in its artifact configuration; generic package defaults
+remain unchanged. See [dataset review](24-dataset-intake-preprocessing-review.md) for
+evidence and limits and [training/evaluation](25-ml-training-evaluation.md) for the
+exact baseline configuration and its hash.
 
 ## Shared ownership and usage
 
@@ -39,8 +42,8 @@ Actual training image bytes             Future Node -> FastAPI image bytes
 
 Python owns these transforms. Node's existing upload validation remains a transport
 security boundary; it does not implement this ML preprocessing. Flutter continues
-to call Node. The production Node/FastAPI orchestration and classifier remain future
-work.
+to call Node. Production Node/FastAPI orchestration and classifier serving remain
+future work; offline training uses the approved shared configuration.
 
 Both environments import the installed package directly:
 

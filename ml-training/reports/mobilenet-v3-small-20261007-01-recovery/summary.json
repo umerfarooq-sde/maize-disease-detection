@@ -1,0 +1,134 @@
+{
+  "status": "completed",
+  "mode": "full",
+  "experiment_id": "mobilenet-v3-small-20261007-01-recovery",
+  "source_training_experiment_id": "mobilenet-v3-small-20261007-01",
+  "training_interrupted": true,
+  "epochs_completed": 10,
+  "planned_maximum_epochs": 12,
+  "best_epoch": 10,
+  "best_checkpoint": "checkpoints/epoch-010.pt",
+  "best_checkpoint_sha256": "a7a08eb88510fd8f58c7a30f174935bf9d6a7bfe941a0eec876ff01d32154c6d",
+  "manifest_fingerprint": "e1abe6c4bba09080371345365ab92067f1f08bfba9f927f66cbc9e58af6b5e98",
+  "preprocessing_hash": "b142e59f458d27a2d3fddbfc86c2f2f802670ab4909f1275babbef92de9cb5c8",
+  "train_samples": 2917,
+  "validation_samples": 628,
+  "test_evaluated_once": true,
+  "test_metrics": {
+    "class_names": [
+      "Common_Rust",
+      "Gray_Leaf_Spot",
+      "Healthy",
+      "Northern_Corn_Leaf_Blight"
+    ],
+    "sample_count": 625,
+    "accuracy": 0.952,
+    "macro_precision": 0.9374629398266894,
+    "macro_recall": 0.9420682173004155,
+    "macro_f1": 0.9396320960478879,
+    "weighted_precision": 0.9526105707335639,
+    "weighted_recall": 0.952,
+    "weighted_f1": 0.9522216736889421,
+    "aggregate_undefined_reasons": {},
+    "per_class": [
+      {
+        "index": 0,
+        "label": "Common_Rust",
+        "support": 195,
+        "predicted_support": 194,
+        "true_positive": 191,
+        "false_positive": 3,
+        "false_negative": 4,
+        "true_negative": 427,
+        "precision": 0.9845360824742269,
+        "recall": 0.9794871794871794,
+        "f1": 0.9820051413881749,
+        "specificity": 0.9930232558139535,
+        "roc_auc": 0.9989624329159214,
+        "undefined_reasons": {}
+      },
+      {
+        "index": 1,
+        "label": "Gray_Leaf_Spot",
+        "support": 85,
+        "predicted_support": 89,
+        "true_positive": 75,
+        "false_positive": 14,
+        "false_negative": 10,
+        "true_negative": 526,
+        "precision": 0.8426966292134831,
+        "recall": 0.8823529411764706,
+        "f1": 0.8620689655172413,
+        "specificity": 0.9740740740740741,
+        "roc_auc": 0.9876906318082789,
+        "undefined_reasons": {}
+      },
+      {
+        "index": 2,
+        "label": "Healthy",
+        "support": 174,
+        "predicted_support": 174,
+        "true_positive": 174,
+        "false_positive": 0,
+        "false_negative": 0,
+        "true_negative": 451,
+        "precision": 1.0,
+        "recall": 1.0,
+        "f1": 1.0,
+        "specificity": 1.0,
+        "roc_auc": 1.0,
+        "undefined_reasons": {}
+      },
+      {
+        "index": 3,
+        "label": "Northern_Corn_Leaf_Blight",
+        "support": 171,
+        "predicted_support": 168,
+        "true_positive": 155,
+        "false_positive": 13,
+        "false_negative": 16,
+        "true_negative": 441,
+        "precision": 0.9226190476190477,
+        "recall": 0.9064327485380117,
+        "f1": 0.9144542772861357,
+        "specificity": 0.9713656387665198,
+        "roc_auc": 0.9916016178478502,
+        "undefined_reasons": {}
+      }
+    ],
+    "confusion_matrix": [
+      [
+        191,
+        0,
+        0,
+        4
+      ],
+      [
+        1,
+        75,
+        0,
+        9
+      ],
+      [
+        0,
+        0,
+        174,
+        0
+      ],
+      [
+        2,
+        14,
+        0,
+        155
+      ]
+    ],
+    "roc_auc": {
+      "macro": 0.9945636706430125,
+      "weighted": 0.9957044076388653,
+      "undefined_reason": null
+    },
+    "classification_summary": "Class | Precision | Recall | F1 | Specificity | Support\nCommon_Rust | 0.9845 | 0.9795 | 0.9820 | 0.9930 | 195\nGray_Leaf_Spot | 0.8427 | 0.8824 | 0.8621 | 0.9741 | 85\nHealthy | 1.0000 | 1.0000 | 1.0000 | 1.0000 | 174\nNorthern_Corn_Leaf_Blight | 0.9226 | 0.9064 | 0.9145 | 0.9714 | 171\nAccuracy: 0.9520 (625 samples)\nmacro: precision=0.9375, recall=0.9421, F1=0.9396\nweighted: precision=0.9526, recall=0.9520, F1=0.9522\n"
+  },
+  "elapsed_seconds": 94.70299999997951,
+  "elapsed_scope": "Recovery evaluation only; original training epoch history is preserved."
+}

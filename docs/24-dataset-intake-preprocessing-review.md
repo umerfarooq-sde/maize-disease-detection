@@ -1,5 +1,10 @@
 # Phase 9.5 — dataset intake and real-image preprocessing review
 
+Historical review. The user subsequently approved exclusions, academic/FYP research
+use and full-frame preprocessing, and authorized Phase 10. Those approvals are recorded
+in [DECISIONS.md](DECISIONS.md); [PROJECT_STATE.md](PROJECT_STATE.md) gives current progress.
+The readiness questions below describe the review checkpoint before that approval.
+
 Reviewed: 2026-10-07. The user supplied one absolute dataset path. It is configured
 in ignored `ml-training/.env`; ignored inventory artifacts also record the source path.
 This document refers to `DATASET_PATH`. No source

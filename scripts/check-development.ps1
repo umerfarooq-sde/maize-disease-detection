@@ -31,9 +31,9 @@ foreach ($target in $components) {
                         & $python -m mypy
                         if ($LASTEXITCODE -ne 0) { throw 'AI strict type check failed.' }
                     } else {
-                        & $python -m ruff format --check preprocessing.py configuration.py dataset_inventory.py dataset_review.py tests
+                        & $python -m ruff format --check .
                         if ($LASTEXITCODE -ne 0) { throw 'Training formatting check failed.' }
-                        & $python -m ruff check preprocessing.py configuration.py dataset_inventory.py dataset_review.py tests
+                        & $python -m ruff check .
                         if ($LASTEXITCODE -ne 0) { throw 'Training lint check failed.' }
                         & $python -m mypy
                         if ($LASTEXITCODE -ne 0) { throw 'Training strict type check failed.' }
@@ -60,7 +60,7 @@ foreach ($target in $components) {
                         & $python -m pytest shared/preprocessing/tests
                         if ($LASTEXITCODE -ne 0) { throw 'Shared preprocessing tests failed.' }
                     }
-                    & $aiPython scripts/check-preprocessing-parity.py
+                    & $aiPython scripts/check-preprocessing-parity.py --config ml-training/configs/full-frame-baseline.json
                     if ($LASTEXITCODE -ne 0) { throw 'Training/serving preprocessing parity failed.' }
                 } finally { Pop-Location }
             }

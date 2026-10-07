@@ -1,0 +1,7 @@
+# Immutable metadata/report SHA-256 values bind exact bytes across platforms.
+ml-training/manifests/** -text
+# Windows-produced CRLF reports retain their bytes; CR is a line terminator here.
+ml-training/reports/** -text whitespace=blank-at-eol,blank-at-eof,space-before-tab,cr-at-eol
+
+# Experiment source fingerprints use the checked-in LF Python source bytes.
+ml-training/*.py text eol=lf

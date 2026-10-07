@@ -1,0 +1,32 @@
+{
+  "source_training_experiment_id": "mobilenet-v3-small-20261007-01",
+  "source_training_directory": ".cache/phase10/experiments/mobilenet-v3-small-20261007-01",
+  "reason": "External foreground-terminal interruption during epoch 11; 10 epochs fully completed.",
+  "actual_epochs_completed": 10,
+  "warmup_epochs_completed": 2,
+  "fine_tune_epochs_completed": 8,
+  "planned_maximum_epochs": 12,
+  "early_stopping_claimed": false,
+  "exact_training_resume_claimed": false,
+  "additional_training": false,
+  "test_used_for_selection": false,
+  "recovery_script_sha256": "f95d5491c3ebf189ad3002e63eaf3bf8c9865e29c3ad3dfaec2a815583589cf9",
+  "source_artifact_sha256": {
+    "base-weights.json": "04ddb6e6f1e0bac3aa0f21328c723c07b126afdd5a1306da6aab9b308776573f",
+    "class-map.json": "6522256071605079465ca6c8623309d2f0592a59ed28580e77e180a23894950e",
+    "dataset-manifest.json": "f971ecb5c9ea38f23040ee260518bc2f03e9b1af7d53b9e66136a27694cfdda1",
+    "environment.json": "47c9076dfe187a728e90357a8bb763375345cf886273aeea6831203502ac75be",
+    "epoch-history.jsonl": "841cf4945c82fa2f56c7603c59227e3747f05856ea3dce18ea136e540b751ec7",
+    "experiment.json": "5032d2fc44d093da2104ac5e56864b30ba3af2f273e17ba9f70cdcdfa6ce9be9",
+    "hyperparameters.json": "3dcd99852ca0ad8690212df229e19a9beadc0ffbb6307500f10473d4b776ed89",
+    "preprocessing.json": "2656fc0541d4ae8d46e9bb365ff374d3bbb31418fd6c1df528d6fdd5d4a95e40",
+    "used-partitions.json": "9573d8b08150c8cd03ccd413723978342e6ac663cc0e66533d462f004a95f2f3",
+    "checkpoints/epoch-001.pt": "9fada02a940722f0f7db69f36f13e865547f23bc530ead01067c06d786b67084",
+    "checkpoints/epoch-003.pt": "8e55113d77b9ebb209214c0417f6046993f82fc85e336e78149cdaf83dbf28be",
+    "checkpoints/epoch-006.pt": "43285b583985ff915819c85ba85af0d6b22c0b0f2fa6fb7214679fd93f8cd362",
+    "checkpoints/epoch-009.pt": "29d4fbd3214ab2bc3995fb6b89c04e82fb36c2b1718704a3a5eb84a0be3ea050",
+    "checkpoints/epoch-010.pt": "a7a08eb88510fd8f58c7a30f174935bf9d6a7bfe941a0eec876ff01d32154c6d"
+  },
+  "selected_checkpoint": "checkpoints/epoch-010.pt",
+  "selected_checkpoint_sha256": "a7a08eb88510fd8f58c7a30f174935bf9d6a7bfe941a0eec876ff01d32154c6d"
+}

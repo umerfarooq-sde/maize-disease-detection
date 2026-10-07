@@ -1,15 +1,22 @@
 # Project state
 
-Updated: 2026-10-07 (Asia/Karachi).
+Updated: 2026-10-08 (Asia/Karachi).
 
 ## Current phase
 
-Phase 9.5 dataset intake and real-image preprocessing review is complete.
-**NOT READY FOR TRAINING** until inclusion, intended-use/permission and preprocessing
-policy decisions are settled. The configured external dataset has 8,040 files in four
-literal classes, 4,186 distinct byte contents, 11 shared-admission failures and three
-contradictory label families. Sources/overlap were recovered automatically from local
-metadata and archives; no manual label/split/provenance inventory is needed.
+Phase 10 dataset preparation, training foundation and baseline evaluation are implemented
+and verified. The foreground fitting process was externally interrupted during epoch 11:
+**ten complete epochs (two warmup/eight fine-tune), out of twelve maximum**. The original
+run is unchanged. Separate immutable recovery evaluates its unchanged epoch-10 validation
+winner: **95.20% test accuracy / 0.9396 macro F1** on 625 held-out contents. No completed
+twelve-epoch budget, early-stopping, convergence or exact optimizer/RNG resume is claimed.
+The approved metadata index has **4,170 unique contents / 4,161 groups** and fixed
+**2,917 train / 628 validation / 625 test** partitions with zero content/group leakage.
+All 8,040 source names, bytes, sizes and mtimes remain unchanged. Reason-coded invalid/
+contradictory-family exclusions, full-frame shared configuration and academic/FYP
+non-commercial restrictions are locked. Sources and labels were recovered automatically;
+no manual metadata inventory or new service secret is required. Read
+[training results and interruption](25-ml-training-evaluation.md).
 Read the [dataset review](24-dataset-intake-preprocessing-review.md),
 [historical foundation audit](23-pre-phase-10-audit.md) and [known issues](KNOWN_ISSUES.md).
 
@@ -27,15 +34,15 @@ Both Python environments import the same `maizedoctor_preprocessing` 1.0.0 packa
 Phase 9.5 runs both policies on all 8,040 images and verifies 160 real consumer parity
 cases. Review of 81 filenames/78 contents found no obvious preprocessing-caused tissue
 loss, without ground-truth lesion masks or classification accuracy. Conservative
-extraction falls back for 8,021 of 8,029 accepted files; full-frame is recommended for
-the first baseline. Canonical policy/version and foundation 224×224/neutral settings
-remain unchanged; no classifier is trained. A reproduced Node/
+extraction falls back for 8,021 of 8,029 accepted files; full-frame is approved for
+the first baseline. Generic package defaults/version remain unchanged; Phase 10 pins
+224×224/ImageNet settings in its artifact configuration. A reproduced Node/
 shared image-admission mismatch, four existing high npm aggregate advisory entries,
 native mobile refresh-cookie integration and deployment/platform limitations are recorded.
 The recovered backend database client matches HEAD and works. Phase 6 remains explicitly
-skipped. Phase 9.5 adds configured read-only intake and records that configuration choice;
-unresolved training policy, label adjudication and use permission are not decisions.
-Stop after Phase 9.5; Phase 10, inference, Node/FastAPI orchestration, mobile sign-in,
+skipped. Phase 9.5 added configured read-only intake; the subsequent approved exclusions,
+use restrictions, full-frame policy and Phase 10 baseline are recorded in DECISIONS.md.
+Stop after Phase 10; inference, Node/FastAPI orchestration, mobile sign-in,
 disease/business APIs, calculators, admin functionality and RAG/Gemini remain deferred.
 
 ## Initial workspace findings
@@ -70,12 +77,12 @@ disease/business APIs, calculators, admin functionality and RAG/Gemini remain de
 | Backend | Express 5 health/auth/scans, strict TS/Zod, Argon2id, rotating/revocable JWT sessions/RBAC, upload signature/full decode validation, Cloudinary authenticated assets, durable scan-upload retry/cleanup; shared Prisma 7.10.0, 21 tables/five migrations, 77 passing tests across five suites |
 | AI service | Python 3.11/FastAPI 0.142.2/Uvicorn 0.54.0 foundation and exact shared preprocessing exports; health reports preprocessing library available without importing heavy modules; 50 tests and Ruff/mypy pass; no inference operations |
 | Shared preprocessing | One independently buildable typed package at `shared/preprocessing`, version 1.0.0, explicit JSON configuration, file/byte entrypoints, conservative extraction/fallback, optional unchanged CPU tensor and debug CLI; 78 tests pass in each consumer environment and eight parity cases pass |
-| ML training | Python 3.11 locked environment, reusable DATASET_PATH configuration, read-only inventory and exact shared-policy review; 29 tests plus Ruff/strict mypy pass, 160 real consumer parity cases; external dataset inspected without source edits, training execution or model |
+| ML training | Python 3.11 locked CPU environment, reusable DATASET_PATH, immutable 4,170-content research index and grouped 2,917/628/625 splits, shared full-frame MobileNetV3 Small, train-only augmentation, validation selection and versioned artifacts; 92 tests, Ruff/strict mypy, 12 synthetic/16 real baseline parity, actual 32/16 smoke pass; ten-epoch interrupted-budget baseline independently evaluated once on test: 95.20% accuracy/0.9396 macro F1 |
 | Infrastructure | Neon PostgreSQL 18.6 with pgvector 0.8.6 migrated; pgvector 0.8.7/PostgreSQL 18 Compose configuration; preserved native 18.4 cluster; private local settings ignored |
 | Documentation | Architecture, database/operations, auth, Flutter foundation, scan uploads/recovery, FastAPI startup/contracts/network, shared preprocessing/configuration/versioning/limitations, decisions, roadmap and verification history |
 | Scripts | Repository/environment/auth/admin/PostgreSQL/Python/development checks including shared preprocessing and actual cross-environment parity; FastAPI start/check scripts, full live Flutter scan-upload harness and backend cleanup CLI |
 
-Mobile authentication workflows, disease detection, ML training/inference, RAG, calculator
+Mobile authentication workflows, disease-result APIs, classifier serving, RAG, calculator
 execution, notification delivery and the admin dashboard remain future work. Flutter
 feature introduction/empty screens are foundation UI; FastAPI exposes only real process
 health and development docs, without prediction/retrieval/generation endpoints.
@@ -1037,18 +1044,88 @@ implementation, not completed files. Stop after this audit.
   canonical preprocessing code/config/version, model, augmentation or permanent split
   was created/changed. The Phase 0–9 audit remains historical evidence.
 
+## Phase 10 dataset preparation, training and evaluation (2026-10-07)
+
+- Approved dataset policy is persisted in `ml-training/configs/research-policy.json`
+  and hash-pinned family/invalid/confirmed-relative evidence in `group-evidence.json`.
+  Exclude 18 filenames/16 unique contents: eleven shared-rejected inputs plus all seven
+  members of three contradictory families. Collapse 3,852 remaining duplicate aliases.
+  No original image is converted, relabeled, renamed, deleted or written.
+- New `dataset_preparation.py` writes/verifies immutable eligibility, exclusions,
+  literal class mapping, provenance, grouped stratified partitions and integrity hashes.
+  Committed safe index: `ml-training/manifests/maize-research-20261007-v1/manifest.json`,
+  semantic fingerprint `e1abe6c4bba09080371345365ab92067f1f08bfba9f927f66cbc9e58af6b5e98`.
+  Future experiments reuse it and resolve source bytes only through `DATASET_PATH`.
+- Fixed class counts (eligible/train/validation/test): Common_Rust 1301/910/196/195;
+  Gray_Leaf_Spot 568/397/86/85; Healthy 1162/813/175/174;
+  Northern_Corn_Leaf_Blight 1139/797/171/171. Seed 20261007; target 70/15/15;
+  nine eligible confirmed-relative links stay together. All pairwise group/content
+  intersections are empty; all 8,040 original names/bytes/sizes/mtimes match Phase 9.5.
+- Shared preprocessing remains package **1.0.0**, with artifact-pinned disabled extraction,
+  full-frame RGB/224 letterbox/CHW float32 and centrally configured ImageNet normalization.
+  Fingerprint `b142e59f458d27a2d3fddbfc86c2f2f802670ab4909f1275babbef92de9cb5c8`.
+  Generic defaults are preserved. Training-only mild flip/affine occurs after shared
+  preprocessing; validation/test never use augmentation. Twelve synthetic and sixteen
+  real TRAIN-image cases show exact training/AI wrapper parity with this configuration.
+- New `model.py`, `training_data.py`, `train.py` and `evaluation.py` implement checked
+  official MobileNetV3 Small weights, deterministic CPU transfer learning, AdamW/scheduler/
+  validation-only checkpoint selection/early-stopping infrastructure, unique epoch files,
+  strict restore parity, guarded final test and typed metrics/standalone plots. Matplotlib
+  and its locked dependencies are added; 43 installed distributions pass compatibility.
+- Actual `smoke-20261007-01`: 32 train/16 validation, one finite epoch, safe save/reload,
+  exact fresh-model outputs, no test evaluation. Actual original run
+  `mobilenet-v3-small-20261007-01`: ten completed epochs, then external terminal
+  interruption during epoch 11. Its directory/checkpoints remain byte-identical.
+  `mobilenet-v3-small-20261007-01-recovery` locks the unchanged epoch-10 validation
+  winner before test, strictly restores it and completes evaluation without more fitting.
+- Selected unaugmented train/validation/test accuracy: 99.5886%/95.7006%/95.2000%; macro
+  F1: 0.9948/0.9411/0.9396. Test has 595 correct of 625, macro precision/recall
+  0.9375/0.9421, weighted F1 0.9522 and macro OVR ROC-AUC 0.9946. Per-class P/R/F1,
+  specificity, AUC, confusion, curves and fitting analysis are preserved. No test
+  result determines hyperparameters, thresholds or selection; test is evaluated once.
+- Best local model: `.cache/phase10/experiments/mobilenet-v3-small-20261007-01-recovery/checkpoints/epoch-010.pt`,
+  SHA-256 `a7a08eb88510fd8f58c7a30f174935bf9d6a7bfe941a0eec876ff01d32154c6d`.
+  [Committed aggregate report](../ml-training/reports/mobilenet-v3-small-20261007-01-recovery/README.md)
+  retains 24 hash-verified numerical/code/provenance files plus integrity.json. Full local
+  experiment retains immutable model and prediction CSVs. No raw source image is published.
+- Checks: **92 tests**, Ruff format/lint on 19 files, strict mypy on nine source files,
+  lock/pip compatibility, repository/templates/ignore, links, whitespace, credentials and
+  private-path scans pass. An independent auditor recomputes every numerical metric from
+  CSVs and validates parent/recovery/config/class/source/environment/checkpoint hashes;
+  two zero-input strict restores agree. It performs no additional test-image inference.
+- Fixed a pre-commit Windows Git newline-conversion issue that changed report byte
+  hashes. Scoped `.gitattributes` retains frozen manifest/report bytes and LF training
+  sources. All 34 hash-bound Git index files match their recorded SHA-256 identities.
+- Reports/documentation/decisions/testing/development checks are updated. Backend,
+  mobile, database, AI service and shared package source remain unchanged. No production
+  model promotion or application inference occurs; stop after Phase 10.
+
 ## Current limitations and pending decisions
+
+- The baseline fitting process was interrupted after ten complete epochs of twelve maximum.
+  Optimizer/RNG state was not saved, so exact training resume is unavailable. Evaluation
+  recovery preserves the original run and completes a valid ten-epoch result, without
+  establishing completion of the planned budget or convergence. Future long training
+  should run independently of an interactive tool terminal; the documented hidden
+  launcher redirects logs and retains immutable outputs.
+- Selected unaugmented train/validation accuracy gap is 3.888 percentage points and
+  macro-F1 gap 0.0537, a generalization/overfitting signal rather than proof. Losses
+  decreased overall; underfitting is not established. Gray_Leaf_Spot test F1 is 0.8621;
+  23/30 errors are its pairwise confusion with Northern_Corn_Leaf_Blight. Known-content
+  grouping does not establish independent plants/fields or remove unknown relatives,
+  background/source/watermark bias. Field validation and commercial licensing/source
+  replacement remain future requirements; these internal scores are research evidence.
 
 - Starlette TestClient emits one upstream deprecation warning recommending httpx2.
   Existing HTTPX remains locked and tests pass; a test-client migration is maintenance
   work rather than an unverified change to this phase's dependency baseline.
-- Shared preprocessing now has dataset-wide mechanical checks and sampled real-image
-  visual review, with no annotated lesion ground truth or measured classifier accuracy.
+- Shared preprocessing has dataset-wide mechanical checks and sampled real-image
+  visual review, without annotated lesion ground truth or independent field accuracy.
   Perimeter-camouflaged leaf edges can still be removed before uncertainty gates detect
   them; outward padding does not guarantee recovery. Resize can lose tiny lesions.
   Extraction retains background for almost all current images and does not identify
-  maize. Approve the recommended full-frame policy and future manifest exclusions for
-  11 invalid files/three conflicting families, and resolve mixed-rights intended use. Future
+  maize. The user approved full-frame policy, invalid/conflicting-family exclusions and
+  academic/FYP use. Commercial licensing or source replacement remains required. Future
   serving needs measured deployment concurrency/time/memory limits and cross-platform
   codec parity; current byte/pixel caps only bound individual inputs.
 - Node security decoding accepts valid 1×1 PNG and PNG trailing bytes that the shared
@@ -1104,9 +1181,10 @@ implementation, not completed files. Stop after this audit.
   install the extension before applying Phase 2 migrations there, or use Neon/pgvector Compose.
 - pg 8.23 can emit a query-queue deprecation warning during Prisma internal related
   queries; verified transactions pass. Keep the current lock until future adapter/pg compatibility is checked.
-- CPU ML environment is the baseline; GPU/CUDA and model/experiment choices remain future work.
-- Evaluated model-compatible preprocessing/mask policy, actual sourced agricultural data/rules, trained
-  model artifacts, embedding model/dimensions/indexes, AI provider credentials, detailed
+- CPU ML environment and the first transfer-learning baseline are implemented;
+  GPU/CUDA, further validation-only experiments and model promotion remain future work.
+- Production model loading/compatibility, actual sourced agricultural data/rules,
+  embedding model/dimensions/indexes, AI provider credentials, detailed
   business APIs and completed-scan retention/Cloudinary deletion remain pending. The initial light
   design system is implemented; domain workflow designs remain future work.
 - Seed data is intentionally empty. Database checks enforce structure/provenance presence;
@@ -1115,13 +1193,9 @@ implementation, not completed files. Stop after this audit.
 
 ## Next step
 
-Stop after Phase 9.5. Review the saved comparisons and settle only the unresolved
-choices: future-index exclusion of 11 invalid inputs/three contradictory label families,
-intended use and rights eligibility, and full-frame shared policy approval. Dataset
-path, labels, sources, derivatives and absence of official splits were determined from
-the supplied files; no manual metadata reconstruction is requested. The current CPU
-environment works and no new external secret is required. Phase 10 begins only after
-these choices and explicit authorization. Reconcile the next instruction with the
-[roadmap](14-roadmap.md); do not
-start training/inference, Node/FastAPI integration, mobile authentication, disease/business
-APIs, RAG/Gemini/calculators or admin functionality automatically.
+Stop after Phase 10. The fixed index, ten-epoch interrupted-budget baseline, immutable
+recovery evaluation and checks are preserved. Wait for the next user instruction and
+reconcile it with the [roadmap](14-roadmap.md). Inference/model promotion, Node/FastAPI
+integration, mobile authentication, disease/business APIs, RAG/Gemini/calculators and
+admin functionality remain future work. Current research use does not clear commercial
+deployment or establish independent field accuracy.

@@ -1,0 +1,467 @@
+{
+  "artifact_sha256": {
+    "base-weights.json": "04ddb6e6f1e0bac3aa0f21328c723c07b126afdd5a1306da6aab9b308776573f",
+    "checkpoints/epoch-010.pt": "a7a08eb88510fd8f58c7a30f174935bf9d6a7bfe941a0eec876ff01d32154c6d",
+    "class-map.json": "6522256071605079465ca6c8623309d2f0592a59ed28580e77e180a23894950e",
+    "dataset-manifest.json": "f971ecb5c9ea38f23040ee260518bc2f03e9b1af7d53b9e66136a27694cfdda1",
+    "environment.json": "47c9076dfe187a728e90357a8bb763375345cf886273aeea6831203502ac75be",
+    "epoch-history.jsonl": "841cf4945c82fa2f56c7603c59227e3747f05856ea3dce18ea136e540b751ec7",
+    "experiment.json": "b14c06ff4530f91b08308b2078dd397b8766f690c1ab565927b9a68359cc6e74",
+    "generalization.json": "4bdf732630c16d047f75c6c755c7c5063bd29d1fc2e6e70c89afe90a224fc385",
+    "history.json": "ad88659dcace208424910a106d18b17eb64abb05274c87339a5dfa6a053fcc2e",
+    "hyperparameters.json": "3dcd99852ca0ad8690212df229e19a9beadc0ffbb6307500f10473d4b776ed89",
+    "preprocessing.json": "2656fc0541d4ae8d46e9bb365ff374d3bbb31418fd6c1df528d6fdd5d4a95e40",
+    "recovery.json": "9a22585b01bc8e262e757cefcd9b28148cd4e9a7f5613ad46822b5ff98a04de9",
+    "selected-metrics.json": "9fa58a28dd9e212a1921183ef534aac99e30743ed3023c3ac2d718943c1ebc24",
+    "selection-lock.json": "0afdb6306b85d75b6bd773b444660f52170a87498a28a9467cdec7cf02aeeb65",
+    "summary.json": "71d1a290e8c00953d0e555db8878b71e640241067583bae52af1e4dd84291781",
+    "test/classification-summary.txt": "65cf250fa07e3a36bf42988082dcb14d28d16e34028a284b53be73d51d158986",
+    "test/confusion-matrix.png": "d9be7bd558663bae65eb4f27f324c93efdc988eaf1f5135a8fdde323844fbd95",
+    "test/metrics.json": "d8a7fb75ffe1f613d7ef751ee905e686bfec944d35b1c62a2988f830fe3801b5",
+    "test/predictions.csv": "24f0bffcdc5828512bc016c1d4f54393d4f0650fc80035101c9c4f5cc70209cf",
+    "test/roc-curves.png": "ccbab69d4640e7581172b1568423c43a7da7c40a842fa4e966f6a1a91f4709b0",
+    "test/training-history.png": "ca6753b744b1900f44f3aea069d0a6d18d6d7745fde51b7edff212f0bbfb9972",
+    "train/classification-summary.txt": "fb6234bbb3b61327fdd5307a059d16c7055bbdc9556c4c09c3c3d56ff03610fa",
+    "train/confusion-matrix.png": "a0ca1cdbc55457700cb0ad0246485807be3cbbfa5c87265f3316e72c198d8c47",
+    "train/metrics.json": "ab3a48996c6417b71ea77ad8b260d104cdaf88add7d833feb9ab9d3389be9fd2",
+    "train/predictions.csv": "1bf342b102d29cf9ee47c37b99e40368b349b76af5d1bbcd1b1e69957f0ff8a9",
+    "train/roc-curves.png": "5bc9dd67fd0be7025b9928dc6c619f54916be4ec1ecdbae5b55108cc95cbac80",
+    "train/training-history.png": "ca6753b744b1900f44f3aea069d0a6d18d6d7745fde51b7edff212f0bbfb9972",
+    "used-partitions.json": "9573d8b08150c8cd03ccd413723978342e6ac663cc0e66533d462f004a95f2f3",
+    "validation/classification-summary.txt": "42efbe2b0816a67bb7d313eab7b9082f4db4a2418e6d9019872809481d5cef69",
+    "validation/confusion-matrix.png": "6bce7ddbf71691ef9ccdeeee184d28cbb79dcd9b82f5eff30d3df5034fdbf1ba",
+    "validation/metrics.json": "2a7c1c637f0c1d199508ecb60f26dca9273fb8d59d90dd903a977ce6e89c44d1",
+    "validation/predictions.csv": "46aa8802a516eeec0625cfb8a7808d0b333b62364b2110bab5c538472bec3294",
+    "validation/roc-curves.png": "69cee64e7b4fac78de4221e231f1ed96b4555a0c55010cf04abf90cf6c7da9dd",
+    "validation/training-history.png": "ca6753b744b1900f44f3aea069d0a6d18d6d7745fde51b7edff212f0bbfb9972"
+  },
+  "audit_method": "Saved numerical artifacts only; independent NumPy formulas; no raw image reading or additional test-model inference.",
+  "best_epoch": 10,
+  "checklist": [
+    "Canonical manifest/class/config/version/policy identity; zero sample/group/pixel overlap; excluded content absent",
+    "train: exact frozen membership, support, finite probabilities and independently recomputed confusion/precision/recall/F1/specificity/AUC",
+    "validation: exact frozen membership, support, finite probabilities and independently recomputed confusion/precision/recall/F1/specificity/AUC",
+    "test: exact frozen membership, support, finite probabilities and independently recomputed confusion/precision/recall/F1/specificity/AUC",
+    "Validation macro F1/loss independently identifies selected epoch; no test history/selection field",
+    "Official base-weight bytes, current consumer code hashes, shared Git source identity and installed environment match records",
+    "Explicit 10/12 interrupted recovery; all original parent files immutable, copied settings/checkpoint byte-identical, frozen best epoch and evaluation script hash verified",
+    "Checkpoint restored strictly into two fresh models with identical finite 2x4 outputs on zeros only",
+    "Selected checkpoint metadata/hash/finite parameters and complete distinct improving-epoch checkpoint list",
+    "Preserved report exports pass privacy checks; matching experiment files have identical bytes",
+    "All 24 export file hashes match integrity.json; preserved recovery-script.txt matches executed helper SHA",
+    "No raw photographs/archives, machine-specific paths, GPS/owner metadata or inline source images in report artifacts"
+  ],
+  "checkpoint_sha256": "a7a08eb88510fd8f58c7a30f174935bf9d6a7bfe941a0eec876ff01d32154c6d",
+  "class_counts": {
+    "test": [
+      195,
+      85,
+      174,
+      171
+    ],
+    "train": [
+      910,
+      397,
+      813,
+      797
+    ],
+    "validation": [
+      196,
+      86,
+      175,
+      171
+    ]
+  },
+  "counts": {
+    "test": 625,
+    "train": 2917,
+    "validation": 628
+  },
+  "environment_sha256": "47c9076dfe187a728e90357a8bb763375345cf886273aeea6831203502ac75be",
+  "epochs_completed": 10,
+  "experiment_id": "mobilenet-v3-small-20261007-01-recovery",
+  "export_sha256": {
+    "README.md": "205206a9e4be523ba7bcb63e3969e99668864defa829b425eca1b0c1948671eb",
+    "base-weights.json": "04ddb6e6f1e0bac3aa0f21328c723c07b126afdd5a1306da6aab9b308776573f",
+    "class-map.json": "6522256071605079465ca6c8623309d2f0592a59ed28580e77e180a23894950e",
+    "environment.json": "47c9076dfe187a728e90357a8bb763375345cf886273aeea6831203502ac75be",
+    "experiment.json": "b14c06ff4530f91b08308b2078dd397b8766f690c1ab565927b9a68359cc6e74",
+    "generalization.json": "4bdf732630c16d047f75c6c755c7c5063bd29d1fc2e6e70c89afe90a224fc385",
+    "history.json": "ad88659dcace208424910a106d18b17eb64abb05274c87339a5dfa6a053fcc2e",
+    "hyperparameters.json": "3dcd99852ca0ad8690212df229e19a9beadc0ffbb6307500f10473d4b776ed89",
+    "integrity.json": "f9634317ae5b35b7196e7a85e51a11046bc62da4b10d0742d97ce7bbb3f3c88b",
+    "preprocessing.json": "2656fc0541d4ae8d46e9bb365ff374d3bbb31418fd6c1df528d6fdd5d4a95e40",
+    "recovery-script.txt": "f95d5491c3ebf189ad3002e63eaf3bf8c9865e29c3ad3dfaec2a815583589cf9",
+    "recovery.json": "9a22585b01bc8e262e757cefcd9b28148cd4e9a7f5613ad46822b5ff98a04de9",
+    "selected-metrics.json": "9fa58a28dd9e212a1921183ef534aac99e30743ed3023c3ac2d718943c1ebc24",
+    "selection-lock.json": "0afdb6306b85d75b6bd773b444660f52170a87498a28a9467cdec7cf02aeeb65",
+    "summary.json": "71d1a290e8c00953d0e555db8878b71e640241067583bae52af1e4dd84291781",
+    "test/classification-summary.txt": "65cf250fa07e3a36bf42988082dcb14d28d16e34028a284b53be73d51d158986",
+    "test/confusion-matrix.png": "d9be7bd558663bae65eb4f27f324c93efdc988eaf1f5135a8fdde323844fbd95",
+    "test/metrics.json": "d8a7fb75ffe1f613d7ef751ee905e686bfec944d35b1c62a2988f830fe3801b5",
+    "test/roc-curves.png": "ccbab69d4640e7581172b1568423c43a7da7c40a842fa4e966f6a1a91f4709b0",
+    "train/metrics.json": "ab3a48996c6417b71ea77ad8b260d104cdaf88add7d833feb9ab9d3389be9fd2",
+    "validation/classification-summary.txt": "42efbe2b0816a67bb7d313eab7b9082f4db4a2418e6d9019872809481d5cef69",
+    "validation/confusion-matrix.png": "6bce7ddbf71691ef9ccdeeee184d28cbb79dcd9b82f5eff30d3df5034fdbf1ba",
+    "validation/metrics.json": "2a7c1c637f0c1d199508ecb60f26dca9273fb8d59d90dd903a977ce6e89c44d1",
+    "validation/roc-curves.png": "69cee64e7b4fac78de4221e231f1ed96b4555a0c55010cf04abf90cf6c7da9dd",
+    "validation/training-history.png": "ca6753b744b1900f44f3aea069d0a6d18d6d7745fde51b7edff212f0bbfb9972"
+  },
+  "hyperparameters_sha256": "3dcd99852ca0ad8690212df229e19a9beadc0ffbb6307500f10473d4b776ed89",
+  "manifest_fingerprint": "e1abe6c4bba09080371345365ab92067f1f08bfba9f927f66cbc9e58af6b5e98",
+  "metrics": {
+    "test": {
+      "accuracy": 0.952,
+      "confusion_matrix": [
+        [
+          191,
+          0,
+          0,
+          4
+        ],
+        [
+          1,
+          75,
+          0,
+          9
+        ],
+        [
+          0,
+          0,
+          174,
+          0
+        ],
+        [
+          2,
+          14,
+          0,
+          155
+        ]
+      ],
+      "macro_f1": 0.9396320960478879,
+      "macro_precision": 0.9374629398266894,
+      "macro_recall": 0.9420682173004155,
+      "per_class": [
+        {
+          "f1": 0.9820051413881749,
+          "false_negative": 4,
+          "false_positive": 3,
+          "index": 0,
+          "label": "Common_Rust",
+          "precision": 0.9845360824742269,
+          "predicted_support": 194,
+          "recall": 0.9794871794871794,
+          "roc_auc": 0.9989624329159214,
+          "specificity": 0.9930232558139535,
+          "support": 195,
+          "true_negative": 427,
+          "true_positive": 191,
+          "undefined_reasons": {}
+        },
+        {
+          "f1": 0.8620689655172413,
+          "false_negative": 10,
+          "false_positive": 14,
+          "index": 1,
+          "label": "Gray_Leaf_Spot",
+          "precision": 0.8426966292134831,
+          "predicted_support": 89,
+          "recall": 0.8823529411764706,
+          "roc_auc": 0.9876906318082789,
+          "specificity": 0.9740740740740741,
+          "support": 85,
+          "true_negative": 526,
+          "true_positive": 75,
+          "undefined_reasons": {}
+        },
+        {
+          "f1": 1.0,
+          "false_negative": 0,
+          "false_positive": 0,
+          "index": 2,
+          "label": "Healthy",
+          "precision": 1.0,
+          "predicted_support": 174,
+          "recall": 1.0,
+          "roc_auc": 1.0,
+          "specificity": 1.0,
+          "support": 174,
+          "true_negative": 451,
+          "true_positive": 174,
+          "undefined_reasons": {}
+        },
+        {
+          "f1": 0.9144542772861357,
+          "false_negative": 16,
+          "false_positive": 13,
+          "index": 3,
+          "label": "Northern_Corn_Leaf_Blight",
+          "precision": 0.9226190476190477,
+          "predicted_support": 168,
+          "recall": 0.9064327485380117,
+          "roc_auc": 0.9916016178478502,
+          "specificity": 0.9713656387665198,
+          "support": 171,
+          "true_negative": 441,
+          "true_positive": 155,
+          "undefined_reasons": {}
+        }
+      ],
+      "roc_auc": {
+        "macro": 0.9945636706430125,
+        "undefined_reason": null,
+        "weighted": 0.9957044076388653
+      },
+      "sample_count": 625,
+      "weighted_f1": 0.9522216736889421,
+      "weighted_precision": 0.9526105707335639,
+      "weighted_recall": 0.952
+    },
+    "train": {
+      "accuracy": 0.9958861844360645,
+      "confusion_matrix": [
+        [
+          908,
+          0,
+          0,
+          2
+        ],
+        [
+          0,
+          391,
+          0,
+          6
+        ],
+        [
+          0,
+          0,
+          813,
+          0
+        ],
+        [
+          0,
+          3,
+          1,
+          793
+        ]
+      ],
+      "macro_f1": 0.9948494681442921,
+      "macro_precision": 0.995292442492009,
+      "macro_recall": 0.9944175067747723,
+      "per_class": [
+        {
+          "f1": 0.9988998899889989,
+          "false_negative": 2,
+          "false_positive": 0,
+          "index": 0,
+          "label": "Common_Rust",
+          "precision": 1.0,
+          "predicted_support": 908,
+          "recall": 0.9978021978021978,
+          "roc_auc": 0.9999989049316403,
+          "specificity": 1.0,
+          "support": 910,
+          "true_negative": 2007,
+          "true_positive": 908,
+          "undefined_reasons": {}
+        },
+        {
+          "f1": 0.988621997471555,
+          "false_negative": 6,
+          "false_positive": 3,
+          "index": 1,
+          "label": "Gray_Leaf_Spot",
+          "precision": 0.9923857868020305,
+          "predicted_support": 394,
+          "recall": 0.9848866498740554,
+          "roc_auc": 0.9999560193514854,
+          "specificity": 0.9988095238095238,
+          "support": 397,
+          "true_negative": 2517,
+          "true_positive": 391,
+          "undefined_reasons": {}
+        },
+        {
+          "f1": 0.9993853718500307,
+          "false_negative": 0,
+          "false_positive": 1,
+          "index": 2,
+          "label": "Healthy",
+          "precision": 0.9987714987714987,
+          "predicted_support": 814,
+          "recall": 1.0,
+          "roc_auc": 1.0,
+          "specificity": 0.9995247148288974,
+          "support": 813,
+          "true_negative": 2103,
+          "true_positive": 813,
+          "undefined_reasons": {}
+        },
+        {
+          "f1": 0.9924906132665833,
+          "false_negative": 4,
+          "false_positive": 8,
+          "index": 3,
+          "label": "Northern_Corn_Leaf_Blight",
+          "precision": 0.9900124843945068,
+          "predicted_support": 801,
+          "recall": 0.9949811794228356,
+          "roc_auc": 0.9999467342155726,
+          "specificity": 0.9962264150943396,
+          "support": 797,
+          "true_negative": 2112,
+          "true_positive": 793,
+          "undefined_reasons": {}
+        }
+      ],
+      "roc_auc": {
+        "macro": 0.9999754146246747,
+        "undefined_reason": null,
+        "weighted": 0.9999791190744407
+      },
+      "sample_count": 2917,
+      "weighted_f1": 0.9958852104812266,
+      "weighted_precision": 0.9958924703202114,
+      "weighted_recall": 0.9958861844360645
+    },
+    "validation": {
+      "accuracy": 0.9570063694267515,
+      "confusion_matrix": [
+        [
+          193,
+          2,
+          0,
+          1
+        ],
+        [
+          1,
+          70,
+          0,
+          15
+        ],
+        [
+          0,
+          0,
+          175,
+          0
+        ],
+        [
+          0,
+          8,
+          0,
+          163
+        ]
+      ],
+      "macro_f1": 0.9411364137870162,
+      "macro_precision": 0.9451149714911018,
+      "macro_recall": 0.9379659350480298,
+      "per_class": [
+        {
+          "f1": 0.9897435897435898,
+          "false_negative": 3,
+          "false_positive": 1,
+          "index": 0,
+          "label": "Common_Rust",
+          "precision": 0.9948453608247423,
+          "predicted_support": 194,
+          "recall": 0.9846938775510204,
+          "roc_auc": 0.9997519841269842,
+          "specificity": 0.9976851851851852,
+          "support": 196,
+          "true_negative": 431,
+          "true_positive": 193,
+          "undefined_reasons": {}
+        },
+        {
+          "f1": 0.8433734939759037,
+          "false_negative": 16,
+          "false_positive": 10,
+          "index": 1,
+          "label": "Gray_Leaf_Spot",
+          "precision": 0.875,
+          "predicted_support": 80,
+          "recall": 0.813953488372093,
+          "roc_auc": 0.9891658800308933,
+          "specificity": 0.981549815498155,
+          "support": 86,
+          "true_negative": 532,
+          "true_positive": 70,
+          "undefined_reasons": {}
+        },
+        {
+          "f1": 1.0,
+          "false_negative": 0,
+          "false_positive": 0,
+          "index": 2,
+          "label": "Healthy",
+          "precision": 1.0,
+          "predicted_support": 175,
+          "recall": 1.0,
+          "roc_auc": 1.0,
+          "specificity": 1.0,
+          "support": 175,
+          "true_negative": 453,
+          "true_positive": 175,
+          "undefined_reasons": {}
+        },
+        {
+          "f1": 0.9314285714285714,
+          "false_negative": 8,
+          "false_positive": 16,
+          "index": 3,
+          "label": "Northern_Corn_Leaf_Blight",
+          "precision": 0.9106145251396648,
+          "predicted_support": 179,
+          "recall": 0.9532163742690059,
+          "roc_auc": 0.9939856936286742,
+          "specificity": 0.9649890590809628,
+          "support": 171,
+          "true_negative": 441,
+          "true_positive": 163,
+          "undefined_reasons": {}
+        }
+      ],
+      "roc_auc": {
+        "macro": 0.9957258894466379,
+        "undefined_reason": null,
+        "weighted": 0.9968012869140909
+      },
+      "sample_count": 628,
+      "weighted_f1": 0.9566785824617149,
+      "weighted_precision": 0.9569343543320576,
+      "weighted_recall": 0.9570063694267515
+    }
+  },
+  "planned_max_epochs": 12,
+  "preprocessing_hash": "b142e59f458d27a2d3fddbfc86c2f2f802670ab4909f1275babbef92de9cb5c8",
+  "privacy_text_artifacts_checked": 24,
+  "shared_source_sha256": {
+    "shared/preprocessing/src/maizedoctor_preprocessing/__init__.py": "5fa2a0d51c96bce3f49bbe69f3fd7d91e818596747350b053e5e14c31fbb521a",
+    "shared/preprocessing/src/maizedoctor_preprocessing/__main__.py": "aeca39e7388e3a6256de2c849852caff8dd420e734bc3675a3939a4caa0df982",
+    "shared/preprocessing/src/maizedoctor_preprocessing/config.py": "cd39719c0664dd0369cebc13f131024a5bb96d364fcdf0caf5503f27146019ed",
+    "shared/preprocessing/src/maizedoctor_preprocessing/debug.py": "59952d5244c7ca09d2e2b79ff7617ead57399c6827ef40e307d2d6396ffb4d20",
+    "shared/preprocessing/src/maizedoctor_preprocessing/decoding.py": "4aebd5ed40b69806e76eb6800a9aa10097077da928779971df737a7588c1ad88",
+    "shared/preprocessing/src/maizedoctor_preprocessing/errors.py": "bee3871a36fa98fd08ac632e547f76a339371bfe9fb7af06aeb1e3fbbe7c876d",
+    "shared/preprocessing/src/maizedoctor_preprocessing/pipeline.py": "e141b7973f9326ab49552a6ddaf7b89924bb549f36d90c54cc700b050d0249b1",
+    "shared/preprocessing/src/maizedoctor_preprocessing/py.typed": "01ba4719c80b6fe911b091a7c05124b64eeece964e09c058ef8f9805daca546b",
+    "shared/preprocessing/src/maizedoctor_preprocessing/segmentation.py": "74c87efde99b20e3217f05f6d94c9e40c34f5a165aed091d768ed9ca9a742d31",
+    "shared/preprocessing/src/maizedoctor_preprocessing/types.py": "5e796a0a169253fd365e8637fb5a1cf64e863fa5a130ad68aabb22aed00e0782"
+  },
+  "source_sha256": {
+    "ml-training/configuration.py": "bf96f9ba15e790b4a573ed75592259d24f613baff940ce2cdbc2ac5457e854c4",
+    "ml-training/dataset_inventory.py": "89d17d99d796a58624b11001979eecababe222c2ffc67d471248c949d485feb0",
+    "ml-training/dataset_preparation.py": "9ccc078e42bda4be5f276b253893891ba73ebb71bfc567ce2e176d6d8c74a2fc",
+    "ml-training/dataset_review.py": "69eef903ed278ab1f0e92b7b641998d37b4110dec70dc5f4542f06e2d547aff8",
+    "ml-training/evaluation.py": "9a9120d9a27d72acd50051dfaddc9b762f4e0d42f598c9b0eccffdd4b08986c6",
+    "ml-training/model.py": "6db5c1fb4029700fdb690c34c4d7d54f38ddc782fb211c7706ccdbd5330ce6d7",
+    "ml-training/preprocessing.py": "f3bc746a60b865db20594fef33a09fcced19d24ecfea72eaa12d01dbae0ee8ca",
+    "ml-training/train.py": "6fc6ada91f068a05630af3f43fba53a58915e3499fe145da87c315a5b31c4d24",
+    "ml-training/training_data.py": "e6cc0c9e81da2b612da5b159b349d1130c399d624dd0c34049f33be6011d71ae"
+  },
+  "status": "PASS",
+  "test_evaluation_in_this_audit": 0,
+  "test_guard_recorded_once": true,
+  "training_experiment_id": "mobilenet-v3-small-20261007-01",
+  "training_interrupted": true,
+  "zero_only_restore": true
+}

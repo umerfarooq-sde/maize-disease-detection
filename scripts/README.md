@@ -1,5 +1,13 @@
 # Scripts
 
+Phase 10 adds configured [dataset preparation](../ml-training/dataset_preparation.py)
+and [training](../ml-training/train.py). Use the committed immutable manifest for
+future experiments; every smoke/full run has a new ignored output directory. Smoke
+uses training/validation only; full selection uses validation and evaluates test last.
+See [training/evaluation](../docs/25-ml-training-evaluation.md) for commands/artifacts.
+Training checks cover all source/tests; preprocessing parity adds the pinned baseline
+configuration for 12 synthetic cases across both Python environments.
+
 Phase 9.5 adds the configured read-only
 [dataset review command](../ml-training/dataset_review.py). It reads `DATASET_PATH`
 through [the training loader](../ml-training/configuration.py), independent of cwd;
@@ -23,7 +31,7 @@ repository checks validate the blank dataset template and ignored local configur
 
 Phase 9 adds [check-preprocessing-parity.py](check-preprocessing-parity.py).
 `check-development.ps1 -Component Preprocessing` checks shared format/lint/types,
-runs synthetic tests in both Python environments and verifies eight identical
+runs synthetic tests in both Python environments and verifies twelve identical
 image/configuration cases through both installed consumer APIs. Training checks now
 include Ruff/mypy. See [shared preprocessing](../docs/22-shared-preprocessing.md).
 

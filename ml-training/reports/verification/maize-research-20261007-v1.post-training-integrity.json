@@ -1,0 +1,41 @@
+{
+  "checked_at_utc": "2026-10-07T18:54:50.576134+00:00",
+  "status": "passed",
+  "stage": "post-training-and-final-evaluation source integrity",
+  "manifest_fingerprint": "e1abe6c4bba09080371345365ab92067f1f08bfba9f927f66cbc9e58af6b5e98",
+  "manifest_file_sha256": "2f0f36b74f25bbb2f2d7f0db489a466f8b58d9de436e6e3bced5e3882dc633ed",
+  "preprocessing_hash": "b142e59f458d27a2d3fddbfc86c2f2f802670ab4909f1275babbef92de9cb5c8",
+  "source_files": 8040,
+  "source_membership_matches_phase95": true,
+  "source_bytes_unchanged": true,
+  "source_sizes_unchanged": true,
+  "source_mtimes_unchanged": true,
+  "stable_hash_reads": true,
+  "source_hash_verification_passes": 2,
+  "eligible_unique_samples": 4170,
+  "eligible_groups": 4161,
+  "split_counts": {
+    "train": 2917,
+    "validation": 628,
+    "test": 625
+  },
+  "partition_overlaps": {
+    "train:validation": {
+      "content": 0,
+      "groups": 0
+    },
+    "train:test": {
+      "content": 0,
+      "groups": 0
+    },
+    "validation:test": {
+      "content": 0,
+      "groups": 0
+    }
+  },
+  "changed_content_count": 0,
+  "changed_size_count": 0,
+  "changed_mtime_count": 0,
+  "source_writes_performed": false,
+  "model_inference_performed": false
+}

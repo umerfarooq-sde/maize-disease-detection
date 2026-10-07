@@ -1,0 +1,152 @@
+{
+  "schema_version": 1,
+  "review": "Phase 9.5 visual/source review, 2026-10-07; no device or repeated timestamp invented as an original-image group",
+  "input_hashes": {
+    "inventory": "9efbd6ad198c53365cf64c8a2ed736eef2dd5e3c0f9a81341b2b647c3b6596f9",
+    "source_linkage": "4d60b28bb3c7c7cdde9db269d0ebe3c7b4031ed93f9cf5a433784d9284bfcc17",
+    "source_index": "91cca05a03c8399a622c0a1479ac9fe5fc04dd1360134bd24b6790e0fb54d972",
+    "manual_review": "1419963fe66ef4818d31b08b10fbe50fc2cd96ad1bdf3962a724ee7d859f11d7",
+    "near_candidates": "7d58de5d06dbe59056c4de500a9119dd7b6f56bcf4d5c3bb1b7f51c9b1a2e4fb"
+  },
+  "invalid_inputs": [
+    {
+      "content_hash": "d02bef2c0a413e6d7f11e09db94d068385736ccdbc952e2d1d3fcb084237f4de",
+      "reason_code": "INVALID_INPUT:FORMAT_MISMATCH"
+    },
+    {
+      "content_hash": "ccbb42a29855fd454cbfe61804c596793d95348ea4d9d4fce0c5351be8f48975",
+      "reason_code": "INVALID_INPUT:ANIMATED_IMAGE"
+    },
+    {
+      "content_hash": "b6be07a0e79d7cac01e7c8972cf6b3f5699b9a594050182ad4995b39f13eddf5",
+      "reason_code": "INVALID_INPUT:FORMAT_MISMATCH"
+    },
+    {
+      "content_hash": "6369884b4de3a50304e0a32809b39bec7144f47505df87bfee498a313b1fb911",
+      "reason_code": "INVALID_INPUT:IMAGE_TOO_LARGE"
+    },
+    {
+      "content_hash": "78c95a0c1ddb962acbc7256ab1d6dad2f92fb0c76617b88b37a576de2f60807c",
+      "reason_code": "INVALID_INPUT:FORMAT_MISMATCH"
+    },
+    {
+      "content_hash": "db524b07878d7c86faa81a9ee38222ee6507c1a34ed7a4794f8969c7c9313b3f",
+      "reason_code": "INVALID_INPUT:FORMAT_MISMATCH"
+    },
+    {
+      "content_hash": "c47a3877968e56b974dc5292a0c3b40d4c14fbb4dbe3e9c62b0fa3bb21bf4c12",
+      "reason_code": "INVALID_INPUT:INVALID_COLOR_PROFILE"
+    },
+    {
+      "content_hash": "a520040b39aafd86177d0eb56cbe72432bb77e0d24c8c9f8f08f7b2c8473d5fb",
+      "reason_code": "INVALID_INPUT:IMAGE_TOO_LARGE"
+    },
+    {
+      "content_hash": "821078c915771fce9e3e56e28abcf89bbefe83e268acc0636106ede5abe036f3",
+      "reason_code": "INVALID_INPUT:INVALID_COLOR_PROFILE"
+    },
+    {
+      "content_hash": "deef0c607d0a5decdae484b0d1d92633ba4fe0ab15595d33e36222f62313f58e",
+      "reason_code": "INVALID_INPUT:INVALID_DIMENSIONS"
+    },
+    {
+      "content_hash": "80b5cf8ce73c1c80e8cc3342891c983220f8bff4801bcfa249be4fb41e6440d8",
+      "reason_code": "INVALID_INPUT:IMAGE_TOO_LARGE"
+    }
+  ],
+  "conflicting_families": [
+    {
+      "family_id": "cross-label-exact-with-rotation",
+      "content_hashes": [
+        "9120578a76fd8539da220def6e0609ebb2435decc7a9c34b949e46e86e794c8d",
+        "d840d7ec52e5a6c19b8af81ce72252cc4803c09096579850c6ae0dd1bb968fb4"
+      ],
+      "reason_code": "CONTRADICTORY_LABEL_FAMILY"
+    },
+    {
+      "family_id": "cross-label-exact-second",
+      "content_hashes": [
+        "ee3838e2249e671b7b4510b0d3831f30882e2bcbf20c9c8c42ee8f4e1b95fcce"
+      ],
+      "reason_code": "CONTRADICTORY_LABEL_FAMILY"
+    },
+    {
+      "family_id": "cross-label-near-watermarked",
+      "content_hashes": [
+        "1c420ab7b30b2dbf7436879f85faabae5550c15b2f04eed6eb20037f0479c9bf",
+        "2bdc6dae1b05e27405e0fbb6e35f2137e2547acaffb9b1b519dcbe1dc038ef57"
+      ],
+      "reason_code": "CONTRADICTORY_LABEL_FAMILY"
+    }
+  ],
+  "confirmed_edges": [
+    {
+      "first_hash": "1c420ab7b30b2dbf7436879f85faabae5550c15b2f04eed6eb20037f0479c9bf",
+      "second_hash": "2bdc6dae1b05e27405e0fbb6e35f2137e2547acaffb9b1b519dcbe1dc038ef57",
+      "kind": "VISUALLY_CONFIRMED_NEAR"
+    },
+    {
+      "first_hash": "1efe5eff3e78c82735ee31c6e8912f7b7c37462f805e9bc015f4e87b4f3dcf19",
+      "second_hash": "908fd04d2c48653b44ef973d61ced18d5f20a12d2d3b7cc9e8cd360f4f8fe3eb",
+      "kind": "VISUALLY_CONFIRMED_NEAR"
+    },
+    {
+      "first_hash": "2521c5cff0f831b830e0171eadbd2982a6b20c73a72932879ea0a7856a489e00",
+      "second_hash": "50f7015247fbf8a3944203f2b3d74bdb6f83263d13e90dfbd2bcfff643dadf51",
+      "kind": "VISUALLY_CONFIRMED_NEAR"
+    },
+    {
+      "first_hash": "269adda16f0a1295747ebd5df39a844d7d241ad93153b972112e0ab2505723f2",
+      "second_hash": "fd1970bc26387e9e8f22ae75600b170290e012c961246d7e70c2435c6d1bcf84",
+      "kind": "VISUALLY_CONFIRMED_NEAR"
+    },
+    {
+      "first_hash": "32061fd1a7ae0da8e727d5de28c803bbc0cfe5b2527ecd1c651dc3bc8adab884",
+      "second_hash": "db2a4a892cc3ce73a5f1e71cc745ee2a78345d72085bdeec5f24d88c168141ac",
+      "kind": "VISUALLY_CONFIRMED_NEAR"
+    },
+    {
+      "first_hash": "428c3b153f036e01e261b795998b37d9ecab2627d22cb2b7fa8d50fae8c14b78",
+      "second_hash": "687dea9785c49e3e57e768d4ff531a6acb0d7f69977104af1dc0c4cb510b7c11",
+      "kind": "VISUALLY_CONFIRMED_NEAR"
+    },
+    {
+      "first_hash": "44edd89c99e07dab5044aff773c7593bd22f48302b61cd5d637e8bf76fed0bb7",
+      "second_hash": "ec72f8a0261686acbd681db89f2627336309c59f346e31ba0bd73834fe5022c7",
+      "kind": "VISUALLY_CONFIRMED_NEAR"
+    },
+    {
+      "first_hash": "4790713869ece61c5f9d0c348d989374d208bd3868c72f35caf596eeea5828f5",
+      "second_hash": "f5256e8babb2d4f392c19a40c9ffb166d5827504ffd65595134586e3f316cd71",
+      "kind": "VISUALLY_CONFIRMED_NEAR"
+    },
+    {
+      "first_hash": "8d0748672aff25d99eaa3b714a3ee1a3773ec8e0b46fde756d9f565b70c74e36",
+      "second_hash": "b7dd69037b5425387b1e87dd0a172c6870554e429d6632a441ff47697f9a43b2",
+      "kind": "VISUALLY_CONFIRMED_NEAR"
+    },
+    {
+      "first_hash": "c0420699cb1efca68d19b1301f53e29089353e3bf46409c0a44e9eed12391494",
+      "second_hash": "f8ce8a1f5fc8d3740c2c222a34f3ee9b913c826430908b8297718c53f7299b6c",
+      "kind": "VISUALLY_CONFIRMED_NEAR"
+    },
+    {
+      "first_hash": "9120578a76fd8539da220def6e0609ebb2435decc7a9c34b949e46e86e794c8d",
+      "second_hash": "d840d7ec52e5a6c19b8af81ce72252cc4803c09096579850c6ae0dd1bb968fb4",
+      "kind": "VISUALLY_CONFIRMED_ROTATION"
+    }
+  ],
+  "grouping_rules": [
+    "byte-identical content",
+    "safe RGB pixel-identical content",
+    "recovered original-name identity",
+    "recovered original UUID",
+    "visually confirmed near/rotated content"
+  ],
+  "excluded_grouping_rules": [
+    "numbered merged filenames",
+    "repeated device IDs",
+    "uncorroborated timestamps",
+    "whole source archives as independent splits"
+  ]
+}

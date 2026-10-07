@@ -5,14 +5,20 @@ with administrative tools for maintaining knowledge and monitoring the system.
 
 ## Current status
 
-Phase 9.5 completes read-only intake of 8,040 supplied images and real-image review
-using the same shared preprocessing package in both Python environments. Four exact
-folder labels, duplicates, invalid inputs and recoverable source relationships are
-documented; 160 real-image/configuration parity cases pass. Source images remain
-unchanged. Training awaits inclusion/use decisions and approval of the recommended
-full-frame policy; the canonical preprocessing default remains unchanged. Existing
-FastAPI, Flutter scanning, backend auth and PostgreSQL/Prisma are preserved. No
-training, inference or AI/RAG features have started.
+Phase 10 dataset preparation, baseline training and evaluation are implemented and verified.
+The live training process was interrupted during epoch 11: ten epochs completed out
+of a planned maximum twelve. Immutable recovery evaluates the unchanged best
+validation-selected checkpoint: **95.20% test accuracy, 0.9396 macro F1** on 625 unique
+held-out contents. See [results and execution limitation](docs/25-ml-training-evaluation.md).
+The approved immutable
+metadata index contains 4,170 eligible unique contents after exclusions/deduplication,
+with 2,917 train, 628 validation and 625 test samples in disjoint content groups.
+Raw images remain unchanged/external. Current use is non-commercial academic/FYP
+research; commercial licensing or source replacement remains required. The baseline
+uses shared full-frame preprocessing and CPU MobileNetV3 Small transfer learning,
+with a verified smoke before training and validation-only checkpoint selection. Existing
+FastAPI, Flutter scanning, backend auth and PostgreSQL/Prisma are preserved; inference,
+application integration and RAG remain future phases.
 See [project state](docs/PROJECT_STATE.md) for verified progress and outstanding decisions.
 Use the [development setup guide](docs/15-development-environment.md) for commands and limitations.
 Use [database operations](docs/16-database-operations.md) for migration and verification commands.
@@ -25,7 +31,7 @@ Use [shared preprocessing](docs/22-shared-preprocessing.md) for the single train
 Use the [pre-Phase-10 audit](docs/23-pre-phase-10-audit.md) and [known issues](docs/KNOWN_ISSUES.md)
 for environment results and compatibility findings. Use the
 [dataset intake and preprocessing review](docs/24-dataset-intake-preprocessing-review.md)
-for current dataset findings, visual artifacts and remaining decisions.
+for historical dataset findings, visual artifacts and provenance.
 
 ## Planned architecture
 
@@ -108,9 +114,6 @@ This does not change the machine's persistent execution policy.
 
 ## Next step
 
-Stop after Phase 9.5. Review the saved comparisons and the documented inclusion,
-permitted-use and preprocessing-policy decisions. Labels and available source/group
-information have been recovered from the files; no manual reconstruction is requested.
-Phase 10 requires an explicit instruction and does not begin automatically.
-See the [readiness report](docs/24-dataset-intake-preprocessing-review.md) and
-[roadmap](docs/14-roadmap.md).
+Phase 10 stops here. The ten-epoch baseline, fixed partitions and verified results are
+preserved; its interrupted budget is explicit. Wait for the next phase instruction.
+See [training/evaluation](docs/25-ml-training-evaluation.md) and the [roadmap](docs/14-roadmap.md).

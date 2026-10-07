@@ -1,0 +1,33 @@
+{
+  "schema_version": 1,
+  "permitted_use": "non-commercial academic/FYP research only",
+  "user_approval": "Phase 10 research use and documented exclusions explicitly authorized",
+  "raw_image_redistribution": false,
+  "commercial_clearance": false,
+  "commercial_use_requirement": "Obtain appropriate licensing or replace restricted source material before commercial use.",
+  "sources": [
+    {
+      "dataset_version_id": "967819/1637108",
+      "name": "Corn or Maize Leaf Disease Dataset",
+      "publisher_url": "https://www.kaggle.com/datasets/smaranjitghose/corn-or-maize-leaf-disease-dataset",
+      "rights": "Publisher describes a PlantVillage/PlantDoc merge and retains original-author rights; no uniform commercial clearance inferred."
+    },
+    {
+      "dataset_version_id": "277323/658267",
+      "name": "PlantVillage Dataset, color branch",
+      "publisher_url": "https://www.kaggle.com/datasets/abdallahalidev/plantvillage-dataset",
+      "license_declaration": "CC BY-NC-SA 4.0",
+      "rights": "Preserve attribution and applicable non-commercial/share-alike terms; publisher declaration does not override contrary individual notices."
+    }
+  ],
+  "embedded_rights_notes": [
+    "CIMMYT non-commercial/share-alike notices are present in source metadata.",
+    "An all-rights-reserved stock-photo notice is present; research approval is not commercial or redistribution clearance."
+  ],
+  "limitations": [
+    "No complete independent plant, field or capture-session grouping is available.",
+    "Source archives overlap and are not independent evaluation domains.",
+    "Exact and confirmed derivative grouping reduces known leakage, but does not establish field-independent accuracy.",
+    "Raw images must not be bundled in the repository, model artifacts, reports or application."
+  ]
+}

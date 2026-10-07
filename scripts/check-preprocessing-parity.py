@@ -49,8 +49,12 @@ def worker(component: str, fixture: Path, configuration: Path) -> None:
     )
 
 
-def check() -> None:
-    from maizedoctor_preprocessing import NormalizationConfig, PreprocessingConfig
+def check(configuration: Path | None = None) -> None:
+    from maizedoctor_preprocessing import (
+        NormalizationConfig,
+        PreprocessingConfig,
+        load_config,
+    )
     from PIL import Image, ImageDraw
 
     cache = REPOSITORY / ".cache"
@@ -80,7 +84,7 @@ def check() -> None:
         samples.append(
             ("synthetic-no-foreground", Image.new("RGB", (80, 80), (100, 100, 100)))
         )
-        configs = (
+        configs = [
             PreprocessingConfig(),
             PreprocessingConfig(
                 target_height=160,
@@ -89,7 +93,9 @@ def check() -> None:
                     mean=(0.4, 0.5, 0.6), std=(0.2, 0.3, 0.4)
                 ),
             ),
-        )
+        ]
+        if configuration is not None:
+            configs.append(load_config(configuration))
         comparisons = 0
         for sample_name, image in samples:
             fixture = temporary / f"{sample_name}.png"
@@ -146,7 +152,7 @@ def main() -> None:
             parser.error("Worker requires image/config")
         worker(args.worker, args.image, args.config)
     else:
-        check()
+        check(args.config)
 
 
 if __name__ == "__main__":

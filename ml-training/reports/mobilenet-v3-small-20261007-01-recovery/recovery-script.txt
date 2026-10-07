@@ -1,0 +1,146 @@
+"""Finish interrupted-budget evaluation without fitting or changing saved models."""
+from pathlib import Path
+import hashlib
+import json
+import math
+import sys
+import time
+
+root = Path(__file__).resolve().parents[1]
+sys.path.insert(0, str(root / "ml-training"))
+from configuration import load_dataset_path
+from dataset_preparation import load_manifest, verify_manifest
+from evaluation import analyze_generalization
+from model import build_model, read_checkpoint, restore_checkpoint
+from train import (
+    FinalTestGuard, TrainingSettings, configure_reproducibility, evaluate,
+    save_evaluation, write_json,
+)
+from training_data import MaizeDataset, make_loader
+import torch
+from torch import nn
+
+parent = root / ".cache/phase10/experiments/mobilenet-v3-small-20261007-01"
+destination = root / ".cache/phase10/experiments/mobilenet-v3-small-20261007-01-recovery"
+assert not destination.exists()
+assert not (parent / "test").exists() and not (parent / "summary.json").exists()
+parent_hashes = {
+    p.relative_to(parent).as_posix(): hashlib.sha256(p.read_bytes()).hexdigest()
+    for p in parent.rglob("*") if p.is_file()
+}
+history = [json.loads(line) for line in (parent / "epoch-history.jsonl").read_text(encoding="utf-8").splitlines()]
+assert [row["epoch"] for row in history] == list(range(1, 11))
+best = max(history, key=lambda row: (row["validation_macro_f1"], -row["validation_loss"]))
+assert best["epoch"] == 10
+settings = TrainingSettings(**json.loads((parent / "hyperparameters.json").read_text(encoding="utf-8")))
+assert not settings.smoke and settings.warmup_epochs == 2 and settings.fine_tune_epochs == 10
+environment = json.loads((parent / "environment.json").read_text(encoding="utf-8"))
+for name, digest in environment["source_hashes"].items():
+    assert hashlib.sha256((root / name).read_bytes()).hexdigest() == digest
+manifest = load_manifest(parent / "dataset-manifest.json")
+dataset_root = load_dataset_path()
+verify_manifest(manifest, dataset_root=dataset_root)
+config = manifest.load_preprocessing()
+class_names = tuple(item.label for item in manifest.classes)
+configure_reproducibility(settings)
+checkpoint_name = f"checkpoints/epoch-{best['epoch']:03d}.pt"
+checkpoint_hash = parent_hashes[checkpoint_name]
+payload = read_checkpoint(parent / checkpoint_name, class_names=class_names,
+                          preprocessing_hash=config.fingerprint, manifest_hash=manifest.fingerprint)
+assert payload["epoch"] == best["epoch"] and payload["experiment_id"] == parent.name
+assert payload["hyperparameters"] == json.loads((parent / "hyperparameters.json").read_text(encoding="utf-8"))
+assert payload["validation_macro_f1"] == best["validation_macro_f1"]
+
+destination.mkdir(parents=True, exist_ok=False)
+for name in ["environment.json", "hyperparameters.json", "preprocessing.json",
+             "dataset-manifest.json", "class-map.json", "base-weights.json", "used-partitions.json",
+             "epoch-history.jsonl", checkpoint_name]:
+    target = destination / name
+    target.parent.mkdir(parents=True, exist_ok=True)
+    with target.open("xb") as stream:
+        stream.write((parent / name).read_bytes())
+experiment = json.loads((parent / "experiment.json").read_text(encoding="utf-8"))
+experiment.update({"experiment_id": destination.name, "training_experiment_id": parent.name,
+                   "training_interrupted": True, "completed_training_epochs": len(history),
+                   "planned_maximum_epochs": settings.warmup_epochs + settings.fine_tune_epochs,
+                   "recovery": "Evaluation only; no further fitting, thresholds or hyperparameter changes."})
+write_json(destination / "experiment.json", experiment)
+write_json(destination / "recovery.json", {
+    "source_training_experiment_id": parent.name,
+    "source_training_directory": parent.relative_to(root).as_posix(),
+    "reason": "External foreground-terminal interruption during epoch 11; 10 epochs fully completed.",
+    "actual_epochs_completed": len(history), "warmup_epochs_completed": 2,
+    "fine_tune_epochs_completed": 8, "planned_maximum_epochs": 12,
+    "early_stopping_claimed": False, "exact_training_resume_claimed": False,
+    "additional_training": False, "test_used_for_selection": False,
+    "recovery_script_sha256": hashlib.sha256(Path(__file__).read_bytes()).hexdigest(),
+    "source_artifact_sha256": parent_hashes,
+    "selected_checkpoint": checkpoint_name, "selected_checkpoint_sha256": checkpoint_hash,
+})
+write_json(destination / "selection-lock.json", {
+    "selection": experiment["selection"], "best_epoch": best["epoch"],
+    "validation_macro_f1": best["validation_macro_f1"], "validation_loss": best["validation_loss"],
+    "checkpoint_sha256": checkpoint_hash, "test_evaluated_before_selection": False,
+    "manifest_fingerprint": manifest.fingerprint, "preprocessing_hash": config.fingerprint,
+})
+started = time.monotonic()
+guard = FinalTestGuard(smoke=False)
+try:
+    model = build_model(len(class_names), pretrained=False, dropout=settings.dropout)
+    reloaded = build_model(len(class_names), pretrained=False, dropout=settings.dropout)
+    restore_checkpoint(model, payload, len(class_names))
+    restore_checkpoint(reloaded, payload, len(class_names))
+    loaders = {
+        split: make_loader(MaizeDataset(manifest.rows_for_split(split), config, split=split,
+                                        dataset_root=dataset_root), batch_size=settings.batch_size, seed=settings.seed)
+        for split in ["train", "validation"]
+    }
+    first_validation = next(iter(loaders["validation"]))[0]
+    with torch.inference_mode():
+        torch.testing.assert_close(model(first_validation), reloaded(first_validation), rtol=0, atol=0)
+    model = reloaded
+    guard.model_selected = True
+    criterion = nn.CrossEntropyLoss()
+    print(json.dumps({"event": "recovery_selection_locked", "best_epoch": best["epoch"],
+                      "epochs_completed": len(history), "planned_maximum_epochs": 12}), flush=True)
+    train_result = evaluate(model, loaders["train"], criterion, class_names)
+    validation_result = evaluate(model, loaders["validation"], criterion, class_names)
+    assert math.isclose(validation_result.metrics["macro_f1"], best["validation_macro_f1"], abs_tol=1e-12)
+    assert math.isclose(validation_result.metrics["accuracy"], best["validation_accuracy"], abs_tol=1e-12)
+    assert math.isclose(validation_result.loss, best["validation_loss"], abs_tol=1e-7)
+    save_evaluation(destination / "train", train_result, history, class_names, split="train")
+    save_evaluation(destination / "validation", validation_result, history, class_names, split="validation")
+    write_json(destination / "history.json", history)
+    write_json(destination / "selected-metrics.json", {
+        "best_epoch": best["epoch"], "train": train_result.metrics, "validation": validation_result.metrics,
+    })
+    write_json(destination / "generalization.json", analyze_generalization(train_result.metrics, validation_result.metrics, history))
+    print(json.dumps({"event": "recovery_validation_verified", "test_evaluated": False}), flush=True)
+    guard.claim()
+    test_loader = make_loader(MaizeDataset(manifest.rows_for_split("test"), config, split="test",
+                                          dataset_root=dataset_root), batch_size=settings.batch_size, seed=settings.seed)
+    test_result = evaluate(model, test_loader, criterion, class_names)
+    save_evaluation(destination / "test", test_result, history, class_names, split="test")
+    assert parent_hashes == {
+        p.relative_to(parent).as_posix(): hashlib.sha256(p.read_bytes()).hexdigest()
+        for p in parent.rglob("*") if p.is_file()
+    }
+    summary = {
+        "status": "completed", "mode": "full", "experiment_id": destination.name,
+        "source_training_experiment_id": parent.name, "training_interrupted": True,
+        "epochs_completed": len(history), "planned_maximum_epochs": 12,
+        "best_epoch": best["epoch"], "best_checkpoint": checkpoint_name,
+        "best_checkpoint_sha256": checkpoint_hash, "manifest_fingerprint": manifest.fingerprint,
+        "preprocessing_hash": config.fingerprint, "train_samples": 2917,
+        "validation_samples": 628, "test_evaluated_once": guard.evaluated,
+        "test_metrics": test_result.metrics, "elapsed_seconds": time.monotonic() - started,
+        "elapsed_scope": "Recovery evaluation only; original training epoch history is preserved.",
+    }
+    write_json(destination / "summary.json", summary)
+    print(json.dumps({"event": "recovery_completed", "status": "completed",
+                      "test_accuracy": test_result.metrics["accuracy"],
+                      "test_macro_f1": test_result.metrics["macro_f1"]}), flush=True)
+except Exception as error:
+    write_json(destination / "failure.json", {"error_type": type(error).__name__,
+                                              "test_evaluated": guard.evaluated})
+    raise

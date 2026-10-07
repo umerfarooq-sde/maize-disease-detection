@@ -96,9 +96,19 @@ See [database design](05-database-design.md) and [project state](PROJECT_STATE.m
 |---|---|
 | One DATASET_PATH loader for intake, validation and future training | Read training-local ignored `.env` independently of cwd, with explicit OS precedence and no interpolation/global environment mutation. Require an absolute existing directory; keep the machine path out of code/templates/Git. Inventory invokes the existing shared pipeline and writes development review artifacts only. No training or preprocessing policy change is authorized. |
 
+## Approved Phase 10 preparation and baseline decisions (2026-10-07)
+
+| Decision | Rationale and boundary |
+|---|---|
+| Exclude 11 shared-rejected inputs and all three contradictory label families | User approved auditable reason-coded index exclusions. Do not delete, rename, modify or relabel originals. Collapse content-identical copies; confirmed derivative families stay in one partition. Preserve the four literal class labels. |
+| Non-commercial academic/FYP research only | Preserve source/license/provenance declarations; no redistribution of raw dataset images through Git, reports, artifacts or app. This approval does not establish commercial clearance. Commercial licensing review or dataset replacement is required before commercial use. |
+| Full-frame shared preprocessing for the first baseline | User approved disabled extraction following Phase 9.5 evidence. Both training and future serving load the exact recorded shared 1.0.0 configuration/hash. Canonical generic package defaults are preserved. |
+| Explicit 224×224 RGB letterbox and ImageNet normalization in the shared configuration | The selected pretrained MobileNetV3 Small uses ImageNet channel mean/std. Configure those values in the shared package rather than adding a consumer-owned preprocessing transform. Keep the full leaf frame instead of adopting the weight library's center crop. Pin the complete configuration with each artifact. |
+| Grouped stratified 70/15/15 split, seed 20261007 | No official split exists. Group content-identical and confirmed derivative relatives first; persist class mapping, eligibility, exclusions and partition manifests with checksums. Test is reserved for final evaluation, never augmentation or tuning. |
+| CPU MobileNetV3 Small transfer-learning baseline | Lightweight architecture suits the existing four-core CPU environment. Verify dataset/index/splits and a small train/validation smoke test before the full run. Select checkpoints using validation only; retain versioned experiment outputs. |
+
 Pending decisions:
-dataset inclusion/conflicting labels and rights eligibility, full-frame baseline approval,
 curated agricultural sources, full JSON validation contracts, retention and
-completed-scan retention/delivery/deletion, production least-privilege roles, evaluated preprocessing/model compatibility,
-actual model artifacts, and embedding model/dimensions/distance/indexes. Address these
+completed-scan retention/delivery/deletion, production least-privilege roles,
+production model promotion/serving compatibility, and embedding model/dimensions/distance/indexes. Address these
 only in a phase explicitly authorized by the user.

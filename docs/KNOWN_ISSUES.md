@@ -1,14 +1,19 @@
 # Known issues
 
-Updated: 2026-10-07 (Asia/Karachi), after Phase 9.5 dataset intake and real-image
-preprocessing review. See the [current dataset review](24-dataset-intake-preprocessing-review.md),
+Updated: 2026-10-08 (Asia/Karachi), after Phase 10 interrupted-budget baseline and
+verified recovery evaluation. See [training results](25-ml-training-evaluation.md),
+[historical dataset review](24-dataset-intake-preprocessing-review.md),
 [historical Phase 0–9 audit](23-pre-phase-10-audit.md), [project state](PROJECT_STATE.md)
 and [shared preprocessing contract](22-shared-preprocessing.md) for evidence.
 
-**Phase 10 is not ready to start:** discovery and real-image validation are complete;
-remaining decisions concern training-index exclusions, mixed-rights use and approval
-of one evaluated preprocessing policy. The previous missing-dataset/labels and
-synthetic-only review blockers are resolved. No new P0 issue or P1 application-code
+**Phase 10 implementation and evaluation are verified:** the user-approved exclusions,
+deduplication/grouping, academic/FYP non-commercial use and full-frame policy are locked.
+The original fit was interrupted during epoch 11 after ten complete epochs of twelve
+maximum; immutable recovery evaluates the unchanged validation-selected epoch-10 model
+once on 625 test contents: 95.20% accuracy/0.9396 macro F1. No convergence, completed
+twelve-epoch optimization or exact-resume claim is made. The
+previous missing-dataset/labels and synthetic-only review blockers are resolved.
+No new P0 issue or P1 application-code
 defect was established. Future feature absence remains outside the implemented phases.
 
 ## P0 — project, data-loss or serious security blockers
@@ -16,24 +21,24 @@ defect was established. Future feature absence remains outside the implemented p
 None found in the reviewed implementation and executed checks. This finding does
 not certify production security or prove field-image/model accuracy.
 
-## P1 — dataset and preprocessing decisions before Phase 10
+## Resolved Phase 9.5 decisions and Phase 10 implementation requirements
 
 | Issue | Evidence | Required action |
 |---|---|---|
-| Contradictory supervised labels | Three visually confirmed cross-label families contain seven filenames/five byte contents assigned to Gray_Leaf_Spot and Northern_Corn_Leaf_Blight. Two families contain exact duplicates; the review also identifies a rotated member and a differently encoded shared photograph. | Approve exclusion of whole conflicting families from the future supervised index, or obtain qualified adjudication if retaining them matters. Preserve originals; never choose a class automatically. Exact paths are in the current dataset review. |
-| Shared-invalid inputs | Both policies reject the same 11 files: four misleading extensions, one multi-frame MPO, two invalid color profiles and four size/dimension failures. These are admissibility failures, not eleven unreadable/corrupt images. | Approve recorded index exclusions. No automatic source rename, conversion, deletion or validation relaxation is required. Any future repair policy must retain originals and serving parity. |
-| Evaluated preprocessing policy awaits approval | Both shared policies were attempted on all 8,040 images; 8,029 are accepted. Conservative extraction falls back on 8,021 (99.900%) and extracts only eight files/four unique Rust contents. The primary visual review covers 81 filenames/78 contents; no obvious tissue deletion was observed in that sample. | Recommend full-frame preprocessing through the existing shared package for the first baseline. Approve and record the same policy/configuration for training and serving. The canonical conservative default was not changed. |
-| Mixed-rights intended use remains unresolved | Recovered Corn-source declarations retain original-author rights; PlantVillage declares CC BY-NC-SA 4.0. Embedded notices include non-commercial/share-alike and all-rights-reserved photographs. Download availability does not establish uniform permission. | Specify intended use and hold contrary/unclear-rights photographs out until permission is established. Source/license declarations are already recovered; do not request a manually reconstructed provenance manifest. |
+| Contradictory supervised labels | Three cross-label families contain seven filenames/five byte contents, including exact, rotated and re-encoded relatives. | User approved exclusion of every family member from training, validation and test. Persist explicit reason codes and evidence; preserve original bytes/names/labels. |
+| Shared-invalid inputs | Both policies reject 11 files: four misleading extensions, one multi-frame MPO, two invalid color profiles and four size/dimension failures. These are admissibility failures, not eleven unreadable images. | User approved reason-coded index exclusions. No source conversion, deletion, rename or validation relaxation. |
+| Full-frame baseline approved | Conservative extraction falls back on 8,021 of 8,029 accepted images; only four unique Rust contents receive extraction. | Pin shared 1.0.0 full-frame configuration/hash in every experiment/artifact. ImageNet normalization is configured centrally for pretrained MobileNetV3 Small; no separate inference transform. |
+| Research use approved; commercial clearance absent | Recovered declarations include CC BY-NC-SA 4.0, original-author, non-commercial/share-alike and all-rights-reserved notices. | Current use is non-commercial academic/FYP research. Preserve declarations; never redistribute raw images through Git, reports, artifacts or app. Commercial licensing review or dataset replacement is required before commercial use. |
 
 The configured `DATASET_PATH` resolves to 8,040 actual images in the exact folders
 `Common_Rust`, `Gray_Leaf_Spot`, `Healthy` and `Northern_Corn_Leaf_Blight`. All files
 match recovered source-archive bytes. The merge has 4,186 byte-unique contents,
 3,854 excess copies and ten reviewed near-content pairs/20 contents; all PlantVillage
 color contents already occur in the other source. No official split exists to preserve.
-Future Phase 10 must collapse copies and group recovered original identities and
-confirmed derivative relatives before a reproducible stratified split. Augment only
-training after splitting; never train or tune on test data. No permanent partition,
-augmentation or manually preprocessed training dataset was created during Phase 9.5.
+Phase 10 collapses copies and groups recovered original identities and confirmed
+relatives in immutable 2,917/628/625 partitions with zero content/group overlap.
+Augment only training after splitting; never train or tune on test data. No manually
+preprocessed second dataset is created. All 8,040 raw names/bytes/sizes/mtimes remain unchanged.
 
 Complete independent plant/field/session mapping remains unavailable. Recovered
 original filenames/UUIDs establish image identity; sparse EXIF timestamps/IDs may be
@@ -41,9 +46,10 @@ copied metadata. This is an evaluation limitation to disclose, not a demand for 
 user to fabricate metadata. Folder labels, sources, existing derivative evidence and
 absence of splits have already been determined from the files.
 
-Training/splitting/augmentation/checkpoint/metrics implementation remains the scope
-of a future explicitly authorized Phase 10, after the three inclusion/use/policy
-decisions described in the current dataset review.
+The approved decisions are implemented in exclusions, immutable eligibility/class/split
+manifests, leakage checks, train-only augmentation and versioned checkpoints/metrics.
+Commercial licensing or
+replacement remains a future requirement; research approval is not commercial clearance.
 
 ## P2 — code/configuration and dependency work before related later phases
 
@@ -106,8 +112,8 @@ The reusable loader provides cwd-independent resolution, OS-variable precedence,
 no interpolation/global mutation and absolute existing-directory validation. Intake,
 review and future training code must use this configuration without hardcoded paths.
 No manual labels, split manifests, provenance files, augmentation inventory or invented
-plant metadata are requested. The remaining user responsibilities are approval of
-the specific exclusion/use/preprocessing decisions and explicit Phase 10 authorization.
+plant metadata are requested. The user approved the exclusion/use/preprocessing decisions
+and explicitly authorized Phase 10. No further approval is needed for its implementation.
 
 Later phases require deliberate choices for model/artifact compatibility, native mobile
 authentication, production deployment/privacy, reviewed agricultural knowledge,
@@ -139,6 +145,24 @@ are **not required now**. No unresolved choice is recorded as an architectural d
 - Repository/template/ignore, documentation links, whitespace and private-path/secret
   checks pass. All image-bearing comparison and source metadata artifacts remain ignored.
 
-Stop after Phase 9.5. Approve the inclusion/use/policy decisions before explicitly
-authorizing Phase 10; no classifier training, hyperparameter tuning or later feature
-implementation occurred.
+## Phase 10 execution and model limitations
+
+- Training/checks: 92 tests, Ruff19/strict mypy9, locked dependency compatibility,
+  twelve synthetic/sixteen real baseline parity cases and actual 32/16 smoke pass.
+  Independent saved-CSV metrics, strict zero-input model restores, parent/recovery/
+  export integrity and all-source immutability checks pass. No additional test inference.
+- Foreground-terminal interruption left ten fully scored epochs, not the twelve-epoch
+  maximum. Optimizer/RNG state was not saved; exact resume/convergence is unavailable.
+  A separate immutable evaluation recovery preserves every parent artifact and evaluates
+  its validation-only winner without more fitting. Future long runs should use the
+  documented independent hidden process/log launcher.
+- Selected train/validation accuracy gap is 3.888 percentage points, with macro-F1
+  gap 0.0537. Overall losses decreased; underfitting and final loss divergence are not
+  established. Gray_Leaf_Spot F1 is 0.8621, with 23/30 errors in its pairwise confusion
+  with Northern_Corn_Leaf_Blight. No post-test tuning occurred.
+- Known-content grouping does not prove field/plant independence, remove unconfirmed
+  relatives or quantify background/source/watermark bias. Perfect Healthy test scores
+  apply only to the 174 benchmark contents. Further field validation, calibrated product
+  decisions and commercial licensing/source replacement remain future work.
+
+Stop after Phase 10; later inference and application integration remain separately scoped.

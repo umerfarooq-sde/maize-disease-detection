@@ -1,0 +1,65 @@
+{
+  "classes": [
+    {
+      "index": 0,
+      "label": "Common_Rust"
+    },
+    {
+      "index": 1,
+      "label": "Gray_Leaf_Spot"
+    },
+    {
+      "index": 2,
+      "label": "Healthy"
+    },
+    {
+      "index": 3,
+      "label": "Northern_Corn_Leaf_Blight"
+    }
+  ],
+  "commercial_clearance": false,
+  "counts": {
+    "duplicate_aliases": 3852,
+    "eligible_groups": 4161,
+    "eligible_unique_samples": 4170,
+    "excluded_files": 18,
+    "excluded_unique_contents": 16,
+    "source_files": 8040,
+    "source_unique_byte_contents": 4186,
+    "test": 625,
+    "train": 2917,
+    "validation": 628
+  },
+  "dataset_version": "maize-research-20261007-v1",
+  "manifest_file_sha256": "2f0f36b74f25bbb2f2d7f0db489a466f8b58d9de436e6e3bced5e3882dc633ed",
+  "manifest_fingerprint": "e1abe6c4bba09080371345365ab92067f1f08bfba9f927f66cbc9e58af6b5e98",
+  "partition_content_group_overlap": 0,
+  "preprocessing_hash": "b142e59f458d27a2d3fddbfc86c2f2f802670ab4909f1275babbef92de9cb5c8",
+  "raw_image_redistribution": false,
+  "seed": 20261007,
+  "split_class_counts": {
+    "test": {
+      "Common_Rust": 195,
+      "Gray_Leaf_Spot": 85,
+      "Healthy": 174,
+      "Northern_Corn_Leaf_Blight": 171
+    },
+    "train": {
+      "Common_Rust": 910,
+      "Gray_Leaf_Spot": 397,
+      "Healthy": 813,
+      "Northern_Corn_Leaf_Blight": 797
+    },
+    "validation": {
+      "Common_Rust": 196,
+      "Gray_Leaf_Spot": 86,
+      "Healthy": 175,
+      "Northern_Corn_Leaf_Blight": 171
+    }
+  },
+  "split_ratios": [
+    0.7,
+    0.15,
+    0.15
+  ]
+}

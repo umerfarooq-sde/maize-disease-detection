@@ -1,0 +1,29 @@
+{
+  "experiment_id": "mobilenet-v3-small-20261007-01-recovery",
+  "files": {
+    "summary.json": "71d1a290e8c00953d0e555db8878b71e640241067583bae52af1e4dd84291781",
+    "experiment.json": "b14c06ff4530f91b08308b2078dd397b8766f690c1ab565927b9a68359cc6e74",
+    "environment.json": "47c9076dfe187a728e90357a8bb763375345cf886273aeea6831203502ac75be",
+    "hyperparameters.json": "3dcd99852ca0ad8690212df229e19a9beadc0ffbb6307500f10473d4b776ed89",
+    "preprocessing.json": "2656fc0541d4ae8d46e9bb365ff374d3bbb31418fd6c1df528d6fdd5d4a95e40",
+    "class-map.json": "6522256071605079465ca6c8623309d2f0592a59ed28580e77e180a23894950e",
+    "base-weights.json": "04ddb6e6f1e0bac3aa0f21328c723c07b126afdd5a1306da6aab9b308776573f",
+    "history.json": "ad88659dcace208424910a106d18b17eb64abb05274c87339a5dfa6a053fcc2e",
+    "selected-metrics.json": "9fa58a28dd9e212a1921183ef534aac99e30743ed3023c3ac2d718943c1ebc24",
+    "generalization.json": "4bdf732630c16d047f75c6c755c7c5063bd29d1fc2e6e70c89afe90a224fc385",
+    "train/metrics.json": "ab3a48996c6417b71ea77ad8b260d104cdaf88add7d833feb9ab9d3389be9fd2",
+    "recovery.json": "9a22585b01bc8e262e757cefcd9b28148cd4e9a7f5613ad46822b5ff98a04de9",
+    "selection-lock.json": "0afdb6306b85d75b6bd773b444660f52170a87498a28a9467cdec7cf02aeeb65",
+    "validation/metrics.json": "2a7c1c637f0c1d199508ecb60f26dca9273fb8d59d90dd903a977ce6e89c44d1",
+    "validation/classification-summary.txt": "42efbe2b0816a67bb7d313eab7b9082f4db4a2418e6d9019872809481d5cef69",
+    "validation/confusion-matrix.png": "6bce7ddbf71691ef9ccdeeee184d28cbb79dcd9b82f5eff30d3df5034fdbf1ba",
+    "validation/roc-curves.png": "69cee64e7b4fac78de4221e231f1ed96b4555a0c55010cf04abf90cf6c7da9dd",
+    "validation/training-history.png": "ca6753b744b1900f44f3aea069d0a6d18d6d7745fde51b7edff212f0bbfb9972",
+    "test/metrics.json": "d8a7fb75ffe1f613d7ef751ee905e686bfec944d35b1c62a2988f830fe3801b5",
+    "test/classification-summary.txt": "65cf250fa07e3a36bf42988082dcb14d28d16e34028a284b53be73d51d158986",
+    "test/confusion-matrix.png": "d9be7bd558663bae65eb4f27f324c93efdc988eaf1f5135a8fdde323844fbd95",
+    "test/roc-curves.png": "ccbab69d4640e7581172b1568423c43a7da7c40a842fa4e966f6a1a91f4709b0",
+    "recovery-script.txt": "f95d5491c3ebf189ad3002e63eaf3bf8c9865e29c3ad3dfaec2a815583589cf9",
+    "README.md": "205206a9e4be523ba7bcb63e3969e99668864defa829b425eca1b0c1948671eb"
+  }
+}

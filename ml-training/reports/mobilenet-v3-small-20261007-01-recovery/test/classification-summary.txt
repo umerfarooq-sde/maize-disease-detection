@@ -1,0 +1,8 @@
+Class | Precision | Recall | F1 | Specificity | Support
+Common_Rust | 0.9845 | 0.9795 | 0.9820 | 0.9930 | 195
+Gray_Leaf_Spot | 0.8427 | 0.8824 | 0.8621 | 0.9741 | 85
+Healthy | 1.0000 | 1.0000 | 1.0000 | 1.0000 | 174
+Northern_Corn_Leaf_Blight | 0.9226 | 0.9064 | 0.9145 | 0.9714 | 171
+Accuracy: 0.9520 (625 samples)
+macro: precision=0.9375, recall=0.9421, F1=0.9396
+weighted: precision=0.9526, recall=0.9520, F1=0.9522
