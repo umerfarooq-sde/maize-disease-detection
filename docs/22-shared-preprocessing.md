@@ -11,6 +11,12 @@ This is a deterministic foreground-preparation pipeline, not a semantic maize-le
 detector. Every result includes `leaf_identity_unverified`. Synthetic tests verify
 mechanics and parity; they do not establish field accuracy or disease recognition.
 
+Phase 9.5 subsequently exercised both unchanged policies on 8,040 configured real
+images, reviewed 81 filenames/78 contents and verified 160 real consumer parity cases.
+Conservative extraction falls back for 8,021 of 8,029 accepted files. Full-frame is
+recommended for the first baseline; canonical policy remains unchanged pending approval.
+See [dataset review](24-dataset-intake-preprocessing-review.md) for evidence and limits.
+
 ## Shared ownership and usage
 
 ```text
@@ -232,10 +238,11 @@ Completed check results and final counts are recorded in
 
 ## Limitations and pending field validation
 
-The repository and current ML scaffold contain no actual maize-leaf dataset. Only
-generated test fixtures and unrelated app launcher graphics were available. No
-dataset path, model artifact or model download was invented. **Representative
-real-image validation is pending.**
+Phase 9 originally had only generated fixtures and launcher graphics. Phase 9.5
+resolved that gap using an external dataset configured through `DATASET_PATH`; raw
+images remain outside Git. Dataset-wide mechanical checks and sampled visual review
+are complete, without annotated lesion masks, clinical accuracy or deployment-device
+validation. See the [real-image results](24-dataset-intake-preprocessing-review.md).
 
 - A leaf edge/tip whose color blends with perimeter-connected background can be
   removed before the border-touching gate sees it. The safety margin helps but
@@ -256,8 +263,7 @@ real-image validation is pending.**
   deployments and record dependency versions. The byte/pixel caps bound individual
   work, but future HTTP serving still needs suitable concurrency/time/memory limits.
 
-Before training or production use, obtain a sourced representative dataset and
-review masks for healthy and diseased leaves, non-green tissue, lesion edges/tips,
-real backgrounds, camera orientation and all expected devices. Define acceptance
-criteria using that evidence. Phase 9 makes this shared contract inspectable and
-reusable; it supplies no measured disease-classification accuracy.
+Before training, resolve the recorded contradictory labels, use eligibility and
+preprocessing-policy choice. Continue target-device/independent-field validation before
+production use. The shared contract and real-image evidence support a reproducible
+baseline; neither supplies measured disease-classification accuracy.

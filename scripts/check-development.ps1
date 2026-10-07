@@ -31,9 +31,9 @@ foreach ($target in $components) {
                         & $python -m mypy
                         if ($LASTEXITCODE -ne 0) { throw 'AI strict type check failed.' }
                     } else {
-                        & $python -m ruff format --check preprocessing.py tests
+                        & $python -m ruff format --check preprocessing.py configuration.py dataset_inventory.py dataset_review.py tests
                         if ($LASTEXITCODE -ne 0) { throw 'Training formatting check failed.' }
-                        & $python -m ruff check preprocessing.py tests
+                        & $python -m ruff check preprocessing.py configuration.py dataset_inventory.py dataset_review.py tests
                         if ($LASTEXITCODE -ne 0) { throw 'Training lint check failed.' }
                         & $python -m mypy
                         if ($LASTEXITCODE -ne 0) { throw 'Training strict type check failed.' }

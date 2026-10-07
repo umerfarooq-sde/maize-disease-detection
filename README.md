@@ -5,14 +5,14 @@ with administrative tools for maintaining knowledge and monitoring the system.
 
 ## Current status
 
-Phase 9 adds one shared deterministic image-preprocessing package used by both Python
-environments: validation/color handling, conservative foreground extraction, crop/resize,
-normalization, model-ready arrays and inspection tools. Real maize-image validation
-remains pending because no dataset is supplied. Existing FastAPI, Flutter scanning,
-backend auth and PostgreSQL/Prisma are preserved. The complete pre-Phase-10 audit
-verifies the implemented environments and live upload/database contracts. Training
-remains blocked by missing sourced raw data, confirmed labels and real-leaf
-preprocessing review. No training, inference or AI/RAG features have started.
+Phase 9.5 completes read-only intake of 8,040 supplied images and real-image review
+using the same shared preprocessing package in both Python environments. Four exact
+folder labels, duplicates, invalid inputs and recoverable source relationships are
+documented; 160 real-image/configuration parity cases pass. Source images remain
+unchanged. Training awaits inclusion/use decisions and approval of the recommended
+full-frame policy; the canonical preprocessing default remains unchanged. Existing
+FastAPI, Flutter scanning, backend auth and PostgreSQL/Prisma are preserved. No
+training, inference or AI/RAG features have started.
 See [project state](docs/PROJECT_STATE.md) for verified progress and outstanding decisions.
 Use the [development setup guide](docs/15-development-environment.md) for commands and limitations.
 Use [database operations](docs/16-database-operations.md) for migration and verification commands.
@@ -23,7 +23,9 @@ Use [scan uploads](docs/20-scan-uploads.md) for request contracts, validation, p
 Use [AI service foundation](docs/21-ai-service-foundation.md) for Python startup, health, internal access and checks.
 Use [shared preprocessing](docs/22-shared-preprocessing.md) for the single training/serving pipeline and its limitations.
 Use the [pre-Phase-10 audit](docs/23-pre-phase-10-audit.md) and [known issues](docs/KNOWN_ISSUES.md)
-for actual test results, compatibility findings and exact data/resources to provide.
+for environment results and compatibility findings. Use the
+[dataset intake and preprocessing review](docs/24-dataset-intake-preprocessing-review.md)
+for current dataset findings, visual artifacts and remaining decisions.
 
 ## Planned architecture
 
@@ -76,6 +78,13 @@ Mobile configuration contains only a public API URL and may later be
 supplied through Flutter build configuration; never supply server secrets to Flutter.
 No provider account, dataset, or model artifact is needed for environment smoke checks.
 
+Dataset intake reads `DATASET_PATH` from ignored `ml-training/.env`, independent of
+the working directory. The supplied local value is configured; the committed
+`ml-training/.env.example` placeholder remains blank. An explicitly set OS variable
+takes precedence. Future inventory, preprocessing validation and training must call
+`load_dataset_path()` from the training configuration module rather than hardcode a
+machine path. See [ML configuration and commands](ml-training/README.md).
+
 ## Repository checks
 
 From the repository root, using PowerShell and Git:
@@ -99,6 +108,9 @@ This does not change the machine's persistent execution policy.
 
 ## Next step
 
-Stop after the Phase 0–9 audit. Supply the actual raw-data path, labels and
-source/split/group information for inventory and real-image preprocessing review.
-Phase 10 does not begin automatically. See the [roadmap](docs/14-roadmap.md).
+Stop after Phase 9.5. Review the saved comparisons and the documented inclusion,
+permitted-use and preprocessing-policy decisions. Labels and available source/group
+information have been recovered from the files; no manual reconstruction is requested.
+Phase 10 requires an explicit instruction and does not begin automatically.
+See the [readiness report](docs/24-dataset-intake-preprocessing-review.md) and
+[roadmap](docs/14-roadmap.md).

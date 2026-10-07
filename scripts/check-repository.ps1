@@ -91,6 +91,9 @@ $requiredFiles += @(
     'scripts/check-preprocessing-parity.py'
 )
 $requiredFiles += @(
+    'ml-training/.env.example', 'ml-training/configuration.py',
+    'ml-training/dataset_inventory.py', 'ml-training/dataset_review.py',
+    'ml-training/tests/test_configuration.py', 'ml-training/tests/test_dataset_review.py',
     'backend/biome.json', 'backend/src/app.ts', 'backend/src/application.ts',
     'backend/src/server.ts', 'backend/src/config/environment.ts', 'backend/src/config/logger.ts',
     'backend/src/database/connection-url.ts', 'backend/src/errors/app-error.ts',
@@ -138,8 +141,9 @@ $templateKeys = @{
     'ai-service' = @('ENVIRONMENT', 'HOST', 'PORT', 'LOG_LEVEL', 'DATABASE_URL', 'GEMINI_API_KEY', 'AI_SERVICE_TOKEN', 'MODEL_PATH', 'MODEL_VERSION', 'PREPROCESSING_VERSION')
     'infrastructure' = @('POSTGRES_DB', 'POSTGRES_USER', 'POSTGRES_PASSWORD', 'POSTGRES_PORT')
     'mobile' = @('API_BASE_URL')
+    'ml-training' = @('DATASET_PATH')
 }
-$blankKeys = @('DATABASE_URL', 'DIRECT_DATABASE_URL', 'JWT_SECRET', 'JWT_REFRESH_SECRET', 'CLOUDINARY_CLOUD_NAME', 'CLOUDINARY_API_KEY', 'CLOUDINARY_API_SECRET', 'GEMINI_API_KEY', 'AI_SERVICE_TOKEN', 'POSTGRES_USER', 'POSTGRES_PASSWORD')
+$blankKeys = @('DATABASE_URL', 'DIRECT_DATABASE_URL', 'JWT_SECRET', 'JWT_REFRESH_SECRET', 'CLOUDINARY_CLOUD_NAME', 'CLOUDINARY_API_KEY', 'CLOUDINARY_API_SECRET', 'GEMINI_API_KEY', 'AI_SERVICE_TOKEN', 'POSTGRES_USER', 'POSTGRES_PASSWORD', 'DATASET_PATH')
 foreach ($component in $templateKeys.Keys) {
     $seenKeys = @{}
     foreach ($line in Get-Content -LiteralPath (Join-Path $repositoryRoot "$component/.env.example")) {
@@ -165,7 +169,7 @@ if ([IO.Path]::GetFullPath($gitRoot) -ne [IO.Path]::GetFullPath($repositoryRoot)
 }
 $ignoredPaths = @(
     '.env', '.env.production', 'backend/.env', 'ai-service/.env.local',
-    'infrastructure/.env', 'mobile/.env', 'backend/node_modules/probe.js',
+    'infrastructure/.env', 'mobile/.env', 'ml-training/.env', 'backend/node_modules/probe.js',
     'backend/dist/probe.js', 'ai-service/.venv/probe', 'ai-service/__pycache__/probe.pyc',
     'mobile/.dart_tool/probe', 'mobile/build/probe', 'mobile/android/local.properties',
     'mobile/android/key.properties', 'mobile/ios/Pods/probe', 'mobile/release.jks',

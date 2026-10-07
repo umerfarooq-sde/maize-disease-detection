@@ -88,10 +88,17 @@ See [database design](05-database-design.md) and [project state](PROJECT_STATE.m
 | Version 1.0.0 plus canonical configuration and supplied-mask hashes | Record source bytes, settings, mask provenance and library versions. Future models pin the evaluated version/configuration; default 224/RGB/neutral normalization is a foundation contract, not selected classifier hyperparameters. |
 | Full-color perimeter-connected extraction with conservative fallback | Preserve enclosed brown/yellow/gray/rust/dead tissue without a healthy-green assumption. Uniform-background gates, all-component retention and outward-only margin reduce loss; uncertain scenes preserve the full frame or explicitly fail by policy. No semantic leaf detector or random GrabCut. |
 | Explicit orientation/profile/alpha and unsigned16 grayscale handling | Standardize color before segmentation, preserve nonzero-alpha tissue and grayscale gradations; no per-image contrast enhancement/lesion cleaning. Provided masks describe the oriented frame and require identical training/serving policy. |
-| Aspect-preserving letterbox and RGB CHW float32 with unchanged optional tensor | One crop/resize/normalization implementation, no random augmentation or extra torch transforms. Debug artifacts and deterministic/cross-environment tests support review; real-image validation remains pending. |
+| Aspect-preserving letterbox and RGB CHW float32 with unchanged optional tensor | One crop/resize/normalization implementation, no random augmentation or extra torch transforms. Debug artifacts and deterministic/cross-environment tests support review; real-image validation was pending at Phase 9 and is recorded in the subsequent Phase 9.5 report. |
+
+## Phase 9.5 dataset configuration decision (2026-10-07)
+
+| Decision | Rationale and boundary |
+|---|---|
+| One DATASET_PATH loader for intake, validation and future training | Read training-local ignored `.env` independently of cwd, with explicit OS precedence and no interpolation/global environment mutation. Require an absolute existing directory; keep the machine path out of code/templates/Git. Inventory invokes the existing shared pipeline and writes development review artifacts only. No training or preprocessing policy change is authorized. |
 
 Pending decisions:
-curated source licensing and taxonomy, full JSON validation contracts, retention and
+dataset inclusion/conflicting labels and rights eligibility, full-frame baseline approval,
+curated agricultural sources, full JSON validation contracts, retention and
 completed-scan retention/delivery/deletion, production least-privilege roles, evaluated preprocessing/model compatibility,
 actual model artifacts, and embedding model/dimensions/distance/indexes. Address these
 only in a phase explicitly authorized by the user.

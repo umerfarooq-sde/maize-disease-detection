@@ -1,5 +1,26 @@
 # Scripts
 
+Phase 9.5 adds the configured read-only
+[dataset review command](../ml-training/dataset_review.py). It reads `DATASET_PATH`
+through [the training loader](../ml-training/configuration.py), independent of cwd;
+the local configuration value belongs in ignored `ml-training/.env` and the template
+placeholder is blank. Future inventory, validation and training must reuse this loader.
+
+From repository root, choose a new ignored directory for another review:
+
+```powershell
+ml-training/.venv/Scripts/python.exe ml-training/dataset_review.py --output .cache/dataset-review/local-review
+```
+
+The command inventories source files, compares both existing shared preprocessing
+policies and writes development-only contact sheets/facts outside the dataset. It
+refuses existing output, confirms source contents unchanged, and performs no training,
+augmentation or permanent partitioning. The completed 8,040-file intake, 160 real-image
+parity cases and remaining decisions are recorded in the
+[Phase 9.5 readiness report](../docs/24-dataset-intake-preprocessing-review.md).
+Training checks now include configuration/intake format/lint/types and fixture tests;
+repository checks validate the blank dataset template and ignored local configuration.
+
 Phase 9 adds [check-preprocessing-parity.py](check-preprocessing-parity.py).
 `check-development.ps1 -Component Preprocessing` checks shared format/lint/types,
 runs synthetic tests in both Python environments and verifies eight identical

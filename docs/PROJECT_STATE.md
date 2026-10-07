@@ -4,31 +4,38 @@ Updated: 2026-10-07 (Asia/Karachi).
 
 ## Current phase
 
-The complete Phase 0–9 audit is finished. **NOT READY FOR PHASE 10**: existing
-implemented foundations pass fresh checks, but no sourced raw maize dataset, confirmed
-taxonomy/label mapping, source/group/split provenance or representative real-leaf
-preprocessing review is available. No new P0/P1 application-code defect was found.
-Read the [full audit](23-pre-phase-10-audit.md) and [known issues](KNOWN_ISSUES.md)
-for the endpoint/environment/version inventories, actual coverage and exact user inputs.
+Phase 9.5 dataset intake and real-image preprocessing review is complete.
+**NOT READY FOR TRAINING** until inclusion, intended-use/permission and preprocessing
+policy decisions are settled. The configured external dataset has 8,040 files in four
+literal classes, 4,186 distinct byte contents, 11 shared-admission failures and three
+contradictory label families. Sources/overlap were recovered automatically from local
+metadata and archives; no manual label/split/provenance inventory is needed.
+Read the [dataset review](24-dataset-intake-preprocessing-review.md),
+[historical foundation audit](23-pre-phase-10-audit.md) and [known issues](KNOWN_ISSUES.md).
 
-Fresh verification includes 77 checked-in backend cases, a supplemental live farmer
+The preceding Phase 0–9 audit verified 77 checked-in backend cases, a live farmer
 WebP/auth lifecycle probe, five migration replay/checksum checks, 52 isolated Flutter
 tests plus both live health/upload tests, and a debug Android APK. The AI suite has
-50 passing tests, training five, shared preprocessing 78 in each independent environment
+50 passing tests, then five training tests, shared preprocessing 78 in each independent environment
 and eight exact cross-environment parity cases. Actual FastAPI startup/shutdown and
 six supplemental synthetic scenes pass. Real Cloudinary JPEG/PNG/WebP uploads and
 nullable/actual farmer ownership are verified. Every audit-created row/asset was removed;
 database counts/catalog/checksums match the pre-audit snapshot. Formatting/lint/types/
 build/locked dependencies, repository/template/ignore/links and source-secret checks pass.
 
-Both Python environments import the same `maizedoctor_preprocessing` 1.0.0 package;
-its default 224×224/neutral normalization and extraction policy remain unevaluated
-classifier settings. No actual maize dataset or model was invented. A reproduced Node/
+Both Python environments import the same `maizedoctor_preprocessing` 1.0.0 package.
+Phase 9.5 runs both policies on all 8,040 images and verifies 160 real consumer parity
+cases. Review of 81 filenames/78 contents found no obvious preprocessing-caused tissue
+loss, without ground-truth lesion masks or classification accuracy. Conservative
+extraction falls back for 8,021 of 8,029 accepted files; full-frame is recommended for
+the first baseline. Canonical policy/version and foundation 224×224/neutral settings
+remain unchanged; no classifier is trained. A reproduced Node/
 shared image-admission mismatch, four existing high npm aggregate advisory entries,
 native mobile refresh-cookie integration and deployment/platform limitations are recorded.
 The recovered backend database client matches HEAD and works. Phase 6 remains explicitly
-skipped. This audit corrects documentation only and makes no new architectural decision.
-Stop after the audit; Phase 10, inference, Node/FastAPI orchestration, mobile sign-in,
+skipped. Phase 9.5 adds configured read-only intake and records that configuration choice;
+unresolved training policy, label adjudication and use permission are not decisions.
+Stop after Phase 9.5; Phase 10, inference, Node/FastAPI orchestration, mobile sign-in,
 disease/business APIs, calculators, admin functionality and RAG/Gemini remain deferred.
 
 ## Initial workspace findings
@@ -63,7 +70,7 @@ disease/business APIs, calculators, admin functionality and RAG/Gemini remain de
 | Backend | Express 5 health/auth/scans, strict TS/Zod, Argon2id, rotating/revocable JWT sessions/RBAC, upload signature/full decode validation, Cloudinary authenticated assets, durable scan-upload retry/cleanup; shared Prisma 7.10.0, 21 tables/five migrations, 77 passing tests across five suites |
 | AI service | Python 3.11/FastAPI 0.142.2/Uvicorn 0.54.0 foundation and exact shared preprocessing exports; health reports preprocessing library available without importing heavy modules; 50 tests and Ruff/mypy pass; no inference operations |
 | Shared preprocessing | One independently buildable typed package at `shared/preprocessing`, version 1.0.0, explicit JSON configuration, file/byte entrypoints, conservative extraction/fallback, optional unchanged CPU tensor and debug CLI; 78 tests pass in each consumer environment and eight parity cases pass |
-| ML training | Python 3.11 manifest/lock and isolated environment using the same preprocessing package; five dependency/identity tests plus Ruff/strict mypy pass; no dataset, training execution or model |
+| ML training | Python 3.11 locked environment, reusable DATASET_PATH configuration, read-only inventory and exact shared-policy review; 29 tests plus Ruff/strict mypy pass, 160 real consumer parity cases; external dataset inspected without source edits, training execution or model |
 | Infrastructure | Neon PostgreSQL 18.6 with pgvector 0.8.6 migrated; pgvector 0.8.7/PostgreSQL 18 Compose configuration; preserved native 18.4 cluster; private local settings ignored |
 | Documentation | Architecture, database/operations, auth, Flutter foundation, scan uploads/recovery, FastAPI startup/contracts/network, shared preprocessing/configuration/versioning/limitations, decisions, roadmap and verification history |
 | Scripts | Repository/environment/auth/admin/PostgreSQL/Python/development checks including shared preprocessing and actual cross-environment parity; FastAPI start/check scripts, full live Flutter scan-upload harness and backend cleanup CLI |
@@ -995,17 +1002,53 @@ be justified until those data/empirical prerequisites are met. Training-only spl
 augmentation/seed/class-map/checkpoint/metrics/plots/run manifests are future Phase 10
 implementation, not completed files. Stop after this audit.
 
+## Phase 9.5 dataset intake and real-image verification (2026-10-07)
+
+- Configured the supplied absolute dataset path in ignored `ml-training/.env`.
+  Added blank `DATASET_PATH` in `.env.example` and a cwd-independent loader with
+  explicit OS precedence, no interpolation/global mutation, and directory validation.
+  Future intake, validation and training read this same configuration.
+- Added read-only `dataset_inventory.py` and `dataset_review.py`. Reports/debug images
+  stay in ignored `.cache/dataset-review/phase95-20261007/`; output cannot overwrite
+  existing files or sit inside the source dataset. All 8,040 source hashes/file stats
+  were checked again after review and are unchanged.
+- Exact classes/counts: Common_Rust 2,498; Gray_Leaf_Spot 1,087; Healthy 2,324;
+  Northern_Corn_Leaf_Blight 2,131. All folders are flat; no official split exists.
+  Inventory finds 3,854 excess exact copies, ten near-content pairs and three
+  contradictory families covering seven filenames/five byte contents. No class was
+  merged, relabeled, finalized or assigned a partition.
+- Both canonical shared policies accept 8,029/reject 11. Conservative mode extracts
+  only eight Rust files/four distinct contents and otherwise preserves the full frame.
+  All 80 purposive comparisons plus the fourth extracted family were viewed. No obvious
+  tissue/lesion deletion was observed in this sample; most clutter remains and small
+  lesions soften through resize. Full-frame is recommended, with approval pending.
+- Recovered both local source archives and matched every current byte hash. The
+  PlantVillage color contribution duplicates the Corn collection. Original-image
+  filenames/UUIDs and confirmed derivatives support grouping; sparse EXIF IDs/timestamps
+  do not establish independent plants/sessions. Mixed license/individual rights notices
+  leave intended-use eligibility unresolved. Private metadata stays ignored.
+- Checks passed: training Ruff format/lint, strict mypy on four sources, 29 tests,
+  locked environment/pip compatibility, 160 real-image/two-policy exact cross-environment
+  parity cases, repository/template/ignore checks, local links, whitespace and private
+  path/credential checks. New tests cover configuration, literal labels, duplicate
+  conflicts, corrupt input, source immutability and safe output destinations.
+- Updated current documentation and added the complete
+  [Phase 9.5 report](24-dataset-intake-preprocessing-review.md). No source image,
+  canonical preprocessing code/config/version, model, augmentation or permanent split
+  was created/changed. The Phase 0–9 audit remains historical evidence.
+
 ## Current limitations and pending decisions
 
 - Starlette TestClient emits one upstream deprecation warning recommending httpx2.
   Existing HTTPX remains locked and tests pass; a test-client migration is maintenance
   work rather than an unverified change to this phase's dependency baseline.
-- Shared preprocessing has only synthetic validation. Perimeter-camouflaged leaf edges
-  can be removed before uncertainty gates detect them; outward padding does not
-  guarantee recovery. Working-image reduction and final resizing can lose tiny lesions.
-  Ambiguous field backgrounds commonly produce full-frame fallback, and foreground
-  extraction does not identify maize. Preserve originals and inspect representative
-  healthy/diseased samples before selecting model-compatible configuration. Future
+- Shared preprocessing now has dataset-wide mechanical checks and sampled real-image
+  visual review, with no annotated lesion ground truth or measured classifier accuracy.
+  Perimeter-camouflaged leaf edges can still be removed before uncertainty gates detect
+  them; outward padding does not guarantee recovery. Resize can lose tiny lesions.
+  Extraction retains background for almost all current images and does not identify
+  maize. Approve the recommended full-frame policy and future manifest exclusions for
+  11 invalid files/three conflicting families, and resolve mixed-rights intended use. Future
   serving needs measured deployment concurrency/time/memory limits and cross-platform
   codec parity; current byte/pixel caps only bound individual inputs.
 - Node security decoding accepts valid 1×1 PNG and PNG trailing bytes that the shared
@@ -1072,11 +1115,13 @@ implementation, not completed files. Stop after this audit.
 
 ## Next step
 
-Stop after the Phase 0–9 audit. Supply the **absolute raw-image path, exact labels and
-source/license reference**, with available official partitions/group/original-parent
-metadata, for inventory and real-image shared-preprocessing review. The current CPU
-environment works and no new external secret is required. Phase 10 is **not ready**
-until these data/validation prerequisites are satisfied and implementation is explicitly
-authorized. Reconcile the next instruction with the [roadmap](14-roadmap.md); do not
+Stop after Phase 9.5. Review the saved comparisons and settle only the unresolved
+choices: future-index exclusion of 11 invalid inputs/three contradictory label families,
+intended use and rights eligibility, and full-frame shared policy approval. Dataset
+path, labels, sources, derivatives and absence of official splits were determined from
+the supplied files; no manual metadata reconstruction is requested. The current CPU
+environment works and no new external secret is required. Phase 10 begins only after
+these choices and explicit authorization. Reconcile the next instruction with the
+[roadmap](14-roadmap.md); do not
 start training/inference, Node/FastAPI integration, mobile authentication, disease/business
 APIs, RAG/Gemini/calculators or admin functionality automatically.

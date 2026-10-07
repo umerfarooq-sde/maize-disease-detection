@@ -1,5 +1,10 @@
 # Pre-Phase-10 engineering audit
 
+Historical Phase 0–9 checkpoint. The subsequent
+[Phase 9.5 dataset review](24-dataset-intake-preprocessing-review.md) resolves the
+missing-dataset/synthetic-only findings below and records current inclusion, rights
+and preprocessing-policy decisions. Preserve these audit results as dated evidence.
+
 Audit date: 2026-10-07 (Asia/Karachi). Scope: the implemented Phase 0–9 foundation.
 This report records fresh checks and traced contracts, rather than relying on previous
 phase reports. No training, inference, RAG, Gemini, mobile authentication, disease APIs
