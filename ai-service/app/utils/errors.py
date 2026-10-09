@@ -25,6 +25,14 @@ class ErrorCode(StrEnum):
     RATE_LIMITED = "RATE_LIMITED"
     SERVICE_UNAVAILABLE = "SERVICE_UNAVAILABLE"
     INTERNAL_ERROR = "INTERNAL_ERROR"
+    IMAGE_INVALID = "IMAGE_INVALID"
+    IMAGE_UNSUPPORTED = "IMAGE_UNSUPPORTED"
+    IMAGE_DIMENSIONS = "IMAGE_DIMENSIONS"
+    PREPROCESSING_FAILED = "PREPROCESSING_FAILED"
+    MODEL_UNAVAILABLE = "MODEL_UNAVAILABLE"
+    INFERENCE_BUSY = "INFERENCE_BUSY"
+    INFERENCE_FAILED = "INFERENCE_FAILED"
+    REQUEST_TIMEOUT = "REQUEST_TIMEOUT"
 
 
 ERRORS: dict[ErrorCode, tuple[int, str]] = {
@@ -38,6 +46,17 @@ ERRORS: dict[ErrorCode, tuple[int, str]] = {
     ErrorCode.RATE_LIMITED: (429, "Too many requests."),
     ErrorCode.SERVICE_UNAVAILABLE: (503, "The service is unavailable."),
     ErrorCode.INTERNAL_ERROR: (500, "An internal error occurred."),
+    ErrorCode.IMAGE_INVALID: (
+        422,
+        "The image cannot be safely decoded or its type is inconsistent.",
+    ),
+    ErrorCode.IMAGE_UNSUPPORTED: (415, "Only still JPEG, PNG and WebP images are supported."),
+    ErrorCode.IMAGE_DIMENSIONS: (422, "The image dimensions are outside the supported limits."),
+    ErrorCode.PREPROCESSING_FAILED: (500, "Image preprocessing failed."),
+    ErrorCode.MODEL_UNAVAILABLE: (503, "The classifier is not ready."),
+    ErrorCode.INFERENCE_BUSY: (503, "The classifier is busy; retry later."),
+    ErrorCode.INFERENCE_FAILED: (500, "Classifier execution failed."),
+    ErrorCode.REQUEST_TIMEOUT: (408, "The image upload timed out."),
 }
 
 

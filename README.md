@@ -5,8 +5,14 @@ with administrative tools for maintaining knowledge and monitoring the system.
 
 ## Current status
 
-Phase 10.5 is complete: **FIT WITH DOCUMENTED LIMITATIONS** for a local research/FYP
-inference prototype. The audit found transformed-photo leakage in the original v1
+Phase 11 is complete: FastAPI loads the approved model once, validates its pinned
+artifacts and serves authenticated internal prediction/model-health endpoints using
+the exact shared full-frame pipeline. All 219 AI tests pass; 16 actual TRAIN cases
+match the frozen training tensors/logits exactly. See
+[production ML inference](docs/27-production-ml-inference.md) for setup and contracts.
+
+The Phase 10.5 candidate remains **FIT WITH DOCUMENTED LIMITATIONS** for a local
+research/FYP inference prototype. The audit found transformed-photo leakage in the original v1
 partitions; its independence claim is invalid. The corrected immutable v2 contains
 **4,162 unique contents / 4,121 groups**, split **2,911 train / 627 validation / 624
 test**, with no confirmed group leakage. Raw source files remain unchanged/external.
@@ -19,7 +25,9 @@ raw probabilities are retained and no confidence threshold is locked. See
 [model fitness](docs/26-model-fitness-validation.md). Use remains non-commercial
 academic/FYP research without raw redistribution or commercial clearance. Shared
 preprocessing, existing FastAPI/Flutter/backend/database features are preserved;
-production inference and application integration remain future work.
+Node/FastAPI orchestration and application result integration remain future work.
+With no approved operational cutoff, every current prediction is `LOW_CONFIDENCE`
+with `THRESHOLD_UNCONFIGURED`; numerical scores do not establish field correctness.
 See [project state](docs/PROJECT_STATE.md) for verified progress and outstanding decisions.
 Use the [development setup guide](docs/15-development-environment.md) for commands and limitations.
 Use [database operations](docs/16-database-operations.md) for migration and verification commands.
@@ -83,7 +91,8 @@ credentials in later phases. Prisma and database checks read backend `.env`; clo
 transaction poolers need a separate `DIRECT_DATABASE_URL` for migration sessions.
 Mobile configuration contains only a public API URL and may later be
 supplied through Flutter build configuration; never supply server secrets to Flutter.
-No provider account, dataset, or model artifact is needed for environment smoke checks.
+Dependency smoke checks use fixtures; starting inference requires the approved model,
+metadata, calibration sidecar and server-only service token. See the inference guide.
 
 Dataset intake reads `DATASET_PATH` from ignored `ml-training/.env`, independent of
 the working directory. The supplied local value is configured; the committed
@@ -115,7 +124,7 @@ This does not change the machine's persistent execution policy.
 
 ## Next step
 
-Stop after Phase 10.5. Phase 11 may begin for a separately authorized FYP prototype
-using the frozen v2 candidate and its documented limitations; no Phase 11 functionality
-is implemented here. See [fitness audit](docs/26-model-fitness-validation.md) and
+Stop after Phase 11. Phase 12 Node/Python integration requires the next explicit
+instruction. Preserve the frozen v2 candidate and its documented limitations. See
+[inference contracts](docs/27-production-ml-inference.md), [fitness audit](docs/26-model-fitness-validation.md) and
 [roadmap](docs/14-roadmap.md).

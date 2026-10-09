@@ -12,13 +12,30 @@ from app.main import create_app
 
 @pytest.fixture(autouse=True)
 def isolated_settings_environment(monkeypatch: pytest.MonkeyPatch) -> None:
-    for name in ("ENVIRONMENT", "HOST", "PORT", "LOG_LEVEL", "AI_SERVICE_TOKEN"):
+    for name in (
+        "ENVIRONMENT",
+        "HOST",
+        "PORT",
+        "LOG_LEVEL",
+        "AI_SERVICE_TOKEN",
+        "INFERENCE_ENABLED",
+        "MODEL_PATH",
+        "MODEL_METADATA_PATH",
+        "MODEL_METADATA_SHA256",
+        "MODEL_VERSION",
+        "PREPROCESSING_VERSION",
+        "INFERENCE_THREADS",
+        "INFERENCE_MAX_CONCURRENCY",
+        "INFERENCE_UPLOAD_TIMEOUT_SECONDS",
+        "CONFIDENCE_POLICY_PATH",
+        "CONFIDENCE_POLICY_SHA256",
+    ):
         monkeypatch.delenv(name, raising=False)
 
 
 @pytest.fixture
 def application() -> FastAPI:
-    return create_app(Settings(_env_file=None, environment="test"))
+    return create_app(Settings(_env_file=None, environment="test", inference_enabled=False))
 
 
 @pytest.fixture

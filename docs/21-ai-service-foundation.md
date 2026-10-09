@@ -1,5 +1,11 @@
 # AI service foundation
 
+> Historical Phase 8/9 guide. Phase 11 now loads the approved classifier at startup
+> and adds authenticated prediction/model-health routes. Read
+> [the current inference guide](27-production-ml-inference.md) for active settings,
+> startup prerequisites, contracts and verification; the earlier boundaries below
+> describe what existed when this foundation was introduced.
+
 Phase 9 adds the [shared preprocessing library](22-shared-preprocessing.md). The
 `app.preprocessing` module re-exports its exact functions; health reports library
 availability without claiming a ready model. No preprocessing/inference HTTP route

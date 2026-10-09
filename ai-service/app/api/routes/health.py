@@ -5,7 +5,7 @@ from fastapi import APIRouter, Query, Request, Response
 
 from app import SERVICE_NAME, SERVICE_VERSION
 from app.schemas.common import ResponseMetadata
-from app.schemas.health import HealthData, HealthQuery, HealthResponse
+from app.schemas.health import Capabilities, HealthData, HealthQuery, HealthResponse, ModelHealth
 from app.utils.errors import request_id
 
 router = APIRouter(tags=["health"])
@@ -17,6 +17,8 @@ async def health(
 ) -> HealthResponse:
     running = cast(bool, request.app.state.running)
     started_at = cast(float | None, request.app.state.started_at)
+    service = request.app.state.inference_service
+    ready = running and service is not None
     if not running:
         response.status_code = 503
     return HealthResponse(
@@ -25,6 +27,11 @@ async def health(
             version=SERVICE_VERSION,
             status="ok" if running else "starting",
             uptime_seconds=round(max(0, perf_counter() - started_at), 3) if started_at else 0,
+            capabilities=Capabilities(inference="ready" if ready else "unavailable"),
+            model=ModelHealth(
+                status="ready" if ready else "not_loaded",
+                version=service.loaded_model.model_version if ready else None,
+            ),
         ),
         meta=ResponseMetadata(request_id=request_id(request)),
     )

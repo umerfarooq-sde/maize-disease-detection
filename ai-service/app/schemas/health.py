@@ -13,16 +13,16 @@ class HealthQuery(BaseModel):
 
 class Capabilities(BaseModel):
     preprocessing: Literal["library_available"] = "library_available"
-    inference: Literal["not_implemented"] = "not_implemented"
+    inference: Literal["ready", "unavailable"] = "unavailable"
     rag: Literal["not_implemented"] = "not_implemented"
     generation: Literal["not_implemented"] = "not_implemented"
 
 
 class ModelHealth(BaseModel):
-    """No loaded artifact exists in Phase 8; never advertise inference readiness."""
+    """Basic safe readiness; detailed model policy is protected separately."""
 
-    status: Literal["not_loaded"] = "not_loaded"
-    version: None = None
+    status: Literal["ready", "not_loaded"] = "not_loaded"
+    version: str | None = None
 
 
 class HealthData(BaseModel):

@@ -1,4 +1,4 @@
-"""Load operational settings without requiring unused provider credentials."""
+"""Load server-only settings; artifact compatibility is verified in the lifespan."""
 
 import ipaddress
 import re
@@ -17,7 +17,7 @@ class ConfigurationError(Exception):
     def __init__(self) -> None:
         super().__init__(
             "Invalid AI service configuration; check ENVIRONMENT, HOST, PORT, "
-            "LOG_LEVEL and AI_SERVICE_TOKEN."
+            "LOG_LEVEL, AI_SERVICE_TOKEN and model/inference settings."
         )
 
 
@@ -43,6 +43,48 @@ class Settings(BaseSettings):
     ai_service_token: SecretStr = Field(
         default=SecretStr(""), validation_alias="AI_SERVICE_TOKEN", repr=False
     )
+    inference_enabled: bool = Field(default=True, validation_alias="INFERENCE_ENABLED")
+    model_path: Path | None = Field(default=None, validation_alias="MODEL_PATH", repr=False)
+    model_metadata_path: Path | None = Field(
+        default=None, validation_alias="MODEL_METADATA_PATH", repr=False
+    )
+    model_metadata_sha256: str = Field(default="", validation_alias="MODEL_METADATA_SHA256")
+    model_version: str = Field(default="", validation_alias="MODEL_VERSION", max_length=120)
+    preprocessing_version: str = Field(
+        default="", validation_alias="PREPROCESSING_VERSION", max_length=30
+    )
+    inference_threads: int = Field(default=2, ge=1, le=8, validation_alias="INFERENCE_THREADS")
+    inference_max_concurrency: int = Field(
+        default=1, ge=1, le=4, validation_alias="INFERENCE_MAX_CONCURRENCY"
+    )
+    inference_upload_timeout_seconds: float = Field(
+        default=10,
+        ge=1,
+        le=60,
+        allow_inf_nan=False,
+        validation_alias="INFERENCE_UPLOAD_TIMEOUT_SECONDS",
+    )
+    confidence_policy_path: Path | None = Field(
+        default=None, validation_alias="CONFIDENCE_POLICY_PATH", repr=False
+    )
+    confidence_policy_sha256: str = Field(default="", validation_alias="CONFIDENCE_POLICY_SHA256")
+
+    @field_validator("model_path", "model_metadata_path", "confidence_policy_path", mode="before")
+    @classmethod
+    def resolve_artifact_path(cls, value: object) -> object:
+        if value is None or value == "":
+            return None
+        if not isinstance(value, str | Path):
+            raise ValueError("Artifact paths must be filesystem paths")
+        path = Path(value)
+        return (path if path.is_absolute() else SERVICE_ROOT / path).resolve()
+
+    @field_validator("model_metadata_sha256", "confidence_policy_sha256")
+    @classmethod
+    def validate_artifact_hash(cls, value: str) -> str:
+        if value and not re.fullmatch(r"[a-f0-9]{64}", value):
+            raise ValueError("Artifact hashes must be lowercase SHA-256 values")
+        return value
 
     @field_validator("host")
     @classmethod

@@ -18,6 +18,8 @@ def test_local_defaults_need_no_database_model_or_generation_credentials() -> No
     assert settings.port == 8000
     assert settings.log_level == "INFO"
     assert settings.ai_service_token.get_secret_value() == ""
+    assert settings.inference_enabled is True
+    assert settings.model_path is None
     assert Settings.model_config["env_file"] == SERVICE_ROOT / ".env"
     assert Path(Settings.model_config["env_file"]).is_absolute()
 
@@ -87,6 +89,10 @@ def test_production_and_non_loopback_binding_require_token(environment: str, hos
         ("LOG_LEVEL", "private_invalid_level"),
         ("AI_SERVICE_TOKEN", "private_short_token"),
         ("AI_SERVICE_TOKEN", "private token with spaces " + "T" * 50),
+        ("MODEL_METADATA_SHA256", "private-invalid-hash"),
+        ("INFERENCE_THREADS", "0"),
+        ("INFERENCE_MAX_CONCURRENCY", "5"),
+        ("INFERENCE_UPLOAD_TIMEOUT_SECONDS", "nan"),
     ],
 )
 def test_invalid_environment_fails_startup_without_echoing_rejected_values(
@@ -121,3 +127,13 @@ def test_settings_are_immutable_and_do_not_re_read_process_environment(
     assert load_settings(env_file=None).port == 8123
     with pytest.raises(ValidationError):
         settings.port = 8123
+
+
+def test_artifact_paths_resolve_against_service_root_not_cwd(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    monkeypatch.chdir(tmp_path)
+    monkeypatch.setenv("MODEL_PATH", "models/version.pt")
+    assert load_settings(env_file=None).model_path == (SERVICE_ROOT / "models/version.pt").resolve()
+    monkeypatch.setenv("MODEL_PATH", "")
+    assert load_settings(env_file=None).model_path is None

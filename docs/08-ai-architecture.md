@@ -1,17 +1,18 @@
 # AI Service Architecture
 
-> **Status:** Phase 8 FastAPI foundation and Phase 9 shared preprocessing are implemented. Model, retrieval/generation and deployment below remain target architecture.
+> **Status:** Phase 11 internal classifier serving, Phase 8 FastAPI foundation and Phase 9 shared preprocessing are implemented. Node orchestration, retrieval/generation and deployment remain future work.
 
 Both Python environments now install the same [shared preprocessing package](22-shared-preprocessing.md).
 Serving and training re-export identical functions and must pin the same configuration
-and mask policy. Health distinguishes library availability from absent model readiness;
-no preprocessing/inference HTTP endpoint or Node orchestration is added.
+and mask policy. The selected model uses the approved full-frame configuration;
+health distinguishes library availability from actual loaded-model readiness.
 
-The current app exposes typed `GET /health`, safe configuration/logging/errors and
-lifespan state without loading a model or connecting to providers. It binds to loopback
-by default, enables no browser CORS and prepares shared-token authentication for future
-internal routes. See [AI foundation](21-ai-service-foundation.md) for implemented
-contracts, local startup, network policy and verification. Flutter calls Node; Node
+The current lifespan validates three pinned deployment files and loads one CPU
+classifier before requests. It exposes safe `GET /health`, authenticated
+`POST /api/v1/predict` and `GET /api/v1/model-health`. It binds to loopback by default,
+enables no browser CORS and requires the server-only shared token for inference.
+See [inference contracts](27-production-ml-inference.md) for startup, exact image
+admission, bounded resources, uncertainty and verification. Flutter calls Node; Node
 orchestration of FastAPI is still deferred to its authorized integration phase.
 
 ## Ownership boundary
@@ -33,6 +34,10 @@ Backend request
 ```
 
 Each stage should fail explicitly. Reject unsupported or corrupt images before inference; reject malformed model output instead of returning a success-shaped fallback.
+
+The current classifier flow ends with typed probabilities and uncertainty.
+Retrieval/generation in this target diagram is deferred. No operational threshold is
+approved: current predictions report `LOW_CONFIDENCE/THRESHOLD_UNCONFIGURED`.
 
 ## Service interface
 

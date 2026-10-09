@@ -116,8 +116,16 @@ See [database design](05-database-design.md) and [project state](PROJECT_STATE.m
 | Calibration disabled, method none, T=1 | Validation-group cross-fit worsens NLL/Brier/ECE; apparent all-validation fitted-T improvement is in-sample. Preserve raw probabilities rather than promote unsupported temperature scaling. |
 | Confidence threshold remains unlocked | Validation cutoff 0.95 retains confident errors and reduces GLS coverage; risk/coverage/class-cost objectives undefined. Null is an explicit pending product policy, not approval for a default arbitrary cutoff. |
 
+## Phase 11 inference decisions (2026-10-09)
+
+| Decision | Rationale and boundary |
+|---|---|
+| Three-file pinned runtime, once-per-lifespan frozen CPU classifier | Configure the approved metadata SHA; metadata binds checkpoint/calibration bytes. Validate explicit class/input/shared config/runtime/state/output before readiness, with no downloads or guessed defaults. Deployment needs no raw dataset or training modules; immutable model artifacts remain unchanged. |
+| Raw image bytes on authenticated internal versioned routes | Reuse existing constant-time server-token authentication for predict/model health, required even on loopback inference startup. Shared image validation is authoritative. Reserve bounded capacity before buffering, limit bytes/upload time and run CPU work off the event loop; Node/Flutter orchestration is deferred to Phase 12. |
+| Null certainty policy remains explicit; optional separately pinned validation-derived policy | Phase 10.5 did not approve an operational cutoff. All current predictions are LOW_CONFIDENCE/THRESHOLD_UNCONFIGURED. Any future research policy must bind the exact model/checkpoint/validation predictions and record an approved validation-only rationale; no threshold selection, calibration or TEST tuning occurs here. |
+
 Pending decisions:
 curated agricultural sources, full JSON validation contracts, retention and
 completed-scan retention/delivery/deletion, production least-privilege roles,
-production model promotion/serving compatibility, and embedding model/dimensions/distance/indexes. Address these
+production hosting/promotion and operational confidence policy, and embedding model/dimensions/distance/indexes. Address these
 only in a phase explicitly authorized by the user.

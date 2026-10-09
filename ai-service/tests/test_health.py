@@ -37,7 +37,7 @@ def test_health_reports_running_foundation_without_provider_details(client: Test
     assert payload["data"]["uptimeSeconds"] >= 0
     assert payload["data"]["capabilities"] == {
         "preprocessing": "library_available",
-        "inference": "not_implemented",
+        "inference": "unavailable",
         "rag": "not_implemented",
         "generation": "not_implemented",
     }
@@ -86,7 +86,12 @@ def test_health_without_startup_is_not_ready(application: FastAPI) -> None:
 
 def test_factory_keeps_settings_and_logging_local_and_health_does_not_leak_token() -> None:
     token = "test_only_" + "T" * 55
-    settings = Settings(_env_file=None, environment="test", ai_service_token=SecretStr(token))
+    settings = Settings(
+        _env_file=None,
+        environment="test",
+        inference_enabled=False,
+        ai_service_token=SecretStr(token),
+    )
     root_handlers = tuple(logging.getLogger().handlers)
     service_handlers = tuple(logging.getLogger(LOGGER_NAME).handlers)
     application = create_app(settings)
@@ -133,7 +138,8 @@ def test_no_browser_cors_or_future_business_endpoints(client: TestClient) -> Non
     )
     assert preflight.status_code == 405
     assert "Access-Control-Allow-Origin" not in preflight.headers
-    for route in ("/api/v1/predict", "/api/v1/rag", "/api/v1/generate", "/health/"):
+    assert client.get("/api/v1/predict").status_code == 405
+    for route in ("/api/v1/rag", "/api/v1/generate", "/health/"):
         assert client.get(route).status_code == 404
 
 
@@ -141,6 +147,7 @@ def test_production_disables_interactive_docs_but_keeps_health() -> None:
     settings = Settings(
         _env_file=None,
         environment="production",
+        inference_enabled=False,
         ai_service_token=SecretStr("test_only_" + "T" * 55),
     )
     application = create_app(settings)
@@ -154,7 +161,7 @@ def test_production_disables_interactive_docs_but_keeps_health() -> None:
 def test_development_openapi_describes_health_without_private_config(client: TestClient) -> None:
     response = client.get("/openapi.json")
     assert response.status_code == 200
-    assert set(response.json()["paths"]) == {"/health"}
+    assert set(response.json()["paths"]) == {"/health", "/api/v1/predict", "/api/v1/model-health"}
     contracts = response.json()["paths"]["/health"]["get"]["responses"]
     for status in ("422", "500"):
         assert contracts[status]["content"]["application/json"]["schema"] == {

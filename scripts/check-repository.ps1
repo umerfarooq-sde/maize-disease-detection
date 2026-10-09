@@ -62,6 +62,15 @@ $requiredFiles += @(
     'ai-service/app/model_management/README.md'
 )
 $requiredFiles += @(
+    'docs/27-production-ml-inference.md', 'scripts/check-inference-parity.py',
+    'ai-service/app/api/routes/prediction.py', 'ai-service/app/inference/service.py',
+    'ai-service/app/model_management/artifacts.py', 'ai-service/app/model_management/confidence.py',
+    'ai-service/app/schemas/prediction.py', 'ai-service/app/schemas/model_health.py',
+    'ai-service/tests/model_fixtures.py', 'ai-service/tests/test_model_artifacts.py',
+    'ai-service/tests/test_confidence_policy.py', 'ai-service/tests/test_inference.py',
+    'ai-service/tests/test_prediction_api.py'
+)
+$requiredFiles += @(
     'backend/prisma/migrations/20261006000000_auth_sessions/migration.sql',
     'backend/src/middleware/authentication.ts', 'backend/src/middleware/authorization.ts',
     'backend/src/modules/auth/auth.types.ts', 'backend/src/modules/auth/auth.repository.ts',
@@ -144,7 +153,7 @@ Write-Output 'PASS: Required directories, documentation, and templates exist.'
 
 $templateKeys = @{
     'backend' = @('NODE_ENV', 'PORT', 'HOST', 'CORS_ORIGINS', 'LOG_LEVEL', 'SHUTDOWN_TIMEOUT_MS', 'RATE_LIMIT_MAX', 'AUTH_RATE_LIMIT_MAX', 'SCAN_RATE_LIMIT_MAX', 'DATABASE_URL', 'DIRECT_DATABASE_URL', 'JWT_SECRET', 'JWT_REFRESH_SECRET', 'JWT_ISSUER', 'JWT_ACCESS_TTL_SECONDS', 'JWT_REFRESH_TTL_SECONDS', 'CLOUDINARY_CLOUD_NAME', 'CLOUDINARY_API_KEY', 'CLOUDINARY_API_SECRET', 'AI_SERVICE_URL', 'AI_SERVICE_TOKEN')
-    'ai-service' = @('ENVIRONMENT', 'HOST', 'PORT', 'LOG_LEVEL', 'DATABASE_URL', 'GEMINI_API_KEY', 'AI_SERVICE_TOKEN', 'MODEL_PATH', 'MODEL_VERSION', 'PREPROCESSING_VERSION')
+    'ai-service' = @('ENVIRONMENT', 'HOST', 'PORT', 'LOG_LEVEL', 'DATABASE_URL', 'GEMINI_API_KEY', 'AI_SERVICE_TOKEN', 'INFERENCE_ENABLED', 'MODEL_PATH', 'MODEL_METADATA_PATH', 'MODEL_METADATA_SHA256', 'MODEL_VERSION', 'PREPROCESSING_VERSION', 'INFERENCE_THREADS', 'INFERENCE_MAX_CONCURRENCY', 'INFERENCE_UPLOAD_TIMEOUT_SECONDS', 'CONFIDENCE_POLICY_PATH', 'CONFIDENCE_POLICY_SHA256')
     'infrastructure' = @('POSTGRES_DB', 'POSTGRES_USER', 'POSTGRES_PASSWORD', 'POSTGRES_PORT')
     'mobile' = @('API_BASE_URL')
     'ml-training' = @('DATASET_PATH')

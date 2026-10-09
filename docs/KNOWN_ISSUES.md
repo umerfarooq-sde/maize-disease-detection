@@ -1,6 +1,15 @@
 # Known issues
 
-Updated: 2026-10-09 (Asia/Karachi), after Phase 10.5.
+Updated: 2026-10-09 (Asia/Karachi), after Phase 11.
+
+Phase 11 internal classifier serving is complete: approved-artifact startup/readiness,
+authenticated prediction/model health, exact shared full-frame preprocessing and
+bounded requests are verified. All 219 AI tests and 16 frozen TRAIN serving parity
+cases pass; representative end-to-end preprocessing/inference averages 17.75 ms
+locally. No operational threshold is approved: all current results explicitly report
+`LOW_CONFIDENCE/THRESHOLD_UNCONFIGURED`. See [the inference contract](27-production-ml-inference.md).
+Node orchestration and deployment remain deferred; scientific/use limitations below
+are preserved and no final TEST evaluation is repeated.
 
 Phase 10.5 is complete. **FIT WITH DOCUMENTED LIMITATIONS** for a local FYP
 research inference prototype. The original v1 scoring arithmetic is preserved, but
@@ -61,9 +70,9 @@ replacement remains a future requirement; research approval is not commercial cl
 
 | Issue | Current behavior / risk | Boundary and action |
 |---|---|---|
-| Node upload acceptance differs from shared preprocessing | Real probes show Node accepts a 1×1 PNG and a PNG with trailing bytes; shared preprocessing rejects them as `INVALID_DIMENSIONS` and `INVALID_IMAGE`. Normal PNG passes both. | Current scans remain pending without inference, so this does not block local training. Before Phase 11/12, agree inference eligibility and align validation or explicitly handle preprocessing failure. Keep all ML transforms in Python. |
+| Node upload acceptance differs from shared preprocessing | Node accepts a 1×1 PNG and PNG trailing bytes; actual Phase 11 FastAPI rejects both under the strict shared contract. Normal PNG passes both. | The [authoritative admission contract](27-production-ml-inference.md) is implemented. In Phase 12 align upload eligibility or explicitly persist accepted-scan processing failure. Keep ML transforms in Python; current Node scans remain pending. |
 | Native Flutter authentication lifecycle is deferred | Upload transport can use an injected bearer token. Mobile login, secure token persistence, HttpOnly refresh-cookie handling and serialized refresh are not implemented. | Add the native session/cookie lifecycle when mobile authentication is authorized. Backend auth is verified; this is future client work, not an existing login regression. |
-| Node/FastAPI integration is deferred | Configuration placeholders and the FastAPI internal-token dependency exist; Node does not call inference and FastAPI exposes no inference operation. | Define typed image/result/error contracts, private URL/authentication and bounded calls in the integration phase. Flutter continues to call Node. No integration is invented during this audit. |
+| Node/FastAPI integration is deferred | Protected FastAPI prediction/model-health contracts now exist; Node does not call inference. | Phase 12 must use the documented raw-image/result/error contract, private URL/server token and bounded calls/retries. Flutter continues to call Node. |
 | Four high npm advisory entries remain | The Phase 0–9 full and omit-dev audits reported `deepmerge-ts` 7.1.5 and `mysql2` 3.15.3, plus propagated `@prisma/config`/`prisma` 7.10.0 entries. PostgreSQL application paths do not use MySQL or recursively merge client object graphs. | Track a compatible remediation for Prisma's dependency/optional-peer graph. Do not apply npm's suggested Prisma 6 downgrade or an unverified transitive override. |
 | Python patch baseline is old | Both environments run Python 3.11.0 and pass the configured `>=3.11,<3.12` constraints/tests. Installed PyTorch is CPU-only. | Provision a maintained compatible 3.11 patch for a new/production environment and revalidate parity. GPU/CUDA is an explicit later environment choice, not a required local-training credential. |
 
@@ -81,7 +90,7 @@ Four aggregate package entries do not mean four separate vulnerable application 
 | Shared rate-limit storage and proxy policy | Counters are currently per process; proxy trust requires the actual deployment topology. | Before multiple replicas/proxy deployment; verify limits across replicas and trusted client-IP handling. |
 | Scheduled scan cleanup | Durable cleanup CLI exists, but no OS/deployment schedule is installed. | Before persistent hosting; schedule `npm run scans:cleanup` every five minutes and verify recovery of abandoned attempts. |
 | Signed-image delivery, retention and EXIF privacy | Signed Cloudinary URLs are bearer capabilities; uploaded originals may retain EXIF/location metadata. Completed-scan retention/deletion and owner-checked future delivery need a policy. | Before broad distribution/production; approve policy and test access, retention and deletion without publishing signed URLs. |
-| Measured preprocessing/inference resource limits | Byte/pixel caps bound individual images; no model-specific worker memory/time/concurrency measurements exist. Windows parity does not establish Linux codec parity. | Before inference deployment; profile representative maximum inputs and validate target-platform outputs. |
+| Deployment preprocessing/inference resource limits | Local batch-one preprocessing/inference averages 17.75 ms; six simultaneous Uvicorn requests produce one success/five busy responses under the default bound. Worst-case 16 MP memory/time and Linux codec parity are unmeasured. | Before deployment profile maximum inputs, memory/throughput, worker count and native-thread failure supervision; validate target-platform outputs. |
 | Docker runtime/native pgvector | Compose configuration validates; Docker Engine is absent, and preserved native Windows PostgreSQL lacks pgvector binaries. Configured Neon works. | Only if choosing those alternative environments; verify pgvector and migrations there. Not required for local CPU training with the current database. |
 
 ## P3 — maintenance and coverage
@@ -92,6 +101,7 @@ The following package/platform findings and broad test counts come from the Phas
 - Starlette 1.7.0 emits its HTTPX TestClient deprecation warning; all 50 AI tests pass.
   Migrate the test client deliberately with lock/compatibility checks. The existing
   pg query-queue deprecation warning also remains a dependency-maintenance item.
+  The expanded Phase 11 AI suite now passes 219 tests with the same existing warning.
 - `npm ls --all` exits successfully but labels three installed, lock-matching Sharp
   optional/WASM packages extraneous. Native JPEG/PNG/WebP checks pass; this does not
   establish an application or lock defect. Reconcile during planned dependency setup.
@@ -109,8 +119,10 @@ The following package/platform findings and broad test counts come from the Phas
 
 Development PostgreSQL, JWT and Cloudinary settings were verified live in the Phase
 0–9 audit without exposing their values. All audit-created database fixtures/provider
-assets were removed; before/after checks matched. **No new service secret is needed
-for local CPU Phase 10.** Local loopback FastAPI health needs no token.
+assets were removed; before/after checks matched. CPU training does not require a
+service secret. Phase 11 inference startup requires a server-only token even on
+loopback; an ignored local token is configured without printing it. Public `/health`
+requires no token, while internal prediction/model health always enforce it.
 
 The user supplied the absolute dataset path; its value is configured in ignored
 `ml-training/.env` as `DATASET_PATH`. `.env.example` contains a blank placeholder.
@@ -121,7 +133,7 @@ No manual labels, split manifests, provenance files, augmentation inventory or i
 plant metadata are requested. The user approved the exclusion/use/preprocessing decisions
 and explicitly authorized Phase 10. No further approval is needed for its implementation.
 
-Later phases require deliberate choices for model/artifact compatibility, native mobile
+Model/artifact compatibility is verified in Phase 11. Later phases require native mobile
 authentication, production deployment/privacy, reviewed agricultural knowledge,
 embeddings and Gemini. Gemini credentials, embedding services and production hosting
 are **not required now**. No unresolved choice is recorded as an architectural decision.
@@ -182,6 +194,18 @@ are **not required now**. No unresolved choice is recorded as an architectural d
   Node/Python admission or handle processing errors in later integration. No inference
   API, commercial permission or field-accuracy certification is added in this audit.
 
-Stop after Phase 10.5. Phase 11 may begin only as separately instructed research/FYP
-prototype work with these limits; new independent field data and commercial licensing
-or replacement remain future requirements.
+## Phase 11 serving verification and remaining boundary
+
+Strict pinned startup, repeated inference, synthetic fixtures for every class,
+JPEG/PNG/WebP and invalid admission, uncertainty-policy provenance, safe failures,
+concurrent requests and graceful shutdown pass. Real serving matches all 16 saved
+TRAIN tensors/logits exactly; no TEST images are reopened. Missing-checkpoint actual
+startup exits 3 with safe logs, and the final approved model starts/stops cleanly.
+Ruff/strict mypy, 78 shared tests in each environment, 12 synthetic parity cases,
+uv lock and installed-package compatibility checks pass. Model artifacts and dependency
+locks are unchanged. Future deployment still needs private networking/TLS/token rotation,
+maximum-input profiling and target-platform parity; the software interface does not
+establish external field accuracy, an approved certainty threshold or OOD rejection.
+
+Stop after Phase 11. Phase 12 requires a separate instruction. Independent field
+data and commercial licensing or source replacement remain future requirements.

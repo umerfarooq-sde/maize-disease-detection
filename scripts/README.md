@@ -1,5 +1,13 @@
 # Scripts
 
+Phase 11 adds [serving parity verification](check-inference-parity.py). It uses
+the configured approved model and `DATASET_PATH` loader, sends 16 frozen TRAIN
+cases through the FastAPI app and compares exact tensor/logit hashes with saved
+Phase 10.5 evidence. It records timing under a new ignored output path and never
+reads TEST images or fits a model. See [inference verification](../docs/27-production-ml-inference.md).
+The existing [start-ai.ps1](start-ai.ps1) now starts the model-backed internal
+service; model files/settings and the server-only token must be configured.
+
 Phase 10.5 adds [offline model compatibility](check-model-compatibility.py), restoring
 the frozen candidate in training and AI environments on 16 TRAIN cases and measuring
 local forward latency/memory. It adds no endpoint; choose a new ignored output.

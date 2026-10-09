@@ -14,7 +14,12 @@ TEST_TOKEN = "test_only_" + "T" * 55
 
 def internal_client(token: str) -> TestClient:
     application = create_app(
-        Settings(_env_file=None, environment="test", ai_service_token=SecretStr(token))
+        Settings(
+            _env_file=None,
+            environment="test",
+            inference_enabled=False,
+            ai_service_token=SecretStr(token),
+        )
     )
 
     @application.get("/test/internal", dependencies=[Depends(require_service_authentication)])

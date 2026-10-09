@@ -1,4 +1,4 @@
-"""Attach this dependency to future /api/v1 internal operation routers."""
+"""Constant-time server authentication for internal /api/v1 operations."""
 
 import hmac
 from typing import Annotated, cast

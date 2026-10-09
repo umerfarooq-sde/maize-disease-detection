@@ -13,6 +13,7 @@ The remaining feature documents describe intended behavior.
 | [Dataset intake and real-image review](24-dataset-intake-preprocessing-review.md) | Phase 9.5 configured inventory, exact labels, recovered provenance/rights, duplicate conflicts, shared-policy comparison, real parity and training readiness |
 | [ML training and evaluation](25-ml-training-evaluation.md) | Phase 10 research/exclusion policy, immutable grouped partitions, shared full-frame baseline, smoke, transfer learning, checkpoints and evaluation |
 | [Model fitness and generalization audit](26-model-fitness-validation.md) | Phase 10.5 transformed-photo leakage investigation, immutable grouped repair, fresh training, validation-only calibration/robustness and frozen descriptive final evaluation |
+| [Production ML inference](27-production-ml-inference.md) | Phase 11 pinned artifact startup, exact shared full-frame serving, internal prediction/model-health contracts, image admission, uncertainty and parity/timing verification |
 | [System overview](01-system-overview.md) | Purpose, users, boundaries, and primary flow |
 | [HLA](02-hla.md) | Logical components and trust boundaries |
 | [HLD](03-hld.md) | Runtime interactions and failures |
@@ -20,7 +21,7 @@ The remaining feature documents describe intended behavior.
 | [Database design](05-database-design.md) | Implemented 21-table schema (19 domain plus auth/upload journals), ERD, ownership, constraints, versions, and vectors |
 | [API design](06-api-design.md) | Implemented health/response contracts and future candidate routes |
 | [Flutter architecture](07-flutter-architecture.md) | Implemented MVVM foundation and future farmer workflows |
-| [AI architecture](08-ai-architecture.md) | Implemented service foundation and future Python inference/grounding ownership |
+| [AI architecture](08-ai-architecture.md) | Implemented FastAPI classifier service and future retrieval/generation ownership |
 | [ML pipeline](09-ml-pipeline.md) | Shared preprocessing, dataset hygiene, and evaluation |
 | [RAG architecture](10-rag-architecture.md) | Source-grounded retrieval and generation |
 | [Security](11-security.md) | Identity, uploads, credentials, and access controls |
@@ -37,5 +38,6 @@ The remaining feature documents describe intended behavior.
 | [Shared preprocessing](22-shared-preprocessing.md) | Phase 9 one package, conservative extraction/fallback, typed configuration, provenance, debug utilities, parity and Phase 9.5 real-image evidence |
 
 The shared preprocessing location is implemented; finalize detailed business API
-contracts, feature workflows and evaluated model compatibility in their phases. Do not treat
+contracts and feature workflows in their phases. Approved model compatibility and
+internal serving are verified in Phase 11. Do not treat
 candidate designs as approved implementation details.

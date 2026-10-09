@@ -129,3 +129,15 @@ all source bytes/labels preserved and all contradictory families wholly excluded
 Validation choices are frozen before one descriptive test evaluation on the corrected,
 previously inspected corpus. Read [model fitness](26-model-fitness-validation.md).
 Stop after Phase 10.5; no inference API or integration starts automatically.
+
+## Phase 11 scope clarification
+
+The user authorized serving the approved frozen Phase 10.5 classifier in FastAPI:
+strict artifact/configuration validation, once-per-lifespan loading, shared full-frame
+preprocessing, internal token protection, typed prediction/model health, bounded image
+admission/resources, configurable validation-derived uncertainty and parity/tests.
+No threshold is approved or selected here; current predictions explicitly report
+`LOW_CONFIDENCE/THRESHOLD_UNCONFIGURED`. No retraining, repeated TEST evaluation,
+Node/Flutter integration or RAG/Gemini is included. Read
+[production inference](27-production-ml-inference.md). Stop after Phase 11;
+Phase 12 requires a separate explicit instruction.

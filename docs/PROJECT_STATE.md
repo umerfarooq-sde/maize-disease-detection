@@ -4,7 +4,14 @@ Updated: 2026-10-09 (Asia/Karachi).
 
 ## Current phase
 
-Phase 10.5 is complete. **FIT WITH DOCUMENTED LIMITATIONS** for a local FYP
+Phase 11 is complete. FastAPI serves the approved classifier through authenticated
+internal prediction/model-health endpoints, validates pinned artifacts at startup
+and loads one model per lifespan using the exact shared full-frame pipeline.
+All 219 AI tests, Ruff and strict mypy pass; 16 real TRAIN tensor/logit hashes match
+the frozen Phase 10.5 evidence exactly. Representative preprocessing-plus-inference
+averages 17.75 ms on the local CPU. Read [inference contracts](27-production-ml-inference.md).
+
+The Phase 10.5 candidate remains **FIT WITH DOCUMENTED LIMITATIONS** for a local FYP
 research inference prototype. The original v1 scoring arithmetic is preserved, but
 confirmed transformed-parent leakage invalidates its independent-evaluation claim.
 The corrected v2 index and fresh model are verified; all 8,040 original files remain
@@ -19,7 +26,8 @@ The completed run stops at epoch 11 under patience 3, out of 12 maximum. Validat
 598 correct of 624. Test Gray Leaf Spot recall is **83.53%**, F1 **0.8659**. These are
 internal benchmark scores, not measured farmer-field accuracy. Calibration remains
 disabled (`T=1`): group cross-fitting worsens NLL/Brier/ECE. No confidence threshold
-is locked. Read [the fitness report](26-model-fitness-validation.md) and
+is locked; current serving explicitly returns `LOW_CONFIDENCE/THRESHOLD_UNCONFIGURED`
+with a null threshold. Read [the fitness report](26-model-fitness-validation.md) and
 [safe numerical/artifact evidence](../ml-training/reports/mobilenet-v3-small-20261009-v2-01-fitness/README.md).
 
 The preceding Phase 0–9 audit verified 77 checked-in backend cases, a live farmer
@@ -44,7 +52,7 @@ native mobile refresh-cookie integration and deployment/platform limitations are
 The recovered backend database client matches HEAD and works. Phase 6 remains explicitly
 skipped. Phase 9.5 added configured read-only intake; the subsequent approved exclusions,
 use restrictions, full-frame policy and Phase 10 baseline are recorded in DECISIONS.md.
-Stop after Phase 10.5; inference, Node/FastAPI orchestration, mobile sign-in,
+Stop after Phase 11; Node/FastAPI orchestration, mobile sign-in,
 disease/business APIs, calculators, admin functionality and RAG/Gemini remain deferred.
 
 ## Initial workspace findings
@@ -77,17 +85,17 @@ disease/business APIs, calculators, admin functionality and RAG/Gemini remain de
 |---|---|
 | Mobile | Flutter 3.41.9/Dart 3.11.5, Material 3 farmer shell, scoped Provider MVVM, go_router 17.5.0/http 1.6.0/image_picker 1.2.2, gallery/camera/preview/progress/retry/pending confirmation; 52 isolated tests, two optional live tests and separately verified real upload; debug Android APK builds |
 | Backend | Express 5 health/auth/scans, strict TS/Zod, Argon2id, rotating/revocable JWT sessions/RBAC, upload signature/full decode validation, Cloudinary authenticated assets, durable scan-upload retry/cleanup; shared Prisma 7.10.0, 21 tables/five migrations, 77 passing tests across five suites |
-| AI service | Python 3.11/FastAPI 0.142.2/Uvicorn 0.54.0 foundation and exact shared preprocessing exports; health reports preprocessing library available without importing heavy modules; 50 tests and Ruff/mypy pass; no inference operations |
+| AI service | Python 3.11/FastAPI 0.142.2/Uvicorn 0.54.0; strict pinned model startup, once-per-lifespan CPU classifier, exact shared full-frame pipeline, authenticated predict/model health, bounded upload/concurrency and explicit uncertainty; 219 tests, Ruff and strict mypy pass; factory remains free of heavy imports |
 | Shared preprocessing | One independently buildable typed package at `shared/preprocessing`, version 1.0.0, explicit JSON configuration, file/byte entrypoints, conservative extraction/fallback, optional unchanged CPU tensor and debug CLI; 78 tests pass in each consumer environment and 12 synthetic baseline parity cases pass |
 | ML training | Corrected immutable v2: 4,162 contents/4,121 groups, 2,911/627/624 partitions, no confirmed leakage; fresh MobileNetV3 Small completed 11 epochs, best epoch 8; validation 96.81% accuracy/0.9589 macro F1, single descriptive test 95.83%/0.9452; raw probabilities, no threshold; 219 tests, Ruff over 32 files, mypy over 15 modules and 16 actual TRAIN cases with AI compatibility pass; limited FYP prototype |
 | Infrastructure | Neon PostgreSQL 18.6 with pgvector 0.8.6 migrated; pgvector 0.8.7/PostgreSQL 18 Compose configuration; preserved native 18.4 cluster; private local settings ignored |
 | Documentation | Architecture, database/operations, auth, Flutter foundation, scan uploads/recovery, FastAPI startup/contracts/network, shared preprocessing/configuration/versioning/limitations, decisions, roadmap and verification history |
-| Scripts | Repository/environment/auth/admin/PostgreSQL/Python/development checks including shared preprocessing and actual cross-environment parity; FastAPI start/check scripts, full live Flutter scan-upload harness and backend cleanup CLI |
+| Scripts | Repository/environment/auth/admin/PostgreSQL/Python/development checks including shared preprocessing and actual cross-environment parity; configured FastAPI startup and 16-TRAIN serving parity/timing verifier; full live Flutter scan-upload harness and backend cleanup CLI |
 
-Mobile authentication workflows, disease-result APIs, classifier serving, RAG, calculator
+Mobile authentication workflows, disease-result APIs, Node inference orchestration, RAG, calculator
 execution, notification delivery and the admin dashboard remain future work. Flutter
-feature introduction/empty screens are foundation UI; FastAPI exposes only real process
-health and development docs, without prediction/retrieval/generation endpoints.
+feature introduction/empty screens are foundation UI; FastAPI now exposes internal
+prediction/model health alongside process health, without retrieval/generation endpoints.
 
 ## Phase 0 verification history
 
@@ -1132,6 +1140,49 @@ current fitness.
   Read [model fitness](26-model-fitness-validation.md) for exact class counts, metrics,
   commands, artifact hashes and remaining limits.
 
+## Phase 11 implementation and verification (2026-10-09)
+
+- Added strict runtime validation for the approved checkpoint, SHA-pinned metadata
+  and adjacent calibration sidecar, literal class mapping, model version, explicit
+  full-frame preprocessing/normalization configuration, runtime dependencies and
+  finite state keys/shapes/dtypes/output. Missing/incompatible artifacts fail startup
+  with safe codes; the model is loaded once, frozen/eval and cleared on shutdown.
+- Added authenticated `POST /api/v1/predict?top_k=4` with unchanged raw JPEG/PNG/WebP
+  bytes and `GET /api/v1/model-health`. Existing public `/health` reports basic readiness.
+  Startup requires the server-only token even on loopback. Settings/templates are
+  explicit; paths resolve relative to the service and credentials remain ignored.
+- Uses the exact shared 1.0.0 full-frame pipeline and tensor conversion. Admission
+  enforces 5 MiB, ≥16-pixel sides, ≤16 million pixels, MIME/signature/container/full
+  decode agreement and still images. Capacity is reserved before buffering; direct
+  CPU callers are bounded too. Uploads have a default 10-second deadline.
+- Returns class, confidence/top probabilities, model/preprocessing versions, duration
+  and explicit uncertainty. With no approved threshold, all current predictions are
+  `LOW_CONFIDENCE/THRESHOLD_UNCONFIGURED`. An optional separately pinned policy must
+  declare validation-only provenance and bind the checkpoint/validation CSV; no real
+  numerical policy is chosen, recalibration performed or TEST images revisited.
+- Checks pass: **219 AI tests**, Ruff format/lint over 40 AI files, strict mypy over
+  24 app files, **78 shared tests in each environment**, 12 exact synthetic parity
+  cases, script lint/compilation, valid uv lock and 43 compatible installed packages.
+  One existing Starlette/HTTPX warning remains; dependencies are unchanged.
+- Serving exactly matches saved Phase 10.5 tensor/logit SHA values for **16 actual
+  TRAIN samples**, four per literal class, via configured `DATASET_PATH`. Mean
+  preprocessing/inference **17.75 ms**, median **15.94 ms**, range **11.20–51.40 ms**
+  at batch one/two CPU threads, excluding transfer/response serialization; not an SLA.
+- Actual loopback Uvicorn passes JPEG/PNG/WebP, auth, malformed/MIME/size cases,
+  model readiness, Node-mismatch rejection and six simultaneous requests (one 200,
+  five busy 503). Owned process shutdown exits 0; actual missing-checkpoint startup
+  exits 3 with a safe error and no rejected path/secret. Final approved-model startup
+  also passes after the strict dtype guard. Local measurements/logs remain ignored.
+- Frozen Phase 10.5 source/model/report/index identities are preserved. No Node or
+  Flutter feature changes, retraining, repeated TEST evaluation or raw dataset edits.
+  Updated architecture/startup/API documentation and actual lifecycle decisions.
+  See [production ML inference](27-production-ml-inference.md) for exact commands,
+  request/response/error contracts, artifact hashes and remaining deployment limits.
+- Final repository/template/ignore and whitespace checks pass; 235 local Markdown
+  links resolve, 452 source candidates contain no private credentials/dataset path,
+  and 171 frozen Phase 10.5 files match working/committed byte hashes. Existing
+  unrelated workspace changes are preserved outside the Phase 11 commit.
+
 ## Current limitations and pending decisions
 
 - V1 transformed-parent leakage invalidates historical independence claims; original
@@ -1159,14 +1210,14 @@ current fitness.
   Extraction retains background for almost all current images and does not identify
   maize. The user approved full-frame policy, invalid/conflicting-family exclusions and
   academic/FYP use. Commercial licensing or source replacement remains required. Future
-  serving needs measured deployment concurrency/time/memory limits and cross-platform
-  codec parity; current byte/pixel caps only bound individual inputs.
+  deployment needs worst-case memory/time profiling and target-platform codec parity;
+  representative local latency and bounded six-request concurrency are now verified.
 - Node security decoding accepts valid 1×1 PNG and PNG trailing bytes that the shared
-  minimum-dimension/container policy rejects. Ordinary PNG agrees. Define common
-  admissibility or explicit accepted-scan preprocessing failure before inference/Node-AI
-  integration; do not duplicate preprocessing or silently relax Python validation.
-- AI foundation does not provide ML readiness, artifact loading/version resolution,
-  predictions, retrieval/generation or Node integration. Production
+  minimum-dimension/container policy rejects. Actual Phase 11 FastAPI rejects both;
+  its exact contract is documented. Align Node eligibility or explicitly handle
+  accepted-scan processing failure in Phase 12 without duplicating ML transforms.
+- FastAPI provides classifier readiness, validated startup and internal predictions;
+  retrieval/generation and Node orchestration remain future work. Deployment
   requires private networking, TLS, coordinated token rotation and deployment-specific
   limits. Generic library/server log events intentionally omit diagnostic messages
   to protect secrets. Python 3.11.0 remains the workstation baseline; provision a
@@ -1216,7 +1267,7 @@ current fitness.
   queries; verified transactions pass. Keep the current lock until future adapter/pg compatibility is checked.
 - CPU ML environment and the first transfer-learning baseline are implemented;
   GPU/CUDA, further validation-only experiments and model promotion remain future work.
-- Production model loading/compatibility, actual sourced agricultural data/rules,
+- Production hosting/promotion, actual sourced agricultural data/rules,
   embedding model/dimensions/indexes, AI provider credentials, detailed
   business APIs and completed-scan retention/Cloudinary deletion remain pending. The initial light
   design system is implemented; domain workflow designs remain future work.
@@ -1226,9 +1277,9 @@ current fitness.
 
 ## Next step
 
-Stop after Phase 10.5. **Phase 11 may begin** for a separately authorized FYP research
-prototype using the frozen v2 candidate and shared configuration. This turn adds no
-inference API or application integration. Independent field validation and commercial
+Stop after Phase 11. Phase 12 Node/Python integration requires the next explicit
+instruction and must use the documented admission/uncertainty contract. Independent
+field validation and commercial
 licensing/source replacement remain requirements before real farmer/commercial use.
-Read [model fitness](26-model-fitness-validation.md) and reconcile the next instruction
+Read [inference contracts](27-production-ml-inference.md), [model fitness](26-model-fitness-validation.md) and reconcile the next instruction
 with the [roadmap](14-roadmap.md).

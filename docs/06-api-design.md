@@ -31,6 +31,12 @@ for validation, safe DTOs, cookie transport, expiry, CSRF protection and RBAC.
 
 ## Scan contract considerations
 
+Phase 11 implements private FastAPI `POST /api/v1/predict` and
+`GET /api/v1/model-health`, protected by a server service token. These accept raw
+encoded image bytes and return the AI service's single `data/meta` envelope. See
+[the exact internal contract](27-production-ml-inference.md). They are separate
+from Node's public scan/auth routes; Node does not call them until Phase 12.
+
 `POST /api/v1/scans` is now implemented with exactly one multipart image,
 JPEG/PNG/WebP validation, 5 MiB/16-megapixel bounds and required idempotency/custom
 headers. Returns 201 for new PENDING scans or 200 for a completed retry. No diagnosis
