@@ -1,0 +1,501 @@
+{
+  "passed": true,
+  "case_count": 16,
+  "partitions_used": [
+    "train"
+  ],
+  "no_api_implemented": true,
+  "model_outputs_exactly_equal": true,
+  "environments": [
+    {
+      "component": "ml-training",
+      "checkpoint_sha256": "e95a2e83262637fc1a08b919e6003bddb2fe70664b9c51418f059b7c8287dc66",
+      "manifest_fingerprint": "a96fd5d32a8e0696df7cfc5bbfa6b78941c8a2f308f940ce295147a8832a583b",
+      "preprocessing_hash": "b142e59f458d27a2d3fddbfc86c2f2f802670ab4909f1275babbef92de9cb5c8",
+      "class_names": [
+        "Common_Rust",
+        "Gray_Leaf_Spot",
+        "Healthy",
+        "Northern_Corn_Leaf_Blight"
+      ],
+      "input": {
+        "shape": [
+          1,
+          3,
+          224,
+          224
+        ],
+        "dtype": "float32",
+        "order": "RGB_CHW"
+      },
+      "output_shape": [
+        1,
+        4
+      ],
+      "parameter_count": 1521956,
+      "parameter_storage_bytes": 6087824,
+      "checkpoint_bytes": 6212695,
+      "cases": [
+        {
+          "sample_id": "00b9be713d9db53a34ecc1bf7bf02e735b44bd6d7e8bb64aae3642d99883267a",
+          "class_index": 0,
+          "tensor_sha256": "a7d86c4714edc8bca3cf9d8d1107ce37436a9c60438d65930a44152b3d695d61",
+          "logits_sha256": "67f9139120de61834f5c916fc999f58f21cd59ea4a3d8d762a2acb62e0edc304",
+          "logits": [
+            6.085251331329346,
+            -4.197628498077393,
+            -3.8538687229156494,
+            0.08696109056472778
+          ]
+        },
+        {
+          "sample_id": "0013fe55fe0d5d2397bcce7ea20747589b1ab34c18a0d34c8efb48d3ef5cbc80",
+          "class_index": 1,
+          "tensor_sha256": "e7c19b2e9aa26bed799173052a9b7bdcca2a8f941281012b54a7a06f7abe3d42",
+          "logits_sha256": "0faa944ebaa5d22602b11f0f221bbe3eabe06f7044d997d6a806b98f84d25ab3",
+          "logits": [
+            -5.456683158874512,
+            8.040116310119629,
+            -9.910113334655762,
+            1.0679316520690918
+          ]
+        },
+        {
+          "sample_id": "004de1ce5ed3aaf376fe971e96c3aa4e70595ec54efb430869ceb91b4a0abc71",
+          "class_index": 2,
+          "tensor_sha256": "96e7c5cea7a5b3438e16b80a394cf9c4553b572182b9cc2c09847c8d85375488",
+          "logits_sha256": "242d238b970171daf4a776af51a4e4a3871904fdc6aed4cb66eb36d8c3a4761a",
+          "logits": [
+            -8.610427856445312,
+            -7.4139628410339355,
+            13.718658447265625,
+            0.26293087005615234
+          ]
+        },
+        {
+          "sample_id": "00126ef33b1f603fcf705fe5b3d186f7932d2348fe52aca404752233586a86e7",
+          "class_index": 3,
+          "tensor_sha256": "b824c2ad5474e127229daa916b2b784fae97d811344c3476e92f4a8d7737dba7",
+          "logits_sha256": "f0a3d4c6b29286d1214654e8d111c0910659c243752b230a7f03c35938703948",
+          "logits": [
+            -5.055500030517578,
+            -2.781060218811035,
+            -4.929114818572998,
+            7.810880184173584
+          ]
+        },
+        {
+          "sample_id": "00c45e284314d90a3f33f476ab6bbc4d5408a7c5c53486d049dd35fcd3545085",
+          "class_index": 0,
+          "tensor_sha256": "54ca6998495bbe351f88cb15da1c5d016e151c639e1b3b43b695c4a733b26634",
+          "logits_sha256": "5d074a3038e196280a68d8cadb584dc3de5133dd799a1d8d3217a3579ab2fb81",
+          "logits": [
+            7.339939594268799,
+            -5.270295143127441,
+            -3.4119832515716553,
+            -1.3954933881759644
+          ]
+        },
+        {
+          "sample_id": "00a39428a5fb85724f4c463df464c76a6f65d4b85c1406d8184fb9f9f9447988",
+          "class_index": 1,
+          "tensor_sha256": "13235cbf4bc28d52035b6a9980a5a72a3c441680d856ea2f1f8e4c573e0232ac",
+          "logits_sha256": "3330626133deb5493df43301b9425391f2c6133c70076cd47714d2d07924b02c",
+          "logits": [
+            -8.219108581542969,
+            7.250204563140869,
+            -6.61182975769043,
+            1.3732765913009644
+          ]
+        },
+        {
+          "sample_id": "00a17aa1f7df29160c0fce5a48079e6658eb4f5539a648985687ebe55c527ac1",
+          "class_index": 2,
+          "tensor_sha256": "0771aa2b8667682e75d26384ed18bf4514a7cf16bb844ee5c6fb52b76b44942a",
+          "logits_sha256": "cd8998c567120d7f9007332f9d0aaf83f1eb0c46d8a2c298fd90f4858e6b7402",
+          "logits": [
+            -5.738365173339844,
+            -3.600067377090454,
+            10.885224342346191,
+            -2.242502212524414
+          ]
+        },
+        {
+          "sample_id": "0024a015776ef9867fc9c25fbca8d9dfb2ab38c46b0f5d38aff4f102523eef0f",
+          "class_index": 3,
+          "tensor_sha256": "2289cacd61c1d9209a97078389be928b09e22c8c5b2b94bdca40d929a494ac98",
+          "logits_sha256": "a6d413984c33d02f702a722b8558b183663b623024b557aac41ea5736d7e9eaa",
+          "logits": [
+            -2.031296730041504,
+            -2.833461284637451,
+            -7.31308650970459,
+            6.962056636810303
+          ]
+        },
+        {
+          "sample_id": "013f521833dbf1175f69ca55b56f9450813a18a9f16610c9f4a2022f2f37e281",
+          "class_index": 0,
+          "tensor_sha256": "eef7fc247752ea144534ab01e46ef5fee361f3a2d34dc5d08c7ab3c108f2fdec",
+          "logits_sha256": "7abdfb3d1c1b9d2a75ba86d33b401efe5716295f7aa5f8f97ad031c2b733bd4e",
+          "logits": [
+            15.461670875549316,
+            -5.858473300933838,
+            -8.325560569763184,
+            -3.06915020942688
+          ]
+        },
+        {
+          "sample_id": "00e37b88d799a367b4fe76956ec8ced446c6aa35c0d8caf4c35f7458bc120d61",
+          "class_index": 1,
+          "tensor_sha256": "9c0e50a27bbfb41b85db41564567b5df1e0dc75683f7e5f8b2fccf7b482e6960",
+          "logits_sha256": "44bd4fb4ced65456d25732faf09207442726773eb1eead5e740a3820f278c82c",
+          "logits": [
+            -7.646001815795898,
+            8.60635757446289,
+            -9.949295043945312,
+            1.8994344472885132
+          ]
+        },
+        {
+          "sample_id": "011a50513b33d260f9032d0ff37db682e254a51864eb6ecd9f10b990c6a9b912",
+          "class_index": 2,
+          "tensor_sha256": "343834a26682351a5b4ea8c03dea6bc20af793f69c169ff07f57340a4f22c15f",
+          "logits_sha256": "0249851bddb3413d376ec298dd78fb8897ba104bf074d82ad7ae436a03d30cc2",
+          "logits": [
+            -6.737914085388184,
+            -4.559154510498047,
+            17.022092819213867,
+            -4.729067325592041
+          ]
+        },
+        {
+          "sample_id": "00582457c5b6fa2d95261f0727637c7ddf62d56712d2cd182ddcb59fa18b2258",
+          "class_index": 3,
+          "tensor_sha256": "f71d6764ee4a5bc2acea1747d1914ffef8a4f891edb6a70ab1a2223e677c60cf",
+          "logits_sha256": "b4fb2d9ae609c7e92fb58aabf83aea1d119f65023b755f8bdfdbf8e1360526ca",
+          "logits": [
+            -2.5788075923919678,
+            -0.3863736689090729,
+            -6.245221138000488,
+            5.026003837585449
+          ]
+        },
+        {
+          "sample_id": "016acd6b0b1d8013b43efa29b7fc3d3c24f81969058dfc606dba8c4aaa116c46",
+          "class_index": 0,
+          "tensor_sha256": "3195592099b8a40d335087ced2c69f13cb0bfcc4551f55573abdfc6ce53ea1b5",
+          "logits_sha256": "695f30adccbcfcfb40de9417f9d23b2242094bf7a870256b76fbfc933e13880b",
+          "logits": [
+            8.071073532104492,
+            -4.742687225341797,
+            -2.7244873046875,
+            -1.1942270994186401
+          ]
+        },
+        {
+          "sample_id": "00fb35108efe02eeb6b17aa7b46e5847c3ce78dace89f9d5268eba9086f87dc9",
+          "class_index": 1,
+          "tensor_sha256": "94625048906b9c5042fc857a2865ce1d8922214b6cb31aa6eaadd5e58148172d",
+          "logits_sha256": "35c6ebcd798381963722d6a39d4ecdad75470b888e4fcbaebc3b9584590c6052",
+          "logits": [
+            -9.554943084716797,
+            6.273820877075195,
+            -3.314206123352051,
+            0.4934079051017761
+          ]
+        },
+        {
+          "sample_id": "01a08db49b37544eea801572f2613f8a783ab6f8cbbe9bc5068cada23a6c66b1",
+          "class_index": 2,
+          "tensor_sha256": "dfe59ba1f01005295db79420edcd94f716656d1575d9319729f32b1573427704",
+          "logits_sha256": "44709d1e1427259fa924b6cd299a3fd1cf4673d070008ba00d2a1159b21ff87f",
+          "logits": [
+            -1.7440229654312134,
+            -5.149783611297607,
+            8.931596755981445,
+            -2.3894858360290527
+          ]
+        },
+        {
+          "sample_id": "006c251199c0d9efe06f799641b9d01dec7fba7ba9762b8d92adc4296fdaffbb",
+          "class_index": 3,
+          "tensor_sha256": "57b9c2db27ecdc8125bce3b49fe2a961f99b4afbe276ed756946b5214ae4a65a",
+          "logits_sha256": "a49aa10f661941a97ae5302b08d6b9586f86ea101b495f226988e9e03243ce9b",
+          "logits": [
+            -3.792811632156372,
+            -4.99304723739624,
+            -7.779238700866699,
+            10.418962478637695
+          ]
+        }
+      ],
+      "torch_version": "2.10.0+cpu",
+      "torchvision_version": "0.25.0+cpu",
+      "preprocessing_package_version": "1.0.0",
+      "model_only_latency_ms": {
+        "threads": 2,
+        "batch_size": 1,
+        "warmup": 5,
+        "samples": 30,
+        "median": 13.864949927665293,
+        "p95": 28.118024906143546,
+        "includes_decode_preprocessing": false,
+        "limitation": "Local workstation probe; concurrent audit jobs may contend for CPU. Not a serving SLA."
+      },
+      "process_memory_bytes": {
+        "WorkingSet64": 382251008,
+        "PeakWorkingSet64": 386740224
+      },
+      "memory_scope": "Python process after imports, checkpoint restore and batch-one inference; not measured server concurrency.",
+      "partitions_used": [
+        "train"
+      ],
+      "cuda_available": false
+    },
+    {
+      "component": "ai-service",
+      "checkpoint_sha256": "e95a2e83262637fc1a08b919e6003bddb2fe70664b9c51418f059b7c8287dc66",
+      "manifest_fingerprint": "a96fd5d32a8e0696df7cfc5bbfa6b78941c8a2f308f940ce295147a8832a583b",
+      "preprocessing_hash": "b142e59f458d27a2d3fddbfc86c2f2f802670ab4909f1275babbef92de9cb5c8",
+      "class_names": [
+        "Common_Rust",
+        "Gray_Leaf_Spot",
+        "Healthy",
+        "Northern_Corn_Leaf_Blight"
+      ],
+      "input": {
+        "shape": [
+          1,
+          3,
+          224,
+          224
+        ],
+        "dtype": "float32",
+        "order": "RGB_CHW"
+      },
+      "output_shape": [
+        1,
+        4
+      ],
+      "parameter_count": 1521956,
+      "parameter_storage_bytes": 6087824,
+      "checkpoint_bytes": 6212695,
+      "cases": [
+        {
+          "sample_id": "00b9be713d9db53a34ecc1bf7bf02e735b44bd6d7e8bb64aae3642d99883267a",
+          "class_index": 0,
+          "tensor_sha256": "a7d86c4714edc8bca3cf9d8d1107ce37436a9c60438d65930a44152b3d695d61",
+          "logits_sha256": "67f9139120de61834f5c916fc999f58f21cd59ea4a3d8d762a2acb62e0edc304",
+          "logits": [
+            6.085251331329346,
+            -4.197628498077393,
+            -3.8538687229156494,
+            0.08696109056472778
+          ]
+        },
+        {
+          "sample_id": "0013fe55fe0d5d2397bcce7ea20747589b1ab34c18a0d34c8efb48d3ef5cbc80",
+          "class_index": 1,
+          "tensor_sha256": "e7c19b2e9aa26bed799173052a9b7bdcca2a8f941281012b54a7a06f7abe3d42",
+          "logits_sha256": "0faa944ebaa5d22602b11f0f221bbe3eabe06f7044d997d6a806b98f84d25ab3",
+          "logits": [
+            -5.456683158874512,
+            8.040116310119629,
+            -9.910113334655762,
+            1.0679316520690918
+          ]
+        },
+        {
+          "sample_id": "004de1ce5ed3aaf376fe971e96c3aa4e70595ec54efb430869ceb91b4a0abc71",
+          "class_index": 2,
+          "tensor_sha256": "96e7c5cea7a5b3438e16b80a394cf9c4553b572182b9cc2c09847c8d85375488",
+          "logits_sha256": "242d238b970171daf4a776af51a4e4a3871904fdc6aed4cb66eb36d8c3a4761a",
+          "logits": [
+            -8.610427856445312,
+            -7.4139628410339355,
+            13.718658447265625,
+            0.26293087005615234
+          ]
+        },
+        {
+          "sample_id": "00126ef33b1f603fcf705fe5b3d186f7932d2348fe52aca404752233586a86e7",
+          "class_index": 3,
+          "tensor_sha256": "b824c2ad5474e127229daa916b2b784fae97d811344c3476e92f4a8d7737dba7",
+          "logits_sha256": "f0a3d4c6b29286d1214654e8d111c0910659c243752b230a7f03c35938703948",
+          "logits": [
+            -5.055500030517578,
+            -2.781060218811035,
+            -4.929114818572998,
+            7.810880184173584
+          ]
+        },
+        {
+          "sample_id": "00c45e284314d90a3f33f476ab6bbc4d5408a7c5c53486d049dd35fcd3545085",
+          "class_index": 0,
+          "tensor_sha256": "54ca6998495bbe351f88cb15da1c5d016e151c639e1b3b43b695c4a733b26634",
+          "logits_sha256": "5d074a3038e196280a68d8cadb584dc3de5133dd799a1d8d3217a3579ab2fb81",
+          "logits": [
+            7.339939594268799,
+            -5.270295143127441,
+            -3.4119832515716553,
+            -1.3954933881759644
+          ]
+        },
+        {
+          "sample_id": "00a39428a5fb85724f4c463df464c76a6f65d4b85c1406d8184fb9f9f9447988",
+          "class_index": 1,
+          "tensor_sha256": "13235cbf4bc28d52035b6a9980a5a72a3c441680d856ea2f1f8e4c573e0232ac",
+          "logits_sha256": "3330626133deb5493df43301b9425391f2c6133c70076cd47714d2d07924b02c",
+          "logits": [
+            -8.219108581542969,
+            7.250204563140869,
+            -6.61182975769043,
+            1.3732765913009644
+          ]
+        },
+        {
+          "sample_id": "00a17aa1f7df29160c0fce5a48079e6658eb4f5539a648985687ebe55c527ac1",
+          "class_index": 2,
+          "tensor_sha256": "0771aa2b8667682e75d26384ed18bf4514a7cf16bb844ee5c6fb52b76b44942a",
+          "logits_sha256": "cd8998c567120d7f9007332f9d0aaf83f1eb0c46d8a2c298fd90f4858e6b7402",
+          "logits": [
+            -5.738365173339844,
+            -3.600067377090454,
+            10.885224342346191,
+            -2.242502212524414
+          ]
+        },
+        {
+          "sample_id": "0024a015776ef9867fc9c25fbca8d9dfb2ab38c46b0f5d38aff4f102523eef0f",
+          "class_index": 3,
+          "tensor_sha256": "2289cacd61c1d9209a97078389be928b09e22c8c5b2b94bdca40d929a494ac98",
+          "logits_sha256": "a6d413984c33d02f702a722b8558b183663b623024b557aac41ea5736d7e9eaa",
+          "logits": [
+            -2.031296730041504,
+            -2.833461284637451,
+            -7.31308650970459,
+            6.962056636810303
+          ]
+        },
+        {
+          "sample_id": "013f521833dbf1175f69ca55b56f9450813a18a9f16610c9f4a2022f2f37e281",
+          "class_index": 0,
+          "tensor_sha256": "eef7fc247752ea144534ab01e46ef5fee361f3a2d34dc5d08c7ab3c108f2fdec",
+          "logits_sha256": "7abdfb3d1c1b9d2a75ba86d33b401efe5716295f7aa5f8f97ad031c2b733bd4e",
+          "logits": [
+            15.461670875549316,
+            -5.858473300933838,
+            -8.325560569763184,
+            -3.06915020942688
+          ]
+        },
+        {
+          "sample_id": "00e37b88d799a367b4fe76956ec8ced446c6aa35c0d8caf4c35f7458bc120d61",
+          "class_index": 1,
+          "tensor_sha256": "9c0e50a27bbfb41b85db41564567b5df1e0dc75683f7e5f8b2fccf7b482e6960",
+          "logits_sha256": "44bd4fb4ced65456d25732faf09207442726773eb1eead5e740a3820f278c82c",
+          "logits": [
+            -7.646001815795898,
+            8.60635757446289,
+            -9.949295043945312,
+            1.8994344472885132
+          ]
+        },
+        {
+          "sample_id": "011a50513b33d260f9032d0ff37db682e254a51864eb6ecd9f10b990c6a9b912",
+          "class_index": 2,
+          "tensor_sha256": "343834a26682351a5b4ea8c03dea6bc20af793f69c169ff07f57340a4f22c15f",
+          "logits_sha256": "0249851bddb3413d376ec298dd78fb8897ba104bf074d82ad7ae436a03d30cc2",
+          "logits": [
+            -6.737914085388184,
+            -4.559154510498047,
+            17.022092819213867,
+            -4.729067325592041
+          ]
+        },
+        {
+          "sample_id": "00582457c5b6fa2d95261f0727637c7ddf62d56712d2cd182ddcb59fa18b2258",
+          "class_index": 3,
+          "tensor_sha256": "f71d6764ee4a5bc2acea1747d1914ffef8a4f891edb6a70ab1a2223e677c60cf",
+          "logits_sha256": "b4fb2d9ae609c7e92fb58aabf83aea1d119f65023b755f8bdfdbf8e1360526ca",
+          "logits": [
+            -2.5788075923919678,
+            -0.3863736689090729,
+            -6.245221138000488,
+            5.026003837585449
+          ]
+        },
+        {
+          "sample_id": "016acd6b0b1d8013b43efa29b7fc3d3c24f81969058dfc606dba8c4aaa116c46",
+          "class_index": 0,
+          "tensor_sha256": "3195592099b8a40d335087ced2c69f13cb0bfcc4551f55573abdfc6ce53ea1b5",
+          "logits_sha256": "695f30adccbcfcfb40de9417f9d23b2242094bf7a870256b76fbfc933e13880b",
+          "logits": [
+            8.071073532104492,
+            -4.742687225341797,
+            -2.7244873046875,
+            -1.1942270994186401
+          ]
+        },
+        {
+          "sample_id": "00fb35108efe02eeb6b17aa7b46e5847c3ce78dace89f9d5268eba9086f87dc9",
+          "class_index": 1,
+          "tensor_sha256": "94625048906b9c5042fc857a2865ce1d8922214b6cb31aa6eaadd5e58148172d",
+          "logits_sha256": "35c6ebcd798381963722d6a39d4ecdad75470b888e4fcbaebc3b9584590c6052",
+          "logits": [
+            -9.554943084716797,
+            6.273820877075195,
+            -3.314206123352051,
+            0.4934079051017761
+          ]
+        },
+        {
+          "sample_id": "01a08db49b37544eea801572f2613f8a783ab6f8cbbe9bc5068cada23a6c66b1",
+          "class_index": 2,
+          "tensor_sha256": "dfe59ba1f01005295db79420edcd94f716656d1575d9319729f32b1573427704",
+          "logits_sha256": "44709d1e1427259fa924b6cd299a3fd1cf4673d070008ba00d2a1159b21ff87f",
+          "logits": [
+            -1.7440229654312134,
+            -5.149783611297607,
+            8.931596755981445,
+            -2.3894858360290527
+          ]
+        },
+        {
+          "sample_id": "006c251199c0d9efe06f799641b9d01dec7fba7ba9762b8d92adc4296fdaffbb",
+          "class_index": 3,
+          "tensor_sha256": "57b9c2db27ecdc8125bce3b49fe2a961f99b4afbe276ed756946b5214ae4a65a",
+          "logits_sha256": "a49aa10f661941a97ae5302b08d6b9586f86ea101b495f226988e9e03243ce9b",
+          "logits": [
+            -3.792811632156372,
+            -4.99304723739624,
+            -7.779238700866699,
+            10.418962478637695
+          ]
+        }
+      ],
+      "torch_version": "2.10.0+cpu",
+      "torchvision_version": "0.25.0+cpu",
+      "preprocessing_package_version": "1.0.0",
+      "model_only_latency_ms": {
+        "threads": 2,
+        "batch_size": 1,
+        "warmup": 5,
+        "samples": 30,
+        "median": 7.448549964465201,
+        "p95": 10.571530146989971,
+        "includes_decode_preprocessing": false,
+        "limitation": "Local workstation probe; concurrent audit jobs may contend for CPU. Not a serving SLA."
+      },
+      "process_memory_bytes": {
+        "WorkingSet64": 382988288,
+        "PeakWorkingSet64": 387182592
+      },
+      "memory_scope": "Python process after imports, checkpoint restore and batch-one inference; not measured server concurrency.",
+      "partitions_used": [
+        "train"
+      ],
+      "cuda_available": false
+    }
+  ]
+}

@@ -117,3 +117,15 @@ small smoke before full transfer-learning training, validation-only selection, f
 held-out test evaluation, versioned checkpoints/history/metrics/plots and fitting analysis.
 Read [training/evaluation](25-ml-training-evaluation.md). Stop after Phase 10; inference,
 application integration and all subsequent phases remain separate.
+
+## Phase 10.5 scope clarification
+
+The user authorized a dedicated complete model-fitness audit before inference work.
+The audit investigates transformed duplicate leakage, fitting behavior, class metrics,
+calibration, confidence/threshold evidence, actual errors, Grad-CAM, source bias,
+robustness and offline artifact compatibility. Confirmed cross-partition parent
+families require a versioned grouped-index repair and fresh bounded training, with
+all source bytes/labels preserved and all contradictory families wholly excluded.
+Validation choices are frozen before one descriptive test evaluation on the corrected,
+previously inspected corpus. Read [model fitness](26-model-fitness-validation.md).
+Stop after Phase 10.5; no inference API or integration starts automatically.

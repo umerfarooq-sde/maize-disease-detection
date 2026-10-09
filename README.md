@@ -5,20 +5,21 @@ with administrative tools for maintaining knowledge and monitoring the system.
 
 ## Current status
 
-Phase 10 dataset preparation, baseline training and evaluation are implemented and verified.
-The live training process was interrupted during epoch 11: ten epochs completed out
-of a planned maximum twelve. Immutable recovery evaluates the unchanged best
-validation-selected checkpoint: **95.20% test accuracy, 0.9396 macro F1** on 625 unique
-held-out contents. See [results and execution limitation](docs/25-ml-training-evaluation.md).
-The approved immutable
-metadata index contains 4,170 eligible unique contents after exclusions/deduplication,
-with 2,917 train, 628 validation and 625 test samples in disjoint content groups.
-Raw images remain unchanged/external. Current use is non-commercial academic/FYP
-research; commercial licensing or source replacement remains required. The baseline
-uses shared full-frame preprocessing and CPU MobileNetV3 Small transfer learning,
-with a verified smoke before training and validation-only checkpoint selection. Existing
-FastAPI, Flutter scanning, backend auth and PostgreSQL/Prisma are preserved; inference,
-application integration and RAG remain future phases.
+Phase 10.5 is complete: **FIT WITH DOCUMENTED LIMITATIONS** for a local research/FYP
+inference prototype. The audit found transformed-photo leakage in the original v1
+partitions; its independence claim is invalid. The corrected immutable v2 contains
+**4,162 unique contents / 4,121 groups**, split **2,911 train / 627 validation / 624
+test**, with no confirmed group leakage. Raw source files remain unchanged/external.
+
+Fresh MobileNetV3 Small fits successfully for 11 epochs (patience 3, best epoch 8), scoring
+**96.81% validation accuracy / 0.9589 macro F1** and **95.83% final descriptive test
+accuracy / 0.9452 macro F1**. This reused public corpus is not an independent field
+holdout. Gray Leaf Spot, source-domain and confident-error limitations are explicit;
+raw probabilities are retained and no confidence threshold is locked. See
+[model fitness](docs/26-model-fitness-validation.md). Use remains non-commercial
+academic/FYP research without raw redistribution or commercial clearance. Shared
+preprocessing, existing FastAPI/Flutter/backend/database features are preserved;
+production inference and application integration remain future work.
 See [project state](docs/PROJECT_STATE.md) for verified progress and outstanding decisions.
 Use the [development setup guide](docs/15-development-environment.md) for commands and limitations.
 Use [database operations](docs/16-database-operations.md) for migration and verification commands.
@@ -114,6 +115,7 @@ This does not change the machine's persistent execution policy.
 
 ## Next step
 
-Phase 10 stops here. The ten-epoch baseline, fixed partitions and verified results are
-preserved; its interrupted budget is explicit. Wait for the next phase instruction.
-See [training/evaluation](docs/25-ml-training-evaluation.md) and the [roadmap](docs/14-roadmap.md).
+Stop after Phase 10.5. Phase 11 may begin for a separately authorized FYP prototype
+using the frozen v2 candidate and its documented limitations; no Phase 11 functionality
+is implemented here. See [fitness audit](docs/26-model-fitness-validation.md) and
+[roadmap](docs/14-roadmap.md).

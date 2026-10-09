@@ -1,0 +1,318 @@
+{
+  "class_names": [
+    "Common_Rust",
+    "Gray_Leaf_Spot",
+    "Healthy",
+    "Northern_Corn_Leaf_Blight"
+  ],
+  "correct": {
+    "count": 607,
+    "mean": 0.980451740091283,
+    "median": 0.9999516010284424,
+    "ninetieth_percentile": 0.9999998807907104,
+    "tenth_percentile": 0.961568546295166
+  },
+  "correct_histogram": [
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    2,
+    2,
+    4,
+    5,
+    9,
+    13,
+    10,
+    562
+  ],
+  "cutoff_usage": "Diagnostic cutoffs only; no operational threshold is selected.",
+  "high_confidence_errors": [
+    {
+      "accepted_count": 572,
+      "diagnostic_cutoff": 0.9,
+      "incorrect_count": 4,
+      "pairs": [
+        {
+          "count": 2,
+          "predicted_label": "Northern_Corn_Leaf_Blight",
+          "true_label": "Gray_Leaf_Spot"
+        },
+        {
+          "count": 1,
+          "predicted_label": "Common_Rust",
+          "true_label": "Gray_Leaf_Spot"
+        },
+        {
+          "count": 1,
+          "predicted_label": "Northern_Corn_Leaf_Blight",
+          "true_label": "Common_Rust"
+        }
+      ]
+    },
+    {
+      "accepted_count": 561,
+      "diagnostic_cutoff": 0.95,
+      "incorrect_count": 2,
+      "pairs": [
+        {
+          "count": 1,
+          "predicted_label": "Northern_Corn_Leaf_Blight",
+          "true_label": "Gray_Leaf_Spot"
+        },
+        {
+          "count": 1,
+          "predicted_label": "Northern_Corn_Leaf_Blight",
+          "true_label": "Common_Rust"
+        }
+      ]
+    },
+    {
+      "accepted_count": 505,
+      "diagnostic_cutoff": 0.99,
+      "incorrect_count": 2,
+      "pairs": [
+        {
+          "count": 1,
+          "predicted_label": "Northern_Corn_Leaf_Blight",
+          "true_label": "Gray_Leaf_Spot"
+        },
+        {
+          "count": 1,
+          "predicted_label": "Northern_Corn_Leaf_Blight",
+          "true_label": "Common_Rust"
+        }
+      ]
+    }
+  ],
+  "incorrect": {
+    "count": 20,
+    "mean": 0.7780079543590546,
+    "median": 0.8428788483142853,
+    "ninetieth_percentile": 0.9144895136356355,
+    "tenth_percentile": 0.5540294229984284
+  },
+  "incorrect_histogram": [
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    1,
+    4,
+    1,
+    0,
+    2,
+    6,
+    4,
+    2
+  ],
+  "metrics": {
+    "accuracy": 0.9681020733652312,
+    "bin_count": 15,
+    "brier": 0.05134712442782574,
+    "definitions": [
+      "NLL: mean -log(max(p_true, probability_floor)); natural logarithm.",
+      "Brier: mean sum_k (p_k - onehot_k)^2; not divided by class count.",
+      "ECE: sum_bin count/N * abs(observed top-label accuracy - mean confidence).",
+      "Equal-width confidence bins are [lower,upper); the last includes 1.",
+      "Empty bins have null accuracy/confidence and contribute zero to ECE."
+    ],
+    "ece": 0.016285386096917837,
+    "nll": 0.09597224325849434,
+    "probability_floor": 1e-15,
+    "probability_values_below_floor": 0,
+    "reliability_bins": [
+      {
+        "count": 0,
+        "lower": 0.0,
+        "mean_confidence": null,
+        "observed_accuracy": null,
+        "upper": 0.06666666666666667
+      },
+      {
+        "count": 0,
+        "lower": 0.06666666666666667,
+        "mean_confidence": null,
+        "observed_accuracy": null,
+        "upper": 0.13333333333333333
+      },
+      {
+        "count": 0,
+        "lower": 0.13333333333333333,
+        "mean_confidence": null,
+        "observed_accuracy": null,
+        "upper": 0.2
+      },
+      {
+        "count": 0,
+        "lower": 0.2,
+        "mean_confidence": null,
+        "observed_accuracy": null,
+        "upper": 0.26666666666666666
+      },
+      {
+        "count": 0,
+        "lower": 0.26666666666666666,
+        "mean_confidence": null,
+        "observed_accuracy": null,
+        "upper": 0.3333333333333333
+      },
+      {
+        "count": 0,
+        "lower": 0.3333333333333333,
+        "mean_confidence": null,
+        "observed_accuracy": null,
+        "upper": 0.4
+      },
+      {
+        "count": 0,
+        "lower": 0.4,
+        "mean_confidence": null,
+        "observed_accuracy": null,
+        "upper": 0.4666666666666667
+      },
+      {
+        "count": 3,
+        "lower": 0.4666666666666667,
+        "mean_confidence": 0.5091265241305033,
+        "observed_accuracy": 0.6666666666666666,
+        "upper": 0.5333333333333333
+      },
+      {
+        "count": 6,
+        "lower": 0.5333333333333333,
+        "mean_confidence": 0.5647248725096384,
+        "observed_accuracy": 0.3333333333333333,
+        "upper": 0.6
+      },
+      {
+        "count": 5,
+        "lower": 0.6,
+        "mean_confidence": 0.6314521074295044,
+        "observed_accuracy": 0.8,
+        "upper": 0.6666666666666666
+      },
+      {
+        "count": 5,
+        "lower": 0.6666666666666666,
+        "mean_confidence": 0.7006767272949219,
+        "observed_accuracy": 1.0,
+        "upper": 0.7333333333333333
+      },
+      {
+        "count": 11,
+        "lower": 0.7333333333333333,
+        "mean_confidence": 0.7776082158088684,
+        "observed_accuracy": 0.8181818181818182,
+        "upper": 0.8
+      },
+      {
+        "count": 19,
+        "lower": 0.8,
+        "mean_confidence": 0.8388938307762146,
+        "observed_accuracy": 0.6842105263157895,
+        "upper": 0.8666666666666667
+      },
+      {
+        "count": 14,
+        "lower": 0.8666666666666667,
+        "mean_confidence": 0.8989979880196708,
+        "observed_accuracy": 0.7142857142857143,
+        "upper": 0.9333333333333333
+      },
+      {
+        "count": 564,
+        "lower": 0.9333333333333333,
+        "mean_confidence": 0.9965236655152436,
+        "observed_accuracy": 0.9964539007092199,
+        "upper": 1.0
+      }
+    ],
+    "sample_count": 627,
+    "true_probabilities_below_floor": 0
+  },
+  "per_true_class": [
+    {
+      "correct": {
+        "count": 193,
+        "mean": 0.9935862792588268,
+        "median": 0.9999715089797974,
+        "ninetieth_percentile": 0.9999997615814209,
+        "tenth_percentile": 0.9941776990890503
+      },
+      "incorrect": {
+        "count": 3,
+        "mean": 0.9018060366312662,
+        "median": 0.85776686668396,
+        "ninetieth_percentile": 0.9672216415405274,
+        "tenth_percentile": 0.8540060997009278
+      },
+      "index": 0,
+      "label": "Common_Rust",
+      "support": 196
+    },
+    {
+      "correct": {
+        "count": 74,
+        "mean": 0.9418823251853118,
+        "median": 0.9855697154998779,
+        "ninetieth_percentile": 0.9993807017803192,
+        "tenth_percentile": 0.8063863039016724
+      },
+      "incorrect": {
+        "count": 11,
+        "mean": 0.7632286060940136,
+        "median": 0.7939771413803101,
+        "ninetieth_percentile": 0.9059110879898071,
+        "tenth_percentile": 0.5799412131309509
+      },
+      "index": 1,
+      "label": "Gray_Leaf_Spot",
+      "support": 85
+    },
+    {
+      "correct": {
+        "count": 175,
+        "mean": 0.9997776746749878,
+        "median": 0.9999974966049194,
+        "ninetieth_percentile": 1.0,
+        "tenth_percentile": 0.9998324513435364
+      },
+      "incorrect": {
+        "count": 0,
+        "mean": null,
+        "median": null,
+        "ninetieth_percentile": null,
+        "tenth_percentile": null
+      },
+      "index": 2,
+      "label": "Healthy",
+      "support": 175
+    },
+    {
+      "correct": {
+        "count": 165,
+        "mean": 0.961888904282541,
+        "median": 0.9993389248847961,
+        "ninetieth_percentile": 0.9999964237213135,
+        "tenth_percentile": 0.8449637174606324
+      },
+      "incorrect": {
+        "count": 6,
+        "mean": 0.7432043850421906,
+        "median": 0.8234456181526184,
+        "ninetieth_percentile": 0.8576011657714844,
+        "tenth_percentile": 0.5485663712024689
+      },
+      "index": 3,
+      "label": "Northern_Corn_Leaf_Blight",
+      "support": 171
+    }
+  ]
+}

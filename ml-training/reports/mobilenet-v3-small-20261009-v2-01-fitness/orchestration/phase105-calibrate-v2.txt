@@ -1,0 +1,214 @@
+"""Validation-only calibration of the completed corrected-v2 deferred-test model.
+
+No image is decoded and no test probability/metric file is read. Every output is
+new and immutable. Uses the existing reusable, tested calibration implementation.
+"""
+from pathlib import Path
+import csv
+import hashlib
+import importlib.metadata
+import json
+import math
+import sys
+
+import numpy as np
+
+ROOT = Path(__file__).resolve().parents[1]
+sys.path.insert(0, str(ROOT / "ml-training"))
+from dataset_preparation import load_manifest
+from fitness_calibration import (
+    PROBABILITY_FLOOR, apply_temperature, confidence_diagnostics, crossfit_temperature,
+    fit_temperature, save_diagnostic_plots, selective_risk_coverage,
+)
+from fitness_integrity import relationship_audit, verify_artifact_hashes
+
+parent = ROOT / ".cache/phase105/experiments/mobilenet-v3-small-20261009-v2-01"
+destination = ROOT / ".cache/phase105/calibration-20261009-v2"
+assert (parent / "summary.json").is_file(), "Training must complete first."
+assert not destination.exists(), "Calibration outputs are immutable; choose a fresh directory."
+assert not (parent / "failure.json").exists()
+summary = json.loads((parent / "summary.json").read_text(encoding="utf-8"))
+assert summary["status"] == "completed" and summary["mode"] == "full"
+assert summary["final_test_deferred"] is True and summary["test_evaluated_once"] is False
+assert summary["test_metrics"] is None and not (parent / "test").exists()
+hparams = json.loads((parent / "hyperparameters.json").read_text(encoding="utf-8"))
+assert hparams["defer_test"] is True and hparams["smoke"] is False
+environment = json.loads((parent / "environment.json").read_text(encoding="utf-8"))
+verify_artifact_hashes(ROOT, environment["source_hashes"])
+manifest = load_manifest(parent / "dataset-manifest.json")
+assert manifest.version == "maize-research-20261008-v2"
+assert manifest.fingerprint == "a96fd5d32a8e0696df7cfc5bbfa6b78941c8a2f308f940ce295147a8832a583b"
+assert len(manifest.splits.validation) == 627
+assert summary["manifest_fingerprint"] == manifest.fingerprint
+assert summary["preprocessing_hash"] == manifest.preprocessing_hash
+relation = relationship_audit(
+    {split: manifest.rows_for_split(split) for split in ("train", "validation", "test")},
+    excluded_contents=(row.content_hash for row in manifest.excluded),
+)
+assert relation["known_relationships_disjoint"] is True
+history = json.loads((parent / "history.json").read_text(encoding="utf-8"))
+best = max(history, key=lambda row: (row["validation_macro_f1"], -row["validation_loss"]))
+assert best["epoch"] == summary["best_epoch"]
+checkpoint = parent / summary["best_checkpoint"]
+assert checkpoint.resolve().is_relative_to(parent.resolve())
+assert hashlib.sha256(checkpoint.read_bytes()).hexdigest() == summary["best_checkpoint_sha256"]
+
+parent_hashes = {
+    path.relative_to(parent).as_posix(): hashlib.sha256(path.read_bytes()).hexdigest()
+    for path in parent.rglob("*") if path.is_file()
+}
+validation_source = parent / "validation/predictions.csv"
+csv_hash = hashlib.sha256(validation_source.read_bytes()).hexdigest()
+with validation_source.open(encoding="utf-8", newline="") as stream:
+    reader = csv.DictReader(stream)
+    class_names = tuple(item.label for item in manifest.classes)
+    assert reader.fieldnames == ["sample_id", "true_index", "predicted_index", *class_names]
+    rows = list(reader)
+by_id = {row.sample_id: row for row in manifest.rows_for_split("validation")}
+assert [row["sample_id"] for row in rows] == list(manifest.splits.validation)
+assert all(int(row["true_index"]) == by_id[row["sample_id"]].class_index for row in rows)
+labels = np.array([int(row["true_index"]) for row in rows], dtype=np.int64)
+probabilities = np.array([[float(row[name]) for name in class_names] for row in rows], dtype=np.float64)
+assert np.array_equal(probabilities.argmax(1), [int(row["predicted_index"]) for row in rows])
+groups = [by_id[row["sample_id"]].group_id for row in rows]
+crossfit = crossfit_temperature(labels, probabilities, groups, class_names, n_splits=5, seed=20261007)
+fit = fit_temperature(labels, probabilities)
+fitted = apply_temperature(probabilities, fit.temperature)
+raw_report = confidence_diagnostics(labels, probabilities, class_names)
+oof_report = confidence_diagnostics(labels, crossfit.probabilities, class_names)
+fitted_report = confidence_diagnostics(labels, fitted, class_names)
+assert np.array_equal(probabilities.argmax(1), fitted.argmax(1))
+assert np.array_equal(probabilities.argmax(1), crossfit.probabilities.argmax(1))
+assert math.isclose(raw_report.metrics.accuracy, best["validation_accuracy"], abs_tol=1e-12)
+nll_improved_folds = sum(row.calibrated_held_out.nll < row.raw_held_out.nll for row in crossfit.report.folds)
+supported = (
+    not fit.boundary_solution
+    and crossfit.report.out_of_fold.nll < crossfit.report.raw.nll - 1e-8
+    and crossfit.report.out_of_fold.brier <= crossfit.report.raw.brier
+    and crossfit.report.out_of_fold.ece <= crossfit.report.raw.ece
+    and nll_improved_folds >= 3
+)
+chosen_temperature = fit.temperature if supported else 1.0
+definition = {"enabled": supported, "temperature": chosen_temperature,
+              "method": "validation_group_crossfit_temperature" if supported else "none"}
+risk_raw = selective_risk_coverage(labels, probabilities, class_names)
+risk_oof = selective_risk_coverage(labels, crossfit.probabilities, class_names)
+risk_fitted = selective_risk_coverage(labels, fitted, class_names)
+destination.mkdir(parents=True, exist_ok=False)
+
+def write_json(name, value):
+    with (destination / name).open("x", encoding="utf-8") as stream:
+        json.dump(value, stream, indent=2, sort_keys=True, allow_nan=False)
+        stream.write("\n")
+
+source_hashes = dict(environment["source_hashes"])
+for path in [ROOT / "ml-training/fitness_calibration.py", Path(__file__)]:
+    source_hashes[path.relative_to(ROOT).as_posix()] = hashlib.sha256(path.read_bytes()).hexdigest()
+configuration = {
+    "phase": "10.5", "dataset_version": manifest.version,
+    "classifier_experiment_id": parent.name,
+    "checkpoint_sha256": summary["best_checkpoint_sha256"],
+    "manifest_fingerprint": manifest.fingerprint,
+    "preprocessing_hash": manifest.preprocessing_hash,
+    "preprocessing_version": manifest.load_preprocessing().preprocessing_version,
+    "class_names": list(class_names),
+    "temperature": chosen_temperature,
+    "calibration_method": definition["method"],
+    "calibration": definition,
+    "probability_floor": PROBABILITY_FLOOR,
+    "application": "softmax(log(max(p, probability_floor)) / temperature) when enabled; raw probabilities when disabled",
+    "operational_threshold": None,
+    "threshold_status": "No operational threshold locked; predefined risk/coverage/class-cost objective is absent.",
+    "valid_for_candidate_promotion": True,
+    "validity_scope": "Self-consistent validation-only calibration evidence, not a standalone overall model-fitness or deployment approval.",
+    "test_probabilities_read": False,
+    "test_application_performed": False,
+    "corpus_prior_test_consumption": True,
+    "source_sha256": source_hashes,
+    "validation_csv_sha256": csv_hash,
+    "training_seed": hparams["seed"], "split_seed": manifest.split_seed,
+    "crossfit_seed": 20261007, "crossfit_folds": 5,
+    "all_validation_fit_count": len(rows), "known_v2_validation_group_count": len(set(groups)),
+    "classifier_validation_reuse": True,
+    "selection_evidence": {
+        "out_of_fold_nll_lower_than_raw": crossfit.report.out_of_fold.nll < crossfit.report.raw.nll,
+        "out_of_fold_brier_not_worse": crossfit.report.out_of_fold.brier <= crossfit.report.raw.brier,
+        "out_of_fold_ece_not_worse": crossfit.report.out_of_fold.ece <= crossfit.report.raw.ece,
+        "held_out_nll_improves_in_folds": nll_improved_folds,
+        "all_validation_fit_boundary_solution": fit.boundary_solution,
+        "calibration_enabled": supported,
+    },
+    "limitations": list(crossfit.report.limitations) + [
+        "Corrected v2 groups repair confirmed derivative leakage but do not prove plant/field independence.",
+        "An unresolved transformed-image pair (pair 24) remains a corpus-independence risk; calibration does not resolve that relationship.",
+        "Temperature is fitted to all validation only after calibrator cross-fitting; full-fit scores are resubstitution.",
+        "The previous v1 model's temperature is not reused or read.",
+        "Any subsequent evaluation on this corpus is descriptive: historical test images were already inspected in Phase 10.",
+    ],
+}
+write_json("calibration-config.json", configuration)
+write_json("temperature-fit.json", fit.model_dump(mode="json"))
+write_json("crossfit.json", crossfit.report.model_dump(mode="json"))
+for name, report, risk in [("raw", raw_report, risk_raw), ("crossfit", oof_report, risk_oof),
+                           ("fitted", fitted_report, risk_fitted)]:
+    write_json(f"confidence-{name}.json", report.model_dump(mode="json"))
+    write_json(f"selective-{name}.json", risk.model_dump(mode="json"))
+write_json("crossfit-membership.json", [
+    {"sample_id": row["sample_id"], "group_id": groups[index], "fold": int(crossfit.fold_ids[index])}
+    for index, row in enumerate(rows)
+])
+write_json("validation-source.json", {
+    "source": validation_source.relative_to(ROOT).as_posix(), "sha256": csv_hash,
+    "sample_count": len(rows), "group_count": len(set(groups)),
+    "class_counts": dict(zip(class_names, np.bincount(labels, minlength=4).tolist(), strict=True)),
+    "source_sha256": source_hashes,
+    "parent_artifact_sha256": parent_hashes,
+    "dependency_versions": {name: importlib.metadata.version(name) for name in ["numpy", "pydantic", "matplotlib"]},
+})
+write_json("validation-results.json", {
+    "classifier_experiment_id": parent.name,
+    "raw": raw_report.metrics.model_dump(mode="json"),
+    "out_of_fold": oof_report.metrics.model_dump(mode="json"),
+    "full_fit_descriptive_resubstitution": fitted_report.metrics.model_dump(mode="json"),
+    "selected_temperature": chosen_temperature,
+    "fitted_temperature": fit.temperature,
+    "calibration": definition,
+    "held_out_nll_improves_in_folds": nll_improved_folds,
+    "argmax_unchanged_by_calibration": True,
+    "operational_threshold": None,
+    "test_probabilities_read": False,
+    "scope": "Validation-only; calibrator cross-fit independence does not erase earlier classifier validation selection.",
+})
+save_diagnostic_plots(destination / "plots", raw_report, calibrated_report=oof_report,
+                      raw_selective=risk_raw, calibrated_selective=risk_oof)
+write_json("freeze.json", {
+    "frozen": True, "classifier_checkpoint_sha256": summary["best_checkpoint_sha256"],
+    "calibration_config_sha256": hashlib.sha256((destination / "calibration-config.json").read_bytes()).hexdigest(),
+    "validation_csv_sha256": csv_hash, "source_sha256": source_hashes,
+    "test_read_before_freeze": False, "test_application_authorized": False,
+    "operational_threshold": None, "parent_artifact_sha256": parent_hashes,
+})
+with (destination / "README.md").open("x", encoding="utf-8") as stream:
+    stream.write("# Corrected-v2 validation-only calibration\n\n"
+                 "All diagnostics use this new classifier's 627 saved validation probabilities. No test probabilities or images were read. Five calibration folds use seed 20261007 and keep known v2 groups intact. No prior v1 temperature is reused.\n\n"
+                 "Scalar temperature is enabled only when the non-boundary all-validation fit has directional out-of-fold NLL/Brier/ECE support and a majority of folds improves held-out NLL. Otherwise raw probabilities are preserved with disabled calibration. Full-validation fitted metrics are descriptive resubstitution. Classifier selection already used validation, so calibration cross-fitting does not establish a fresh independent classifier holdout.\n\n"
+                 "No operational threshold is locked: acceptable risk, coverage and class-specific costs are undefined. Candidate risk curves and high-confidence cutoffs are diagnostics only. Wilson intervals are descriptive per-row intervals and do not correct unknown plant/source dependence or threshold search.\n\n"
+                 "Plots compare raw and out-of-fold calibrator probabilities. Brier sums squared errors across classes; NLL uses natural logarithms with a recorded 1e-15 floor; top-label ECE uses 15 equal-width bins with one included in the final bin. Raw source images, local machine paths and private metadata are absent. The underlying corpus's earlier test consumption remains a scientific limitation.\n")
+assert parent_hashes == {
+    path.relative_to(parent).as_posix(): hashlib.sha256(path.read_bytes()).hexdigest()
+    for path in parent.rglob("*") if path.is_file()
+}
+assert hashlib.sha256(validation_source.read_bytes()).hexdigest() == csv_hash
+write_json("integrity.json", {
+    path.relative_to(destination).as_posix(): hashlib.sha256(path.read_bytes()).hexdigest()
+    for path in sorted(destination.rglob("*")) if path.is_file()
+})
+print(json.dumps({
+    "status": "validation_calibration_frozen", "classifier_experiment_id": parent.name,
+    "validation_count": len(rows), "calibration_enabled": supported,
+    "selected_temperature": chosen_temperature, "fitted_temperature": fit.temperature,
+    "raw_nll": raw_report.metrics.nll, "oof_nll": oof_report.metrics.nll,
+    "raw_brier": raw_report.metrics.brier, "oof_brier": oof_report.metrics.brier,
+    "raw_ece15": raw_report.metrics.ece, "oof_ece15": oof_report.metrics.ece,
+    "operational_threshold": None, "test_probabilities_read": False,
+}, indent=2))

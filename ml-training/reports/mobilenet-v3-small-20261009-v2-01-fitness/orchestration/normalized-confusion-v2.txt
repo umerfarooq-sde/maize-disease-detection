@@ -1,0 +1,35 @@
+"""Numerical row-normalized confusion plots, no source images or model inference."""
+import argparse
+import json
+from pathlib import Path
+import numpy as np
+from matplotlib.backends.backend_agg import FigureCanvasAgg
+from matplotlib.figure import Figure
+
+parser = argparse.ArgumentParser()
+parser.add_argument("--metrics", type=Path, required=True)
+parser.add_argument("--output", type=Path, required=True)
+parser.add_argument("--partition", choices=("validation", "test"), required=True)
+args = parser.parse_args()
+assert not args.output.exists()
+metrics = json.loads(args.metrics.read_text(encoding="utf-8"))
+matrix = np.array(metrics["confusion_matrix"], dtype=np.int64)
+assert matrix.shape == (4, 4) and (matrix.sum(axis=1) > 0).all()
+normalized = matrix / matrix.sum(axis=1, keepdims=True)
+args.output.mkdir(parents=True, exist_ok=False)
+report = {"partition": args.partition, "class_names": metrics["class_names"], "rows_true_columns_predicted": True, "raw_counts": matrix.tolist(), "row_normalized": normalized.tolist(), "support": matrix.sum(axis=1).tolist(), "source_metrics": args.metrics.as_posix()}
+with (args.output / "normalized-confusion.json").open("x", encoding="utf-8") as stream:
+    json.dump(report, stream, indent=2, allow_nan=False); stream.write("\n")
+figure = Figure(figsize=(8, 7), layout="constrained")
+FigureCanvasAgg(figure)
+axis = figure.subplots()
+plot = axis.imshow(normalized, cmap="Blues", vmin=0, vmax=1)
+figure.colorbar(plot, ax=axis, label="Fraction of true class")
+labels = ["Rust", "Gray Leaf Spot", "Healthy", "Northern Leaf Blight"]
+axis.set(xticks=range(4), yticks=range(4), xticklabels=labels, yticklabels=labels, xlabel="Predicted class", ylabel="True class", title=f"{args.partition.capitalize()} confusion — row-normalized")
+axis.tick_params(axis="x", rotation=30)
+for i in range(4):
+    for j in range(4):
+        axis.text(j, i, f"{100 * normalized[i,j]:.2f}%\n({matrix[i,j]})", ha="center", va="center", color="white" if normalized[i,j] > 0.5 else "black")
+figure.savefig(args.output / "normalized-confusion.png", dpi=160)
+print(json.dumps({"partition": args.partition, "sample_count": int(matrix.sum()), "normalized_confusion_saved": True}))

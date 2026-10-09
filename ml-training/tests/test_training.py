@@ -236,6 +236,8 @@ def test_final_test_guard_requires_selection_and_is_single_use() -> None:
         guard.claim()
     with pytest.raises(ValueError):
         FinalTestGuard(smoke=True, model_selected=True).claim()
+    with pytest.raises(ValueError):
+        FinalTestGuard(smoke=False, model_selected=True, deferred=True).claim()
 
 
 def checkpoint_payload(model: nn.Module, fixture: TrainingFixture) -> dict[str, object]:
@@ -396,3 +398,33 @@ def test_full_fixture_evaluates_test_once_after_selected_reload(
     assert events[:2] == ["reload", "reload"]
     assert (tmp_path / "full-fixture/test/metrics.json").is_file()
     assert (tmp_path / "full-fixture/generalization.json").is_file()
+
+
+def test_deferred_full_fit_never_decodes_or_evaluates_test(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch, training_fixture: TrainingFixture
+) -> None:
+    test_paths = {row.relative_path for row in training_fixture.manifest.rows_for_split("test")}
+    original_preprocess = training_data.preprocess_file
+
+    def forbid_test(path: Path, config: PreprocessingConfig):
+        assert path.relative_to(training_fixture.root).as_posix() not in test_paths
+        return original_preprocess(path, config)
+
+    monkeypatch.setattr(training_data, "preprocess_file", forbid_test)
+    destination = tmp_path / "validation-only-full"
+    result = run_training(
+        training_fixture.manifest_path,
+        training_fixture.config_path,
+        destination,
+        TrainingSettings(warmup_epochs=1, fine_tune_epochs=1, pretrained=False, defer_test=True),
+        model_factory=tiny_factory,
+    )
+    assert result["epochs_completed"] == 2
+    assert result["mode"] == "full"
+    assert result["test_evaluated_once"] is False
+    assert result["final_test_deferred"] is True
+    assert result["test_metrics"] is None
+    assert not (destination / "test").exists()
+    assert json.loads((destination / "used-partitions.json").read_bytes())["test"] == []
+    assert (destination / "validation/metrics.json").is_file()
+    assert (destination / "selected-metrics.json").is_file()

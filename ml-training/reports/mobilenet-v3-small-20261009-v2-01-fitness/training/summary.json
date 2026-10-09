@@ -1,0 +1,17 @@
+{
+  "status": "completed",
+  "mode": "full",
+  "experiment_id": "mobilenet-v3-small-20261009-v2-01",
+  "epochs_completed": 11,
+  "best_epoch": 8,
+  "best_checkpoint": "checkpoints/epoch-008.pt",
+  "best_checkpoint_sha256": "e95a2e83262637fc1a08b919e6003bddb2fe70664b9c51418f059b7c8287dc66",
+  "manifest_fingerprint": "a96fd5d32a8e0696df7cfc5bbfa6b78941c8a2f308f940ce295147a8832a583b",
+  "preprocessing_hash": "b142e59f458d27a2d3fddbfc86c2f2f802670ab4909f1275babbef92de9cb5c8",
+  "train_samples": 2911,
+  "validation_samples": 627,
+  "test_evaluated_once": false,
+  "final_test_deferred": true,
+  "test_metrics": null,
+  "elapsed_seconds": 1687.625
+}

@@ -15,19 +15,21 @@ Current use is non-commercial academic/FYP research, without raw redistribution.
 [pipeline behavior/versioning](../docs/22-shared-preprocessing.md) and the
 [dataset readiness report](../docs/24-dataset-intake-preprocessing-review.md).
 
-The persisted [manifest summary](manifests/maize-research-20261007-v1/summary.json)
-records 4,170 eligible contents in 4,161 groups, with fixed 2,917/628/625 partitions.
-Future experiments consume its full manifest and continue resolving raw bytes via
-`DATASET_PATH`. See [training/evaluation](../docs/25-ml-training-evaluation.md) for commands,
-architecture, pinned preprocessing, artifacts and results.
+The corrected [v2 index](manifests/maize-research-20261008-v2/README.md) records
+4,162 eligible unique contents/4,121 groups with fixed 2,911/627/624 partitions.
+The unchanged v1 is historical: confirmed transformed-parent leakage invalidated
+its independent-evaluation claim. Future experiments consume v2 and resolve original
+bytes only through `DATASET_PATH`. Source labels/files remain unchanged.
 
-The evaluated first baseline scores **95.20% test accuracy / 0.9396 macro F1** on 625
-held-out contents. Its training process was externally interrupted during epoch 11:
-ten complete epochs (two warmup/eight fine-tune) out of twelve maximum. The original
-run is unchanged; separate immutable recovery strictly reloads the epoch-10 validation
-winner and evaluates test once, without further fitting. See the
-[saved aggregate report](reports/mobilenet-v3-small-20261007-01-recovery/README.md).
-No completed-budget/convergence, exact-resume, field-accuracy or production claim is made.
+Phase 10.5's fresh `mobilenet-v3-small-20261009-v2-01` stops successfully at 11 epochs
+under patience 3; validation selects epoch 8. Validation accuracy/macro F1 is
+96.81%/0.9589; the single post-freeze descriptive test scores 95.83%/0.9452. Model version
+`mobilenet-v3-small-v2-20261009` is **FIT WITH DOCUMENTED LIMITATIONS** for an FYP
+prototype; source/class/confidence weakness and reused-corpus limits apply. Temperature
+scaling is disabled (T=1) because group-fold evidence does not improve; no operational
+threshold is locked. See [fitness report](../docs/26-model-fitness-validation.md) and
+[safe numerical/artifact export](reports/mobilenet-v3-small-20261009-v2-01-fitness/README.md).
+The original experiment/recovery remains immutable. No inference endpoint is added.
 
 Import the same preprocessing implementation as production inference. Split before
 augmentation, augment only training data, and keep the test set out of training and
@@ -86,3 +88,20 @@ plus exact baseline-config synthetic
 cross-environment parity. These checks do not train a model or load the supplied
 dataset; the separate review command performs the real-image inspection.
 See the [development setup](../docs/15-development-environment.md).
+
+## Offline fitness workflow
+
+Use `train.py --defer-test` for a new reviewed experiment: fit/select using TRAIN/VAL,
+then review validation errors, confidence/group-fold calibration, source and fixed
+robustness probes. `fitness_artifacts.validate_bundle()` checks hash-bound frozen
+choices before `final_evaluation.py` permits one final checkpoint/index evaluation.
+Global claims refuse test replay/output reuse. Never fit temperature or select a
+threshold from final test; read the complete [commands and scope](../docs/26-model-fitness-validation.md).
+
+`fitness_integrity.py` audits known relationship intersections; `dataset_group_repair.py`
+persists approved newly confirmed group/exclusion evidence in a new dataset version.
+`fitness_calibration.py` supplies typed confidence/risk diagnostics and group cross-fit;
+`fitness_visual.py` supplies development-only actual input/CAM/augmentation and fixed
+validation perturbations. `scripts/check-model-compatibility.py` checks the checkpoint
+in both environments on TRAIN only, without implementing serving. Outputs must remain
+new/ignored; never publish raw image sheets or weights through the repository.

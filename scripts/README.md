@@ -1,9 +1,18 @@
 # Scripts
 
+Phase 10.5 adds [offline model compatibility](check-model-compatibility.py), restoring
+the frozen candidate in training and AI environments on 16 TRAIN cases and measuring
+local forward latency/memory. It adds no endpoint; choose a new ignored output.
+The [fitness workflow](../docs/26-model-fitness-validation.md) documents deferred-test
+fitting, validation diagnostics/freeze and the guarded single descriptive final test.
+Use the corrected v2 manifest for new authorized experiments; v1 is historical.
+
 Phase 10 adds configured [dataset preparation](../ml-training/dataset_preparation.py)
 and [training](../ml-training/train.py). Use the committed immutable manifest for
 future experiments; every smoke/full run has a new ignored output directory. Smoke
-uses training/validation only; full selection uses validation and evaluates test last.
+uses training/validation only. Full selection uses validation; the default workflow
+evaluates test last. For fitness review, `--defer-test` leaves test evaluation to the
+separate frozen-candidate evaluator after validation decisions are complete.
 See [training/evaluation](../docs/25-ml-training-evaluation.md) for commands/artifacts.
 Training checks cover all source/tests; preprocessing parity adds the pinned baseline
 configuration for 12 synthetic cases across both Python environments.

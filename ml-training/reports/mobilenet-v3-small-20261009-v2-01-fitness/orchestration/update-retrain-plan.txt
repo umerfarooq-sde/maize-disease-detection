@@ -1,0 +1,22 @@
+import json
+from pathlib import Path
+
+root = Path(__file__).resolve().parents[2]
+prior = root / '.cache/phase105/retrain-plan.json'
+plan = json.loads(prior.read_bytes())
+plan.update({
+    'prior_plan': '.cache/phase105/retrain-plan.json',
+    'new_blocking_defect': 'Four additional confirmed rotated/cropped photo families carry contradictory Gray_Leaf_Spot and Northern_Corn_Leaf_Blight folder labels.',
+    'changes': [
+        'Union all newly confirmed same-parent photo/leaf-region families before splitting',
+        'Exclude entire newly confirmed contradictory connected families and their aliases with explicit reason codes',
+        'Recompute deterministic grouped partitions with the existing seed/algorithm',
+        'Defer final test until validation diagnostics and policy selection are frozen',
+    ],
+    'authorization': 'Audit Part2 requires correction/retraining for leakage; locked rules permit changes for a genuine blocking technical defect. Apply the existing whole-contradictory-family exclusion policy, never relabeling or editing raw files.',
+    'source_eligibility_label_or_preprocessing_changes': 'Eligibility changes solely for auditable newly confirmed contradictory families; labels, original bytes and shared preprocessing are unchanged.',
+    'final_eligible_count': 'Pending confirmed connected-family closure; no count invented.',
+})
+with (root / '.cache/phase105/retrain-plan-v2.json').open('x', encoding='utf-8') as stream:
+    stream.write(json.dumps(plan, indent=2) + '\n')
+print('Preserved original pre-fit plan; recorded the new blocking exclusion correction.')

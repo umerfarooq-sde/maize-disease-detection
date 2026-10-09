@@ -1,0 +1,32 @@
+{
+  "phase": "10.5",
+  "experiment_id": "mobilenet-v3-small-20261009-v2-01",
+  "dataset_version": "maize-research-20261008-v2",
+  "manifest_fingerprint": "a96fd5d32a8e0696df7cfc5bbfa6b78941c8a2f308f940ce295147a8832a583b",
+  "manifest_file_sha256": "7286a103820ccc0f0f85de9b8ffa5475fbea4cbae22e0d17fef0d99e22d2792d",
+  "eligible_contents": 4162,
+  "eligible_groups": 4121,
+  "split_counts": {"train": 2911, "validation": 627, "test": 624},
+  "class_counts": {
+    "Common_Rust": {"train": 910, "validation": 196, "test": 195},
+    "Gray_Leaf_Spot": {"train": 394, "validation": 85, "test": 85},
+    "Healthy": {"train": 813, "validation": 175, "test": 174},
+    "Northern_Corn_Leaf_Blight": {"train": 794, "validation": 171, "test": 170}
+  },
+  "reason": "Required fresh fitting after confirmed previously ungrouped cross-partition photo families invalidated v1 independence; four newly confirmed contradictory families are wholly excluded under the existing policy.",
+  "previous_plan": ".cache/phase105/retrain-plan-v2.json",
+  "changes_from_previous_plan": "Final eligibility and relationship closure verified; actual launch date/ID updated only. Architecture, optimizer, learning rates, regularization, augmentation, preprocessing and reproducibility seed remain unchanged.",
+  "launch_gate": "All source integrity, grouped closure, focused synthetic safeguards and real v2 train32/validation16 smoke passed.",
+  "source_files_frozen_before_fit": true,
+  "fresh_initialization": "Verified official ImageNet weights, not the v1 fitted checkpoint",
+  "split_seed": 20261007,
+  "training_seed": 20261007,
+  "test_deferred_until_validation_decision_freeze": true,
+  "test_used_for_plan_selection": false,
+  "previous_corpus_test_was_consumed": true,
+  "scientific_boundary": "Corrected internal holdout from a previously inspected public corpus, not a fresh external or field test",
+  "raw_source_changes": false,
+  "class_labels_changed": false,
+  "operational_confidence_threshold": null,
+  "threshold_rationale": "Analyze validation-only risk/coverage with uncertainty; no application risk/coverage objective has been defined, so no threshold is preselected arbitrarily."
+}

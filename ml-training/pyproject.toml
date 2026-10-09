@@ -48,7 +48,7 @@ select = ["E", "F", "I", "UP", "B", "SIM"]
 [tool.mypy]
 python_version = "3.11"
 strict = true
-files = ["preprocessing.py", "configuration.py", "dataset_inventory.py", "dataset_review.py", "dataset_preparation.py", "evaluation.py", "model.py", "training_data.py", "train.py"]
+files = ["preprocessing.py", "configuration.py", "dataset_inventory.py", "dataset_review.py", "dataset_preparation.py", "evaluation.py", "model.py", "training_data.py", "train.py", "fitness_artifacts.py", "fitness_calibration.py", "fitness_integrity.py", "fitness_visual.py", "dataset_group_repair.py", "final_evaluation.py"]
 plugins = ["pydantic.mypy"]
 
 [tool.pydantic-mypy]

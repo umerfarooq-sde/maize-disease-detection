@@ -1,0 +1,36 @@
+"""Post-freeze descriptive TEST image review from saved predictions, no model calls."""
+import csv,json,sys
+from pathlib import Path
+from PIL import Image,ImageDraw
+ROOT=Path(__file__).resolve().parents[2]
+sys.path.insert(0,str(ROOT/'ml-training'))
+from configuration import load_dataset_path
+from dataset_preparation import load_manifest
+from maizedoctor_preprocessing import preprocess_file
+manifest=load_manifest(ROOT/'ml-training/manifests/maize-research-20261008-v2/manifest.json')
+root=load_dataset_path()
+output=ROOT/'.cache/phase105/test-error-inspection-v2'
+assert not output.exists()
+rows=list(csv.DictReader((ROOT/'.cache/phase105/final-test-20261009-v2/raw/predictions.csv').open(encoding='utf-8',newline='')))
+classes=[c.label for c in manifest.classes]
+errors=[r for r in rows if r['true_index']!=r['predicted_index']]
+errors.sort(key=lambda r:-max(float(r[k]) for k in classes))
+selected=errors[:6]+errors[-2:]
+byid={r.sample_id:r for r in manifest.rows_for_split('test')}
+output.mkdir(parents=True,exist_ok=False)
+metadata=[]
+for i,r in enumerate(selected):
+    row=byid[r['sample_id']]
+    processed=preprocess_file(root/row.relative_path,manifest.load_preprocessing())
+    assert processed.metadata.image_hash==row.content_hash
+    metadata.append({'sample_id':row.sample_id,'group_id':row.group_id,'partition':'test','relative_path':row.relative_path,'true_label':row.label,'predicted_label':classes[int(r['predicted_index'])],'confidence':max(float(r[k]) for k in classes),'probabilities':[float(r[k]) for k in classes],'review_only_after_candidate_freeze_and_test':True})
+    image=Image.fromarray(processed.prepared_rgb)
+    panel=Image.new('RGB',(480,340),'white')
+    panel.paste(image.resize((224,224)),(128,4))
+    draw=ImageDraw.Draw(panel)
+    draw.text((5,235),f"{i} {row.relative_path}\nTrue:{row.label}\nPred:{classes[int(r['predicted_index'])]}\nConfidence:{metadata[-1]['confidence']:.6f}",fill='black')
+    if i%4==0: sheet=Image.new('RGB',(960,680),'white')
+    sheet.paste(panel,((i%2)*480,((i%4)//2)*340))
+    if i%4==3:sheet.save(output/f'test-errors-{i//4:02d}.png')
+with (output/'examples.json').open('x',encoding='utf-8') as stream: json.dump(metadata,stream,indent=2);stream.write('\n')
+print(json.dumps({'test_errors':len(errors),'descriptive_examples':len(metadata),'model_inference_performed':False,'selection_changes':False,'examples':metadata}))

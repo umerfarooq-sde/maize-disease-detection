@@ -1,0 +1,97 @@
+"""Freeze validation-reviewed choices before the single descriptive v2 final test."""
+import datetime
+import hashlib
+import json
+from pathlib import Path
+import sys
+
+ROOT = Path(__file__).resolve().parents[2]
+sys.path.insert(0, str(ROOT / "ml-training"))
+from dataset_preparation import load_manifest
+from fitness_artifacts import CalibrationDefinition, FitnessBundle, artifact_reference, validate_bundle
+from fitness_integrity import verify_artifact_hashes
+from train import write_json
+
+experiment = ROOT / ".cache/phase105/experiments/mobilenet-v3-small-20261009-v2-01"
+calibration = ROOT / ".cache/phase105/calibration-20261009-v2"
+visual = ROOT / ".cache/phase105/visual-20261009-v2"
+review = ROOT / ".cache/phase105/visual-20261009-v2-review"
+manifest_path = ROOT / "ml-training/manifests/maize-research-20261008-v2/manifest.json"
+destination = ROOT / ".cache/phase105/candidates/mobilenet-v3-small-v2-20261009"
+assert not destination.exists()
+read = lambda path: json.loads(path.read_text(encoding="utf-8"))
+summary = read(experiment / "summary.json")
+assert summary["status"] == "completed" and summary["final_test_deferred"]
+assert summary["test_evaluated_once"] is False and not (experiment / "test").exists()
+manifest = load_manifest(manifest_path)
+config = manifest.load_preprocessing()
+calibration_configuration = read(calibration / "calibration-config.json")
+assert calibration_configuration["operational_threshold"] is None
+assert calibration_configuration["test_probabilities_read"] is False
+assert calibration_configuration["valid_for_candidate_promotion"] is True
+verify_artifact_hashes(ROOT, read(experiment / "environment.json")["source_hashes"])
+verify_artifact_hashes(ROOT, calibration_configuration["source_sha256"])
+assert read(visual / "summary.json")["test_image_access"] is False
+assert (review / "manual-review.json").is_file()
+compatibility = ROOT / ".cache/phase105/offline-model-compatibility-v2.json"
+assert read(compatibility)["passed"] and read(compatibility)["partitions_used"] == ["train"]
+decision_path = ROOT / ".cache/phase105/validation-decision-20261009-v2.json"
+decision = read(decision_path)
+assert decision["test_used_for_selection"] is False
+assert decision["checkpoint_sha256"] == summary["best_checkpoint_sha256"]
+assert decision["verdict"] == "FIT WITH DOCUMENTED LIMITATIONS"
+definition = CalibrationDefinition.model_validate(decision["calibration"])
+assert definition.temperature == calibration_configuration["temperature"]
+references = [
+    artifact_reference(experiment / summary["best_checkpoint"], ROOT, "weights"),
+    artifact_reference(manifest_path, ROOT, "index"),
+    artifact_reference(experiment / "summary.json", ROOT, "training_summary"),
+    artifact_reference(experiment / "environment.json", ROOT, "training_environment"),
+    artifact_reference(experiment / "hyperparameters.json", ROOT, "training_configuration"),
+    artifact_reference(experiment / "experiment.json", ROOT, "training_experiment"),
+    artifact_reference(experiment / "validation/predictions.csv", ROOT, "validation_predictions"),
+    artifact_reference(experiment / "validation/metrics.json", ROOT, "validation_metrics"),
+    artifact_reference(calibration / "calibration-config.json", ROOT, "calibration_configuration"),
+]
+for name in ("class-map.json", "splits.json", "exclusions.json", "preprocessing.json", "research-policy.json", "repair-transition.json", "confirmed-parent-relations.json", "independent-integrity.json"):
+    references.append(artifact_reference(manifest_path.parent / name, ROOT, "metadata"))
+for path in (experiment / "history.json", experiment / "train/metrics.json", experiment / "generalization.json", calibration / "crossfit.json", calibration / "validation-results.json", visual / "robustness.json", visual / "source-membership.json", review / "manual-review.json", compatibility, decision_path, ROOT / ".cache/phase105/audit-v2-validation.json"):
+    references.append(artifact_reference(path, ROOT, "diagnostic"))
+source_paths = set(read(experiment / "environment.json")["source_hashes"]) | set(calibration_configuration["source_sha256"])
+source_paths.update(("scripts/check-model-compatibility.py", ".cache/phase105/freeze-v2-candidate.py", ".cache/phase105/manual-review-v2.py"))
+for path in sorted(source_paths):
+    references.append(artifact_reference(ROOT / path, ROOT, "source"))
+freeze = {
+    "candidate_id": destination.name,
+    "frozen_utc": datetime.datetime.now(datetime.timezone.utc).isoformat(),
+    "checkpoint_sha256": summary["best_checkpoint_sha256"],
+    "calibration": definition.model_dump(mode="json"),
+    "confidence_threshold": None,
+    "manifest_fingerprint": manifest.fingerprint,
+    "preprocessing_hash": manifest.preprocessing_hash,
+    "split_seed": manifest.split_seed,
+    "training_seed": read(experiment / "hyperparameters.json")["seed"],
+    "test_used_for_selection": False,
+    "corpus_prior_test_consumption": True,
+    "artifact_sha256": {item.path: item.sha256 for item in references},
+}
+destination.mkdir(parents=True, exist_ok=False)
+write_json(destination / "decision-freeze.json", freeze)
+references.append(artifact_reference(destination / "decision-freeze.json", ROOT, "decision_freeze"))
+bundle = FitnessBundle(
+    candidate_id=destination.name, training_experiment_id=summary["experiment_id"],
+    architecture="mobilenet_v3_small", classes=manifest.classes,
+    preprocessing=config, preprocessing_hash=config.fingerprint,
+    preprocessing_policy="shared_full_frame", dataset_version=manifest.version,
+    manifest_fingerprint=manifest.fingerprint, split_seed=manifest.split_seed,
+    training_seed=freeze["training_seed"], calibration=definition,
+    confidence_threshold=None, confidence_threshold_status="unlocked",
+    test_status="previously_consumed_descriptive", test_used_for_selection=False,
+    academic_noncommercial_only=True, raw_image_redistribution=False,
+    commercial_clearance=False, ready_for_phase11=True,
+    verdict=decision["verdict"], references=tuple(references),
+)
+write_json(destination / "candidate.json", bundle.model_dump(mode="json"))
+validate_bundle(destination / "candidate.json", ROOT)
+write_json(destination / "validation.json", {"passed": True, "candidate_id": bundle.candidate_id, "bundle_sha256": hashlib.sha256((destination / "candidate.json").read_bytes()).hexdigest(), "reference_count": len(references), "test_inference_performed": False, "source_hashes_verified": True})
+print(json.dumps({"candidate_id": bundle.candidate_id, "validated": True, "reference_count": len(references), "test_inference_performed": False}))

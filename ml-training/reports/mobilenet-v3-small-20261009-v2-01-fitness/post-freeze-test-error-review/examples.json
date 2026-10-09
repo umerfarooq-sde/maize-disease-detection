@@ -1,0 +1,130 @@
+[
+  {
+    "sample_id": "36bf6f66a4c7aae1a0e410d52cd7e856fae7a7e4d96c4c26d172e45b2a22d706",
+    "group_id": "c24ca358a4df362a84baca4f7f08ca499f9845d327d83d4de71a8ffc68104e41",
+    "partition": "test",
+    "relative_path": "Gray_Leaf_Spot/Gray_Leaf_Spot (218).JPG",
+    "true_label": "Gray_Leaf_Spot",
+    "predicted_label": "Northern_Corn_Leaf_Blight",
+    "confidence": 0.998318076133728,
+    "probabilities": [
+      4.5476078014417e-08,
+      0.0016818620497360826,
+      8.294839659583886e-08,
+      0.998318076133728
+    ],
+    "review_only_after_candidate_freeze_and_test": true
+  },
+  {
+    "sample_id": "c42692b15dcae2e1a507b8f9956cc4d4e176c7423bd1f765ed765099bd75cfca",
+    "group_id": "ce4d140324b8037e7f0c48b9770f0dbf92763b8110f47dca14c0fd873b968a19",
+    "partition": "test",
+    "relative_path": "Gray_Leaf_Spot/Gray_Leaf_Spot (1070).JPG",
+    "true_label": "Gray_Leaf_Spot",
+    "predicted_label": "Northern_Corn_Leaf_Blight",
+    "confidence": 0.9973461627960205,
+    "probabilities": [
+      1.2295791975702741e-06,
+      0.002123073674738407,
+      0.0005295549053698778,
+      0.9973461627960205
+    ],
+    "review_only_after_candidate_freeze_and_test": true
+  },
+  {
+    "sample_id": "a03d5be8ba52ddb438d41b5787246bf4f5e74ea2e120094739d9e8b6f57ba035",
+    "group_id": "bdf144c7758208e3eb206df66906678904ef4551674489c77f31dafbdbb58034",
+    "partition": "test",
+    "relative_path": "Gray_Leaf_Spot/Gray_Leaf_Spot (661).jpg",
+    "true_label": "Gray_Leaf_Spot",
+    "predicted_label": "Northern_Corn_Leaf_Blight",
+    "confidence": 0.9959724545478821,
+    "probabilities": [
+      0.002101687015965581,
+      0.0019159835064783692,
+      9.837152902036905e-06,
+      0.9959724545478821
+    ],
+    "review_only_after_candidate_freeze_and_test": true
+  },
+  {
+    "sample_id": "d9b760ff530a06ad3064b04417b044a5c640019c61420eec6634107f2a7211e1",
+    "group_id": "71bf68a0fe62b0f450072f854a46524dde93f24540010bcc4a6414d21223443f",
+    "partition": "test",
+    "relative_path": "Northern_Corn_Leaf_Blight/Northern_Corn_Leaf_Blight (1182).JPG",
+    "true_label": "Northern_Corn_Leaf_Blight",
+    "predicted_label": "Gray_Leaf_Spot",
+    "confidence": 0.9844873547554016,
+    "probabilities": [
+      0.0003837138065136969,
+      0.9844873547554016,
+      0.0001122655812650919,
+      0.015016564168035984
+    ],
+    "review_only_after_candidate_freeze_and_test": true
+  },
+  {
+    "sample_id": "3a1b77d3c2ff3160ea110ed791f433ecf33469b89875c2871d2b31b98b140466",
+    "group_id": "721a58053c98228481084b684f5cbce50c61c0fffba367a705a2fd326eced620",
+    "partition": "test",
+    "relative_path": "Gray_Leaf_Spot/Gray_Leaf_Spot (550).jpg",
+    "true_label": "Gray_Leaf_Spot",
+    "predicted_label": "Northern_Corn_Leaf_Blight",
+    "confidence": 0.9753819704055786,
+    "probabilities": [
+      0.0027244624216109514,
+      0.021808242425322533,
+      8.52527518873103e-05,
+      0.9753819704055786
+    ],
+    "review_only_after_candidate_freeze_and_test": true
+  },
+  {
+    "sample_id": "26dc49c5191806d424eafd6b75de6156550f2d7ece5abe718ac3a0344a103d1f",
+    "group_id": "bbd6f2e256a45f8f2689c905972a31b0bdb1831b16dc69881b1ba504a8a01d0d",
+    "partition": "test",
+    "relative_path": "Common_Rust/Common_Rust (1855).jpg",
+    "true_label": "Common_Rust",
+    "predicted_label": "Northern_Corn_Leaf_Blight",
+    "confidence": 0.9667623043060303,
+    "probabilities": [
+      0.02150164172053337,
+      0.009705220349133015,
+      0.002030796604231,
+      0.9667623043060303
+    ],
+    "review_only_after_candidate_freeze_and_test": true
+  },
+  {
+    "sample_id": "c31d1f6e4d597c66ba18b7cbb5ca01b86595ad18a2d05f0043c556f094cdbc27",
+    "group_id": "df71d7f12904262b06163a7692729292be628107b1db4313b5c2e88e8a58e471",
+    "partition": "test",
+    "relative_path": "Gray_Leaf_Spot/Gray_Leaf_Spot (464).jpg",
+    "true_label": "Gray_Leaf_Spot",
+    "predicted_label": "Common_Rust",
+    "confidence": 0.481976717710495,
+    "probabilities": [
+      0.481976717710495,
+      0.41449347138404846,
+      5.025775863032322e-06,
+      0.10352480411529541
+    ],
+    "review_only_after_candidate_freeze_and_test": true
+  },
+  {
+    "sample_id": "bf29769b915f54336bfc200ff95c5c7d1c753f55b4e621d7fba1b3519a3b6782",
+    "group_id": "36428c2d50cf5e41defc961e78ba8c4c1d147670180ff82d3a9d9fce4ba9c847",
+    "partition": "test",
+    "relative_path": "Northern_Corn_Leaf_Blight/Northern_Corn_Leaf_Blight (1836).jpg",
+    "true_label": "Northern_Corn_Leaf_Blight",
+    "predicted_label": "Gray_Leaf_Spot",
+    "confidence": 0.39789730310440063,
+    "probabilities": [
+      0.3049861192703247,
+      0.39789730310440063,
+      0.00010067919356515631,
+      0.29701587557792664
+    ],
+    "review_only_after_candidate_freeze_and_test": true
+  }
+]

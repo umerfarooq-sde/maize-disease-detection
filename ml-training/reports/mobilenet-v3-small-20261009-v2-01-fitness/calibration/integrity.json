@@ -1,0 +1,19 @@
+{
+  "README.md": "6877830b9ad039a9cec18cee562f25ab314555db54c2cc97bc04b568591a7f09",
+  "calibration-config.json": "641e5b1c2daaa1082bd17ddfe4ba401d13e2a69700c48c0860bb15279d41d14d",
+  "confidence-crossfit.json": "d6254b46f0789606b490476ffda409452b3189781933b2bcd9db4d12ced22702",
+  "confidence-fitted.json": "248d625ceb4ca17d6750e0fef27b5aaa4245de8a847a59cb1081a52520ea5f55",
+  "confidence-raw.json": "72d2c7da687b944f49205ab390d9f245d15c8e4719cd64fe5e6e991162bd7671",
+  "crossfit-membership.json": "62f610be2a1b88638e892f41fcd9207222f6a86ef7836a0e63c1872831c89a9f",
+  "crossfit.json": "7c28c751f7b6d81bcca81c2b303101abd8a0b6b7192ba944e02b5530cb921f9b",
+  "freeze.json": "95f820518476c057c309b2c785f823005d4e17526c635b48f9f866d529d4f182",
+  "plots/confidence-distribution.png": "7e6a34ca013f197ac2b525090b890e6335a5506cbb38d0944ab88b3be9e7d155",
+  "plots/reliability.png": "56559d14966b0bcf1fb5695f43f487f12bfb67013ec72b0d2d6da0cb9fd41ad4",
+  "plots/selective-risk-coverage.png": "18426613e8a09636430c34742786efb85ee8fb8121c87c512b69a0ee9cec3cdb",
+  "selective-crossfit.json": "259d9d831c192f06e9467d6c80e968508ae2d24c3a9b6dccc57874277c40f71f",
+  "selective-fitted.json": "ba441b16286a6ed0147be04384face32fc16d484d51dab1aa768d031e742cb31",
+  "selective-raw.json": "927ec8dac72d2e9c53d59cca40a9ad4506e250f58dc1a2bb5a6a39de9642d3a7",
+  "temperature-fit.json": "18d9e92b1f88526e1a4c43c10aed43b593476ccb8b6b02ff6e5770bdd0ce46c3",
+  "validation-results.json": "afb5582dc1d7724bec42f906f6e7ca1a7299968c215b9de0b441f2e849da26ae",
+  "validation-source.json": "aef1fc9055f58185aa9efb69968340b8be6089f7ad85e0ded91b291e2030e01a"
+}

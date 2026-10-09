@@ -1,0 +1,3475 @@
+{
+  "partition": "validation",
+  "original_metrics": {
+    "class_names": [
+      "Common_Rust",
+      "Gray_Leaf_Spot",
+      "Healthy",
+      "Northern_Corn_Leaf_Blight"
+    ],
+    "sample_count": 627,
+    "accuracy": 0.9681020733652312,
+    "macro_precision": 0.9634760730578937,
+    "macro_recall": 0.9550485983867231,
+    "macro_f1": 0.9589089912721949,
+    "weighted_precision": 0.968027205315925,
+    "weighted_recall": 0.9681020733652312,
+    "weighted_f1": 0.9678448186790355,
+    "aggregate_undefined_reasons": {},
+    "per_class": [
+      {
+        "index": 0,
+        "label": "Common_Rust",
+        "support": 196,
+        "predicted_support": 197,
+        "true_positive": 193,
+        "false_positive": 4,
+        "false_negative": 3,
+        "true_negative": 427,
+        "precision": 0.9796954314720813,
+        "recall": 0.9846938775510204,
+        "f1": 0.9821882951653944,
+        "specificity": 0.9907192575406032,
+        "roc_auc": 0.9993844405511625,
+        "undefined_reasons": {}
+      },
+      {
+        "index": 1,
+        "label": "Gray_Leaf_Spot",
+        "support": 85,
+        "predicted_support": 79,
+        "true_positive": 74,
+        "false_positive": 5,
+        "false_negative": 11,
+        "true_negative": 537,
+        "precision": 0.9367088607594937,
+        "recall": 0.8705882352941177,
+        "f1": 0.9024390243902439,
+        "specificity": 0.9907749077490775,
+        "roc_auc": 0.9932928152810939,
+        "undefined_reasons": {}
+      },
+      {
+        "index": 2,
+        "label": "Healthy",
+        "support": 175,
+        "predicted_support": 175,
+        "true_positive": 175,
+        "false_positive": 0,
+        "false_negative": 0,
+        "true_negative": 452,
+        "precision": 1.0,
+        "recall": 1.0,
+        "f1": 1.0,
+        "specificity": 1.0,
+        "roc_auc": 1.0,
+        "undefined_reasons": {}
+      },
+      {
+        "index": 3,
+        "label": "Northern_Corn_Leaf_Blight",
+        "support": 171,
+        "predicted_support": 176,
+        "true_positive": 165,
+        "false_positive": 11,
+        "false_negative": 6,
+        "true_negative": 445,
+        "precision": 0.9375,
+        "recall": 0.9649122807017544,
+        "f1": 0.9510086455331412,
+        "specificity": 0.9758771929824561,
+        "roc_auc": 0.9956653329229507,
+        "undefined_reasons": {}
+      }
+    ],
+    "confusion_matrix": [
+      [
+        193,
+        0,
+        0,
+        3
+      ],
+      [
+        3,
+        74,
+        0,
+        8
+      ],
+      [
+        0,
+        0,
+        175,
+        0
+      ],
+      [
+        1,
+        5,
+        0,
+        165
+      ]
+    ],
+    "roc_auc": {
+      "macro": 0.9970856471888018,
+      "weighted": 0.9977161269166595,
+      "undefined_reason": null
+    },
+    "classification_summary": "Class | Precision | Recall | F1 | Specificity | Support\nCommon_Rust | 0.9797 | 0.9847 | 0.9822 | 0.9907 | 196\nGray_Leaf_Spot | 0.9367 | 0.8706 | 0.9024 | 0.9908 | 85\nHealthy | 1.0000 | 1.0000 | 1.0000 | 1.0000 | 175\nNorthern_Corn_Leaf_Blight | 0.9375 | 0.9649 | 0.9510 | 0.9759 | 171\nAccuracy: 0.9681 (627 samples)\nmacro: precision=0.9635, recall=0.9550, F1=0.9589\nweighted: precision=0.9680, recall=0.9681, F1=0.9678\n"
+  },
+  "probes": {
+    "brightness_0.8": {
+      "evaluated": 627,
+      "admission_failures": 0,
+      "class_change_count": 7,
+      "class_change_rate": 0.011164274322169059,
+      "mean_confidence_change": -0.0059336997105174085,
+      "metrics": {
+        "class_names": [
+          "Common_Rust",
+          "Gray_Leaf_Spot",
+          "Healthy",
+          "Northern_Corn_Leaf_Blight"
+        ],
+        "sample_count": 627,
+        "accuracy": 0.9617224880382775,
+        "macro_precision": 0.9576778523131428,
+        "macro_recall": 0.9479079351038661,
+        "macro_f1": 0.9523074911383715,
+        "weighted_precision": 0.9617727912929033,
+        "weighted_recall": 0.9617224880382775,
+        "weighted_f1": 0.9614450542248671,
+        "aggregate_undefined_reasons": {},
+        "per_class": [
+          {
+            "index": 0,
+            "label": "Common_Rust",
+            "support": 196,
+            "predicted_support": 196,
+            "true_positive": 192,
+            "false_positive": 4,
+            "false_negative": 4,
+            "true_negative": 427,
+            "precision": 0.9795918367346939,
+            "recall": 0.9795918367346939,
+            "f1": 0.9795918367346939,
+            "specificity": 0.9907192575406032,
+            "roc_auc": 0.9993844405511625,
+            "undefined_reasons": {}
+          },
+          {
+            "index": 1,
+            "label": "Gray_Leaf_Spot",
+            "support": 85,
+            "predicted_support": 78,
+            "true_positive": 73,
+            "false_positive": 5,
+            "false_negative": 12,
+            "true_negative": 537,
+            "precision": 0.9358974358974359,
+            "recall": 0.8588235294117647,
+            "f1": 0.8957055214723927,
+            "specificity": 0.9907749077490775,
+            "roc_auc": 0.9911004992402865,
+            "undefined_reasons": {}
+          },
+          {
+            "index": 2,
+            "label": "Healthy",
+            "support": 175,
+            "predicted_support": 176,
+            "true_positive": 175,
+            "false_positive": 1,
+            "false_negative": 0,
+            "true_negative": 451,
+            "precision": 0.9943181818181818,
+            "recall": 1.0,
+            "f1": 0.9971509971509972,
+            "specificity": 0.9977876106194691,
+            "roc_auc": 1.0,
+            "undefined_reasons": {}
+          },
+          {
+            "index": 3,
+            "label": "Northern_Corn_Leaf_Blight",
+            "support": 171,
+            "predicted_support": 177,
+            "true_positive": 163,
+            "false_positive": 14,
+            "false_negative": 8,
+            "true_negative": 442,
+            "precision": 0.9209039548022598,
+            "recall": 0.9532163742690059,
+            "f1": 0.9367816091954023,
+            "specificity": 0.9692982456140351,
+            "roc_auc": 0.9946009028419001,
+            "undefined_reasons": {}
+          }
+        ],
+        "confusion_matrix": [
+          [
+            192,
+            0,
+            0,
+            4
+          ],
+          [
+            2,
+            73,
+            0,
+            10
+          ],
+          [
+            0,
+            0,
+            175,
+            0
+          ],
+          [
+            2,
+            5,
+            1,
+            163
+          ]
+        ],
+        "roc_auc": {
+          "macro": 0.9962714606583373,
+          "weighted": 0.9971286238746685,
+          "undefined_reason": null
+        },
+        "classification_summary": "Class | Precision | Recall | F1 | Specificity | Support\nCommon_Rust | 0.9796 | 0.9796 | 0.9796 | 0.9907 | 196\nGray_Leaf_Spot | 0.9359 | 0.8588 | 0.8957 | 0.9908 | 85\nHealthy | 0.9943 | 1.0000 | 0.9972 | 0.9978 | 175\nNorthern_Corn_Leaf_Blight | 0.9209 | 0.9532 | 0.9368 | 0.9693 | 171\nAccuracy: 0.9617 (627 samples)\nmacro: precision=0.9577, recall=0.9479, F1=0.9523\nweighted: precision=0.9618, recall=0.9617, F1=0.9614\n"
+      },
+      "matched_original_metrics": {
+        "class_names": [
+          "Common_Rust",
+          "Gray_Leaf_Spot",
+          "Healthy",
+          "Northern_Corn_Leaf_Blight"
+        ],
+        "sample_count": 627,
+        "accuracy": 0.9681020733652312,
+        "macro_precision": 0.9634760730578937,
+        "macro_recall": 0.9550485983867231,
+        "macro_f1": 0.9589089912721949,
+        "weighted_precision": 0.968027205315925,
+        "weighted_recall": 0.9681020733652312,
+        "weighted_f1": 0.9678448186790355,
+        "aggregate_undefined_reasons": {},
+        "per_class": [
+          {
+            "index": 0,
+            "label": "Common_Rust",
+            "support": 196,
+            "predicted_support": 197,
+            "true_positive": 193,
+            "false_positive": 4,
+            "false_negative": 3,
+            "true_negative": 427,
+            "precision": 0.9796954314720813,
+            "recall": 0.9846938775510204,
+            "f1": 0.9821882951653944,
+            "specificity": 0.9907192575406032,
+            "roc_auc": 0.9993844405511625,
+            "undefined_reasons": {}
+          },
+          {
+            "index": 1,
+            "label": "Gray_Leaf_Spot",
+            "support": 85,
+            "predicted_support": 79,
+            "true_positive": 74,
+            "false_positive": 5,
+            "false_negative": 11,
+            "true_negative": 537,
+            "precision": 0.9367088607594937,
+            "recall": 0.8705882352941177,
+            "f1": 0.9024390243902439,
+            "specificity": 0.9907749077490775,
+            "roc_auc": 0.9932928152810939,
+            "undefined_reasons": {}
+          },
+          {
+            "index": 2,
+            "label": "Healthy",
+            "support": 175,
+            "predicted_support": 175,
+            "true_positive": 175,
+            "false_positive": 0,
+            "false_negative": 0,
+            "true_negative": 452,
+            "precision": 1.0,
+            "recall": 1.0,
+            "f1": 1.0,
+            "specificity": 1.0,
+            "roc_auc": 1.0,
+            "undefined_reasons": {}
+          },
+          {
+            "index": 3,
+            "label": "Northern_Corn_Leaf_Blight",
+            "support": 171,
+            "predicted_support": 176,
+            "true_positive": 165,
+            "false_positive": 11,
+            "false_negative": 6,
+            "true_negative": 445,
+            "precision": 0.9375,
+            "recall": 0.9649122807017544,
+            "f1": 0.9510086455331412,
+            "specificity": 0.9758771929824561,
+            "roc_auc": 0.9956653329229507,
+            "undefined_reasons": {}
+          }
+        ],
+        "confusion_matrix": [
+          [
+            193,
+            0,
+            0,
+            3
+          ],
+          [
+            3,
+            74,
+            0,
+            8
+          ],
+          [
+            0,
+            0,
+            175,
+            0
+          ],
+          [
+            1,
+            5,
+            0,
+            165
+          ]
+        ],
+        "roc_auc": {
+          "macro": 0.9970856471888018,
+          "weighted": 0.9977161269166595,
+          "undefined_reason": null
+        },
+        "classification_summary": "Class | Precision | Recall | F1 | Specificity | Support\nCommon_Rust | 0.9797 | 0.9847 | 0.9822 | 0.9907 | 196\nGray_Leaf_Spot | 0.9367 | 0.8706 | 0.9024 | 0.9908 | 85\nHealthy | 1.0000 | 1.0000 | 1.0000 | 1.0000 | 175\nNorthern_Corn_Leaf_Blight | 0.9375 | 0.9649 | 0.9510 | 0.9759 | 171\nAccuracy: 0.9681 (627 samples)\nmacro: precision=0.9635, recall=0.9550, F1=0.9589\nweighted: precision=0.9680, recall=0.9681, F1=0.9678\n"
+      },
+      "accuracy_change_vs_matched_original": -0.006379585326953707
+    },
+    "brightness_1.2": {
+      "evaluated": 627,
+      "admission_failures": 0,
+      "class_change_count": 4,
+      "class_change_rate": 0.006379585326953748,
+      "mean_confidence_change": -0.0024351657767805374,
+      "metrics": {
+        "class_names": [
+          "Common_Rust",
+          "Gray_Leaf_Spot",
+          "Healthy",
+          "Northern_Corn_Leaf_Blight"
+        ],
+        "sample_count": 627,
+        "accuracy": 0.9649122807017544,
+        "macro_precision": 0.9606157731157731,
+        "macro_recall": 0.9506454336120413,
+        "macro_f1": 0.9551614774292021,
+        "weighted_precision": 0.9648208870696909,
+        "weighted_recall": 0.9649122807017544,
+        "weighted_f1": 0.9645807998433021,
+        "aggregate_undefined_reasons": {},
+        "per_class": [
+          {
+            "index": 0,
+            "label": "Common_Rust",
+            "support": 196,
+            "predicted_support": 198,
+            "true_positive": 193,
+            "false_positive": 5,
+            "false_negative": 3,
+            "true_negative": 426,
+            "precision": 0.9747474747474747,
+            "recall": 0.9846938775510204,
+            "f1": 0.9796954314720813,
+            "specificity": 0.988399071925754,
+            "roc_auc": 0.9994199535962877,
+            "undefined_reasons": {}
+          },
+          {
+            "index": 1,
+            "label": "Gray_Leaf_Spot",
+            "support": 85,
+            "predicted_support": 78,
+            "true_positive": 73,
+            "false_positive": 5,
+            "false_negative": 12,
+            "true_negative": 537,
+            "precision": 0.9358974358974359,
+            "recall": 0.8588235294117647,
+            "f1": 0.8957055214723927,
+            "specificity": 0.9907749077490775,
+            "roc_auc": 0.99327110918168,
+            "undefined_reasons": {}
+          },
+          {
+            "index": 2,
+            "label": "Healthy",
+            "support": 175,
+            "predicted_support": 175,
+            "true_positive": 175,
+            "false_positive": 0,
+            "false_negative": 0,
+            "true_negative": 452,
+            "precision": 1.0,
+            "recall": 1.0,
+            "f1": 1.0,
+            "specificity": 1.0,
+            "roc_auc": 1.0,
+            "undefined_reasons": {}
+          },
+          {
+            "index": 3,
+            "label": "Northern_Corn_Leaf_Blight",
+            "support": 171,
+            "predicted_support": 176,
+            "true_positive": 164,
+            "false_positive": 12,
+            "false_negative": 7,
+            "true_negative": 444,
+            "precision": 0.9318181818181818,
+            "recall": 0.9590643274853801,
+            "f1": 0.9452449567723343,
+            "specificity": 0.9736842105263158,
+            "roc_auc": 0.9957679285934133,
+            "undefined_reasons": {}
+          }
+        ],
+        "confusion_matrix": [
+          [
+            193,
+            0,
+            0,
+            3
+          ],
+          [
+            3,
+            73,
+            0,
+            9
+          ],
+          [
+            0,
+            0,
+            175,
+            0
+          ],
+          [
+            2,
+            5,
+            0,
+            164
+          ]
+        ],
+        "roc_auc": {
+          "macro": 0.9971147478428453,
+          "weighted": 0.9977522663074783,
+          "undefined_reason": null
+        },
+        "classification_summary": "Class | Precision | Recall | F1 | Specificity | Support\nCommon_Rust | 0.9747 | 0.9847 | 0.9797 | 0.9884 | 196\nGray_Leaf_Spot | 0.9359 | 0.8588 | 0.8957 | 0.9908 | 85\nHealthy | 1.0000 | 1.0000 | 1.0000 | 1.0000 | 175\nNorthern_Corn_Leaf_Blight | 0.9318 | 0.9591 | 0.9452 | 0.9737 | 171\nAccuracy: 0.9649 (627 samples)\nmacro: precision=0.9606, recall=0.9506, F1=0.9552\nweighted: precision=0.9648, recall=0.9649, F1=0.9646\n"
+      },
+      "matched_original_metrics": {
+        "class_names": [
+          "Common_Rust",
+          "Gray_Leaf_Spot",
+          "Healthy",
+          "Northern_Corn_Leaf_Blight"
+        ],
+        "sample_count": 627,
+        "accuracy": 0.9681020733652312,
+        "macro_precision": 0.9634760730578937,
+        "macro_recall": 0.9550485983867231,
+        "macro_f1": 0.9589089912721949,
+        "weighted_precision": 0.968027205315925,
+        "weighted_recall": 0.9681020733652312,
+        "weighted_f1": 0.9678448186790355,
+        "aggregate_undefined_reasons": {},
+        "per_class": [
+          {
+            "index": 0,
+            "label": "Common_Rust",
+            "support": 196,
+            "predicted_support": 197,
+            "true_positive": 193,
+            "false_positive": 4,
+            "false_negative": 3,
+            "true_negative": 427,
+            "precision": 0.9796954314720813,
+            "recall": 0.9846938775510204,
+            "f1": 0.9821882951653944,
+            "specificity": 0.9907192575406032,
+            "roc_auc": 0.9993844405511625,
+            "undefined_reasons": {}
+          },
+          {
+            "index": 1,
+            "label": "Gray_Leaf_Spot",
+            "support": 85,
+            "predicted_support": 79,
+            "true_positive": 74,
+            "false_positive": 5,
+            "false_negative": 11,
+            "true_negative": 537,
+            "precision": 0.9367088607594937,
+            "recall": 0.8705882352941177,
+            "f1": 0.9024390243902439,
+            "specificity": 0.9907749077490775,
+            "roc_auc": 0.9932928152810939,
+            "undefined_reasons": {}
+          },
+          {
+            "index": 2,
+            "label": "Healthy",
+            "support": 175,
+            "predicted_support": 175,
+            "true_positive": 175,
+            "false_positive": 0,
+            "false_negative": 0,
+            "true_negative": 452,
+            "precision": 1.0,
+            "recall": 1.0,
+            "f1": 1.0,
+            "specificity": 1.0,
+            "roc_auc": 1.0,
+            "undefined_reasons": {}
+          },
+          {
+            "index": 3,
+            "label": "Northern_Corn_Leaf_Blight",
+            "support": 171,
+            "predicted_support": 176,
+            "true_positive": 165,
+            "false_positive": 11,
+            "false_negative": 6,
+            "true_negative": 445,
+            "precision": 0.9375,
+            "recall": 0.9649122807017544,
+            "f1": 0.9510086455331412,
+            "specificity": 0.9758771929824561,
+            "roc_auc": 0.9956653329229507,
+            "undefined_reasons": {}
+          }
+        ],
+        "confusion_matrix": [
+          [
+            193,
+            0,
+            0,
+            3
+          ],
+          [
+            3,
+            74,
+            0,
+            8
+          ],
+          [
+            0,
+            0,
+            175,
+            0
+          ],
+          [
+            1,
+            5,
+            0,
+            165
+          ]
+        ],
+        "roc_auc": {
+          "macro": 0.9970856471888018,
+          "weighted": 0.9977161269166595,
+          "undefined_reason": null
+        },
+        "classification_summary": "Class | Precision | Recall | F1 | Specificity | Support\nCommon_Rust | 0.9797 | 0.9847 | 0.9822 | 0.9907 | 196\nGray_Leaf_Spot | 0.9367 | 0.8706 | 0.9024 | 0.9908 | 85\nHealthy | 1.0000 | 1.0000 | 1.0000 | 1.0000 | 175\nNorthern_Corn_Leaf_Blight | 0.9375 | 0.9649 | 0.9510 | 0.9759 | 171\nAccuracy: 0.9681 (627 samples)\nmacro: precision=0.9635, recall=0.9550, F1=0.9589\nweighted: precision=0.9680, recall=0.9681, F1=0.9678\n"
+      },
+      "accuracy_change_vs_matched_original": -0.0031897926634768536
+    },
+    "contrast_0.8": {
+      "evaluated": 627,
+      "admission_failures": 0,
+      "class_change_count": 4,
+      "class_change_rate": 0.006379585326953748,
+      "mean_confidence_change": -0.0013919186078760614,
+      "metrics": {
+        "class_names": [
+          "Common_Rust",
+          "Gray_Leaf_Spot",
+          "Healthy",
+          "Northern_Corn_Leaf_Blight"
+        ],
+        "sample_count": 627,
+        "accuracy": 0.9665071770334929,
+        "macro_precision": 0.961889401395822,
+        "macro_recall": 0.9521074219161348,
+        "macro_f1": 0.9564895345696068,
+        "weighted_precision": 0.9666068867724693,
+        "weighted_recall": 0.9665071770334929,
+        "weighted_f1": 0.9662288895339088,
+        "aggregate_undefined_reasons": {},
+        "per_class": [
+          {
+            "index": 0,
+            "label": "Common_Rust",
+            "support": 196,
+            "predicted_support": 196,
+            "true_positive": 193,
+            "false_positive": 3,
+            "false_negative": 3,
+            "true_negative": 428,
+            "precision": 0.9846938775510204,
+            "recall": 0.9846938775510204,
+            "f1": 0.9846938775510204,
+            "specificity": 0.9930394431554525,
+            "roc_auc": 0.9994673043231214,
+            "undefined_reasons": {}
+          },
+          {
+            "index": 1,
+            "label": "Gray_Leaf_Spot",
+            "support": 85,
+            "predicted_support": 78,
+            "true_positive": 73,
+            "false_positive": 5,
+            "false_negative": 12,
+            "true_negative": 537,
+            "precision": 0.9358974358974359,
+            "recall": 0.8588235294117647,
+            "f1": 0.8957055214723927,
+            "specificity": 0.9907749077490775,
+            "roc_auc": 0.992598220099848,
+            "undefined_reasons": {}
+          },
+          {
+            "index": 2,
+            "label": "Healthy",
+            "support": 175,
+            "predicted_support": 175,
+            "true_positive": 175,
+            "false_positive": 0,
+            "false_negative": 0,
+            "true_negative": 452,
+            "precision": 1.0,
+            "recall": 1.0,
+            "f1": 1.0,
+            "specificity": 1.0,
+            "roc_auc": 1.0,
+            "undefined_reasons": {}
+          },
+          {
+            "index": 3,
+            "label": "Northern_Corn_Leaf_Blight",
+            "support": 171,
+            "predicted_support": 178,
+            "true_positive": 165,
+            "false_positive": 13,
+            "false_negative": 6,
+            "true_negative": 443,
+            "precision": 0.9269662921348315,
+            "recall": 0.9649122807017544,
+            "f1": 0.9455587392550143,
+            "specificity": 0.9714912280701754,
+            "roc_auc": 0.9955627372524879,
+            "undefined_reasons": {}
+          }
+        ],
+        "confusion_matrix": [
+          [
+            193,
+            0,
+            0,
+            3
+          ],
+          [
+            2,
+            73,
+            0,
+            10
+          ],
+          [
+            0,
+            0,
+            175,
+            0
+          ],
+          [
+            1,
+            5,
+            0,
+            165
+          ]
+        ],
+        "roc_auc": {
+          "macro": 0.9969070654188643,
+          "weighted": 0.9976198858468809,
+          "undefined_reason": null
+        },
+        "classification_summary": "Class | Precision | Recall | F1 | Specificity | Support\nCommon_Rust | 0.9847 | 0.9847 | 0.9847 | 0.9930 | 196\nGray_Leaf_Spot | 0.9359 | 0.8588 | 0.8957 | 0.9908 | 85\nHealthy | 1.0000 | 1.0000 | 1.0000 | 1.0000 | 175\nNorthern_Corn_Leaf_Blight | 0.9270 | 0.9649 | 0.9456 | 0.9715 | 171\nAccuracy: 0.9665 (627 samples)\nmacro: precision=0.9619, recall=0.9521, F1=0.9565\nweighted: precision=0.9666, recall=0.9665, F1=0.9662\n"
+      },
+      "matched_original_metrics": {
+        "class_names": [
+          "Common_Rust",
+          "Gray_Leaf_Spot",
+          "Healthy",
+          "Northern_Corn_Leaf_Blight"
+        ],
+        "sample_count": 627,
+        "accuracy": 0.9681020733652312,
+        "macro_precision": 0.9634760730578937,
+        "macro_recall": 0.9550485983867231,
+        "macro_f1": 0.9589089912721949,
+        "weighted_precision": 0.968027205315925,
+        "weighted_recall": 0.9681020733652312,
+        "weighted_f1": 0.9678448186790355,
+        "aggregate_undefined_reasons": {},
+        "per_class": [
+          {
+            "index": 0,
+            "label": "Common_Rust",
+            "support": 196,
+            "predicted_support": 197,
+            "true_positive": 193,
+            "false_positive": 4,
+            "false_negative": 3,
+            "true_negative": 427,
+            "precision": 0.9796954314720813,
+            "recall": 0.9846938775510204,
+            "f1": 0.9821882951653944,
+            "specificity": 0.9907192575406032,
+            "roc_auc": 0.9993844405511625,
+            "undefined_reasons": {}
+          },
+          {
+            "index": 1,
+            "label": "Gray_Leaf_Spot",
+            "support": 85,
+            "predicted_support": 79,
+            "true_positive": 74,
+            "false_positive": 5,
+            "false_negative": 11,
+            "true_negative": 537,
+            "precision": 0.9367088607594937,
+            "recall": 0.8705882352941177,
+            "f1": 0.9024390243902439,
+            "specificity": 0.9907749077490775,
+            "roc_auc": 0.9932928152810939,
+            "undefined_reasons": {}
+          },
+          {
+            "index": 2,
+            "label": "Healthy",
+            "support": 175,
+            "predicted_support": 175,
+            "true_positive": 175,
+            "false_positive": 0,
+            "false_negative": 0,
+            "true_negative": 452,
+            "precision": 1.0,
+            "recall": 1.0,
+            "f1": 1.0,
+            "specificity": 1.0,
+            "roc_auc": 1.0,
+            "undefined_reasons": {}
+          },
+          {
+            "index": 3,
+            "label": "Northern_Corn_Leaf_Blight",
+            "support": 171,
+            "predicted_support": 176,
+            "true_positive": 165,
+            "false_positive": 11,
+            "false_negative": 6,
+            "true_negative": 445,
+            "precision": 0.9375,
+            "recall": 0.9649122807017544,
+            "f1": 0.9510086455331412,
+            "specificity": 0.9758771929824561,
+            "roc_auc": 0.9956653329229507,
+            "undefined_reasons": {}
+          }
+        ],
+        "confusion_matrix": [
+          [
+            193,
+            0,
+            0,
+            3
+          ],
+          [
+            3,
+            74,
+            0,
+            8
+          ],
+          [
+            0,
+            0,
+            175,
+            0
+          ],
+          [
+            1,
+            5,
+            0,
+            165
+          ]
+        ],
+        "roc_auc": {
+          "macro": 0.9970856471888018,
+          "weighted": 0.9977161269166595,
+          "undefined_reason": null
+        },
+        "classification_summary": "Class | Precision | Recall | F1 | Specificity | Support\nCommon_Rust | 0.9797 | 0.9847 | 0.9822 | 0.9907 | 196\nGray_Leaf_Spot | 0.9367 | 0.8706 | 0.9024 | 0.9908 | 85\nHealthy | 1.0000 | 1.0000 | 1.0000 | 1.0000 | 175\nNorthern_Corn_Leaf_Blight | 0.9375 | 0.9649 | 0.9510 | 0.9759 | 171\nAccuracy: 0.9681 (627 samples)\nmacro: precision=0.9635, recall=0.9550, F1=0.9589\nweighted: precision=0.9680, recall=0.9681, F1=0.9678\n"
+      },
+      "accuracy_change_vs_matched_original": -0.0015948963317383713
+    },
+    "contrast_1.2": {
+      "evaluated": 627,
+      "admission_failures": 0,
+      "class_change_count": 5,
+      "class_change_rate": 0.007974481658692184,
+      "mean_confidence_change": -0.0023973985341937537,
+      "metrics": {
+        "class_names": [
+          "Common_Rust",
+          "Gray_Leaf_Spot",
+          "Healthy",
+          "Northern_Corn_Leaf_Blight"
+        ],
+        "sample_count": 627,
+        "accuracy": 0.9633173843700159,
+        "macro_precision": 0.9609428349000428,
+        "macro_recall": 0.9477042571414531,
+        "macro_f1": 0.95353846584845,
+        "weighted_precision": 0.9634090048116137,
+        "weighted_recall": 0.9633173843700159,
+        "weighted_f1": 0.9628890521990275,
+        "aggregate_undefined_reasons": {},
+        "per_class": [
+          {
+            "index": 0,
+            "label": "Common_Rust",
+            "support": 196,
+            "predicted_support": 199,
+            "true_positive": 193,
+            "false_positive": 6,
+            "false_negative": 3,
+            "true_negative": 425,
+            "precision": 0.9698492462311558,
+            "recall": 0.9846938775510204,
+            "f1": 0.9772151898734177,
+            "specificity": 0.9860788863109049,
+            "roc_auc": 0.9994673043231214,
+            "undefined_reasons": {}
+          },
+          {
+            "index": 1,
+            "label": "Gray_Leaf_Spot",
+            "support": 85,
+            "predicted_support": 76,
+            "true_positive": 72,
+            "false_positive": 4,
+            "false_negative": 13,
+            "true_negative": 538,
+            "precision": 0.9473684210526315,
+            "recall": 0.8470588235294118,
+            "f1": 0.8944099378881988,
+            "specificity": 0.992619926199262,
+            "roc_auc": 0.9934230518775776,
+            "undefined_reasons": {}
+          },
+          {
+            "index": 2,
+            "label": "Healthy",
+            "support": 175,
+            "predicted_support": 175,
+            "true_positive": 175,
+            "false_positive": 0,
+            "false_negative": 0,
+            "true_negative": 452,
+            "precision": 1.0,
+            "recall": 1.0,
+            "f1": 1.0,
+            "specificity": 1.0,
+            "roc_auc": 1.0,
+            "undefined_reasons": {}
+          },
+          {
+            "index": 3,
+            "label": "Northern_Corn_Leaf_Blight",
+            "support": 171,
+            "predicted_support": 177,
+            "true_positive": 164,
+            "false_positive": 13,
+            "false_negative": 7,
+            "true_negative": 443,
+            "precision": 0.9265536723163842,
+            "recall": 0.9590643274853801,
+            "f1": 0.9425287356321839,
+            "specificity": 0.9714912280701754,
+            "roc_auc": 0.9955370883348723,
+            "undefined_reasons": {}
+          }
+        ],
+        "confusion_matrix": [
+          [
+            193,
+            0,
+            0,
+            3
+          ],
+          [
+            3,
+            72,
+            0,
+            10
+          ],
+          [
+            0,
+            0,
+            175,
+            0
+          ],
+          [
+            3,
+            4,
+            0,
+            164
+          ]
+        ],
+        "roc_auc": {
+          "macro": 0.9971068611338929,
+          "weighted": 0.9977247099875424,
+          "undefined_reason": null
+        },
+        "classification_summary": "Class | Precision | Recall | F1 | Specificity | Support\nCommon_Rust | 0.9698 | 0.9847 | 0.9772 | 0.9861 | 196\nGray_Leaf_Spot | 0.9474 | 0.8471 | 0.8944 | 0.9926 | 85\nHealthy | 1.0000 | 1.0000 | 1.0000 | 1.0000 | 175\nNorthern_Corn_Leaf_Blight | 0.9266 | 0.9591 | 0.9425 | 0.9715 | 171\nAccuracy: 0.9633 (627 samples)\nmacro: precision=0.9609, recall=0.9477, F1=0.9535\nweighted: precision=0.9634, recall=0.9633, F1=0.9629\n"
+      },
+      "matched_original_metrics": {
+        "class_names": [
+          "Common_Rust",
+          "Gray_Leaf_Spot",
+          "Healthy",
+          "Northern_Corn_Leaf_Blight"
+        ],
+        "sample_count": 627,
+        "accuracy": 0.9681020733652312,
+        "macro_precision": 0.9634760730578937,
+        "macro_recall": 0.9550485983867231,
+        "macro_f1": 0.9589089912721949,
+        "weighted_precision": 0.968027205315925,
+        "weighted_recall": 0.9681020733652312,
+        "weighted_f1": 0.9678448186790355,
+        "aggregate_undefined_reasons": {},
+        "per_class": [
+          {
+            "index": 0,
+            "label": "Common_Rust",
+            "support": 196,
+            "predicted_support": 197,
+            "true_positive": 193,
+            "false_positive": 4,
+            "false_negative": 3,
+            "true_negative": 427,
+            "precision": 0.9796954314720813,
+            "recall": 0.9846938775510204,
+            "f1": 0.9821882951653944,
+            "specificity": 0.9907192575406032,
+            "roc_auc": 0.9993844405511625,
+            "undefined_reasons": {}
+          },
+          {
+            "index": 1,
+            "label": "Gray_Leaf_Spot",
+            "support": 85,
+            "predicted_support": 79,
+            "true_positive": 74,
+            "false_positive": 5,
+            "false_negative": 11,
+            "true_negative": 537,
+            "precision": 0.9367088607594937,
+            "recall": 0.8705882352941177,
+            "f1": 0.9024390243902439,
+            "specificity": 0.9907749077490775,
+            "roc_auc": 0.9932928152810939,
+            "undefined_reasons": {}
+          },
+          {
+            "index": 2,
+            "label": "Healthy",
+            "support": 175,
+            "predicted_support": 175,
+            "true_positive": 175,
+            "false_positive": 0,
+            "false_negative": 0,
+            "true_negative": 452,
+            "precision": 1.0,
+            "recall": 1.0,
+            "f1": 1.0,
+            "specificity": 1.0,
+            "roc_auc": 1.0,
+            "undefined_reasons": {}
+          },
+          {
+            "index": 3,
+            "label": "Northern_Corn_Leaf_Blight",
+            "support": 171,
+            "predicted_support": 176,
+            "true_positive": 165,
+            "false_positive": 11,
+            "false_negative": 6,
+            "true_negative": 445,
+            "precision": 0.9375,
+            "recall": 0.9649122807017544,
+            "f1": 0.9510086455331412,
+            "specificity": 0.9758771929824561,
+            "roc_auc": 0.9956653329229507,
+            "undefined_reasons": {}
+          }
+        ],
+        "confusion_matrix": [
+          [
+            193,
+            0,
+            0,
+            3
+          ],
+          [
+            3,
+            74,
+            0,
+            8
+          ],
+          [
+            0,
+            0,
+            175,
+            0
+          ],
+          [
+            1,
+            5,
+            0,
+            165
+          ]
+        ],
+        "roc_auc": {
+          "macro": 0.9970856471888018,
+          "weighted": 0.9977161269166595,
+          "undefined_reason": null
+        },
+        "classification_summary": "Class | Precision | Recall | F1 | Specificity | Support\nCommon_Rust | 0.9797 | 0.9847 | 0.9822 | 0.9907 | 196\nGray_Leaf_Spot | 0.9367 | 0.8706 | 0.9024 | 0.9908 | 85\nHealthy | 1.0000 | 1.0000 | 1.0000 | 1.0000 | 175\nNorthern_Corn_Leaf_Blight | 0.9375 | 0.9649 | 0.9510 | 0.9759 | 171\nAccuracy: 0.9681 (627 samples)\nmacro: precision=0.9635, recall=0.9550, F1=0.9589\nweighted: precision=0.9680, recall=0.9681, F1=0.9678\n"
+      },
+      "accuracy_change_vs_matched_original": -0.004784688995215336
+    },
+    "rotation_minus_5": {
+      "evaluated": 627,
+      "admission_failures": 0,
+      "class_change_count": 9,
+      "class_change_rate": 0.014354066985645933,
+      "mean_confidence_change": -0.0011979542565687992,
+      "metrics": {
+        "class_names": [
+          "Common_Rust",
+          "Gray_Leaf_Spot",
+          "Healthy",
+          "Northern_Corn_Leaf_Blight"
+        ],
+        "sample_count": 627,
+        "accuracy": 0.9728867623604466,
+        "macro_precision": 0.9710849414239244,
+        "macro_recall": 0.959248085198992,
+        "macro_f1": 0.9645304838650425,
+        "weighted_precision": 0.9729947348956351,
+        "weighted_recall": 0.9728867623604466,
+        "weighted_f1": 0.9725522154214078,
+        "aggregate_undefined_reasons": {},
+        "per_class": [
+          {
+            "index": 0,
+            "label": "Common_Rust",
+            "support": 196,
+            "predicted_support": 198,
+            "true_positive": 194,
+            "false_positive": 4,
+            "false_negative": 2,
+            "true_negative": 427,
+            "precision": 0.9797979797979798,
+            "recall": 0.9897959183673469,
+            "f1": 0.9847715736040609,
+            "specificity": 0.9907192575406032,
+            "roc_auc": 0.999656707230456,
+            "undefined_reasons": {}
+          },
+          {
+            "index": 1,
+            "label": "Gray_Leaf_Spot",
+            "support": 85,
+            "predicted_support": 77,
+            "true_positive": 74,
+            "false_positive": 3,
+            "false_negative": 11,
+            "true_negative": 539,
+            "precision": 0.961038961038961,
+            "recall": 0.8705882352941177,
+            "f1": 0.9135802469135802,
+            "specificity": 0.9944649446494465,
+            "roc_auc": 0.9949424788365531,
+            "undefined_reasons": {}
+          },
+          {
+            "index": 2,
+            "label": "Healthy",
+            "support": 175,
+            "predicted_support": 175,
+            "true_positive": 175,
+            "false_positive": 0,
+            "false_negative": 0,
+            "true_negative": 452,
+            "precision": 1.0,
+            "recall": 1.0,
+            "f1": 1.0,
+            "specificity": 1.0,
+            "roc_auc": 1.0,
+            "undefined_reasons": {}
+          },
+          {
+            "index": 3,
+            "label": "Northern_Corn_Leaf_Blight",
+            "support": 171,
+            "predicted_support": 177,
+            "true_positive": 167,
+            "false_positive": 10,
+            "false_negative": 4,
+            "true_negative": 446,
+            "precision": 0.943502824858757,
+            "recall": 0.9766081871345029,
+            "f1": 0.9597701149425287,
+            "specificity": 0.9780701754385965,
+            "roc_auc": 0.9974222837796245,
+            "undefined_reasons": {}
+          }
+        ],
+        "confusion_matrix": [
+          [
+            194,
+            0,
+            0,
+            2
+          ],
+          [
+            3,
+            74,
+            0,
+            8
+          ],
+          [
+            0,
+            0,
+            175,
+            0
+          ],
+          [
+            1,
+            3,
+            0,
+            167
+          ]
+        ],
+        "roc_auc": {
+          "macro": 0.9980053674616584,
+          "weighted": 0.9985040444092379,
+          "undefined_reason": null
+        },
+        "classification_summary": "Class | Precision | Recall | F1 | Specificity | Support\nCommon_Rust | 0.9798 | 0.9898 | 0.9848 | 0.9907 | 196\nGray_Leaf_Spot | 0.9610 | 0.8706 | 0.9136 | 0.9945 | 85\nHealthy | 1.0000 | 1.0000 | 1.0000 | 1.0000 | 175\nNorthern_Corn_Leaf_Blight | 0.9435 | 0.9766 | 0.9598 | 0.9781 | 171\nAccuracy: 0.9729 (627 samples)\nmacro: precision=0.9711, recall=0.9592, F1=0.9645\nweighted: precision=0.9730, recall=0.9729, F1=0.9726\n"
+      },
+      "matched_original_metrics": {
+        "class_names": [
+          "Common_Rust",
+          "Gray_Leaf_Spot",
+          "Healthy",
+          "Northern_Corn_Leaf_Blight"
+        ],
+        "sample_count": 627,
+        "accuracy": 0.9681020733652312,
+        "macro_precision": 0.9634760730578937,
+        "macro_recall": 0.9550485983867231,
+        "macro_f1": 0.9589089912721949,
+        "weighted_precision": 0.968027205315925,
+        "weighted_recall": 0.9681020733652312,
+        "weighted_f1": 0.9678448186790355,
+        "aggregate_undefined_reasons": {},
+        "per_class": [
+          {
+            "index": 0,
+            "label": "Common_Rust",
+            "support": 196,
+            "predicted_support": 197,
+            "true_positive": 193,
+            "false_positive": 4,
+            "false_negative": 3,
+            "true_negative": 427,
+            "precision": 0.9796954314720813,
+            "recall": 0.9846938775510204,
+            "f1": 0.9821882951653944,
+            "specificity": 0.9907192575406032,
+            "roc_auc": 0.9993844405511625,
+            "undefined_reasons": {}
+          },
+          {
+            "index": 1,
+            "label": "Gray_Leaf_Spot",
+            "support": 85,
+            "predicted_support": 79,
+            "true_positive": 74,
+            "false_positive": 5,
+            "false_negative": 11,
+            "true_negative": 537,
+            "precision": 0.9367088607594937,
+            "recall": 0.8705882352941177,
+            "f1": 0.9024390243902439,
+            "specificity": 0.9907749077490775,
+            "roc_auc": 0.9932928152810939,
+            "undefined_reasons": {}
+          },
+          {
+            "index": 2,
+            "label": "Healthy",
+            "support": 175,
+            "predicted_support": 175,
+            "true_positive": 175,
+            "false_positive": 0,
+            "false_negative": 0,
+            "true_negative": 452,
+            "precision": 1.0,
+            "recall": 1.0,
+            "f1": 1.0,
+            "specificity": 1.0,
+            "roc_auc": 1.0,
+            "undefined_reasons": {}
+          },
+          {
+            "index": 3,
+            "label": "Northern_Corn_Leaf_Blight",
+            "support": 171,
+            "predicted_support": 176,
+            "true_positive": 165,
+            "false_positive": 11,
+            "false_negative": 6,
+            "true_negative": 445,
+            "precision": 0.9375,
+            "recall": 0.9649122807017544,
+            "f1": 0.9510086455331412,
+            "specificity": 0.9758771929824561,
+            "roc_auc": 0.9956653329229507,
+            "undefined_reasons": {}
+          }
+        ],
+        "confusion_matrix": [
+          [
+            193,
+            0,
+            0,
+            3
+          ],
+          [
+            3,
+            74,
+            0,
+            8
+          ],
+          [
+            0,
+            0,
+            175,
+            0
+          ],
+          [
+            1,
+            5,
+            0,
+            165
+          ]
+        ],
+        "roc_auc": {
+          "macro": 0.9970856471888018,
+          "weighted": 0.9977161269166595,
+          "undefined_reason": null
+        },
+        "classification_summary": "Class | Precision | Recall | F1 | Specificity | Support\nCommon_Rust | 0.9797 | 0.9847 | 0.9822 | 0.9907 | 196\nGray_Leaf_Spot | 0.9367 | 0.8706 | 0.9024 | 0.9908 | 85\nHealthy | 1.0000 | 1.0000 | 1.0000 | 1.0000 | 175\nNorthern_Corn_Leaf_Blight | 0.9375 | 0.9649 | 0.9510 | 0.9759 | 171\nAccuracy: 0.9681 (627 samples)\nmacro: precision=0.9635, recall=0.9550, F1=0.9589\nweighted: precision=0.9680, recall=0.9681, F1=0.9678\n"
+      },
+      "accuracy_change_vs_matched_original": 0.004784688995215336
+    },
+    "rotation_plus_5": {
+      "evaluated": 627,
+      "admission_failures": 0,
+      "class_change_count": 14,
+      "class_change_rate": 0.022328548644338118,
+      "mean_confidence_change": -0.003449410437777092,
+      "metrics": {
+        "class_names": [
+          "Common_Rust",
+          "Gray_Leaf_Spot",
+          "Healthy",
+          "Northern_Corn_Leaf_Blight"
+        ],
+        "sample_count": 627,
+        "accuracy": 0.9665071770334929,
+        "macro_precision": 0.9623401162790697,
+        "macro_recall": 0.9548793201491123,
+        "macro_f1": 0.9583738257207645,
+        "weighted_precision": 0.9662928860205482,
+        "weighted_recall": 0.9665071770334929,
+        "weighted_f1": 0.9662533143638505,
+        "aggregate_undefined_reasons": {},
+        "per_class": [
+          {
+            "index": 0,
+            "label": "Common_Rust",
+            "support": 196,
+            "predicted_support": 200,
+            "true_positive": 194,
+            "false_positive": 6,
+            "false_negative": 2,
+            "true_negative": 425,
+            "precision": 0.97,
+            "recall": 0.9897959183673469,
+            "f1": 0.9797979797979798,
+            "specificity": 0.9860788863109049,
+            "roc_auc": 0.9997040579572897,
+            "undefined_reasons": {}
+          },
+          {
+            "index": 1,
+            "label": "Gray_Leaf_Spot",
+            "support": 85,
+            "predicted_support": 80,
+            "true_positive": 75,
+            "false_positive": 5,
+            "false_negative": 10,
+            "true_negative": 537,
+            "precision": 0.9375,
+            "recall": 0.8823529411764706,
+            "f1": 0.9090909090909091,
+            "specificity": 0.9907749077490775,
+            "roc_auc": 0.9949858910353809,
+            "undefined_reasons": {}
+          },
+          {
+            "index": 2,
+            "label": "Healthy",
+            "support": 175,
+            "predicted_support": 175,
+            "true_positive": 175,
+            "false_positive": 0,
+            "false_negative": 0,
+            "true_negative": 452,
+            "precision": 1.0,
+            "recall": 1.0,
+            "f1": 1.0,
+            "specificity": 1.0,
+            "roc_auc": 1.0,
+            "undefined_reasons": {}
+          },
+          {
+            "index": 3,
+            "label": "Northern_Corn_Leaf_Blight",
+            "support": 171,
+            "predicted_support": 172,
+            "true_positive": 162,
+            "false_positive": 10,
+            "false_negative": 9,
+            "true_negative": 446,
+            "precision": 0.9418604651162791,
+            "recall": 0.9473684210526315,
+            "f1": 0.9446064139941691,
+            "specificity": 0.9780701754385965,
+            "roc_auc": 0.9968708320508874,
+            "undefined_reasons": {}
+          }
+        ],
+        "confusion_matrix": [
+          [
+            194,
+            0,
+            0,
+            2
+          ],
+          [
+            2,
+            75,
+            0,
+            8
+          ],
+          [
+            0,
+            0,
+            175,
+            0
+          ],
+          [
+            4,
+            5,
+            0,
+            162
+          ]
+        ],
+        "roc_auc": {
+          "macro": 0.9978901952608894,
+          "weighted": 0.9983743355316395,
+          "undefined_reason": null
+        },
+        "classification_summary": "Class | Precision | Recall | F1 | Specificity | Support\nCommon_Rust | 0.9700 | 0.9898 | 0.9798 | 0.9861 | 196\nGray_Leaf_Spot | 0.9375 | 0.8824 | 0.9091 | 0.9908 | 85\nHealthy | 1.0000 | 1.0000 | 1.0000 | 1.0000 | 175\nNorthern_Corn_Leaf_Blight | 0.9419 | 0.9474 | 0.9446 | 0.9781 | 171\nAccuracy: 0.9665 (627 samples)\nmacro: precision=0.9623, recall=0.9549, F1=0.9584\nweighted: precision=0.9663, recall=0.9665, F1=0.9663\n"
+      },
+      "matched_original_metrics": {
+        "class_names": [
+          "Common_Rust",
+          "Gray_Leaf_Spot",
+          "Healthy",
+          "Northern_Corn_Leaf_Blight"
+        ],
+        "sample_count": 627,
+        "accuracy": 0.9681020733652312,
+        "macro_precision": 0.9634760730578937,
+        "macro_recall": 0.9550485983867231,
+        "macro_f1": 0.9589089912721949,
+        "weighted_precision": 0.968027205315925,
+        "weighted_recall": 0.9681020733652312,
+        "weighted_f1": 0.9678448186790355,
+        "aggregate_undefined_reasons": {},
+        "per_class": [
+          {
+            "index": 0,
+            "label": "Common_Rust",
+            "support": 196,
+            "predicted_support": 197,
+            "true_positive": 193,
+            "false_positive": 4,
+            "false_negative": 3,
+            "true_negative": 427,
+            "precision": 0.9796954314720813,
+            "recall": 0.9846938775510204,
+            "f1": 0.9821882951653944,
+            "specificity": 0.9907192575406032,
+            "roc_auc": 0.9993844405511625,
+            "undefined_reasons": {}
+          },
+          {
+            "index": 1,
+            "label": "Gray_Leaf_Spot",
+            "support": 85,
+            "predicted_support": 79,
+            "true_positive": 74,
+            "false_positive": 5,
+            "false_negative": 11,
+            "true_negative": 537,
+            "precision": 0.9367088607594937,
+            "recall": 0.8705882352941177,
+            "f1": 0.9024390243902439,
+            "specificity": 0.9907749077490775,
+            "roc_auc": 0.9932928152810939,
+            "undefined_reasons": {}
+          },
+          {
+            "index": 2,
+            "label": "Healthy",
+            "support": 175,
+            "predicted_support": 175,
+            "true_positive": 175,
+            "false_positive": 0,
+            "false_negative": 0,
+            "true_negative": 452,
+            "precision": 1.0,
+            "recall": 1.0,
+            "f1": 1.0,
+            "specificity": 1.0,
+            "roc_auc": 1.0,
+            "undefined_reasons": {}
+          },
+          {
+            "index": 3,
+            "label": "Northern_Corn_Leaf_Blight",
+            "support": 171,
+            "predicted_support": 176,
+            "true_positive": 165,
+            "false_positive": 11,
+            "false_negative": 6,
+            "true_negative": 445,
+            "precision": 0.9375,
+            "recall": 0.9649122807017544,
+            "f1": 0.9510086455331412,
+            "specificity": 0.9758771929824561,
+            "roc_auc": 0.9956653329229507,
+            "undefined_reasons": {}
+          }
+        ],
+        "confusion_matrix": [
+          [
+            193,
+            0,
+            0,
+            3
+          ],
+          [
+            3,
+            74,
+            0,
+            8
+          ],
+          [
+            0,
+            0,
+            175,
+            0
+          ],
+          [
+            1,
+            5,
+            0,
+            165
+          ]
+        ],
+        "roc_auc": {
+          "macro": 0.9970856471888018,
+          "weighted": 0.9977161269166595,
+          "undefined_reason": null
+        },
+        "classification_summary": "Class | Precision | Recall | F1 | Specificity | Support\nCommon_Rust | 0.9797 | 0.9847 | 0.9822 | 0.9907 | 196\nGray_Leaf_Spot | 0.9367 | 0.8706 | 0.9024 | 0.9908 | 85\nHealthy | 1.0000 | 1.0000 | 1.0000 | 1.0000 | 175\nNorthern_Corn_Leaf_Blight | 0.9375 | 0.9649 | 0.9510 | 0.9759 | 171\nAccuracy: 0.9681 (627 samples)\nmacro: precision=0.9635, recall=0.9550, F1=0.9589\nweighted: precision=0.9680, recall=0.9681, F1=0.9678\n"
+      },
+      "accuracy_change_vs_matched_original": -0.0015948963317383713
+    },
+    "scale_0.97": {
+      "evaluated": 627,
+      "admission_failures": 0,
+      "class_change_count": 17,
+      "class_change_rate": 0.02711323763955343,
+      "mean_confidence_change": 0.00026270262362283953,
+      "metrics": {
+        "class_names": [
+          "Common_Rust",
+          "Gray_Leaf_Spot",
+          "Healthy",
+          "Northern_Corn_Leaf_Blight"
+        ],
+        "sample_count": 627,
+        "accuracy": 0.9665071770334929,
+        "macro_precision": 0.9698378823073945,
+        "macro_recall": 0.9485896112831098,
+        "macro_f1": 0.9574978967661292,
+        "weighted_precision": 0.9672503906971172,
+        "weighted_recall": 0.9665071770334929,
+        "weighted_f1": 0.9658437394588975,
+        "aggregate_undefined_reasons": {},
+        "per_class": [
+          {
+            "index": 0,
+            "label": "Common_Rust",
+            "support": 196,
+            "predicted_support": 205,
+            "true_positive": 196,
+            "false_positive": 9,
+            "false_negative": 0,
+            "true_negative": 422,
+            "precision": 0.9560975609756097,
+            "recall": 1.0,
+            "f1": 0.9775561097256857,
+            "specificity": 0.9791183294663574,
+            "roc_auc": 0.9997632463658317,
+            "undefined_reasons": {}
+          },
+          {
+            "index": 1,
+            "label": "Gray_Leaf_Spot",
+            "support": 85,
+            "predicted_support": 72,
+            "true_positive": 71,
+            "false_positive": 1,
+            "false_negative": 14,
+            "true_negative": 541,
+            "precision": 0.9861111111111112,
+            "recall": 0.8352941176470589,
+            "f1": 0.9044585987261147,
+            "specificity": 0.9981549815498155,
+            "roc_auc": 0.995615367918385,
+            "undefined_reasons": {}
+          },
+          {
+            "index": 2,
+            "label": "Healthy",
+            "support": 175,
+            "predicted_support": 175,
+            "true_positive": 175,
+            "false_positive": 0,
+            "false_negative": 0,
+            "true_negative": 452,
+            "precision": 1.0,
+            "recall": 1.0,
+            "f1": 1.0,
+            "specificity": 1.0,
+            "roc_auc": 1.0,
+            "undefined_reasons": {}
+          },
+          {
+            "index": 3,
+            "label": "Northern_Corn_Leaf_Blight",
+            "support": 171,
+            "predicted_support": 175,
+            "true_positive": 164,
+            "false_positive": 11,
+            "false_negative": 7,
+            "true_negative": 445,
+            "precision": 0.9371428571428572,
+            "recall": 0.9590643274853801,
+            "f1": 0.9479768786127167,
+            "specificity": 0.9758771929824561,
+            "roc_auc": 0.9974222837796245,
+            "undefined_reasons": {}
+          }
+        ],
+        "confusion_matrix": [
+          [
+            196,
+            0,
+            0,
+            0
+          ],
+          [
+            3,
+            71,
+            0,
+            11
+          ],
+          [
+            0,
+            0,
+            175,
+            0
+          ],
+          [
+            6,
+            1,
+            0,
+            164
+          ]
+        ],
+        "roc_auc": {
+          "macro": 0.9982002245159604,
+          "weighted": 0.9986285695168765,
+          "undefined_reason": null
+        },
+        "classification_summary": "Class | Precision | Recall | F1 | Specificity | Support\nCommon_Rust | 0.9561 | 1.0000 | 0.9776 | 0.9791 | 196\nGray_Leaf_Spot | 0.9861 | 0.8353 | 0.9045 | 0.9982 | 85\nHealthy | 1.0000 | 1.0000 | 1.0000 | 1.0000 | 175\nNorthern_Corn_Leaf_Blight | 0.9371 | 0.9591 | 0.9480 | 0.9759 | 171\nAccuracy: 0.9665 (627 samples)\nmacro: precision=0.9698, recall=0.9486, F1=0.9575\nweighted: precision=0.9673, recall=0.9665, F1=0.9658\n"
+      },
+      "matched_original_metrics": {
+        "class_names": [
+          "Common_Rust",
+          "Gray_Leaf_Spot",
+          "Healthy",
+          "Northern_Corn_Leaf_Blight"
+        ],
+        "sample_count": 627,
+        "accuracy": 0.9681020733652312,
+        "macro_precision": 0.9634760730578937,
+        "macro_recall": 0.9550485983867231,
+        "macro_f1": 0.9589089912721949,
+        "weighted_precision": 0.968027205315925,
+        "weighted_recall": 0.9681020733652312,
+        "weighted_f1": 0.9678448186790355,
+        "aggregate_undefined_reasons": {},
+        "per_class": [
+          {
+            "index": 0,
+            "label": "Common_Rust",
+            "support": 196,
+            "predicted_support": 197,
+            "true_positive": 193,
+            "false_positive": 4,
+            "false_negative": 3,
+            "true_negative": 427,
+            "precision": 0.9796954314720813,
+            "recall": 0.9846938775510204,
+            "f1": 0.9821882951653944,
+            "specificity": 0.9907192575406032,
+            "roc_auc": 0.9993844405511625,
+            "undefined_reasons": {}
+          },
+          {
+            "index": 1,
+            "label": "Gray_Leaf_Spot",
+            "support": 85,
+            "predicted_support": 79,
+            "true_positive": 74,
+            "false_positive": 5,
+            "false_negative": 11,
+            "true_negative": 537,
+            "precision": 0.9367088607594937,
+            "recall": 0.8705882352941177,
+            "f1": 0.9024390243902439,
+            "specificity": 0.9907749077490775,
+            "roc_auc": 0.9932928152810939,
+            "undefined_reasons": {}
+          },
+          {
+            "index": 2,
+            "label": "Healthy",
+            "support": 175,
+            "predicted_support": 175,
+            "true_positive": 175,
+            "false_positive": 0,
+            "false_negative": 0,
+            "true_negative": 452,
+            "precision": 1.0,
+            "recall": 1.0,
+            "f1": 1.0,
+            "specificity": 1.0,
+            "roc_auc": 1.0,
+            "undefined_reasons": {}
+          },
+          {
+            "index": 3,
+            "label": "Northern_Corn_Leaf_Blight",
+            "support": 171,
+            "predicted_support": 176,
+            "true_positive": 165,
+            "false_positive": 11,
+            "false_negative": 6,
+            "true_negative": 445,
+            "precision": 0.9375,
+            "recall": 0.9649122807017544,
+            "f1": 0.9510086455331412,
+            "specificity": 0.9758771929824561,
+            "roc_auc": 0.9956653329229507,
+            "undefined_reasons": {}
+          }
+        ],
+        "confusion_matrix": [
+          [
+            193,
+            0,
+            0,
+            3
+          ],
+          [
+            3,
+            74,
+            0,
+            8
+          ],
+          [
+            0,
+            0,
+            175,
+            0
+          ],
+          [
+            1,
+            5,
+            0,
+            165
+          ]
+        ],
+        "roc_auc": {
+          "macro": 0.9970856471888018,
+          "weighted": 0.9977161269166595,
+          "undefined_reason": null
+        },
+        "classification_summary": "Class | Precision | Recall | F1 | Specificity | Support\nCommon_Rust | 0.9797 | 0.9847 | 0.9822 | 0.9907 | 196\nGray_Leaf_Spot | 0.9367 | 0.8706 | 0.9024 | 0.9908 | 85\nHealthy | 1.0000 | 1.0000 | 1.0000 | 1.0000 | 175\nNorthern_Corn_Leaf_Blight | 0.9375 | 0.9649 | 0.9510 | 0.9759 | 171\nAccuracy: 0.9681 (627 samples)\nmacro: precision=0.9635, recall=0.9550, F1=0.9589\nweighted: precision=0.9680, recall=0.9681, F1=0.9678\n"
+      },
+      "accuracy_change_vs_matched_original": -0.0015948963317383713
+    },
+    "jpeg_quality_70": {
+      "evaluated": 627,
+      "admission_failures": 0,
+      "class_change_count": 3,
+      "class_change_rate": 0.004784688995215311,
+      "mean_confidence_change": -0.002580796322373872,
+      "metrics": {
+        "class_names": [
+          "Common_Rust",
+          "Gray_Leaf_Spot",
+          "Healthy",
+          "Northern_Corn_Leaf_Blight"
+        ],
+        "sample_count": 627,
+        "accuracy": 0.9649122807017544,
+        "macro_precision": 0.9603866305282907,
+        "macro_recall": 0.9491662454455466,
+        "macro_f1": 0.954109977324263,
+        "weighted_precision": 0.9650816870885836,
+        "weighted_recall": 0.9649122807017544,
+        "weighted_f1": 0.9645679856206172,
+        "aggregate_undefined_reasons": {},
+        "per_class": [
+          {
+            "index": 0,
+            "label": "Common_Rust",
+            "support": 196,
+            "predicted_support": 196,
+            "true_positive": 193,
+            "false_positive": 3,
+            "false_negative": 3,
+            "true_negative": 428,
+            "precision": 0.9846938775510204,
+            "recall": 0.9846938775510204,
+            "f1": 0.9846938775510204,
+            "specificity": 0.9930394431554525,
+            "roc_auc": 0.9994199535962877,
+            "undefined_reasons": {}
+          },
+          {
+            "index": 1,
+            "label": "Gray_Leaf_Spot",
+            "support": 85,
+            "predicted_support": 77,
+            "true_positive": 72,
+            "false_positive": 5,
+            "false_negative": 13,
+            "true_negative": 537,
+            "precision": 0.935064935064935,
+            "recall": 0.8470588235294118,
+            "f1": 0.8888888888888888,
+            "specificity": 0.9907749077490775,
+            "roc_auc": 0.9920121554156718,
+            "undefined_reasons": {}
+          },
+          {
+            "index": 2,
+            "label": "Healthy",
+            "support": 175,
+            "predicted_support": 175,
+            "true_positive": 175,
+            "false_positive": 0,
+            "false_negative": 0,
+            "true_negative": 452,
+            "precision": 1.0,
+            "recall": 1.0,
+            "f1": 1.0,
+            "specificity": 1.0,
+            "roc_auc": 1.0,
+            "undefined_reasons": {}
+          },
+          {
+            "index": 3,
+            "label": "Northern_Corn_Leaf_Blight",
+            "support": 171,
+            "predicted_support": 179,
+            "true_positive": 165,
+            "false_positive": 14,
+            "false_negative": 6,
+            "true_negative": 442,
+            "precision": 0.9217877094972067,
+            "recall": 0.9649122807017544,
+            "f1": 0.9428571428571428,
+            "specificity": 0.9692982456140351,
+            "roc_auc": 0.9953190725351391,
+            "undefined_reasons": {}
+          }
+        ],
+        "confusion_matrix": [
+          [
+            193,
+            0,
+            0,
+            3
+          ],
+          [
+            2,
+            72,
+            0,
+            11
+          ],
+          [
+            0,
+            0,
+            175,
+            0
+          ],
+          [
+            1,
+            5,
+            0,
+            165
+          ]
+        ],
+        "roc_auc": {
+          "macro": 0.9966877953867747,
+          "weighted": 0.9974591794556831,
+          "undefined_reason": null
+        },
+        "classification_summary": "Class | Precision | Recall | F1 | Specificity | Support\nCommon_Rust | 0.9847 | 0.9847 | 0.9847 | 0.9930 | 196\nGray_Leaf_Spot | 0.9351 | 0.8471 | 0.8889 | 0.9908 | 85\nHealthy | 1.0000 | 1.0000 | 1.0000 | 1.0000 | 175\nNorthern_Corn_Leaf_Blight | 0.9218 | 0.9649 | 0.9429 | 0.9693 | 171\nAccuracy: 0.9649 (627 samples)\nmacro: precision=0.9604, recall=0.9492, F1=0.9541\nweighted: precision=0.9651, recall=0.9649, F1=0.9646\n"
+      },
+      "matched_original_metrics": {
+        "class_names": [
+          "Common_Rust",
+          "Gray_Leaf_Spot",
+          "Healthy",
+          "Northern_Corn_Leaf_Blight"
+        ],
+        "sample_count": 627,
+        "accuracy": 0.9681020733652312,
+        "macro_precision": 0.9634760730578937,
+        "macro_recall": 0.9550485983867231,
+        "macro_f1": 0.9589089912721949,
+        "weighted_precision": 0.968027205315925,
+        "weighted_recall": 0.9681020733652312,
+        "weighted_f1": 0.9678448186790355,
+        "aggregate_undefined_reasons": {},
+        "per_class": [
+          {
+            "index": 0,
+            "label": "Common_Rust",
+            "support": 196,
+            "predicted_support": 197,
+            "true_positive": 193,
+            "false_positive": 4,
+            "false_negative": 3,
+            "true_negative": 427,
+            "precision": 0.9796954314720813,
+            "recall": 0.9846938775510204,
+            "f1": 0.9821882951653944,
+            "specificity": 0.9907192575406032,
+            "roc_auc": 0.9993844405511625,
+            "undefined_reasons": {}
+          },
+          {
+            "index": 1,
+            "label": "Gray_Leaf_Spot",
+            "support": 85,
+            "predicted_support": 79,
+            "true_positive": 74,
+            "false_positive": 5,
+            "false_negative": 11,
+            "true_negative": 537,
+            "precision": 0.9367088607594937,
+            "recall": 0.8705882352941177,
+            "f1": 0.9024390243902439,
+            "specificity": 0.9907749077490775,
+            "roc_auc": 0.9932928152810939,
+            "undefined_reasons": {}
+          },
+          {
+            "index": 2,
+            "label": "Healthy",
+            "support": 175,
+            "predicted_support": 175,
+            "true_positive": 175,
+            "false_positive": 0,
+            "false_negative": 0,
+            "true_negative": 452,
+            "precision": 1.0,
+            "recall": 1.0,
+            "f1": 1.0,
+            "specificity": 1.0,
+            "roc_auc": 1.0,
+            "undefined_reasons": {}
+          },
+          {
+            "index": 3,
+            "label": "Northern_Corn_Leaf_Blight",
+            "support": 171,
+            "predicted_support": 176,
+            "true_positive": 165,
+            "false_positive": 11,
+            "false_negative": 6,
+            "true_negative": 445,
+            "precision": 0.9375,
+            "recall": 0.9649122807017544,
+            "f1": 0.9510086455331412,
+            "specificity": 0.9758771929824561,
+            "roc_auc": 0.9956653329229507,
+            "undefined_reasons": {}
+          }
+        ],
+        "confusion_matrix": [
+          [
+            193,
+            0,
+            0,
+            3
+          ],
+          [
+            3,
+            74,
+            0,
+            8
+          ],
+          [
+            0,
+            0,
+            175,
+            0
+          ],
+          [
+            1,
+            5,
+            0,
+            165
+          ]
+        ],
+        "roc_auc": {
+          "macro": 0.9970856471888018,
+          "weighted": 0.9977161269166595,
+          "undefined_reason": null
+        },
+        "classification_summary": "Class | Precision | Recall | F1 | Specificity | Support\nCommon_Rust | 0.9797 | 0.9847 | 0.9822 | 0.9907 | 196\nGray_Leaf_Spot | 0.9367 | 0.8706 | 0.9024 | 0.9908 | 85\nHealthy | 1.0000 | 1.0000 | 1.0000 | 1.0000 | 175\nNorthern_Corn_Leaf_Blight | 0.9375 | 0.9649 | 0.9510 | 0.9759 | 171\nAccuracy: 0.9681 (627 samples)\nmacro: precision=0.9635, recall=0.9550, F1=0.9589\nweighted: precision=0.9680, recall=0.9681, F1=0.9678\n"
+      },
+      "accuracy_change_vs_matched_original": -0.0031897926634768536
+    },
+    "blur_radius_0.7": {
+      "evaluated": 627,
+      "admission_failures": 0,
+      "class_change_count": 11,
+      "class_change_rate": 0.017543859649122806,
+      "mean_confidence_change": -0.001376545885533237,
+      "metrics": {
+        "class_names": [
+          "Common_Rust",
+          "Gray_Leaf_Spot",
+          "Healthy",
+          "Northern_Corn_Leaf_Blight"
+        ],
+        "sample_count": 627,
+        "accuracy": 0.9649122807017544,
+        "macro_precision": 0.9621219040102229,
+        "macro_recall": 0.947687057279052,
+        "macro_f1": 0.9538439239332097,
+        "weighted_precision": 0.9653834066163232,
+        "weighted_recall": 0.9649122807017544,
+        "weighted_f1": 0.9644682470639407,
+        "aggregate_undefined_reasons": {},
+        "per_class": [
+          {
+            "index": 0,
+            "label": "Common_Rust",
+            "support": 196,
+            "predicted_support": 196,
+            "true_positive": 193,
+            "false_positive": 3,
+            "false_negative": 3,
+            "true_negative": 428,
+            "precision": 0.9846938775510204,
+            "recall": 0.9846938775510204,
+            "f1": 0.9846938775510204,
+            "specificity": 0.9930394431554525,
+            "roc_auc": 0.9994909796865382,
+            "undefined_reasons": {}
+          },
+          {
+            "index": 1,
+            "label": "Gray_Leaf_Spot",
+            "support": 85,
+            "predicted_support": 75,
+            "true_positive": 71,
+            "false_positive": 4,
+            "false_negative": 14,
+            "true_negative": 538,
+            "precision": 0.9466666666666667,
+            "recall": 0.8352941176470589,
+            "f1": 0.8875,
+            "specificity": 0.992619926199262,
+            "roc_auc": 0.9936184067723031,
+            "undefined_reasons": {}
+          },
+          {
+            "index": 2,
+            "label": "Healthy",
+            "support": 175,
+            "predicted_support": 175,
+            "true_positive": 175,
+            "false_positive": 0,
+            "false_negative": 0,
+            "true_negative": 452,
+            "precision": 1.0,
+            "recall": 1.0,
+            "f1": 1.0,
+            "specificity": 1.0,
+            "roc_auc": 1.0,
+            "undefined_reasons": {}
+          },
+          {
+            "index": 3,
+            "label": "Northern_Corn_Leaf_Blight",
+            "support": 171,
+            "predicted_support": 181,
+            "true_positive": 166,
+            "false_positive": 15,
+            "false_negative": 5,
+            "true_negative": 441,
+            "precision": 0.9171270718232044,
+            "recall": 0.9707602339181286,
+            "f1": 0.9431818181818182,
+            "specificity": 0.9671052631578947,
+            "roc_auc": 0.9961783112752642,
+            "undefined_reasons": {}
+          }
+        ],
+        "confusion_matrix": [
+          [
+            193,
+            0,
+            0,
+            3
+          ],
+          [
+            2,
+            71,
+            0,
+            12
+          ],
+          [
+            0,
+            0,
+            175,
+            0
+          ],
+          [
+            1,
+            4,
+            0,
+            166
+          ]
+        ],
+        "roc_auc": {
+          "macro": 0.9973219244335264,
+          "weighted": 0.9979334734007613,
+          "undefined_reason": null
+        },
+        "classification_summary": "Class | Precision | Recall | F1 | Specificity | Support\nCommon_Rust | 0.9847 | 0.9847 | 0.9847 | 0.9930 | 196\nGray_Leaf_Spot | 0.9467 | 0.8353 | 0.8875 | 0.9926 | 85\nHealthy | 1.0000 | 1.0000 | 1.0000 | 1.0000 | 175\nNorthern_Corn_Leaf_Blight | 0.9171 | 0.9708 | 0.9432 | 0.9671 | 171\nAccuracy: 0.9649 (627 samples)\nmacro: precision=0.9621, recall=0.9477, F1=0.9538\nweighted: precision=0.9654, recall=0.9649, F1=0.9645\n"
+      },
+      "matched_original_metrics": {
+        "class_names": [
+          "Common_Rust",
+          "Gray_Leaf_Spot",
+          "Healthy",
+          "Northern_Corn_Leaf_Blight"
+        ],
+        "sample_count": 627,
+        "accuracy": 0.9681020733652312,
+        "macro_precision": 0.9634760730578937,
+        "macro_recall": 0.9550485983867231,
+        "macro_f1": 0.9589089912721949,
+        "weighted_precision": 0.968027205315925,
+        "weighted_recall": 0.9681020733652312,
+        "weighted_f1": 0.9678448186790355,
+        "aggregate_undefined_reasons": {},
+        "per_class": [
+          {
+            "index": 0,
+            "label": "Common_Rust",
+            "support": 196,
+            "predicted_support": 197,
+            "true_positive": 193,
+            "false_positive": 4,
+            "false_negative": 3,
+            "true_negative": 427,
+            "precision": 0.9796954314720813,
+            "recall": 0.9846938775510204,
+            "f1": 0.9821882951653944,
+            "specificity": 0.9907192575406032,
+            "roc_auc": 0.9993844405511625,
+            "undefined_reasons": {}
+          },
+          {
+            "index": 1,
+            "label": "Gray_Leaf_Spot",
+            "support": 85,
+            "predicted_support": 79,
+            "true_positive": 74,
+            "false_positive": 5,
+            "false_negative": 11,
+            "true_negative": 537,
+            "precision": 0.9367088607594937,
+            "recall": 0.8705882352941177,
+            "f1": 0.9024390243902439,
+            "specificity": 0.9907749077490775,
+            "roc_auc": 0.9932928152810939,
+            "undefined_reasons": {}
+          },
+          {
+            "index": 2,
+            "label": "Healthy",
+            "support": 175,
+            "predicted_support": 175,
+            "true_positive": 175,
+            "false_positive": 0,
+            "false_negative": 0,
+            "true_negative": 452,
+            "precision": 1.0,
+            "recall": 1.0,
+            "f1": 1.0,
+            "specificity": 1.0,
+            "roc_auc": 1.0,
+            "undefined_reasons": {}
+          },
+          {
+            "index": 3,
+            "label": "Northern_Corn_Leaf_Blight",
+            "support": 171,
+            "predicted_support": 176,
+            "true_positive": 165,
+            "false_positive": 11,
+            "false_negative": 6,
+            "true_negative": 445,
+            "precision": 0.9375,
+            "recall": 0.9649122807017544,
+            "f1": 0.9510086455331412,
+            "specificity": 0.9758771929824561,
+            "roc_auc": 0.9956653329229507,
+            "undefined_reasons": {}
+          }
+        ],
+        "confusion_matrix": [
+          [
+            193,
+            0,
+            0,
+            3
+          ],
+          [
+            3,
+            74,
+            0,
+            8
+          ],
+          [
+            0,
+            0,
+            175,
+            0
+          ],
+          [
+            1,
+            5,
+            0,
+            165
+          ]
+        ],
+        "roc_auc": {
+          "macro": 0.9970856471888018,
+          "weighted": 0.9977161269166595,
+          "undefined_reason": null
+        },
+        "classification_summary": "Class | Precision | Recall | F1 | Specificity | Support\nCommon_Rust | 0.9797 | 0.9847 | 0.9822 | 0.9907 | 196\nGray_Leaf_Spot | 0.9367 | 0.8706 | 0.9024 | 0.9908 | 85\nHealthy | 1.0000 | 1.0000 | 1.0000 | 1.0000 | 175\nNorthern_Corn_Leaf_Blight | 0.9375 | 0.9649 | 0.9510 | 0.9759 | 171\nAccuracy: 0.9681 (627 samples)\nmacro: precision=0.9635, recall=0.9550, F1=0.9589\nweighted: precision=0.9680, recall=0.9681, F1=0.9678\n"
+      },
+      "accuracy_change_vs_matched_original": -0.0031897926634768536
+    },
+    "horizontal_flip": {
+      "evaluated": 627,
+      "admission_failures": 0,
+      "class_change_count": 7,
+      "class_change_rate": 0.011164274322169059,
+      "mean_confidence_change": 0.0006998805433179012,
+      "metrics": {
+        "class_names": [
+          "Common_Rust",
+          "Gray_Leaf_Spot",
+          "Healthy",
+          "Northern_Corn_Leaf_Blight"
+        ],
+        "sample_count": 627,
+        "accuracy": 0.9665071770334929,
+        "macro_precision": 0.9656447379627844,
+        "macro_recall": 0.9521074219161348,
+        "macro_f1": 0.9580808375197574,
+        "weighted_precision": 0.9667336024951017,
+        "weighted_recall": 0.9665071770334929,
+        "weighted_f1": 0.9661405023454512,
+        "aggregate_undefined_reasons": {},
+        "per_class": [
+          {
+            "index": 0,
+            "label": "Common_Rust",
+            "support": 196,
+            "predicted_support": 199,
+            "true_positive": 193,
+            "false_positive": 6,
+            "false_negative": 3,
+            "true_negative": 425,
+            "precision": 0.9698492462311558,
+            "recall": 0.9846938775510204,
+            "f1": 0.9772151898734177,
+            "specificity": 0.9860788863109049,
+            "roc_auc": 0.9995975188219139,
+            "undefined_reasons": {}
+          },
+          {
+            "index": 1,
+            "label": "Gray_Leaf_Spot",
+            "support": 85,
+            "predicted_support": 76,
+            "true_positive": 73,
+            "false_positive": 3,
+            "false_negative": 12,
+            "true_negative": 539,
+            "precision": 0.9605263157894737,
+            "recall": 0.8588235294117647,
+            "f1": 0.906832298136646,
+            "specificity": 0.9944649446494465,
+            "roc_auc": 0.99327110918168,
+            "undefined_reasons": {}
+          },
+          {
+            "index": 2,
+            "label": "Healthy",
+            "support": 175,
+            "predicted_support": 175,
+            "true_positive": 175,
+            "false_positive": 0,
+            "false_negative": 0,
+            "true_negative": 452,
+            "precision": 1.0,
+            "recall": 1.0,
+            "f1": 1.0,
+            "specificity": 1.0,
+            "roc_auc": 1.0,
+            "undefined_reasons": {}
+          },
+          {
+            "index": 3,
+            "label": "Northern_Corn_Leaf_Blight",
+            "support": 171,
+            "predicted_support": 177,
+            "true_positive": 165,
+            "false_positive": 12,
+            "false_negative": 6,
+            "true_negative": 444,
+            "precision": 0.9322033898305084,
+            "recall": 0.9649122807017544,
+            "f1": 0.9482758620689655,
+            "specificity": 0.9736842105263158,
+            "roc_auc": 0.9956653329229507,
+            "undefined_reasons": {}
+          }
+        ],
+        "confusion_matrix": [
+          [
+            193,
+            0,
+            0,
+            3
+          ],
+          [
+            3,
+            73,
+            0,
+            9
+          ],
+          [
+            0,
+            0,
+            175,
+            0
+          ],
+          [
+            3,
+            3,
+            0,
+            165
+          ]
+        ],
+        "roc_auc": {
+          "macro": 0.9971334902316362,
+          "weighted": 0.9977797925029704,
+          "undefined_reason": null
+        },
+        "classification_summary": "Class | Precision | Recall | F1 | Specificity | Support\nCommon_Rust | 0.9698 | 0.9847 | 0.9772 | 0.9861 | 196\nGray_Leaf_Spot | 0.9605 | 0.8588 | 0.9068 | 0.9945 | 85\nHealthy | 1.0000 | 1.0000 | 1.0000 | 1.0000 | 175\nNorthern_Corn_Leaf_Blight | 0.9322 | 0.9649 | 0.9483 | 0.9737 | 171\nAccuracy: 0.9665 (627 samples)\nmacro: precision=0.9656, recall=0.9521, F1=0.9581\nweighted: precision=0.9667, recall=0.9665, F1=0.9661\n"
+      },
+      "matched_original_metrics": {
+        "class_names": [
+          "Common_Rust",
+          "Gray_Leaf_Spot",
+          "Healthy",
+          "Northern_Corn_Leaf_Blight"
+        ],
+        "sample_count": 627,
+        "accuracy": 0.9681020733652312,
+        "macro_precision": 0.9634760730578937,
+        "macro_recall": 0.9550485983867231,
+        "macro_f1": 0.9589089912721949,
+        "weighted_precision": 0.968027205315925,
+        "weighted_recall": 0.9681020733652312,
+        "weighted_f1": 0.9678448186790355,
+        "aggregate_undefined_reasons": {},
+        "per_class": [
+          {
+            "index": 0,
+            "label": "Common_Rust",
+            "support": 196,
+            "predicted_support": 197,
+            "true_positive": 193,
+            "false_positive": 4,
+            "false_negative": 3,
+            "true_negative": 427,
+            "precision": 0.9796954314720813,
+            "recall": 0.9846938775510204,
+            "f1": 0.9821882951653944,
+            "specificity": 0.9907192575406032,
+            "roc_auc": 0.9993844405511625,
+            "undefined_reasons": {}
+          },
+          {
+            "index": 1,
+            "label": "Gray_Leaf_Spot",
+            "support": 85,
+            "predicted_support": 79,
+            "true_positive": 74,
+            "false_positive": 5,
+            "false_negative": 11,
+            "true_negative": 537,
+            "precision": 0.9367088607594937,
+            "recall": 0.8705882352941177,
+            "f1": 0.9024390243902439,
+            "specificity": 0.9907749077490775,
+            "roc_auc": 0.9932928152810939,
+            "undefined_reasons": {}
+          },
+          {
+            "index": 2,
+            "label": "Healthy",
+            "support": 175,
+            "predicted_support": 175,
+            "true_positive": 175,
+            "false_positive": 0,
+            "false_negative": 0,
+            "true_negative": 452,
+            "precision": 1.0,
+            "recall": 1.0,
+            "f1": 1.0,
+            "specificity": 1.0,
+            "roc_auc": 1.0,
+            "undefined_reasons": {}
+          },
+          {
+            "index": 3,
+            "label": "Northern_Corn_Leaf_Blight",
+            "support": 171,
+            "predicted_support": 176,
+            "true_positive": 165,
+            "false_positive": 11,
+            "false_negative": 6,
+            "true_negative": 445,
+            "precision": 0.9375,
+            "recall": 0.9649122807017544,
+            "f1": 0.9510086455331412,
+            "specificity": 0.9758771929824561,
+            "roc_auc": 0.9956653329229507,
+            "undefined_reasons": {}
+          }
+        ],
+        "confusion_matrix": [
+          [
+            193,
+            0,
+            0,
+            3
+          ],
+          [
+            3,
+            74,
+            0,
+            8
+          ],
+          [
+            0,
+            0,
+            175,
+            0
+          ],
+          [
+            1,
+            5,
+            0,
+            165
+          ]
+        ],
+        "roc_auc": {
+          "macro": 0.9970856471888018,
+          "weighted": 0.9977161269166595,
+          "undefined_reason": null
+        },
+        "classification_summary": "Class | Precision | Recall | F1 | Specificity | Support\nCommon_Rust | 0.9797 | 0.9847 | 0.9822 | 0.9907 | 196\nGray_Leaf_Spot | 0.9367 | 0.8706 | 0.9024 | 0.9908 | 85\nHealthy | 1.0000 | 1.0000 | 1.0000 | 1.0000 | 175\nNorthern_Corn_Leaf_Blight | 0.9375 | 0.9649 | 0.9510 | 0.9759 | 171\nAccuracy: 0.9681 (627 samples)\nmacro: precision=0.9635, recall=0.9550, F1=0.9589\nweighted: precision=0.9680, recall=0.9681, F1=0.9678\n"
+      },
+      "accuracy_change_vs_matched_original": -0.0015948963317383713
+    }
+  },
+  "admission_failures": [],
+  "changed_cases": [
+    {
+      "sample_id": "059ddf97d4b4b78821434ddbf7faec8592a55cd38738fb83720551a06551da15",
+      "group_id": "25a0660b13444379d628c94802861170d77f550ec0f5a807030c18dc19ad9b64",
+      "true_index": 1,
+      "perturbation": "horizontal_flip",
+      "original_prediction": 1,
+      "perturbed_prediction": 3,
+      "original_confidence": 0.6666337847709656,
+      "perturbed_confidence": 0.6919627785682678,
+      "confidence_change": 0.025328993797302246,
+      "true_class_probability_change": -0.3585970997810364
+    },
+    {
+      "sample_id": "1236a199431c6c7b4798310cfb847faa4c4b9047b62149de91674989b1ed76b9",
+      "group_id": "6ed945d7e49f0ef0614a1e38847b85036ab51c727c1842e811552bdcfe4ab5c4",
+      "true_index": 0,
+      "perturbation": "rotation_minus_5",
+      "original_prediction": 3,
+      "perturbed_prediction": 0,
+      "original_confidence": 0.85776686668396,
+      "perturbed_confidence": 0.8258264660835266,
+      "confidence_change": -0.03194040060043335,
+      "true_class_probability_change": 0.7177494168281555
+    },
+    {
+      "sample_id": "1236a199431c6c7b4798310cfb847faa4c4b9047b62149de91674989b1ed76b9",
+      "group_id": "6ed945d7e49f0ef0614a1e38847b85036ab51c727c1842e811552bdcfe4ab5c4",
+      "true_index": 0,
+      "perturbation": "scale_0.97",
+      "original_prediction": 3,
+      "perturbed_prediction": 0,
+      "original_confidence": 0.85776686668396,
+      "perturbed_confidence": 0.8300771117210388,
+      "confidence_change": -0.027689754962921143,
+      "true_class_probability_change": 0.7220000624656677
+    },
+    {
+      "sample_id": "16977964fb1e3a13a8e8b366b73dacb7be286aa7702d6ab30400f3d35c04e806",
+      "group_id": "419f112cef631b9b7851cc39f8520981d3aa08e8239add7039ebff32c69654ea",
+      "true_index": 0,
+      "perturbation": "rotation_plus_5",
+      "original_prediction": 3,
+      "perturbed_prediction": 0,
+      "original_confidence": 0.9945853352546692,
+      "perturbed_confidence": 0.6865813136100769,
+      "confidence_change": -0.3080040216445923,
+      "true_class_probability_change": 0.6814817190170288
+    },
+    {
+      "sample_id": "16977964fb1e3a13a8e8b366b73dacb7be286aa7702d6ab30400f3d35c04e806",
+      "group_id": "419f112cef631b9b7851cc39f8520981d3aa08e8239add7039ebff32c69654ea",
+      "true_index": 0,
+      "perturbation": "scale_0.97",
+      "original_prediction": 3,
+      "perturbed_prediction": 0,
+      "original_confidence": 0.9945853352546692,
+      "perturbed_confidence": 0.6723619699478149,
+      "confidence_change": -0.32222336530685425,
+      "true_class_probability_change": 0.6672623753547668
+    },
+    {
+      "sample_id": "16b6177e6d8f24a7b4c85e515c8712b2d5ed91bb179791260000325e09ffd972",
+      "group_id": "12e45876e63cfcf95e2af7d1f73de0b0f3e3f6855ffad6bb5488c4209ada5e05",
+      "true_index": 1,
+      "perturbation": "rotation_minus_5",
+      "original_prediction": 3,
+      "perturbed_prediction": 1,
+      "original_confidence": 0.8907809257507324,
+      "perturbed_confidence": 0.88055020570755,
+      "confidence_change": -0.010230720043182373,
+      "true_class_probability_change": 0.7713316082954407
+    },
+    {
+      "sample_id": "16b6177e6d8f24a7b4c85e515c8712b2d5ed91bb179791260000325e09ffd972",
+      "group_id": "12e45876e63cfcf95e2af7d1f73de0b0f3e3f6855ffad6bb5488c4209ada5e05",
+      "true_index": 1,
+      "perturbation": "rotation_plus_5",
+      "original_prediction": 3,
+      "perturbed_prediction": 1,
+      "original_confidence": 0.8907809257507324,
+      "perturbed_confidence": 0.883267879486084,
+      "confidence_change": -0.0075130462646484375,
+      "true_class_probability_change": 0.7740492820739746
+    },
+    {
+      "sample_id": "16b6177e6d8f24a7b4c85e515c8712b2d5ed91bb179791260000325e09ffd972",
+      "group_id": "12e45876e63cfcf95e2af7d1f73de0b0f3e3f6855ffad6bb5488c4209ada5e05",
+      "true_index": 1,
+      "perturbation": "blur_radius_0.7",
+      "original_prediction": 3,
+      "perturbed_prediction": 1,
+      "original_confidence": 0.8907809257507324,
+      "perturbed_confidence": 0.5014517903327942,
+      "confidence_change": -0.38932913541793823,
+      "true_class_probability_change": 0.3922331929206848
+    },
+    {
+      "sample_id": "17575b008ad644896ec5fccefb358195b76834eb10fb12446d2523b3a2251292",
+      "group_id": "912a43b7db032569237e3cc2ce012561f69afc250a7a46c2e9c31772638b0f81",
+      "true_index": 3,
+      "perturbation": "brightness_1.2",
+      "original_prediction": 3,
+      "perturbed_prediction": 1,
+      "original_confidence": 0.5676694512367249,
+      "perturbed_confidence": 0.5165885090827942,
+      "confidence_change": -0.051080942153930664,
+      "true_class_probability_change": -0.08756360411643982
+    },
+    {
+      "sample_id": "17575b008ad644896ec5fccefb358195b76834eb10fb12446d2523b3a2251292",
+      "group_id": "912a43b7db032569237e3cc2ce012561f69afc250a7a46c2e9c31772638b0f81",
+      "true_index": 3,
+      "perturbation": "rotation_minus_5",
+      "original_prediction": 3,
+      "perturbed_prediction": 1,
+      "original_confidence": 0.5676694512367249,
+      "perturbed_confidence": 0.5263519883155823,
+      "confidence_change": -0.04131746292114258,
+      "true_class_probability_change": -0.09648063778877258
+    },
+    {
+      "sample_id": "17575b008ad644896ec5fccefb358195b76834eb10fb12446d2523b3a2251292",
+      "group_id": "912a43b7db032569237e3cc2ce012561f69afc250a7a46c2e9c31772638b0f81",
+      "true_index": 3,
+      "perturbation": "rotation_plus_5",
+      "original_prediction": 3,
+      "perturbed_prediction": 1,
+      "original_confidence": 0.5676694512367249,
+      "perturbed_confidence": 0.5011081695556641,
+      "confidence_change": -0.06656128168106079,
+      "true_class_probability_change": -0.07059049606323242
+    },
+    {
+      "sample_id": "187dba9a9b5fb5b19302741895fe71f28fcbc2eb20eee6da09cba216f4275b38",
+      "group_id": "cc211fa164218fd0bee818387cc02ec658230b0a96ba04b17c9641edc0f99415",
+      "true_index": 1,
+      "perturbation": "brightness_0.8",
+      "original_prediction": 0,
+      "perturbed_prediction": 3,
+      "original_confidence": 0.5799413323402405,
+      "perturbed_confidence": 0.48357251286506653,
+      "confidence_change": -0.09636881947517395,
+      "true_class_probability_change": -0.021557945758104324
+    },
+    {
+      "sample_id": "187dba9a9b5fb5b19302741895fe71f28fcbc2eb20eee6da09cba216f4275b38",
+      "group_id": "cc211fa164218fd0bee818387cc02ec658230b0a96ba04b17c9641edc0f99415",
+      "true_index": 1,
+      "perturbation": "contrast_0.8",
+      "original_prediction": 0,
+      "perturbed_prediction": 3,
+      "original_confidence": 0.5799413323402405,
+      "perturbed_confidence": 0.5000802278518677,
+      "confidence_change": -0.0798611044883728,
+      "true_class_probability_change": 0.011730179190635681
+    },
+    {
+      "sample_id": "187dba9a9b5fb5b19302741895fe71f28fcbc2eb20eee6da09cba216f4275b38",
+      "group_id": "cc211fa164218fd0bee818387cc02ec658230b0a96ba04b17c9641edc0f99415",
+      "true_index": 1,
+      "perturbation": "rotation_plus_5",
+      "original_prediction": 0,
+      "perturbed_prediction": 3,
+      "original_confidence": 0.5799413323402405,
+      "perturbed_confidence": 0.5107698440551758,
+      "confidence_change": -0.0691714882850647,
+      "true_class_probability_change": 0.09687450528144836
+    },
+    {
+      "sample_id": "187dba9a9b5fb5b19302741895fe71f28fcbc2eb20eee6da09cba216f4275b38",
+      "group_id": "cc211fa164218fd0bee818387cc02ec658230b0a96ba04b17c9641edc0f99415",
+      "true_index": 1,
+      "perturbation": "jpeg_quality_70",
+      "original_prediction": 0,
+      "perturbed_prediction": 3,
+      "original_confidence": 0.5799413323402405,
+      "perturbed_confidence": 0.7564428448677063,
+      "confidence_change": 0.17650151252746582,
+      "true_class_probability_change": -0.016795802861452103
+    },
+    {
+      "sample_id": "187dba9a9b5fb5b19302741895fe71f28fcbc2eb20eee6da09cba216f4275b38",
+      "group_id": "cc211fa164218fd0bee818387cc02ec658230b0a96ba04b17c9641edc0f99415",
+      "true_index": 1,
+      "perturbation": "blur_radius_0.7",
+      "original_prediction": 0,
+      "perturbed_prediction": 3,
+      "original_confidence": 0.5799413323402405,
+      "perturbed_confidence": 0.5161604881286621,
+      "confidence_change": -0.06378084421157837,
+      "true_class_probability_change": 0.03468848019838333
+    },
+    {
+      "sample_id": "1b2416416c1b30c5627de056b3678efa48686d1e509bab3de00b97dd079d4976",
+      "group_id": "d7d02e3f01ee1b966546d7f6ecbcd6e7a16dbb3ff63d379e4f52184547f07192",
+      "true_index": 3,
+      "perturbation": "rotation_minus_5",
+      "original_prediction": 1,
+      "perturbed_prediction": 3,
+      "original_confidence": 0.5417377948760986,
+      "perturbed_confidence": 0.6097713708877563,
+      "confidence_change": 0.06803357601165771,
+      "true_class_probability_change": 0.15154406428337097
+    },
+    {
+      "sample_id": "1b2416416c1b30c5627de056b3678efa48686d1e509bab3de00b97dd079d4976",
+      "group_id": "d7d02e3f01ee1b966546d7f6ecbcd6e7a16dbb3ff63d379e4f52184547f07192",
+      "true_index": 3,
+      "perturbation": "rotation_plus_5",
+      "original_prediction": 1,
+      "perturbed_prediction": 3,
+      "original_confidence": 0.5417377948760986,
+      "perturbed_confidence": 0.9644032716751099,
+      "confidence_change": 0.42266547679901123,
+      "true_class_probability_change": 0.5061759948730469
+    },
+    {
+      "sample_id": "1b2416416c1b30c5627de056b3678efa48686d1e509bab3de00b97dd079d4976",
+      "group_id": "d7d02e3f01ee1b966546d7f6ecbcd6e7a16dbb3ff63d379e4f52184547f07192",
+      "true_index": 3,
+      "perturbation": "scale_0.97",
+      "original_prediction": 1,
+      "perturbed_prediction": 3,
+      "original_confidence": 0.5417377948760986,
+      "perturbed_confidence": 0.9205878376960754,
+      "confidence_change": 0.3788500428199768,
+      "true_class_probability_change": 0.46236053109169006
+    },
+    {
+      "sample_id": "1b2416416c1b30c5627de056b3678efa48686d1e509bab3de00b97dd079d4976",
+      "group_id": "d7d02e3f01ee1b966546d7f6ecbcd6e7a16dbb3ff63d379e4f52184547f07192",
+      "true_index": 3,
+      "perturbation": "blur_radius_0.7",
+      "original_prediction": 1,
+      "perturbed_prediction": 3,
+      "original_confidence": 0.5417377948760986,
+      "perturbed_confidence": 0.9618382453918457,
+      "confidence_change": 0.42010045051574707,
+      "true_class_probability_change": 0.5036109685897827
+    },
+    {
+      "sample_id": "245f829c456fe7614a03706e589f1fa64e2230f864fe2bf873980cd13a41fd3b",
+      "group_id": "0c22c4ffc360fd24f9f0c1a07d234bf1b2ad569668a3ad98662094da8c94c3fc",
+      "true_index": 1,
+      "perturbation": "contrast_0.8",
+      "original_prediction": 1,
+      "perturbed_prediction": 3,
+      "original_confidence": 0.6570992469787598,
+      "perturbed_confidence": 0.6221216320991516,
+      "confidence_change": -0.034977614879608154,
+      "true_class_probability_change": -0.27922379970550537
+    },
+    {
+      "sample_id": "245f829c456fe7614a03706e589f1fa64e2230f864fe2bf873980cd13a41fd3b",
+      "group_id": "0c22c4ffc360fd24f9f0c1a07d234bf1b2ad569668a3ad98662094da8c94c3fc",
+      "true_index": 1,
+      "perturbation": "rotation_minus_5",
+      "original_prediction": 1,
+      "perturbed_prediction": 3,
+      "original_confidence": 0.6570992469787598,
+      "perturbed_confidence": 0.5510292649269104,
+      "confidence_change": -0.10606998205184937,
+      "true_class_probability_change": -0.20814049243927002
+    },
+    {
+      "sample_id": "245f829c456fe7614a03706e589f1fa64e2230f864fe2bf873980cd13a41fd3b",
+      "group_id": "0c22c4ffc360fd24f9f0c1a07d234bf1b2ad569668a3ad98662094da8c94c3fc",
+      "true_index": 1,
+      "perturbation": "scale_0.97",
+      "original_prediction": 1,
+      "perturbed_prediction": 3,
+      "original_confidence": 0.6570992469787598,
+      "perturbed_confidence": 0.6524630784988403,
+      "confidence_change": -0.004636168479919434,
+      "true_class_probability_change": -0.3095777928829193
+    },
+    {
+      "sample_id": "245f829c456fe7614a03706e589f1fa64e2230f864fe2bf873980cd13a41fd3b",
+      "group_id": "0c22c4ffc360fd24f9f0c1a07d234bf1b2ad569668a3ad98662094da8c94c3fc",
+      "true_index": 1,
+      "perturbation": "jpeg_quality_70",
+      "original_prediction": 1,
+      "perturbed_prediction": 3,
+      "original_confidence": 0.6570992469787598,
+      "perturbed_confidence": 0.5190637111663818,
+      "confidence_change": -0.13803553581237793,
+      "true_class_probability_change": -0.1761644184589386
+    },
+    {
+      "sample_id": "245f829c456fe7614a03706e589f1fa64e2230f864fe2bf873980cd13a41fd3b",
+      "group_id": "0c22c4ffc360fd24f9f0c1a07d234bf1b2ad569668a3ad98662094da8c94c3fc",
+      "true_index": 1,
+      "perturbation": "blur_radius_0.7",
+      "original_prediction": 1,
+      "perturbed_prediction": 3,
+      "original_confidence": 0.6570992469787598,
+      "perturbed_confidence": 0.6804872751235962,
+      "confidence_change": 0.023388028144836426,
+      "true_class_probability_change": -0.33758801221847534
+    },
+    {
+      "sample_id": "2c926e35d8eee7513d5b1a5e9198afd0a56abeab2342131cda3792e2c0106120",
+      "group_id": "68cb60830b9cf75a8df04e3bf116054d8e993866e967e2a23d43e8f72d8b0e20",
+      "true_index": 1,
+      "perturbation": "brightness_0.8",
+      "original_prediction": 1,
+      "perturbed_prediction": 3,
+      "original_confidence": 0.5066933035850525,
+      "perturbed_confidence": 0.68423992395401,
+      "confidence_change": 0.17754662036895752,
+      "true_class_probability_change": -0.19117599725723267
+    },
+    {
+      "sample_id": "2c926e35d8eee7513d5b1a5e9198afd0a56abeab2342131cda3792e2c0106120",
+      "group_id": "68cb60830b9cf75a8df04e3bf116054d8e993866e967e2a23d43e8f72d8b0e20",
+      "true_index": 1,
+      "perturbation": "brightness_1.2",
+      "original_prediction": 1,
+      "perturbed_prediction": 3,
+      "original_confidence": 0.5066933035850525,
+      "perturbed_confidence": 0.6561155319213867,
+      "confidence_change": 0.14942222833633423,
+      "true_class_probability_change": -0.16285580396652222
+    },
+    {
+      "sample_id": "2c926e35d8eee7513d5b1a5e9198afd0a56abeab2342131cda3792e2c0106120",
+      "group_id": "68cb60830b9cf75a8df04e3bf116054d8e993866e967e2a23d43e8f72d8b0e20",
+      "true_index": 1,
+      "perturbation": "contrast_0.8",
+      "original_prediction": 1,
+      "perturbed_prediction": 3,
+      "original_confidence": 0.5066933035850525,
+      "perturbed_confidence": 0.5128579139709473,
+      "confidence_change": 0.006164610385894775,
+      "true_class_probability_change": -0.019614458084106445
+    },
+    {
+      "sample_id": "2c926e35d8eee7513d5b1a5e9198afd0a56abeab2342131cda3792e2c0106120",
+      "group_id": "68cb60830b9cf75a8df04e3bf116054d8e993866e967e2a23d43e8f72d8b0e20",
+      "true_index": 1,
+      "perturbation": "contrast_1.2",
+      "original_prediction": 1,
+      "perturbed_prediction": 3,
+      "original_confidence": 0.5066933035850525,
+      "perturbed_confidence": 0.572992205619812,
+      "confidence_change": 0.06629890203475952,
+      "true_class_probability_change": -0.07977688312530518
+    },
+    {
+      "sample_id": "2c926e35d8eee7513d5b1a5e9198afd0a56abeab2342131cda3792e2c0106120",
+      "group_id": "68cb60830b9cf75a8df04e3bf116054d8e993866e967e2a23d43e8f72d8b0e20",
+      "true_index": 1,
+      "perturbation": "rotation_minus_5",
+      "original_prediction": 1,
+      "perturbed_prediction": 3,
+      "original_confidence": 0.5066933035850525,
+      "perturbed_confidence": 0.5382854342460632,
+      "confidence_change": 0.03159213066101074,
+      "true_class_probability_change": -0.045090705156326294
+    },
+    {
+      "sample_id": "2c926e35d8eee7513d5b1a5e9198afd0a56abeab2342131cda3792e2c0106120",
+      "group_id": "68cb60830b9cf75a8df04e3bf116054d8e993866e967e2a23d43e8f72d8b0e20",
+      "true_index": 1,
+      "perturbation": "jpeg_quality_70",
+      "original_prediction": 1,
+      "perturbed_prediction": 3,
+      "original_confidence": 0.5066933035850525,
+      "perturbed_confidence": 0.5272654891014099,
+      "confidence_change": 0.020572185516357422,
+      "true_class_probability_change": -0.03400564193725586
+    },
+    {
+      "sample_id": "2c926e35d8eee7513d5b1a5e9198afd0a56abeab2342131cda3792e2c0106120",
+      "group_id": "68cb60830b9cf75a8df04e3bf116054d8e993866e967e2a23d43e8f72d8b0e20",
+      "true_index": 1,
+      "perturbation": "blur_radius_0.7",
+      "original_prediction": 1,
+      "perturbed_prediction": 3,
+      "original_confidence": 0.5066933035850525,
+      "perturbed_confidence": 0.7972257137298584,
+      "confidence_change": 0.2905324101448059,
+      "true_class_probability_change": -0.3040510416030884
+    },
+    {
+      "sample_id": "2c926e35d8eee7513d5b1a5e9198afd0a56abeab2342131cda3792e2c0106120",
+      "group_id": "68cb60830b9cf75a8df04e3bf116054d8e993866e967e2a23d43e8f72d8b0e20",
+      "true_index": 1,
+      "perturbation": "horizontal_flip",
+      "original_prediction": 1,
+      "perturbed_prediction": 3,
+      "original_confidence": 0.5066933035850525,
+      "perturbed_confidence": 0.7892531156539917,
+      "confidence_change": 0.2825598120689392,
+      "true_class_probability_change": -0.29595667123794556
+    },
+    {
+      "sample_id": "3a4b94999c54e5bfabc3bb0ba1245defef7936dd6714969475e4f132ed213cff",
+      "group_id": "80306736b0bb22b02673432db545563d3d37f8921cda1292731b597be2eeb5a6",
+      "true_index": 3,
+      "perturbation": "rotation_plus_5",
+      "original_prediction": 3,
+      "perturbed_prediction": 1,
+      "original_confidence": 0.9325364232063293,
+      "perturbed_confidence": 0.5573656558990479,
+      "confidence_change": -0.3751707673072815,
+      "true_class_probability_change": -0.4907585084438324
+    },
+    {
+      "sample_id": "4c13735ba9424a41af747827e3c2433813e1ddb14f60188f6b389dbcf8551113",
+      "group_id": "8597cc8dc2c66cb0768e647f4405062c4ab9a3555755dc89a83b4432ac13ce2b",
+      "true_index": 3,
+      "perturbation": "rotation_plus_5",
+      "original_prediction": 3,
+      "perturbed_prediction": 1,
+      "original_confidence": 0.8033626675605774,
+      "perturbed_confidence": 0.8959488868713379,
+      "confidence_change": 0.0925862193107605,
+      "true_class_probability_change": -0.6993132829666138
+    },
+    {
+      "sample_id": "4e164e90fe1e8914481785b8ca04d9aab1d343e78a09a76084a3e57a37a8eb70",
+      "group_id": "e3a47c3f7ff3d19b80073b5c8f0308de5a9e60d744783ab2a398a57df9d1b7b8",
+      "true_index": 3,
+      "perturbation": "brightness_0.8",
+      "original_prediction": 3,
+      "perturbed_prediction": 0,
+      "original_confidence": 0.6031818389892578,
+      "perturbed_confidence": 0.621877133846283,
+      "confidence_change": 0.018695294857025146,
+      "true_class_probability_change": -0.2509153187274933
+    },
+    {
+      "sample_id": "4e164e90fe1e8914481785b8ca04d9aab1d343e78a09a76084a3e57a37a8eb70",
+      "group_id": "e3a47c3f7ff3d19b80073b5c8f0308de5a9e60d744783ab2a398a57df9d1b7b8",
+      "true_index": 3,
+      "perturbation": "contrast_1.2",
+      "original_prediction": 3,
+      "perturbed_prediction": 0,
+      "original_confidence": 0.6031818389892578,
+      "perturbed_confidence": 0.5040726065635681,
+      "confidence_change": -0.0991092324256897,
+      "true_class_probability_change": -0.17850616574287415
+    },
+    {
+      "sample_id": "4e164e90fe1e8914481785b8ca04d9aab1d343e78a09a76084a3e57a37a8eb70",
+      "group_id": "e3a47c3f7ff3d19b80073b5c8f0308de5a9e60d744783ab2a398a57df9d1b7b8",
+      "true_index": 3,
+      "perturbation": "rotation_plus_5",
+      "original_prediction": 3,
+      "perturbed_prediction": 0,
+      "original_confidence": 0.6031818389892578,
+      "perturbed_confidence": 0.4769701063632965,
+      "confidence_change": -0.1262117326259613,
+      "true_class_probability_change": -0.17458298802375793
+    },
+    {
+      "sample_id": "4e164e90fe1e8914481785b8ca04d9aab1d343e78a09a76084a3e57a37a8eb70",
+      "group_id": "e3a47c3f7ff3d19b80073b5c8f0308de5a9e60d744783ab2a398a57df9d1b7b8",
+      "true_index": 3,
+      "perturbation": "scale_0.97",
+      "original_prediction": 3,
+      "perturbed_prediction": 0,
+      "original_confidence": 0.6031818389892578,
+      "perturbed_confidence": 0.5633096098899841,
+      "confidence_change": -0.03987222909927368,
+      "true_class_probability_change": -0.19729724526405334
+    },
+    {
+      "sample_id": "5da9051297640763e97ffbaf7d52fa9d4ca19f57227337fe01a5593d4f15eecb",
+      "group_id": "0b7d42709da2c5c0c90d394b03af62af7255e82d05d082c496b7128670ac191b",
+      "true_index": 1,
+      "perturbation": "brightness_0.8",
+      "original_prediction": 1,
+      "perturbed_prediction": 3,
+      "original_confidence": 0.7941539287567139,
+      "perturbed_confidence": 0.615801215171814,
+      "confidence_change": -0.1783527135848999,
+      "true_class_probability_change": -0.40997329354286194
+    },
+    {
+      "sample_id": "686dfa96f95cceae2eb740033584a1b7d9c76d3d02e47bf5f840e6d1ce6d2d5a",
+      "group_id": "2c997f3d64197125669ea1b5be37a4e43e0b73479a267126d91f6153d34a4d3e",
+      "true_index": 3,
+      "perturbation": "brightness_0.8",
+      "original_prediction": 3,
+      "perturbed_prediction": 2,
+      "original_confidence": 0.8648273944854736,
+      "perturbed_confidence": 0.6553610563278198,
+      "confidence_change": -0.2094663381576538,
+      "true_class_probability_change": -0.5627446174621582
+    },
+    {
+      "sample_id": "7fc834fdfac812ae4935e36ddea00a969ded49a79c08dabd1baaf14e11ab06c7",
+      "group_id": "46c7656d590fba3ec35872437fb02f94f91f1ac443576acda47377a3171ac3c7",
+      "true_index": 1,
+      "perturbation": "blur_radius_0.7",
+      "original_prediction": 1,
+      "perturbed_prediction": 3,
+      "original_confidence": 0.8502976298332214,
+      "perturbed_confidence": 0.6828187704086304,
+      "confidence_change": -0.16747885942459106,
+      "true_class_probability_change": -0.533153772354126
+    },
+    {
+      "sample_id": "8c43ba1ddf1e4a51fb8ccddc4aa858014b36834a8d27a9d6f4d67fa195183276",
+      "group_id": "b6d6115f5979154123f873a933dbbf70746974251114f82c3a73ec6f39901b08",
+      "true_index": 1,
+      "perturbation": "scale_0.97",
+      "original_prediction": 1,
+      "perturbed_prediction": 3,
+      "original_confidence": 0.8349288105964661,
+      "perturbed_confidence": 0.6029902100563049,
+      "confidence_change": -0.23193860054016113,
+      "true_class_probability_change": -0.4382103979587555
+    },
+    {
+      "sample_id": "8c43ba1ddf1e4a51fb8ccddc4aa858014b36834a8d27a9d6f4d67fa195183276",
+      "group_id": "b6d6115f5979154123f873a933dbbf70746974251114f82c3a73ec6f39901b08",
+      "true_index": 1,
+      "perturbation": "blur_radius_0.7",
+      "original_prediction": 1,
+      "perturbed_prediction": 3,
+      "original_confidence": 0.8349288105964661,
+      "perturbed_confidence": 0.6003949642181396,
+      "confidence_change": -0.23453384637832642,
+      "true_class_probability_change": -0.43543192744255066
+    },
+    {
+      "sample_id": "8fc552ceeb446267d6137f1af25d911b92c12f4470a950fdcf0aa672b91ab2a2",
+      "group_id": "84a82fb47bc113cdf5b9cdd1860938c644b19f23905239995acaf3a2e036826b",
+      "true_index": 3,
+      "perturbation": "rotation_minus_5",
+      "original_prediction": 1,
+      "perturbed_prediction": 3,
+      "original_confidence": 0.844456672668457,
+      "perturbed_confidence": 0.9662203192710876,
+      "confidence_change": 0.12176364660263062,
+      "true_class_probability_change": 0.8106805086135864
+    },
+    {
+      "sample_id": "8fc552ceeb446267d6137f1af25d911b92c12f4470a950fdcf0aa672b91ab2a2",
+      "group_id": "84a82fb47bc113cdf5b9cdd1860938c644b19f23905239995acaf3a2e036826b",
+      "true_index": 3,
+      "perturbation": "rotation_plus_5",
+      "original_prediction": 1,
+      "perturbed_prediction": 3,
+      "original_confidence": 0.844456672668457,
+      "perturbed_confidence": 0.5912059545516968,
+      "confidence_change": -0.25325071811676025,
+      "true_class_probability_change": 0.43566617369651794
+    },
+    {
+      "sample_id": "8fc552ceeb446267d6137f1af25d911b92c12f4470a950fdcf0aa672b91ab2a2",
+      "group_id": "84a82fb47bc113cdf5b9cdd1860938c644b19f23905239995acaf3a2e036826b",
+      "true_index": 3,
+      "perturbation": "scale_0.97",
+      "original_prediction": 1,
+      "perturbed_prediction": 3,
+      "original_confidence": 0.844456672668457,
+      "perturbed_confidence": 0.9841679930686951,
+      "confidence_change": 0.13971132040023804,
+      "true_class_probability_change": 0.8286281824111938
+    },
+    {
+      "sample_id": "8fc552ceeb446267d6137f1af25d911b92c12f4470a950fdcf0aa672b91ab2a2",
+      "group_id": "84a82fb47bc113cdf5b9cdd1860938c644b19f23905239995acaf3a2e036826b",
+      "true_index": 3,
+      "perturbation": "horizontal_flip",
+      "original_prediction": 1,
+      "perturbed_prediction": 3,
+      "original_confidence": 0.844456672668457,
+      "perturbed_confidence": 0.5846795439720154,
+      "confidence_change": -0.25977712869644165,
+      "true_class_probability_change": 0.42913976311683655
+    },
+    {
+      "sample_id": "989e407a60c825288db9e56a7adb809698c9768dd92e404a43076240f241307b",
+      "group_id": "cce52dcccd7b8f500e1652c315c7d2cde9385f75c6910a7917538dc4463310b6",
+      "true_index": 1,
+      "perturbation": "scale_0.97",
+      "original_prediction": 1,
+      "perturbed_prediction": 3,
+      "original_confidence": 0.9523308277130127,
+      "perturbed_confidence": 0.8394789695739746,
+      "confidence_change": -0.11285185813903809,
+      "true_class_probability_change": -0.7918426990509033
+    },
+    {
+      "sample_id": "9c0e29744ac972c8901db9111c559b277e30754944c592b7b3e0f77343be4499",
+      "group_id": "c1fa6b203d07eb7bb30d5311399c2c48ba9d3cc1c98c8e69ca926f80d1fc4d8a",
+      "true_index": 1,
+      "perturbation": "brightness_0.8",
+      "original_prediction": 3,
+      "perturbed_prediction": 1,
+      "original_confidence": 0.6055488586425781,
+      "perturbed_confidence": 0.8474505543708801,
+      "confidence_change": 0.241901695728302,
+      "true_class_probability_change": 0.45325416326522827
+    },
+    {
+      "sample_id": "9c0e29744ac972c8901db9111c559b277e30754944c592b7b3e0f77343be4499",
+      "group_id": "c1fa6b203d07eb7bb30d5311399c2c48ba9d3cc1c98c8e69ca926f80d1fc4d8a",
+      "true_index": 1,
+      "perturbation": "contrast_0.8",
+      "original_prediction": 3,
+      "perturbed_prediction": 1,
+      "original_confidence": 0.6055488586425781,
+      "perturbed_confidence": 0.7538341283798218,
+      "confidence_change": 0.14828526973724365,
+      "true_class_probability_change": 0.3596377372741699
+    },
+    {
+      "sample_id": "9c0e29744ac972c8901db9111c559b277e30754944c592b7b3e0f77343be4499",
+      "group_id": "c1fa6b203d07eb7bb30d5311399c2c48ba9d3cc1c98c8e69ca926f80d1fc4d8a",
+      "true_index": 1,
+      "perturbation": "rotation_plus_5",
+      "original_prediction": 3,
+      "perturbed_prediction": 1,
+      "original_confidence": 0.6055488586425781,
+      "perturbed_confidence": 0.9288262724876404,
+      "confidence_change": 0.32327741384506226,
+      "true_class_probability_change": 0.5346298813819885
+    },
+    {
+      "sample_id": "9c0e29744ac972c8901db9111c559b277e30754944c592b7b3e0f77343be4499",
+      "group_id": "c1fa6b203d07eb7bb30d5311399c2c48ba9d3cc1c98c8e69ca926f80d1fc4d8a",
+      "true_index": 1,
+      "perturbation": "blur_radius_0.7",
+      "original_prediction": 3,
+      "perturbed_prediction": 1,
+      "original_confidence": 0.6055488586425781,
+      "perturbed_confidence": 0.5613122582435608,
+      "confidence_change": -0.044236600399017334,
+      "true_class_probability_change": 0.16711586713790894
+    },
+    {
+      "sample_id": "9c0e29744ac972c8901db9111c559b277e30754944c592b7b3e0f77343be4499",
+      "group_id": "c1fa6b203d07eb7bb30d5311399c2c48ba9d3cc1c98c8e69ca926f80d1fc4d8a",
+      "true_index": 1,
+      "perturbation": "horizontal_flip",
+      "original_prediction": 3,
+      "perturbed_prediction": 1,
+      "original_confidence": 0.6055488586425781,
+      "perturbed_confidence": 0.9732728004455566,
+      "confidence_change": 0.3677239418029785,
+      "true_class_probability_change": 0.5790764093399048
+    },
+    {
+      "sample_id": "a1a187efd7d785fb9644eaa74769af8978752eec2a6b194eae29994195880d02",
+      "group_id": "a1743861b522c1ed9ac69dd8d3414cc11a2bbccf280ab04460e1649f112cacd9",
+      "true_index": 1,
+      "perturbation": "contrast_1.2",
+      "original_prediction": 1,
+      "perturbed_prediction": 3,
+      "original_confidence": 0.7319397926330566,
+      "perturbed_confidence": 0.5464929342269897,
+      "confidence_change": -0.1854468584060669,
+      "true_class_probability_change": -0.3168833255767822
+    },
+    {
+      "sample_id": "a5778b6f26c7c6df8f48048a6f32cc203cc09b039480fda08a0bf73ddb6de17f",
+      "group_id": "0617c7b0dc8b0d2bbe788135aed9e0b35bb37a1660fcfdb9c8367028b3f4749d",
+      "true_index": 3,
+      "perturbation": "scale_0.97",
+      "original_prediction": 1,
+      "perturbed_prediction": 3,
+      "original_confidence": 0.8024343848228455,
+      "perturbed_confidence": 0.5008132457733154,
+      "confidence_change": -0.30162113904953003,
+      "true_class_probability_change": 0.30345267057418823
+    },
+    {
+      "sample_id": "a742709b1e023a34d0c99e313bf01450a490dfdad079b4e8ede2254c68d46ff1",
+      "group_id": "f3c4f2f6623731ad2923a6863c993dba987d6b81e2337247c170e90403fc7416",
+      "true_index": 3,
+      "perturbation": "blur_radius_0.7",
+      "original_prediction": 3,
+      "perturbed_prediction": 1,
+      "original_confidence": 0.6247977018356323,
+      "perturbed_confidence": 0.609707772731781,
+      "confidence_change": -0.015089929103851318,
+      "true_class_probability_change": -0.2345060110092163
+    },
+    {
+      "sample_id": "b2ac17778d7fbc1ea06741685d94c85204f609b2bea91afde7e7e918f50d84c6",
+      "group_id": "1afe8484861099b09f51af261f87b86c7d95b7200cb7e46e5739b2f370afe82b",
+      "true_index": 1,
+      "perturbation": "blur_radius_0.7",
+      "original_prediction": 1,
+      "perturbed_prediction": 3,
+      "original_confidence": 0.8528190851211548,
+      "perturbed_confidence": 0.5094253420829773,
+      "confidence_change": -0.3433937430381775,
+      "true_class_probability_change": -0.36273545026779175
+    },
+    {
+      "sample_id": "c32940e51b08d745cc74bf3e62a21f7a5caeec58e876f0fbd88f6aaddb02068d",
+      "group_id": "9db9cb5141d17838f3bf87b8f8fe86c39fc783d9a0e0ca589ecd60fc2eb426a4",
+      "true_index": 3,
+      "perturbation": "scale_0.97",
+      "original_prediction": 3,
+      "perturbed_prediction": 0,
+      "original_confidence": 0.8432461619377136,
+      "perturbed_confidence": 0.5351192355155945,
+      "confidence_change": -0.30812692642211914,
+      "true_class_probability_change": -0.4169216752052307
+    },
+    {
+      "sample_id": "c94d957b20467558fbaa1e393e9676e29dbfaa2b85c8563cd5b920a7d16fd77f",
+      "group_id": "763f48783516f99bcd0b7d5ae2958db2fb77532d3c095a450ad94cfc1a638e80",
+      "true_index": 1,
+      "perturbation": "rotation_plus_5",
+      "original_prediction": 1,
+      "perturbed_prediction": 3,
+      "original_confidence": 0.9861665964126587,
+      "perturbed_confidence": 0.5743361711502075,
+      "confidence_change": -0.41183042526245117,
+      "true_class_probability_change": -0.5742686986923218
+    },
+    {
+      "sample_id": "ca0ba0c662262898d2bdb9a898de82741c8693a0734776dfda10ad1545cbdecd",
+      "group_id": "a49c3db103f9723c3a1ce1772eb000c97dbe252690e77435406bc78e275e4677",
+      "true_index": 3,
+      "perturbation": "brightness_1.2",
+      "original_prediction": 1,
+      "perturbed_prediction": 3,
+      "original_confidence": 0.5553950071334839,
+      "perturbed_confidence": 0.6122198104858398,
+      "confidence_change": 0.05682480335235596,
+      "true_class_probability_change": 0.1676172912120819
+    },
+    {
+      "sample_id": "ca0ba0c662262898d2bdb9a898de82741c8693a0734776dfda10ad1545cbdecd",
+      "group_id": "a49c3db103f9723c3a1ce1772eb000c97dbe252690e77435406bc78e275e4677",
+      "true_index": 3,
+      "perturbation": "contrast_1.2",
+      "original_prediction": 1,
+      "perturbed_prediction": 3,
+      "original_confidence": 0.5553950071334839,
+      "perturbed_confidence": 0.6251891255378723,
+      "confidence_change": 0.06979411840438843,
+      "true_class_probability_change": 0.18058660626411438
+    },
+    {
+      "sample_id": "ca0ba0c662262898d2bdb9a898de82741c8693a0734776dfda10ad1545cbdecd",
+      "group_id": "a49c3db103f9723c3a1ce1772eb000c97dbe252690e77435406bc78e275e4677",
+      "true_index": 3,
+      "perturbation": "rotation_minus_5",
+      "original_prediction": 1,
+      "perturbed_prediction": 3,
+      "original_confidence": 0.5553950071334839,
+      "perturbed_confidence": 0.9771153926849365,
+      "confidence_change": 0.42172038555145264,
+      "true_class_probability_change": 0.532512903213501
+    },
+    {
+      "sample_id": "ca0ba0c662262898d2bdb9a898de82741c8693a0734776dfda10ad1545cbdecd",
+      "group_id": "a49c3db103f9723c3a1ce1772eb000c97dbe252690e77435406bc78e275e4677",
+      "true_index": 3,
+      "perturbation": "rotation_plus_5",
+      "original_prediction": 1,
+      "perturbed_prediction": 3,
+      "original_confidence": 0.5553950071334839,
+      "perturbed_confidence": 0.8829088807106018,
+      "confidence_change": 0.3275138735771179,
+      "true_class_probability_change": 0.43830636143684387
+    },
+    {
+      "sample_id": "ca0ba0c662262898d2bdb9a898de82741c8693a0734776dfda10ad1545cbdecd",
+      "group_id": "a49c3db103f9723c3a1ce1772eb000c97dbe252690e77435406bc78e275e4677",
+      "true_index": 3,
+      "perturbation": "scale_0.97",
+      "original_prediction": 1,
+      "perturbed_prediction": 3,
+      "original_confidence": 0.5553950071334839,
+      "perturbed_confidence": 0.9280124306678772,
+      "confidence_change": 0.3726174235343933,
+      "true_class_probability_change": 0.48340991139411926
+    },
+    {
+      "sample_id": "ca0ba0c662262898d2bdb9a898de82741c8693a0734776dfda10ad1545cbdecd",
+      "group_id": "a49c3db103f9723c3a1ce1772eb000c97dbe252690e77435406bc78e275e4677",
+      "true_index": 3,
+      "perturbation": "blur_radius_0.7",
+      "original_prediction": 1,
+      "perturbed_prediction": 3,
+      "original_confidence": 0.5553950071334839,
+      "perturbed_confidence": 0.9306401610374451,
+      "confidence_change": 0.3752451539039612,
+      "true_class_probability_change": 0.48603764176368713
+    },
+    {
+      "sample_id": "ca0ba0c662262898d2bdb9a898de82741c8693a0734776dfda10ad1545cbdecd",
+      "group_id": "a49c3db103f9723c3a1ce1772eb000c97dbe252690e77435406bc78e275e4677",
+      "true_index": 3,
+      "perturbation": "horizontal_flip",
+      "original_prediction": 1,
+      "perturbed_prediction": 3,
+      "original_confidence": 0.5553950071334839,
+      "perturbed_confidence": 0.5152010321617126,
+      "confidence_change": -0.04019397497177124,
+      "true_class_probability_change": 0.07059851288795471
+    },
+    {
+      "sample_id": "d335de0aeb36d5127592a6c5b33cc02e5e9e9bff688500e71cd338736329cf1c",
+      "group_id": "4ca6d73fbb008c83c32bf6e11edaeec3f61d68e9a31cb2543ec741fb53f0f4d8",
+      "true_index": 1,
+      "perturbation": "rotation_minus_5",
+      "original_prediction": 3,
+      "perturbed_prediction": 1,
+      "original_confidence": 0.5095126628875732,
+      "perturbed_confidence": 0.4690549671649933,
+      "confidence_change": -0.040457695722579956,
+      "true_class_probability_change": 0.09270915389060974
+    },
+    {
+      "sample_id": "d335de0aeb36d5127592a6c5b33cc02e5e9e9bff688500e71cd338736329cf1c",
+      "group_id": "4ca6d73fbb008c83c32bf6e11edaeec3f61d68e9a31cb2543ec741fb53f0f4d8",
+      "true_index": 1,
+      "perturbation": "scale_0.97",
+      "original_prediction": 3,
+      "perturbed_prediction": 1,
+      "original_confidence": 0.5095126628875732,
+      "perturbed_confidence": 0.47208863496780396,
+      "confidence_change": -0.03742402791976929,
+      "true_class_probability_change": 0.09574282169342041
+    },
+    {
+      "sample_id": "de379d4358356de272c96d14e2940fa348871389caa3efec148963059d22c5e4",
+      "group_id": "334cf322d1f5fa39ab2da04b299f5b10f05ee7396e0d2f0434057e6fbbd0e37b",
+      "true_index": 0,
+      "perturbation": "brightness_0.8",
+      "original_prediction": 0,
+      "perturbed_prediction": 3,
+      "original_confidence": 0.8337989449501038,
+      "perturbed_confidence": 0.4361651837825775,
+      "confidence_change": -0.39763376116752625,
+      "true_class_probability_change": -0.40080612897872925
+    },
+    {
+      "sample_id": "ebba0adbb3c8f9457c5b94caeeecbf3106289179f62ad17fe50b2ed8e16d5012",
+      "group_id": "31991674324d695f609478566c63edde6119941244f57103748aa2df3d3570a1",
+      "true_index": 3,
+      "perturbation": "scale_0.97",
+      "original_prediction": 3,
+      "perturbed_prediction": 0,
+      "original_confidence": 0.797120988368988,
+      "perturbed_confidence": 0.7054992318153381,
+      "confidence_change": -0.0916217565536499,
+      "true_class_probability_change": -0.5375012159347534
+    },
+    {
+      "sample_id": "ec17e9324b96e1d6cade04880b52476e82eab564e7a21bc523799dc6e1172995",
+      "group_id": "0a10bbf9e2f6e62c4cf3a8e100a179bee08cfb6f3b24cd511866c9bec4d05a20",
+      "true_index": 0,
+      "perturbation": "scale_0.97",
+      "original_prediction": 3,
+      "perturbed_prediction": 0,
+      "original_confidence": 0.8530659079551697,
+      "perturbed_confidence": 0.7321853637695312,
+      "confidence_change": -0.12088054418563843,
+      "true_class_probability_change": 0.5852882862091064
+    },
+    {
+      "sample_id": "f25854a38b56467ebaeb2bebd16922021ef9893fb2d8dfc1f67fa594d2f2d5f7",
+      "group_id": "bf10ec53dea5370d033a8b7b97abe43c2e371d74487928087d9edee450b83f79",
+      "true_index": 1,
+      "perturbation": "scale_0.97",
+      "original_prediction": 1,
+      "perturbed_prediction": 3,
+      "original_confidence": 0.7338516116142273,
+      "perturbed_confidence": 0.5210985541343689,
+      "confidence_change": -0.2127530574798584,
+      "true_class_probability_change": -0.3122119605541229
+    },
+    {
+      "sample_id": "fd00790441ba4d97505a14b117f69a2dea10e5626d02eeb58d1213fe895b7a90",
+      "group_id": "5823fbbfc76864010201dfeca6d0d7e40d44e1c8e4ae9061e14e60ad3a86e79f",
+      "true_index": 3,
+      "perturbation": "rotation_plus_5",
+      "original_prediction": 3,
+      "perturbed_prediction": 0,
+      "original_confidence": 0.7600592970848083,
+      "perturbed_confidence": 0.6389563679695129,
+      "confidence_change": -0.12110292911529541,
+      "true_class_probability_change": -0.43974873423576355
+    },
+    {
+      "sample_id": "fd00790441ba4d97505a14b117f69a2dea10e5626d02eeb58d1213fe895b7a90",
+      "group_id": "5823fbbfc76864010201dfeca6d0d7e40d44e1c8e4ae9061e14e60ad3a86e79f",
+      "true_index": 3,
+      "perturbation": "scale_0.97",
+      "original_prediction": 3,
+      "perturbed_prediction": 0,
+      "original_confidence": 0.7600592970848083,
+      "perturbed_confidence": 0.7214460372924805,
+      "confidence_change": -0.03861325979232788,
+      "true_class_probability_change": -0.5308170318603516
+    },
+    {
+      "sample_id": "fd00790441ba4d97505a14b117f69a2dea10e5626d02eeb58d1213fe895b7a90",
+      "group_id": "5823fbbfc76864010201dfeca6d0d7e40d44e1c8e4ae9061e14e60ad3a86e79f",
+      "true_index": 3,
+      "perturbation": "horizontal_flip",
+      "original_prediction": 3,
+      "perturbed_prediction": 0,
+      "original_confidence": 0.7600592970848083,
+      "perturbed_confidence": 0.49579164385795593,
+      "confidence_change": -0.2642676532268524,
+      "true_class_probability_change": -0.30697792768478394
+    },
+    {
+      "sample_id": "fdd5b4ff8cf23f946c8f45d98e4257d4b50ab7183a5282202e0b3836f86ea3e8",
+      "group_id": "72d32f3dda0c2ae4de97b2a5dea0489a12bf21d78c3257598d4477ae81db1a88",
+      "true_index": 3,
+      "perturbation": "brightness_1.2",
+      "original_prediction": 3,
+      "perturbed_prediction": 0,
+      "original_confidence": 0.5111730694770813,
+      "perturbed_confidence": 0.5970492362976074,
+      "confidence_change": 0.08587616682052612,
+      "true_class_probability_change": -0.12435269355773926
+    },
+    {
+      "sample_id": "fdd5b4ff8cf23f946c8f45d98e4257d4b50ab7183a5282202e0b3836f86ea3e8",
+      "group_id": "72d32f3dda0c2ae4de97b2a5dea0489a12bf21d78c3257598d4477ae81db1a88",
+      "true_index": 3,
+      "perturbation": "contrast_1.2",
+      "original_prediction": 3,
+      "perturbed_prediction": 0,
+      "original_confidence": 0.5111730694770813,
+      "perturbed_confidence": 0.5078797936439514,
+      "confidence_change": -0.003293275833129883,
+      "true_class_probability_change": -0.033450931310653687
+    },
+    {
+      "sample_id": "fdd5b4ff8cf23f946c8f45d98e4257d4b50ab7183a5282202e0b3836f86ea3e8",
+      "group_id": "72d32f3dda0c2ae4de97b2a5dea0489a12bf21d78c3257598d4477ae81db1a88",
+      "true_index": 3,
+      "perturbation": "rotation_plus_5",
+      "original_prediction": 3,
+      "perturbed_prediction": 0,
+      "original_confidence": 0.5111730694770813,
+      "perturbed_confidence": 0.8047040700912476,
+      "confidence_change": 0.29353100061416626,
+      "true_class_probability_change": -0.31902191042900085
+    },
+    {
+      "sample_id": "fdd5b4ff8cf23f946c8f45d98e4257d4b50ab7183a5282202e0b3836f86ea3e8",
+      "group_id": "72d32f3dda0c2ae4de97b2a5dea0489a12bf21d78c3257598d4477ae81db1a88",
+      "true_index": 3,
+      "perturbation": "scale_0.97",
+      "original_prediction": 3,
+      "perturbed_prediction": 0,
+      "original_confidence": 0.5111730694770813,
+      "perturbed_confidence": 0.7782356142997742,
+      "confidence_change": 0.26706254482269287,
+      "true_class_probability_change": -0.2999081015586853
+    },
+    {
+      "sample_id": "fdd5b4ff8cf23f946c8f45d98e4257d4b50ab7183a5282202e0b3836f86ea3e8",
+      "group_id": "72d32f3dda0c2ae4de97b2a5dea0489a12bf21d78c3257598d4477ae81db1a88",
+      "true_index": 3,
+      "perturbation": "horizontal_flip",
+      "original_prediction": 3,
+      "perturbed_prediction": 0,
+      "original_confidence": 0.5111730694770813,
+      "perturbed_confidence": 0.571649432182312,
+      "confidence_change": 0.06047636270523071,
+      "true_class_probability_change": -0.21739116311073303
+    }
+  ]
+}

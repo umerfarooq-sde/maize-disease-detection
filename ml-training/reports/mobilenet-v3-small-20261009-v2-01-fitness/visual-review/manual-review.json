@@ -1,0 +1,1479 @@
+{
+  "reviewer": "root",
+  "review_date": "2026-10-09 (Asia/Karachi)",
+  "actual_validation_sheets_reviewed": 11,
+  "actual_validation_contents_reviewed": 41,
+  "all_validation_errors_reviewed": 20,
+  "train_augmentation_sheets_reviewed": 3,
+  "train_contents_reviewed": 11,
+  "actual_train_augmented_variants_reviewed": 33,
+  "test_images_read": false,
+  "source_or_label_changes": false,
+  "cam_limitations": "Predicted-logit gradient map at coarse 7x7; localization is diagnostic, not causal/pathology proof. Border heat is interpreted relative to region area.",
+  "augmentation_findings": "Actual flips/affines preserve visible major lesions/colours across these 33 examples. Mild edge clipping and white wedges occur; backgrounds/fingers remain. No strong brightness/color modifications; no exhaustive lesion-mask retention guarantee.",
+  "preprocessing_findings": "Full oriented frame retained with one shared resize/normalization; raw source black/gray backgrounds are preserved, not newly removed. Tiny lesion detail can soften at224 pixels.",
+  "source_findings": "PlantVillage-overlap579:570correct98.45%; Corn-only48:37correct77.08%; Corn-only GLS2/9recall22.22%. Overlapping archives, small subgroup/noHealthy, no verified independent field/plant domains.",
+  "conclusion": "Suitable for a limited FYP research inference prototype with disclosed source/class/confidence weaknesses; field/commercial validity unestablished. These observations do not justify a particular class weight, random hyperparameter search or larger architecture. New plant/session-independent field data and verified labels are the scientific next validation step.",
+  "examples": [
+    {
+      "sample_id": "16977964fb1e3a13a8e8b366b73dacb7be286aa7702d6ab30400f3d35c04e806",
+      "group_id": "419f112cef631b9b7851cc39f8520981d3aa08e8239add7039ebff32c69654ea",
+      "relative_path": "Common_Rust/Common_Rust (1780).jpg",
+      "partition": "validation",
+      "true_label": "Common_Rust",
+      "predicted_label": "Northern_Corn_Leaf_Blight",
+      "confidence": 0.9945853352546692,
+      "probabilities": [
+        0.005099602043628693,
+        0.000312526011839509,
+        2.590711574157467e-06,
+        0.9945853352546692
+      ],
+      "selection_categories": [
+        "misclassified",
+        "wrong_confidence_ge_0.9"
+      ],
+      "pixel_proxies_not_semantic_labels": {
+        "brightness": 145.39564732142858,
+        "sharpness": 1100.6508014775077,
+        "aspect_extremeness": 1.3333333333333333
+      },
+      "source_membership": "Corn_collection_only_origin_not_independently_verified",
+      "cam_target": "predicted class logit",
+      "cam_geometry": {
+        "positive_activation_mass": 16058.8955078125,
+        "border_pixel_fraction": 0.35427295918367346,
+        "border_activation_fraction": 0.16325495951213273,
+        "border_enrichment_vs_uniform": 0.46081687941498495,
+        "letterbox_pixel_fraction": 0.25,
+        "letterbox_activation_fraction": 0.03438203149794862
+      },
+      "visual_index": 0,
+      "manual_observation": "Field leaf with broad yellow/brown longitudinal damage, busy background; CAM strongest on damaged central leaf. Confident class error suggests phenotype/label overlap, not proven background shortcut."
+    },
+    {
+      "sample_id": "131259d54437feaa5080ae6b2756c15c4eca029a8d96f8bea8dc6826f94064c8",
+      "group_id": "fa41dd7e94e7c3722bbc864e13003ed83d924897ec2282f3ee92cc13fdf29ede",
+      "relative_path": "Gray_Leaf_Spot/Gray_Leaf_Spot (387).JPG",
+      "partition": "validation",
+      "true_label": "Gray_Leaf_Spot",
+      "predicted_label": "Northern_Corn_Leaf_Blight",
+      "confidence": 0.9916953444480896,
+      "probabilities": [
+        4.520352831605123e-06,
+        0.008296361193060875,
+        3.7753659398731543e-06,
+        0.9916953444480896
+      ],
+      "selection_categories": [
+        "misclassified",
+        "wrong_confidence_ge_0.9"
+      ],
+      "pixel_proxies_not_semantic_labels": {
+        "brightness": 121.54133450255102,
+        "sharpness": 471.5999693383976,
+        "aspect_extremeness": 1.0
+      },
+      "source_membership": "PlantVillage_color_overlap",
+      "cam_target": "predicted class logit",
+      "cam_geometry": {
+        "positive_activation_mass": 6662.23779296875,
+        "border_pixel_fraction": 0.35427295918367346,
+        "border_activation_fraction": 0.19541628961564286,
+        "border_enrichment_vs_uniform": 0.5515980956207525,
+        "letterbox_pixel_fraction": 0.0,
+        "letterbox_activation_fraction": 0.0
+      },
+      "visual_index": 1,
+      "manual_observation": "Large pale elongated necrotic region plus punctate spots; CAM centered on large lesion, consistent with morphology overlap despite wrong literal class."
+    },
+    {
+      "sample_id": "d1d06fd426ee88b247aa5da856d75e3e54f117a74b0bbb62a69bc9e0af397199",
+      "group_id": "3278e30ee768ce04178b001d319870b649473b77537509baeb2e659c8be01d69",
+      "relative_path": "Gray_Leaf_Spot/Gray_Leaf_Spot (194).JPG",
+      "partition": "validation",
+      "true_label": "Gray_Leaf_Spot",
+      "predicted_label": "Northern_Corn_Leaf_Blight",
+      "confidence": 0.9059109091758728,
+      "probabilities": [
+        6.921921158209443e-05,
+        0.09391767531633377,
+        0.00010218187526334077,
+        0.9059109091758728
+      ],
+      "selection_categories": [
+        "misclassified",
+        "wrong_confidence_ge_0.9"
+      ],
+      "pixel_proxies_not_semantic_labels": {
+        "brightness": 115.47221779336735,
+        "sharpness": 274.94847627383183,
+        "aspect_extremeness": 1.0
+      },
+      "source_membership": "PlantVillage_color_overlap",
+      "cam_target": "predicted class logit",
+      "cam_geometry": {
+        "positive_activation_mass": 15484.736328125,
+        "border_pixel_fraction": 0.35427295918367346,
+        "border_activation_fraction": 0.2801054087410927,
+        "border_enrichment_vs_uniform": 0.7906485704879088,
+        "letterbox_pixel_fraction": 0.0,
+        "letterbox_activation_fraction": 0.0
+      },
+      "visual_index": 2,
+      "manual_observation": "Curled leaf, broad necrotic midsection and scattered dots; CAM covers leaf lesions and some right background."
+    },
+    {
+      "sample_id": "8546324a1f059cce2f8e1dad4a547c8de5db7a0fa0e6f61281aa1c5223bc5cad",
+      "group_id": "887bac28c98b4284a0435431e45609acc9d20d22d2725c3db27506e78fcd1c0b",
+      "relative_path": "Gray_Leaf_Spot/Gray_Leaf_Spot (353).jpg",
+      "partition": "validation",
+      "true_label": "Gray_Leaf_Spot",
+      "predicted_label": "Common_Rust",
+      "confidence": 0.9014104008674622,
+      "probabilities": [
+        0.9014104008674622,
+        0.043576568365097046,
+        2.954352203232702e-05,
+        0.05498339980840683
+      ],
+      "selection_categories": [
+        "misclassified",
+        "wrong_confidence_ge_0.9"
+      ],
+      "pixel_proxies_not_semantic_labels": {
+        "brightness": 157.51765784438774,
+        "sharpness": 1381.1372575612925,
+        "aspect_extremeness": 1.328125
+      },
+      "source_membership": "Corn_collection_only_origin_not_independently_verified",
+      "cam_target": "predicted class logit",
+      "cam_geometry": {
+        "positive_activation_mass": 14646.017578125,
+        "border_pixel_fraction": 0.35427295918367346,
+        "border_activation_fraction": 0.41873500835671384,
+        "border_enrichment_vs_uniform": 1.1819558831743067,
+        "letterbox_pixel_fraction": 0.24553571428571427,
+        "letterbox_activation_fraction": 0.32741668923706196
+      },
+      "visual_index": 3,
+      "manual_observation": "Bright/backlit field frame, large pale lesions and distracting background; CAM extends into top letterbox and bright background; padding/border enrichment warrants caution."
+    },
+    {
+      "sample_id": "16b6177e6d8f24a7b4c85e515c8712b2d5ed91bb179791260000325e09ffd972",
+      "group_id": "12e45876e63cfcf95e2af7d1f73de0b0f3e3f6855ffad6bb5488c4209ada5e05",
+      "relative_path": "Gray_Leaf_Spot/Gray_Leaf_Spot (1007).JPG",
+      "partition": "validation",
+      "true_label": "Gray_Leaf_Spot",
+      "predicted_label": "Northern_Corn_Leaf_Blight",
+      "confidence": 0.8907809257507324,
+      "probabilities": [
+        2.7782107281382196e-07,
+        0.10921858251094818,
+        1.4151048333133076e-07,
+        0.8907809257507324
+      ],
+      "selection_categories": [
+        "misclassified",
+        "wrong_confidence_lt_0.9"
+      ],
+      "pixel_proxies_not_semantic_labels": {
+        "brightness": 118.35002790178571,
+        "sharpness": 815.0845402273126,
+        "aspect_extremeness": 1.0
+      },
+      "source_membership": "PlantVillage_color_overlap",
+      "cam_target": "predicted class logit",
+      "cam_geometry": {
+        "positive_activation_mass": 7167.0244140625,
+        "border_pixel_fraction": 0.35427295918367346,
+        "border_activation_fraction": 0.23505412770320014,
+        "border_enrichment_vs_uniform": 0.6634831183413462,
+        "letterbox_pixel_fraction": 0.0,
+        "letterbox_activation_fraction": 0.0
+      },
+      "visual_index": 4,
+      "manual_observation": "Broad pale lesions on a gray-backed leaf; CAM tracks lesion; literal GLS/Blight ambiguity remains."
+    },
+    {
+      "sample_id": "6fb3ac72f6bcae59e68b8d59823c2cd0f1d6e02b4ebdb104582bb4f174ca3f40",
+      "group_id": "0617c7b0dc8b0d2bbe788135aed9e0b35bb37a1660fcfdb9c8367028b3f4749d",
+      "relative_path": "Northern_Corn_Leaf_Blight/Northern_Corn_Leaf_Blight (15).JPG",
+      "partition": "validation",
+      "true_label": "Northern_Corn_Leaf_Blight",
+      "predicted_label": "Gray_Leaf_Spot",
+      "confidence": 0.8673586249351501,
+      "probabilities": [
+        8.909040843718685e-06,
+        0.8673586249351501,
+        0.00010079436469823122,
+        0.13253161311149597
+      ],
+      "selection_categories": [
+        "misclassified",
+        "wrong_confidence_lt_0.9"
+      ],
+      "pixel_proxies_not_semantic_labels": {
+        "brightness": 121.36587213010205,
+        "sharpness": 1277.6414459904547,
+        "aspect_extremeness": 1.0
+      },
+      "source_membership": "PlantVillage_color_overlap",
+      "cam_target": "predicted class logit",
+      "cam_geometry": {
+        "positive_activation_mass": 10744.9765625,
+        "border_pixel_fraction": 0.35427295918367346,
+        "border_activation_fraction": 0.4901109311982271,
+        "border_enrichment_vs_uniform": 1.3834274349573719,
+        "letterbox_pixel_fraction": 0.0,
+        "letterbox_activation_fraction": 0.0
+      },
+      "visual_index": 5,
+      "manual_observation": "Partial leaf on gray background; elongated brown mark and punctate spots; CAM strongest near top/background and left boundary, weak pathology alignment."
+    },
+    {
+      "sample_id": "1236a199431c6c7b4798310cfb847faa4c4b9047b62149de91674989b1ed76b9",
+      "group_id": "6ed945d7e49f0ef0614a1e38847b85036ab51c727c1842e811552bdcfe4ab5c4",
+      "relative_path": "Common_Rust/Common_Rust (1721).jpg",
+      "partition": "validation",
+      "true_label": "Common_Rust",
+      "predicted_label": "Northern_Corn_Leaf_Blight",
+      "confidence": 0.85776686668396,
+      "probabilities": [
+        0.10807705670595169,
+        0.034154847264289856,
+        1.2553319947983255e-06,
+        0.85776686668396
+      ],
+      "selection_categories": [
+        "misclassified",
+        "wrong_confidence_lt_0.9"
+      ],
+      "pixel_proxies_not_semantic_labels": {
+        "brightness": 167.53794642857142,
+        "sharpness": 738.2748724092597,
+        "aspect_extremeness": 1.3333333333333333
+      },
+      "source_membership": "Corn_collection_only_origin_not_independently_verified",
+      "cam_target": "predicted class logit",
+      "cam_geometry": {
+        "positive_activation_mass": 7445.81005859375,
+        "border_pixel_fraction": 0.35427295918367346,
+        "border_activation_fraction": 0.20604112303880007,
+        "border_enrichment_vs_uniform": 0.581588624527162,
+        "letterbox_pixel_fraction": 0.25,
+        "letterbox_activation_fraction": 0.0155424209173718
+      },
+      "visual_index": 6,
+      "manual_observation": "Wide field leaf with small rusty spots; downsize makes small spots finer; CAM follows central midrib/spot area."
+    },
+    {
+      "sample_id": "ec17e9324b96e1d6cade04880b52476e82eab564e7a21bc523799dc6e1172995",
+      "group_id": "0a10bbf9e2f6e62c4cf3a8e100a179bee08cfb6f3b24cd511866c9bec4d05a20",
+      "relative_path": "Common_Rust/Common_Rust (1804).jpg",
+      "partition": "validation",
+      "true_label": "Common_Rust",
+      "predicted_label": "Northern_Corn_Leaf_Blight",
+      "confidence": 0.8530659079551697,
+      "probabilities": [
+        0.1468971073627472,
+        3.5526227293303236e-05,
+        1.4683323570352513e-06,
+        0.8530659079551697
+      ],
+      "selection_categories": [
+        "misclassified",
+        "wrong_confidence_lt_0.9"
+      ],
+      "pixel_proxies_not_semantic_labels": {
+        "brightness": 162.78071189413265,
+        "sharpness": 827.1836204528809,
+        "aspect_extremeness": 1.3333333333333333
+      },
+      "source_membership": "Corn_collection_only_origin_not_independently_verified",
+      "cam_target": "predicted class logit",
+      "cam_geometry": {
+        "positive_activation_mass": 5803.37060546875,
+        "border_pixel_fraction": 0.35427295918367346,
+        "border_activation_fraction": 0.03461970006149612,
+        "border_enrichment_vs_uniform": 0.09772041349491613,
+        "letterbox_pixel_fraction": 0.25,
+        "letterbox_activation_fraction": 0.01578344279485344
+      },
+      "visual_index": 7,
+      "manual_observation": "Macro closeup with dark raised spots and broad pale damaged tissue; CAM follows the damaged region, not a proof of correct disease semantics."
+    },
+    {
+      "sample_id": "b8edc738dfbc1015fd856650f261e0aefb7ce7d1ece7c47c037a34ac85b4718d",
+      "group_id": "72d32f3dda0c2ae4de97b2a5dea0489a12bf21d78c3257598d4477ae81db1a88",
+      "relative_path": "Northern_Corn_Leaf_Blight/Northern_Corn_Leaf_Blight (124).jpg",
+      "partition": "validation",
+      "true_label": "Northern_Corn_Leaf_Blight",
+      "predicted_label": "Common_Rust",
+      "confidence": 0.8478437066078186,
+      "probabilities": [
+        0.8478437066078186,
+        0.005878301803022623,
+        0.0016459602629765868,
+        0.144632026553154
+      ],
+      "selection_categories": [
+        "misclassified",
+        "wrong_confidence_lt_0.9"
+      ],
+      "pixel_proxies_not_semantic_labels": {
+        "brightness": 184.09147799744898,
+        "sharpness": 474.81473162808754,
+        "aspect_extremeness": 1.899581589958159
+      },
+      "source_membership": "Corn_collection_only_origin_not_independently_verified",
+      "cam_target": "predicted class logit",
+      "cam_geometry": {
+        "positive_activation_mass": 15156.2216796875,
+        "border_pixel_fraction": 0.35427295918367346,
+        "border_activation_fraction": 0.312490886741992,
+        "border_enrichment_vs_uniform": 0.8820624849890971,
+        "letterbox_pixel_fraction": 0.4732142857142857,
+        "letterbox_activation_fraction": 0.40550890848958415
+      },
+      "visual_index": 8,
+      "manual_observation": "Partial narrow leaf with yellow/brown streaks on pale background; CAM includes leaf and padding, ambiguity with Rust."
+    },
+    {
+      "sample_id": "8fc552ceeb446267d6137f1af25d911b92c12f4470a950fdcf0aa672b91ab2a2",
+      "group_id": "84a82fb47bc113cdf5b9cdd1860938c644b19f23905239995acaf3a2e036826b",
+      "relative_path": "Northern_Corn_Leaf_Blight/Northern_Corn_Leaf_Blight (1651).JPG",
+      "partition": "validation",
+      "true_label": "Northern_Corn_Leaf_Blight",
+      "predicted_label": "Gray_Leaf_Spot",
+      "confidence": 0.844456672668457,
+      "probabilities": [
+        3.18981892633019e-06,
+        0.844456672668457,
+        2.747283360804431e-07,
+        0.15553978085517883
+      ],
+      "selection_categories": [
+        "misclassified",
+        "wrong_confidence_lt_0.9"
+      ],
+      "pixel_proxies_not_semantic_labels": {
+        "brightness": 122.16631457270408,
+        "sharpness": 405.13733076940025,
+        "aspect_extremeness": 1.0
+      },
+      "source_membership": "PlantVillage_color_overlap",
+      "cam_target": "predicted class logit",
+      "cam_geometry": {
+        "positive_activation_mass": 20844.96484375,
+        "border_pixel_fraction": 0.35427295918367346,
+        "border_activation_fraction": 0.3490741544111653,
+        "border_enrichment_vs_uniform": 0.9853254259526683,
+        "letterbox_pixel_fraction": 0.0,
+        "letterbox_activation_fraction": 0.0
+      },
+      "visual_index": 9,
+      "manual_observation": "Gray-backed leaf with mixed elongated and punctate lesions; CAM on central tissue but also right background."
+    },
+    {
+      "sample_id": "0d56d3946159d0d2062744242e41f4f390e23369be12c0480567802e89397ff8",
+      "group_id": "ce6cb52a35c98b7a63afe230b015e142ccc6df56145148a95691e9ea53cab0e7",
+      "relative_path": "Gray_Leaf_Spot/Gray_Leaf_Spot (649).jpg",
+      "partition": "validation",
+      "true_label": "Gray_Leaf_Spot",
+      "predicted_label": "Northern_Corn_Leaf_Blight",
+      "confidence": 0.8413008451461792,
+      "probabilities": [
+        0.09167115390300751,
+        0.06667386740446091,
+        0.0003541285404935479,
+        0.8413008451461792
+      ],
+      "selection_categories": [
+        "misclassified",
+        "wrong_confidence_lt_0.9"
+      ],
+      "pixel_proxies_not_semantic_labels": {
+        "brightness": 134.66990194515307,
+        "sharpness": 1256.6180278896443,
+        "aspect_extremeness": 1.2175
+      },
+      "source_membership": "Corn_collection_only_origin_not_independently_verified",
+      "cam_target": "predicted class logit",
+      "cam_geometry": {
+        "positive_activation_mass": 9028.4912109375,
+        "border_pixel_fraction": 0.35427295918367346,
+        "border_activation_fraction": 0.32738190461511,
+        "border_enrichment_vs_uniform": 0.9240950970953961,
+        "letterbox_pixel_fraction": 0.17857142857142858,
+        "letterbox_activation_fraction": 0.08334156735810842
+      },
+      "visual_index": 10,
+      "manual_observation": "Natural field background with elongated pale marks; CAM strongest at lower-left background, suspicious contextual attention."
+    },
+    {
+      "sample_id": "a5778b6f26c7c6df8f48048a6f32cc203cc09b039480fda08a0bf73ddb6de17f",
+      "group_id": "0617c7b0dc8b0d2bbe788135aed9e0b35bb37a1660fcfdb9c8367028b3f4749d",
+      "relative_path": "Northern_Corn_Leaf_Blight/Northern_Corn_Leaf_Blight (1484).jpg",
+      "partition": "validation",
+      "true_label": "Northern_Corn_Leaf_Blight",
+      "predicted_label": "Gray_Leaf_Spot",
+      "confidence": 0.8024343848228455,
+      "probabilities": [
+        3.632281732279807e-05,
+        0.8024343848228455,
+        0.00016871659317985177,
+        0.1973605751991272
+      ],
+      "selection_categories": [
+        "misclassified",
+        "wrong_confidence_lt_0.9"
+      ],
+      "pixel_proxies_not_semantic_labels": {
+        "brightness": 118.35590720663265,
+        "sharpness": 1301.605204042421,
+        "aspect_extremeness": 1.0
+      },
+      "source_membership": "PlantVillage_color_overlap",
+      "cam_target": "predicted class logit",
+      "cam_geometry": {
+        "positive_activation_mass": 7933.392578125,
+        "border_pixel_fraction": 0.35427295918367346,
+        "border_activation_fraction": 0.4860030301113002,
+        "border_enrichment_vs_uniform": 1.3718321353996736,
+        "letterbox_pixel_fraction": 0.0,
+        "letterbox_activation_fraction": 0.0
+      },
+      "visual_index": 11,
+      "manual_observation": "Gray-backed partial leaf with one elongated lesion; heat at upper/background edge rather than lesion center."
+    },
+    {
+      "sample_id": "56a65794b3375625ccdb802cd7f821b1965eb8add70fe0a04b5a888a169bb5a6",
+      "group_id": "d3d3116f216d14b4f90a8ccab2307197ff910f8f0fb36aec545ac10e3cd7984f",
+      "relative_path": "Gray_Leaf_Spot/Gray_Leaf_Spot (916).jpg",
+      "partition": "validation",
+      "true_label": "Gray_Leaf_Spot",
+      "predicted_label": "Common_Rust",
+      "confidence": 0.7939772605895996,
+      "probabilities": [
+        0.7939772605895996,
+        0.003636895678937435,
+        1.2953838677276508e-06,
+        0.20238454639911652
+      ],
+      "selection_categories": [
+        "misclassified",
+        "wrong_confidence_lt_0.9"
+      ],
+      "pixel_proxies_not_semantic_labels": {
+        "brightness": 129.58494100765307,
+        "sharpness": 1078.0282872258401,
+        "aspect_extremeness": 1.3333333333333333
+      },
+      "source_membership": "Corn_collection_only_origin_not_independently_verified",
+      "cam_target": "predicted class logit",
+      "cam_geometry": {
+        "positive_activation_mass": 9756.708984375,
+        "border_pixel_fraction": 0.35427295918367346,
+        "border_activation_fraction": 0.4500272248562938,
+        "border_enrichment_vs_uniform": 1.2702838678211859,
+        "letterbox_pixel_fraction": 0.25,
+        "letterbox_activation_fraction": 0.4275264316320801
+      },
+      "visual_index": 12,
+      "manual_observation": "Heavily pale/streaked field leaf; CAM includes lesions and substantial white letterbox mass."
+    },
+    {
+      "sample_id": "92b43d93a4ce77e72be76cb9f6c526679d6b8b105f37e98f241a5dc2dd417cf9",
+      "group_id": "dfc36aac59bddfeaa062b22d2fa2bea70aacb7892b12b999cbb84cbc978d3132",
+      "relative_path": "Gray_Leaf_Spot/Gray_Leaf_Spot (317).jpg",
+      "partition": "validation",
+      "true_label": "Gray_Leaf_Spot",
+      "predicted_label": "Northern_Corn_Leaf_Blight",
+      "confidence": 0.7921372056007385,
+      "probabilities": [
+        0.007859090343117714,
+        0.19865480065345764,
+        0.0013488965341821313,
+        0.7921372056007385
+      ],
+      "selection_categories": [
+        "misclassified",
+        "wrong_confidence_lt_0.9"
+      ],
+      "pixel_proxies_not_semantic_labels": {
+        "brightness": 150.4344108737245,
+        "sharpness": 900.9908518439678,
+        "aspect_extremeness": 1.1705685618729098
+      },
+      "source_membership": "Corn_collection_only_origin_not_independently_verified",
+      "cam_target": "predicted class logit",
+      "cam_geometry": {
+        "positive_activation_mass": 11907.9638671875,
+        "border_pixel_fraction": 0.35427295918367346,
+        "border_activation_fraction": 0.18248283650114341,
+        "border_enrichment_vs_uniform": 0.5150910668475119,
+        "letterbox_pixel_fraction": 0.14732142857142858,
+        "letterbox_activation_fraction": 0.031112719174692292
+      },
+      "visual_index": 13,
+      "manual_observation": "Long field leaf with many elongated marks; CAM follows leaf damage and some lower background."
+    },
+    {
+      "sample_id": "9c0e29744ac972c8901db9111c559b277e30754944c592b7b3e0f77343be4499",
+      "group_id": "c1fa6b203d07eb7bb30d5311399c2c48ba9d3cc1c98c8e69ca926f80d1fc4d8a",
+      "relative_path": "Gray_Leaf_Spot/Gray_Leaf_Spot (421).JPG",
+      "partition": "validation",
+      "true_label": "Gray_Leaf_Spot",
+      "predicted_label": "Northern_Corn_Leaf_Blight",
+      "confidence": 0.6055488586425781,
+      "probabilities": [
+        4.092815743206302e-06,
+        0.39419639110565186,
+        0.00025071512209251523,
+        0.6055488586425781
+      ],
+      "selection_categories": [
+        "misclassified",
+        "wrong_confidence_lt_0.9"
+      ],
+      "pixel_proxies_not_semantic_labels": {
+        "brightness": 107.65302136479592,
+        "sharpness": 642.4331752132844,
+        "aspect_extremeness": 1.0
+      },
+      "source_membership": "PlantVillage_color_overlap",
+      "cam_target": "predicted class logit",
+      "cam_geometry": {
+        "positive_activation_mass": 2949.8154296875,
+        "border_pixel_fraction": 0.35427295918367346,
+        "border_activation_fraction": 0.45292951492264316,
+        "border_enrichment_vs_uniform": 1.278476110528721,
+        "letterbox_pixel_fraction": 0.0,
+        "letterbox_activation_fraction": 0.0
+      },
+      "visual_index": 14,
+      "manual_observation": "Partial gray-backed leaf, large pale lesion and tiny dots; CAM focused on lesion; low confidence reflects class overlap."
+    },
+    {
+      "sample_id": "09be2f9958acdcd1cc32b43cb3f9b6196815f6ee9103077861a10f78f2a5978c",
+      "group_id": "f15263f1edba54bea0d9851f55ea98b371fc77ee60597fa0f7a9fcb4ef56f1ef",
+      "relative_path": "Gray_Leaf_Spot/Gray_Leaf_Spot (886).jpg",
+      "partition": "validation",
+      "true_label": "Gray_Leaf_Spot",
+      "predicted_label": "Northern_Corn_Leaf_Blight",
+      "confidence": 0.5832991003990173,
+      "probabilities": [
+        0.06259822845458984,
+        0.34629490971565247,
+        0.007807778660207987,
+        0.5832991003990173
+      ],
+      "selection_categories": [
+        "misclassified",
+        "wrong_confidence_lt_0.9"
+      ],
+      "pixel_proxies_not_semantic_labels": {
+        "brightness": 133.54663584183675,
+        "sharpness": 780.1376925761975,
+        "aspect_extremeness": 1.1111111111111112
+      },
+      "source_membership": "Corn_collection_only_origin_not_independently_verified",
+      "cam_target": "predicted class logit",
+      "cam_geometry": {
+        "positive_activation_mass": 11965.0380859375,
+        "border_pixel_fraction": 0.35427295918367346,
+        "border_activation_fraction": 0.15772838002386347,
+        "border_enrichment_vs_uniform": 0.4452171014895012,
+        "letterbox_pixel_fraction": 0.09821428571428571,
+        "letterbox_activation_fraction": 0.02509821145167492
+      },
+      "visual_index": 15,
+      "manual_observation": "Long field leaf with pale lesions; CAM tracks central damaged tissue; low confidence wrong prediction."
+    },
+    {
+      "sample_id": "187dba9a9b5fb5b19302741895fe71f28fcbc2eb20eee6da09cba216f4275b38",
+      "group_id": "cc211fa164218fd0bee818387cc02ec658230b0a96ba04b17c9641edc0f99415",
+      "relative_path": "Gray_Leaf_Spot/Gray_Leaf_Spot (428).jpg",
+      "partition": "validation",
+      "true_label": "Gray_Leaf_Spot",
+      "predicted_label": "Common_Rust",
+      "confidence": 0.5799413323402405,
+      "probabilities": [
+        0.5799413323402405,
+        0.07344955205917358,
+        2.444823257974349e-05,
+        0.34658458828926086
+      ],
+      "selection_categories": [
+        "misclassified",
+        "wrong_confidence_lt_0.9"
+      ],
+      "pixel_proxies_not_semantic_labels": {
+        "brightness": 162.46470424107142,
+        "sharpness": 433.06128421221007,
+        "aspect_extremeness": 1.3333333333333333
+      },
+      "source_membership": "Corn_collection_only_origin_not_independently_verified",
+      "cam_target": "predicted class logit",
+      "cam_geometry": {
+        "positive_activation_mass": 11123.7783203125,
+        "border_pixel_fraction": 0.35427295918367346,
+        "border_activation_fraction": 0.44617417168967555,
+        "border_enrichment_vs_uniform": 1.2594079229692372,
+        "letterbox_pixel_fraction": 0.25,
+        "letterbox_activation_fraction": 0.43941526584423907
+      },
+      "visual_index": 16,
+      "manual_observation": "Partial heavily streaked leaf with pink/pale marks and reddish puncta; CAM on tissue, literal GLS/Rust ambiguity."
+    },
+    {
+      "sample_id": "ca0ba0c662262898d2bdb9a898de82741c8693a0734776dfda10ad1545cbdecd",
+      "group_id": "a49c3db103f9723c3a1ce1772eb000c97dbe252690e77435406bc78e275e4677",
+      "relative_path": "Northern_Corn_Leaf_Blight/Northern_Corn_Leaf_Blight (227).JPG",
+      "partition": "validation",
+      "true_label": "Northern_Corn_Leaf_Blight",
+      "predicted_label": "Gray_Leaf_Spot",
+      "confidence": 0.5553950071334839,
+      "probabilities": [
+        3.8118037082313094e-07,
+        0.5553950071334839,
+        2.145296548405895e-06,
+        0.44460251927375793
+      ],
+      "selection_categories": [
+        "misclassified",
+        "wrong_confidence_lt_0.9",
+        "smallest_top_two_probability_margin"
+      ],
+      "pixel_proxies_not_semantic_labels": {
+        "brightness": 116.85688376913265,
+        "sharpness": 552.5580126382271,
+        "aspect_extremeness": 1.0
+      },
+      "source_membership": "PlantVillage_color_overlap",
+      "cam_target": "predicted class logit",
+      "cam_geometry": {
+        "positive_activation_mass": 17538.48828125,
+        "border_pixel_fraction": 0.35427295918367346,
+        "border_activation_fraction": 0.5331515307962198,
+        "border_enrichment_vs_uniform": 1.5049173722564764,
+        "letterbox_pixel_fraction": 0.0,
+        "letterbox_activation_fraction": 0.0
+      },
+      "visual_index": 17,
+      "manual_observation": "Gray-backed leaf with elongated lesions; CAM strongly around outside leaf boundary, borderline wrong prediction."
+    },
+    {
+      "sample_id": "1b2416416c1b30c5627de056b3678efa48686d1e509bab3de00b97dd079d4976",
+      "group_id": "d7d02e3f01ee1b966546d7f6ecbcd6e7a16dbb3ff63d379e4f52184547f07192",
+      "relative_path": "Northern_Corn_Leaf_Blight/Northern_Corn_Leaf_Blight (649).JPG",
+      "partition": "validation",
+      "true_label": "Northern_Corn_Leaf_Blight",
+      "predicted_label": "Gray_Leaf_Spot",
+      "confidence": 0.5417377948760986,
+      "probabilities": [
+        2.347077133890707e-05,
+        0.5417377948760986,
+        1.1406757039367221e-05,
+        0.4582273066043854
+      ],
+      "selection_categories": [
+        "misclassified",
+        "wrong_confidence_lt_0.9",
+        "smallest_top_two_probability_margin"
+      ],
+      "pixel_proxies_not_semantic_labels": {
+        "brightness": 109.8072584502551,
+        "sharpness": 1743.0555745525594,
+        "aspect_extremeness": 1.0
+      },
+      "source_membership": "PlantVillage_color_overlap",
+      "cam_target": "predicted class logit",
+      "cam_geometry": {
+        "positive_activation_mass": 10498.916015625,
+        "border_pixel_fraction": 0.35427295918367346,
+        "border_activation_fraction": 0.5047405377601296,
+        "border_enrichment_vs_uniform": 1.424722165990789,
+        "letterbox_pixel_fraction": 0.0,
+        "letterbox_activation_fraction": 0.0
+      },
+      "visual_index": 18,
+      "manual_observation": "Mixed severe punctate/elongated lesions; weak, diffuse CAM with right gray-background focus; borderline wrong prediction."
+    },
+    {
+      "sample_id": "d335de0aeb36d5127592a6c5b33cc02e5e9e9bff688500e71cd338736329cf1c",
+      "group_id": "4ca6d73fbb008c83c32bf6e11edaeec3f61d68e9a31cb2543ec741fb53f0f4d8",
+      "relative_path": "Gray_Leaf_Spot/Gray_Leaf_Spot (888).jpg",
+      "partition": "validation",
+      "true_label": "Gray_Leaf_Spot",
+      "predicted_label": "Northern_Corn_Leaf_Blight",
+      "confidence": 0.5095126628875732,
+      "probabilities": [
+        0.112558513879776,
+        0.37634581327438354,
+        0.0015830864431336522,
+        0.5095126628875732
+      ],
+      "selection_categories": [
+        "misclassified",
+        "wrong_confidence_lt_0.9",
+        "smallest_top_two_probability_margin"
+      ],
+      "pixel_proxies_not_semantic_labels": {
+        "brightness": 179.91667330994898,
+        "sharpness": 1373.2811447311967,
+        "aspect_extremeness": 1.5
+      },
+      "source_membership": "Corn_collection_only_origin_not_independently_verified",
+      "cam_target": "predicted class logit",
+      "cam_geometry": {
+        "positive_activation_mass": 6714.8310546875,
+        "border_pixel_fraction": 0.35427295918367346,
+        "border_activation_fraction": 0.1614199895956755,
+        "border_enrichment_vs_uniform": 0.45563734236907144,
+        "letterbox_pixel_fraction": 0.33482142857142855,
+        "letterbox_activation_fraction": 0.052850267168916984
+      },
+      "visual_index": 19,
+      "manual_observation": "Yellow/brown elongated leaf streaks with watermark/field background; CAM includes right background; near-even GLS/Blight probabilities."
+    },
+    {
+      "sample_id": "67c6ea8e29d8dd602374af013406ab66868078b1535a0b39bd7eef844d771f76",
+      "group_id": "035066de604e7ff04e654ecf503b6a0ca39eaf776460c33b27c6271c0d293387",
+      "relative_path": "Healthy/Healthy (128).jpg",
+      "partition": "validation",
+      "true_label": "Healthy",
+      "predicted_label": "Healthy",
+      "confidence": 1.0,
+      "probabilities": [
+        7.169291549313783e-11,
+        1.0371923320207088e-09,
+        1.0,
+        3.2518783221746617e-09
+      ],
+      "selection_categories": [
+        "brightest_luminance_proxy"
+      ],
+      "pixel_proxies_not_semantic_labels": {
+        "brightness": 205.21528220663265,
+        "sharpness": 419.47109742583655,
+        "aspect_extremeness": 1.0
+      },
+      "source_membership": "PlantVillage_color_overlap",
+      "cam_target": "predicted class logit",
+      "cam_geometry": {
+        "positive_activation_mass": 26120.55859375,
+        "border_pixel_fraction": 0.35427295918367346,
+        "border_activation_fraction": 0.4579202908748093,
+        "border_enrichment_vs_uniform": 1.2925634853135932,
+        "letterbox_pixel_fraction": 0.0,
+        "letterbox_activation_fraction": 0.0
+      },
+      "visual_index": 20,
+      "manual_observation": "Bright closeup of apparently intact leaf; correct Healthy. Texture/source appearance may aid prediction; no independent field evidence."
+    },
+    {
+      "sample_id": "b0f225cbc52093d2347c43910fc6a9a4628186080b3cbdfb3d13abab1c81a4c3",
+      "group_id": "8870fb06f7f07edd466552a7e7e475bdd26fef2d28aaa71f12b062ef42c1d3cd",
+      "relative_path": "Healthy/Healthy (121).jpg",
+      "partition": "validation",
+      "true_label": "Healthy",
+      "predicted_label": "Healthy",
+      "confidence": 1.0,
+      "probabilities": [
+        3.141715332333206e-09,
+        1.5605369441118455e-08,
+        1.0,
+        3.3650973563226216e-08
+      ],
+      "selection_categories": [
+        "low_sharpness_proxy"
+      ],
+      "pixel_proxies_not_semantic_labels": {
+        "brightness": 145.48012994260205,
+        "sharpness": 12.561319925148554,
+        "aspect_extremeness": 1.0
+      },
+      "source_membership": "PlantVillage_color_overlap",
+      "cam_target": "predicted class logit",
+      "cam_geometry": {
+        "positive_activation_mass": 28016.69921875,
+        "border_pixel_fraction": 0.35427295918367346,
+        "border_activation_fraction": 0.34806891816055574,
+        "border_enrichment_vs_uniform": 0.9824879634126938,
+        "letterbox_pixel_fraction": 0.0,
+        "letterbox_activation_fraction": 0.0
+      },
+      "visual_index": 21,
+      "manual_observation": "Visibly soft/blurred closeup; correct Healthy at near-one confidence. This does not establish robust diseased-leaf blur diagnosis."
+    },
+    {
+      "sample_id": "e73ea3de5ee74c4411916cdffc9c20122882e8653e5e2ed7b380580fd81293ab",
+      "group_id": "a719fff61c1f2a3c7de34b85da3de31024322e37d3475f6d414cc9ebb47bfc44",
+      "relative_path": "Healthy/Healthy (1385).jpg",
+      "partition": "validation",
+      "true_label": "Healthy",
+      "predicted_label": "Healthy",
+      "confidence": 1.0,
+      "probabilities": [
+        1.9918536153795685e-08,
+        8.40316083383641e-09,
+        1.0,
+        3.020068817249921e-08
+      ],
+      "selection_categories": [
+        "highest_confidence_correct_per_class"
+      ],
+      "pixel_proxies_not_semantic_labels": {
+        "brightness": 187.20752949617346,
+        "sharpness": 31.23194351895359,
+        "aspect_extremeness": 1.0
+      },
+      "source_membership": "PlantVillage_color_overlap",
+      "cam_target": "predicted class logit",
+      "cam_geometry": {
+        "positive_activation_mass": 22647.005859375,
+        "border_pixel_fraction": 0.35427295918367346,
+        "border_activation_fraction": 0.34517381100409333,
+        "border_enrichment_vs_uniform": 0.9743159957775308,
+        "letterbox_pixel_fraction": 0.0,
+        "letterbox_activation_fraction": 0.0
+      },
+      "visual_index": 22,
+      "manual_observation": "Healthy closeup with strong blurred veins; correct near-one confidence; possible source/style cue."
+    },
+    {
+      "sample_id": "e958c8ecef0d3665189239be87d9ed3b986185dd7b8342b89d774971c7d278db",
+      "group_id": "9a31dcb7812c7b402c6813c467bcb3184256e3a1162415d13f9a4f79ec31b264",
+      "relative_path": "Common_Rust/Common_Rust (1525).JPG",
+      "partition": "validation",
+      "true_label": "Common_Rust",
+      "predicted_label": "Common_Rust",
+      "confidence": 1.0,
+      "probabilities": [
+        1.0,
+        1.9938977136035874e-09,
+        8.67449584385227e-11,
+        4.9701618820563453e-08
+      ],
+      "selection_categories": [
+        "highest_confidence_correct_per_class"
+      ],
+      "pixel_proxies_not_semantic_labels": {
+        "brightness": 84.67006138392857,
+        "sharpness": 1111.46469952513,
+        "aspect_extremeness": 1.0
+      },
+      "source_membership": "PlantVillage_color_overlap",
+      "cam_target": "predicted class logit",
+      "cam_geometry": {
+        "positive_activation_mass": 19176.263671875,
+        "border_pixel_fraction": 0.35427295918367346,
+        "border_activation_fraction": 0.4044744952943229,
+        "border_enrichment_vs_uniform": 1.1417029858172787,
+        "letterbox_pixel_fraction": 0.0,
+        "letterbox_activation_fraction": 0.0
+      },
+      "visual_index": 23,
+      "manual_observation": "Heavily damaged rust-labelled leaf on black background; heat partly on leaf and partly off its edges; correct classification does not prove lesion causality."
+    },
+    {
+      "sample_id": "4d1562be6eab5379e718c6b3a095552503ba39c69288d421fa55480ef889e708",
+      "group_id": "d9bf3d243312973022cc441afa89564bf5934d85bbeea4c2ca1435bf3ff16d27",
+      "relative_path": "Healthy/Healthy (515).jpg",
+      "partition": "validation",
+      "true_label": "Healthy",
+      "predicted_label": "Healthy",
+      "confidence": 0.9999998807907104,
+      "probabilities": [
+        2.4610453674966948e-09,
+        7.00911417794714e-09,
+        0.9999998807907104,
+        6.879491110112212e-08
+      ],
+      "selection_categories": [
+        "brightest_luminance_proxy"
+      ],
+      "pixel_proxies_not_semantic_labels": {
+        "brightness": 208.64343510841837,
+        "sharpness": 66.09519585288102,
+        "aspect_extremeness": 1.0
+      },
+      "source_membership": "PlantVillage_color_overlap",
+      "cam_target": "predicted class logit",
+      "cam_geometry": {
+        "positive_activation_mass": 23793.142578125,
+        "border_pixel_fraction": 0.35427295918367346,
+        "border_activation_fraction": 0.30913454170298704,
+        "border_enrichment_vs_uniform": 0.8725885893614468,
+        "letterbox_pixel_fraction": 0.0,
+        "letterbox_activation_fraction": 0.0
+      },
+      "visual_index": 24,
+      "manual_observation": "Very bright intact leaf closeup; correct Healthy; reflected light is source appearance, no lesion validation."
+    },
+    {
+      "sample_id": "6df1fa2c745d2c10b9e05048cabf74592d9a92c3b5098c7ce17ea5568a21c501",
+      "group_id": "f145e52c99a257c57b80c2d585cb0a8b1d20abd75575b479a372dde9f242abb5",
+      "relative_path": "Northern_Corn_Leaf_Blight/Northern_Corn_Leaf_Blight (1931).JPG",
+      "partition": "validation",
+      "true_label": "Northern_Corn_Leaf_Blight",
+      "predicted_label": "Northern_Corn_Leaf_Blight",
+      "confidence": 0.9999998807907104,
+      "probabilities": [
+        7.328300188902404e-10,
+        1.2629966761323885e-07,
+        4.3147299622070534e-10,
+        0.9999998807907104
+      ],
+      "selection_categories": [
+        "highest_confidence_correct_per_class"
+      ],
+      "pixel_proxies_not_semantic_labels": {
+        "brightness": 116.03966039540816,
+        "sharpness": 381.9665171564842,
+        "aspect_extremeness": 1.0
+      },
+      "source_membership": "PlantVillage_color_overlap",
+      "cam_target": "predicted class logit",
+      "cam_geometry": {
+        "positive_activation_mass": 17571.96484375,
+        "border_pixel_fraction": 0.35427295918367346,
+        "border_activation_fraction": 0.2840885572566208,
+        "border_enrichment_vs_uniform": 0.801891733174404,
+        "letterbox_pixel_fraction": 0.0,
+        "letterbox_activation_fraction": 0.0
+      },
+      "visual_index": 25,
+      "manual_observation": "Gray-backed diseased leaf; CAM strongest on broad pale necrotic region, good coarse lesion alignment."
+    },
+    {
+      "sample_id": "c01fef8455aa1b0a5bdeb20a906d9e61dc768c4258731abe45c1dcbfc7c638e2",
+      "group_id": "01c5373c8f4157411ec5028632e2396900833cddf23622e755a19c234a03ae03",
+      "relative_path": "Gray_Leaf_Spot/Gray_Leaf_Spot (152).JPG",
+      "partition": "validation",
+      "true_label": "Gray_Leaf_Spot",
+      "predicted_label": "Gray_Leaf_Spot",
+      "confidence": 0.9999898672103882,
+      "probabilities": [
+        3.594896824665739e-08,
+        0.9999898672103882,
+        5.458266372215803e-08,
+        1.0138698598893825e-05
+      ],
+      "selection_categories": [
+        "highest_confidence_correct_per_class"
+      ],
+      "pixel_proxies_not_semantic_labels": {
+        "brightness": 123.49880420918367,
+        "sharpness": 1527.979050248228,
+        "aspect_extremeness": 1.0
+      },
+      "source_membership": "PlantVillage_color_overlap",
+      "cam_target": "predicted class logit",
+      "cam_geometry": {
+        "positive_activation_mass": 26504.1875,
+        "border_pixel_fraction": 0.35427295918367346,
+        "border_activation_fraction": 0.3445102719617419,
+        "border_enrichment_vs_uniform": 0.9724430358884092,
+        "letterbox_pixel_fraction": 0.0,
+        "letterbox_activation_fraction": 0.0
+      },
+      "visual_index": 26,
+      "manual_observation": "Gray-backed streaked leaf with cast shadow; CAM includes tissue and background border; correct GLS with strong confidence."
+    },
+    {
+      "sample_id": "51a594edfcc8acf9bafec4b397809062dbbe3c85970527eeb3810154a8d5b5df",
+      "group_id": "c6af1b456f10d60eee552ea1155ef5f54d74002f0c298c91f4e5571a0d866ab9",
+      "relative_path": "Healthy/Healthy (1743).jpg",
+      "partition": "validation",
+      "true_label": "Healthy",
+      "predicted_label": "Healthy",
+      "confidence": 0.9999892711639404,
+      "probabilities": [
+        1.2950332006766985e-07,
+        4.6248951548477635e-06,
+        0.9999892711639404,
+        5.9586782299447805e-06
+      ],
+      "selection_categories": [
+        "low_sharpness_proxy"
+      ],
+      "pixel_proxies_not_semantic_labels": {
+        "brightness": 150.18959263392858,
+        "sharpness": 12.17491734578976,
+        "aspect_extremeness": 1.0
+      },
+      "source_membership": "PlantVillage_color_overlap",
+      "cam_target": "predicted class logit",
+      "cam_geometry": {
+        "positive_activation_mass": 22818.697265625,
+        "border_pixel_fraction": 0.35427295918367346,
+        "border_activation_fraction": 0.3091574523462077,
+        "border_enrichment_vs_uniform": 0.8726532588278193,
+        "letterbox_pixel_fraction": 0.0,
+        "letterbox_activation_fraction": 0.0
+      },
+      "visual_index": 27,
+      "manual_observation": "Blurred intact leaf closeup; correct Healthy; coarse vein/style activation."
+    },
+    {
+      "sample_id": "1b63add375440bcb3b56c9aee5ef09a111801f37d5729c35943c6022f38e315d",
+      "group_id": "bc50db8b27a88083b6a57bc6464232013f597a5274bc69117a4c8939a762d26c",
+      "relative_path": "Healthy/Healthy (1621).jpg",
+      "partition": "validation",
+      "true_label": "Healthy",
+      "predicted_label": "Healthy",
+      "confidence": 0.999982476234436,
+      "probabilities": [
+        5.086983492219588e-07,
+        1.569278254009987e-07,
+        0.999982476234436,
+        1.6863554265000857e-05
+      ],
+      "selection_categories": [
+        "brightest_luminance_proxy"
+      ],
+      "pixel_proxies_not_semantic_labels": {
+        "brightness": 209.76468829719389,
+        "sharpness": 62.760976306004906,
+        "aspect_extremeness": 1.0
+      },
+      "source_membership": "PlantVillage_color_overlap",
+      "cam_target": "predicted class logit",
+      "cam_geometry": {
+        "positive_activation_mass": 27743.18359375,
+        "border_pixel_fraction": 0.35427295918367346,
+        "border_activation_fraction": 0.3400541095750575,
+        "border_enrichment_vs_uniform": 0.9598647053351758,
+        "letterbox_pixel_fraction": 0.0,
+        "letterbox_activation_fraction": 0.0
+      },
+      "visual_index": 28,
+      "manual_observation": "Bright intact leaf closeup; correct Healthy; texture/style activation and no field independence."
+    },
+    {
+      "sample_id": "6281258e7a48162b321a9fde1980e9ddf80ff7728819bac61bd899a4f930370b",
+      "group_id": "61dbc49300e2c7e88f63611c6793d28f309f9e6a1afa7392dbf663f7632a36f5",
+      "relative_path": "Healthy/Healthy (1088).jpg",
+      "partition": "validation",
+      "true_label": "Healthy",
+      "predicted_label": "Healthy",
+      "confidence": 0.9999239444732666,
+      "probabilities": [
+        7.70025621932291e-07,
+        2.7155057978234254e-05,
+        0.9999239444732666,
+        4.8190235247602686e-05
+      ],
+      "selection_categories": [
+        "low_sharpness_proxy"
+      ],
+      "pixel_proxies_not_semantic_labels": {
+        "brightness": 156.6995176977041,
+        "sharpness": 10.89518519770548,
+        "aspect_extremeness": 1.0
+      },
+      "source_membership": "PlantVillage_color_overlap",
+      "cam_target": "predicted class logit",
+      "cam_geometry": {
+        "positive_activation_mass": 16695.28125,
+        "border_pixel_fraction": 0.35427295918367346,
+        "border_activation_fraction": 0.39701969493625633,
+        "border_enrichment_vs_uniform": 1.1206604530333932,
+        "letterbox_pixel_fraction": 0.0,
+        "letterbox_activation_fraction": 0.0
+      },
+      "visual_index": 29,
+      "manual_observation": "Soft leaf closeup; correct Healthy; high confidence applies to benchmark source only."
+    },
+    {
+      "sample_id": "b3da369d604332a40858dc0bacd97e5055c589f68541a2bea79990286c44885d",
+      "group_id": "85fd7355daca0f48b30dbbd1a1486b465c5ecf3a63dc8ed3b8ac9aab59280e0a",
+      "relative_path": "Common_Rust/Common_Rust (1213).JPG",
+      "partition": "validation",
+      "true_label": "Common_Rust",
+      "predicted_label": "Common_Rust",
+      "confidence": 0.9987851977348328,
+      "probabilities": [
+        0.9987851977348328,
+        7.63544267101679e-06,
+        2.1988648768456187e-06,
+        0.001205043401569128
+      ],
+      "selection_categories": [
+        "darkest_luminance_proxy"
+      ],
+      "pixel_proxies_not_semantic_labels": {
+        "brightness": 41.9445950255102,
+        "sharpness": 933.0198708164448,
+        "aspect_extremeness": 1.0
+      },
+      "source_membership": "PlantVillage_color_overlap",
+      "cam_target": "predicted class logit",
+      "cam_geometry": {
+        "positive_activation_mass": 15070.1435546875,
+        "border_pixel_fraction": 0.35427295918367346,
+        "border_activation_fraction": 0.2494354038572361,
+        "border_enrichment_vs_uniform": 0.7040768915358168,
+        "letterbox_pixel_fraction": 0.0,
+        "letterbox_activation_fraction": 0.0
+      },
+      "visual_index": 30,
+      "manual_observation": "Dark black-backed extensively damaged leaf; CAM predominantly on damaged tissue, adequate coarse localization."
+    },
+    {
+      "sample_id": "947994ac352a865a2dc6f91accb187c539c2b0aa14b0079ba1f153b82220e9a8",
+      "group_id": "e83d8507298bdad2e6a59aecf836931fc257f5d68790aeedd78b888419528c7a",
+      "relative_path": "Common_Rust/Common_Rust (2399).JPG",
+      "partition": "validation",
+      "true_label": "Common_Rust",
+      "predicted_label": "Common_Rust",
+      "confidence": 0.9985625147819519,
+      "probabilities": [
+        0.9985625147819519,
+        0.0011998936533927917,
+        0.00019573997997213155,
+        4.185596480965614e-05
+      ],
+      "selection_categories": [
+        "darkest_luminance_proxy"
+      ],
+      "pixel_proxies_not_semantic_labels": {
+        "brightness": 43.30612244897959,
+        "sharpness": 390.05133772829777,
+        "aspect_extremeness": 1.0
+      },
+      "source_membership": "PlantVillage_color_overlap",
+      "cam_target": "predicted class logit",
+      "cam_geometry": {
+        "positive_activation_mass": 20212.02734375,
+        "border_pixel_fraction": 0.35427295918367346,
+        "border_activation_fraction": 0.16055821497062683,
+        "border_enrichment_vs_uniform": 0.4532048264157388,
+        "letterbox_pixel_fraction": 0.0,
+        "letterbox_activation_fraction": 0.0
+      },
+      "visual_index": 31,
+      "manual_observation": "Rust spots on black-backed green leaf; CAM extends to black background beyond leaf; possible contextual dependence despite correct output."
+    },
+    {
+      "sample_id": "533def71437e6b09560b57f5ec10fdf337658bbe318a0bd45ebd5872cbf09fa2",
+      "group_id": "3e052ef68ab1be684693b258631887a3d4a645250a4121dbbd5cb55e9f903594",
+      "relative_path": "Healthy/Healthy (1551).jpg",
+      "partition": "validation",
+      "true_label": "Healthy",
+      "predicted_label": "Healthy",
+      "confidence": 0.9856005311012268,
+      "probabilities": [
+        0.0003095772408414632,
+        0.014039107598364353,
+        0.9856005311012268,
+        5.077584137325175e-05
+      ],
+      "selection_categories": [
+        "lowest_confidence_correct_per_class"
+      ],
+      "pixel_proxies_not_semantic_labels": {
+        "brightness": 101.71101721938776,
+        "sharpness": 967.4931483969794,
+        "aspect_extremeness": 1.0
+      },
+      "source_membership": "PlantVillage_color_overlap",
+      "cam_target": "predicted class logit",
+      "cam_geometry": {
+        "positive_activation_mass": 15629.47265625,
+        "border_pixel_fraction": 0.35427295918367346,
+        "border_activation_fraction": 0.36047668854790316,
+        "border_enrichment_vs_uniform": 1.0175111568732893,
+        "letterbox_pixel_fraction": 0.0,
+        "letterbox_activation_fraction": 0.0
+      },
+      "visual_index": 32,
+      "manual_observation": "Leaf closeup with holes/physical damage and gray background; labelled Healthy and correctly predicted. Holes alone do not justify disease relabeling."
+    },
+    {
+      "sample_id": "2e58f04b91cdbaa570d8473de989fb0742069643d88878f0a77efaafed5da353",
+      "group_id": "d4ef3b8019432b6cbf1524a1d31911a9bcb5735c1a41296aa36a4f3b459dfe4f",
+      "relative_path": "Common_Rust/Common_Rust (2063).jpg",
+      "partition": "validation",
+      "true_label": "Common_Rust",
+      "predicted_label": "Common_Rust",
+      "confidence": 0.864273190498352,
+      "probabilities": [
+        0.864273190498352,
+        0.08775319159030914,
+        1.3747868251812179e-05,
+        0.04795987904071808
+      ],
+      "selection_categories": [
+        "non_square_aspect_proxy"
+      ],
+      "pixel_proxies_not_semantic_labels": {
+        "brightness": 193.74258609693877,
+        "sharpness": 715.8529150588272,
+        "aspect_extremeness": 2.142857142857143
+      },
+      "source_membership": "Corn_collection_only_origin_not_independently_verified",
+      "cam_target": "predicted class logit",
+      "cam_geometry": {
+        "positive_activation_mass": 10193.310546875,
+        "border_pixel_fraction": 0.35427295918367346,
+        "border_activation_fraction": 0.3100066104934398,
+        "border_enrichment_vs_uniform": 0.8750501624729318,
+        "letterbox_pixel_fraction": 0.53125,
+        "letterbox_activation_fraction": 0.42735259318161134
+      },
+      "visual_index": 33,
+      "manual_observation": "Wide leaf with few small rust-coloured spots; CAM on central spots but also padding. Padding area exceeds heat fraction, so mass alone does not prove bias."
+    },
+    {
+      "sample_id": "2ee50ffeacf03802f905cfe487fff656bf985126fd741241ed68f9a312dc8a9a",
+      "group_id": "09aab2cec2d208a3f8d289b6bacff5fa4b0fd82a29ccb91fde8c592158ecd007",
+      "relative_path": "Northern_Corn_Leaf_Blight/Northern_Corn_Leaf_Blight (1910).jpg",
+      "partition": "validation",
+      "true_label": "Northern_Corn_Leaf_Blight",
+      "predicted_label": "Northern_Corn_Leaf_Blight",
+      "confidence": 0.8124865293502808,
+      "probabilities": [
+        0.1871437281370163,
+        0.00036900167469866574,
+        8.152254622473265e-07,
+        0.8124865293502808
+      ],
+      "selection_categories": [
+        "non_square_aspect_proxy"
+      ],
+      "pixel_proxies_not_semantic_labels": {
+        "brightness": 183.53344228316325,
+        "sharpness": 639.1290228913994,
+        "aspect_extremeness": 1.9277777777777778
+      },
+      "source_membership": "Corn_collection_only_origin_not_independently_verified",
+      "cam_target": "predicted class logit",
+      "cam_geometry": {
+        "positive_activation_mass": 8663.2451171875,
+        "border_pixel_fraction": 0.35427295918367346,
+        "border_activation_fraction": 0.1035278012589781,
+        "border_enrichment_vs_uniform": 0.292226088882228,
+        "letterbox_pixel_fraction": 0.48214285714285715,
+        "letterbox_activation_fraction": 0.08174586297196884
+      },
+      "visual_index": 34,
+      "manual_observation": "Portrait leaf with large dead brown lesion and nearby text/paper; CAM centered on lesion with little padding heat."
+    },
+    {
+      "sample_id": "dd164c9cd73d2a15e902217a7ecd854f6cfd2899cdb153c52c764672ebc2434f",
+      "group_id": "ddd77e85b134d96f9c59e5bedb0cd49484337082163534d42688375ce954bfba",
+      "relative_path": "Common_Rust/Common_Rust (1537).JPG",
+      "partition": "validation",
+      "true_label": "Common_Rust",
+      "predicted_label": "Common_Rust",
+      "confidence": 0.7897421717643738,
+      "probabilities": [
+        0.7897421717643738,
+        0.10338760167360306,
+        0.0003713199112098664,
+        0.10649889707565308
+      ],
+      "selection_categories": [
+        "darkest_luminance_proxy"
+      ],
+      "pixel_proxies_not_semantic_labels": {
+        "brightness": 51.2907565369898,
+        "sharpness": 285.621780531747,
+        "aspect_extremeness": 1.0
+      },
+      "source_membership": "PlantVillage_color_overlap",
+      "cam_target": "predicted class logit",
+      "cam_geometry": {
+        "positive_activation_mass": 9322.587890625,
+        "border_pixel_fraction": 0.35427295918367346,
+        "border_activation_fraction": 0.42675729835444615,
+        "border_enrichment_vs_uniform": 1.204600258901479,
+        "letterbox_pixel_fraction": 0.0,
+        "letterbox_activation_fraction": 0.0
+      },
+      "visual_index": 35,
+      "manual_observation": "Dark-backed leaf with small rust spots; coarse CAM partly follows spots and edge; confident-correct lower than typical Rust."
+    },
+    {
+      "sample_id": "b234c7d11d83a62df5f6d6ad3751f982bc61ca7bfea353a84ee104dd3c60933e",
+      "group_id": "3fc55db9d002de1dfde4dec475b1af8e2b01b7b22d9512be6f5badc2a58d7a8b",
+      "relative_path": "Common_Rust/Common_Rust (2125).jpg",
+      "partition": "validation",
+      "true_label": "Common_Rust",
+      "predicted_label": "Common_Rust",
+      "confidence": 0.7604734301567078,
+      "probabilities": [
+        0.7604734301567078,
+        0.0679839700460434,
+        0.00628229696303606,
+        0.16526028513908386
+      ],
+      "selection_categories": [
+        "lowest_confidence_correct_per_class"
+      ],
+      "pixel_proxies_not_semantic_labels": {
+        "brightness": 191.04743303571428,
+        "sharpness": 1601.0061319725355,
+        "aspect_extremeness": 1.520912547528517
+      },
+      "source_membership": "Corn_collection_only_origin_not_independently_verified",
+      "cam_target": "predicted class logit",
+      "cam_geometry": {
+        "positive_activation_mass": 6132.123046875,
+        "border_pixel_fraction": 0.35427295918367346,
+        "border_activation_fraction": 0.5205644137700831,
+        "border_enrichment_vs_uniform": 1.4693879402187044,
+        "letterbox_pixel_fraction": 0.34375,
+        "letterbox_activation_fraction": 0.38507637164305414
+      },
+      "visual_index": 36,
+      "manual_observation": "Narrow field leaf containing attribution watermark; correct Rust but heat near right lesion/background and letterbox. Watermark causality not proven."
+    },
+    {
+      "sample_id": "4e164e90fe1e8914481785b8ca04d9aab1d343e78a09a76084a3e57a37a8eb70",
+      "group_id": "e3a47c3f7ff3d19b80073b5c8f0308de5a9e60d744783ab2a398a57df9d1b7b8",
+      "relative_path": "Northern_Corn_Leaf_Blight/Northern_Corn_Leaf_Blight (1697).jpg",
+      "partition": "validation",
+      "true_label": "Northern_Corn_Leaf_Blight",
+      "predicted_label": "Northern_Corn_Leaf_Blight",
+      "confidence": 0.6031818389892578,
+      "probabilities": [
+        0.36213088035583496,
+        0.03314446657896042,
+        0.0015427845064550638,
+        0.6031818389892578
+      ],
+      "selection_categories": [
+        "non_square_aspect_proxy"
+      ],
+      "pixel_proxies_not_semantic_labels": {
+        "brightness": 199.28125,
+        "sharpness": 187.50649712374687,
+        "aspect_extremeness": 2.123989218328841
+      },
+      "source_membership": "Corn_collection_only_origin_not_independently_verified",
+      "cam_target": "predicted class logit",
+      "cam_geometry": {
+        "positive_activation_mass": 9511.0458984375,
+        "border_pixel_fraction": 0.35427295918367346,
+        "border_activation_fraction": 0.16098812072024396,
+        "border_enrichment_vs_uniform": 0.45441831375219177,
+        "letterbox_pixel_fraction": 0.53125,
+        "letterbox_activation_fraction": 0.0391700706548954
+      },
+      "visual_index": 37,
+      "manual_observation": "Partial heavily damaged leaf on pale background; CAM follows lesion region; low-confidence correct Blight."
+    },
+    {
+      "sample_id": "4a2fd0beb1b15e6c98d455dc8965d9b4d71dac85b121596c00537400c67bd829",
+      "group_id": "8adb971b5fbb508b7743f970b61ce09e68c46ecfbff3391f2fe9d012a9965cbd",
+      "relative_path": "Northern_Corn_Leaf_Blight/Northern_Corn_Leaf_Blight (491).jpg",
+      "partition": "validation",
+      "true_label": "Northern_Corn_Leaf_Blight",
+      "predicted_label": "Northern_Corn_Leaf_Blight",
+      "confidence": 0.560306966304779,
+      "probabilities": [
+        5.892629360459978e-06,
+        0.43968284130096436,
+        4.262661150278291e-06,
+        0.560306966304779
+      ],
+      "selection_categories": [
+        "smallest_top_two_probability_margin"
+      ],
+      "pixel_proxies_not_semantic_labels": {
+        "brightness": 107.56511080994898,
+        "sharpness": 223.0902544150299,
+        "aspect_extremeness": 1.0
+      },
+      "source_membership": "PlantVillage_color_overlap",
+      "cam_target": "predicted class logit",
+      "cam_geometry": {
+        "positive_activation_mass": 10366.0302734375,
+        "border_pixel_fraction": 0.35427295918367346,
+        "border_activation_fraction": 0.3812817039204169,
+        "border_enrichment_vs_uniform": 1.0762371048554702,
+        "letterbox_pixel_fraction": 0.0,
+        "letterbox_activation_fraction": 0.0
+      },
+      "visual_index": 38,
+      "manual_observation": "Gray-backed leaf with elongated lesions; borderline-correct Blight with CAM on lesion and outside boundary."
+    },
+    {
+      "sample_id": "fdd5b4ff8cf23f946c8f45d98e4257d4b50ab7183a5282202e0b3836f86ea3e8",
+      "group_id": "72d32f3dda0c2ae4de97b2a5dea0489a12bf21d78c3257598d4477ae81db1a88",
+      "relative_path": "Northern_Corn_Leaf_Blight/Northern_Corn_Leaf_Blight (346).jpg",
+      "partition": "validation",
+      "true_label": "Northern_Corn_Leaf_Blight",
+      "predicted_label": "Northern_Corn_Leaf_Blight",
+      "confidence": 0.5111730694770813,
+      "probabilities": [
+        0.47875598073005676,
+        0.00670446315780282,
+        0.003366470569744706,
+        0.5111730694770813
+      ],
+      "selection_categories": [
+        "lowest_confidence_correct_per_class",
+        "smallest_top_two_probability_margin"
+      ],
+      "pixel_proxies_not_semantic_labels": {
+        "brightness": 179.58091517857142,
+        "sharpness": 478.35282336786764,
+        "aspect_extremeness": 1.7777777777777777
+      },
+      "source_membership": "Corn_collection_only_origin_not_independently_verified",
+      "cam_target": "predicted class logit",
+      "cam_geometry": {
+        "positive_activation_mass": 6175.92431640625,
+        "border_pixel_fraction": 0.35427295918367346,
+        "border_activation_fraction": 0.22161164356328558,
+        "border_enrichment_vs_uniform": 0.6255392567186892,
+        "letterbox_pixel_fraction": 0.4375,
+        "letterbox_activation_fraction": 0.09840451395298955
+      },
+      "visual_index": 39,
+      "manual_observation": "Narrow partial leaf with yellow longitudinal streaks; near-even correct Blight, lesion detail softened by resize."
+    },
+    {
+      "sample_id": "2c926e35d8eee7513d5b1a5e9198afd0a56abeab2342131cda3792e2c0106120",
+      "group_id": "68cb60830b9cf75a8df04e3bf116054d8e993866e967e2a23d43e8f72d8b0e20",
+      "relative_path": "Gray_Leaf_Spot/Gray_Leaf_Spot (226).JPG",
+      "partition": "validation",
+      "true_label": "Gray_Leaf_Spot",
+      "predicted_label": "Gray_Leaf_Spot",
+      "confidence": 0.5066933035850525,
+      "probabilities": [
+        1.5717805581516586e-05,
+        0.5066933035850525,
+        3.0319090001285076e-05,
+        0.4932606816291809
+      ],
+      "selection_categories": [
+        "lowest_confidence_correct_per_class",
+        "smallest_top_two_probability_margin"
+      ],
+      "pixel_proxies_not_semantic_labels": {
+        "brightness": 114.6899713010204,
+        "sharpness": 914.1914799824103,
+        "aspect_extremeness": 1.0
+      },
+      "source_membership": "PlantVillage_color_overlap",
+      "cam_target": "predicted class logit",
+      "cam_geometry": {
+        "positive_activation_mass": 11134.068359375,
+        "border_pixel_fraction": 0.35427295918367346,
+        "border_activation_fraction": 0.17911231680356057,
+        "border_enrichment_vs_uniform": 0.5055771606624356,
+        "letterbox_pixel_fraction": 0.0,
+        "letterbox_activation_fraction": 0.0
+      },
+      "visual_index": 40,
+      "manual_observation": "Gray-backed green leaf with tiny/elongated lesions; near-even correct GLS, CAM follows lesion region; ambiguity remains."
+    }
+  ]
+}

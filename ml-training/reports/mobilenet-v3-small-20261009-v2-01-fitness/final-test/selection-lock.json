@@ -1,0 +1,19 @@
+{
+  "candidate_id": "mobilenet-v3-small-v2-20261009",
+  "bundle_sha256": "d8115ae08724f014c70828c1f419eda38921d0fd32205e59bd25ee472ee360ec",
+  "checkpoint_sha256": "e95a2e83262637fc1a08b919e6003bddb2fe70664b9c51418f059b7c8287dc66",
+  "manifest_fingerprint": "a96fd5d32a8e0696df7cfc5bbfa6b78941c8a2f308f940ce295147a8832a583b",
+  "preprocessing_hash": "b142e59f458d27a2d3fddbfc86c2f2f802670ab4909f1275babbef92de9cb5c8",
+  "split_seed": 20261007,
+  "training_seed": 20261007,
+  "calibration": {
+    "enabled": false,
+    "temperature": 1.0,
+    "method": "none"
+  },
+  "confidence_threshold": null,
+  "test_used_for_selection": false,
+  "test_evaluated_before_this_lock": false,
+  "corpus_prior_test_consumption": true,
+  "limitation": "Grouped repair of a previously inspected corpus, not an unseen field holdout."
+}

@@ -1,0 +1,330 @@
+"""One-off immutable metadata export; never fits or performs model inference."""
+from __future__ import annotations
+
+import csv
+import datetime
+import hashlib
+import json
+import re
+import sys
+from collections import Counter
+from pathlib import Path
+
+import numpy as np
+
+ROOT = Path(__file__).resolve().parents[2]
+sys.path.insert(0, str(ROOT / "ml-training"))
+from configuration import load_dataset_path
+from dataset_inventory import file_digest
+from dataset_preparation import CLASS_LABELS, load_manifest, verify_manifest
+from evaluation import compute_metrics
+from fitness_artifacts import validate_bundle
+from fitness_integrity import relationship_audit, verify_artifact_hashes
+
+EXPERIMENT_ID = "mobilenet-v3-small-20261009-v2-01"
+PHASE = ROOT / ".cache/phase105"
+FIT = PHASE / "experiments" / EXPERIMENT_ID
+CALIBRATION = PHASE / "calibration-20261009-v2"
+VISUAL = PHASE / "visual-20261009-v2"
+REVIEW = PHASE / "visual-20261009-v2-review"
+CANDIDATE = PHASE / "candidates/mobilenet-v3-small-v2-20261009"
+FINAL = PHASE / "final-test-20261009-v2"
+MANIFEST = ROOT / "ml-training/manifests/maize-research-20261008-v2/manifest.json"
+DESTINATION = ROOT / "ml-training/reports" / (EXPERIMENT_ID + "-fitness")
+SOURCE_PROOF = PHASE / "post-final-test-source-integrity-20261009-v2.json"
+PRIVATE_ROOT = load_dataset_path()
+
+
+def check(condition, message):
+    if not condition:
+        raise ValueError(message)
+
+
+def read(path):
+    def invalid_constant(value):
+        raise ValueError("Non-finite JSON value.")
+    return json.loads(path.read_bytes(), parse_constant=invalid_constant)
+
+
+def sha(data):
+    return hashlib.sha256(data).hexdigest()
+
+
+def relative(path):
+    resolved = path.resolve(strict=True)
+    check(resolved.is_relative_to(ROOT), "Artifact escapes repository.")
+    return resolved.relative_to(ROOT).as_posix()
+
+
+def reference(path):
+    return {"path": relative(path), "sha256": file_digest(path), "size_bytes": path.stat().st_size}
+
+
+def bind(actual, expected, description):
+    for key, value in expected.items():
+        check(key in actual and actual[key] == value, description + " differs: " + key)
+        if isinstance(value, bool):
+            check(actual[key] is value, description + " boolean differs: " + key)
+
+
+def write_json(path, payload):
+    with path.open("x", encoding="utf-8", newline="\n") as stream:
+        json.dump(payload, stream, indent=2, ensure_ascii=False, allow_nan=False)
+        stream.write("\n")
+
+
+def metric_audit(folder, manifest, partition):
+    with (folder / "predictions.csv").open(encoding="utf-8", newline="") as stream:
+        reader = csv.DictReader(stream)
+        check(reader.fieldnames == ["sample_id", "true_index", "predicted_index", *CLASS_LABELS], "CSV schema differs.")
+        records = list(reader)
+    membership = manifest.rows_for_split(partition)
+    check([row["sample_id"] for row in records] == [row.sample_id for row in membership], "Exact split membership differs.")
+    labels = np.array([int(row["true_index"]) for row in records], dtype=np.int64)
+    probabilities = np.array([[float(row[label]) for label in CLASS_LABELS] for row in records])
+    check(labels.tolist() == [row.class_index for row in membership], "CSV labels differ from index.")
+    check(np.isfinite(probabilities).all(), "CSV probabilities are non-finite.")
+    check(probabilities.argmax(axis=1).tolist() == [int(row["predicted_index"]) for row in records], "CSV predictions differ from argmax.")
+    calculated = dict(compute_metrics(labels, probabilities, CLASS_LABELS))
+    metrics = read(folder / "metrics.json")
+    bind(metrics, calculated, partition + " saved arithmetic")
+    return calculated, {"partition": partition, "sample_count": len(records), "csv_sha256": file_digest(folder / "predictions.csv"), "metrics_sha256": file_digest(folder / "metrics.json"), "membership_labels_argmax_and_metrics_match": True}
+
+
+def privacy_check(name, data):
+    if name.endswith(".png"):
+        check(data.startswith(b"\x89PNG\r\n\x1a\n"), "Numerical plot has invalid PNG signature.")
+        return
+    text = data.decode("utf-8")
+    check(str(PRIVATE_ROOT).casefold() not in text.casefold(), "Private dataset path detected.")
+    check(PRIVATE_ROOT.as_posix().casefold() not in text.casefold(), "Private dataset path detected.")
+    check(not re.search(r"(?<![A-Za-z0-9])[A-Za-z]:[/\\]", text), "Absolute Windows path detected.")
+    check(not re.search(r"(?:data:image/[A-Za-z0-9.+-]+;base64,|-----BEGIN (?:RSA |EC |OPENSSH )?PRIVATE KEY-----)", text), "Binary image payload or private key detected.")
+    if name.endswith(".json"):
+        payload = json.loads(text)
+        def inspect(value):
+            if isinstance(value, dict):
+                for key, child in value.items():
+                    check(key.lower() not in {"gpslatitude", "gpslongitude", "gpsinfo", "image_base64", "image_bytes", "pixel_data", "raw_pixels"}, "Forbidden image/private metadata detected.")
+                    inspect(child)
+            elif isinstance(value, list):
+                for child in value:
+                    inspect(child)
+        inspect(payload)
+
+
+def main():
+    check(not DESTINATION.exists(), "Immutable report destination already exists.")
+    bundle_path = CANDIDATE / "candidate.json"
+    bundle = validate_bundle(bundle_path, ROOT)
+    check(len(bundle.references) == 48, "Frozen candidate reference count differs.")
+    manifest = load_manifest(MANIFEST)
+    check(manifest.counts["eligible_unique_samples"] == 4162, "V2 eligibility differs.")
+    archived = load_manifest(FIT / "dataset-manifest.json")
+    check(archived == manifest, "Training index content differs from public V2 index.")
+    expected_calibration = {"enabled": False, "temperature": 1.0, "method": "none"}
+    check(bundle.calibration.model_dump(mode="json") == expected_calibration, "Frozen calibration differs.")
+    check(bundle.confidence_threshold is None, "An operational threshold was unexpectedly selected.")
+    by_role = {item.role: item for item in bundle.references}
+    checkpoint = ROOT / by_role["weights"].path
+    summary = read(FIT / "summary.json")
+    settings = read(FIT / "hyperparameters.json")
+    environment = read(FIT / "environment.json")
+    experiment = read(FIT / "experiment.json")
+    source_count = verify_artifact_hashes(ROOT, environment["source_hashes"])
+    history = read(FIT / "history.json")
+    winner = max(history, key=lambda row: (row["validation_macro_f1"], -row["validation_loss"]))
+    check(winner["epoch"] == summary["best_epoch"] == 8, "Validation-selected epoch differs.")
+    check(len(history) == summary["epochs_completed"] == 11, "Completed epoch count differs.")
+    check(summary["best_checkpoint_sha256"] == file_digest(checkpoint), "Selected checkpoint hash differs.")
+    bind(settings, {"seed": 20261007, "defer_test": True, "smoke": False}, "Training settings")
+    calibration = read(CALIBRATION / "calibration-config.json")
+    calibration_files = verify_artifact_hashes(CALIBRATION, read(CALIBRATION / "integrity.json"))
+    calibration_source_count = verify_artifact_hashes(ROOT, calibration["source_sha256"])
+    calibration_freeze = read(CALIBRATION / "freeze.json")
+    bind(calibration_freeze, {"frozen": True, "calibration_config_sha256": file_digest(CALIBRATION / "calibration-config.json"), "classifier_checkpoint_sha256": file_digest(checkpoint), "operational_threshold": None, "test_read_before_freeze": False}, "Calibration freeze")
+    validation_decision = read(PHASE / "validation-decision-20261009-v2.json")
+    bind(validation_decision, {"candidate_id": bundle.candidate_id, "checkpoint_sha256": file_digest(checkpoint), "calibration": expected_calibration, "confidence_threshold": None, "test_used_for_selection": False, "test_predictions_read_before_this_decision": False, "verdict": bundle.verdict}, "Validation decision")
+    decision_freeze = read(CANDIDATE / "decision-freeze.json")
+    lock = read(FINAL / "selection-lock.json")
+    frozen_binding = {"candidate_id": bundle.candidate_id, "checkpoint_sha256": file_digest(checkpoint), "manifest_fingerprint": manifest.fingerprint, "preprocessing_hash": manifest.preprocessing_hash, "split_seed": manifest.split_seed, "training_seed": settings["seed"], "calibration": expected_calibration, "confidence_threshold": None, "test_used_for_selection": False}
+    bind(lock, {**frozen_binding, "bundle_sha256": file_digest(bundle_path), "test_evaluated_before_this_lock": False, "corpus_prior_test_consumption": True}, "Final selection lock")
+    bind(decision_freeze, frozen_binding, "Pre-TEST decision freeze")
+    final_summary = read(FINAL / "summary.json")
+    bind(final_summary, {"status": "completed", "candidate_id": bundle.candidate_id, "sample_count": 624, "test_evaluated_once": True, "test_used_for_selection": False, "checkpoint_sha256": file_digest(checkpoint), "manifest_fingerprint": manifest.fingerprint, "preprocessing_hash": manifest.preprocessing_hash, "argmax_unchanged_by_calibration": True, "corpus_prior_test_consumption": True}, "Final summary")
+    validation_metrics, validation_arithmetic = metric_audit(FIT / "validation", manifest, "validation")
+    test_metrics, test_arithmetic = metric_audit(FINAL / "raw", manifest, "test")
+    bind(final_summary["raw_metrics"], test_metrics, "Final raw metrics")
+    bind(final_summary["calibrated_metrics"], test_metrics, "Final unchanged-policy metrics")
+    bind(read(FINAL / "calibrated-metrics.json"), test_metrics, "Saved unchanged-policy metrics")
+    check((FINAL / "raw-confidence.json").read_bytes() == (FINAL / "calibrated-confidence.json").read_bytes(), "Disabled calibration changed confidence outputs.")
+    check((FINAL / "raw-selective.json").read_bytes() == (FINAL / "calibrated-selective.json").read_bytes(), "Disabled calibration changed selective outputs.")
+    claim = ROOT / ".cache/model-test-claims" / (file_digest(checkpoint) + "-" + manifest.fingerprint + ".json")
+    bind(read(claim), {"candidate_id": bundle.candidate_id, "bundle_sha256": file_digest(bundle_path), "checkpoint_sha256": file_digest(checkpoint), "manifest_fingerprint": manifest.fingerprint, "test_used_for_selection": False}, "Single-evaluation claim")
+    independent = read(PHASE / "audit-v2-final.json")
+    bind(independent, {"passed": True, "experiment_id": EXPERIMENT_ID, "manifest_fingerprint": manifest.fingerprint, "checkpoint_sha256": file_digest(checkpoint), "source_hashes_match": True, "best_epoch_independently_selected": 8, "source_images_read": False}, "Independent final audit")
+    for audit in independent["audits"]:
+        folder = FINAL / "raw" if audit["partition"] == "test" else FIT / audit["partition"]
+        bind(audit, {"csv_sha256": file_digest(folder / "predictions.csv"), "metrics_sha256": file_digest(folder / "metrics.json"), "all_classification_and_auc_metrics_match": True}, "Independent arithmetic pins")
+    compatibility = read(PHASE / "offline-model-compatibility-v2.json")
+    check(compatibility["passed"] is True and compatibility["partitions_used"] == ["train"], "Offline compatibility proof differs.")
+    visual_summary = read(VISUAL / "summary.json")
+    bind(visual_summary, {"status": "completed", "test_image_access": False, "model_changes": False, "checkpoint_sha256": file_digest(checkpoint), "manifest_fingerprint": manifest.fingerprint, "preprocessing_hash": manifest.preprocessing_hash}, "Visual diagnostics")
+    review = read(REVIEW / "manual-review.json")
+    bind(review, {"actual_validation_contents_reviewed": 41, "actual_train_augmented_variants_reviewed": 33, "test_images_read": False, "source_or_label_changes": False}, "Manual review")
+    calibration_results = read(CALIBRATION / "validation-results.json")
+    bind(calibration_results, {"calibration": expected_calibration, "selected_temperature": 1.0, "operational_threshold": None, "test_probabilities_read": False, "classifier_experiment_id": EXPERIMENT_ID}, "Validation calibration results")
+
+    # Fresh, read-only post-test comparison with the original Phase 9.5 snapshot.
+    verify_manifest(manifest, PRIVATE_ROOT)
+    inventory_path = ROOT / ".cache/dataset-review/phase95-20261007/inventory.json"
+    original_manifest = load_manifest(ROOT / "ml-training/manifests/maize-research-20261007-v1/manifest.json")
+    check(file_digest(inventory_path) == original_manifest.input_hashes["inventory"], "Original inventory pin differs.")
+    inventory = read(inventory_path)
+    expected_names = {row["relative_path"] for row in inventory}
+    actual_names = {path.relative_to(PRIVATE_ROOT).as_posix() for path in PRIVATE_ROOT.rglob("*") if path.is_file()}
+    check(len(inventory) == 8040 and actual_names == expected_names, "Original source membership differs.")
+    for row in inventory:
+        path = (PRIVATE_ROOT / row["relative_path"]).resolve(strict=True)
+        check(path.is_relative_to(PRIVATE_ROOT), "Source escapes configured dataset.")
+        before = path.stat()
+        check(before.st_size == row["size_bytes"] and before.st_mtime_ns == row["modified_ns"], "Source size or timestamp changed.")
+        check(file_digest(path) == row["sha256"], "Source bytes changed.")
+        after = path.stat()
+        check((before.st_size, before.st_mtime_ns) == (after.st_size, after.st_mtime_ns), "Source changed during verification.")
+    original_edges = read(ROOT / "ml-training/configs/group-evidence.json")["confirmed_edges"]
+    repaired_evidence = read(MANIFEST.parent / "confirmed-parent-relations.json")
+    edges = [(row["first_hash"], row["second_hash"]) for row in [*original_edges, *repaired_evidence["confirmed_edges"]]]
+    relationship = relationship_audit({name: manifest.rows_for_split(name) for name in manifest.splits.as_mapping()}, confirmed_edges=edges, excluded_contents=[row.content_hash for row in manifest.excluded])
+    check(relationship["known_relationships_disjoint"] and len(edges) == 47, "Known source relations cross partitions.")
+    proof = {"verified_utc": datetime.datetime.now(datetime.timezone.utc).isoformat(), "stage": "after final descriptive V2 TEST evaluation", "source_files_names_bytes_sizes_mtimes_unchanged": 8040, "source_unique_contents": 4186, "source_inventory_sha256": file_digest(inventory_path), "manifest_fingerprint": manifest.fingerprint, "manifest_file_sha256": file_digest(MANIFEST), "counts": manifest.counts, "split_counts": {name: len(rows) for name, rows in manifest.splits.as_mapping().items()}, "class_counts": dict(Counter(row.label for row in manifest.eligible)), "all_47_confirmed_edge_audit": relationship, "raw_source_changes": False, "model_inference_performed": False, "machine_specific_dataset_path_in_report": False, "remaining_uncertainty": "Two reviewed candidates remain unresolved; pair 24 crosses TRAIN/VALIDATION. Disjointness applies to confirmed identities, not unknown plant/field/capture relations."}
+    if SOURCE_PROOF.exists():
+        bind(read(SOURCE_PROOF), {key: value for key, value in proof.items() if key != "verified_utc"}, "Existing immutable post-test proof")
+    else:
+        write_json(SOURCE_PROOF, proof)
+
+    copies = {}
+    def add(path, name):
+        check(name not in copies, "Duplicate export destination.")
+        data = path.read_bytes()
+        privacy_check(name, data)
+        copies[name] = (path, data)
+    for path in sorted(FIT.rglob("*")):
+        if path.is_file() and not path.is_relative_to(FIT / "checkpoints") and path.name != "dataset-manifest.json":
+            check(path.suffix in {".json", ".jsonl", ".csv", ".txt", ".png"}, "Unexpected training artifact.")
+            if path.suffix == ".png":
+                check(path.name in {"confusion-matrix.png", "roc-curves.png", "training-history.png"}, "Unapproved training image.")
+            add(path, "training/" + path.relative_to(FIT).as_posix())
+    for folder, prefix in ((CALIBRATION, "calibration"), (CANDIDATE, "candidate"), (FINAL, "final-test"), (REVIEW, "visual-review")):
+        for path in sorted(folder.rglob("*")):
+            if path.is_file():
+                if path.suffix == ".png":
+                    check(path.name in {"confidence-distribution.png", "reliability.png", "selective-risk-coverage.png", "confusion-matrix.png", "roc-curves.png"}, "Unapproved numerical image.")
+                else:
+                    check(path.suffix in {".json", ".csv", ".txt", ".md"}, "Unexpected report artifact.")
+                add(path, prefix + "/" + path.relative_to(folder).as_posix())
+    for path in sorted(VISUAL.iterdir()):
+        if path.is_file() and path.suffix in {".json", ".jsonl"}:
+            add(path, "visual-metadata/" + path.name)
+    audits = ["audit-v2-final.json", "audit-v2-validation.json", "offline-model-compatibility-v2.json", "calibration-audit-v2.json", "final-retrain-plan-20261009.json", "validation-decision-20261009-v2.json"]
+    for name in audits:
+        add(PHASE / name, "audits/" + name)
+    add(SOURCE_PROOF, "audits/" + SOURCE_PROOF.name)
+    add(claim, "candidate/single-test-evaluation-claim.json")
+    for folder_name, prefix in (("normalized-validation-v2", "normalized-validation"), ("normalized-test-v2", "normalized-test")):
+        for name in ("normalized-confusion.json", "normalized-confusion.png"):
+            add(PHASE / folder_name / name, prefix + "/" + name)
+    error_review = read(PHASE / "test-error-inspection-v2/review-notes.json")
+    bind(error_review, {"partition": "test", "reviewed_after_frozen_selection_and_single_final_evaluation": True, "new_model_inference": False, "examples_reviewed": 8}, "Post-freeze error inspection")
+    for name in ("examples.json", "review-notes.json"):
+        add(PHASE / "test-error-inspection-v2" / name, "post-freeze-test-error-review/" + name)
+    helper_paths = [".cache/phase105-calibrate-v2.py", ".cache/phase105-audit-calibration-v2.py", ".cache/phase105/freeze-v2-candidate.py", ".cache/phase105/audit-v2-artifacts.py", ".cache/phase105/normalized-confusion-v2.py", ".cache/phase105/manual-review-v2.py", ".cache/phase105/update-retrain-plan.py", ".cache/phase105/test-error-inspection-v2.py", ".cache/phase105/export-v2-fitness.py"]
+    for name in helper_paths:
+        path = ROOT / name
+        add(path, "orchestration/" + path.stem + ".txt")
+
+    config = manifest.load_preprocessing()
+    validation_confidence = read(CALIBRATION / "confidence-raw.json")
+    final_confidence = read(FINAL / "raw-confidence.json")
+    artifact = {"schema_version": 1, "model_version": validation_decision["model_version"], "candidate_id": bundle.candidate_id, "training_experiment_id": EXPERIMENT_ID, "architecture": bundle.architecture, "parameter_count": independent["parameter_count"], "verdict": bundle.verdict, "readiness_scope": validation_decision["readiness_scope"], "production_model_promoted": False, "checkpoint": {**reference(checkpoint), "selected_epoch": summary["best_epoch"], "selection": experiment["selection"], "weights_distributed_in_report": False}, "pre_test_frozen_candidate": {"bundle": reference(bundle_path), "decision_freeze": reference(CANDIDATE / "decision-freeze.json"), "validation_decision": reference(PHASE / "validation-decision-20261009-v2.json"), "reference_count": len(bundle.references), "selection_used_test": False}, "classes": [row.model_dump(mode="json") for row in manifest.classes], "class_to_index": {row.label: row.index for row in manifest.classes}, "input": {"shape": [1, 3, 224, 224], "color_space": "RGB", "layout": "NCHW", "dtype": "float32", "resize": "aspect-preserving bilinear letterbox; white padding", "normalization": {"decoded_byte_range": [0, 255], "formula": "((RGB / 255.0) - mean) / std", "mean": list(config.normalization.mean), "std": list(config.normalization.std)}}, "preprocessing": {"version": config.preprocessing_version, "semantic_sha256": config.fingerprint, "implementation": "maizedoctor_preprocessing; shared unchanged by training and AI service", "segmentation_policy": "disabled; full oriented frame retained", "configuration": config.model_dump(mode="json"), "configuration_file": reference(MANIFEST.parent / "preprocessing.json")}, "dataset": {"version": manifest.version, "manifest": reference(MANIFEST), "manifest_fingerprint": manifest.fingerprint, "splits": reference(MANIFEST.parent / "splits.json"), "exclusions": reference(MANIFEST.parent / "exclusions.json"), "confirmed_parent_evidence": reference(MANIFEST.parent / "confirmed-parent-relations.json"), "counts": manifest.counts, "partition_counts": {name: len(rows) for name, rows in manifest.splits.as_mapping().items()}, "split_seed": manifest.split_seed, "split_ratios": list(manifest.split_ratios), "all_known_identities_disjoint": True, "raw_names_labels_bytes_preserved": True, "unknown_capture_or_leaf_identity_independence_established": False}, "training": {"seed": settings["seed"], "hyperparameters": settings, "completed_epochs": summary["epochs_completed"], "selected_epoch": summary["best_epoch"], "optimizer": "AdamW", "loss": "CrossEntropyLoss; no class weighting", "scheduler": {"name": "ReduceLROnPlateau", "monitor": "validation macro F1", "mode": "max", "factor": 0.5, "patience": 1}, "gradient_clip_max_norm": 5.0, "augmentation": {"partition": "TRAIN only", "horizontal_flip_probability": 0.5, "affine_degrees": [-6, 6], "translate_fraction": [0.02, 0.02], "scale": [0.97, 1.03], "fill": "shared-config normalized white", "validation_test_augmented": False}, "initialization": read(FIT / "base-weights.json"), "final_test_deferred_during_fit": True}, "calibration": {**expected_calibration, "operational_threshold": None, "threshold_status": "unlocked; no approved risk/coverage/class-cost objective", "reason": validation_decision["calibration_reason"], "diagnostic_only_fitted_temperature": calibration_results["fitted_temperature"], "diagnostic_fitted_temperature_applied": False, "configuration": reference(CALIBRATION / "calibration-config.json"), "freeze": reference(CALIBRATION / "freeze.json"), "no_test_refit": True}, "metrics": {"validation": {"sample_count": 627, "raw_classification": validation_metrics, "selected_policy_classification": validation_metrics, "raw_probability": validation_confidence["metrics"], "selected_policy_probability": validation_confidence["metrics"], "diagnostic_crossfit_probability": calibration_results["out_of_fold"], "diagnostic_full_fit_resubstitution_probability": calibration_results["full_fit_descriptive_resubstitution"]}, "final_test": {"sample_count": 624, "raw_classification": test_metrics, "selected_policy_classification": read(FINAL / "calibrated-metrics.json"), "raw_probability": final_confidence["metrics"], "selected_policy_probability": read(FINAL / "calibrated-confidence.json")["metrics"], "correct_predictions": int(np.trace(np.array(test_metrics["confusion_matrix"]))), "test_evaluated_once_for_this_checkpoint_index": True, "test_used_for_selection": False, "weights_temperature_threshold_changed_after_test": False, "interpretation": "Descriptive corrected grouped benchmark on a previously inspected corpus; not a fresh external field holdout", "selection_lock": reference(FINAL / "selection-lock.json"), "summary": reference(FINAL / "summary.json")}}, "environment": environment, "dependencies": environment["distributions"], "research_policy": manifest.research_policy, "limitations": ["The old V1 holdout was invalidated by confirmed cross-partition same-parent content; old and new metrics are not comparable independent holdouts.", "V2 repairs confirmed identity relations and excludes all confirmed conflicting families, but does not prove plant/field/session independence.", "Unresolved Healthy pair 24 crosses TRAIN/VALIDATION; unresolved pair 58 is within TRAIN. Neither is a confirmed identity and neither was silently grouped or excluded.", "Classifier-selected validation was reused for diagnostics; calibration cross-fit does not erase classifier validation selection.", "The dataset and historical test were inspected; current final TEST metrics are descriptive and never selected weights, temperature or threshold.", "Source-domain/class weaknesses and high-confidence errors remain; no operational rejection threshold was locked.", "Single CPU seed; independent field validation and multi-seed stability remain pending.", "Academic/FYP non-commercial research only; no raw image redistribution or commercial clearance; no production promotion."]}
+    check(artifact["metrics"]["final_test"]["correct_predictions"] == 598, "Final correct count differs.")
+    check(artifact["classes"] == read(FIT / "class-map.json"), "Artifact class map differs.")
+    check(artifact["input"]["normalization"]["mean"] == [0.485, 0.456, 0.406] and artifact["input"]["normalization"]["std"] == [0.229, 0.224, 0.225], "Artifact normalization differs.")
+    artifact_bytes = (json.dumps(artifact, indent=2, ensure_ascii=False, allow_nan=False) + "\n").encode("utf-8")
+    privacy_check("model-artifact.json", artifact_bytes)
+    provenance = {"schema_version": 1, "experiment_id": EXPERIMENT_ID, "copies": {name: {"source": relative(path), "sha256": sha(data), "size_bytes": len(data), "copied_byte_for_byte": True} for name, (path, data) in copies.items()}, "metadata_only_exclusions": {"checkpoint_weights": "Kept in ignored local experiment; referenced by full SHA only.", "training_dataset_manifest_copy": "Canonical public V2 index is already versioned; identical typed content verified and referenced instead of duplicated.", "visual_image_sheets_and_augmentation_grids": "Raw-image-derived assets are never redistributed.", "dataset_binary_images": "Read-only source; never copied into reports."}}
+    DESTINATION.mkdir(parents=True, exist_ok=False)
+    for name, (source, data) in copies.items():
+        target = DESTINATION / name
+        target.parent.mkdir(parents=True, exist_ok=True)
+        with target.open("xb") as stream:
+            stream.write(data)
+        check(target.read_bytes() == source.read_bytes() == data, "Source or copied artifact changed during export.")
+    with (DESTINATION / "model-artifact.json").open("xb") as stream:
+        stream.write(artifact_bytes)
+    write_json(DESTINATION / "copy-provenance.json", provenance)
+    critical_proof = {"passed": True, "model_artifact_sha256": sha(artifact_bytes), "experiment_id": EXPERIMENT_ID, "candidate_id": bundle.candidate_id, "candidate_sha256": file_digest(bundle_path), "pre_test_decision_freeze_sha256": file_digest(CANDIDATE / "decision-freeze.json"), "checkpoint_sha256": file_digest(checkpoint), "manifest_fingerprint": manifest.fingerprint, "preprocessing_hash": manifest.preprocessing_hash, "selected_epoch": 8, "candidate_references_verified": len(bundle.references), "training_source_files_verified": source_count, "calibration_source_files_verified": calibration_source_count, "calibration_integrity_files_verified": calibration_files, "final_test_lock_matches_pre_test_candidate": True, "weights_temperature_threshold_unchanged_after_test": True, "calibration": expected_calibration, "confidence_threshold": None, "validation_saved_prediction_audit": validation_arithmetic, "final_test_saved_prediction_audit": test_arithmetic, "raw_and_selected_policy_confidence_and_selective_outputs_byte_identical": True, "all_8040_original_names_bytes_sizes_mtimes_unchanged_after_test": True, "export_copy_count": len(copies), "source_images_or_weights_exported": False, "model_inference_or_refit_performed_by_exporter": False, "privacy_check": "No actual DATASET_PATH, absolute Windows paths, GPS values, embedded image payloads or private keys in exported metadata.", "interpretation": "Critical-field and artifact consistency proof; not independent field validity or commercial clearance."}
+    write_json(DESTINATION / "model-artifact-validation.json", critical_proof)
+    readme = """# Corrected V2 fitness audit — MobileNetV3 Small
+
+This immutable report preserves exact aggregate results, saved probability CSVs,
+configuration/provenance metadata and numerical Matplotlib plots. It contains no
+raw photographs, Grad-CAM/contact/augmentation sheets, pixel caches or model weights.
+Use is non-commercial academic/FYP research only. Licensing or source replacement
+is required before commercial use; raw-image redistribution is prohibited.
+
+The fresh corrected-index fit completed 11 epochs, stopped through the configured
+validation patience rule and selected epoch 8 using validation macro F1 and loss
+for exact ties. The old V1 split/evaluation was invalidated by newly confirmed
+same-parent leakage. V2 has 4,162 eligible contents in 4,121 groups, with partitions
+2,911 TRAIN / 627 VALIDATION / 624 TEST. Four new contradictory families (eight
+contents) are wholly excluded, without deleting or relabeling any source file.
+
+The pre-TEST candidate and decision freeze are copied without modification. The
+selected policy retains raw probabilities: calibration disabled, temperature 1.0,
+confidence threshold `null`. The diagnostic validation-fitted temperature is not
+applied because group cross-fitting worsened NLL, Brier and ECE. Final TEST evaluated
+the frozen checkpoint/index once: 598/624 correct (95.8333%), macro F1 0.9451708648.
+The final addendum binds that frozen decision and makes no new model/policy choice.
+
+These are descriptive results on a previously inspected corpus, not an unseen
+external field holdout. Unknown plant/field/session identities and unresolved
+Healthy candidate 24 across TRAIN/VALIDATION remain explicit risks. Source and GLS
+weaknesses, high-confidence errors and single-seed limits remain. Verdict:
+**FIT WITH DOCUMENTED LIMITATIONS**, restricted to an offline/FYP research inference
+prototype; field/commercial farmer-diagnosis suitability is not established.
+No Phase 11 API or production promotion was implemented.
+
+`model-artifact.json` specifies the exact local checkpoint SHA/location, class map,
+224×224 RGB shared preprocessing/normalization, V2 split/exclusions, seeds,
+hyperparameters/dependencies, calibration policy, validation and final TEST results,
+research restrictions and the untouched pre-TEST candidate bindings.
+`model-artifact-validation.json` documents fail-closed critical-field checks.
+`copy-provenance.json` maps every exact source-byte copy. `integrity.json` hashes
+every report file except itself. `orchestration/*.txt` archives exact helper source
+for audit, not serving code. `visual-metadata/` and `visual-review/` contain numerical
+observations only; associated source-image sheets stay local and ignored.
+
+The full local experiment and checkpoint remain under
+`.cache/phase105/experiments/mobilenet-v3-small-20261009-v2-01/`.
+Checkpoint `checkpoints/epoch-008.pt`, SHA-256:
+`e95a2e83262637fc1a08b919e6003bddb2fe70664b9c51418f059b7c8287dc66`.
+The canonical metadata-only index is
+`ml-training/manifests/maize-research-20261008-v2/`.
+Never overwrite this report or promote the checkpoint without preserving the
+shared preprocessing, class mapping, hash bindings and documented limitations.
+"""
+    with (DESTINATION / "README.md").open("x", encoding="utf-8", newline="\n") as stream:
+        stream.write(readme)
+    for path in DESTINATION.rglob("*"):
+        if path.is_file():
+            privacy_check(path.relative_to(DESTINATION).as_posix(), path.read_bytes())
+    integrity = {"schema_version": 1, "experiment_id": EXPERIMENT_ID, "model_version": bundle.candidate_id, "files": {path.relative_to(DESTINATION).as_posix(): file_digest(path) for path in sorted(DESTINATION.rglob("*")) if path.is_file()}}
+    write_json(DESTINATION / "integrity.json", integrity)
+    verified = verify_artifact_hashes(DESTINATION, integrity["files"])
+    validate_bundle(bundle_path, ROOT)
+    print(json.dumps({"report": DESTINATION.relative_to(ROOT).as_posix(), "files": verified + 1, "exact_copies": len(copies), "numeric_pngs": sum(name.endswith(".png") for name in integrity["files"]), "integrity_sha256": file_digest(DESTINATION / "integrity.json"), "model_artifact_sha256": file_digest(DESTINATION / "model-artifact.json"), "validation_proof_sha256": file_digest(DESTINATION / "model-artifact-validation.json"), "source_proof_sha256": file_digest(SOURCE_PROOF), "source_files_unchanged": 8040, "candidate_verified_references": len(bundle.references), "raw_images_or_weights_exported": False, "model_inference_performed": False}, allow_nan=False))
+
+
+if __name__ == "__main__":
+    main()

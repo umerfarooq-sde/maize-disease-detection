@@ -1,0 +1,71 @@
+"""Persist root's actual contact-sheet review; no labels or source images change."""
+import json
+from pathlib import Path
+ROOT = Path(__file__).resolve().parents[2]
+visual = ROOT / ".cache/phase105/visual-20261009-v2"
+output = ROOT / ".cache/phase105/visual-20261009-v2-review"
+assert not output.exists()
+samples = json.loads((visual / "visual-samples.json").read_text(encoding="utf-8"))
+notes = [
+"Field leaf with broad yellow/brown longitudinal damage, busy background; CAM strongest on damaged central leaf. Confident class error suggests phenotype/label overlap, not proven background shortcut.",
+"Large pale elongated necrotic region plus punctate spots; CAM centered on large lesion, consistent with morphology overlap despite wrong literal class.",
+"Curled leaf, broad necrotic midsection and scattered dots; CAM covers leaf lesions and some right background.",
+"Bright/backlit field frame, large pale lesions and distracting background; CAM extends into top letterbox and bright background; padding/border enrichment warrants caution.",
+"Broad pale lesions on a gray-backed leaf; CAM tracks lesion; literal GLS/Blight ambiguity remains.",
+"Partial leaf on gray background; elongated brown mark and punctate spots; CAM strongest near top/background and left boundary, weak pathology alignment.",
+"Wide field leaf with small rusty spots; downsize makes small spots finer; CAM follows central midrib/spot area.",
+"Macro closeup with dark raised spots and broad pale damaged tissue; CAM follows the damaged region, not a proof of correct disease semantics.",
+"Partial narrow leaf with yellow/brown streaks on pale background; CAM includes leaf and padding, ambiguity with Rust.",
+"Gray-backed leaf with mixed elongated and punctate lesions; CAM on central tissue but also right background.",
+"Natural field background with elongated pale marks; CAM strongest at lower-left background, suspicious contextual attention.",
+"Gray-backed partial leaf with one elongated lesion; heat at upper/background edge rather than lesion center.",
+"Heavily pale/streaked field leaf; CAM includes lesions and substantial white letterbox mass.",
+"Long field leaf with many elongated marks; CAM follows leaf damage and some lower background.",
+"Partial gray-backed leaf, large pale lesion and tiny dots; CAM focused on lesion; low confidence reflects class overlap.",
+"Long field leaf with pale lesions; CAM tracks central damaged tissue; low confidence wrong prediction.",
+"Partial heavily streaked leaf with pink/pale marks and reddish puncta; CAM on tissue, literal GLS/Rust ambiguity.",
+"Gray-backed leaf with elongated lesions; CAM strongly around outside leaf boundary, borderline wrong prediction.",
+"Mixed severe punctate/elongated lesions; weak, diffuse CAM with right gray-background focus; borderline wrong prediction.",
+"Yellow/brown elongated leaf streaks with watermark/field background; CAM includes right background; near-even GLS/Blight probabilities.",
+"Bright closeup of apparently intact leaf; correct Healthy. Texture/source appearance may aid prediction; no independent field evidence.",
+"Visibly soft/blurred closeup; correct Healthy at near-one confidence. This does not establish robust diseased-leaf blur diagnosis.",
+"Healthy closeup with strong blurred veins; correct near-one confidence; possible source/style cue.",
+"Heavily damaged rust-labelled leaf on black background; heat partly on leaf and partly off its edges; correct classification does not prove lesion causality.",
+"Very bright intact leaf closeup; correct Healthy; reflected light is source appearance, no lesion validation.",
+"Gray-backed diseased leaf; CAM strongest on broad pale necrotic region, good coarse lesion alignment.",
+"Gray-backed streaked leaf with cast shadow; CAM includes tissue and background border; correct GLS with strong confidence.",
+"Blurred intact leaf closeup; correct Healthy; coarse vein/style activation.",
+"Bright intact leaf closeup; correct Healthy; texture/style activation and no field independence.",
+"Soft leaf closeup; correct Healthy; high confidence applies to benchmark source only.",
+"Dark black-backed extensively damaged leaf; CAM predominantly on damaged tissue, adequate coarse localization.",
+"Rust spots on black-backed green leaf; CAM extends to black background beyond leaf; possible contextual dependence despite correct output.",
+"Leaf closeup with holes/physical damage and gray background; labelled Healthy and correctly predicted. Holes alone do not justify disease relabeling.",
+"Wide leaf with few small rust-coloured spots; CAM on central spots but also padding. Padding area exceeds heat fraction, so mass alone does not prove bias.",
+"Portrait leaf with large dead brown lesion and nearby text/paper; CAM centered on lesion with little padding heat.",
+"Dark-backed leaf with small rust spots; coarse CAM partly follows spots and edge; confident-correct lower than typical Rust.",
+"Narrow field leaf containing attribution watermark; correct Rust but heat near right lesion/background and letterbox. Watermark causality not proven.",
+"Partial heavily damaged leaf on pale background; CAM follows lesion region; low-confidence correct Blight.",
+"Gray-backed leaf with elongated lesions; borderline-correct Blight with CAM on lesion and outside boundary.",
+"Narrow partial leaf with yellow longitudinal streaks; near-even correct Blight, lesion detail softened by resize.",
+"Gray-backed green leaf with tiny/elongated lesions; near-even correct GLS, CAM follows lesion region; ambiguity remains.",
+]
+assert len(samples) == len(notes) == 41
+output.mkdir(parents=True, exist_ok=False)
+report = {
+  "reviewer": "root", "review_date": "2026-10-09 (Asia/Karachi)",
+  "actual_validation_sheets_reviewed": 11, "actual_validation_contents_reviewed": 41,
+  "all_validation_errors_reviewed": 20, "train_augmentation_sheets_reviewed": 3,
+  "train_contents_reviewed": 11, "actual_train_augmented_variants_reviewed": 33,
+  "test_images_read": False, "source_or_label_changes": False,
+  "cam_limitations": "Predicted-logit gradient map at coarse 7x7; localization is diagnostic, not causal/pathology proof. Border heat is interpreted relative to region area.",
+  "augmentation_findings": "Actual flips/affines preserve visible major lesions/colours across these 33 examples. Mild edge clipping and white wedges occur; backgrounds/fingers remain. No strong brightness/color modifications; no exhaustive lesion-mask retention guarantee.",
+  "preprocessing_findings": "Full oriented frame retained with one shared resize/normalization; raw source black/gray backgrounds are preserved, not newly removed. Tiny lesion detail can soften at224 pixels.",
+  "source_findings": "PlantVillage-overlap579:570correct98.45%; Corn-only48:37correct77.08%; Corn-only GLS2/9recall22.22%. Overlapping archives, small subgroup/noHealthy, no verified independent field/plant domains.",
+  "conclusion": "Suitable for a limited FYP research inference prototype with disclosed source/class/confidence weaknesses; field/commercial validity unestablished. These observations do not justify a particular class weight, random hyperparameter search or larger architecture. New plant/session-independent field data and verified labels are the scientific next validation step.",
+  "examples": [{**row, "visual_index": i, "manual_observation": notes[i]} for i,row in enumerate(samples)],
+}
+with (output / "manual-review.json").open("x", encoding="utf-8") as stream:
+    json.dump(report, stream, indent=2, allow_nan=False); stream.write("\n")
+with (output / "README.md").open("x", encoding="utf-8") as stream:
+    stream.write("# V2 manual visual review\n\nRoot inspected all11 validation sheets (41 unique contents including all20errors) and all3 actualTRAINaugmentation sheets (11contents/33variants), plus actual training curves. See manual-review.json for exact IDs, groups, probabilities and observations. All image-bearing sheets remain local/ignored; no test image influenced selection.\n\nThe model is a limited research/FYP prototype candidate, not validated for farmer diagnosis or commercial deployment. Coarse CAM/background evidence is suggestive rather than causal. Source-domain and lesion/label ambiguity, small-lesion resize loss and confident wrong predictions remain.\n")
+print(json.dumps({"manual_review_saved": True, "validation_contents":41, "all_errors":20, "train_augmented_variants":33, "test_images_read":False}))

@@ -1,0 +1,69 @@
+{
+  "partition": "validation",
+  "class_names": [
+    "Common_Rust",
+    "Gray_Leaf_Spot",
+    "Healthy",
+    "Northern_Corn_Leaf_Blight"
+  ],
+  "rows_true_columns_predicted": true,
+  "raw_counts": [
+    [
+      193,
+      0,
+      0,
+      3
+    ],
+    [
+      3,
+      74,
+      0,
+      8
+    ],
+    [
+      0,
+      0,
+      175,
+      0
+    ],
+    [
+      1,
+      5,
+      0,
+      165
+    ]
+  ],
+  "row_normalized": [
+    [
+      0.9846938775510204,
+      0.0,
+      0.0,
+      0.015306122448979591
+    ],
+    [
+      0.03529411764705882,
+      0.8705882352941177,
+      0.0,
+      0.09411764705882353
+    ],
+    [
+      0.0,
+      0.0,
+      1.0,
+      0.0
+    ],
+    [
+      0.005847953216374269,
+      0.029239766081871343,
+      0.0,
+      0.9649122807017544
+    ]
+  ],
+  "support": [
+    196,
+    85,
+    175,
+    171
+  ],
+  "source_metrics": ".cache/phase105/experiments/mobilenet-v3-small-20261009-v2-01/validation/metrics.json"
+}

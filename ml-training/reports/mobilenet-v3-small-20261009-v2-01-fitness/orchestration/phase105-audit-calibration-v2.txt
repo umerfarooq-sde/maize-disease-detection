@@ -1,0 +1,92 @@
+"""Read-only audit of new validation-only calibration, with no test access."""
+import hashlib
+import json
+from pathlib import Path
+import re
+import sys
+
+ROOT = Path(__file__).resolve().parents[1]
+sys.path.insert(0, str(ROOT / "ml-training"))
+from dataset_preparation import load_manifest
+
+directory = ROOT / ".cache/phase105/calibration-20261009-v2"
+parent = ROOT / ".cache/phase105/experiments/mobilenet-v3-small-20261009-v2-01"
+def read(name):
+    return json.loads((directory / name).read_text(encoding="utf-8"))
+def sha(path):
+    return hashlib.sha256(path.read_bytes()).hexdigest()
+
+integrity = read("integrity.json")
+actual_paths = {path.relative_to(directory).as_posix() for path in directory.rglob("*")
+                if path.is_file() and path.name != "integrity.json"}
+assert actual_paths == set(integrity)
+for relative, digest in integrity.items():
+    path = directory / relative
+    assert path.resolve().is_relative_to(directory.resolve()) and sha(path) == digest
+config = read("calibration-config.json")
+summary = json.loads((parent / "summary.json").read_text(encoding="utf-8"))
+manifest = load_manifest(parent / "dataset-manifest.json")
+source = read("validation-source.json")
+freeze = read("freeze.json")
+assert config["classifier_experiment_id"] == parent.name
+assert config["checkpoint_sha256"] == summary["best_checkpoint_sha256"]
+assert config["manifest_fingerprint"] == manifest.fingerprint
+assert config["preprocessing_hash"] == manifest.preprocessing_hash
+assert config["preprocessing_version"] == manifest.load_preprocessing().preprocessing_version
+assert config["class_names"] == ["Common_Rust", "Gray_Leaf_Spot", "Healthy", "Northern_Corn_Leaf_Blight"]
+assert config["class_names"] == [row.label for row in manifest.classes]
+assert config["crossfit_seed"] == 20261007 and config["crossfit_folds"] == 5
+assert config["operational_threshold"] is None and config["test_probabilities_read"] is False
+assert config["test_application_performed"] is False
+assert config["valid_for_candidate_promotion"] is True
+assert freeze["test_read_before_freeze"] is False
+assert freeze["test_application_authorized"] is False
+assert freeze["calibration_config_sha256"] == sha(directory / "calibration-config.json")
+assert source["sample_count"] == 627 == len(manifest.splits.validation)
+assert config["validation_csv_sha256"] == sha(parent / "validation/predictions.csv") == source["sha256"]
+for relative, digest in config["source_sha256"].items():
+    path = ROOT / relative
+    assert path.resolve().is_relative_to(ROOT.resolve()) and sha(path) == digest
+for relative, digest in source["parent_artifact_sha256"].items():
+    path = parent / relative
+    assert path.resolve().is_relative_to(parent.resolve()) and sha(path) == digest
+members = read("crossfit-membership.json")
+assert [row["sample_id"] for row in members] == list(manifest.splits.validation)
+manifest_rows = {row.sample_id: row for row in manifest.rows_for_split("validation")}
+folds_by_group = {}
+for row in members:
+    assert row["group_id"] == manifest_rows[row["sample_id"]].group_id
+    assert type(row["fold"]) is int and 0 <= row["fold"] < 5
+    folds_by_group.setdefault(row["group_id"], set()).add(row["fold"])
+assert all(len(folds) == 1 for folds in folds_by_group.values())
+assert len(folds_by_group) == source["group_count"] == config["known_v2_validation_group_count"]
+assert {row["fold"] for row in members} == set(range(5))
+for path in directory.rglob("*"):
+    if path.is_file() and path.suffix in {".json", ".md"}:
+        text = path.read_text(encoding="utf-8")
+        assert re.search(r"[A-Za-z]:[\\/]", text) is None, f"Machine path in {path.name}"
+        assert "GPSLatitude" not in text and "GPSLongitude" not in text
+results = read("validation-results.json")
+confidences = {name: read(f"confidence-{name}.json") for name in ("raw", "crossfit")}
+risks = {name: read(f"selective-{name}.json") for name in ("raw", "crossfit")}
+assert all(report["selected_threshold"] is None for report in risks.values())
+output = {
+    "status": "passed", "integrity_files_verified": len(integrity),
+    "source_hashes_verified": len(config["source_sha256"]),
+    "parent_artifact_hashes_verified": len(source["parent_artifact_sha256"]),
+    "validation_count": 627, "validation_group_count": len(folds_by_group),
+    "class_counts": source["class_counts"],
+    "group_fold_disjoint": True, "private_paths_or_GPS_values_found": False,
+    "argmax_unchanged": results["argmax_unchanged_by_calibration"],
+    "calibration": config["calibration"], "metrics": results,
+    "high_confidence_errors": {name: report["high_confidence_errors"] for name, report in confidences.items()},
+    "diagnostic_risk_points": {name: [row for row in report["candidates"] if row["threshold"] in {.9, .95, .99}]
+                               for name, report in risks.items()},
+    "operational_threshold": None, "test_probabilities_read": False,
+    "configuration_sha256": sha(directory / "calibration-config.json"),
+    "integrity_sha256": sha(directory / "integrity.json"),
+}
+with (ROOT / ".cache/phase105/calibration-audit-v2.json").open("x", encoding="utf-8") as stream:
+    json.dump(output, stream, indent=2, sort_keys=True, allow_nan=False)
+    stream.write("\n")
+print(json.dumps(output, indent=2))

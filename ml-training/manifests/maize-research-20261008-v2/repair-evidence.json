@@ -1,0 +1,223 @@
+{
+  "schema_version": 1,
+  "review_status": "FINAL_CONFIRMED_RELATIONS",
+  "parent_manifest_fingerprint": "e1abe6c4bba09080371345365ab92067f1f08bfba9f927f66cbc9e58af6b5e98",
+  "confirmed_edges": [
+    {
+      "first_hash": "0269c07a3081df41e9e8e5a7ee3c18394bb81fd8b0c6bff78b610d993b72a14d",
+      "second_hash": "8f22a1471132f061c984e6cdb3722ef1dee08e68374dac0d92aefa873151dc62",
+      "kind": "VISUALLY_CONFIRMED_TRANSFORMED_PHOTO",
+      "reason": "Identical field photograph, lesion constellation, full leaf contour and background under 90-degree rotation. Labels conflict; exclude the entire connected family without choosing or changing a disease label."
+    },
+    {
+      "first_hash": "eef5a57824278ec80ddf58e5daa1eb7bc3064d6750854292b4886621791ec148",
+      "second_hash": "1540ae24bb5b56d3371bcf66a9ab5ee0691c3d1fea002b7efb1afbf36c48526e",
+      "kind": "VISUALLY_CONFIRMED_SHARED_LEAF_REGION",
+      "reason": "Distinctive branched necrotic scars, peripheral puncta, vein and leaf-edge landmarks align across the photographed region. Shared leaf-region parent identity is confirmed; identical exposure versus another capture of the same physical leaf is not asserted."
+    },
+    {
+      "first_hash": "c1e4ed369415d54d77632271a5d7c741200ccb9357d4e9fceee7db3cb028f8dd",
+      "second_hash": "858c88af4a614df72e30fe773ef55c5aa46861d3f0ed1f73d7a8a8b6400f2a71",
+      "kind": "VISUALLY_CONFIRMED_SHARED_LEAF_REGION",
+      "reason": "Distinctive branched necrotic scars, peripheral puncta, vein and leaf-edge landmarks align across the photographed region. Shared leaf-region parent identity is confirmed; identical exposure versus another capture of the same physical leaf is not asserted."
+    },
+    {
+      "first_hash": "3b616d93a4aa72ad932f05dd2ff1a0392139ce355a1b9d24f0e78cf71405a62c",
+      "second_hash": "1816338ef66a7c08c1d385bce179f6a846ceedef5bb91eb31effabd155412aed",
+      "kind": "VISUALLY_CONFIRMED_TRANSFORMED_PHOTO",
+      "reason": "Identical watermarked field photograph, elongated lesion distribution, midrib and dark background under rotated crop. Labels conflict; exclude the entire connected family without choosing or changing a disease label."
+    },
+    {
+      "first_hash": "2f7f2b5279b7ef07b63c5dc4869df28679170ef3c15a90335583d9a34fe9f138",
+      "second_hash": "e9663732ef042db247af05d84a989d2e4e06d2b0690362e38891d1da4b4e510d",
+      "kind": "VISUALLY_CONFIRMED_SHARED_LEAF_REGION",
+      "reason": "Distinctive branched necrotic scars, peripheral puncta, vein and leaf-edge landmarks align across the photographed region. Shared leaf-region parent identity is confirmed; identical exposure versus another capture of the same physical leaf is not asserted."
+    },
+    {
+      "first_hash": "314cb6de570e01a3a7ab10f2e23a741a129f6053ed951dcacecf289e7a640fa9",
+      "second_hash": "b602dae65b4cb04861c53a3ca3fdb32dd235ca12b87d7f37c7f422e4ba6be71b",
+      "kind": "VISUALLY_CONFIRMED_SHARED_LEAF_REGION",
+      "reason": "Distinctive branched necrotic scars, peripheral puncta, vein and leaf-edge landmarks align across the photographed region. Shared leaf-region parent identity is confirmed; identical exposure versus another capture of the same physical leaf is not asserted."
+    },
+    {
+      "first_hash": "1ca22fbfd1daf3bde55e6341838302c498c59259308e83d0f0825c0e7d41cd57",
+      "second_hash": "da5b711afd5654b00f44310d2de001150182e8548bf9b6e751b1adea2a922dba",
+      "kind": "VISUALLY_CONFIRMED_SHARED_LEAF_REGION",
+      "reason": "Matching irregular triangular shadow boundary, vein texture and localized leaf-surface landmarks after registration. Shared leaf-region parent identity is confirmed; identical exposure versus another capture of the same physical leaf is not asserted."
+    },
+    {
+      "first_hash": "8ab213989053fff2cf51905155c44379bbed4102a0ace6bb759d4bc6a27b6a35",
+      "second_hash": "75c80b935cefdae8cfd186006d0e71cd776314769e3a8b7ffbcdee8d0b06b723",
+      "kind": "VISUALLY_CONFIRMED_SHARED_LEAF_REGION",
+      "reason": "Distinctive branched necrotic scars, peripheral puncta, vein and leaf-edge landmarks align across the photographed region. Shared leaf-region parent identity is confirmed; identical exposure versus another capture of the same physical leaf is not asserted."
+    },
+    {
+      "first_hash": "db69d8c010c4712299de0f0037469bbd9d08bdef51a57e6c8a3b4afe52e4c186",
+      "second_hash": "0ad1a073ce0b555bc76a3a357f83284db244d4625be40602b01396550f429d0d",
+      "kind": "VISUALLY_CONFIRMED_SHARED_LEAF_REGION",
+      "reason": "Distinctive branched necrotic scars, peripheral puncta, vein and leaf-edge landmarks align across the photographed region. Shared leaf-region parent identity is confirmed; identical exposure versus another capture of the same physical leaf is not asserted."
+    },
+    {
+      "first_hash": "6d6da75cbfcf1533e60ca92057ad06e851adb824329ce343537d940306df55f7",
+      "second_hash": "ef5f76888a0e7b72684ba6a4ff0de4be13e7fc33b62092e2aa4aa23add241e84",
+      "kind": "VISUALLY_CONFIRMED_SHARED_LEAF_REGION",
+      "reason": "Distinctive branched necrotic scars, peripheral puncta, vein and leaf-edge landmarks align across the photographed region. Shared leaf-region parent identity is confirmed; identical exposure versus another capture of the same physical leaf is not asserted."
+    },
+    {
+      "first_hash": "17215ca4a1247cf6c2d3754f97e0d4b35860a722ba32f7dbb5ef1faa41ce885d",
+      "second_hash": "3908a7924faf7d45ce849142ba238876839a882a0bc6a50e0c056b98dc2b2b3a",
+      "kind": "VISUALLY_CONFIRMED_SHARED_LEAF_REGION",
+      "reason": "Distinctive branched necrotic scars, peripheral puncta, vein and leaf-edge landmarks align across the photographed region. Shared leaf-region parent identity is confirmed; identical exposure versus another capture of the same physical leaf is not asserted."
+    },
+    {
+      "first_hash": "258ccc4da2fd7c5d979b5658b009e9e15d45703306a58fa0d94716c022757979",
+      "second_hash": "9ea1eefc1c0e683ddd90f1085faf77b9b762409a276126b1b7666a0dda0a4ca0",
+      "kind": "VISUALLY_CONFIRMED_SHARED_LEAF_REGION",
+      "reason": "Distinctive branched necrotic scars, peripheral puncta, vein and leaf-edge landmarks align across the photographed region. Shared leaf-region parent identity is confirmed; identical exposure versus another capture of the same physical leaf is not asserted."
+    },
+    {
+      "first_hash": "2aae06514f4951ad0db642654a940d9c043445d1aba75f3ad902c3abd716b9b0",
+      "second_hash": "ac01e4c4824ff19bbe38a290113e3716754913fdc330fbbe717afb3df6b32a48",
+      "kind": "VISUALLY_CONFIRMED_SHARED_LEAF_REGION",
+      "reason": "Distinctive branched necrotic scars, peripheral puncta, vein and leaf-edge landmarks align across the photographed region. Shared leaf-region parent identity is confirmed; identical exposure versus another capture of the same physical leaf is not asserted."
+    },
+    {
+      "first_hash": "c6acc7eb47f198961ddfdc2f3ed5148e2bfa90ff9ef43a39da7debc3280e7d2c",
+      "second_hash": "faf5987565e0b4352b8670191f35fd64b1ce5c5111f33482aa3006cbe8ca5864",
+      "kind": "VISUALLY_CONFIRMED_SHARED_LEAF_REGION",
+      "reason": "Distinctive branched necrotic scars, peripheral puncta, vein and leaf-edge landmarks align across the photographed region. Shared leaf-region parent identity is confirmed; identical exposure versus another capture of the same physical leaf is not asserted."
+    },
+    {
+      "first_hash": "c7a51c90e69969e7d9166bb35c795c039dfa770ba14a9cb57b721c30edcb3549",
+      "second_hash": "340590c324ba36db7bd281b75d668fc427d13a27f943cdfbf4eae3a4f757d373",
+      "kind": "VISUALLY_CONFIRMED_SHARED_LEAF_REGION",
+      "reason": "Matching unique rust-punctum arrangement, central vein and leaf contour despite perspective/exposure changes. Shared leaf-region parent identity is confirmed; identical exposure versus another capture of the same physical leaf is not asserted."
+    },
+    {
+      "first_hash": "3aa0c53a6fe1d8c0c3e8ba8831e2f5e76588eda192d3be57b866a937e3e47dd7",
+      "second_hash": "28e343bc7770ab8a6436239257bea0d48464b5aeaed27bc1e2e431036281a1c5",
+      "kind": "VISUALLY_CONFIRMED_SHARED_LEAF_REGION",
+      "reason": "Distinctive branched necrotic scars, peripheral puncta, vein and leaf-edge landmarks align across the photographed region. Shared leaf-region parent identity is confirmed; identical exposure versus another capture of the same physical leaf is not asserted."
+    },
+    {
+      "first_hash": "5da03fe49b6be4b953ffbbb3d945c334b896eb4857cc718e3a606e7f486c4c9d",
+      "second_hash": "863ddd25e742c69b10991ceaddaa32948e6d100a66ff034039620599c30e70c9",
+      "kind": "VISUALLY_CONFIRMED_SHARED_LEAF_REGION",
+      "reason": "Matching distinctive cross-vein/crease and leaf microtexture over a broad region after registration. Shared leaf-region parent identity is confirmed; identical exposure versus another capture of the same physical leaf is not asserted."
+    },
+    {
+      "first_hash": "d65adfb57a6c81fb6c58b3a3a31ac56329dd2680f4389c02c93478c300d19acc",
+      "second_hash": "bb6513c8d45b22472dd5e8ee2c28bd5eac6ab2655f53a7ec7a9bcd9c1b7e77ca",
+      "kind": "VISUALLY_CONFIRMED_SHARED_LEAF_REGION",
+      "reason": "Identical distinctive rust-covered strip photograph after rotation/crop, with corresponding lesion distribution. Shared leaf-region parent identity is confirmed; identical exposure versus another capture of the same physical leaf is not asserted."
+    },
+    {
+      "first_hash": "cdaa1b4a7adc90108d55f29ea3f7bec2bfdc4d05b54eebc9ab30b234da614aca",
+      "second_hash": "54f203dc51c628aa43f12836845417b1bfe6c8f1b244075761c1db4bd07fb42f",
+      "kind": "VISUALLY_CONFIRMED_SHARED_LEAF_REGION",
+      "reason": "Matching broken/dead tissue contours and split/scar pattern, with registered distinctive background features. Shared leaf-region parent identity is confirmed; identical exposure versus another capture of the same physical leaf is not asserted."
+    },
+    {
+      "first_hash": "e8c3ae9b3d759a09088ba0862146fed9926dda685f8512849086f874a48ec430",
+      "second_hash": "1ef67c035b390e85bbcd63b5daac7cab87c564e3d8f0250390a792dfebc35bb1",
+      "kind": "VISUALLY_CONFIRMED_SHARED_LEAF_REGION",
+      "reason": "Matching curved midrib, localized isolated marks and crease/vein microtexture, not merely green color. Shared leaf-region parent identity is confirmed; identical exposure versus another capture of the same physical leaf is not asserted."
+    },
+    {
+      "first_hash": "1ebf14863b5eac43dfd7d799c879b4edecfbaf10816641cea033afc76d6c1773",
+      "second_hash": "54f702d351d0fa85b40bd4deaccad06a092058796558788fa32c2f1f7bad5faa",
+      "kind": "VISUALLY_CONFIRMED_SHARED_LEAF_REGION",
+      "reason": "Matching distinctive tapered necrotic tip and branched scar/vein arrangement after registration. Shared leaf-region parent identity is confirmed; identical exposure versus another capture of the same physical leaf is not asserted."
+    },
+    {
+      "first_hash": "fc2a3f5eeec7277750aa5fcb750ddeca6ec5303aeb8c6143a5accd0b7ce1bfa3",
+      "second_hash": "5a98cdc9194b65b6844177ab6ebfd61b41853fc09a4ebbc2a6a7d5bb9bcb0ed4",
+      "kind": "VISUALLY_CONFIRMED_SHARED_LEAF_REGION",
+      "reason": "Distinctive branched necrotic scars, peripheral puncta, vein and leaf-edge landmarks align across the photographed region. Shared leaf-region parent identity is confirmed; identical exposure versus another capture of the same physical leaf is not asserted."
+    },
+    {
+      "first_hash": "24fbf0bd8988344e27b4dcfd9e7046012ed75704278045c59258933f987a76c5",
+      "second_hash": "e97525592f286b0dd593010fe970a8f35935e3a28e8c76d9f3b73339ebbaff59",
+      "kind": "VISUALLY_CONFIRMED_SHARED_LEAF_REGION",
+      "reason": "Matching distinctive branched lesion and peripheral puncta configuration despite exposure/pose changes. Shared leaf-region parent identity is confirmed; identical exposure versus another capture of the same physical leaf is not asserted."
+    },
+    {
+      "first_hash": "04812fb142968b3f0f45b20020602437dc9860694da96cd26f0ebb9ac096796e",
+      "second_hash": "17c121716b95edfe209097e6d2a5c152fb4a21e9e02e8f4f21afc643c18c9d17",
+      "kind": "VISUALLY_CONFIRMED_SHARED_LEAF_REGION",
+      "reason": "Distinctive branched necrotic scars, peripheral puncta, vein and leaf-edge landmarks align across the photographed region. Shared leaf-region parent identity is confirmed; identical exposure versus another capture of the same physical leaf is not asserted."
+    },
+    {
+      "first_hash": "8a029a83af9dbb012d0f3ff917fc487f60822fbad6ea97f62b8d7842cde87782",
+      "second_hash": "8aace910c1cb5a05645d1e50d573ab7c7904403c910c1b8304b1293c472e0f08",
+      "kind": "VISUALLY_CONFIRMED_SHARED_LEAF_REGION",
+      "reason": "Distinctive branched necrotic scars, peripheral puncta, vein and leaf-edge landmarks align across the photographed region. Shared leaf-region parent identity is confirmed; identical exposure versus another capture of the same physical leaf is not asserted."
+    },
+    {
+      "first_hash": "bf65279b92c34fd6eb6dd6f2b1611b55c1ab4314a67059e5e0cf3c2a618ae79d",
+      "second_hash": "34712be4e6eb9ac2757a1d2290022720763d3cc01e9f22eeb938bb41439b9b02",
+      "kind": "VISUALLY_CONFIRMED_SHARED_LEAF_REGION",
+      "reason": "Distinctive branched necrotic scars, peripheral puncta, vein and leaf-edge landmarks align across the photographed region. Shared leaf-region parent identity is confirmed; identical exposure versus another capture of the same physical leaf is not asserted."
+    },
+    {
+      "first_hash": "366cac0649df317e9cdfbc64ec11c8b3da8e15aa7db164a9bf84db5c6236dfa3",
+      "second_hash": "99ad81a07cbf1e2b1afa1da2fbb60355e2a794766888016ceef0737c72ba6cc9",
+      "kind": "VISUALLY_CONFIRMED_TRANSFORMED_PHOTO",
+      "reason": "Identical field photograph, complete lesion constellation, leaf contour and soil/grass background after crop. Labels conflict; exclude the entire connected family without choosing or changing a disease label."
+    },
+    {
+      "first_hash": "4350be846fec732e7ae31d5c8b29ecd33736a3f1570b2c4b7d47e5eb3c883c94",
+      "second_hash": "5aad94abd7b113d9b8ae446e3c84d1fe91da824354a26013f5a6799c31dc8a32",
+      "kind": "VISUALLY_CONFIRMED_SHARED_LEAF_REGION",
+      "reason": "Distinctive branched necrotic scars, peripheral puncta, vein and leaf-edge landmarks align across the photographed region. Shared leaf-region parent identity is confirmed; identical exposure versus another capture of the same physical leaf is not asserted."
+    },
+    {
+      "first_hash": "6fb3ac72f6bcae59e68b8d59823c2cd0f1d6e02b4ebdb104582bb4f174ca3f40",
+      "second_hash": "a5778b6f26c7c6df8f48048a6f32cc203cc09b039480fda08a0bf73ddb6de17f",
+      "kind": "VISUALLY_CONFIRMED_SHARED_LEAF_REGION",
+      "reason": "Distinctive branched necrotic scars, peripheral puncta, vein and leaf-edge landmarks align across the photographed region. Shared leaf-region parent identity is confirmed; identical exposure versus another capture of the same physical leaf is not asserted."
+    },
+    {
+      "first_hash": "1f21f42dd7c29d874c17262aaa08045805faa6c69ec41d71417935c97b16f1be",
+      "second_hash": "533def71437e6b09560b57f5ec10fdf337658bbe318a0bd45ebd5872cbf09fa2",
+      "kind": "VISUALLY_CONFIRMED_SHARED_LEAF_REGION",
+      "reason": "Two matching irregular holes plus distinctive vein/shadow geometry. Shared leaf-region parent identity is confirmed; identical exposure versus another capture of the same physical leaf is not asserted."
+    },
+    {
+      "first_hash": "55f02728739315c61a1c9d28b976226bfb5ae951e363d13f99dfe73816fc17ab",
+      "second_hash": "381d55d1be384b9e5bf71fcfab7fbb7bf376cb00de6af99eb6bceb81138cb421",
+      "kind": "VISUALLY_CONFIRMED_SHARED_LEAF_REGION",
+      "reason": "Distinctive branched necrotic scars, peripheral puncta, vein and leaf-edge landmarks align across the photographed region. Shared leaf-region parent identity is confirmed; identical exposure versus another capture of the same physical leaf is not asserted."
+    },
+    {
+      "first_hash": "d188dac9dfffbad0727a8d92c99ae2feb5c3f3ad96ced26e7800d91502be3ba5",
+      "second_hash": "831fb8491facdc93152b407c8a203554abebb002ad92f7d7c67a4ca6e8213304",
+      "kind": "VISUALLY_CONFIRMED_SHARED_LEAF_REGION",
+      "reason": "Distinctive branched necrotic scars, peripheral puncta, vein and leaf-edge landmarks align across the photographed region. Shared leaf-region parent identity is confirmed; identical exposure versus another capture of the same physical leaf is not asserted."
+    },
+    {
+      "first_hash": "fdd5b4ff8cf23f946c8f45d98e4257d4b50ab7183a5282202e0b3836f86ea3e8",
+      "second_hash": "b8edc738dfbc1015fd856650f261e0aefb7ce7d1ece7c47c037a34ac85b4718d",
+      "kind": "VISUALLY_CONFIRMED_SHARED_LEAF_REGION",
+      "reason": "Matching elongated yellow-stripe constellation around the white midrib. Shared leaf-region parent identity is confirmed; identical exposure versus another capture of the same physical leaf is not asserted."
+    },
+    {
+      "first_hash": "c0e31c3044e24803359a5499288b7af95f6d1a6691f255a8c3503b865ccded4b",
+      "second_hash": "9d980f54f2c84d87a4d853e5284e254a45c169c555909c9305c761bcd8192be4",
+      "kind": "VISUALLY_CONFIRMED_SHARED_LEAF_REGION",
+      "reason": "Matching localized crease, thin dark streak and microgroove configuration. Shared leaf-region parent identity is confirmed; identical exposure versus another capture of the same physical leaf is not asserted."
+    },
+    {
+      "first_hash": "ff1c976d0c0804c4477cfdcb0cf5597fe27c3b66b4c2c18d5b021e3d23c56e19",
+      "second_hash": "4713b10521040b12bd472f7d83aca182cb240f99d6a214ec2c904cca3316e30a",
+      "kind": "VISUALLY_CONFIRMED_TRANSFORMED_PHOTO",
+      "reason": "Identical field photograph, complete lesion constellation and field background after crop/re-encoding. Labels conflict; exclude the entire connected family without choosing or changing a disease label."
+    },
+    {
+      "first_hash": "7267ec4c415da6562c9db6e772e72b7f4643bee43ff05bf1e6ba2bcd448a227d",
+      "second_hash": "91ac6b6b90bde080027b6b861f210eae5308493a5062d25bd849542d08928099",
+      "kind": "VISUALLY_CONFIRMED_SHARED_LEAF_REGION",
+      "reason": "Matching many distinctive tan slit/scar arrangements plus vein/outline despite focus/exposure changes. Shared leaf-region parent identity is confirmed; identical exposure versus another capture of the same physical leaf is not asserted."
+    }
+  ]
+}

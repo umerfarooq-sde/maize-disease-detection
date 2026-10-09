@@ -1,0 +1,45 @@
+{
+  "passed": true,
+  "model_artifact_sha256": "a831116fe1ff8b915543991412f4ab6b334736e8eaca376fab8db3b57e5b263d",
+  "experiment_id": "mobilenet-v3-small-20261009-v2-01",
+  "candidate_id": "mobilenet-v3-small-v2-20261009",
+  "candidate_sha256": "d8115ae08724f014c70828c1f419eda38921d0fd32205e59bd25ee472ee360ec",
+  "pre_test_decision_freeze_sha256": "e34bd402c35019af0597df04ff81575881a86900e03a3e7b3609680316ff462d",
+  "checkpoint_sha256": "e95a2e83262637fc1a08b919e6003bddb2fe70664b9c51418f059b7c8287dc66",
+  "manifest_fingerprint": "a96fd5d32a8e0696df7cfc5bbfa6b78941c8a2f308f940ce295147a8832a583b",
+  "preprocessing_hash": "b142e59f458d27a2d3fddbfc86c2f2f802670ab4909f1275babbef92de9cb5c8",
+  "selected_epoch": 8,
+  "candidate_references_verified": 48,
+  "training_source_files_verified": 15,
+  "calibration_source_files_verified": 16,
+  "calibration_integrity_files_verified": 17,
+  "final_test_lock_matches_pre_test_candidate": true,
+  "weights_temperature_threshold_unchanged_after_test": true,
+  "calibration": {
+    "enabled": false,
+    "temperature": 1.0,
+    "method": "none"
+  },
+  "confidence_threshold": null,
+  "validation_saved_prediction_audit": {
+    "partition": "validation",
+    "sample_count": 627,
+    "csv_sha256": "b2c7ac706fce189e591e58349e0fd43516946af72219e32cd5b5a3247c7c7f1c",
+    "metrics_sha256": "5ba4f4069c3d6a33d43cc36d748056ff09d635d495e6568b543df19dd5fb0c8a",
+    "membership_labels_argmax_and_metrics_match": true
+  },
+  "final_test_saved_prediction_audit": {
+    "partition": "test",
+    "sample_count": 624,
+    "csv_sha256": "a720b3fa9405aa9e2192c624cbcf8f87b579631349793acf8b2760c1c1edb4a4",
+    "metrics_sha256": "c43b78229dfcc1aedb97a1c1027fd35ebf5d49f509560ea9a18755c72070f4fd",
+    "membership_labels_argmax_and_metrics_match": true
+  },
+  "raw_and_selected_policy_confidence_and_selective_outputs_byte_identical": true,
+  "all_8040_original_names_bytes_sizes_mtimes_unchanged_after_test": true,
+  "export_copy_count": 93,
+  "source_images_or_weights_exported": false,
+  "model_inference_or_refit_performed_by_exporter": false,
+  "privacy_check": "No actual DATASET_PATH, absolute Windows paths, GPS values, embedded image payloads or private keys in exported metadata.",
+  "interpretation": "Critical-field and artifact consistency proof; not independent field validity or commercial clearance."
+}

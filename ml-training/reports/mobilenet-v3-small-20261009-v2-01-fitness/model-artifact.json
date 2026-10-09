@@ -1,0 +1,1922 @@
+{
+  "schema_version": 1,
+  "model_version": "mobilenet-v3-small-v2-20261009",
+  "candidate_id": "mobilenet-v3-small-v2-20261009",
+  "training_experiment_id": "mobilenet-v3-small-20261009-v2-01",
+  "architecture": "mobilenet_v3_small",
+  "parameter_count": 1521956,
+  "verdict": "FIT WITH DOCUMENTED LIMITATIONS",
+  "readiness_scope": "Offline/FYP research inference prototype only; neither independent field accuracy nor commercial farmer-diagnosis suitability is established.",
+  "production_model_promoted": false,
+  "checkpoint": {
+    "path": ".cache/phase105/experiments/mobilenet-v3-small-20261009-v2-01/checkpoints/epoch-008.pt",
+    "sha256": "e95a2e83262637fc1a08b919e6003bddb2fe70664b9c51418f059b7c8287dc66",
+    "size_bytes": 6212695,
+    "selected_epoch": 8,
+    "selection": "validation macro F1; validation loss breaks exact ties",
+    "weights_distributed_in_report": false
+  },
+  "pre_test_frozen_candidate": {
+    "bundle": {
+      "path": ".cache/phase105/candidates/mobilenet-v3-small-v2-20261009/candidate.json",
+      "sha256": "d8115ae08724f014c70828c1f419eda38921d0fd32205e59bd25ee472ee360ec",
+      "size_bytes": 11833
+    },
+    "decision_freeze": {
+      "path": ".cache/phase105/candidates/mobilenet-v3-small-v2-20261009/decision-freeze.json",
+      "sha256": "e34bd402c35019af0597df04ff81575881a86900e03a3e7b3609680316ff462d",
+      "size_bytes": 6786
+    },
+    "validation_decision": {
+      "path": ".cache/phase105/validation-decision-20261009-v2.json",
+      "sha256": "c8e01f4d749cc811dd62770a3ef59ca0641e5bb072ac437280c42a63125fed72",
+      "size_bytes": 3095
+    },
+    "reference_count": 48,
+    "selection_used_test": false
+  },
+  "classes": [
+    {
+      "label": "Common_Rust",
+      "index": 0
+    },
+    {
+      "label": "Gray_Leaf_Spot",
+      "index": 1
+    },
+    {
+      "label": "Healthy",
+      "index": 2
+    },
+    {
+      "label": "Northern_Corn_Leaf_Blight",
+      "index": 3
+    }
+  ],
+  "class_to_index": {
+    "Common_Rust": 0,
+    "Gray_Leaf_Spot": 1,
+    "Healthy": 2,
+    "Northern_Corn_Leaf_Blight": 3
+  },
+  "input": {
+    "shape": [
+      1,
+      3,
+      224,
+      224
+    ],
+    "color_space": "RGB",
+    "layout": "NCHW",
+    "dtype": "float32",
+    "resize": "aspect-preserving bilinear letterbox; white padding",
+    "normalization": {
+      "decoded_byte_range": [
+        0,
+        255
+      ],
+      "formula": "((RGB / 255.0) - mean) / std",
+      "mean": [
+        0.485,
+        0.456,
+        0.406
+      ],
+      "std": [
+        0.229,
+        0.224,
+        0.225
+      ]
+    }
+  },
+  "preprocessing": {
+    "version": "1.0.0",
+    "semantic_sha256": "b142e59f458d27a2d3fddbfc86c2f2f802670ab4909f1275babbef92de9cb5c8",
+    "implementation": "maizedoctor_preprocessing; shared unchanged by training and AI service",
+    "segmentation_policy": "disabled; full oriented frame retained",
+    "configuration": {
+      "preprocessing_version": "1.0.0",
+      "target_height": 224,
+      "target_width": 224,
+      "max_bytes": 5242880,
+      "max_pixels": 16000000,
+      "min_side": 16,
+      "background_rgb": [
+        255,
+        255,
+        255
+      ],
+      "crop_padding_fraction": 0.08,
+      "crop_min_padding_pixels": 2,
+      "interpolation": "bilinear",
+      "normalization": {
+        "mean": [
+          0.485,
+          0.456,
+          0.406
+        ],
+        "std": [
+          0.229,
+          0.224,
+          0.225
+        ]
+      },
+      "segmentation": {
+        "mode": "disabled",
+        "uncertain_policy": "preserve",
+        "max_working_dimension": 512,
+        "border_fraction": 0.03,
+        "background_tolerance": 12.0,
+        "max_border_variation": 6.0,
+        "min_foreground_fraction": 0.02,
+        "max_foreground_fraction": 0.9,
+        "min_component_fraction": 0.001,
+        "mask_margin_pixels": 2
+      }
+    },
+    "configuration_file": {
+      "path": "ml-training/manifests/maize-research-20261008-v2/preprocessing.json",
+      "sha256": "6fcf247200349dcccb2dc6c13850aa29c4db3986f15071bb31986dba49223a0e",
+      "size_bytes": 798
+    }
+  },
+  "dataset": {
+    "version": "maize-research-20261008-v2",
+    "manifest": {
+      "path": "ml-training/manifests/maize-research-20261008-v2/manifest.json",
+      "sha256": "7286a103820ccc0f0f85de9b8ffa5475fbea4cbae22e0d17fef0d99e22d2792d",
+      "size_bytes": 10530148
+    },
+    "manifest_fingerprint": "a96fd5d32a8e0696df7cfc5bbfa6b78941c8a2f308f940ce295147a8832a583b",
+    "splits": {
+      "path": "ml-training/manifests/maize-research-20261008-v2/splits.json",
+      "sha256": "27344162c27b0344011609933e290800442c07c0616560669f29e500571f6692",
+      "size_bytes": 299722
+    },
+    "exclusions": {
+      "path": "ml-training/manifests/maize-research-20261008-v2/exclusions.json",
+      "sha256": "4c1a772ddaaf2cc975365ce31d5dbe36d65488e7fac0df98fac5c94704d4b754",
+      "size_bytes": 8775
+    },
+    "confirmed_parent_evidence": {
+      "path": "ml-training/manifests/maize-research-20261008-v2/confirmed-parent-relations.json",
+      "sha256": "7bcd7552dad9591c6a0a19b838f3a2d9e231765fcb1b9e4068fc4d9db2a35998",
+      "size_bytes": 96677
+    },
+    "counts": {
+      "duplicate_aliases": 3852,
+      "eligible_groups": 4121,
+      "eligible_unique_samples": 4162,
+      "excluded_files": 26,
+      "excluded_unique_contents": 24,
+      "source_files": 8040,
+      "source_unique_byte_contents": 4186,
+      "test": 624,
+      "train": 2911,
+      "validation": 627
+    },
+    "partition_counts": {
+      "train": 2911,
+      "validation": 627,
+      "test": 624
+    },
+    "split_seed": 20261007,
+    "split_ratios": [
+      0.7,
+      0.15,
+      0.15
+    ],
+    "all_known_identities_disjoint": true,
+    "raw_names_labels_bytes_preserved": true,
+    "unknown_capture_or_leaf_identity_independence_established": false
+  },
+  "training": {
+    "seed": 20261007,
+    "hyperparameters": {
+      "seed": 20261007,
+      "threads": 4,
+      "batch_size": 16,
+      "warmup_epochs": 2,
+      "fine_tune_epochs": 10,
+      "warmup_lr": 0.001,
+      "feature_lr": 0.0001,
+      "classifier_lr": 0.0003,
+      "weight_decay": 0.0001,
+      "dropout": 0.2,
+      "patience": 3,
+      "smoke": false,
+      "smoke_train_size": 32,
+      "smoke_validation_size": 16,
+      "pretrained": true,
+      "defer_test": true
+    },
+    "completed_epochs": 11,
+    "selected_epoch": 8,
+    "optimizer": "AdamW",
+    "loss": "CrossEntropyLoss; no class weighting",
+    "scheduler": {
+      "name": "ReduceLROnPlateau",
+      "monitor": "validation macro F1",
+      "mode": "max",
+      "factor": 0.5,
+      "patience": 1
+    },
+    "gradient_clip_max_norm": 5.0,
+    "augmentation": {
+      "partition": "TRAIN only",
+      "horizontal_flip_probability": 0.5,
+      "affine_degrees": [
+        -6,
+        6
+      ],
+      "translate_fraction": [
+        0.02,
+        0.02
+      ],
+      "scale": [
+        0.97,
+        1.03
+      ],
+      "fill": "shared-config normalized white",
+      "validation_test_augmented": false
+    },
+    "initialization": {
+      "name": "MobileNet_V3_Small_Weights.IMAGENET1K_V1",
+      "url": "https://download.pytorch.org/models/mobilenet_v3_small-047dcff4.pth",
+      "sha256": "047dcff4addef86ea5bc2eff13c9614dc11f47ab1160d0a71a25e7db994f4e1f"
+    },
+    "final_test_deferred_during_fit": true
+  },
+  "calibration": {
+    "enabled": false,
+    "temperature": 1.0,
+    "method": "none",
+    "operational_threshold": null,
+    "threshold_status": "unlocked; no approved risk/coverage/class-cost objective",
+    "reason": "Validation-group cross-fit NLL, Brier and ECE all worsen; full-validation fitted T improvement is resubstitution and does not justify activation.",
+    "diagnostic_only_fitted_temperature": 1.2394404602861469,
+    "diagnostic_fitted_temperature_applied": false,
+    "configuration": {
+      "path": ".cache/phase105/calibration-20261009-v2/calibration-config.json",
+      "sha256": "641e5b1c2daaa1082bd17ddfe4ba401d13e2a69700c48c0860bb15279d41d14d",
+      "size_bytes": 4619
+    },
+    "freeze": {
+      "path": ".cache/phase105/calibration-20261009-v2/freeze.json",
+      "sha256": "95f820518476c057c309b2c785f823005d4e17526c635b48f9f866d529d4f182",
+      "size_bytes": 5168
+    },
+    "no_test_refit": true
+  },
+  "metrics": {
+    "validation": {
+      "sample_count": 627,
+      "raw_classification": {
+        "class_names": [
+          "Common_Rust",
+          "Gray_Leaf_Spot",
+          "Healthy",
+          "Northern_Corn_Leaf_Blight"
+        ],
+        "sample_count": 627,
+        "accuracy": 0.9681020733652312,
+        "macro_precision": 0.9634760730578937,
+        "macro_recall": 0.9550485983867231,
+        "macro_f1": 0.9589089912721949,
+        "weighted_precision": 0.968027205315925,
+        "weighted_recall": 0.9681020733652312,
+        "weighted_f1": 0.9678448186790355,
+        "aggregate_undefined_reasons": {},
+        "per_class": [
+          {
+            "index": 0,
+            "label": "Common_Rust",
+            "support": 196,
+            "predicted_support": 197,
+            "true_positive": 193,
+            "false_positive": 4,
+            "false_negative": 3,
+            "true_negative": 427,
+            "precision": 0.9796954314720813,
+            "recall": 0.9846938775510204,
+            "f1": 0.9821882951653944,
+            "specificity": 0.9907192575406032,
+            "roc_auc": 0.9993844405511625,
+            "undefined_reasons": {}
+          },
+          {
+            "index": 1,
+            "label": "Gray_Leaf_Spot",
+            "support": 85,
+            "predicted_support": 79,
+            "true_positive": 74,
+            "false_positive": 5,
+            "false_negative": 11,
+            "true_negative": 537,
+            "precision": 0.9367088607594937,
+            "recall": 0.8705882352941177,
+            "f1": 0.9024390243902439,
+            "specificity": 0.9907749077490775,
+            "roc_auc": 0.9932928152810939,
+            "undefined_reasons": {}
+          },
+          {
+            "index": 2,
+            "label": "Healthy",
+            "support": 175,
+            "predicted_support": 175,
+            "true_positive": 175,
+            "false_positive": 0,
+            "false_negative": 0,
+            "true_negative": 452,
+            "precision": 1.0,
+            "recall": 1.0,
+            "f1": 1.0,
+            "specificity": 1.0,
+            "roc_auc": 1.0,
+            "undefined_reasons": {}
+          },
+          {
+            "index": 3,
+            "label": "Northern_Corn_Leaf_Blight",
+            "support": 171,
+            "predicted_support": 176,
+            "true_positive": 165,
+            "false_positive": 11,
+            "false_negative": 6,
+            "true_negative": 445,
+            "precision": 0.9375,
+            "recall": 0.9649122807017544,
+            "f1": 0.9510086455331412,
+            "specificity": 0.9758771929824561,
+            "roc_auc": 0.9956653329229507,
+            "undefined_reasons": {}
+          }
+        ],
+        "confusion_matrix": [
+          [
+            193,
+            0,
+            0,
+            3
+          ],
+          [
+            3,
+            74,
+            0,
+            8
+          ],
+          [
+            0,
+            0,
+            175,
+            0
+          ],
+          [
+            1,
+            5,
+            0,
+            165
+          ]
+        ],
+        "roc_auc": {
+          "macro": 0.9970856471888018,
+          "weighted": 0.9977161269166595,
+          "undefined_reason": null
+        },
+        "classification_summary": "Class | Precision | Recall | F1 | Specificity | Support\nCommon_Rust | 0.9797 | 0.9847 | 0.9822 | 0.9907 | 196\nGray_Leaf_Spot | 0.9367 | 0.8706 | 0.9024 | 0.9908 | 85\nHealthy | 1.0000 | 1.0000 | 1.0000 | 1.0000 | 175\nNorthern_Corn_Leaf_Blight | 0.9375 | 0.9649 | 0.9510 | 0.9759 | 171\nAccuracy: 0.9681 (627 samples)\nmacro: precision=0.9635, recall=0.9550, F1=0.9589\nweighted: precision=0.9680, recall=0.9681, F1=0.9678\n"
+      },
+      "selected_policy_classification": {
+        "class_names": [
+          "Common_Rust",
+          "Gray_Leaf_Spot",
+          "Healthy",
+          "Northern_Corn_Leaf_Blight"
+        ],
+        "sample_count": 627,
+        "accuracy": 0.9681020733652312,
+        "macro_precision": 0.9634760730578937,
+        "macro_recall": 0.9550485983867231,
+        "macro_f1": 0.9589089912721949,
+        "weighted_precision": 0.968027205315925,
+        "weighted_recall": 0.9681020733652312,
+        "weighted_f1": 0.9678448186790355,
+        "aggregate_undefined_reasons": {},
+        "per_class": [
+          {
+            "index": 0,
+            "label": "Common_Rust",
+            "support": 196,
+            "predicted_support": 197,
+            "true_positive": 193,
+            "false_positive": 4,
+            "false_negative": 3,
+            "true_negative": 427,
+            "precision": 0.9796954314720813,
+            "recall": 0.9846938775510204,
+            "f1": 0.9821882951653944,
+            "specificity": 0.9907192575406032,
+            "roc_auc": 0.9993844405511625,
+            "undefined_reasons": {}
+          },
+          {
+            "index": 1,
+            "label": "Gray_Leaf_Spot",
+            "support": 85,
+            "predicted_support": 79,
+            "true_positive": 74,
+            "false_positive": 5,
+            "false_negative": 11,
+            "true_negative": 537,
+            "precision": 0.9367088607594937,
+            "recall": 0.8705882352941177,
+            "f1": 0.9024390243902439,
+            "specificity": 0.9907749077490775,
+            "roc_auc": 0.9932928152810939,
+            "undefined_reasons": {}
+          },
+          {
+            "index": 2,
+            "label": "Healthy",
+            "support": 175,
+            "predicted_support": 175,
+            "true_positive": 175,
+            "false_positive": 0,
+            "false_negative": 0,
+            "true_negative": 452,
+            "precision": 1.0,
+            "recall": 1.0,
+            "f1": 1.0,
+            "specificity": 1.0,
+            "roc_auc": 1.0,
+            "undefined_reasons": {}
+          },
+          {
+            "index": 3,
+            "label": "Northern_Corn_Leaf_Blight",
+            "support": 171,
+            "predicted_support": 176,
+            "true_positive": 165,
+            "false_positive": 11,
+            "false_negative": 6,
+            "true_negative": 445,
+            "precision": 0.9375,
+            "recall": 0.9649122807017544,
+            "f1": 0.9510086455331412,
+            "specificity": 0.9758771929824561,
+            "roc_auc": 0.9956653329229507,
+            "undefined_reasons": {}
+          }
+        ],
+        "confusion_matrix": [
+          [
+            193,
+            0,
+            0,
+            3
+          ],
+          [
+            3,
+            74,
+            0,
+            8
+          ],
+          [
+            0,
+            0,
+            175,
+            0
+          ],
+          [
+            1,
+            5,
+            0,
+            165
+          ]
+        ],
+        "roc_auc": {
+          "macro": 0.9970856471888018,
+          "weighted": 0.9977161269166595,
+          "undefined_reason": null
+        },
+        "classification_summary": "Class | Precision | Recall | F1 | Specificity | Support\nCommon_Rust | 0.9797 | 0.9847 | 0.9822 | 0.9907 | 196\nGray_Leaf_Spot | 0.9367 | 0.8706 | 0.9024 | 0.9908 | 85\nHealthy | 1.0000 | 1.0000 | 1.0000 | 1.0000 | 175\nNorthern_Corn_Leaf_Blight | 0.9375 | 0.9649 | 0.9510 | 0.9759 | 171\nAccuracy: 0.9681 (627 samples)\nmacro: precision=0.9635, recall=0.9550, F1=0.9589\nweighted: precision=0.9680, recall=0.9681, F1=0.9678\n"
+      },
+      "raw_probability": {
+        "accuracy": 0.9681020733652312,
+        "bin_count": 15,
+        "brier": 0.05134712442782574,
+        "definitions": [
+          "NLL: mean -log(max(p_true, probability_floor)); natural logarithm.",
+          "Brier: mean sum_k (p_k - onehot_k)^2; not divided by class count.",
+          "ECE: sum_bin count/N * abs(observed top-label accuracy - mean confidence).",
+          "Equal-width confidence bins are [lower,upper); the last includes 1.",
+          "Empty bins have null accuracy/confidence and contribute zero to ECE."
+        ],
+        "ece": 0.016285386096917837,
+        "nll": 0.09597224325849434,
+        "probability_floor": 1e-15,
+        "probability_values_below_floor": 0,
+        "reliability_bins": [
+          {
+            "count": 0,
+            "lower": 0.0,
+            "mean_confidence": null,
+            "observed_accuracy": null,
+            "upper": 0.06666666666666667
+          },
+          {
+            "count": 0,
+            "lower": 0.06666666666666667,
+            "mean_confidence": null,
+            "observed_accuracy": null,
+            "upper": 0.13333333333333333
+          },
+          {
+            "count": 0,
+            "lower": 0.13333333333333333,
+            "mean_confidence": null,
+            "observed_accuracy": null,
+            "upper": 0.2
+          },
+          {
+            "count": 0,
+            "lower": 0.2,
+            "mean_confidence": null,
+            "observed_accuracy": null,
+            "upper": 0.26666666666666666
+          },
+          {
+            "count": 0,
+            "lower": 0.26666666666666666,
+            "mean_confidence": null,
+            "observed_accuracy": null,
+            "upper": 0.3333333333333333
+          },
+          {
+            "count": 0,
+            "lower": 0.3333333333333333,
+            "mean_confidence": null,
+            "observed_accuracy": null,
+            "upper": 0.4
+          },
+          {
+            "count": 0,
+            "lower": 0.4,
+            "mean_confidence": null,
+            "observed_accuracy": null,
+            "upper": 0.4666666666666667
+          },
+          {
+            "count": 3,
+            "lower": 0.4666666666666667,
+            "mean_confidence": 0.5091265241305033,
+            "observed_accuracy": 0.6666666666666666,
+            "upper": 0.5333333333333333
+          },
+          {
+            "count": 6,
+            "lower": 0.5333333333333333,
+            "mean_confidence": 0.5647248725096384,
+            "observed_accuracy": 0.3333333333333333,
+            "upper": 0.6
+          },
+          {
+            "count": 5,
+            "lower": 0.6,
+            "mean_confidence": 0.6314521074295044,
+            "observed_accuracy": 0.8,
+            "upper": 0.6666666666666666
+          },
+          {
+            "count": 5,
+            "lower": 0.6666666666666666,
+            "mean_confidence": 0.7006767272949219,
+            "observed_accuracy": 1.0,
+            "upper": 0.7333333333333333
+          },
+          {
+            "count": 11,
+            "lower": 0.7333333333333333,
+            "mean_confidence": 0.7776082158088684,
+            "observed_accuracy": 0.8181818181818182,
+            "upper": 0.8
+          },
+          {
+            "count": 19,
+            "lower": 0.8,
+            "mean_confidence": 0.8388938307762146,
+            "observed_accuracy": 0.6842105263157895,
+            "upper": 0.8666666666666667
+          },
+          {
+            "count": 14,
+            "lower": 0.8666666666666667,
+            "mean_confidence": 0.8989979880196708,
+            "observed_accuracy": 0.7142857142857143,
+            "upper": 0.9333333333333333
+          },
+          {
+            "count": 564,
+            "lower": 0.9333333333333333,
+            "mean_confidence": 0.9965236655152436,
+            "observed_accuracy": 0.9964539007092199,
+            "upper": 1.0
+          }
+        ],
+        "sample_count": 627,
+        "true_probabilities_below_floor": 0
+      },
+      "selected_policy_probability": {
+        "accuracy": 0.9681020733652312,
+        "bin_count": 15,
+        "brier": 0.05134712442782574,
+        "definitions": [
+          "NLL: mean -log(max(p_true, probability_floor)); natural logarithm.",
+          "Brier: mean sum_k (p_k - onehot_k)^2; not divided by class count.",
+          "ECE: sum_bin count/N * abs(observed top-label accuracy - mean confidence).",
+          "Equal-width confidence bins are [lower,upper); the last includes 1.",
+          "Empty bins have null accuracy/confidence and contribute zero to ECE."
+        ],
+        "ece": 0.016285386096917837,
+        "nll": 0.09597224325849434,
+        "probability_floor": 1e-15,
+        "probability_values_below_floor": 0,
+        "reliability_bins": [
+          {
+            "count": 0,
+            "lower": 0.0,
+            "mean_confidence": null,
+            "observed_accuracy": null,
+            "upper": 0.06666666666666667
+          },
+          {
+            "count": 0,
+            "lower": 0.06666666666666667,
+            "mean_confidence": null,
+            "observed_accuracy": null,
+            "upper": 0.13333333333333333
+          },
+          {
+            "count": 0,
+            "lower": 0.13333333333333333,
+            "mean_confidence": null,
+            "observed_accuracy": null,
+            "upper": 0.2
+          },
+          {
+            "count": 0,
+            "lower": 0.2,
+            "mean_confidence": null,
+            "observed_accuracy": null,
+            "upper": 0.26666666666666666
+          },
+          {
+            "count": 0,
+            "lower": 0.26666666666666666,
+            "mean_confidence": null,
+            "observed_accuracy": null,
+            "upper": 0.3333333333333333
+          },
+          {
+            "count": 0,
+            "lower": 0.3333333333333333,
+            "mean_confidence": null,
+            "observed_accuracy": null,
+            "upper": 0.4
+          },
+          {
+            "count": 0,
+            "lower": 0.4,
+            "mean_confidence": null,
+            "observed_accuracy": null,
+            "upper": 0.4666666666666667
+          },
+          {
+            "count": 3,
+            "lower": 0.4666666666666667,
+            "mean_confidence": 0.5091265241305033,
+            "observed_accuracy": 0.6666666666666666,
+            "upper": 0.5333333333333333
+          },
+          {
+            "count": 6,
+            "lower": 0.5333333333333333,
+            "mean_confidence": 0.5647248725096384,
+            "observed_accuracy": 0.3333333333333333,
+            "upper": 0.6
+          },
+          {
+            "count": 5,
+            "lower": 0.6,
+            "mean_confidence": 0.6314521074295044,
+            "observed_accuracy": 0.8,
+            "upper": 0.6666666666666666
+          },
+          {
+            "count": 5,
+            "lower": 0.6666666666666666,
+            "mean_confidence": 0.7006767272949219,
+            "observed_accuracy": 1.0,
+            "upper": 0.7333333333333333
+          },
+          {
+            "count": 11,
+            "lower": 0.7333333333333333,
+            "mean_confidence": 0.7776082158088684,
+            "observed_accuracy": 0.8181818181818182,
+            "upper": 0.8
+          },
+          {
+            "count": 19,
+            "lower": 0.8,
+            "mean_confidence": 0.8388938307762146,
+            "observed_accuracy": 0.6842105263157895,
+            "upper": 0.8666666666666667
+          },
+          {
+            "count": 14,
+            "lower": 0.8666666666666667,
+            "mean_confidence": 0.8989979880196708,
+            "observed_accuracy": 0.7142857142857143,
+            "upper": 0.9333333333333333
+          },
+          {
+            "count": 564,
+            "lower": 0.9333333333333333,
+            "mean_confidence": 0.9965236655152436,
+            "observed_accuracy": 0.9964539007092199,
+            "upper": 1.0
+          }
+        ],
+        "sample_count": 627,
+        "true_probabilities_below_floor": 0
+      },
+      "diagnostic_crossfit_probability": {
+        "accuracy": 0.9681020733652312,
+        "bin_count": 15,
+        "brier": 0.05163338969776187,
+        "definitions": [
+          "NLL: mean -log(max(p_true, probability_floor)); natural logarithm.",
+          "Brier: mean sum_k (p_k - onehot_k)^2; not divided by class count.",
+          "ECE: sum_bin count/N * abs(observed top-label accuracy - mean confidence).",
+          "Equal-width confidence bins are [lower,upper); the last includes 1.",
+          "Empty bins have null accuracy/confidence and contribute zero to ECE."
+        ],
+        "ece": 0.0179467174311494,
+        "nll": 0.09639724536153993,
+        "probability_floor": 1e-15,
+        "probability_values_below_floor": 0,
+        "reliability_bins": [
+          {
+            "count": 0,
+            "lower": 0.0,
+            "mean_confidence": null,
+            "observed_accuracy": null,
+            "upper": 0.06666666666666667
+          },
+          {
+            "count": 0,
+            "lower": 0.06666666666666667,
+            "mean_confidence": null,
+            "observed_accuracy": null,
+            "upper": 0.13333333333333333
+          },
+          {
+            "count": 0,
+            "lower": 0.13333333333333333,
+            "mean_confidence": null,
+            "observed_accuracy": null,
+            "upper": 0.2
+          },
+          {
+            "count": 0,
+            "lower": 0.2,
+            "mean_confidence": null,
+            "observed_accuracy": null,
+            "upper": 0.26666666666666666
+          },
+          {
+            "count": 0,
+            "lower": 0.26666666666666666,
+            "mean_confidence": null,
+            "observed_accuracy": null,
+            "upper": 0.3333333333333333
+          },
+          {
+            "count": 0,
+            "lower": 0.3333333333333333,
+            "mean_confidence": null,
+            "observed_accuracy": null,
+            "upper": 0.4
+          },
+          {
+            "count": 0,
+            "lower": 0.4,
+            "mean_confidence": null,
+            "observed_accuracy": null,
+            "upper": 0.4666666666666667
+          },
+          {
+            "count": 5,
+            "lower": 0.4666666666666667,
+            "mean_confidence": 0.5130991927290885,
+            "observed_accuracy": 0.4,
+            "upper": 0.5333333333333333
+          },
+          {
+            "count": 7,
+            "lower": 0.5333333333333333,
+            "mean_confidence": 0.5623045146843856,
+            "observed_accuracy": 0.5714285714285714,
+            "upper": 0.6
+          },
+          {
+            "count": 5,
+            "lower": 0.6,
+            "mean_confidence": 0.6526121035435376,
+            "observed_accuracy": 1.0,
+            "upper": 0.6666666666666666
+          },
+          {
+            "count": 9,
+            "lower": 0.6666666666666666,
+            "mean_confidence": 0.7020592157382791,
+            "observed_accuracy": 1.0,
+            "upper": 0.7333333333333333
+          },
+          {
+            "count": 20,
+            "lower": 0.7333333333333333,
+            "mean_confidence": 0.7728690379487007,
+            "observed_accuracy": 0.6,
+            "upper": 0.8
+          },
+          {
+            "count": 12,
+            "lower": 0.8,
+            "mean_confidence": 0.8335266581096605,
+            "observed_accuracy": 0.75,
+            "upper": 0.8666666666666667
+          },
+          {
+            "count": 23,
+            "lower": 0.8666666666666667,
+            "mean_confidence": 0.9115898445112423,
+            "observed_accuracy": 0.9565217391304348,
+            "upper": 0.9333333333333333
+          },
+          {
+            "count": 546,
+            "lower": 0.9333333333333333,
+            "mean_confidence": 0.9950335408510865,
+            "observed_accuracy": 0.9963369963369964,
+            "upper": 1.0
+          }
+        ],
+        "sample_count": 627,
+        "true_probabilities_below_floor": 0
+      },
+      "diagnostic_full_fit_resubstitution_probability": {
+        "accuracy": 0.9681020733652312,
+        "bin_count": 15,
+        "brier": 0.05086817369263517,
+        "definitions": [
+          "NLL: mean -log(max(p_true, probability_floor)); natural logarithm.",
+          "Brier: mean sum_k (p_k - onehot_k)^2; not divided by class count.",
+          "ECE: sum_bin count/N * abs(observed top-label accuracy - mean confidence).",
+          "Equal-width confidence bins are [lower,upper); the last includes 1.",
+          "Empty bins have null accuracy/confidence and contribute zero to ECE."
+        ],
+        "ece": 0.023545978009576633,
+        "nll": 0.09308886342389203,
+        "probability_floor": 1e-15,
+        "probability_values_below_floor": 0,
+        "reliability_bins": [
+          {
+            "count": 0,
+            "lower": 0.0,
+            "mean_confidence": null,
+            "observed_accuracy": null,
+            "upper": 0.06666666666666667
+          },
+          {
+            "count": 0,
+            "lower": 0.06666666666666667,
+            "mean_confidence": null,
+            "observed_accuracy": null,
+            "upper": 0.13333333333333333
+          },
+          {
+            "count": 0,
+            "lower": 0.13333333333333333,
+            "mean_confidence": null,
+            "observed_accuracy": null,
+            "upper": 0.2
+          },
+          {
+            "count": 0,
+            "lower": 0.2,
+            "mean_confidence": null,
+            "observed_accuracy": null,
+            "upper": 0.26666666666666666
+          },
+          {
+            "count": 0,
+            "lower": 0.26666666666666666,
+            "mean_confidence": null,
+            "observed_accuracy": null,
+            "upper": 0.3333333333333333
+          },
+          {
+            "count": 0,
+            "lower": 0.3333333333333333,
+            "mean_confidence": null,
+            "observed_accuracy": null,
+            "upper": 0.4
+          },
+          {
+            "count": 0,
+            "lower": 0.4,
+            "mean_confidence": null,
+            "observed_accuracy": null,
+            "upper": 0.4666666666666667
+          },
+          {
+            "count": 3,
+            "lower": 0.4666666666666667,
+            "mean_confidence": 0.4950187881884001,
+            "observed_accuracy": 0.6666666666666666,
+            "upper": 0.5333333333333333
+          },
+          {
+            "count": 8,
+            "lower": 0.5333333333333333,
+            "mean_confidence": 0.5511414672273924,
+            "observed_accuracy": 0.375,
+            "upper": 0.6
+          },
+          {
+            "count": 5,
+            "lower": 0.6,
+            "mean_confidence": 0.6313750292408727,
+            "observed_accuracy": 1.0,
+            "upper": 0.6666666666666666
+          },
+          {
+            "count": 10,
+            "lower": 0.6666666666666666,
+            "mean_confidence": 0.6994470568051506,
+            "observed_accuracy": 1.0,
+            "upper": 0.7333333333333333
+          },
+          {
+            "count": 20,
+            "lower": 0.7333333333333333,
+            "mean_confidence": 0.7707946963055641,
+            "observed_accuracy": 0.65,
+            "upper": 0.8
+          },
+          {
+            "count": 13,
+            "lower": 0.8,
+            "mean_confidence": 0.832450225264969,
+            "observed_accuracy": 0.6153846153846154,
+            "upper": 0.8666666666666667
+          },
+          {
+            "count": 22,
+            "lower": 0.8666666666666667,
+            "mean_confidence": 0.9117164006862807,
+            "observed_accuracy": 1.0,
+            "upper": 0.9333333333333333
+          },
+          {
+            "count": 546,
+            "lower": 0.9333333333333333,
+            "mean_confidence": 0.9948523580337935,
+            "observed_accuracy": 0.9963369963369964,
+            "upper": 1.0
+          }
+        ],
+        "sample_count": 627,
+        "true_probabilities_below_floor": 0
+      }
+    },
+    "final_test": {
+      "sample_count": 624,
+      "raw_classification": {
+        "class_names": [
+          "Common_Rust",
+          "Gray_Leaf_Spot",
+          "Healthy",
+          "Northern_Corn_Leaf_Blight"
+        ],
+        "sample_count": 624,
+        "accuracy": 0.9583333333333334,
+        "macro_precision": 0.9496396846546746,
+        "macro_recall": 0.9413650075414781,
+        "macro_f1": 0.9451708647993344,
+        "weighted_precision": 0.957712468753025,
+        "weighted_recall": 0.9583333333333334,
+        "weighted_f1": 0.9578134440917534,
+        "aggregate_undefined_reasons": {},
+        "per_class": [
+          {
+            "index": 0,
+            "label": "Common_Rust",
+            "support": 195,
+            "predicted_support": 200,
+            "true_positive": 194,
+            "false_positive": 6,
+            "false_negative": 1,
+            "true_negative": 423,
+            "precision": 0.97,
+            "recall": 0.9948717948717949,
+            "f1": 0.9822784810126582,
+            "specificity": 0.986013986013986,
+            "roc_auc": 0.9995816149662304,
+            "undefined_reasons": {}
+          },
+          {
+            "index": 1,
+            "label": "Gray_Leaf_Spot",
+            "support": 85,
+            "predicted_support": 79,
+            "true_positive": 71,
+            "false_positive": 8,
+            "false_negative": 14,
+            "true_negative": 531,
+            "precision": 0.8987341772151899,
+            "recall": 0.8352941176470589,
+            "f1": 0.8658536585365854,
+            "specificity": 0.9851576994434137,
+            "roc_auc": 0.9888464476699771,
+            "undefined_reasons": {}
+          },
+          {
+            "index": 2,
+            "label": "Healthy",
+            "support": 174,
+            "predicted_support": 174,
+            "true_positive": 174,
+            "false_positive": 0,
+            "false_negative": 0,
+            "true_negative": 450,
+            "precision": 1.0,
+            "recall": 1.0,
+            "f1": 1.0,
+            "specificity": 1.0,
+            "roc_auc": 1.0,
+            "undefined_reasons": {}
+          },
+          {
+            "index": 3,
+            "label": "Northern_Corn_Leaf_Blight",
+            "support": 170,
+            "predicted_support": 171,
+            "true_positive": 159,
+            "false_positive": 12,
+            "false_negative": 11,
+            "true_negative": 442,
+            "precision": 0.9298245614035088,
+            "recall": 0.9352941176470588,
+            "f1": 0.9325513196480938,
+            "specificity": 0.973568281938326,
+            "roc_auc": 0.9930033687483805,
+            "undefined_reasons": {}
+          }
+        ],
+        "confusion_matrix": [
+          [
+            194,
+            0,
+            0,
+            1
+          ],
+          [
+            3,
+            71,
+            0,
+            11
+          ],
+          [
+            0,
+            0,
+            174,
+            0
+          ],
+          [
+            3,
+            8,
+            0,
+            159
+          ]
+        ],
+        "roc_auc": {
+          "macro": 0.995357857846147,
+          "weighted": 0.99644380714357,
+          "undefined_reason": null
+        },
+        "classification_summary": "Class | Precision | Recall | F1 | Specificity | Support\nCommon_Rust | 0.9700 | 0.9949 | 0.9823 | 0.9860 | 195\nGray_Leaf_Spot | 0.8987 | 0.8353 | 0.8659 | 0.9852 | 85\nHealthy | 1.0000 | 1.0000 | 1.0000 | 1.0000 | 174\nNorthern_Corn_Leaf_Blight | 0.9298 | 0.9353 | 0.9326 | 0.9736 | 170\nAccuracy: 0.9583 (624 samples)\nmacro: precision=0.9496, recall=0.9414, F1=0.9452\nweighted: precision=0.9577, recall=0.9583, F1=0.9578\n"
+      },
+      "selected_policy_classification": {
+        "class_names": [
+          "Common_Rust",
+          "Gray_Leaf_Spot",
+          "Healthy",
+          "Northern_Corn_Leaf_Blight"
+        ],
+        "sample_count": 624,
+        "accuracy": 0.9583333333333334,
+        "macro_precision": 0.9496396846546746,
+        "macro_recall": 0.9413650075414781,
+        "macro_f1": 0.9451708647993344,
+        "weighted_precision": 0.957712468753025,
+        "weighted_recall": 0.9583333333333334,
+        "weighted_f1": 0.9578134440917534,
+        "aggregate_undefined_reasons": {},
+        "per_class": [
+          {
+            "index": 0,
+            "label": "Common_Rust",
+            "support": 195,
+            "predicted_support": 200,
+            "true_positive": 194,
+            "false_positive": 6,
+            "false_negative": 1,
+            "true_negative": 423,
+            "precision": 0.97,
+            "recall": 0.9948717948717949,
+            "f1": 0.9822784810126582,
+            "specificity": 0.986013986013986,
+            "roc_auc": 0.9995816149662304,
+            "undefined_reasons": {}
+          },
+          {
+            "index": 1,
+            "label": "Gray_Leaf_Spot",
+            "support": 85,
+            "predicted_support": 79,
+            "true_positive": 71,
+            "false_positive": 8,
+            "false_negative": 14,
+            "true_negative": 531,
+            "precision": 0.8987341772151899,
+            "recall": 0.8352941176470589,
+            "f1": 0.8658536585365854,
+            "specificity": 0.9851576994434137,
+            "roc_auc": 0.9888464476699771,
+            "undefined_reasons": {}
+          },
+          {
+            "index": 2,
+            "label": "Healthy",
+            "support": 174,
+            "predicted_support": 174,
+            "true_positive": 174,
+            "false_positive": 0,
+            "false_negative": 0,
+            "true_negative": 450,
+            "precision": 1.0,
+            "recall": 1.0,
+            "f1": 1.0,
+            "specificity": 1.0,
+            "roc_auc": 1.0,
+            "undefined_reasons": {}
+          },
+          {
+            "index": 3,
+            "label": "Northern_Corn_Leaf_Blight",
+            "support": 170,
+            "predicted_support": 171,
+            "true_positive": 159,
+            "false_positive": 12,
+            "false_negative": 11,
+            "true_negative": 442,
+            "precision": 0.9298245614035088,
+            "recall": 0.9352941176470588,
+            "f1": 0.9325513196480938,
+            "specificity": 0.973568281938326,
+            "roc_auc": 0.9930033687483805,
+            "undefined_reasons": {}
+          }
+        ],
+        "confusion_matrix": [
+          [
+            194,
+            0,
+            0,
+            1
+          ],
+          [
+            3,
+            71,
+            0,
+            11
+          ],
+          [
+            0,
+            0,
+            174,
+            0
+          ],
+          [
+            3,
+            8,
+            0,
+            159
+          ]
+        ],
+        "roc_auc": {
+          "macro": 0.995357857846147,
+          "weighted": 0.99644380714357,
+          "undefined_reason": null
+        },
+        "classification_summary": "Class | Precision | Recall | F1 | Specificity | Support\nCommon_Rust | 0.9700 | 0.9949 | 0.9823 | 0.9860 | 195\nGray_Leaf_Spot | 0.8987 | 0.8353 | 0.8659 | 0.9852 | 85\nHealthy | 1.0000 | 1.0000 | 1.0000 | 1.0000 | 174\nNorthern_Corn_Leaf_Blight | 0.9298 | 0.9353 | 0.9326 | 0.9736 | 170\nAccuracy: 0.9583 (624 samples)\nmacro: precision=0.9496, recall=0.9414, F1=0.9452\nweighted: precision=0.9577, recall=0.9583, F1=0.9578\n"
+      },
+      "raw_probability": {
+        "sample_count": 624,
+        "accuracy": 0.9583333333333334,
+        "nll": 0.11912369014044571,
+        "brier": 0.0625482427446002,
+        "ece": 0.02667097026147908,
+        "bin_count": 15,
+        "reliability_bins": [
+          {
+            "lower": 0.0,
+            "upper": 0.06666666666666667,
+            "count": 0,
+            "mean_confidence": null,
+            "observed_accuracy": null
+          },
+          {
+            "lower": 0.06666666666666667,
+            "upper": 0.13333333333333333,
+            "count": 0,
+            "mean_confidence": null,
+            "observed_accuracy": null
+          },
+          {
+            "lower": 0.13333333333333333,
+            "upper": 0.2,
+            "count": 0,
+            "mean_confidence": null,
+            "observed_accuracy": null
+          },
+          {
+            "lower": 0.2,
+            "upper": 0.26666666666666666,
+            "count": 0,
+            "mean_confidence": null,
+            "observed_accuracy": null
+          },
+          {
+            "lower": 0.26666666666666666,
+            "upper": 0.3333333333333333,
+            "count": 0,
+            "mean_confidence": null,
+            "observed_accuracy": null
+          },
+          {
+            "lower": 0.3333333333333333,
+            "upper": 0.4,
+            "count": 1,
+            "mean_confidence": 0.39789730310440063,
+            "observed_accuracy": 0.0
+          },
+          {
+            "lower": 0.4,
+            "upper": 0.4666666666666667,
+            "count": 0,
+            "mean_confidence": null,
+            "observed_accuracy": null
+          },
+          {
+            "lower": 0.4666666666666667,
+            "upper": 0.5333333333333333,
+            "count": 4,
+            "mean_confidence": 0.5036507174372673,
+            "observed_accuracy": 0.5
+          },
+          {
+            "lower": 0.5333333333333333,
+            "upper": 0.6,
+            "count": 10,
+            "mean_confidence": 0.5772575736045837,
+            "observed_accuracy": 0.9
+          },
+          {
+            "lower": 0.6,
+            "upper": 0.6666666666666666,
+            "count": 8,
+            "mean_confidence": 0.6398069635033607,
+            "observed_accuracy": 0.25
+          },
+          {
+            "lower": 0.6666666666666666,
+            "upper": 0.7333333333333333,
+            "count": 7,
+            "mean_confidence": 0.7096034969602313,
+            "observed_accuracy": 0.7142857142857143
+          },
+          {
+            "lower": 0.7333333333333333,
+            "upper": 0.8,
+            "count": 7,
+            "mean_confidence": 0.7705957293510437,
+            "observed_accuracy": 0.5714285714285714
+          },
+          {
+            "lower": 0.8,
+            "upper": 0.8666666666666667,
+            "count": 11,
+            "mean_confidence": 0.8333189975131642,
+            "observed_accuracy": 0.7272727272727273
+          },
+          {
+            "lower": 0.8666666666666667,
+            "upper": 0.9333333333333333,
+            "count": 13,
+            "mean_confidence": 0.8921266748354986,
+            "observed_accuracy": 1.0
+          },
+          {
+            "lower": 0.9333333333333333,
+            "upper": 1.0,
+            "count": 563,
+            "mean_confidence": 0.996249551459697,
+            "observed_accuracy": 0.9857904085257548
+          }
+        ],
+        "probability_floor": 1e-15,
+        "true_probabilities_below_floor": 0,
+        "probability_values_below_floor": 0,
+        "definitions": [
+          "NLL: mean -log(max(p_true, probability_floor)); natural logarithm.",
+          "Brier: mean sum_k (p_k - onehot_k)^2; not divided by class count.",
+          "ECE: sum_bin count/N * abs(observed top-label accuracy - mean confidence).",
+          "Equal-width confidence bins are [lower,upper); the last includes 1.",
+          "Empty bins have null accuracy/confidence and contribute zero to ECE."
+        ]
+      },
+      "selected_policy_probability": {
+        "sample_count": 624,
+        "accuracy": 0.9583333333333334,
+        "nll": 0.11912369014044571,
+        "brier": 0.0625482427446002,
+        "ece": 0.02667097026147908,
+        "bin_count": 15,
+        "reliability_bins": [
+          {
+            "lower": 0.0,
+            "upper": 0.06666666666666667,
+            "count": 0,
+            "mean_confidence": null,
+            "observed_accuracy": null
+          },
+          {
+            "lower": 0.06666666666666667,
+            "upper": 0.13333333333333333,
+            "count": 0,
+            "mean_confidence": null,
+            "observed_accuracy": null
+          },
+          {
+            "lower": 0.13333333333333333,
+            "upper": 0.2,
+            "count": 0,
+            "mean_confidence": null,
+            "observed_accuracy": null
+          },
+          {
+            "lower": 0.2,
+            "upper": 0.26666666666666666,
+            "count": 0,
+            "mean_confidence": null,
+            "observed_accuracy": null
+          },
+          {
+            "lower": 0.26666666666666666,
+            "upper": 0.3333333333333333,
+            "count": 0,
+            "mean_confidence": null,
+            "observed_accuracy": null
+          },
+          {
+            "lower": 0.3333333333333333,
+            "upper": 0.4,
+            "count": 1,
+            "mean_confidence": 0.39789730310440063,
+            "observed_accuracy": 0.0
+          },
+          {
+            "lower": 0.4,
+            "upper": 0.4666666666666667,
+            "count": 0,
+            "mean_confidence": null,
+            "observed_accuracy": null
+          },
+          {
+            "lower": 0.4666666666666667,
+            "upper": 0.5333333333333333,
+            "count": 4,
+            "mean_confidence": 0.5036507174372673,
+            "observed_accuracy": 0.5
+          },
+          {
+            "lower": 0.5333333333333333,
+            "upper": 0.6,
+            "count": 10,
+            "mean_confidence": 0.5772575736045837,
+            "observed_accuracy": 0.9
+          },
+          {
+            "lower": 0.6,
+            "upper": 0.6666666666666666,
+            "count": 8,
+            "mean_confidence": 0.6398069635033607,
+            "observed_accuracy": 0.25
+          },
+          {
+            "lower": 0.6666666666666666,
+            "upper": 0.7333333333333333,
+            "count": 7,
+            "mean_confidence": 0.7096034969602313,
+            "observed_accuracy": 0.7142857142857143
+          },
+          {
+            "lower": 0.7333333333333333,
+            "upper": 0.8,
+            "count": 7,
+            "mean_confidence": 0.7705957293510437,
+            "observed_accuracy": 0.5714285714285714
+          },
+          {
+            "lower": 0.8,
+            "upper": 0.8666666666666667,
+            "count": 11,
+            "mean_confidence": 0.8333189975131642,
+            "observed_accuracy": 0.7272727272727273
+          },
+          {
+            "lower": 0.8666666666666667,
+            "upper": 0.9333333333333333,
+            "count": 13,
+            "mean_confidence": 0.8921266748354986,
+            "observed_accuracy": 1.0
+          },
+          {
+            "lower": 0.9333333333333333,
+            "upper": 1.0,
+            "count": 563,
+            "mean_confidence": 0.996249551459697,
+            "observed_accuracy": 0.9857904085257548
+          }
+        ],
+        "probability_floor": 1e-15,
+        "true_probabilities_below_floor": 0,
+        "probability_values_below_floor": 0,
+        "definitions": [
+          "NLL: mean -log(max(p_true, probability_floor)); natural logarithm.",
+          "Brier: mean sum_k (p_k - onehot_k)^2; not divided by class count.",
+          "ECE: sum_bin count/N * abs(observed top-label accuracy - mean confidence).",
+          "Equal-width confidence bins are [lower,upper); the last includes 1.",
+          "Empty bins have null accuracy/confidence and contribute zero to ECE."
+        ]
+      },
+      "correct_predictions": 598,
+      "test_evaluated_once_for_this_checkpoint_index": true,
+      "test_used_for_selection": false,
+      "weights_temperature_threshold_changed_after_test": false,
+      "interpretation": "Descriptive corrected grouped benchmark on a previously inspected corpus; not a fresh external field holdout",
+      "selection_lock": {
+        "path": ".cache/phase105/final-test-20261009-v2/selection-lock.json",
+        "sha256": "a1c1a649700ca52f77c69b37033056d8d0337abb6772736e27d1b3ebb80d00c4",
+        "size_bytes": 834
+      },
+      "summary": {
+        "path": ".cache/phase105/final-test-20261009-v2/summary.json",
+        "sha256": "5209d12801f50b8c26971a95bd6498c75aab0f7c3ec1d27c109c4fc36d8ba4e6",
+        "size_bytes": 7166
+      }
+    }
+  },
+  "environment": {
+    "python": "3.11.0",
+    "platform": "Windows",
+    "machine": "AMD64",
+    "logical_cpu_count": 8,
+    "torch_threads": 4,
+    "torch": "2.10.0+cpu",
+    "cuda_available": false,
+    "git_revision": "75cf924069eeb3edc26ef199bcfb916ddde36b12",
+    "working_tree_dirty": true,
+    "source_hashes": {
+      "ml-training/configuration.py": "bf96f9ba15e790b4a573ed75592259d24f613baff940ce2cdbc2ac5457e854c4",
+      "ml-training/dataset_group_repair.py": "0b00e95db25da73291f88899708f05a25bafe81e9178e7fd6a2ef31a518e6cc5",
+      "ml-training/dataset_inventory.py": "89d17d99d796a58624b11001979eecababe222c2ffc67d471248c949d485feb0",
+      "ml-training/dataset_preparation.py": "9ccc078e42bda4be5f276b253893891ba73ebb71bfc567ce2e176d6d8c74a2fc",
+      "ml-training/dataset_review.py": "69eef903ed278ab1f0e92b7b641998d37b4110dec70dc5f4542f06e2d547aff8",
+      "ml-training/evaluation.py": "9a9120d9a27d72acd50051dfaddc9b762f4e0d42f598c9b0eccffdd4b08986c6",
+      "ml-training/final_evaluation.py": "f6ff22f9f094520bd2cc2b93b1f404cc062bb25eef966d36f557e5f64ca639c6",
+      "ml-training/fitness_artifacts.py": "989481dc5aef17a4094e1c35dd89899d3a5dfd586ecd3fb7f13681450566401c",
+      "ml-training/fitness_calibration.py": "766c5b996fb314541c3f7994cf605d58d274001520d923ac19f55b609f0f8030",
+      "ml-training/fitness_integrity.py": "f6a1bfe10cd677d2e96d8e4606a1f4f7a74e0d3f4a7308652949c242ac3eae16",
+      "ml-training/fitness_visual.py": "e12f418d45e9bbb17fcdf2a0a2162ce60fec6527cb3a2a9bd2f6202009dc4bcf",
+      "ml-training/model.py": "6db5c1fb4029700fdb690c34c4d7d54f38ddc782fb211c7706ccdbd5330ce6d7",
+      "ml-training/preprocessing.py": "f3bc746a60b865db20594fef33a09fcced19d24ecfea72eaa12d01dbae0ee8ca",
+      "ml-training/train.py": "a61c34d6145c75bde0adcb58b9ab3122b7d02aa7249973d93fd0c30ff447a97b",
+      "ml-training/training_data.py": "e6cc0c9e81da2b612da5b159b349d1130c399d624dd0c34049f33be6011d71ae"
+    },
+    "distributions": [
+      {
+        "name": "annotated-types",
+        "version": "0.8.0"
+      },
+      {
+        "name": "cloudpickle",
+        "version": "3.1.2"
+      },
+      {
+        "name": "colorama",
+        "version": "0.4.6"
+      },
+      {
+        "name": "contourpy",
+        "version": "1.3.3"
+      },
+      {
+        "name": "cycler",
+        "version": "0.12.1"
+      },
+      {
+        "name": "filelock",
+        "version": "4.0.11"
+      },
+      {
+        "name": "fonttools",
+        "version": "4.66.1"
+      },
+      {
+        "name": "fsspec",
+        "version": "2026.9.0"
+      },
+      {
+        "name": "iniconfig",
+        "version": "2.3.0"
+      },
+      {
+        "name": "Jinja2",
+        "version": "3.1.6"
+      },
+      {
+        "name": "joblib",
+        "version": "1.6.0"
+      },
+      {
+        "name": "kiwisolver",
+        "version": "1.5.1"
+      },
+      {
+        "name": "librt",
+        "version": "0.16.0"
+      },
+      {
+        "name": "maizedoctor-preprocessing",
+        "version": "1.0.0"
+      },
+      {
+        "name": "MarkupSafe",
+        "version": "3.0.4"
+      },
+      {
+        "name": "matplotlib",
+        "version": "3.11.2"
+      },
+      {
+        "name": "mpmath",
+        "version": "1.3.0"
+      },
+      {
+        "name": "mypy",
+        "version": "1.20.2"
+      },
+      {
+        "name": "mypy_extensions",
+        "version": "1.1.0"
+      },
+      {
+        "name": "networkx",
+        "version": "3.6.1"
+      },
+      {
+        "name": "numpy",
+        "version": "2.4.6"
+      },
+      {
+        "name": "opencv-python",
+        "version": "4.13.0.92"
+      },
+      {
+        "name": "packaging",
+        "version": "26.3"
+      },
+      {
+        "name": "pathspec",
+        "version": "1.1.1"
+      },
+      {
+        "name": "pillow",
+        "version": "12.3.0"
+      },
+      {
+        "name": "pluggy",
+        "version": "1.6.0"
+      },
+      {
+        "name": "pydantic",
+        "version": "2.13.5"
+      },
+      {
+        "name": "pydantic_core",
+        "version": "2.46.5"
+      },
+      {
+        "name": "Pygments",
+        "version": "2.21.0"
+      },
+      {
+        "name": "pyparsing",
+        "version": "3.3.3"
+      },
+      {
+        "name": "pytest",
+        "version": "9.1.1"
+      },
+      {
+        "name": "python-dateutil",
+        "version": "2.9.0.post0"
+      },
+      {
+        "name": "python-dotenv",
+        "version": "1.2.4"
+      },
+      {
+        "name": "ruff",
+        "version": "0.16.10"
+      },
+      {
+        "name": "scikit-learn",
+        "version": "1.8.0"
+      },
+      {
+        "name": "scipy",
+        "version": "1.17.1"
+      },
+      {
+        "name": "six",
+        "version": "1.17.0"
+      },
+      {
+        "name": "sympy",
+        "version": "1.14.0"
+      },
+      {
+        "name": "threadpoolctl",
+        "version": "3.7.0"
+      },
+      {
+        "name": "torch",
+        "version": "2.10.0+cpu"
+      },
+      {
+        "name": "torchvision",
+        "version": "0.25.0+cpu"
+      },
+      {
+        "name": "typing-inspection",
+        "version": "0.4.4"
+      },
+      {
+        "name": "typing_extensions",
+        "version": "4.16.0"
+      }
+    ]
+  },
+  "dependencies": [
+    {
+      "name": "annotated-types",
+      "version": "0.8.0"
+    },
+    {
+      "name": "cloudpickle",
+      "version": "3.1.2"
+    },
+    {
+      "name": "colorama",
+      "version": "0.4.6"
+    },
+    {
+      "name": "contourpy",
+      "version": "1.3.3"
+    },
+    {
+      "name": "cycler",
+      "version": "0.12.1"
+    },
+    {
+      "name": "filelock",
+      "version": "4.0.11"
+    },
+    {
+      "name": "fonttools",
+      "version": "4.66.1"
+    },
+    {
+      "name": "fsspec",
+      "version": "2026.9.0"
+    },
+    {
+      "name": "iniconfig",
+      "version": "2.3.0"
+    },
+    {
+      "name": "Jinja2",
+      "version": "3.1.6"
+    },
+    {
+      "name": "joblib",
+      "version": "1.6.0"
+    },
+    {
+      "name": "kiwisolver",
+      "version": "1.5.1"
+    },
+    {
+      "name": "librt",
+      "version": "0.16.0"
+    },
+    {
+      "name": "maizedoctor-preprocessing",
+      "version": "1.0.0"
+    },
+    {
+      "name": "MarkupSafe",
+      "version": "3.0.4"
+    },
+    {
+      "name": "matplotlib",
+      "version": "3.11.2"
+    },
+    {
+      "name": "mpmath",
+      "version": "1.3.0"
+    },
+    {
+      "name": "mypy",
+      "version": "1.20.2"
+    },
+    {
+      "name": "mypy_extensions",
+      "version": "1.1.0"
+    },
+    {
+      "name": "networkx",
+      "version": "3.6.1"
+    },
+    {
+      "name": "numpy",
+      "version": "2.4.6"
+    },
+    {
+      "name": "opencv-python",
+      "version": "4.13.0.92"
+    },
+    {
+      "name": "packaging",
+      "version": "26.3"
+    },
+    {
+      "name": "pathspec",
+      "version": "1.1.1"
+    },
+    {
+      "name": "pillow",
+      "version": "12.3.0"
+    },
+    {
+      "name": "pluggy",
+      "version": "1.6.0"
+    },
+    {
+      "name": "pydantic",
+      "version": "2.13.5"
+    },
+    {
+      "name": "pydantic_core",
+      "version": "2.46.5"
+    },
+    {
+      "name": "Pygments",
+      "version": "2.21.0"
+    },
+    {
+      "name": "pyparsing",
+      "version": "3.3.3"
+    },
+    {
+      "name": "pytest",
+      "version": "9.1.1"
+    },
+    {
+      "name": "python-dateutil",
+      "version": "2.9.0.post0"
+    },
+    {
+      "name": "python-dotenv",
+      "version": "1.2.4"
+    },
+    {
+      "name": "ruff",
+      "version": "0.16.10"
+    },
+    {
+      "name": "scikit-learn",
+      "version": "1.8.0"
+    },
+    {
+      "name": "scipy",
+      "version": "1.17.1"
+    },
+    {
+      "name": "six",
+      "version": "1.17.0"
+    },
+    {
+      "name": "sympy",
+      "version": "1.14.0"
+    },
+    {
+      "name": "threadpoolctl",
+      "version": "3.7.0"
+    },
+    {
+      "name": "torch",
+      "version": "2.10.0+cpu"
+    },
+    {
+      "name": "torchvision",
+      "version": "0.25.0+cpu"
+    },
+    {
+      "name": "typing-inspection",
+      "version": "0.4.4"
+    },
+    {
+      "name": "typing_extensions",
+      "version": "4.16.0"
+    }
+  ],
+  "research_policy": {
+    "commercial_clearance": false,
+    "commercial_use_requirement": "Obtain appropriate licensing or replace restricted source material before commercial use.",
+    "embedded_rights_notes": [
+      "CIMMYT non-commercial/share-alike notices are present in source metadata.",
+      "An all-rights-reserved stock-photo notice is present; research approval is not commercial or redistribution clearance."
+    ],
+    "limitations": [
+      "No complete independent plant, field or capture-session grouping is available.",
+      "Source archives overlap and are not independent evaluation domains.",
+      "Exact and confirmed derivative grouping reduces known leakage, but does not establish field-independent accuracy.",
+      "Raw images must not be bundled in the repository, model artifacts, reports or application."
+    ],
+    "permitted_use": "non-commercial academic/FYP research only",
+    "raw_image_redistribution": false,
+    "schema_version": 1,
+    "sources": [
+      {
+        "dataset_version_id": "967819/1637108",
+        "name": "Corn or Maize Leaf Disease Dataset",
+        "publisher_url": "https://www.kaggle.com/datasets/smaranjitghose/corn-or-maize-leaf-disease-dataset",
+        "rights": "Publisher describes a PlantVillage/PlantDoc merge and retains original-author rights; no uniform commercial clearance inferred."
+      },
+      {
+        "dataset_version_id": "277323/658267",
+        "license_declaration": "CC BY-NC-SA 4.0",
+        "name": "PlantVillage Dataset, color branch",
+        "publisher_url": "https://www.kaggle.com/datasets/abdallahalidev/plantvillage-dataset",
+        "rights": "Preserve attribution and applicable non-commercial/share-alike terms; publisher declaration does not override contrary individual notices."
+      }
+    ],
+    "user_approval": "Phase 10 research use and documented exclusions explicitly authorized"
+  },
+  "limitations": [
+    "The old V1 holdout was invalidated by confirmed cross-partition same-parent content; old and new metrics are not comparable independent holdouts.",
+    "V2 repairs confirmed identity relations and excludes all confirmed conflicting families, but does not prove plant/field/session independence.",
+    "Unresolved Healthy pair 24 crosses TRAIN/VALIDATION; unresolved pair 58 is within TRAIN. Neither is a confirmed identity and neither was silently grouped or excluded.",
+    "Classifier-selected validation was reused for diagnostics; calibration cross-fit does not erase classifier validation selection.",
+    "The dataset and historical test were inspected; current final TEST metrics are descriptive and never selected weights, temperature or threshold.",
+    "Source-domain/class weaknesses and high-confidence errors remain; no operational rejection threshold was locked.",
+    "Single CPU seed; independent field validation and multi-seed stability remain pending.",
+    "Academic/FYP non-commercial research only; no raw image redistribution or commercial clearance; no production promotion."
+  ]
+}

@@ -1,0 +1,744 @@
+{
+  "candidates": [
+    {
+      "accepted_accuracy": 0.9681020733652312,
+      "accepted_count": 627,
+      "accepted_error_interval": {
+        "confidence_level": 0.95,
+        "lower": 0.02074235483644448,
+        "upper": 0.04875443902147999
+      },
+      "accepted_error_rate": 0.03189792663476874,
+      "correct_count": 607,
+      "coverage": 1.0,
+      "error_count": 20,
+      "per_true_class": [
+        {
+          "accepted_accuracy": 0.9846938775510204,
+          "accepted_correct_count": 193,
+          "accepted_count": 196,
+          "accepted_error_interval": {
+            "confidence_level": 0.95,
+            "lower": 0.005218879779228865,
+            "upper": 0.04402745218196985
+          },
+          "coverage": 1.0,
+          "index": 0,
+          "label": "Common_Rust",
+          "support": 196
+        },
+        {
+          "accepted_accuracy": 0.8705882352941177,
+          "accepted_correct_count": 74,
+          "accepted_count": 85,
+          "accepted_error_interval": {
+            "confidence_level": 0.95,
+            "lower": 0.07382352798125273,
+            "upper": 0.21704808943386777
+          },
+          "coverage": 1.0,
+          "index": 1,
+          "label": "Gray_Leaf_Spot",
+          "support": 85
+        },
+        {
+          "accepted_accuracy": 1.0,
+          "accepted_correct_count": 175,
+          "accepted_count": 175,
+          "accepted_error_interval": {
+            "confidence_level": 0.95,
+            "lower": 0.0,
+            "upper": 0.02147968846835207
+          },
+          "coverage": 1.0,
+          "index": 2,
+          "label": "Healthy",
+          "support": 175
+        },
+        {
+          "accepted_accuracy": 0.9649122807017544,
+          "accepted_correct_count": 165,
+          "accepted_count": 171,
+          "accepted_error_interval": {
+            "confidence_level": 0.95,
+            "lower": 0.016178397190256082,
+            "upper": 0.07442630793829172
+          },
+          "coverage": 1.0,
+          "index": 3,
+          "label": "Northern_Corn_Leaf_Blight",
+          "support": 171
+        }
+      ],
+      "rejection_rate": 0.0,
+      "threshold": 0.0
+    },
+    {
+      "accepted_accuracy": 0.9681020733652312,
+      "accepted_count": 627,
+      "accepted_error_interval": {
+        "confidence_level": 0.95,
+        "lower": 0.02074235483644448,
+        "upper": 0.04875443902147999
+      },
+      "accepted_error_rate": 0.03189792663476874,
+      "correct_count": 607,
+      "coverage": 1.0,
+      "error_count": 20,
+      "per_true_class": [
+        {
+          "accepted_accuracy": 0.9846938775510204,
+          "accepted_correct_count": 193,
+          "accepted_count": 196,
+          "accepted_error_interval": {
+            "confidence_level": 0.95,
+            "lower": 0.005218879779228865,
+            "upper": 0.04402745218196985
+          },
+          "coverage": 1.0,
+          "index": 0,
+          "label": "Common_Rust",
+          "support": 196
+        },
+        {
+          "accepted_accuracy": 0.8705882352941177,
+          "accepted_correct_count": 74,
+          "accepted_count": 85,
+          "accepted_error_interval": {
+            "confidence_level": 0.95,
+            "lower": 0.07382352798125273,
+            "upper": 0.21704808943386777
+          },
+          "coverage": 1.0,
+          "index": 1,
+          "label": "Gray_Leaf_Spot",
+          "support": 85
+        },
+        {
+          "accepted_accuracy": 1.0,
+          "accepted_correct_count": 175,
+          "accepted_count": 175,
+          "accepted_error_interval": {
+            "confidence_level": 0.95,
+            "lower": 0.0,
+            "upper": 0.02147968846835207
+          },
+          "coverage": 1.0,
+          "index": 2,
+          "label": "Healthy",
+          "support": 175
+        },
+        {
+          "accepted_accuracy": 0.9649122807017544,
+          "accepted_correct_count": 165,
+          "accepted_count": 171,
+          "accepted_error_interval": {
+            "confidence_level": 0.95,
+            "lower": 0.016178397190256082,
+            "upper": 0.07442630793829172
+          },
+          "coverage": 1.0,
+          "index": 3,
+          "label": "Northern_Corn_Leaf_Blight",
+          "support": 171
+        }
+      ],
+      "rejection_rate": 0.0,
+      "threshold": 0.5
+    },
+    {
+      "accepted_accuracy": 0.9757281553398058,
+      "accepted_count": 618,
+      "accepted_error_interval": {
+        "confidence_level": 0.95,
+        "lower": 0.014763269818634281,
+        "upper": 0.03965809167256246
+      },
+      "accepted_error_rate": 0.024271844660194174,
+      "correct_count": 603,
+      "coverage": 0.9856459330143541,
+      "error_count": 15,
+      "per_true_class": [
+        {
+          "accepted_accuracy": 0.9846938775510204,
+          "accepted_correct_count": 193,
+          "accepted_count": 196,
+          "accepted_error_interval": {
+            "confidence_level": 0.95,
+            "lower": 0.005218879779228865,
+            "upper": 0.04402745218196985
+          },
+          "coverage": 1.0,
+          "index": 0,
+          "label": "Common_Rust",
+          "support": 196
+        },
+        {
+          "accepted_accuracy": 0.9012345679012346,
+          "accepted_correct_count": 73,
+          "accepted_count": 81,
+          "accepted_error_interval": {
+            "confidence_level": 0.95,
+            "lower": 0.050900116268798354,
+            "upper": 0.18296501401647308
+          },
+          "coverage": 0.9529411764705882,
+          "index": 1,
+          "label": "Gray_Leaf_Spot",
+          "support": 85
+        },
+        {
+          "accepted_accuracy": 1.0,
+          "accepted_correct_count": 175,
+          "accepted_count": 175,
+          "accepted_error_interval": {
+            "confidence_level": 0.95,
+            "lower": 0.0,
+            "upper": 0.02147968846835207
+          },
+          "coverage": 1.0,
+          "index": 2,
+          "label": "Healthy",
+          "support": 175
+        },
+        {
+          "accepted_accuracy": 0.9759036144578314,
+          "accepted_correct_count": 162,
+          "accepted_count": 166,
+          "accepted_error_interval": {
+            "confidence_level": 0.95,
+            "lower": 0.009409601294356727,
+            "upper": 0.06031105997949307
+          },
+          "coverage": 0.9707602339181286,
+          "index": 3,
+          "label": "Northern_Corn_Leaf_Blight",
+          "support": 171
+        }
+      ],
+      "rejection_rate": 0.014354066985645897,
+      "threshold": 0.6
+    },
+    {
+      "accepted_accuracy": 0.9770867430441899,
+      "accepted_count": 611,
+      "accepted_error_interval": {
+        "confidence_level": 0.95,
+        "lower": 0.013697146341324917,
+        "upper": 0.03809093392536385
+      },
+      "accepted_error_rate": 0.022913256955810146,
+      "correct_count": 597,
+      "coverage": 0.9744816586921851,
+      "error_count": 14,
+      "per_true_class": [
+        {
+          "accepted_accuracy": 0.9846938775510204,
+          "accepted_correct_count": 193,
+          "accepted_count": 196,
+          "accepted_error_interval": {
+            "confidence_level": 0.95,
+            "lower": 0.005218879779228865,
+            "upper": 0.04402745218196985
+          },
+          "coverage": 1.0,
+          "index": 0,
+          "label": "Common_Rust",
+          "support": 196
+        },
+        {
+          "accepted_accuracy": 0.9090909090909091,
+          "accepted_correct_count": 70,
+          "accepted_count": 77,
+          "accepted_error_interval": {
+            "confidence_level": 0.95,
+            "lower": 0.044735710601777307,
+            "upper": 0.1759611828111233
+          },
+          "coverage": 0.9058823529411765,
+          "index": 1,
+          "label": "Gray_Leaf_Spot",
+          "support": 85
+        },
+        {
+          "accepted_accuracy": 1.0,
+          "accepted_correct_count": 175,
+          "accepted_count": 175,
+          "accepted_error_interval": {
+            "confidence_level": 0.95,
+            "lower": 0.0,
+            "upper": 0.02147968846835207
+          },
+          "coverage": 1.0,
+          "index": 2,
+          "label": "Healthy",
+          "support": 175
+        },
+        {
+          "accepted_accuracy": 0.9754601226993865,
+          "accepted_correct_count": 159,
+          "accepted_count": 163,
+          "accepted_error_interval": {
+            "confidence_level": 0.95,
+            "lower": 0.009583521690912599,
+            "upper": 0.06139079670928933
+          },
+          "coverage": 0.9532163742690059,
+          "index": 3,
+          "label": "Northern_Corn_Leaf_Blight",
+          "support": 171
+        }
+      ],
+      "rejection_rate": 0.02551834130781494,
+      "threshold": 0.7
+    },
+    {
+      "accepted_accuracy": 0.9798994974874372,
+      "accepted_count": 597,
+      "accepted_error_interval": {
+        "confidence_level": 0.95,
+        "lower": 0.011535035692942208,
+        "upper": 0.0348024105867139
+      },
+      "accepted_error_rate": 0.020100502512562814,
+      "correct_count": 585,
+      "coverage": 0.9521531100478469,
+      "error_count": 12,
+      "per_true_class": [
+        {
+          "accepted_accuracy": 0.9845360824742269,
+          "accepted_correct_count": 191,
+          "accepted_count": 194,
+          "accepted_error_interval": {
+            "confidence_level": 0.95,
+            "lower": 0.005272823185712136,
+            "upper": 0.044471345096091464
+          },
+          "coverage": 0.9897959183673469,
+          "index": 0,
+          "label": "Common_Rust",
+          "support": 196
+        },
+        {
+          "accepted_accuracy": 0.9295774647887324,
+          "accepted_correct_count": 66,
+          "accepted_count": 71,
+          "accepted_error_interval": {
+            "confidence_level": 0.95,
+            "lower": 0.030453602439710924,
+            "upper": 0.15449013113789908
+          },
+          "coverage": 0.8352941176470589,
+          "index": 1,
+          "label": "Gray_Leaf_Spot",
+          "support": 85
+        },
+        {
+          "accepted_accuracy": 1.0,
+          "accepted_correct_count": 175,
+          "accepted_count": 175,
+          "accepted_error_interval": {
+            "confidence_level": 0.95,
+            "lower": 0.0,
+            "upper": 0.02147968846835207
+          },
+          "coverage": 1.0,
+          "index": 2,
+          "label": "Healthy",
+          "support": 175
+        },
+        {
+          "accepted_accuracy": 0.9745222929936306,
+          "accepted_correct_count": 153,
+          "accepted_count": 157,
+          "accepted_error_interval": {
+            "confidence_level": 0.95,
+            "lower": 0.009951391042220214,
+            "upper": 0.06367054019066526
+          },
+          "coverage": 0.9181286549707602,
+          "index": 3,
+          "label": "Northern_Corn_Leaf_Blight",
+          "support": 171
+        }
+      ],
+      "rejection_rate": 0.04784688995215314,
+      "threshold": 0.8
+    },
+    {
+      "accepted_accuracy": 0.9863247863247864,
+      "accepted_count": 585,
+      "accepted_error_interval": {
+        "confidence_level": 0.95,
+        "lower": 0.006945375802607899,
+        "upper": 0.02675038138886386
+      },
+      "accepted_error_rate": 0.013675213675213675,
+      "correct_count": 577,
+      "coverage": 0.9330143540669856,
+      "error_count": 8,
+      "per_true_class": [
+        {
+          "accepted_accuracy": 0.9844559585492227,
+          "accepted_correct_count": 190,
+          "accepted_count": 193,
+          "accepted_error_interval": {
+            "confidence_level": 0.95,
+            "lower": 0.005300215242179038,
+            "upper": 0.0446966648848823
+          },
+          "coverage": 0.9846938775510204,
+          "index": 0,
+          "label": "Common_Rust",
+          "support": 196
+        },
+        {
+          "accepted_accuracy": 0.9420289855072463,
+          "accepted_correct_count": 65,
+          "accepted_count": 69,
+          "accepted_error_interval": {
+            "confidence_level": 0.95,
+            "lower": 0.02277238888037121,
+            "upper": 0.13979243357661653
+          },
+          "coverage": 0.8117647058823529,
+          "index": 1,
+          "label": "Gray_Leaf_Spot",
+          "support": 85
+        },
+        {
+          "accepted_accuracy": 1.0,
+          "accepted_correct_count": 175,
+          "accepted_count": 175,
+          "accepted_error_interval": {
+            "confidence_level": 0.95,
+            "lower": 0.0,
+            "upper": 0.02147968846835207
+          },
+          "coverage": 1.0,
+          "index": 2,
+          "label": "Healthy",
+          "support": 175
+        },
+        {
+          "accepted_accuracy": 0.9932432432432432,
+          "accepted_correct_count": 147,
+          "accepted_count": 148,
+          "accepted_error_interval": {
+            "confidence_level": 0.95,
+            "lower": 0.0011937308904065753,
+            "upper": 0.03727704557646182
+          },
+          "coverage": 0.8654970760233918,
+          "index": 3,
+          "label": "Northern_Corn_Leaf_Blight",
+          "support": 171
+        }
+      ],
+      "rejection_rate": 0.06698564593301437,
+      "threshold": 0.85
+    },
+    {
+      "accepted_accuracy": 0.993006993006993,
+      "accepted_count": 572,
+      "accepted_error_interval": {
+        "confidence_level": 0.95,
+        "lower": 0.002722706391979905,
+        "upper": 0.017841041909410334
+      },
+      "accepted_error_rate": 0.006993006993006993,
+      "correct_count": 568,
+      "coverage": 0.9122807017543859,
+      "error_count": 4,
+      "per_true_class": [
+        {
+          "accepted_accuracy": 0.9947089947089947,
+          "accepted_correct_count": 188,
+          "accepted_count": 189,
+          "accepted_error_interval": {
+            "confidence_level": 0.95,
+            "lower": 0.0009346037378160608,
+            "upper": 0.029356905444997014
+          },
+          "coverage": 0.9642857142857143,
+          "index": 0,
+          "label": "Common_Rust",
+          "support": 196
+        },
+        {
+          "accepted_accuracy": 0.9516129032258065,
+          "accepted_correct_count": 59,
+          "accepted_count": 62,
+          "accepted_error_interval": {
+            "confidence_level": 0.95,
+            "lower": 0.016591685850580726,
+            "upper": 0.1328803792732396
+          },
+          "coverage": 0.7294117647058823,
+          "index": 1,
+          "label": "Gray_Leaf_Spot",
+          "support": 85
+        },
+        {
+          "accepted_accuracy": 1.0,
+          "accepted_correct_count": 175,
+          "accepted_count": 175,
+          "accepted_error_interval": {
+            "confidence_level": 0.95,
+            "lower": 0.0,
+            "upper": 0.02147968846835207
+          },
+          "coverage": 1.0,
+          "index": 2,
+          "label": "Healthy",
+          "support": 175
+        },
+        {
+          "accepted_accuracy": 1.0,
+          "accepted_correct_count": 146,
+          "accepted_count": 146,
+          "accepted_error_interval": {
+            "confidence_level": 0.95,
+            "lower": 0.0,
+            "upper": 0.025636822084673896
+          },
+          "coverage": 0.8538011695906432,
+          "index": 3,
+          "label": "Northern_Corn_Leaf_Blight",
+          "support": 171
+        }
+      ],
+      "rejection_rate": 0.08771929824561409,
+      "threshold": 0.9
+    },
+    {
+      "accepted_accuracy": 0.9964349376114082,
+      "accepted_count": 561,
+      "accepted_error_interval": {
+        "confidence_level": 0.95,
+        "lower": 0.0009782137410660231,
+        "upper": 0.01290436994368321
+      },
+      "accepted_error_rate": 0.0035650623885918,
+      "correct_count": 559,
+      "coverage": 0.8947368421052632,
+      "error_count": 2,
+      "per_true_class": [
+        {
+          "accepted_accuracy": 0.9947089947089947,
+          "accepted_correct_count": 188,
+          "accepted_count": 189,
+          "accepted_error_interval": {
+            "confidence_level": 0.95,
+            "lower": 0.0009346037378160608,
+            "upper": 0.029356905444997014
+          },
+          "coverage": 0.9642857142857143,
+          "index": 0,
+          "label": "Common_Rust",
+          "support": 196
+        },
+        {
+          "accepted_accuracy": 0.9824561403508771,
+          "accepted_correct_count": 56,
+          "accepted_count": 57,
+          "accepted_error_interval": {
+            "confidence_level": 0.95,
+            "lower": 0.003103664651408093,
+            "upper": 0.09290749178567684
+          },
+          "coverage": 0.6705882352941176,
+          "index": 1,
+          "label": "Gray_Leaf_Spot",
+          "support": 85
+        },
+        {
+          "accepted_accuracy": 1.0,
+          "accepted_correct_count": 175,
+          "accepted_count": 175,
+          "accepted_error_interval": {
+            "confidence_level": 0.95,
+            "lower": 0.0,
+            "upper": 0.02147968846835207
+          },
+          "coverage": 1.0,
+          "index": 2,
+          "label": "Healthy",
+          "support": 175
+        },
+        {
+          "accepted_accuracy": 1.0,
+          "accepted_correct_count": 140,
+          "accepted_count": 140,
+          "accepted_error_interval": {
+            "confidence_level": 0.95,
+            "lower": 1.734723475976807e-18,
+            "upper": 0.026706200369412993
+          },
+          "coverage": 0.8187134502923976,
+          "index": 3,
+          "label": "Northern_Corn_Leaf_Blight",
+          "support": 171
+        }
+      ],
+      "rejection_rate": 0.10526315789473684,
+      "threshold": 0.95
+    },
+    {
+      "accepted_accuracy": 0.996309963099631,
+      "accepted_count": 542,
+      "accepted_error_interval": {
+        "confidence_level": 0.95,
+        "lower": 0.001012525166995507,
+        "upper": 0.01335329240508086
+      },
+      "accepted_error_rate": 0.0036900369003690036,
+      "correct_count": 540,
+      "coverage": 0.8644338118022329,
+      "error_count": 2,
+      "per_true_class": [
+        {
+          "accepted_accuracy": 0.9946236559139785,
+          "accepted_correct_count": 185,
+          "accepted_count": 186,
+          "accepted_error_interval": {
+            "confidence_level": 0.95,
+            "lower": 0.000949688025281158,
+            "upper": 0.029820507573623305
+          },
+          "coverage": 0.9489795918367347,
+          "index": 0,
+          "label": "Common_Rust",
+          "support": 196
+        },
+        {
+          "accepted_accuracy": 0.9787234042553191,
+          "accepted_correct_count": 46,
+          "accepted_count": 47,
+          "accepted_error_interval": {
+            "confidence_level": 0.95,
+            "lower": 0.0037657680385967812,
+            "upper": 0.11112981041629329
+          },
+          "coverage": 0.5529411764705883,
+          "index": 1,
+          "label": "Gray_Leaf_Spot",
+          "support": 85
+        },
+        {
+          "accepted_accuracy": 1.0,
+          "accepted_correct_count": 175,
+          "accepted_count": 175,
+          "accepted_error_interval": {
+            "confidence_level": 0.95,
+            "lower": 0.0,
+            "upper": 0.02147968846835207
+          },
+          "coverage": 1.0,
+          "index": 2,
+          "label": "Healthy",
+          "support": 175
+        },
+        {
+          "accepted_accuracy": 1.0,
+          "accepted_correct_count": 134,
+          "accepted_count": 134,
+          "accepted_error_interval": {
+            "confidence_level": 0.95,
+            "lower": 0.0,
+            "upper": 0.027868675023899322
+          },
+          "coverage": 0.783625730994152,
+          "index": 3,
+          "label": "Northern_Corn_Leaf_Blight",
+          "support": 171
+        }
+      ],
+      "rejection_rate": 0.1355661881977671,
+      "threshold": 0.97
+    },
+    {
+      "accepted_accuracy": 0.996039603960396,
+      "accepted_count": 505,
+      "accepted_error_interval": {
+        "confidence_level": 0.95,
+        "lower": 0.0010867561578226893,
+        "upper": 0.014323660357505524
+      },
+      "accepted_error_rate": 0.0039603960396039604,
+      "correct_count": 503,
+      "coverage": 0.8054226475279107,
+      "error_count": 2,
+      "per_true_class": [
+        {
+          "accepted_accuracy": 0.9944444444444445,
+          "accepted_correct_count": 179,
+          "accepted_count": 180,
+          "accepted_error_interval": {
+            "confidence_level": 0.95,
+            "lower": 0.0009813660672160114,
+            "upper": 0.030793070766379115
+          },
+          "coverage": 0.9183673469387755,
+          "index": 0,
+          "label": "Common_Rust",
+          "support": 196
+        },
+        {
+          "accepted_accuracy": 0.9722222222222222,
+          "accepted_correct_count": 35,
+          "accepted_count": 36,
+          "accepted_error_interval": {
+            "confidence_level": 0.95,
+            "lower": 0.004920407139810443,
+            "upper": 0.14169718653273855
+          },
+          "coverage": 0.4235294117647059,
+          "index": 1,
+          "label": "Gray_Leaf_Spot",
+          "support": 85
+        },
+        {
+          "accepted_accuracy": 1.0,
+          "accepted_correct_count": 174,
+          "accepted_count": 174,
+          "accepted_error_interval": {
+            "confidence_level": 0.95,
+            "lower": 0.0,
+            "upper": 0.021600468451887907
+          },
+          "coverage": 0.9942857142857143,
+          "index": 2,
+          "label": "Healthy",
+          "support": 175
+        },
+        {
+          "accepted_accuracy": 1.0,
+          "accepted_correct_count": 115,
+          "accepted_count": 115,
+          "accepted_error_interval": {
+            "confidence_level": 0.95,
+            "lower": 0.0,
+            "upper": 0.03232423144931307
+          },
+          "coverage": 0.672514619883041,
+          "index": 3,
+          "label": "Northern_Corn_Leaf_Blight",
+          "support": 171
+        }
+      ],
+      "rejection_rate": 0.1945773524720893,
+      "threshold": 0.99
+    }
+  ],
+  "class_names": [
+    "Common_Rust",
+    "Gray_Leaf_Spot",
+    "Healthy",
+    "Northern_Corn_Leaf_Blight"
+  ],
+  "interval_assumption": "95% Wilson binomial intervals are descriptive per-row intervals. Unknown plant/source dependence and data-dependent threshold search are not corrected.",
+  "sample_count": 627,
+  "selected_threshold": null,
+  "selection_reason": "No threshold locked: acceptable risk, minimum coverage, class-specific costs and field-domain evidence have not been defined."
+}

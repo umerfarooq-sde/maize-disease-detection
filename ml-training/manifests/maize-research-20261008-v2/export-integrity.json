@@ -1,0 +1,34 @@
+{
+  "byte_preserving_copies": [
+    "manifest.json",
+    "class-map.json",
+    "splits.json",
+    "exclusions.json",
+    "research-policy.json",
+    "preprocessing.json",
+    "repair-evidence.json",
+    "repair-transition.json",
+    "integrity.json",
+    "confirmed-parent-relations.json",
+    "independent-integrity.json"
+  ],
+  "dataset_version": "maize-research-20261008-v2",
+  "files": {
+    "README.md": "44634de2976bb2db4fb6ff39dd268b5f69d81aff217d3c2489155ebecabc958b",
+    "class-map.json": "71fc97c485026196263e1e12398735ca2efbf5cccb1ef9e9a45d15fb7d2df58d",
+    "confirmed-parent-relations.json": "7bcd7552dad9591c6a0a19b838f3a2d9e231765fcb1b9e4068fc4d9db2a35998",
+    "exclusions.json": "4c1a772ddaaf2cc975365ce31d5dbe36d65488e7fac0df98fac5c94704d4b754",
+    "independent-integrity.json": "7ce9193d20036d55dcf2af22bd6b050544113b74ccd6ed1246273011c4db2927",
+    "integrity.json": "432aeb7921202870a976f415fdb069e9370b8d17f9020535fd752a64ed893f5d",
+    "manifest.json": "7286a103820ccc0f0f85de9b8ffa5475fbea4cbae22e0d17fef0d99e22d2792d",
+    "preprocessing.json": "6fcf247200349dcccb2dc6c13850aa29c4db3986f15071bb31986dba49223a0e",
+    "repair-evidence.json": "ec8d5f69290cf910463b5b38541fc606cfd1af30328ec4b7f2aff3e4aa711d0f",
+    "repair-transition.json": "4661789c1ec9a6c469c59d030ffa69c6558e4448c21aebc7174631df99119e03",
+    "research-policy.json": "ff1f69ce149668a14532909e5f8c0d0eea29da31493db748770d9735f9cc4d01",
+    "splits.json": "27344162c27b0344011609933e290800442c07c0616560669f29e500571f6692",
+    "summary.json": "c5e8325d2a6cacbd9b76620b6e70d7a405908bfbe3b949368bed7a3a0544c1d5"
+  },
+  "manifest_fingerprint": "a96fd5d32a8e0696df7cfc5bbfa6b78941c8a2f308f940ce295147a8832a583b",
+  "original_bundle_integrity_sha256": "432aeb7921202870a976f415fdb069e9370b8d17f9020535fd752a64ed893f5d",
+  "source_binary_redistribution": false
+}

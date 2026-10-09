@@ -1,0 +1,244 @@
+[
+  {
+    "relative_path": "Common_Rust/Common_Rust (1730).jpg",
+    "content_hash": "d02bef2c0a413e6d7f11e09db94d068385736ccdbc952e2d1d3fcb084237f4de",
+    "label": "Common_Rust",
+    "reason_codes": [
+      "INVALID_INPUT:FORMAT_MISMATCH"
+    ],
+    "family_id": null
+  },
+  {
+    "relative_path": "Common_Rust/Common_Rust (1733).jpg",
+    "content_hash": "ccbb42a29855fd454cbfe61804c596793d95348ea4d9d4fce0c5351be8f48975",
+    "label": "Common_Rust",
+    "reason_codes": [
+      "INVALID_INPUT:ANIMATED_IMAGE"
+    ],
+    "family_id": null
+  },
+  {
+    "relative_path": "Common_Rust/Common_Rust (1747).jpg",
+    "content_hash": "b6be07a0e79d7cac01e7c8972cf6b3f5699b9a594050182ad4995b39f13eddf5",
+    "label": "Common_Rust",
+    "reason_codes": [
+      "INVALID_INPUT:FORMAT_MISMATCH"
+    ],
+    "family_id": null
+  },
+  {
+    "relative_path": "Common_Rust/Common_Rust (1753).jpg",
+    "content_hash": "6369884b4de3a50304e0a32809b39bec7144f47505df87bfee498a313b1fb911",
+    "label": "Common_Rust",
+    "reason_codes": [
+      "INVALID_INPUT:IMAGE_TOO_LARGE"
+    ],
+    "family_id": null
+  },
+  {
+    "relative_path": "Common_Rust/Common_Rust (1755).jpg",
+    "content_hash": "78c95a0c1ddb962acbc7256ab1d6dad2f92fb0c76617b88b37a576de2f60807c",
+    "label": "Common_Rust",
+    "reason_codes": [
+      "INVALID_INPUT:FORMAT_MISMATCH"
+    ],
+    "family_id": null
+  },
+  {
+    "relative_path": "Gray_Leaf_Spot/Gray_Leaf_Spot (303).jpg",
+    "content_hash": "db524b07878d7c86faa81a9ee38222ee6507c1a34ed7a4794f8969c7c9313b3f",
+    "label": "Gray_Leaf_Spot",
+    "reason_codes": [
+      "INVALID_INPUT:FORMAT_MISMATCH"
+    ],
+    "family_id": null
+  },
+  {
+    "relative_path": "Gray_Leaf_Spot/Gray_Leaf_Spot (414).jpg",
+    "content_hash": "9120578a76fd8539da220def6e0609ebb2435decc7a9c34b949e46e86e794c8d",
+    "label": "Gray_Leaf_Spot",
+    "reason_codes": [
+      "CONTRADICTORY_LABEL_FAMILY"
+    ],
+    "family_id": "cross-label-exact-with-rotation"
+  },
+  {
+    "relative_path": "Gray_Leaf_Spot/Gray_Leaf_Spot (538).jpg",
+    "content_hash": "1c420ab7b30b2dbf7436879f85faabae5550c15b2f04eed6eb20037f0479c9bf",
+    "label": "Gray_Leaf_Spot",
+    "reason_codes": [
+      "CONTRADICTORY_LABEL_FAMILY"
+    ],
+    "family_id": "cross-label-near-watermarked"
+  },
+  {
+    "relative_path": "Gray_Leaf_Spot/Gray_Leaf_Spot (575).jpg",
+    "content_hash": "c47a3877968e56b974dc5292a0c3b40d4c14fbb4dbe3e9c62b0fa3bb21bf4c12",
+    "label": "Gray_Leaf_Spot",
+    "reason_codes": [
+      "INVALID_INPUT:INVALID_COLOR_PROFILE"
+    ],
+    "family_id": null
+  },
+  {
+    "relative_path": "Gray_Leaf_Spot/Gray_Leaf_Spot (686).jpg",
+    "content_hash": "a520040b39aafd86177d0eb56cbe72432bb77e0d24c8c9f8f08f7b2c8473d5fb",
+    "label": "Gray_Leaf_Spot",
+    "reason_codes": [
+      "INVALID_INPUT:IMAGE_TOO_LARGE"
+    ],
+    "family_id": null
+  },
+  {
+    "relative_path": "Gray_Leaf_Spot/Gray_Leaf_Spot (877).jpg",
+    "content_hash": "ee3838e2249e671b7b4510b0d3831f30882e2bcbf20c9c8c42ee8f4e1b95fcce",
+    "label": "Gray_Leaf_Spot",
+    "reason_codes": [
+      "CONTRADICTORY_LABEL_FAMILY"
+    ],
+    "family_id": "cross-label-exact-second"
+  },
+  {
+    "relative_path": "Northern_Corn_Leaf_Blight/Northern_Corn_Leaf_Blight (1772).jpg",
+    "content_hash": "2bdc6dae1b05e27405e0fbb6e35f2137e2547acaffb9b1b519dcbe1dc038ef57",
+    "label": "Northern_Corn_Leaf_Blight",
+    "reason_codes": [
+      "CONTRADICTORY_LABEL_FAMILY"
+    ],
+    "family_id": "cross-label-near-watermarked"
+  },
+  {
+    "relative_path": "Northern_Corn_Leaf_Blight/Northern_Corn_Leaf_Blight (1828).jpg",
+    "content_hash": "ee3838e2249e671b7b4510b0d3831f30882e2bcbf20c9c8c42ee8f4e1b95fcce",
+    "label": "Northern_Corn_Leaf_Blight",
+    "reason_codes": [
+      "CONTRADICTORY_LABEL_FAMILY"
+    ],
+    "family_id": "cross-label-exact-second"
+  },
+  {
+    "relative_path": "Northern_Corn_Leaf_Blight/Northern_Corn_Leaf_Blight (1873).jpg",
+    "content_hash": "821078c915771fce9e3e56e28abcf89bbefe83e268acc0636106ede5abe036f3",
+    "label": "Northern_Corn_Leaf_Blight",
+    "reason_codes": [
+      "INVALID_INPUT:INVALID_COLOR_PROFILE"
+    ],
+    "family_id": null
+  },
+  {
+    "relative_path": "Northern_Corn_Leaf_Blight/Northern_Corn_Leaf_Blight (529).jpg",
+    "content_hash": "d840d7ec52e5a6c19b8af81ce72252cc4803c09096579850c6ae0dd1bb968fb4",
+    "label": "Northern_Corn_Leaf_Blight",
+    "reason_codes": [
+      "CONTRADICTORY_LABEL_FAMILY"
+    ],
+    "family_id": "cross-label-exact-with-rotation"
+  },
+  {
+    "relative_path": "Northern_Corn_Leaf_Blight/Northern_Corn_Leaf_Blight (553).jpg",
+    "content_hash": "9120578a76fd8539da220def6e0609ebb2435decc7a9c34b949e46e86e794c8d",
+    "label": "Northern_Corn_Leaf_Blight",
+    "reason_codes": [
+      "CONTRADICTORY_LABEL_FAMILY"
+    ],
+    "family_id": "cross-label-exact-with-rotation"
+  },
+  {
+    "relative_path": "Northern_Corn_Leaf_Blight/Northern_Corn_Leaf_Blight (678).jpg",
+    "content_hash": "deef0c607d0a5decdae484b0d1d92633ba4fe0ab15595d33e36222f62313f58e",
+    "label": "Northern_Corn_Leaf_Blight",
+    "reason_codes": [
+      "INVALID_INPUT:INVALID_DIMENSIONS"
+    ],
+    "family_id": null
+  },
+  {
+    "relative_path": "Northern_Corn_Leaf_Blight/Northern_Corn_Leaf_Blight (727).jpg",
+    "content_hash": "80b5cf8ce73c1c80e8cc3342891c983220f8bff4801bcfa249be4fb41e6440d8",
+    "label": "Northern_Corn_Leaf_Blight",
+    "reason_codes": [
+      "INVALID_INPUT:IMAGE_TOO_LARGE"
+    ],
+    "family_id": null
+  },
+  {
+    "relative_path": "Gray_Leaf_Spot/Gray_Leaf_Spot (501).jpg",
+    "content_hash": "8f22a1471132f061c984e6cdb3722ef1dee08e68374dac0d92aefa873151dc62",
+    "label": "Gray_Leaf_Spot",
+    "reason_codes": [
+      "CONTRADICTORY_LABEL_FAMILY",
+      "PHASE105_NEW_CONTRADICTORY_FAMILY"
+    ],
+    "family_id": "phase105-conflict-eb72d063d0143f78f9fa28c529982ed163c2c57fed2bcd5e9feaa8d7f5d1d112"
+  },
+  {
+    "relative_path": "Gray_Leaf_Spot/Gray_Leaf_Spot (525).jpg",
+    "content_hash": "1816338ef66a7c08c1d385bce179f6a846ceedef5bb91eb31effabd155412aed",
+    "label": "Gray_Leaf_Spot",
+    "reason_codes": [
+      "CONTRADICTORY_LABEL_FAMILY",
+      "PHASE105_NEW_CONTRADICTORY_FAMILY"
+    ],
+    "family_id": "phase105-conflict-d36880a21672fd145d84e39480b024b754b9d87df909e479eb087183dbadf683"
+  },
+  {
+    "relative_path": "Gray_Leaf_Spot/Gray_Leaf_Spot (600).jpg",
+    "content_hash": "ff1c976d0c0804c4477cfdcb0cf5597fe27c3b66b4c2c18d5b021e3d23c56e19",
+    "label": "Gray_Leaf_Spot",
+    "reason_codes": [
+      "CONTRADICTORY_LABEL_FAMILY",
+      "PHASE105_NEW_CONTRADICTORY_FAMILY"
+    ],
+    "family_id": "phase105-conflict-487d6fb44995dfb0a4888bc946870b658a07c23b0431efb10797c1741b1e7851"
+  },
+  {
+    "relative_path": "Gray_Leaf_Spot/Gray_Leaf_Spot (928).jpg",
+    "content_hash": "99ad81a07cbf1e2b1afa1da2fbb60355e2a794766888016ceef0737c72ba6cc9",
+    "label": "Gray_Leaf_Spot",
+    "reason_codes": [
+      "CONTRADICTORY_LABEL_FAMILY",
+      "PHASE105_NEW_CONTRADICTORY_FAMILY"
+    ],
+    "family_id": "phase105-conflict-13e07315245f8b965fe15bb759858b328df10fe88d1f2e0e90e810e647944bc4"
+  },
+  {
+    "relative_path": "Northern_Corn_Leaf_Blight/Northern_Corn_Leaf_Blight (1822).jpg",
+    "content_hash": "4713b10521040b12bd472f7d83aca182cb240f99d6a214ec2c904cca3316e30a",
+    "label": "Northern_Corn_Leaf_Blight",
+    "reason_codes": [
+      "CONTRADICTORY_LABEL_FAMILY",
+      "PHASE105_NEW_CONTRADICTORY_FAMILY"
+    ],
+    "family_id": "phase105-conflict-487d6fb44995dfb0a4888bc946870b658a07c23b0431efb10797c1741b1e7851"
+  },
+  {
+    "relative_path": "Northern_Corn_Leaf_Blight/Northern_Corn_Leaf_Blight (1946).jpg",
+    "content_hash": "3b616d93a4aa72ad932f05dd2ff1a0392139ce355a1b9d24f0e78cf71405a62c",
+    "label": "Northern_Corn_Leaf_Blight",
+    "reason_codes": [
+      "CONTRADICTORY_LABEL_FAMILY",
+      "PHASE105_NEW_CONTRADICTORY_FAMILY"
+    ],
+    "family_id": "phase105-conflict-d36880a21672fd145d84e39480b024b754b9d87df909e479eb087183dbadf683"
+  },
+  {
+    "relative_path": "Northern_Corn_Leaf_Blight/Northern_Corn_Leaf_Blight (1995).jpg",
+    "content_hash": "366cac0649df317e9cdfbc64ec11c8b3da8e15aa7db164a9bf84db5c6236dfa3",
+    "label": "Northern_Corn_Leaf_Blight",
+    "reason_codes": [
+      "CONTRADICTORY_LABEL_FAMILY",
+      "PHASE105_NEW_CONTRADICTORY_FAMILY"
+    ],
+    "family_id": "phase105-conflict-13e07315245f8b965fe15bb759858b328df10fe88d1f2e0e90e810e647944bc4"
+  },
+  {
+    "relative_path": "Northern_Corn_Leaf_Blight/Northern_Corn_Leaf_Blight (2093).jpg",
+    "content_hash": "0269c07a3081df41e9e8e5a7ee3c18394bb81fd8b0c6bff78b610d993b72a14d",
+    "label": "Northern_Corn_Leaf_Blight",
+    "reason_codes": [
+      "CONTRADICTORY_LABEL_FAMILY",
+      "PHASE105_NEW_CONTRADICTORY_FAMILY"
+    ],
+    "family_id": "phase105-conflict-eb72d063d0143f78f9fa28c529982ed163c2c57fed2bcd5e9feaa8d7f5d1d112"
+  }
+]

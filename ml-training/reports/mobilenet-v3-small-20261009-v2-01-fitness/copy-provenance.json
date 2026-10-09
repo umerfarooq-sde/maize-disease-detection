@@ -1,0 +1,570 @@
+{
+  "schema_version": 1,
+  "experiment_id": "mobilenet-v3-small-20261009-v2-01",
+  "copies": {
+    "training/base-weights.json": {
+      "source": ".cache/phase105/experiments/mobilenet-v3-small-20261009-v2-01/base-weights.json",
+      "sha256": "04ddb6e6f1e0bac3aa0f21328c723c07b126afdd5a1306da6aab9b308776573f",
+      "size_bytes": 222,
+      "copied_byte_for_byte": true
+    },
+    "training/class-map.json": {
+      "source": ".cache/phase105/experiments/mobilenet-v3-small-20261009-v2-01/class-map.json",
+      "sha256": "6522256071605079465ca6c8623309d2f0592a59ed28580e77e180a23894950e",
+      "size_bytes": 242,
+      "copied_byte_for_byte": true
+    },
+    "training/environment.json": {
+      "source": ".cache/phase105/experiments/mobilenet-v3-small-20261009-v2-01/environment.json",
+      "sha256": "66f91f839a695c42e9392e2f118bdbb0a8da597cce4fff5f443164c54173c22d",
+      "size_bytes": 4936,
+      "copied_byte_for_byte": true
+    },
+    "training/epoch-history.jsonl": {
+      "source": ".cache/phase105/experiments/mobilenet-v3-small-20261009-v2-01/epoch-history.jsonl",
+      "sha256": "bdc89c6ee4d9bcc06c13d41600459862843b15d9fa1fa895a97f014710880963",
+      "size_bytes": 2846,
+      "copied_byte_for_byte": true
+    },
+    "training/experiment.json": {
+      "source": ".cache/phase105/experiments/mobilenet-v3-small-20261009-v2-01/experiment.json",
+      "sha256": "2e92da820b1d5cdf9160d1db78954cb9ea2885bd10ea183dc9f07648e13eeda1",
+      "size_bytes": 2815,
+      "copied_byte_for_byte": true
+    },
+    "training/generalization.json": {
+      "source": ".cache/phase105/experiments/mobilenet-v3-small-20261009-v2-01/generalization.json",
+      "sha256": "428eca863426b0027014e686a928ac96d711bc0d20a1a62e47372b21d4a1ebf5",
+      "size_bytes": 1932,
+      "copied_byte_for_byte": true
+    },
+    "training/history.json": {
+      "source": ".cache/phase105/experiments/mobilenet-v3-small-20261009-v2-01/history.json",
+      "sha256": "1ecb5a3afa370b46165aa0e61c5d24b1ea2fc9811fcee06dad2cb6c8db2c56c7",
+      "size_bytes": 3379,
+      "copied_byte_for_byte": true
+    },
+    "training/hyperparameters.json": {
+      "source": ".cache/phase105/experiments/mobilenet-v3-small-20261009-v2-01/hyperparameters.json",
+      "sha256": "5b8305aebbd12e660db1a3119e6a066c208b0f7bf12122f0aed47488bb529728",
+      "size_bytes": 378,
+      "copied_byte_for_byte": true
+    },
+    "training/preprocessing.json": {
+      "source": ".cache/phase105/experiments/mobilenet-v3-small-20261009-v2-01/preprocessing.json",
+      "sha256": "2656fc0541d4ae8d46e9bb365ff374d3bbb31418fd6c1df528d6fdd5d4a95e40",
+      "size_bytes": 838,
+      "copied_byte_for_byte": true
+    },
+    "training/selected-metrics.json": {
+      "source": ".cache/phase105/experiments/mobilenet-v3-small-20261009-v2-01/selected-metrics.json",
+      "sha256": "01170833b5717fcf28fa4b6c6c52d5ab7c1c7c06ec494c06bcaedc218cbaa006",
+      "size_bytes": 6708,
+      "copied_byte_for_byte": true
+    },
+    "training/summary.json": {
+      "source": ".cache/phase105/experiments/mobilenet-v3-small-20261009-v2-01/summary.json",
+      "sha256": "ba70bc0d166b4a2dc78587cdd6a139e5a0853bef4b080db1d3712ac8e362a1d5",
+      "size_bytes": 667,
+      "copied_byte_for_byte": true
+    },
+    "training/train/classification-summary.txt": {
+      "source": ".cache/phase105/experiments/mobilenet-v3-small-20261009-v2-01/train/classification-summary.txt",
+      "sha256": "daee5c945ce5bde95e07738336d9e2f463d58904a6475770f17da199ac9f800d",
+      "size_bytes": 428,
+      "copied_byte_for_byte": true
+    },
+    "training/train/confusion-matrix.png": {
+      "source": ".cache/phase105/experiments/mobilenet-v3-small-20261009-v2-01/train/confusion-matrix.png",
+      "sha256": "55983d2ca0d9c625a940465d1ff1216cebaa702a8b9babe421cb98e8d1945ca0",
+      "size_bytes": 72617,
+      "copied_byte_for_byte": true
+    },
+    "training/train/metrics.json": {
+      "source": ".cache/phase105/experiments/mobilenet-v3-small-20261009-v2-01/train/metrics.json",
+      "sha256": "b3c4028771dc66664ed99ccdf233ec2066690e4916954ebe55851aac17ad54cc",
+      "size_bytes": 3931,
+      "copied_byte_for_byte": true
+    },
+    "training/train/predictions.csv": {
+      "source": ".cache/phase105/experiments/mobilenet-v3-small-20261009-v2-01/train/predictions.csv",
+      "sha256": "7dacb226d89f2c210bcd56d989dee4db7ef1169bfacdc8cfa1ca3486921329fa",
+      "size_bytes": 449388,
+      "copied_byte_for_byte": true
+    },
+    "training/train/roc-curves.png": {
+      "source": ".cache/phase105/experiments/mobilenet-v3-small-20261009-v2-01/train/roc-curves.png",
+      "sha256": "c805bd24484f7e47fb81274d802f7662774627e3db2d42d3648112272f668403",
+      "size_bytes": 72260,
+      "copied_byte_for_byte": true
+    },
+    "training/train/training-history.png": {
+      "source": ".cache/phase105/experiments/mobilenet-v3-small-20261009-v2-01/train/training-history.png",
+      "sha256": "fcd5f5d66a7dd325fca0f7c0df34adfe32592e86c679accc70b2013e3e04b95b",
+      "size_bytes": 93981,
+      "copied_byte_for_byte": true
+    },
+    "training/used-partitions.json": {
+      "source": ".cache/phase105/experiments/mobilenet-v3-small-20261009-v2-01/used-partitions.json",
+      "sha256": "80c204814b8a6eb1e1e817ca7c62a579314559a11482466d368394d1f73a5dc7",
+      "size_bytes": 258356,
+      "copied_byte_for_byte": true
+    },
+    "training/validation/classification-summary.txt": {
+      "source": ".cache/phase105/experiments/mobilenet-v3-small-20261009-v2-01/validation/classification-summary.txt",
+      "sha256": "90a52996f5e50ab4175981e3b697fd3f5d33635002fa2a790ae168119b1f6ab9",
+      "size_bytes": 426,
+      "copied_byte_for_byte": true
+    },
+    "training/validation/confusion-matrix.png": {
+      "source": ".cache/phase105/experiments/mobilenet-v3-small-20261009-v2-01/validation/confusion-matrix.png",
+      "sha256": "165ec5f69c8db94c2b057b00bd77a5ea72c41a11a4b0ca60155bb781fb346a1e",
+      "size_bytes": 75177,
+      "copied_byte_for_byte": true
+    },
+    "training/validation/metrics.json": {
+      "source": ".cache/phase105/experiments/mobilenet-v3-small-20261009-v2-01/validation/metrics.json",
+      "sha256": "5ba4f4069c3d6a33d43cc36d748056ff09d635d495e6568b543df19dd5fb0c8a",
+      "size_bytes": 3867,
+      "copied_byte_for_byte": true
+    },
+    "training/validation/predictions.csv": {
+      "source": ".cache/phase105/experiments/mobilenet-v3-small-20261009-v2-01/validation/predictions.csv",
+      "sha256": "b2c7ac706fce189e591e58349e0fd43516946af72219e32cd5b5a3247c7c7f1c",
+      "size_bytes": 96749,
+      "copied_byte_for_byte": true
+    },
+    "training/validation/roc-curves.png": {
+      "source": ".cache/phase105/experiments/mobilenet-v3-small-20261009-v2-01/validation/roc-curves.png",
+      "sha256": "a0e753737d4cc0d8314df28eb34279847675b65cca6087d254e34d55b9c1eb8b",
+      "size_bytes": 75510,
+      "copied_byte_for_byte": true
+    },
+    "training/validation/training-history.png": {
+      "source": ".cache/phase105/experiments/mobilenet-v3-small-20261009-v2-01/validation/training-history.png",
+      "sha256": "fcd5f5d66a7dd325fca0f7c0df34adfe32592e86c679accc70b2013e3e04b95b",
+      "size_bytes": 93981,
+      "copied_byte_for_byte": true
+    },
+    "calibration/calibration-config.json": {
+      "source": ".cache/phase105/calibration-20261009-v2/calibration-config.json",
+      "sha256": "641e5b1c2daaa1082bd17ddfe4ba401d13e2a69700c48c0860bb15279d41d14d",
+      "size_bytes": 4619,
+      "copied_byte_for_byte": true
+    },
+    "calibration/confidence-crossfit.json": {
+      "source": ".cache/phase105/calibration-20261009-v2/confidence-crossfit.json",
+      "sha256": "d6254b46f0789606b490476ffda409452b3189781933b2bcd9db4d12ced22702",
+      "size_bytes": 7818,
+      "copied_byte_for_byte": true
+    },
+    "calibration/confidence-fitted.json": {
+      "source": ".cache/phase105/calibration-20261009-v2/confidence-fitted.json",
+      "sha256": "248d625ceb4ca17d6750e0fef27b5aaa4245de8a847a59cb1081a52520ea5f55",
+      "size_bytes": 7673,
+      "copied_byte_for_byte": true
+    },
+    "calibration/confidence-raw.json": {
+      "source": ".cache/phase105/calibration-20261009-v2/confidence-raw.json",
+      "sha256": "72d2c7da687b944f49205ab390d9f245d15c8e4719cd64fe5e6e991162bd7671",
+      "size_bytes": 8129,
+      "copied_byte_for_byte": true
+    },
+    "calibration/crossfit-membership.json": {
+      "source": ".cache/phase105/calibration-20261009-v2/crossfit-membership.json",
+      "sha256": "62f610be2a1b88638e892f41fcd9207222f6a86ef7836a0e63c1872831c89a9f",
+      "size_bytes": 123524,
+      "copied_byte_for_byte": true
+    },
+    "calibration/crossfit.json": {
+      "source": ".cache/phase105/calibration-20261009-v2/crossfit.json",
+      "sha256": "7c28c751f7b6d81bcca81c2b303101abd8a0b6b7192ba944e02b5530cb921f9b",
+      "size_bytes": 52253,
+      "copied_byte_for_byte": true
+    },
+    "calibration/freeze.json": {
+      "source": ".cache/phase105/calibration-20261009-v2/freeze.json",
+      "sha256": "95f820518476c057c309b2c785f823005d4e17526c635b48f9f866d529d4f182",
+      "size_bytes": 5168,
+      "copied_byte_for_byte": true
+    },
+    "calibration/integrity.json": {
+      "source": ".cache/phase105/calibration-20261009-v2/integrity.json",
+      "sha256": "98c110df95e6baa176838d349c815e09ea4b525ebba6ed38f2035fd2df392894",
+      "size_bytes": 1639,
+      "copied_byte_for_byte": true
+    },
+    "calibration/plots/confidence-distribution.png": {
+      "source": ".cache/phase105/calibration-20261009-v2/plots/confidence-distribution.png",
+      "sha256": "7e6a34ca013f197ac2b525090b890e6335a5506cbb38d0944ab88b3be9e7d155",
+      "size_bytes": 32360,
+      "copied_byte_for_byte": true
+    },
+    "calibration/plots/reliability.png": {
+      "source": ".cache/phase105/calibration-20261009-v2/plots/reliability.png",
+      "sha256": "56559d14966b0bcf1fb5695f43f487f12bfb67013ec72b0d2d6da0cb9fd41ad4",
+      "size_bytes": 97626,
+      "copied_byte_for_byte": true
+    },
+    "calibration/plots/selective-risk-coverage.png": {
+      "source": ".cache/phase105/calibration-20261009-v2/plots/selective-risk-coverage.png",
+      "sha256": "18426613e8a09636430c34742786efb85ee8fb8121c87c512b69a0ee9cec3cdb",
+      "size_bytes": 44535,
+      "copied_byte_for_byte": true
+    },
+    "calibration/README.md": {
+      "source": ".cache/phase105/calibration-20261009-v2/README.md",
+      "sha256": "6877830b9ad039a9cec18cee562f25ab314555db54c2cc97bc04b568591a7f09",
+      "size_bytes": 1410,
+      "copied_byte_for_byte": true
+    },
+    "calibration/selective-crossfit.json": {
+      "source": ".cache/phase105/calibration-20261009-v2/selective-crossfit.json",
+      "sha256": "259d9d831c192f06e9467d6c80e968508ae2d24c3a9b6dccc57874277c40f71f",
+      "size_bytes": 23164,
+      "copied_byte_for_byte": true
+    },
+    "calibration/selective-fitted.json": {
+      "source": ".cache/phase105/calibration-20261009-v2/selective-fitted.json",
+      "sha256": "ba441b16286a6ed0147be04384face32fc16d484d51dab1aa768d031e742cb31",
+      "size_bytes": 23136,
+      "copied_byte_for_byte": true
+    },
+    "calibration/selective-raw.json": {
+      "source": ".cache/phase105/calibration-20261009-v2/selective-raw.json",
+      "sha256": "927ec8dac72d2e9c53d59cca40a9ad4506e250f58dc1a2bb5a6a39de9642d3a7",
+      "size_bytes": 23208,
+      "copied_byte_for_byte": true
+    },
+    "calibration/temperature-fit.json": {
+      "source": ".cache/phase105/calibration-20261009-v2/temperature-fit.json",
+      "sha256": "18d9e92b1f88526e1a4c43c10aed43b593476ccb8b6b02ff6e5770bdd0ce46c3",
+      "size_bytes": 430,
+      "copied_byte_for_byte": true
+    },
+    "calibration/validation-results.json": {
+      "source": ".cache/phase105/calibration-20261009-v2/validation-results.json",
+      "sha256": "afb5582dc1d7724bec42f906f6e7ca1a7299968c215b9de0b441f2e849da26ae",
+      "size_bytes": 11302,
+      "copied_byte_for_byte": true
+    },
+    "calibration/validation-source.json": {
+      "source": ".cache/phase105/calibration-20261009-v2/validation-source.json",
+      "sha256": "aef1fc9055f58185aa9efb69968340b8be6089f7ad85e0ded91b291e2030e01a",
+      "size_bytes": 5221,
+      "copied_byte_for_byte": true
+    },
+    "candidate/candidate.json": {
+      "source": ".cache/phase105/candidates/mobilenet-v3-small-v2-20261009/candidate.json",
+      "sha256": "d8115ae08724f014c70828c1f419eda38921d0fd32205e59bd25ee472ee360ec",
+      "size_bytes": 11833,
+      "copied_byte_for_byte": true
+    },
+    "candidate/decision-freeze.json": {
+      "source": ".cache/phase105/candidates/mobilenet-v3-small-v2-20261009/decision-freeze.json",
+      "sha256": "e34bd402c35019af0597df04ff81575881a86900e03a3e7b3609680316ff462d",
+      "size_bytes": 6786,
+      "copied_byte_for_byte": true
+    },
+    "candidate/validation.json": {
+      "source": ".cache/phase105/candidates/mobilenet-v3-small-v2-20261009/validation.json",
+      "sha256": "3711fd54fefd267c72ab8be22f2130456060926e12dd801214da4dfc95a06c96",
+      "size_bytes": 264,
+      "copied_byte_for_byte": true
+    },
+    "final-test/calibrated-confidence.json": {
+      "source": ".cache/phase105/final-test-20261009-v2/calibrated-confidence.json",
+      "sha256": "e4702316c53985b607522a53f1ff41211dc748006583680ff1d65fbedccd77a4",
+      "size_bytes": 8125,
+      "copied_byte_for_byte": true
+    },
+    "final-test/calibrated-metrics.json": {
+      "source": ".cache/phase105/final-test-20261009-v2/calibrated-metrics.json",
+      "sha256": "b311546bd55186a257885738ad8f334354a06ac7ea3c6aaea044d96d9fd29ec6",
+      "size_bytes": 3062,
+      "copied_byte_for_byte": true
+    },
+    "final-test/calibrated-selective.json": {
+      "source": ".cache/phase105/final-test-20261009-v2/calibrated-selective.json",
+      "sha256": "9d85c5ec6eeb952f09320805b4cd768dd4ae879d8c25b970bbcc065175e31b8d",
+      "size_bytes": 23318,
+      "copied_byte_for_byte": true
+    },
+    "final-test/confidence-plots/confidence-distribution.png": {
+      "source": ".cache/phase105/final-test-20261009-v2/confidence-plots/confidence-distribution.png",
+      "sha256": "c1b18c49c8851f5df440c4d3b15b31932c57a172229965d5a2ac062ba87d1dfe",
+      "size_bytes": 32375,
+      "copied_byte_for_byte": true
+    },
+    "final-test/confidence-plots/reliability.png": {
+      "source": ".cache/phase105/final-test-20261009-v2/confidence-plots/reliability.png",
+      "sha256": "8955621556da38e6166a8bc07057b5ae2f05d3df1f70d6210ae83714baeb581e",
+      "size_bytes": 96251,
+      "copied_byte_for_byte": true
+    },
+    "final-test/confidence-plots/selective-risk-coverage.png": {
+      "source": ".cache/phase105/final-test-20261009-v2/confidence-plots/selective-risk-coverage.png",
+      "sha256": "bcbd943e80be7c95d793208f43a348163269c607a32e8decacc26ef6bac29b85",
+      "size_bytes": 43727,
+      "copied_byte_for_byte": true
+    },
+    "final-test/raw/classification-summary.txt": {
+      "source": ".cache/phase105/final-test-20261009-v2/raw/classification-summary.txt",
+      "sha256": "4d85433bf59b2aee24a79b99bd9aed4afa9b9ed0656c02397c47e96e124d36bc",
+      "size_bytes": 426,
+      "copied_byte_for_byte": true
+    },
+    "final-test/raw/confusion-matrix.png": {
+      "source": ".cache/phase105/final-test-20261009-v2/raw/confusion-matrix.png",
+      "sha256": "5f13683e86033070d7e8b9556e06268ff12f5bad8d74db9752d1d688d2b44656",
+      "size_bytes": 74063,
+      "copied_byte_for_byte": true
+    },
+    "final-test/raw/metrics.json": {
+      "source": ".cache/phase105/final-test-20261009-v2/raw/metrics.json",
+      "sha256": "c43b78229dfcc1aedb97a1c1027fd35ebf5d49f509560ea9a18755c72070f4fd",
+      "size_bytes": 3376,
+      "copied_byte_for_byte": true
+    },
+    "final-test/raw/predictions.csv": {
+      "source": ".cache/phase105/final-test-20261009-v2/raw/predictions.csv",
+      "sha256": "a720b3fa9405aa9e2192c624cbcf8f87b579631349793acf8b2760c1c1edb4a4",
+      "size_bytes": 96479,
+      "copied_byte_for_byte": true
+    },
+    "final-test/raw/roc-curves.png": {
+      "source": ".cache/phase105/final-test-20261009-v2/raw/roc-curves.png",
+      "sha256": "9394ceb002824eb6f79f79669a0e5df515bd2eef1b37513d4ef15f929529b447",
+      "size_bytes": 75053,
+      "copied_byte_for_byte": true
+    },
+    "final-test/raw-confidence.json": {
+      "source": ".cache/phase105/final-test-20261009-v2/raw-confidence.json",
+      "sha256": "e4702316c53985b607522a53f1ff41211dc748006583680ff1d65fbedccd77a4",
+      "size_bytes": 8125,
+      "copied_byte_for_byte": true
+    },
+    "final-test/raw-selective.json": {
+      "source": ".cache/phase105/final-test-20261009-v2/raw-selective.json",
+      "sha256": "9d85c5ec6eeb952f09320805b4cd768dd4ae879d8c25b970bbcc065175e31b8d",
+      "size_bytes": 23318,
+      "copied_byte_for_byte": true
+    },
+    "final-test/selection-lock.json": {
+      "source": ".cache/phase105/final-test-20261009-v2/selection-lock.json",
+      "sha256": "a1c1a649700ca52f77c69b37033056d8d0337abb6772736e27d1b3ebb80d00c4",
+      "size_bytes": 834,
+      "copied_byte_for_byte": true
+    },
+    "final-test/summary.json": {
+      "source": ".cache/phase105/final-test-20261009-v2/summary.json",
+      "sha256": "5209d12801f50b8c26971a95bd6498c75aab0f7c3ec1d27c109c4fc36d8ba4e6",
+      "size_bytes": 7166,
+      "copied_byte_for_byte": true
+    },
+    "visual-review/manual-review.json": {
+      "source": ".cache/phase105/visual-20261009-v2-review/manual-review.json",
+      "sha256": "130e26ffd0266908a75b028476c27de7bfc5a6d78afcb14dd0f1896e245ef381",
+      "size_bytes": 63642,
+      "copied_byte_for_byte": true
+    },
+    "visual-review/README.md": {
+      "source": ".cache/phase105/visual-20261009-v2-review/README.md",
+      "sha256": "4d0b0d6dfba08ccdfb9ddd8534a69c717604dc9791649c487da04f88733a1c38",
+      "size_bytes": 660,
+      "copied_byte_for_byte": true
+    },
+    "visual-metadata/augmentation-samples.json": {
+      "source": ".cache/phase105/visual-20261009-v2/augmentation-samples.json",
+      "sha256": "a7dc56d04eeea7a945e4f8009de472d999fa692f682f084e8410a8440f028c84",
+      "size_bytes": 4211,
+      "copied_byte_for_byte": true
+    },
+    "visual-metadata/capacity.json": {
+      "source": ".cache/phase105/visual-20261009-v2/capacity.json",
+      "sha256": "ffe475e1b5b1f193297da58d21cdecfd7d5105675bb2a5bd4045a3ddff223abb",
+      "size_bytes": 643,
+      "copied_byte_for_byte": true
+    },
+    "visual-metadata/plan.json": {
+      "source": ".cache/phase105/visual-20261009-v2/plan.json",
+      "sha256": "8b479a0ce55a2cf0fedd1b97a39085a02bdb5cde01284873af82abae86fb1dab",
+      "size_bytes": 1995,
+      "copied_byte_for_byte": true
+    },
+    "visual-metadata/robustness-cases.jsonl": {
+      "source": ".cache/phase105/visual-20261009-v2/robustness-cases.jsonl",
+      "sha256": "5fd1d9cac07f9676448a6b91b3b4415f026fc1f207ab73c11e0df1737b04addb",
+      "size_bytes": 2817399,
+      "copied_byte_for_byte": true
+    },
+    "visual-metadata/robustness.json": {
+      "source": ".cache/phase105/visual-20261009-v2/robustness.json",
+      "sha256": "e62845cb4200f12b339ce3ae629425dc6b238286d8a0618799c8cb8782d5ad09",
+      "size_bytes": 125158,
+      "copied_byte_for_byte": true
+    },
+    "visual-metadata/source-membership.json": {
+      "source": ".cache/phase105/visual-20261009-v2/source-membership.json",
+      "sha256": "804ad5a4b607c39215c500d7a42703a0e4a14c26ec92f0dd44b3ff240d07a056",
+      "size_bytes": 7732,
+      "copied_byte_for_byte": true
+    },
+    "visual-metadata/summary.json": {
+      "source": ".cache/phase105/visual-20261009-v2/summary.json",
+      "sha256": "9680519aac86dac8e1c87a22ea84e6c1d3b25e982034be529e6277474fcaea34",
+      "size_bytes": 1234,
+      "copied_byte_for_byte": true
+    },
+    "visual-metadata/visual-samples.json": {
+      "source": ".cache/phase105/visual-20261009-v2/visual-samples.json",
+      "sha256": "a98106b694250aecf6316565ecd89e6a8b2751f0a7b9a5cd232c13de0d41a642",
+      "size_bytes": 51778,
+      "copied_byte_for_byte": true
+    },
+    "audits/audit-v2-final.json": {
+      "source": ".cache/phase105/audit-v2-final.json",
+      "sha256": "971c0a21e6e9eaab99d3f3221d8a7ba4a39b20950c154fe66aaf6b0c6692a8ba",
+      "size_bytes": 1608,
+      "copied_byte_for_byte": true
+    },
+    "audits/audit-v2-validation.json": {
+      "source": ".cache/phase105/audit-v2-validation.json",
+      "sha256": "6f057e5fdfe3d3193f0c3e7005f108b84ff5d5159d4dc45eb58d504e6b32c6d3",
+      "size_bytes": 1228,
+      "copied_byte_for_byte": true
+    },
+    "audits/offline-model-compatibility-v2.json": {
+      "source": ".cache/phase105/offline-model-compatibility-v2.json",
+      "sha256": "c53faea4d3562049791ca112f2dfe36b21334bf5ea95b8efd7dee6150fa73f3c",
+      "size_bytes": 19669,
+      "copied_byte_for_byte": true
+    },
+    "audits/calibration-audit-v2.json": {
+      "source": ".cache/phase105/calibration-audit-v2.json",
+      "sha256": "bab9abec30abcce6d6fcc104ce6232db95d0129aaa247e524249616d7fbba3ef",
+      "size_bytes": 30296,
+      "copied_byte_for_byte": true
+    },
+    "audits/final-retrain-plan-20261009.json": {
+      "source": ".cache/phase105/final-retrain-plan-20261009.json",
+      "sha256": "01169eb9a65094c1cbd87ea07a62e29b186851646b1a62a7321734c432b9f0ae",
+      "size_bytes": 2176,
+      "copied_byte_for_byte": true
+    },
+    "audits/validation-decision-20261009-v2.json": {
+      "source": ".cache/phase105/validation-decision-20261009-v2.json",
+      "sha256": "c8e01f4d749cc811dd62770a3ef59ca0641e5bb072ac437280c42a63125fed72",
+      "size_bytes": 3095,
+      "copied_byte_for_byte": true
+    },
+    "audits/post-final-test-source-integrity-20261009-v2.json": {
+      "source": ".cache/phase105/post-final-test-source-integrity-20261009-v2.json",
+      "sha256": "3599d02a9498f5793296b9282df11370c6fef62522f58934547bc280608632fd",
+      "size_bytes": 2502,
+      "copied_byte_for_byte": true
+    },
+    "candidate/single-test-evaluation-claim.json": {
+      "source": ".cache/model-test-claims/e95a2e83262637fc1a08b919e6003bddb2fe70664b9c51418f059b7c8287dc66-a96fd5d32a8e0696df7cfc5bbfa6b78941c8a2f308f940ce295147a8832a583b.json",
+      "sha256": "f5521a44cd0576c1682151dd46735bd4bdbe575e496182541e11a1ccd40dbeb3",
+      "size_bytes": 370,
+      "copied_byte_for_byte": true
+    },
+    "normalized-validation/normalized-confusion.json": {
+      "source": ".cache/phase105/normalized-validation-v2/normalized-confusion.json",
+      "sha256": "f341062465d448e995fbe2240e49d6b85e399e8d8f0868a70067fb217fd935b1",
+      "size_bytes": 1014,
+      "copied_byte_for_byte": true
+    },
+    "normalized-validation/normalized-confusion.png": {
+      "source": ".cache/phase105/normalized-validation-v2/normalized-confusion.png",
+      "sha256": "c23d652a2bff661122ef5989b2aa170fcb5255e2dc94812c54ddcb958d448267",
+      "size_bytes": 102919,
+      "copied_byte_for_byte": true
+    },
+    "normalized-test/normalized-confusion.json": {
+      "source": ".cache/phase105/normalized-test-v2/normalized-confusion.json",
+      "sha256": "8d3aa7602dbe2fa1a827522f04453dbc4c2fe7357ef53b7780bc3335b03d1e7a",
+      "size_bytes": 978,
+      "copied_byte_for_byte": true
+    },
+    "normalized-test/normalized-confusion.png": {
+      "source": ".cache/phase105/normalized-test-v2/normalized-confusion.png",
+      "sha256": "d38e42c0b78091b10df26627287b85333cbd77d76d441b2e6c3a7287e40965f6",
+      "size_bytes": 100406,
+      "copied_byte_for_byte": true
+    },
+    "post-freeze-test-error-review/examples.json": {
+      "source": ".cache/phase105/test-error-inspection-v2/examples.json",
+      "sha256": "e06994cc040eeec64d153b7340dd3ea244f1a58383e8824ab18e11d4d2d5b932",
+      "size_bytes": 4863,
+      "copied_byte_for_byte": true
+    },
+    "post-freeze-test-error-review/review-notes.json": {
+      "source": ".cache/phase105/test-error-inspection-v2/review-notes.json",
+      "sha256": "1adc18ca66656923e1426ec0ea9d6668ad03553bcab2c0e2133e30cefed8027a",
+      "size_bytes": 2216,
+      "copied_byte_for_byte": true
+    },
+    "orchestration/phase105-calibrate-v2.txt": {
+      "source": ".cache/phase105-calibrate-v2.py",
+      "sha256": "3e56d286e61408b37b8ea6d207c9b42e8ab072525070706fa37b11628f28ae9d",
+      "size_bytes": 13684,
+      "copied_byte_for_byte": true
+    },
+    "orchestration/phase105-audit-calibration-v2.txt": {
+      "source": ".cache/phase105-audit-calibration-v2.py",
+      "sha256": "8433881e0223c43ef392198dae5fe80c7433a495836be2d4a91fdc1c4efd9004",
+      "size_bytes": 5274,
+      "copied_byte_for_byte": true
+    },
+    "orchestration/freeze-v2-candidate.txt": {
+      "source": ".cache/phase105/freeze-v2-candidate.py",
+      "sha256": "f82a3dca89e71a3e4f56811d577a7edbbaa68b8fbf523148bbae17f464172915",
+      "size_bytes": 6584,
+      "copied_byte_for_byte": true
+    },
+    "orchestration/audit-v2-artifacts.txt": {
+      "source": ".cache/phase105/audit-v2-artifacts.py",
+      "sha256": "f61b6d20d64fa7d884812b32ab86f4c6d1ce6217f5290166cd3a5a177316d9fb",
+      "size_bytes": 6436,
+      "copied_byte_for_byte": true
+    },
+    "orchestration/normalized-confusion-v2.txt": {
+      "source": ".cache/phase105/normalized-confusion-v2.py",
+      "sha256": "9ab70f2a1ebf7fbbfe62d97199a952558e8fa1cb1ec0260d3e178188bee2afd5",
+      "size_bytes": 2194,
+      "copied_byte_for_byte": true
+    },
+    "orchestration/manual-review-v2.txt": {
+      "source": ".cache/phase105/manual-review-v2.py",
+      "sha256": "52eb8d5f0272902bd1ffc0b43609b55b7592087ea165bf2fed1acb15d4be9b0f",
+      "size_bytes": 8429,
+      "copied_byte_for_byte": true
+    },
+    "orchestration/update-retrain-plan.txt": {
+      "source": ".cache/phase105/update-retrain-plan.py",
+      "sha256": "e23d3054078e76b5c13122d884726ea1fada2c845f6d2a3b28536cda4695d44e",
+      "size_bytes": 1606,
+      "copied_byte_for_byte": true
+    },
+    "orchestration/test-error-inspection-v2.txt": {
+      "source": ".cache/phase105/test-error-inspection-v2.py",
+      "sha256": "09351b8e889dfcd56b05fba903d85be20a23749715d6bb2456176bc540386fbd",
+      "size_bytes": 2393,
+      "copied_byte_for_byte": true
+    },
+    "orchestration/export-v2-fitness.txt": {
+      "source": ".cache/phase105/export-v2-fitness.py",
+      "sha256": "998b338126dd7366cbb237934cb4c459f2decaea0b669045d216e5c23e38f584",
+      "size_bytes": 32330,
+      "copied_byte_for_byte": true
+    }
+  },
+  "metadata_only_exclusions": {
+    "checkpoint_weights": "Kept in ignored local experiment; referenced by full SHA only.",
+    "training_dataset_manifest_copy": "Canonical public V2 index is already versioned; identical typed content verified and referenced instead of duplicated.",
+    "visual_image_sheets_and_augmentation_grids": "Raw-image-derived assets are never redistributed.",
+    "dataset_binary_images": "Read-only source; never copied into reports."
+  }
+}

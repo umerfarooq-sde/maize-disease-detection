@@ -1,0 +1,18 @@
+[
+  {
+    "label": "Common_Rust",
+    "index": 0
+  },
+  {
+    "label": "Gray_Leaf_Spot",
+    "index": 1
+  },
+  {
+    "label": "Healthy",
+    "index": 2
+  },
+  {
+    "label": "Northern_Corn_Leaf_Blight",
+    "index": 3
+  }
+]

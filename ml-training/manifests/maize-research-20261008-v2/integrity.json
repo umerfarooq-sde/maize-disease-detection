@@ -1,0 +1,13 @@
+{
+  "manifest_fingerprint": "a96fd5d32a8e0696df7cfc5bbfa6b78941c8a2f308f940ce295147a8832a583b",
+  "files": {
+    "manifest.json": "7286a103820ccc0f0f85de9b8ffa5475fbea4cbae22e0d17fef0d99e22d2792d",
+    "class-map.json": "71fc97c485026196263e1e12398735ca2efbf5cccb1ef9e9a45d15fb7d2df58d",
+    "splits.json": "27344162c27b0344011609933e290800442c07c0616560669f29e500571f6692",
+    "exclusions.json": "4c1a772ddaaf2cc975365ce31d5dbe36d65488e7fac0df98fac5c94704d4b754",
+    "research-policy.json": "ff1f69ce149668a14532909e5f8c0d0eea29da31493db748770d9735f9cc4d01",
+    "preprocessing.json": "6fcf247200349dcccb2dc6c13850aa29c4db3986f15071bb31986dba49223a0e",
+    "repair-evidence.json": "ec8d5f69290cf910463b5b38541fc606cfd1af30328ec4b7f2aff3e4aa711d0f",
+    "repair-transition.json": "4661789c1ec9a6c469c59d030ffa69c6558e4448c21aebc7174631df99119e03"
+  }
+}

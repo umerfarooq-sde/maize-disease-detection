@@ -2,6 +2,12 @@
 
 Final documentation review: 2026-10-08 (Asia/Karachi).
 
+**Historical result — superseded for independent evaluation:** Phase 10.5 discovered
+confirmed shared-photo families across these v1 partitions. Preserve the figures and
+artifacts below as historical records; they cannot establish independent model fitness.
+Use the [grouping repair and fresh fitness audit](26-model-fitness-validation.md) for
+current data, candidate selection and readiness. The original files remain unchanged.
+
 Phase 10 is explicitly authorized following the approved Phase 9.5 review. This
 document records the implemented research baseline and verified interrupted-budget results.
 Inference endpoints, Node orchestration, Flutter results and model promotion are later phases.

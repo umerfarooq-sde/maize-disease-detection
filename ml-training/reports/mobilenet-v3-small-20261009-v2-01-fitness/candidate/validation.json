@@ -1,0 +1,8 @@
+{
+  "passed": true,
+  "candidate_id": "mobilenet-v3-small-v2-20261009",
+  "bundle_sha256": "d8115ae08724f014c70828c1f419eda38921d0fd32205e59bd25ee472ee360ec",
+  "reference_count": 48,
+  "test_inference_performed": false,
+  "source_hashes_verified": true
+}

@@ -1,0 +1,19 @@
+{
+  "architecture": "mobilenet_v3_small",
+  "parameters": 1521956,
+  "warmup_trainable_parameters": 594948,
+  "fine_tune_trainable_parameters": 1521956,
+  "parameter_storage_bytes": 6087824,
+  "checkpoint_bytes": 6212695,
+  "feature_blocks": 13,
+  "cam_spatial_resolution": "7x7 final features upsampled to 224; coarse diagnostic localization",
+  "input_dimensions": [
+    3,
+    224,
+    224
+  ],
+  "torch": "2.10.0+cpu",
+  "torchvision": "0.25.0+cpu",
+  "runtime_threads": 2,
+  "training_policy": "2 epochs frozen features incl BN statistics; subsequent fine-tune all features with separate feature/head learning rates"
+}

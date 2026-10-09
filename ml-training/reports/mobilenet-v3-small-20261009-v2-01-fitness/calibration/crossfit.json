@@ -1,0 +1,1668 @@
+{
+  "folds": [
+    {
+      "calibrated_held_out": {
+        "accuracy": 0.9841269841269841,
+        "bin_count": 15,
+        "brier": 0.03691571309858707,
+        "definitions": [
+          "NLL: mean -log(max(p_true, probability_floor)); natural logarithm.",
+          "Brier: mean sum_k (p_k - onehot_k)^2; not divided by class count.",
+          "ECE: sum_bin count/N * abs(observed top-label accuracy - mean confidence).",
+          "Equal-width confidence bins are [lower,upper); the last includes 1.",
+          "Empty bins have null accuracy/confidence and contribute zero to ECE."
+        ],
+        "ece": 0.025716286384333473,
+        "nll": 0.07168516235290542,
+        "probability_floor": 1e-15,
+        "probability_values_below_floor": 0,
+        "reliability_bins": [
+          {
+            "count": 0,
+            "lower": 0.0,
+            "mean_confidence": null,
+            "observed_accuracy": null,
+            "upper": 0.06666666666666667
+          },
+          {
+            "count": 0,
+            "lower": 0.06666666666666667,
+            "mean_confidence": null,
+            "observed_accuracy": null,
+            "upper": 0.13333333333333333
+          },
+          {
+            "count": 0,
+            "lower": 0.13333333333333333,
+            "mean_confidence": null,
+            "observed_accuracy": null,
+            "upper": 0.2
+          },
+          {
+            "count": 0,
+            "lower": 0.2,
+            "mean_confidence": null,
+            "observed_accuracy": null,
+            "upper": 0.26666666666666666
+          },
+          {
+            "count": 0,
+            "lower": 0.26666666666666666,
+            "mean_confidence": null,
+            "observed_accuracy": null,
+            "upper": 0.3333333333333333
+          },
+          {
+            "count": 0,
+            "lower": 0.3333333333333333,
+            "mean_confidence": null,
+            "observed_accuracy": null,
+            "upper": 0.4
+          },
+          {
+            "count": 0,
+            "lower": 0.4,
+            "mean_confidence": null,
+            "observed_accuracy": null,
+            "upper": 0.4666666666666667
+          },
+          {
+            "count": 2,
+            "lower": 0.4666666666666667,
+            "mean_confidence": 0.5182848833252965,
+            "observed_accuracy": 0.5,
+            "upper": 0.5333333333333333
+          },
+          {
+            "count": 1,
+            "lower": 0.5333333333333333,
+            "mean_confidence": 0.5461411324584796,
+            "observed_accuracy": 1.0,
+            "upper": 0.6
+          },
+          {
+            "count": 1,
+            "lower": 0.6,
+            "mean_confidence": 0.6648105666509381,
+            "observed_accuracy": 1.0,
+            "upper": 0.6666666666666666
+          },
+          {
+            "count": 3,
+            "lower": 0.6666666666666666,
+            "mean_confidence": 0.7181271789865198,
+            "observed_accuracy": 1.0,
+            "upper": 0.7333333333333333
+          },
+          {
+            "count": 5,
+            "lower": 0.7333333333333333,
+            "mean_confidence": 0.7804871420754165,
+            "observed_accuracy": 0.8,
+            "upper": 0.8
+          },
+          {
+            "count": 2,
+            "lower": 0.8,
+            "mean_confidence": 0.8237628975759894,
+            "observed_accuracy": 1.0,
+            "upper": 0.8666666666666667
+          },
+          {
+            "count": 7,
+            "lower": 0.8666666666666667,
+            "mean_confidence": 0.9125593479191216,
+            "observed_accuracy": 1.0,
+            "upper": 0.9333333333333333
+          },
+          {
+            "count": 105,
+            "lower": 0.9333333333333333,
+            "mean_confidence": 0.9951724524304065,
+            "observed_accuracy": 1.0,
+            "upper": 1.0
+          }
+        ],
+        "sample_count": 126,
+        "true_probabilities_below_floor": 0
+      },
+      "fit_class_counts": [
+        156,
+        68,
+        140,
+        137
+      ],
+      "fit_count": 501,
+      "fit_group_count": 495,
+      "fold": 0,
+      "held_out_class_counts": [
+        40,
+        17,
+        35,
+        34
+      ],
+      "held_out_count": 126,
+      "held_out_group_count": 126,
+      "raw_held_out": {
+        "accuracy": 0.9841269841269841,
+        "bin_count": 15,
+        "brier": 0.03442607374133865,
+        "definitions": [
+          "NLL: mean -log(max(p_true, probability_floor)); natural logarithm.",
+          "Brier: mean sum_k (p_k - onehot_k)^2; not divided by class count.",
+          "ECE: sum_bin count/N * abs(observed top-label accuracy - mean confidence).",
+          "Equal-width confidence bins are [lower,upper); the last includes 1.",
+          "Empty bins have null accuracy/confidence and contribute zero to ECE."
+        ],
+        "ece": 0.02012806184708121,
+        "nll": 0.06549445244813176,
+        "probability_floor": 1e-15,
+        "probability_values_below_floor": 0,
+        "reliability_bins": [
+          {
+            "count": 0,
+            "lower": 0.0,
+            "mean_confidence": null,
+            "observed_accuracy": null,
+            "upper": 0.06666666666666667
+          },
+          {
+            "count": 0,
+            "lower": 0.06666666666666667,
+            "mean_confidence": null,
+            "observed_accuracy": null,
+            "upper": 0.13333333333333333
+          },
+          {
+            "count": 0,
+            "lower": 0.13333333333333333,
+            "mean_confidence": null,
+            "observed_accuracy": null,
+            "upper": 0.2
+          },
+          {
+            "count": 0,
+            "lower": 0.2,
+            "mean_confidence": null,
+            "observed_accuracy": null,
+            "upper": 0.26666666666666666
+          },
+          {
+            "count": 0,
+            "lower": 0.26666666666666666,
+            "mean_confidence": null,
+            "observed_accuracy": null,
+            "upper": 0.3333333333333333
+          },
+          {
+            "count": 0,
+            "lower": 0.3333333333333333,
+            "mean_confidence": null,
+            "observed_accuracy": null,
+            "upper": 0.4
+          },
+          {
+            "count": 0,
+            "lower": 0.4,
+            "mean_confidence": null,
+            "observed_accuracy": null,
+            "upper": 0.4666666666666667
+          },
+          {
+            "count": 1,
+            "lower": 0.4666666666666667,
+            "mean_confidence": 0.5066933631896973,
+            "observed_accuracy": 1.0,
+            "upper": 0.5333333333333333
+          },
+          {
+            "count": 2,
+            "lower": 0.5333333333333333,
+            "mean_confidence": 0.5701238811016083,
+            "observed_accuracy": 0.5,
+            "upper": 0.6
+          },
+          {
+            "count": 0,
+            "lower": 0.6,
+            "mean_confidence": null,
+            "observed_accuracy": null,
+            "upper": 0.6666666666666666
+          },
+          {
+            "count": 1,
+            "lower": 0.6666666666666666,
+            "mean_confidence": 0.7100524306297302,
+            "observed_accuracy": 1.0,
+            "upper": 0.7333333333333333
+          },
+          {
+            "count": 3,
+            "lower": 0.7333333333333333,
+            "mean_confidence": 0.7835399508476257,
+            "observed_accuracy": 1.0,
+            "upper": 0.8
+          },
+          {
+            "count": 5,
+            "lower": 0.8,
+            "mean_confidence": 0.850118100643158,
+            "observed_accuracy": 0.8,
+            "upper": 0.8666666666666667
+          },
+          {
+            "count": 3,
+            "lower": 0.8666666666666667,
+            "mean_confidence": 0.900037149588267,
+            "observed_accuracy": 1.0,
+            "upper": 0.9333333333333333
+          },
+          {
+            "count": 111,
+            "lower": 0.9333333333333333,
+            "mean_confidence": 0.9962813097077448,
+            "observed_accuracy": 1.0,
+            "upper": 1.0
+          }
+        ],
+        "sample_count": 126,
+        "true_probabilities_below_floor": 0
+      },
+      "temperature_fit": {
+        "boundary_solution": false,
+        "fit_sample_count": 501,
+        "fitted_nll": 0.09870586430617662,
+        "fitting_objective": "Multiclass NLL on supplied calibration-fit rows only.",
+        "interpretation": "Fit-set NLL is resubstitution, not an independent performance estimate.",
+        "lower_bound": 0.25,
+        "probability_floor": 1e-15,
+        "raw_nll": 0.10363731639642981,
+        "temperature": 1.307425718916474,
+        "upper_bound": 4.0
+      }
+    },
+    {
+      "calibrated_held_out": {
+        "accuracy": 0.9920634920634921,
+        "bin_count": 15,
+        "brier": 0.016297706344895864,
+        "definitions": [
+          "NLL: mean -log(max(p_true, probability_floor)); natural logarithm.",
+          "Brier: mean sum_k (p_k - onehot_k)^2; not divided by class count.",
+          "ECE: sum_bin count/N * abs(observed top-label accuracy - mean confidence).",
+          "Equal-width confidence bins are [lower,upper); the last includes 1.",
+          "Empty bins have null accuracy/confidence and contribute zero to ECE."
+        ],
+        "ece": 0.029124411487001976,
+        "nll": 0.03663227864419943,
+        "probability_floor": 1e-15,
+        "probability_values_below_floor": 0,
+        "reliability_bins": [
+          {
+            "count": 0,
+            "lower": 0.0,
+            "mean_confidence": null,
+            "observed_accuracy": null,
+            "upper": 0.06666666666666667
+          },
+          {
+            "count": 0,
+            "lower": 0.06666666666666667,
+            "mean_confidence": null,
+            "observed_accuracy": null,
+            "upper": 0.13333333333333333
+          },
+          {
+            "count": 0,
+            "lower": 0.13333333333333333,
+            "mean_confidence": null,
+            "observed_accuracy": null,
+            "upper": 0.2
+          },
+          {
+            "count": 0,
+            "lower": 0.2,
+            "mean_confidence": null,
+            "observed_accuracy": null,
+            "upper": 0.26666666666666666
+          },
+          {
+            "count": 0,
+            "lower": 0.26666666666666666,
+            "mean_confidence": null,
+            "observed_accuracy": null,
+            "upper": 0.3333333333333333
+          },
+          {
+            "count": 0,
+            "lower": 0.3333333333333333,
+            "mean_confidence": null,
+            "observed_accuracy": null,
+            "upper": 0.4
+          },
+          {
+            "count": 0,
+            "lower": 0.4,
+            "mean_confidence": null,
+            "observed_accuracy": null,
+            "upper": 0.4666666666666667
+          },
+          {
+            "count": 1,
+            "lower": 0.4666666666666667,
+            "mean_confidence": 0.5268184525778312,
+            "observed_accuracy": 0.0,
+            "upper": 0.5333333333333333
+          },
+          {
+            "count": 1,
+            "lower": 0.5333333333333333,
+            "mean_confidence": 0.5949697682709448,
+            "observed_accuracy": 1.0,
+            "upper": 0.6
+          },
+          {
+            "count": 0,
+            "lower": 0.6,
+            "mean_confidence": null,
+            "observed_accuracy": null,
+            "upper": 0.6666666666666666
+          },
+          {
+            "count": 2,
+            "lower": 0.6666666666666666,
+            "mean_confidence": 0.6766862524658749,
+            "observed_accuracy": 1.0,
+            "upper": 0.7333333333333333
+          },
+          {
+            "count": 4,
+            "lower": 0.7333333333333333,
+            "mean_confidence": 0.7577588304595991,
+            "observed_accuracy": 1.0,
+            "upper": 0.8
+          },
+          {
+            "count": 1,
+            "lower": 0.8,
+            "mean_confidence": 0.8202063061523909,
+            "observed_accuracy": 1.0,
+            "upper": 0.8666666666666667
+          },
+          {
+            "count": 5,
+            "lower": 0.8666666666666667,
+            "mean_confidence": 0.9086069107017719,
+            "observed_accuracy": 1.0,
+            "upper": 0.9333333333333333
+          },
+          {
+            "count": 112,
+            "lower": 0.9333333333333333,
+            "mean_confidence": 0.9956653942010111,
+            "observed_accuracy": 1.0,
+            "upper": 1.0
+          }
+        ],
+        "sample_count": 126,
+        "true_probabilities_below_floor": 0
+      },
+      "fit_class_counts": [
+        157,
+        68,
+        140,
+        136
+      ],
+      "fit_count": 501,
+      "fit_group_count": 497,
+      "fold": 1,
+      "held_out_class_counts": [
+        39,
+        17,
+        35,
+        35
+      ],
+      "held_out_count": 126,
+      "held_out_group_count": 124,
+      "raw_held_out": {
+        "accuracy": 0.9920634920634921,
+        "bin_count": 15,
+        "brier": 0.012906535791515164,
+        "definitions": [
+          "NLL: mean -log(max(p_true, probability_floor)); natural logarithm.",
+          "Brier: mean sum_k (p_k - onehot_k)^2; not divided by class count.",
+          "ECE: sum_bin count/N * abs(observed top-label accuracy - mean confidence).",
+          "Equal-width confidence bins are [lower,upper); the last includes 1.",
+          "Empty bins have null accuracy/confidence and contribute zero to ECE."
+        ],
+        "ece": 0.02110907151585529,
+        "nll": 0.02701330449798486,
+        "probability_floor": 1e-15,
+        "probability_values_below_floor": 0,
+        "reliability_bins": [
+          {
+            "count": 0,
+            "lower": 0.0,
+            "mean_confidence": null,
+            "observed_accuracy": null,
+            "upper": 0.06666666666666667
+          },
+          {
+            "count": 0,
+            "lower": 0.06666666666666667,
+            "mean_confidence": null,
+            "observed_accuracy": null,
+            "upper": 0.13333333333333333
+          },
+          {
+            "count": 0,
+            "lower": 0.13333333333333333,
+            "mean_confidence": null,
+            "observed_accuracy": null,
+            "upper": 0.2
+          },
+          {
+            "count": 0,
+            "lower": 0.2,
+            "mean_confidence": null,
+            "observed_accuracy": null,
+            "upper": 0.26666666666666666
+          },
+          {
+            "count": 0,
+            "lower": 0.26666666666666666,
+            "mean_confidence": null,
+            "observed_accuracy": null,
+            "upper": 0.3333333333333333
+          },
+          {
+            "count": 0,
+            "lower": 0.3333333333333333,
+            "mean_confidence": null,
+            "observed_accuracy": null,
+            "upper": 0.4
+          },
+          {
+            "count": 0,
+            "lower": 0.4,
+            "mean_confidence": null,
+            "observed_accuracy": null,
+            "upper": 0.4666666666666667
+          },
+          {
+            "count": 0,
+            "lower": 0.4666666666666667,
+            "mean_confidence": null,
+            "observed_accuracy": null,
+            "upper": 0.5333333333333333
+          },
+          {
+            "count": 1,
+            "lower": 0.5333333333333333,
+            "mean_confidence": 0.5832991600036621,
+            "observed_accuracy": 0.0,
+            "upper": 0.6
+          },
+          {
+            "count": 1,
+            "lower": 0.6,
+            "mean_confidence": 0.6247972846031189,
+            "observed_accuracy": 1.0,
+            "upper": 0.6666666666666666
+          },
+          {
+            "count": 1,
+            "lower": 0.6666666666666666,
+            "mean_confidence": 0.7319392561912537,
+            "observed_accuracy": 1.0,
+            "upper": 0.7333333333333333
+          },
+          {
+            "count": 2,
+            "lower": 0.7333333333333333,
+            "mean_confidence": 0.7640026807785034,
+            "observed_accuracy": 1.0,
+            "upper": 0.8
+          },
+          {
+            "count": 3,
+            "lower": 0.8,
+            "mean_confidence": 0.8370690743128458,
+            "observed_accuracy": 1.0,
+            "upper": 0.8666666666666667
+          },
+          {
+            "count": 1,
+            "lower": 0.8666666666666667,
+            "mean_confidence": 0.8817741274833679,
+            "observed_accuracy": 1.0,
+            "upper": 0.9333333333333333
+          },
+          {
+            "count": 117,
+            "lower": 0.9333333333333333,
+            "mean_confidence": 0.9969729307370309,
+            "observed_accuracy": 1.0,
+            "upper": 1.0
+          }
+        ],
+        "sample_count": 126,
+        "true_probabilities_below_floor": 0
+      },
+      "temperature_fit": {
+        "boundary_solution": false,
+        "fit_sample_count": 501,
+        "fitted_nll": 0.10764512160413228,
+        "fitting_objective": "Multiclass NLL on supplied calibration-fit rows only.",
+        "interpretation": "Fit-set NLL is resubstitution, not an independent performance estimate.",
+        "lower_bound": 0.25,
+        "probability_floor": 1e-15,
+        "raw_nll": 0.11331520989287396,
+        "temperature": 1.323888340683,
+        "upper_bound": 4.0
+      }
+    },
+    {
+      "calibrated_held_out": {
+        "accuracy": 0.944,
+        "bin_count": 15,
+        "brier": 0.08901962943992248,
+        "definitions": [
+          "NLL: mean -log(max(p_true, probability_floor)); natural logarithm.",
+          "Brier: mean sum_k (p_k - onehot_k)^2; not divided by class count.",
+          "ECE: sum_bin count/N * abs(observed top-label accuracy - mean confidence).",
+          "Equal-width confidence bins are [lower,upper); the last includes 1.",
+          "Empty bins have null accuracy/confidence and contribute zero to ECE."
+        ],
+        "ece": 0.04743097738835718,
+        "nll": 0.17715352314477778,
+        "probability_floor": 1e-15,
+        "probability_values_below_floor": 0,
+        "reliability_bins": [
+          {
+            "count": 0,
+            "lower": 0.0,
+            "mean_confidence": null,
+            "observed_accuracy": null,
+            "upper": 0.06666666666666667
+          },
+          {
+            "count": 0,
+            "lower": 0.06666666666666667,
+            "mean_confidence": null,
+            "observed_accuracy": null,
+            "upper": 0.13333333333333333
+          },
+          {
+            "count": 0,
+            "lower": 0.13333333333333333,
+            "mean_confidence": null,
+            "observed_accuracy": null,
+            "upper": 0.2
+          },
+          {
+            "count": 0,
+            "lower": 0.2,
+            "mean_confidence": null,
+            "observed_accuracy": null,
+            "upper": 0.26666666666666666
+          },
+          {
+            "count": 0,
+            "lower": 0.26666666666666666,
+            "mean_confidence": null,
+            "observed_accuracy": null,
+            "upper": 0.3333333333333333
+          },
+          {
+            "count": 0,
+            "lower": 0.3333333333333333,
+            "mean_confidence": null,
+            "observed_accuracy": null,
+            "upper": 0.4
+          },
+          {
+            "count": 0,
+            "lower": 0.4,
+            "mean_confidence": null,
+            "observed_accuracy": null,
+            "upper": 0.4666666666666667
+          },
+          {
+            "count": 1,
+            "lower": 0.4666666666666667,
+            "mean_confidence": 0.5000074926135417,
+            "observed_accuracy": 0.0,
+            "upper": 0.5333333333333333
+          },
+          {
+            "count": 1,
+            "lower": 0.5333333333333333,
+            "mean_confidence": 0.5624805650558624,
+            "observed_accuracy": 1.0,
+            "upper": 0.6
+          },
+          {
+            "count": 2,
+            "lower": 0.6,
+            "mean_confidence": 0.6560094095919693,
+            "observed_accuracy": 1.0,
+            "upper": 0.6666666666666666
+          },
+          {
+            "count": 1,
+            "lower": 0.6666666666666666,
+            "mean_confidence": 0.6945934234296494,
+            "observed_accuracy": 1.0,
+            "upper": 0.7333333333333333
+          },
+          {
+            "count": 4,
+            "lower": 0.7333333333333333,
+            "mean_confidence": 0.775410473151052,
+            "observed_accuracy": 0.25,
+            "upper": 0.8
+          },
+          {
+            "count": 2,
+            "lower": 0.8,
+            "mean_confidence": 0.833867488763022,
+            "observed_accuracy": 0.5,
+            "upper": 0.8666666666666667
+          },
+          {
+            "count": 3,
+            "lower": 0.8666666666666667,
+            "mean_confidence": 0.9020398090800191,
+            "observed_accuracy": 0.6666666666666666,
+            "upper": 0.9333333333333333
+          },
+          {
+            "count": 111,
+            "lower": 0.9333333333333333,
+            "mean_confidence": 0.9956978485696418,
+            "observed_accuracy": 0.990990990990991,
+            "upper": 1.0
+          }
+        ],
+        "sample_count": 125,
+        "true_probabilities_below_floor": 0
+      },
+      "fit_class_counts": [
+        157,
+        68,
+        140,
+        137
+      ],
+      "fit_count": 502,
+      "fit_group_count": 498,
+      "fold": 2,
+      "held_out_class_counts": [
+        39,
+        17,
+        35,
+        34
+      ],
+      "held_out_count": 125,
+      "held_out_group_count": 123,
+      "raw_held_out": {
+        "accuracy": 0.944,
+        "bin_count": 15,
+        "brier": 0.09007865414176869,
+        "definitions": [
+          "NLL: mean -log(max(p_true, probability_floor)); natural logarithm.",
+          "Brier: mean sum_k (p_k - onehot_k)^2; not divided by class count.",
+          "ECE: sum_bin count/N * abs(observed top-label accuracy - mean confidence).",
+          "Equal-width confidence bins are [lower,upper); the last includes 1.",
+          "Empty bins have null accuracy/confidence and contribute zero to ECE."
+        ],
+        "ece": 0.04920943450927734,
+        "nll": 0.18364202401475713,
+        "probability_floor": 1e-15,
+        "probability_values_below_floor": 0,
+        "reliability_bins": [
+          {
+            "count": 0,
+            "lower": 0.0,
+            "mean_confidence": null,
+            "observed_accuracy": null,
+            "upper": 0.06666666666666667
+          },
+          {
+            "count": 0,
+            "lower": 0.06666666666666667,
+            "mean_confidence": null,
+            "observed_accuracy": null,
+            "upper": 0.13333333333333333
+          },
+          {
+            "count": 0,
+            "lower": 0.13333333333333333,
+            "mean_confidence": null,
+            "observed_accuracy": null,
+            "upper": 0.2
+          },
+          {
+            "count": 0,
+            "lower": 0.2,
+            "mean_confidence": null,
+            "observed_accuracy": null,
+            "upper": 0.26666666666666666
+          },
+          {
+            "count": 0,
+            "lower": 0.26666666666666666,
+            "mean_confidence": null,
+            "observed_accuracy": null,
+            "upper": 0.3333333333333333
+          },
+          {
+            "count": 0,
+            "lower": 0.3333333333333333,
+            "mean_confidence": null,
+            "observed_accuracy": null,
+            "upper": 0.4
+          },
+          {
+            "count": 0,
+            "lower": 0.4,
+            "mean_confidence": null,
+            "observed_accuracy": null,
+            "upper": 0.4666666666666667
+          },
+          {
+            "count": 1,
+            "lower": 0.4666666666666667,
+            "mean_confidence": 0.509512722492218,
+            "observed_accuracy": 0.0,
+            "upper": 0.5333333333333333
+          },
+          {
+            "count": 1,
+            "lower": 0.5333333333333333,
+            "mean_confidence": 0.5676695704460144,
+            "observed_accuracy": 1.0,
+            "upper": 0.6
+          },
+          {
+            "count": 1,
+            "lower": 0.6,
+            "mean_confidence": 0.6570993661880493,
+            "observed_accuracy": 1.0,
+            "upper": 0.6666666666666666
+          },
+          {
+            "count": 2,
+            "lower": 0.6666666666666666,
+            "mean_confidence": 0.6901345551013947,
+            "observed_accuracy": 1.0,
+            "upper": 0.7333333333333333
+          },
+          {
+            "count": 3,
+            "lower": 0.7333333333333333,
+            "mean_confidence": 0.7882634202639262,
+            "observed_accuracy": 0.3333333333333333,
+            "upper": 0.8
+          },
+          {
+            "count": 2,
+            "lower": 0.8,
+            "mean_confidence": 0.8181166052818298,
+            "observed_accuracy": 0.5,
+            "upper": 0.8666666666666667
+          },
+          {
+            "count": 4,
+            "lower": 0.8666666666666667,
+            "mean_confidence": 0.9039265960454941,
+            "observed_accuracy": 0.5,
+            "upper": 0.9333333333333333
+          },
+          {
+            "count": 111,
+            "lower": 0.9333333333333333,
+            "mean_confidence": 0.9966664394816837,
+            "observed_accuracy": 0.990990990990991,
+            "upper": 1.0
+          }
+        ],
+        "sample_count": 125,
+        "true_probabilities_below_floor": 0
+      },
+      "temperature_fit": {
+        "boundary_solution": false,
+        "fit_sample_count": 502,
+        "fitted_nll": 0.07393423310039011,
+        "fitting_objective": "Multiclass NLL on supplied calibration-fit rows only.",
+        "interpretation": "Fit-set NLL is resubstitution, not an independent performance estimate.",
+        "lower_bound": 0.25,
+        "probability_floor": 1e-15,
+        "raw_nll": 0.07414211856818984,
+        "temperature": 1.0666255164229537,
+        "upper_bound": 4.0
+      }
+    },
+    {
+      "calibrated_held_out": {
+        "accuracy": 0.96,
+        "bin_count": 15,
+        "brier": 0.06815512280301865,
+        "definitions": [
+          "NLL: mean -log(max(p_true, probability_floor)); natural logarithm.",
+          "Brier: mean sum_k (p_k - onehot_k)^2; not divided by class count.",
+          "ECE: sum_bin count/N * abs(observed top-label accuracy - mean confidence).",
+          "Equal-width confidence bins are [lower,upper); the last includes 1.",
+          "Empty bins have null accuracy/confidence and contribute zero to ECE."
+        ],
+        "ece": 0.03141130501586113,
+        "nll": 0.12245733425166846,
+        "probability_floor": 1e-15,
+        "probability_values_below_floor": 0,
+        "reliability_bins": [
+          {
+            "count": 0,
+            "lower": 0.0,
+            "mean_confidence": null,
+            "observed_accuracy": null,
+            "upper": 0.06666666666666667
+          },
+          {
+            "count": 0,
+            "lower": 0.06666666666666667,
+            "mean_confidence": null,
+            "observed_accuracy": null,
+            "upper": 0.13333333333333333
+          },
+          {
+            "count": 0,
+            "lower": 0.13333333333333333,
+            "mean_confidence": null,
+            "observed_accuracy": null,
+            "upper": 0.2
+          },
+          {
+            "count": 0,
+            "lower": 0.2,
+            "mean_confidence": null,
+            "observed_accuracy": null,
+            "upper": 0.26666666666666666
+          },
+          {
+            "count": 0,
+            "lower": 0.26666666666666666,
+            "mean_confidence": null,
+            "observed_accuracy": null,
+            "upper": 0.3333333333333333
+          },
+          {
+            "count": 0,
+            "lower": 0.3333333333333333,
+            "mean_confidence": null,
+            "observed_accuracy": null,
+            "upper": 0.4
+          },
+          {
+            "count": 0,
+            "lower": 0.4,
+            "mean_confidence": null,
+            "observed_accuracy": null,
+            "upper": 0.4666666666666667
+          },
+          {
+            "count": 1,
+            "lower": 0.4666666666666667,
+            "mean_confidence": 0.5021002518034773,
+            "observed_accuracy": 1.0,
+            "upper": 0.5333333333333333
+          },
+          {
+            "count": 2,
+            "lower": 0.5333333333333333,
+            "mean_confidence": 0.5518950851638178,
+            "observed_accuracy": 0.5,
+            "upper": 0.6
+          },
+          {
+            "count": 1,
+            "lower": 0.6,
+            "mean_confidence": 0.6389189455240547,
+            "observed_accuracy": 1.0,
+            "upper": 0.6666666666666666
+          },
+          {
+            "count": 2,
+            "lower": 0.6666666666666666,
+            "mean_confidence": 0.7158682357500565,
+            "observed_accuracy": 1.0,
+            "upper": 0.7333333333333333
+          },
+          {
+            "count": 3,
+            "lower": 0.7333333333333333,
+            "mean_confidence": 0.778249614810757,
+            "observed_accuracy": 0.3333333333333333,
+            "upper": 0.8
+          },
+          {
+            "count": 5,
+            "lower": 0.8,
+            "mean_confidence": 0.8328333597885255,
+            "observed_accuracy": 0.8,
+            "upper": 0.8666666666666667
+          },
+          {
+            "count": 6,
+            "lower": 0.8666666666666667,
+            "mean_confidence": 0.9153469575614809,
+            "observed_accuracy": 1.0,
+            "upper": 0.9333333333333333
+          },
+          {
+            "count": 105,
+            "lower": 0.9333333333333333,
+            "mean_confidence": 0.9941766164521585,
+            "observed_accuracy": 0.9904761904761905,
+            "upper": 1.0
+          }
+        ],
+        "sample_count": 125,
+        "true_probabilities_below_floor": 0
+      },
+      "fit_class_counts": [
+        157,
+        68,
+        140,
+        137
+      ],
+      "fit_count": 502,
+      "fit_group_count": 497,
+      "fold": 3,
+      "held_out_class_counts": [
+        39,
+        17,
+        35,
+        34
+      ],
+      "held_out_count": 125,
+      "held_out_group_count": 124,
+      "raw_held_out": {
+        "accuracy": 0.96,
+        "bin_count": 15,
+        "brier": 0.06902205983820611,
+        "definitions": [
+          "NLL: mean -log(max(p_true, probability_floor)); natural logarithm.",
+          "Brier: mean sum_k (p_k - onehot_k)^2; not divided by class count.",
+          "ECE: sum_bin count/N * abs(observed top-label accuracy - mean confidence).",
+          "Equal-width confidence bins are [lower,upper); the last includes 1.",
+          "Empty bins have null accuracy/confidence and contribute zero to ECE."
+        ],
+        "ece": 0.03617437171936028,
+        "nll": 0.12814268041578641,
+        "probability_floor": 1e-15,
+        "probability_values_below_floor": 0,
+        "reliability_bins": [
+          {
+            "count": 0,
+            "lower": 0.0,
+            "mean_confidence": null,
+            "observed_accuracy": null,
+            "upper": 0.06666666666666667
+          },
+          {
+            "count": 0,
+            "lower": 0.06666666666666667,
+            "mean_confidence": null,
+            "observed_accuracy": null,
+            "upper": 0.13333333333333333
+          },
+          {
+            "count": 0,
+            "lower": 0.13333333333333333,
+            "mean_confidence": null,
+            "observed_accuracy": null,
+            "upper": 0.2
+          },
+          {
+            "count": 0,
+            "lower": 0.2,
+            "mean_confidence": null,
+            "observed_accuracy": null,
+            "upper": 0.26666666666666666
+          },
+          {
+            "count": 0,
+            "lower": 0.26666666666666666,
+            "mean_confidence": null,
+            "observed_accuracy": null,
+            "upper": 0.3333333333333333
+          },
+          {
+            "count": 0,
+            "lower": 0.3333333333333333,
+            "mean_confidence": null,
+            "observed_accuracy": null,
+            "upper": 0.4
+          },
+          {
+            "count": 0,
+            "lower": 0.4,
+            "mean_confidence": null,
+            "observed_accuracy": null,
+            "upper": 0.4666666666666667
+          },
+          {
+            "count": 1,
+            "lower": 0.4666666666666667,
+            "mean_confidence": 0.5111734867095947,
+            "observed_accuracy": 1.0,
+            "upper": 0.5333333333333333
+          },
+          {
+            "count": 1,
+            "lower": 0.5333333333333333,
+            "mean_confidence": 0.5417375564575195,
+            "observed_accuracy": 0.0,
+            "upper": 0.6
+          },
+          {
+            "count": 2,
+            "lower": 0.6,
+            "mean_confidence": 0.6349077820777893,
+            "observed_accuracy": 1.0,
+            "upper": 0.6666666666666666
+          },
+          {
+            "count": 0,
+            "lower": 0.6666666666666666,
+            "mean_confidence": null,
+            "observed_accuracy": null,
+            "upper": 0.7333333333333333
+          },
+          {
+            "count": 2,
+            "lower": 0.7333333333333333,
+            "mean_confidence": 0.7749008536338806,
+            "observed_accuracy": 1.0,
+            "upper": 0.8
+          },
+          {
+            "count": 5,
+            "lower": 0.8,
+            "mean_confidence": 0.8419199228286743,
+            "observed_accuracy": 0.6,
+            "upper": 0.8666666666666667
+          },
+          {
+            "count": 4,
+            "lower": 0.8666666666666667,
+            "mean_confidence": 0.8973122388124466,
+            "observed_accuracy": 0.75,
+            "upper": 0.9333333333333333
+          },
+          {
+            "count": 110,
+            "lower": 0.9333333333333333,
+            "mean_confidence": 0.9955636463382027,
+            "observed_accuracy": 0.990909090909091,
+            "upper": 1.0
+          }
+        ],
+        "sample_count": 125,
+        "true_probabilities_below_floor": 0
+      },
+      "temperature_fit": {
+        "boundary_solution": false,
+        "fit_sample_count": 502,
+        "fitted_nll": 0.0858098778427179,
+        "fitting_objective": "Multiclass NLL on supplied calibration-fit rows only.",
+        "interpretation": "Fit-set NLL is resubstitution, not an independent performance estimate.",
+        "lower_bound": 0.25,
+        "probability_floor": 1e-15,
+        "raw_nll": 0.08796167623725626,
+        "temperature": 1.2142920325164537,
+        "upper_bound": 4.0
+      }
+    },
+    {
+      "calibrated_held_out": {
+        "accuracy": 0.96,
+        "bin_count": 15,
+        "brier": 0.04817920368200162,
+        "definitions": [
+          "NLL: mean -log(max(p_true, probability_floor)); natural logarithm.",
+          "Brier: mean sum_k (p_k - onehot_k)^2; not divided by class count.",
+          "ECE: sum_bin count/N * abs(observed top-label accuracy - mean confidence).",
+          "Equal-width confidence bins are [lower,upper); the last includes 1.",
+          "Empty bins have null accuracy/confidence and contribute zero to ECE."
+        ],
+        "ece": 0.035040822338185465,
+        "nll": 0.07473374481195635,
+        "probability_floor": 1e-15,
+        "probability_values_below_floor": 0,
+        "reliability_bins": [
+          {
+            "count": 0,
+            "lower": 0.0,
+            "mean_confidence": null,
+            "observed_accuracy": null,
+            "upper": 0.06666666666666667
+          },
+          {
+            "count": 0,
+            "lower": 0.06666666666666667,
+            "mean_confidence": null,
+            "observed_accuracy": null,
+            "upper": 0.13333333333333333
+          },
+          {
+            "count": 0,
+            "lower": 0.13333333333333333,
+            "mean_confidence": null,
+            "observed_accuracy": null,
+            "upper": 0.2
+          },
+          {
+            "count": 0,
+            "lower": 0.2,
+            "mean_confidence": null,
+            "observed_accuracy": null,
+            "upper": 0.26666666666666666
+          },
+          {
+            "count": 0,
+            "lower": 0.26666666666666666,
+            "mean_confidence": null,
+            "observed_accuracy": null,
+            "upper": 0.3333333333333333
+          },
+          {
+            "count": 0,
+            "lower": 0.3333333333333333,
+            "mean_confidence": null,
+            "observed_accuracy": null,
+            "upper": 0.4
+          },
+          {
+            "count": 0,
+            "lower": 0.4,
+            "mean_confidence": null,
+            "observed_accuracy": null,
+            "upper": 0.4666666666666667
+          },
+          {
+            "count": 0,
+            "lower": 0.4666666666666667,
+            "mean_confidence": null,
+            "observed_accuracy": null,
+            "upper": 0.5333333333333333
+          },
+          {
+            "count": 2,
+            "lower": 0.5333333333333333,
+            "mean_confidence": 0.5643749833388882,
+            "observed_accuracy": 0.0,
+            "upper": 0.6
+          },
+          {
+            "count": 1,
+            "lower": 0.6,
+            "mean_confidence": 0.6473121863587566,
+            "observed_accuracy": 1.0,
+            "upper": 0.6666666666666666
+          },
+          {
+            "count": 1,
+            "lower": 0.6666666666666666,
+            "mean_confidence": 0.6844490048234407,
+            "observed_accuracy": 1.0,
+            "upper": 0.7333333333333333
+          },
+          {
+            "count": 4,
+            "lower": 0.7333333333333333,
+            "mean_confidence": 0.7718797474305141,
+            "observed_accuracy": 0.5,
+            "upper": 0.8
+          },
+          {
+            "count": 2,
+            "lower": 0.8,
+            "mean_confidence": 0.8513430097714425,
+            "observed_accuracy": 0.5,
+            "upper": 0.8666666666666667
+          },
+          {
+            "count": 2,
+            "lower": 0.8666666666666667,
+            "mean_confidence": 0.9187076311034603,
+            "observed_accuracy": 1.0,
+            "upper": 0.9333333333333333
+          },
+          {
+            "count": 113,
+            "lower": 0.9333333333333333,
+            "mean_confidence": 0.9944219091175258,
+            "observed_accuracy": 1.0,
+            "upper": 1.0
+          }
+        ],
+        "sample_count": 125,
+        "true_probabilities_below_floor": 0
+      },
+      "fit_class_counts": [
+        157,
+        68,
+        140,
+        137
+      ],
+      "fit_count": 502,
+      "fit_group_count": 497,
+      "fold": 4,
+      "held_out_class_counts": [
+        39,
+        17,
+        35,
+        34
+      ],
+      "held_out_count": 125,
+      "held_out_group_count": 124,
+      "raw_held_out": {
+        "accuracy": 0.96,
+        "bin_count": 15,
+        "brier": 0.05074519174088244,
+        "definitions": [
+          "NLL: mean -log(max(p_true, probability_floor)); natural logarithm.",
+          "Brier: mean sum_k (p_k - onehot_k)^2; not divided by class count.",
+          "ECE: sum_bin count/N * abs(observed top-label accuracy - mean confidence).",
+          "Equal-width confidence bins are [lower,upper); the last includes 1.",
+          "Empty bins have null accuracy/confidence and contribute zero to ECE."
+        ],
+        "ece": 0.03348413944244381,
+        "nll": 0.07636424875237839,
+        "probability_floor": 1e-15,
+        "probability_values_below_floor": 0,
+        "reliability_bins": [
+          {
+            "count": 0,
+            "lower": 0.0,
+            "mean_confidence": null,
+            "observed_accuracy": null,
+            "upper": 0.06666666666666667
+          },
+          {
+            "count": 0,
+            "lower": 0.06666666666666667,
+            "mean_confidence": null,
+            "observed_accuracy": null,
+            "upper": 0.13333333333333333
+          },
+          {
+            "count": 0,
+            "lower": 0.13333333333333333,
+            "mean_confidence": null,
+            "observed_accuracy": null,
+            "upper": 0.2
+          },
+          {
+            "count": 0,
+            "lower": 0.2,
+            "mean_confidence": null,
+            "observed_accuracy": null,
+            "upper": 0.26666666666666666
+          },
+          {
+            "count": 0,
+            "lower": 0.26666666666666666,
+            "mean_confidence": null,
+            "observed_accuracy": null,
+            "upper": 0.3333333333333333
+          },
+          {
+            "count": 0,
+            "lower": 0.3333333333333333,
+            "mean_confidence": null,
+            "observed_accuracy": null,
+            "upper": 0.4
+          },
+          {
+            "count": 0,
+            "lower": 0.4,
+            "mean_confidence": null,
+            "observed_accuracy": null,
+            "upper": 0.4666666666666667
+          },
+          {
+            "count": 0,
+            "lower": 0.4666666666666667,
+            "mean_confidence": null,
+            "observed_accuracy": null,
+            "upper": 0.5333333333333333
+          },
+          {
+            "count": 1,
+            "lower": 0.5333333333333333,
+            "mean_confidence": 0.5553951859474182,
+            "observed_accuracy": 0.0,
+            "upper": 0.6
+          },
+          {
+            "count": 1,
+            "lower": 0.6,
+            "mean_confidence": 0.6055483222007751,
+            "observed_accuracy": 0.0,
+            "upper": 0.6666666666666666
+          },
+          {
+            "count": 1,
+            "lower": 0.6666666666666666,
+            "mean_confidence": 0.6811228394508362,
+            "observed_accuracy": 1.0,
+            "upper": 0.7333333333333333
+          },
+          {
+            "count": 1,
+            "lower": 0.7333333333333333,
+            "mean_confidence": 0.7604731917381287,
+            "observed_accuracy": 1.0,
+            "upper": 0.8
+          },
+          {
+            "count": 4,
+            "lower": 0.8,
+            "mean_confidence": 0.8328380584716797,
+            "observed_accuracy": 0.5,
+            "upper": 0.8666666666666667
+          },
+          {
+            "count": 2,
+            "lower": 0.8666666666666667,
+            "mean_confidence": 0.8995654582977295,
+            "observed_accuracy": 0.5,
+            "upper": 0.9333333333333333
+          },
+          {
+            "count": 115,
+            "lower": 0.9333333333333333,
+            "mean_confidence": 0.9970809843229211,
+            "observed_accuracy": 1.0,
+            "upper": 1.0
+          }
+        ],
+        "sample_count": 125,
+        "true_probabilities_below_floor": 0
+      },
+      "temperature_fit": {
+        "boundary_solution": false,
+        "fit_sample_count": 502,
+        "fitted_nll": 0.09766460116994845,
+        "fitting_objective": "Multiclass NLL on supplied calibration-fit rows only.",
+        "interpretation": "Fit-set NLL is resubstitution, not an independent performance estimate.",
+        "lower_bound": 0.25,
+        "probability_floor": 1e-15,
+        "raw_nll": 0.10085471201001722,
+        "temperature": 1.249443486716966,
+        "upper_bound": 4.0
+      }
+    }
+  ],
+  "limitations": [
+    "Each calibrator sees no labels or probabilities from its held-out groups.",
+    "Classifier weights were already selected using this validation set; this is not a fresh holdout.",
+    "Known image groups do not establish independent plants, fields or sources.",
+    "ECE is bin-dependent; fit selection must not use the consumed test partition."
+  ],
+  "n_splits": 5,
+  "out_of_fold": {
+    "accuracy": 0.9681020733652312,
+    "bin_count": 15,
+    "brier": 0.05163338969776187,
+    "definitions": [
+      "NLL: mean -log(max(p_true, probability_floor)); natural logarithm.",
+      "Brier: mean sum_k (p_k - onehot_k)^2; not divided by class count.",
+      "ECE: sum_bin count/N * abs(observed top-label accuracy - mean confidence).",
+      "Equal-width confidence bins are [lower,upper); the last includes 1.",
+      "Empty bins have null accuracy/confidence and contribute zero to ECE."
+    ],
+    "ece": 0.0179467174311494,
+    "nll": 0.09639724536153993,
+    "probability_floor": 1e-15,
+    "probability_values_below_floor": 0,
+    "reliability_bins": [
+      {
+        "count": 0,
+        "lower": 0.0,
+        "mean_confidence": null,
+        "observed_accuracy": null,
+        "upper": 0.06666666666666667
+      },
+      {
+        "count": 0,
+        "lower": 0.06666666666666667,
+        "mean_confidence": null,
+        "observed_accuracy": null,
+        "upper": 0.13333333333333333
+      },
+      {
+        "count": 0,
+        "lower": 0.13333333333333333,
+        "mean_confidence": null,
+        "observed_accuracy": null,
+        "upper": 0.2
+      },
+      {
+        "count": 0,
+        "lower": 0.2,
+        "mean_confidence": null,
+        "observed_accuracy": null,
+        "upper": 0.26666666666666666
+      },
+      {
+        "count": 0,
+        "lower": 0.26666666666666666,
+        "mean_confidence": null,
+        "observed_accuracy": null,
+        "upper": 0.3333333333333333
+      },
+      {
+        "count": 0,
+        "lower": 0.3333333333333333,
+        "mean_confidence": null,
+        "observed_accuracy": null,
+        "upper": 0.4
+      },
+      {
+        "count": 0,
+        "lower": 0.4,
+        "mean_confidence": null,
+        "observed_accuracy": null,
+        "upper": 0.4666666666666667
+      },
+      {
+        "count": 5,
+        "lower": 0.4666666666666667,
+        "mean_confidence": 0.5130991927290885,
+        "observed_accuracy": 0.4,
+        "upper": 0.5333333333333333
+      },
+      {
+        "count": 7,
+        "lower": 0.5333333333333333,
+        "mean_confidence": 0.5623045146843856,
+        "observed_accuracy": 0.5714285714285714,
+        "upper": 0.6
+      },
+      {
+        "count": 5,
+        "lower": 0.6,
+        "mean_confidence": 0.6526121035435376,
+        "observed_accuracy": 1.0,
+        "upper": 0.6666666666666666
+      },
+      {
+        "count": 9,
+        "lower": 0.6666666666666666,
+        "mean_confidence": 0.7020592157382791,
+        "observed_accuracy": 1.0,
+        "upper": 0.7333333333333333
+      },
+      {
+        "count": 20,
+        "lower": 0.7333333333333333,
+        "mean_confidence": 0.7728690379487007,
+        "observed_accuracy": 0.6,
+        "upper": 0.8
+      },
+      {
+        "count": 12,
+        "lower": 0.8,
+        "mean_confidence": 0.8335266581096605,
+        "observed_accuracy": 0.75,
+        "upper": 0.8666666666666667
+      },
+      {
+        "count": 23,
+        "lower": 0.8666666666666667,
+        "mean_confidence": 0.9115898445112423,
+        "observed_accuracy": 0.9565217391304348,
+        "upper": 0.9333333333333333
+      },
+      {
+        "count": 546,
+        "lower": 0.9333333333333333,
+        "mean_confidence": 0.9950335408510865,
+        "observed_accuracy": 0.9963369963369964,
+        "upper": 1.0
+      }
+    ],
+    "sample_count": 627,
+    "true_probabilities_below_floor": 0
+  },
+  "raw": {
+    "accuracy": 0.9681020733652312,
+    "bin_count": 15,
+    "brier": 0.05134712442782574,
+    "definitions": [
+      "NLL: mean -log(max(p_true, probability_floor)); natural logarithm.",
+      "Brier: mean sum_k (p_k - onehot_k)^2; not divided by class count.",
+      "ECE: sum_bin count/N * abs(observed top-label accuracy - mean confidence).",
+      "Equal-width confidence bins are [lower,upper); the last includes 1.",
+      "Empty bins have null accuracy/confidence and contribute zero to ECE."
+    ],
+    "ece": 0.016285386096917837,
+    "nll": 0.09597224325849434,
+    "probability_floor": 1e-15,
+    "probability_values_below_floor": 0,
+    "reliability_bins": [
+      {
+        "count": 0,
+        "lower": 0.0,
+        "mean_confidence": null,
+        "observed_accuracy": null,
+        "upper": 0.06666666666666667
+      },
+      {
+        "count": 0,
+        "lower": 0.06666666666666667,
+        "mean_confidence": null,
+        "observed_accuracy": null,
+        "upper": 0.13333333333333333
+      },
+      {
+        "count": 0,
+        "lower": 0.13333333333333333,
+        "mean_confidence": null,
+        "observed_accuracy": null,
+        "upper": 0.2
+      },
+      {
+        "count": 0,
+        "lower": 0.2,
+        "mean_confidence": null,
+        "observed_accuracy": null,
+        "upper": 0.26666666666666666
+      },
+      {
+        "count": 0,
+        "lower": 0.26666666666666666,
+        "mean_confidence": null,
+        "observed_accuracy": null,
+        "upper": 0.3333333333333333
+      },
+      {
+        "count": 0,
+        "lower": 0.3333333333333333,
+        "mean_confidence": null,
+        "observed_accuracy": null,
+        "upper": 0.4
+      },
+      {
+        "count": 0,
+        "lower": 0.4,
+        "mean_confidence": null,
+        "observed_accuracy": null,
+        "upper": 0.4666666666666667
+      },
+      {
+        "count": 3,
+        "lower": 0.4666666666666667,
+        "mean_confidence": 0.5091265241305033,
+        "observed_accuracy": 0.6666666666666666,
+        "upper": 0.5333333333333333
+      },
+      {
+        "count": 6,
+        "lower": 0.5333333333333333,
+        "mean_confidence": 0.5647248725096384,
+        "observed_accuracy": 0.3333333333333333,
+        "upper": 0.6
+      },
+      {
+        "count": 5,
+        "lower": 0.6,
+        "mean_confidence": 0.6314521074295044,
+        "observed_accuracy": 0.8,
+        "upper": 0.6666666666666666
+      },
+      {
+        "count": 5,
+        "lower": 0.6666666666666666,
+        "mean_confidence": 0.7006767272949219,
+        "observed_accuracy": 1.0,
+        "upper": 0.7333333333333333
+      },
+      {
+        "count": 11,
+        "lower": 0.7333333333333333,
+        "mean_confidence": 0.7776082158088684,
+        "observed_accuracy": 0.8181818181818182,
+        "upper": 0.8
+      },
+      {
+        "count": 19,
+        "lower": 0.8,
+        "mean_confidence": 0.8388938307762146,
+        "observed_accuracy": 0.6842105263157895,
+        "upper": 0.8666666666666667
+      },
+      {
+        "count": 14,
+        "lower": 0.8666666666666667,
+        "mean_confidence": 0.8989979880196708,
+        "observed_accuracy": 0.7142857142857143,
+        "upper": 0.9333333333333333
+      },
+      {
+        "count": 564,
+        "lower": 0.9333333333333333,
+        "mean_confidence": 0.9965236655152436,
+        "observed_accuracy": 0.9964539007092199,
+        "upper": 1.0
+      }
+    ],
+    "sample_count": 627,
+    "true_probabilities_below_floor": 0
+  },
+  "scope": "Calibration-only group-aware stratified cross-fitting of supplied validation rows.",
+  "seed": 20261007
+}

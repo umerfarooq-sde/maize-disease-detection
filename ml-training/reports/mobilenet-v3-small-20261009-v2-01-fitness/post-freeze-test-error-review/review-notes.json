@@ -1,0 +1,18 @@
+{
+  "partition": "test",
+  "reviewed_after_frozen_selection_and_single_final_evaluation": true,
+  "new_model_inference": false,
+  "model_calibration_threshold_label_or_split_changes": false,
+  "examples_reviewed": 8,
+  "observations": [
+    {"relative_path": "Gray_Leaf_Spot/Gray_Leaf_Spot (218).JPG", "note": "Broad elongated pale necrotic lesion on gray-backed leaf; morphologically overlapping GLS/Blight, wrong Blight confidence0.998318."},
+    {"relative_path": "Gray_Leaf_Spot/Gray_Leaf_Spot (1070).JPG", "note": "Large pale/brown dead-tissue region across green leaf; wrong Blight confidence0.997346, no pathology-confirmed relabeling."},
+    {"relative_path": "Gray_Leaf_Spot/Gray_Leaf_Spot (661).jpg", "note": "Portrait field photograph, dense elongated pale lesions and distracting foliage; wrong Blight confidence0.995972."},
+    {"relative_path": "Northern_Corn_Leaf_Blight/Northern_Corn_Leaf_Blight (1182).JPG", "note": "Heavily damaged leaf with mixture of punctate and elongated pale lesions on gray background; confident reciprocal GLS error0.984487."},
+    {"relative_path": "Gray_Leaf_Spot/Gray_Leaf_Spot (550).jpg", "note": "Partial field leaf densely covered in long pale streaks; high-confidence Blight confusion0.975382."},
+    {"relative_path": "Common_Rust/Common_Rust (1855).jpg", "note": "Few small yellow/brown spots in brightly lit field frame, fine-detail and symptom-class ambiguity; wrong Blight0.966762."},
+    {"relative_path": "Gray_Leaf_Spot/Gray_Leaf_Spot (464).jpg", "note": "Wide green field leaf with punctate and elongated yellow/brown marks; uncertain Rust0.481977 versus GLS0.414493."},
+    {"relative_path": "Northern_Corn_Leaf_Blight/Northern_Corn_Leaf_Blight (1836).jpg", "note": "Partial field leaf with broad dead tissue and elongated pale marks; max probabilityGLS0.397897 with Rust0.304986/Blight0.297016, substantial closed-set ambiguity."}
+  ],
+  "interpretation": "Descriptive error review only. Source appearance, small lesions, heavy tissue damage and interclass morphology overlap remain plausible failure factors; label error is not proven and raw labels remain unchanged. New independent field evidence is required; do not retune using this consumed test."
+}

@@ -1,0 +1,93 @@
+{
+  "added_contradictory_families": 4,
+  "added_excluded_files": 8,
+  "added_excluded_unique_contents": 8,
+  "all_old_new_confirmed_parent_edge_crossings": 0,
+  "class_counts": {
+    "Common_Rust": 1301,
+    "Gray_Leaf_Spot": 564,
+    "Healthy": 1162,
+    "Northern_Corn_Leaf_Blight": 1135
+  },
+  "class_group_counts": {
+    "Common_Rust": 1297,
+    "Gray_Leaf_Spot": 563,
+    "Healthy": 1154,
+    "Northern_Corn_Leaf_Blight": 1107
+  },
+  "classes": [
+    {
+      "index": 0,
+      "label": "Common_Rust"
+    },
+    {
+      "index": 1,
+      "label": "Gray_Leaf_Spot"
+    },
+    {
+      "index": 2,
+      "label": "Healthy"
+    },
+    {
+      "index": 3,
+      "label": "Northern_Corn_Leaf_Blight"
+    }
+  ],
+  "commercial_clearance": false,
+  "confirmed_parent_relations_sha256": "7bcd7552dad9591c6a0a19b838f3a2d9e231765fcb1b9e4068fc4d9db2a35998",
+  "counts": {
+    "duplicate_aliases": 3852,
+    "eligible_groups": 4121,
+    "eligible_unique_samples": 4162,
+    "excluded_files": 26,
+    "excluded_unique_contents": 24,
+    "source_files": 8040,
+    "source_unique_byte_contents": 4186,
+    "test": 624,
+    "train": 2911,
+    "validation": 627
+  },
+  "dataset_version": "maize-research-20261008-v2",
+  "evaluation_boundary": "Corrected, previously inspected public benchmark; v1 metrics cannot establish independent evaluation. Fresh model fitting is required; this is not newly collected or never-inspected external test data.",
+  "independent_integrity_sha256": "7ce9193d20036d55dcf2af22bd6b050544113b74ccd6ed1246273011c4db2927",
+  "known_original_id_uuid_alias_overlap": 0,
+  "manifest_file_sha256": "7286a103820ccc0f0f85de9b8ffa5475fbea4cbae22e0d17fef0d99e22d2792d",
+  "manifest_fingerprint": "a96fd5d32a8e0696df7cfc5bbfa6b78941c8a2f308f940ce295147a8832a583b",
+  "moved_surviving_samples": 1783,
+  "parent_dataset_version": "maize-research-20261007-v1",
+  "parent_manifest_file_sha256": "2f0f36b74f25bbb2f2d7f0db489a466f8b58d9de436e6e3bced5e3882dc633ed",
+  "parent_manifest_fingerprint": "e1abe6c4bba09080371345365ab92067f1f08bfba9f927f66cbc9e58af6b5e98",
+  "partition_content_group_overlap": 0,
+  "preprocessing_hash": "b142e59f458d27a2d3fddbfc86c2f2f802670ab4909f1275babbef92de9cb5c8",
+  "raw_image_redistribution": false,
+  "seed": 20261007,
+  "split_class_counts": {
+    "test": {
+      "Common_Rust": 195,
+      "Gray_Leaf_Spot": 85,
+      "Healthy": 174,
+      "Northern_Corn_Leaf_Blight": 170
+    },
+    "train": {
+      "Common_Rust": 910,
+      "Gray_Leaf_Spot": 394,
+      "Healthy": 813,
+      "Northern_Corn_Leaf_Blight": 794
+    },
+    "validation": {
+      "Common_Rust": 196,
+      "Gray_Leaf_Spot": 85,
+      "Healthy": 175,
+      "Northern_Corn_Leaf_Blight": 171
+    }
+  },
+  "split_ratios": [
+    0.7,
+    0.15,
+    0.15
+  ],
+  "unresolved_candidate_pair_numbers": [
+    24,
+    58
+  ]
+}

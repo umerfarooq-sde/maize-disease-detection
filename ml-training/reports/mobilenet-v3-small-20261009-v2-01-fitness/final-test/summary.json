@@ -1,0 +1,242 @@
+{
+  "status": "completed",
+  "candidate_id": "mobilenet-v3-small-v2-20261009",
+  "sample_count": 624,
+  "test_evaluated_once": true,
+  "test_used_for_selection": false,
+  "corpus_prior_test_consumption": true,
+  "argmax_unchanged_by_calibration": true,
+  "checkpoint_sha256": "e95a2e83262637fc1a08b919e6003bddb2fe70664b9c51418f059b7c8287dc66",
+  "manifest_fingerprint": "a96fd5d32a8e0696df7cfc5bbfa6b78941c8a2f308f940ce295147a8832a583b",
+  "preprocessing_hash": "b142e59f458d27a2d3fddbfc86c2f2f802670ab4909f1275babbef92de9cb5c8",
+  "raw_metrics": {
+    "class_names": [
+      "Common_Rust",
+      "Gray_Leaf_Spot",
+      "Healthy",
+      "Northern_Corn_Leaf_Blight"
+    ],
+    "sample_count": 624,
+    "accuracy": 0.9583333333333334,
+    "macro_precision": 0.9496396846546746,
+    "macro_recall": 0.9413650075414781,
+    "macro_f1": 0.9451708647993344,
+    "weighted_precision": 0.957712468753025,
+    "weighted_recall": 0.9583333333333334,
+    "weighted_f1": 0.9578134440917534,
+    "aggregate_undefined_reasons": {},
+    "per_class": [
+      {
+        "index": 0,
+        "label": "Common_Rust",
+        "support": 195,
+        "predicted_support": 200,
+        "true_positive": 194,
+        "false_positive": 6,
+        "false_negative": 1,
+        "true_negative": 423,
+        "precision": 0.97,
+        "recall": 0.9948717948717949,
+        "f1": 0.9822784810126582,
+        "specificity": 0.986013986013986,
+        "roc_auc": 0.9995816149662304,
+        "undefined_reasons": {}
+      },
+      {
+        "index": 1,
+        "label": "Gray_Leaf_Spot",
+        "support": 85,
+        "predicted_support": 79,
+        "true_positive": 71,
+        "false_positive": 8,
+        "false_negative": 14,
+        "true_negative": 531,
+        "precision": 0.8987341772151899,
+        "recall": 0.8352941176470589,
+        "f1": 0.8658536585365854,
+        "specificity": 0.9851576994434137,
+        "roc_auc": 0.9888464476699771,
+        "undefined_reasons": {}
+      },
+      {
+        "index": 2,
+        "label": "Healthy",
+        "support": 174,
+        "predicted_support": 174,
+        "true_positive": 174,
+        "false_positive": 0,
+        "false_negative": 0,
+        "true_negative": 450,
+        "precision": 1.0,
+        "recall": 1.0,
+        "f1": 1.0,
+        "specificity": 1.0,
+        "roc_auc": 1.0,
+        "undefined_reasons": {}
+      },
+      {
+        "index": 3,
+        "label": "Northern_Corn_Leaf_Blight",
+        "support": 170,
+        "predicted_support": 171,
+        "true_positive": 159,
+        "false_positive": 12,
+        "false_negative": 11,
+        "true_negative": 442,
+        "precision": 0.9298245614035088,
+        "recall": 0.9352941176470588,
+        "f1": 0.9325513196480938,
+        "specificity": 0.973568281938326,
+        "roc_auc": 0.9930033687483805,
+        "undefined_reasons": {}
+      }
+    ],
+    "confusion_matrix": [
+      [
+        194,
+        0,
+        0,
+        1
+      ],
+      [
+        3,
+        71,
+        0,
+        11
+      ],
+      [
+        0,
+        0,
+        174,
+        0
+      ],
+      [
+        3,
+        8,
+        0,
+        159
+      ]
+    ],
+    "roc_auc": {
+      "macro": 0.995357857846147,
+      "weighted": 0.99644380714357,
+      "undefined_reason": null
+    },
+    "classification_summary": "Class | Precision | Recall | F1 | Specificity | Support\nCommon_Rust | 0.9700 | 0.9949 | 0.9823 | 0.9860 | 195\nGray_Leaf_Spot | 0.8987 | 0.8353 | 0.8659 | 0.9852 | 85\nHealthy | 1.0000 | 1.0000 | 1.0000 | 1.0000 | 174\nNorthern_Corn_Leaf_Blight | 0.9298 | 0.9353 | 0.9326 | 0.9736 | 170\nAccuracy: 0.9583 (624 samples)\nmacro: precision=0.9496, recall=0.9414, F1=0.9452\nweighted: precision=0.9577, recall=0.9583, F1=0.9578\n"
+  },
+  "calibrated_metrics": {
+    "class_names": [
+      "Common_Rust",
+      "Gray_Leaf_Spot",
+      "Healthy",
+      "Northern_Corn_Leaf_Blight"
+    ],
+    "sample_count": 624,
+    "accuracy": 0.9583333333333334,
+    "macro_precision": 0.9496396846546746,
+    "macro_recall": 0.9413650075414781,
+    "macro_f1": 0.9451708647993344,
+    "weighted_precision": 0.957712468753025,
+    "weighted_recall": 0.9583333333333334,
+    "weighted_f1": 0.9578134440917534,
+    "aggregate_undefined_reasons": {},
+    "per_class": [
+      {
+        "index": 0,
+        "label": "Common_Rust",
+        "support": 195,
+        "predicted_support": 200,
+        "true_positive": 194,
+        "false_positive": 6,
+        "false_negative": 1,
+        "true_negative": 423,
+        "precision": 0.97,
+        "recall": 0.9948717948717949,
+        "f1": 0.9822784810126582,
+        "specificity": 0.986013986013986,
+        "roc_auc": 0.9995816149662304,
+        "undefined_reasons": {}
+      },
+      {
+        "index": 1,
+        "label": "Gray_Leaf_Spot",
+        "support": 85,
+        "predicted_support": 79,
+        "true_positive": 71,
+        "false_positive": 8,
+        "false_negative": 14,
+        "true_negative": 531,
+        "precision": 0.8987341772151899,
+        "recall": 0.8352941176470589,
+        "f1": 0.8658536585365854,
+        "specificity": 0.9851576994434137,
+        "roc_auc": 0.9888464476699771,
+        "undefined_reasons": {}
+      },
+      {
+        "index": 2,
+        "label": "Healthy",
+        "support": 174,
+        "predicted_support": 174,
+        "true_positive": 174,
+        "false_positive": 0,
+        "false_negative": 0,
+        "true_negative": 450,
+        "precision": 1.0,
+        "recall": 1.0,
+        "f1": 1.0,
+        "specificity": 1.0,
+        "roc_auc": 1.0,
+        "undefined_reasons": {}
+      },
+      {
+        "index": 3,
+        "label": "Northern_Corn_Leaf_Blight",
+        "support": 170,
+        "predicted_support": 171,
+        "true_positive": 159,
+        "false_positive": 12,
+        "false_negative": 11,
+        "true_negative": 442,
+        "precision": 0.9298245614035088,
+        "recall": 0.9352941176470588,
+        "f1": 0.9325513196480938,
+        "specificity": 0.973568281938326,
+        "roc_auc": 0.9930033687483805,
+        "undefined_reasons": {}
+      }
+    ],
+    "confusion_matrix": [
+      [
+        194,
+        0,
+        0,
+        1
+      ],
+      [
+        3,
+        71,
+        0,
+        11
+      ],
+      [
+        0,
+        0,
+        174,
+        0
+      ],
+      [
+        3,
+        8,
+        0,
+        159
+      ]
+    ],
+    "roc_auc": {
+      "macro": 0.995357857846147,
+      "weighted": 0.99644380714357,
+      "undefined_reason": null
+    },
+    "classification_summary": "Class | Precision | Recall | F1 | Specificity | Support\nCommon_Rust | 0.9700 | 0.9949 | 0.9823 | 0.9860 | 195\nGray_Leaf_Spot | 0.8987 | 0.8353 | 0.8659 | 0.9852 | 85\nHealthy | 1.0000 | 1.0000 | 1.0000 | 1.0000 | 174\nNorthern_Corn_Leaf_Blight | 0.9298 | 0.9353 | 0.9326 | 0.9736 | 170\nAccuracy: 0.9583 (624 samples)\nmacro: precision=0.9496, recall=0.9414, F1=0.9452\nweighted: precision=0.9577, recall=0.9583, F1=0.9578\n"
+  }
+}

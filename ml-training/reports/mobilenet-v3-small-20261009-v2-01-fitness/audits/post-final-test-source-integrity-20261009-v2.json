@@ -1,0 +1,79 @@
+{
+  "verified_utc": "2026-10-09T11:03:18.400399+00:00",
+  "stage": "after final descriptive V2 TEST evaluation",
+  "source_files_names_bytes_sizes_mtimes_unchanged": 8040,
+  "source_unique_contents": 4186,
+  "source_inventory_sha256": "9efbd6ad198c53365cf64c8a2ed736eef2dd5e3c0f9a81341b2b647c3b6596f9",
+  "manifest_fingerprint": "a96fd5d32a8e0696df7cfc5bbfa6b78941c8a2f308f940ce295147a8832a583b",
+  "manifest_file_sha256": "7286a103820ccc0f0f85de9b8ffa5475fbea4cbae22e0d17fef0d99e22d2792d",
+  "counts": {
+    "duplicate_aliases": 3852,
+    "eligible_groups": 4121,
+    "eligible_unique_samples": 4162,
+    "excluded_files": 26,
+    "excluded_unique_contents": 24,
+    "source_files": 8040,
+    "source_unique_byte_contents": 4186,
+    "test": 624,
+    "train": 2911,
+    "validation": 627
+  },
+  "split_counts": {
+    "train": 2911,
+    "validation": 627,
+    "test": 624
+  },
+  "class_counts": {
+    "Northern_Corn_Leaf_Blight": 1135,
+    "Gray_Leaf_Spot": 564,
+    "Common_Rust": 1301,
+    "Healthy": 1162
+  },
+  "all_47_confirmed_edge_audit": {
+    "known_identity_overlap_count": 0,
+    "pairwise_intersections": {
+      "train/validation": {
+        "sample_id": 0,
+        "content_hash": 0,
+        "pixel_hash": 0,
+        "group_id": 0,
+        "original_id": 0,
+        "original_uuid": 0,
+        "relative_path": 0
+      },
+      "train/test": {
+        "sample_id": 0,
+        "content_hash": 0,
+        "pixel_hash": 0,
+        "group_id": 0,
+        "original_id": 0,
+        "original_uuid": 0,
+        "relative_path": 0
+      },
+      "validation/test": {
+        "sample_id": 0,
+        "content_hash": 0,
+        "pixel_hash": 0,
+        "group_id": 0,
+        "original_id": 0,
+        "original_uuid": 0,
+        "relative_path": 0
+      }
+    },
+    "confirmed_edge_counts": {
+      "both_ineligible": 6,
+      "same_partition": 41
+    },
+    "confirmed_edge_crossings": [],
+    "excluded_contents_in_partitions": [],
+    "mixed_label_group_ids": [],
+    "eligible_unique_contents": 4162,
+    "eligible_groups": 4121,
+    "known_relationships_disjoint": true,
+    "limitation": "Known identities do not prove unknown photo, plant or capture independence."
+  },
+  "raw_source_changes": false,
+  "model_inference_performed": false,
+  "machine_specific_dataset_path_in_report": false,
+  "remaining_uncertainty": "Two reviewed candidates remain unresolved; pair 24 crosses TRAIN/VALIDATION. Disjointness applies to confirmed identities, not unknown plant/field/capture relations."
+}

@@ -63,6 +63,7 @@ class TrainingSettings:
     smoke_train_size: int = 32
     smoke_validation_size: int = 16
     pretrained: bool = True
+    defer_test: bool = False
 
     def __post_init__(self) -> None:
         if (
@@ -85,9 +86,10 @@ class FinalTestGuard:
     smoke: bool
     model_selected: bool = False
     evaluated: bool = False
+    deferred: bool = False
 
     def claim(self) -> None:
-        if self.smoke or not self.model_selected or self.evaluated:
+        if self.smoke or self.deferred or not self.model_selected or self.evaluated:
             raise ValueError("Final test requires a selected model and may run only once.")
         self.evaluated = True
 
@@ -322,6 +324,7 @@ def run_training(
             "preprocessing_hash": config.fingerprint,
             "preprocessing_version": config.preprocessing_version,
             "test_selection_usage": "never",
+            "final_test_deferred": settings.defer_test,
             "selection": "validation macro F1; validation loss breaks exact ties",
             "augmentation": (
                 "TRAIN only: horizontal flip and small affine; normalized background fill"
@@ -329,7 +332,7 @@ def run_training(
         },
     )
     history: list[HistoryRow] = []
-    guard = FinalTestGuard(smoke=settings.smoke)
+    guard = FinalTestGuard(smoke=settings.smoke, deferred=settings.defer_test)
     try:
         train_rows = manifest.rows_for_split("train")
         validation_rows = manifest.rows_for_split("validation")
@@ -341,7 +344,7 @@ def run_training(
             {
                 "train": [row.sample_id for row in train_rows],
                 "validation": [row.sample_id for row in validation_rows],
-                "test": [] if settings.smoke else list(manifest.splits.test),
+                "test": [] if settings.smoke or settings.defer_test else list(manifest.splits.test),
                 "smoke": settings.smoke,
             },
         )
@@ -498,7 +501,7 @@ def run_training(
             analyze_generalization(selected_train.metrics, selected_validation.metrics, history),
         )
         final_metrics: EvaluationMetrics | None = None
-        if not settings.smoke:
+        if not settings.smoke and not settings.defer_test:
             guard.claim()
             test_loader = make_loader(
                 MaizeDataset(
@@ -523,6 +526,7 @@ def run_training(
             "train_samples": len(train_rows),
             "validation_samples": len(validation_rows),
             "test_evaluated_once": guard.evaluated,
+            "final_test_deferred": settings.defer_test,
             "test_metrics": final_metrics,
             "elapsed_seconds": time.monotonic() - started,
         }
@@ -550,13 +554,18 @@ def main() -> None:
     )
     parser.add_argument("--output", type=Path, required=True)
     parser.add_argument("--smoke", action="store_true")
+    parser.add_argument(
+        "--defer-test",
+        action="store_true",
+        help="Fit/select with train/validation only; defer test until the audit decision is frozen",
+    )
     parser.add_argument("--batch-size", type=int, default=16)
     args = parser.parse_args()
     run_training(
         args.manifest,
         args.config,
         args.output,
-        TrainingSettings(smoke=args.smoke, batch_size=args.batch_size),
+        TrainingSettings(smoke=args.smoke, batch_size=args.batch_size, defer_test=args.defer_test),
     )
 
 

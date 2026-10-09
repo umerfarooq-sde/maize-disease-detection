@@ -1,0 +1,1813 @@
+{
+  "schema_version": 1,
+  "review_status": "FINAL_CONFIRMED_RELATIONS",
+  "review_completed": "2026-10-09 (Asia/Karachi); source screening initiated 2026-10-08",
+  "parent_manifest_fingerprint": "e1abe6c4bba09080371345365ab92067f1f08bfba9f927f66cbc9e58af6b5e98",
+  "parent_dataset_version": "maize-research-20261007-v1",
+  "input_hashes": {
+    "parent_manifest_file": "2f0f36b74f25bbb2f2d7f0db489a466f8b58d9de436e6e3bced5e3882dc633ed",
+    "all_group_similarity_screen": "e8f80efe164d969dabf05510050cab334acd52b13f44bb11f72123151c602e78",
+    "all_group_geometry": "5f97d47c0fc9de0699d39992b98e106a3a7ec1269a369ae031517bb58723ba08",
+    "phase95_group_evidence": "4274fc5d134c9c1539890f4abd0f4dfd8f72114973b205e43b6d9470ca1018e8",
+    "phase95_inventory": "9efbd6ad198c53365cf64c8a2ed736eef2dd5e3c0f9a81341b2b647c3b6596f9"
+  },
+  "screen": {
+    "unique_contents_examined": 4170,
+    "fingerprints_examined": 266880,
+    "method": "Eight dihedral orientations of full frame, centered 90/80/70% crops, four off-center 90% crops; pHash <= 8, dHash <= 12; all unknown groups including same-partition.",
+    "candidate_pairs": 76,
+    "manual_reviewed_pairs": 76,
+    "confirmed_parent_edges": 36,
+    "new_cross_label_edges": 4,
+    "rejected_as_identity_evidence": 38,
+    "unresolved_candidates": 2,
+    "independent_second_reviewer": "Pairs 31-76 reviewed independently by shared_pipeline_review; 12 confirmed, 33 rejected, one unresolved."
+  },
+  "confirmed_edges": [
+    {
+      "first_hash": "0269c07a3081df41e9e8e5a7ee3c18394bb81fd8b0c6bff78b610d993b72a14d",
+      "second_hash": "8f22a1471132f061c984e6cdb3722ef1dee08e68374dac0d92aefa873151dc62",
+      "kind": "VISUALLY_CONFIRMED_TRANSFORMED_PHOTO",
+      "reason": "Identical field photograph, lesion constellation, full leaf contour and background under 90-degree rotation. Labels conflict; exclude the entire connected family without choosing or changing a disease label.",
+      "pair_number": 1,
+      "first_relative_path": "Northern_Corn_Leaf_Blight/Northern_Corn_Leaf_Blight (2093).jpg",
+      "second_relative_path": "Gray_Leaf_Spot/Gray_Leaf_Spot (501).jpg",
+      "first_partition_v1": "validation",
+      "second_partition_v1": "validation",
+      "geometry": {
+        "keypoints": [
+          1455,
+          1430
+        ],
+        "ratio_test_matches": 1252,
+        "inliers": 1249,
+        "inlier_fraction": 0.9976038338658147,
+        "matched_source_hull_fraction": 0.9304255539040196,
+        "matched_target_hull_fraction": 0.9308619070194222,
+        "median_reprojection_pixels": 0.03921499103307724,
+        "warped_pixel_coverage": 1.0,
+        "registered_gray_correlation": 0.9939572311065022,
+        "registered_gray_ssim": 0.9669182300567627,
+        "registered_rgb_mae_0_255": 3.2328418079096046
+      }
+    },
+    {
+      "first_hash": "eef5a57824278ec80ddf58e5daa1eb7bc3064d6750854292b4886621791ec148",
+      "second_hash": "1540ae24bb5b56d3371bcf66a9ab5ee0691c3d1fea002b7efb1afbf36c48526e",
+      "kind": "VISUALLY_CONFIRMED_SHARED_LEAF_REGION",
+      "reason": "Distinctive branched necrotic scars, peripheral puncta, vein and leaf-edge landmarks align across the photographed region. Shared leaf-region parent identity is confirmed; identical exposure versus another capture of the same physical leaf is not asserted.",
+      "pair_number": 2,
+      "first_relative_path": "Northern_Corn_Leaf_Blight/Northern_Corn_Leaf_Blight (1616).jpg",
+      "second_relative_path": "Northern_Corn_Leaf_Blight/Northern_Corn_Leaf_Blight (546).JPG",
+      "first_partition_v1": "train",
+      "second_partition_v1": "validation",
+      "geometry": {
+        "keypoints": [
+          406,
+          395
+        ],
+        "ratio_test_matches": 70,
+        "inliers": 58,
+        "inlier_fraction": 0.8285714285714286,
+        "matched_source_hull_fraction": 0.39801838347049256,
+        "matched_target_hull_fraction": 0.3928543124334367,
+        "median_reprojection_pixels": 0.623097836971283,
+        "warped_pixel_coverage": 0.963623046875,
+        "registered_gray_correlation": 0.9007979506683575,
+        "registered_gray_ssim": 0.45756375789642334,
+        "registered_rgb_mae_0_255": 10.318242758212989
+      }
+    },
+    {
+      "first_hash": "c1e4ed369415d54d77632271a5d7c741200ccb9357d4e9fceee7db3cb028f8dd",
+      "second_hash": "858c88af4a614df72e30fe773ef55c5aa46861d3f0ed1f73d7a8a8b6400f2a71",
+      "kind": "VISUALLY_CONFIRMED_SHARED_LEAF_REGION",
+      "reason": "Distinctive branched necrotic scars, peripheral puncta, vein and leaf-edge landmarks align across the photographed region. Shared leaf-region parent identity is confirmed; identical exposure versus another capture of the same physical leaf is not asserted.",
+      "pair_number": 3,
+      "first_relative_path": "Northern_Corn_Leaf_Blight/Northern_Corn_Leaf_Blight (103).JPG",
+      "second_relative_path": "Northern_Corn_Leaf_Blight/Northern_Corn_Leaf_Blight (1798).jpg",
+      "first_partition_v1": "validation",
+      "second_partition_v1": "train",
+      "geometry": {
+        "keypoints": [
+          332,
+          408
+        ],
+        "ratio_test_matches": 107,
+        "inliers": 103,
+        "inlier_fraction": 0.9626168224299065,
+        "matched_source_hull_fraction": 0.4919566403578679,
+        "matched_target_hull_fraction": 0.5540825255495965,
+        "median_reprojection_pixels": 0.5348068475723267,
+        "warped_pixel_coverage": 0.983001708984375,
+        "registered_gray_correlation": 0.9435825934634763,
+        "registered_gray_ssim": 0.7816790342330933,
+        "registered_rgb_mae_0_255": 5.683400080717767
+      }
+    },
+    {
+      "first_hash": "3b616d93a4aa72ad932f05dd2ff1a0392139ce355a1b9d24f0e78cf71405a62c",
+      "second_hash": "1816338ef66a7c08c1d385bce179f6a846ceedef5bb91eb31effabd155412aed",
+      "kind": "VISUALLY_CONFIRMED_TRANSFORMED_PHOTO",
+      "reason": "Identical watermarked field photograph, elongated lesion distribution, midrib and dark background under rotated crop. Labels conflict; exclude the entire connected family without choosing or changing a disease label.",
+      "pair_number": 4,
+      "first_relative_path": "Northern_Corn_Leaf_Blight/Northern_Corn_Leaf_Blight (1946).jpg",
+      "second_relative_path": "Gray_Leaf_Spot/Gray_Leaf_Spot (525).jpg",
+      "first_partition_v1": "train",
+      "second_partition_v1": "train",
+      "geometry": {
+        "keypoints": [
+          2282,
+          1569
+        ],
+        "ratio_test_matches": 820,
+        "inliers": 808,
+        "inlier_fraction": 0.9853658536585366,
+        "matched_source_hull_fraction": 0.7376238962433053,
+        "matched_target_hull_fraction": 0.8595813719905823,
+        "median_reprojection_pixels": 0.20976877212524414,
+        "warped_pixel_coverage": 1.0,
+        "registered_gray_correlation": 0.9947763164483755,
+        "registered_gray_ssim": 0.9309413433074951,
+        "registered_rgb_mae_0_255": 5.286188692705546
+      }
+    },
+    {
+      "first_hash": "2f7f2b5279b7ef07b63c5dc4869df28679170ef3c15a90335583d9a34fe9f138",
+      "second_hash": "e9663732ef042db247af05d84a989d2e4e06d2b0690362e38891d1da4b4e510d",
+      "kind": "VISUALLY_CONFIRMED_SHARED_LEAF_REGION",
+      "reason": "Distinctive branched necrotic scars, peripheral puncta, vein and leaf-edge landmarks align across the photographed region. Shared leaf-region parent identity is confirmed; identical exposure versus another capture of the same physical leaf is not asserted.",
+      "pair_number": 5,
+      "first_relative_path": "Northern_Corn_Leaf_Blight/Northern_Corn_Leaf_Blight (1119).JPG",
+      "second_relative_path": "Northern_Corn_Leaf_Blight/Northern_Corn_Leaf_Blight (1226).jpg",
+      "first_partition_v1": "train",
+      "second_partition_v1": "test",
+      "geometry": {
+        "keypoints": [
+          527,
+          552
+        ],
+        "ratio_test_matches": 113,
+        "inliers": 107,
+        "inlier_fraction": 0.9469026548672567,
+        "matched_source_hull_fraction": 0.6072644536856194,
+        "matched_target_hull_fraction": 0.7021403243932443,
+        "median_reprojection_pixels": 0.5115507245063782,
+        "warped_pixel_coverage": 0.999176025390625,
+        "registered_gray_correlation": 0.94099120366153,
+        "registered_gray_ssim": 0.6767598986625671,
+        "registered_rgb_mae_0_255": 8.971182920497236
+      }
+    },
+    {
+      "first_hash": "314cb6de570e01a3a7ab10f2e23a741a129f6053ed951dcacecf289e7a640fa9",
+      "second_hash": "b602dae65b4cb04861c53a3ca3fdb32dd235ca12b87d7f37c7f422e4ba6be71b",
+      "kind": "VISUALLY_CONFIRMED_SHARED_LEAF_REGION",
+      "reason": "Distinctive branched necrotic scars, peripheral puncta, vein and leaf-edge landmarks align across the photographed region. Shared leaf-region parent identity is confirmed; identical exposure versus another capture of the same physical leaf is not asserted.",
+      "pair_number": 6,
+      "first_relative_path": "Northern_Corn_Leaf_Blight/Northern_Corn_Leaf_Blight (539).JPG",
+      "second_relative_path": "Northern_Corn_Leaf_Blight/Northern_Corn_Leaf_Blight (1053).jpg",
+      "first_partition_v1": "train",
+      "second_partition_v1": "validation",
+      "geometry": {
+        "keypoints": [
+          482,
+          488
+        ],
+        "ratio_test_matches": 127,
+        "inliers": 123,
+        "inlier_fraction": 0.968503937007874,
+        "matched_source_hull_fraction": 0.4647110253568092,
+        "matched_target_hull_fraction": 0.4483711592255929,
+        "median_reprojection_pixels": 0.4804539978504181,
+        "warped_pixel_coverage": 0.938995361328125,
+        "registered_gray_correlation": 0.9128050603422803,
+        "registered_gray_ssim": 0.7777456045150757,
+        "registered_rgb_mae_0_255": 5.497269979524846
+      }
+    },
+    {
+      "first_hash": "1ca22fbfd1daf3bde55e6341838302c498c59259308e83d0f0825c0e7d41cd57",
+      "second_hash": "da5b711afd5654b00f44310d2de001150182e8548bf9b6e751b1adea2a922dba",
+      "kind": "VISUALLY_CONFIRMED_SHARED_LEAF_REGION",
+      "reason": "Matching irregular triangular shadow boundary, vein texture and localized leaf-surface landmarks after registration. Shared leaf-region parent identity is confirmed; identical exposure versus another capture of the same physical leaf is not asserted.",
+      "pair_number": 7,
+      "first_relative_path": "Healthy/Healthy (1742).jpg",
+      "second_relative_path": "Healthy/Healthy (1893).JPG",
+      "first_partition_v1": "test",
+      "second_partition_v1": "train",
+      "geometry": {
+        "keypoints": [
+          686,
+          740
+        ],
+        "ratio_test_matches": 71,
+        "inliers": 60,
+        "inlier_fraction": 0.8450704225352113,
+        "matched_source_hull_fraction": 0.44326772076370047,
+        "matched_target_hull_fraction": 0.4738113229857429,
+        "median_reprojection_pixels": 0.6395398378372192,
+        "warped_pixel_coverage": 0.9864501953125,
+        "registered_gray_correlation": 0.8370640009496417,
+        "registered_gray_ssim": 0.528809130191803,
+        "registered_rgb_mae_0_255": 11.075459926576745
+      }
+    },
+    {
+      "first_hash": "8ab213989053fff2cf51905155c44379bbed4102a0ace6bb759d4bc6a27b6a35",
+      "second_hash": "75c80b935cefdae8cfd186006d0e71cd776314769e3a8b7ffbcdee8d0b06b723",
+      "kind": "VISUALLY_CONFIRMED_SHARED_LEAF_REGION",
+      "reason": "Distinctive branched necrotic scars, peripheral puncta, vein and leaf-edge landmarks align across the photographed region. Shared leaf-region parent identity is confirmed; identical exposure versus another capture of the same physical leaf is not asserted.",
+      "pair_number": 8,
+      "first_relative_path": "Northern_Corn_Leaf_Blight/Northern_Corn_Leaf_Blight (1537).JPG",
+      "second_relative_path": "Northern_Corn_Leaf_Blight/Northern_Corn_Leaf_Blight (1456).jpg",
+      "first_partition_v1": "train",
+      "second_partition_v1": "validation",
+      "geometry": {
+        "keypoints": [
+          305,
+          382
+        ],
+        "ratio_test_matches": 46,
+        "inliers": 30,
+        "inlier_fraction": 0.6521739130434783,
+        "matched_source_hull_fraction": 0.191098405052274,
+        "matched_target_hull_fraction": 0.19914822527481107,
+        "median_reprojection_pixels": 0.798373281955719,
+        "warped_pixel_coverage": 0.9463043212890625,
+        "registered_gray_correlation": 0.9321774254776417,
+        "registered_gray_ssim": 0.5816922187805176,
+        "registered_rgb_mae_0_255": 8.09340449661652
+      }
+    },
+    {
+      "first_hash": "db69d8c010c4712299de0f0037469bbd9d08bdef51a57e6c8a3b4afe52e4c186",
+      "second_hash": "0ad1a073ce0b555bc76a3a357f83284db244d4625be40602b01396550f429d0d",
+      "kind": "VISUALLY_CONFIRMED_SHARED_LEAF_REGION",
+      "reason": "Distinctive branched necrotic scars, peripheral puncta, vein and leaf-edge landmarks align across the photographed region. Shared leaf-region parent identity is confirmed; identical exposure versus another capture of the same physical leaf is not asserted.",
+      "pair_number": 9,
+      "first_relative_path": "Northern_Corn_Leaf_Blight/Northern_Corn_Leaf_Blight (1662).JPG",
+      "second_relative_path": "Northern_Corn_Leaf_Blight/Northern_Corn_Leaf_Blight (1259).jpg",
+      "first_partition_v1": "train",
+      "second_partition_v1": "train",
+      "geometry": {
+        "keypoints": [
+          463,
+          458
+        ],
+        "ratio_test_matches": 87,
+        "inliers": 73,
+        "inlier_fraction": 0.8390804597701149,
+        "matched_source_hull_fraction": 0.5126170772614721,
+        "matched_target_hull_fraction": 0.5405013497973528,
+        "median_reprojection_pixels": 0.4795612692832947,
+        "warped_pixel_coverage": 0.9919891357421875,
+        "registered_gray_correlation": 0.9424835294726867,
+        "registered_gray_ssim": 0.6932748556137085,
+        "registered_rgb_mae_0_255": 6.447026913394144
+      }
+    },
+    {
+      "first_hash": "6d6da75cbfcf1533e60ca92057ad06e851adb824329ce343537d940306df55f7",
+      "second_hash": "ef5f76888a0e7b72684ba6a4ff0de4be13e7fc33b62092e2aa4aa23add241e84",
+      "kind": "VISUALLY_CONFIRMED_SHARED_LEAF_REGION",
+      "reason": "Distinctive branched necrotic scars, peripheral puncta, vein and leaf-edge landmarks align across the photographed region. Shared leaf-region parent identity is confirmed; identical exposure versus another capture of the same physical leaf is not asserted.",
+      "pair_number": 10,
+      "first_relative_path": "Northern_Corn_Leaf_Blight/Northern_Corn_Leaf_Blight (578).JPG",
+      "second_relative_path": "Northern_Corn_Leaf_Blight/Northern_Corn_Leaf_Blight (1654).JPG",
+      "first_partition_v1": "test",
+      "second_partition_v1": "train",
+      "geometry": {
+        "keypoints": [
+          467,
+          477
+        ],
+        "ratio_test_matches": 74,
+        "inliers": 50,
+        "inlier_fraction": 0.6756756756756757,
+        "matched_source_hull_fraction": 0.324139802355774,
+        "matched_target_hull_fraction": 0.3560963399321201,
+        "median_reprojection_pixels": 0.7910303473472595,
+        "warped_pixel_coverage": 0.9575042724609375,
+        "registered_gray_correlation": 0.8842402633532761,
+        "registered_gray_ssim": 0.5129600763320923,
+        "registered_rgb_mae_0_255": 11.582248357263895
+      }
+    },
+    {
+      "first_hash": "17215ca4a1247cf6c2d3754f97e0d4b35860a722ba32f7dbb5ef1faa41ce885d",
+      "second_hash": "3908a7924faf7d45ce849142ba238876839a882a0bc6a50e0c056b98dc2b2b3a",
+      "kind": "VISUALLY_CONFIRMED_SHARED_LEAF_REGION",
+      "reason": "Distinctive branched necrotic scars, peripheral puncta, vein and leaf-edge landmarks align across the photographed region. Shared leaf-region parent identity is confirmed; identical exposure versus another capture of the same physical leaf is not asserted.",
+      "pair_number": 11,
+      "first_relative_path": "Northern_Corn_Leaf_Blight/Northern_Corn_Leaf_Blight (473).jpg",
+      "second_relative_path": "Northern_Corn_Leaf_Blight/Northern_Corn_Leaf_Blight (627).JPG",
+      "first_partition_v1": "test",
+      "second_partition_v1": "train",
+      "geometry": {
+        "keypoints": [
+          496,
+          468
+        ],
+        "ratio_test_matches": 103,
+        "inliers": 90,
+        "inlier_fraction": 0.8737864077669902,
+        "matched_source_hull_fraction": 0.49531733451473714,
+        "matched_target_hull_fraction": 0.47124732469460084,
+        "median_reprojection_pixels": 0.4888148307800293,
+        "warped_pixel_coverage": 0.92205810546875,
+        "registered_gray_correlation": 0.9382076825664112,
+        "registered_gray_ssim": 0.6068691611289978,
+        "registered_rgb_mae_0_255": 10.086339665938528
+      }
+    },
+    {
+      "first_hash": "258ccc4da2fd7c5d979b5658b009e9e15d45703306a58fa0d94716c022757979",
+      "second_hash": "9ea1eefc1c0e683ddd90f1085faf77b9b762409a276126b1b7666a0dda0a4ca0",
+      "kind": "VISUALLY_CONFIRMED_SHARED_LEAF_REGION",
+      "reason": "Distinctive branched necrotic scars, peripheral puncta, vein and leaf-edge landmarks align across the photographed region. Shared leaf-region parent identity is confirmed; identical exposure versus another capture of the same physical leaf is not asserted.",
+      "pair_number": 12,
+      "first_relative_path": "Northern_Corn_Leaf_Blight/Northern_Corn_Leaf_Blight (1524).JPG",
+      "second_relative_path": "Northern_Corn_Leaf_Blight/Northern_Corn_Leaf_Blight (1371).JPG",
+      "first_partition_v1": "validation",
+      "second_partition_v1": "train",
+      "geometry": {
+        "keypoints": [
+          949,
+          502
+        ],
+        "ratio_test_matches": 110,
+        "inliers": 75,
+        "inlier_fraction": 0.6818181818181818,
+        "matched_source_hull_fraction": 0.39028808184261804,
+        "matched_target_hull_fraction": 0.4320487844585307,
+        "median_reprojection_pixels": 1.012316107749939,
+        "warped_pixel_coverage": 0.911773681640625,
+        "registered_gray_correlation": 0.878293348906917,
+        "registered_gray_ssim": 0.5616305470466614,
+        "registered_rgb_mae_0_255": 11.881547678816482
+      }
+    },
+    {
+      "first_hash": "2aae06514f4951ad0db642654a940d9c043445d1aba75f3ad902c3abd716b9b0",
+      "second_hash": "ac01e4c4824ff19bbe38a290113e3716754913fdc330fbbe717afb3df6b32a48",
+      "kind": "VISUALLY_CONFIRMED_SHARED_LEAF_REGION",
+      "reason": "Distinctive branched necrotic scars, peripheral puncta, vein and leaf-edge landmarks align across the photographed region. Shared leaf-region parent identity is confirmed; identical exposure versus another capture of the same physical leaf is not asserted.",
+      "pair_number": 14,
+      "first_relative_path": "Northern_Corn_Leaf_Blight/Northern_Corn_Leaf_Blight (1540).jpg",
+      "second_relative_path": "Northern_Corn_Leaf_Blight/Northern_Corn_Leaf_Blight (1338).JPG",
+      "first_partition_v1": "train",
+      "second_partition_v1": "validation",
+      "geometry": {
+        "keypoints": [
+          538,
+          546
+        ],
+        "ratio_test_matches": 85,
+        "inliers": 78,
+        "inlier_fraction": 0.9176470588235294,
+        "matched_source_hull_fraction": 0.5853000901287864,
+        "matched_target_hull_fraction": 0.6078566065177529,
+        "median_reprojection_pixels": 0.6681157350540161,
+        "warped_pixel_coverage": 0.9945068359375,
+        "registered_gray_correlation": 0.9557951380868437,
+        "registered_gray_ssim": 0.7110965847969055,
+        "registered_rgb_mae_0_255": 7.07766662575181
+      }
+    },
+    {
+      "first_hash": "c6acc7eb47f198961ddfdc2f3ed5148e2bfa90ff9ef43a39da7debc3280e7d2c",
+      "second_hash": "faf5987565e0b4352b8670191f35fd64b1ce5c5111f33482aa3006cbe8ca5864",
+      "kind": "VISUALLY_CONFIRMED_SHARED_LEAF_REGION",
+      "reason": "Distinctive branched necrotic scars, peripheral puncta, vein and leaf-edge landmarks align across the photographed region. Shared leaf-region parent identity is confirmed; identical exposure versus another capture of the same physical leaf is not asserted.",
+      "pair_number": 15,
+      "first_relative_path": "Northern_Corn_Leaf_Blight/Northern_Corn_Leaf_Blight (1063).jpg",
+      "second_relative_path": "Northern_Corn_Leaf_Blight/Northern_Corn_Leaf_Blight (1276).JPG",
+      "first_partition_v1": "train",
+      "second_partition_v1": "validation",
+      "geometry": {
+        "keypoints": [
+          356,
+          377
+        ],
+        "ratio_test_matches": 50,
+        "inliers": 40,
+        "inlier_fraction": 0.8,
+        "matched_source_hull_fraction": 0.2787007264694493,
+        "matched_target_hull_fraction": 0.30686241989205315,
+        "median_reprojection_pixels": 0.5281192660331726,
+        "warped_pixel_coverage": 0.9601593017578125,
+        "registered_gray_correlation": 0.9367746005727537,
+        "registered_gray_ssim": 0.5625003576278687,
+        "registered_rgb_mae_0_255": 9.496728910078135
+      }
+    },
+    {
+      "first_hash": "c7a51c90e69969e7d9166bb35c795c039dfa770ba14a9cb57b721c30edcb3549",
+      "second_hash": "340590c324ba36db7bd281b75d668fc427d13a27f943cdfbf4eae3a4f757d373",
+      "kind": "VISUALLY_CONFIRMED_SHARED_LEAF_REGION",
+      "reason": "Matching unique rust-punctum arrangement, central vein and leaf contour despite perspective/exposure changes. Shared leaf-region parent identity is confirmed; identical exposure versus another capture of the same physical leaf is not asserted.",
+      "pair_number": 16,
+      "first_relative_path": "Common_Rust/Common_Rust (1814).JPG",
+      "second_relative_path": "Common_Rust/Common_Rust (1835).JPG",
+      "first_partition_v1": "train",
+      "second_partition_v1": "train",
+      "geometry": {
+        "keypoints": [
+          500,
+          512
+        ],
+        "ratio_test_matches": 73,
+        "inliers": 43,
+        "inlier_fraction": 0.589041095890411,
+        "matched_source_hull_fraction": 0.2038709475985623,
+        "matched_target_hull_fraction": 0.219269831499089,
+        "median_reprojection_pixels": 0.9403766393661499,
+        "warped_pixel_coverage": 0.840240478515625,
+        "registered_gray_correlation": 0.8437903598680387,
+        "registered_gray_ssim": 0.42559289932250977,
+        "registered_rgb_mae_0_255": 18.091145171249046
+      }
+    },
+    {
+      "first_hash": "3aa0c53a6fe1d8c0c3e8ba8831e2f5e76588eda192d3be57b866a937e3e47dd7",
+      "second_hash": "28e343bc7770ab8a6436239257bea0d48464b5aeaed27bc1e2e431036281a1c5",
+      "kind": "VISUALLY_CONFIRMED_SHARED_LEAF_REGION",
+      "reason": "Distinctive branched necrotic scars, peripheral puncta, vein and leaf-edge landmarks align across the photographed region. Shared leaf-region parent identity is confirmed; identical exposure versus another capture of the same physical leaf is not asserted.",
+      "pair_number": 17,
+      "first_relative_path": "Northern_Corn_Leaf_Blight/Northern_Corn_Leaf_Blight (1377).jpg",
+      "second_relative_path": "Northern_Corn_Leaf_Blight/Northern_Corn_Leaf_Blight (1178).JPG",
+      "first_partition_v1": "validation",
+      "second_partition_v1": "train",
+      "geometry": {
+        "keypoints": [
+          314,
+          354
+        ],
+        "ratio_test_matches": 75,
+        "inliers": 66,
+        "inlier_fraction": 0.88,
+        "matched_source_hull_fraction": 0.42606321107441936,
+        "matched_target_hull_fraction": 0.48715301529007354,
+        "median_reprojection_pixels": 0.6402493715286255,
+        "warped_pixel_coverage": 0.9765625,
+        "registered_gray_correlation": 0.918507668505337,
+        "registered_gray_ssim": 0.6735381484031677,
+        "registered_rgb_mae_0_255": 7.965479166666666
+      }
+    },
+    {
+      "first_hash": "5da03fe49b6be4b953ffbbb3d945c334b896eb4857cc718e3a606e7f486c4c9d",
+      "second_hash": "863ddd25e742c69b10991ceaddaa32948e6d100a66ff034039620599c30e70c9",
+      "kind": "VISUALLY_CONFIRMED_SHARED_LEAF_REGION",
+      "reason": "Matching distinctive cross-vein/crease and leaf microtexture over a broad region after registration. Shared leaf-region parent identity is confirmed; identical exposure versus another capture of the same physical leaf is not asserted.",
+      "pair_number": 18,
+      "first_relative_path": "Healthy/Healthy (1624).jpg",
+      "second_relative_path": "Healthy/Healthy (1494).jpg",
+      "first_partition_v1": "train",
+      "second_partition_v1": "validation",
+      "geometry": {
+        "keypoints": [
+          766,
+          596
+        ],
+        "ratio_test_matches": 108,
+        "inliers": 82,
+        "inlier_fraction": 0.7592592592592593,
+        "matched_source_hull_fraction": 0.7123434027779143,
+        "matched_target_hull_fraction": 0.7115693047059656,
+        "median_reprojection_pixels": 0.7846410870552063,
+        "warped_pixel_coverage": 0.9506988525390625,
+        "registered_gray_correlation": 0.9291027905923082,
+        "registered_gray_ssim": 0.614948570728302,
+        "registered_rgb_mae_0_255": 10.476505363400475
+      }
+    },
+    {
+      "first_hash": "d65adfb57a6c81fb6c58b3a3a31ac56329dd2680f4389c02c93478c300d19acc",
+      "second_hash": "bb6513c8d45b22472dd5e8ee2c28bd5eac6ab2655f53a7ec7a9bcd9c1b7e77ca",
+      "kind": "VISUALLY_CONFIRMED_SHARED_LEAF_REGION",
+      "reason": "Identical distinctive rust-covered strip photograph after rotation/crop, with corresponding lesion distribution. Shared leaf-region parent identity is confirmed; identical exposure versus another capture of the same physical leaf is not asserted.",
+      "pair_number": 19,
+      "first_relative_path": "Common_Rust/Common_Rust (1741).jpg",
+      "second_relative_path": "Common_Rust/Common_Rust (155).jpg",
+      "first_partition_v1": "train",
+      "second_partition_v1": "train",
+      "geometry": {
+        "keypoints": [
+          1399,
+          2500
+        ],
+        "ratio_test_matches": 369,
+        "inliers": 364,
+        "inlier_fraction": 0.986449864498645,
+        "matched_source_hull_fraction": 0.7140407221445679,
+        "matched_target_hull_fraction": 0.5977206503044994,
+        "median_reprojection_pixels": 0.19365602731704712,
+        "warped_pixel_coverage": 0.8228481359649122,
+        "registered_gray_correlation": 0.9745129539218305,
+        "registered_gray_ssim": 0.8185402154922485,
+        "registered_rgb_mae_0_255": 9.223975828914615
+      }
+    },
+    {
+      "first_hash": "cdaa1b4a7adc90108d55f29ea3f7bec2bfdc4d05b54eebc9ab30b234da614aca",
+      "second_hash": "54f203dc51c628aa43f12836845417b1bfe6c8f1b244075761c1db4bd07fb42f",
+      "kind": "VISUALLY_CONFIRMED_SHARED_LEAF_REGION",
+      "reason": "Matching broken/dead tissue contours and split/scar pattern, with registered distinctive background features. Shared leaf-region parent identity is confirmed; identical exposure versus another capture of the same physical leaf is not asserted.",
+      "pair_number": 20,
+      "first_relative_path": "Northern_Corn_Leaf_Blight/Northern_Corn_Leaf_Blight (1501).JPG",
+      "second_relative_path": "Northern_Corn_Leaf_Blight/Northern_Corn_Leaf_Blight (1607).jpg",
+      "first_partition_v1": "test",
+      "second_partition_v1": "test",
+      "geometry": {
+        "keypoints": [
+          295,
+          298
+        ],
+        "ratio_test_matches": 42,
+        "inliers": 39,
+        "inlier_fraction": 0.9285714285714286,
+        "matched_source_hull_fraction": 0.4716175892400692,
+        "matched_target_hull_fraction": 0.48291891369695794,
+        "median_reprojection_pixels": 0.44174274802207947,
+        "warped_pixel_coverage": 0.9002532958984375,
+        "registered_gray_correlation": 0.8747233931252592,
+        "registered_gray_ssim": 0.7137540578842163,
+        "registered_rgb_mae_0_255": 7.036429995988633
+      }
+    },
+    {
+      "first_hash": "e8c3ae9b3d759a09088ba0862146fed9926dda685f8512849086f874a48ec430",
+      "second_hash": "1ef67c035b390e85bbcd63b5daac7cab87c564e3d8f0250390a792dfebc35bb1",
+      "kind": "VISUALLY_CONFIRMED_SHARED_LEAF_REGION",
+      "reason": "Matching curved midrib, localized isolated marks and crease/vein microtexture, not merely green color. Shared leaf-region parent identity is confirmed; identical exposure versus another capture of the same physical leaf is not asserted.",
+      "pair_number": 21,
+      "first_relative_path": "Healthy/Healthy (1550).jpg",
+      "second_relative_path": "Healthy/Healthy (171).jpg",
+      "first_partition_v1": "train",
+      "second_partition_v1": "validation",
+      "geometry": {
+        "keypoints": [
+          432,
+          413
+        ],
+        "ratio_test_matches": 45,
+        "inliers": 32,
+        "inlier_fraction": 0.7111111111111111,
+        "matched_source_hull_fraction": 0.46351973150263026,
+        "matched_target_hull_fraction": 0.4893265976808624,
+        "median_reprojection_pixels": 0.6131095290184021,
+        "warped_pixel_coverage": 0.87890625,
+        "registered_gray_correlation": 0.9562854645637644,
+        "registered_gray_ssim": 0.694769024848938,
+        "registered_rgb_mae_0_255": 6.312829861111111
+      }
+    },
+    {
+      "first_hash": "1ebf14863b5eac43dfd7d799c879b4edecfbaf10816641cea033afc76d6c1773",
+      "second_hash": "54f702d351d0fa85b40bd4deaccad06a092058796558788fa32c2f1f7bad5faa",
+      "kind": "VISUALLY_CONFIRMED_SHARED_LEAF_REGION",
+      "reason": "Matching distinctive tapered necrotic tip and branched scar/vein arrangement after registration. Shared leaf-region parent identity is confirmed; identical exposure versus another capture of the same physical leaf is not asserted.",
+      "pair_number": 22,
+      "first_relative_path": "Northern_Corn_Leaf_Blight/Northern_Corn_Leaf_Blight (318).JPG",
+      "second_relative_path": "Northern_Corn_Leaf_Blight/Northern_Corn_Leaf_Blight (101).JPG",
+      "first_partition_v1": "train",
+      "second_partition_v1": "train",
+      "geometry": {
+        "keypoints": [
+          340,
+          357
+        ],
+        "ratio_test_matches": 29,
+        "inliers": 20,
+        "inlier_fraction": 0.6896551724137931,
+        "matched_source_hull_fraction": 0.13293508449759717,
+        "matched_target_hull_fraction": 0.18687705085136397,
+        "median_reprojection_pixels": 0.6703914403915405,
+        "warped_pixel_coverage": 0.9985809326171875,
+        "registered_gray_correlation": 0.846783834369951,
+        "registered_gray_ssim": 0.5822064280509949,
+        "registered_rgb_mae_0_255": 9.853037503374438
+      }
+    },
+    {
+      "first_hash": "fc2a3f5eeec7277750aa5fcb750ddeca6ec5303aeb8c6143a5accd0b7ce1bfa3",
+      "second_hash": "5a98cdc9194b65b6844177ab6ebfd61b41853fc09a4ebbc2a6a7d5bb9bcb0ed4",
+      "kind": "VISUALLY_CONFIRMED_SHARED_LEAF_REGION",
+      "reason": "Distinctive branched necrotic scars, peripheral puncta, vein and leaf-edge landmarks align across the photographed region. Shared leaf-region parent identity is confirmed; identical exposure versus another capture of the same physical leaf is not asserted.",
+      "pair_number": 23,
+      "first_relative_path": "Northern_Corn_Leaf_Blight/Northern_Corn_Leaf_Blight (113).JPG",
+      "second_relative_path": "Northern_Corn_Leaf_Blight/Northern_Corn_Leaf_Blight (641).JPG",
+      "first_partition_v1": "validation",
+      "second_partition_v1": "train",
+      "geometry": {
+        "keypoints": [
+          545,
+          701
+        ],
+        "ratio_test_matches": 83,
+        "inliers": 51,
+        "inlier_fraction": 0.6144578313253012,
+        "matched_source_hull_fraction": 0.29271328448003353,
+        "matched_target_hull_fraction": 0.2814125578017096,
+        "median_reprojection_pixels": 0.8231225609779358,
+        "warped_pixel_coverage": 0.9152984619140625,
+        "registered_gray_correlation": 0.791161608374292,
+        "registered_gray_ssim": 0.4337056279182434,
+        "registered_rgb_mae_0_255": 14.137384346086522
+      }
+    },
+    {
+      "first_hash": "24fbf0bd8988344e27b4dcfd9e7046012ed75704278045c59258933f987a76c5",
+      "second_hash": "e97525592f286b0dd593010fe970a8f35935e3a28e8c76d9f3b73339ebbaff59",
+      "kind": "VISUALLY_CONFIRMED_SHARED_LEAF_REGION",
+      "reason": "Matching distinctive branched lesion and peripheral puncta configuration despite exposure/pose changes. Shared leaf-region parent identity is confirmed; identical exposure versus another capture of the same physical leaf is not asserted.",
+      "pair_number": 25,
+      "first_relative_path": "Northern_Corn_Leaf_Blight/Northern_Corn_Leaf_Blight (1383).JPG",
+      "second_relative_path": "Northern_Corn_Leaf_Blight/Northern_Corn_Leaf_Blight (631).JPG",
+      "first_partition_v1": "train",
+      "second_partition_v1": "train",
+      "geometry": {
+        "keypoints": [
+          495,
+          555
+        ],
+        "ratio_test_matches": 81,
+        "inliers": 61,
+        "inlier_fraction": 0.7530864197530864,
+        "matched_source_hull_fraction": 0.4788842723994454,
+        "matched_target_hull_fraction": 0.5550840712391387,
+        "median_reprojection_pixels": 0.8087952733039856,
+        "warped_pixel_coverage": 0.9658660888671875,
+        "registered_gray_correlation": 0.7341191376164619,
+        "registered_gray_ssim": 0.4160403311252594,
+        "registered_rgb_mae_0_255": 13.24066204310758
+      }
+    },
+    {
+      "first_hash": "04812fb142968b3f0f45b20020602437dc9860694da96cd26f0ebb9ac096796e",
+      "second_hash": "17c121716b95edfe209097e6d2a5c152fb4a21e9e02e8f4f21afc643c18c9d17",
+      "kind": "VISUALLY_CONFIRMED_SHARED_LEAF_REGION",
+      "reason": "Distinctive branched necrotic scars, peripheral puncta, vein and leaf-edge landmarks align across the photographed region. Shared leaf-region parent identity is confirmed; identical exposure versus another capture of the same physical leaf is not asserted.",
+      "pair_number": 29,
+      "first_relative_path": "Northern_Corn_Leaf_Blight/Northern_Corn_Leaf_Blight (1236).jpg",
+      "second_relative_path": "Northern_Corn_Leaf_Blight/Northern_Corn_Leaf_Blight (1709).JPG",
+      "first_partition_v1": "train",
+      "second_partition_v1": "train",
+      "geometry": {
+        "keypoints": [
+          640,
+          653
+        ],
+        "ratio_test_matches": 170,
+        "inliers": 159,
+        "inlier_fraction": 0.9352941176470588,
+        "matched_source_hull_fraction": 0.6106043890272113,
+        "matched_target_hull_fraction": 0.5971571585272257,
+        "median_reprojection_pixels": 0.43027442693710327,
+        "warped_pixel_coverage": 0.96875,
+        "registered_gray_correlation": 0.9337120576521395,
+        "registered_gray_ssim": 0.684659481048584,
+        "registered_rgb_mae_0_255": 7.826922673051075
+      }
+    },
+    {
+      "first_hash": "8a029a83af9dbb012d0f3ff917fc487f60822fbad6ea97f62b8d7842cde87782",
+      "second_hash": "8aace910c1cb5a05645d1e50d573ab7c7904403c910c1b8304b1293c472e0f08",
+      "kind": "VISUALLY_CONFIRMED_SHARED_LEAF_REGION",
+      "reason": "Distinctive branched necrotic scars, peripheral puncta, vein and leaf-edge landmarks align across the photographed region. Shared leaf-region parent identity is confirmed; identical exposure versus another capture of the same physical leaf is not asserted.",
+      "pair_number": 32,
+      "first_relative_path": "Northern_Corn_Leaf_Blight/Northern_Corn_Leaf_Blight (1351).JPG",
+      "second_relative_path": "Northern_Corn_Leaf_Blight/Northern_Corn_Leaf_Blight (1185).jpg",
+      "first_partition_v1": "train",
+      "second_partition_v1": "test",
+      "geometry": {
+        "keypoints": [
+          464,
+          610
+        ],
+        "ratio_test_matches": 80,
+        "inliers": 68,
+        "inlier_fraction": 0.85,
+        "matched_source_hull_fraction": 0.6020238309177298,
+        "matched_target_hull_fraction": 0.7136818600796622,
+        "median_reprojection_pixels": 0.6443710327148438,
+        "warped_pixel_coverage": 0.9971160888671875,
+        "registered_gray_correlation": 0.9128752530478041,
+        "registered_gray_ssim": 0.6585100293159485,
+        "registered_rgb_mae_0_255": 7.939905427946195
+      }
+    },
+    {
+      "first_hash": "bf65279b92c34fd6eb6dd6f2b1611b55c1ab4314a67059e5e0cf3c2a618ae79d",
+      "second_hash": "34712be4e6eb9ac2757a1d2290022720763d3cc01e9f22eeb938bb41439b9b02",
+      "kind": "VISUALLY_CONFIRMED_SHARED_LEAF_REGION",
+      "reason": "Distinctive branched necrotic scars, peripheral puncta, vein and leaf-edge landmarks align across the photographed region. Shared leaf-region parent identity is confirmed; identical exposure versus another capture of the same physical leaf is not asserted.",
+      "pair_number": 34,
+      "first_relative_path": "Northern_Corn_Leaf_Blight/Northern_Corn_Leaf_Blight (1093).JPG",
+      "second_relative_path": "Northern_Corn_Leaf_Blight/Northern_Corn_Leaf_Blight (1067).JPG",
+      "first_partition_v1": "test",
+      "second_partition_v1": "train",
+      "geometry": {
+        "keypoints": [
+          475,
+          606
+        ],
+        "ratio_test_matches": 93,
+        "inliers": 76,
+        "inlier_fraction": 0.8172043010752689,
+        "matched_source_hull_fraction": 0.25314142208359036,
+        "matched_target_hull_fraction": 0.29607739576052317,
+        "median_reprojection_pixels": 0.9141067266464233,
+        "warped_pixel_coverage": 0.9196014404296875,
+        "registered_gray_correlation": 0.8051188936691871,
+        "registered_gray_ssim": 0.5022252798080444,
+        "registered_rgb_mae_0_255": 16.334522486048197
+      }
+    },
+    {
+      "first_hash": "366cac0649df317e9cdfbc64ec11c8b3da8e15aa7db164a9bf84db5c6236dfa3",
+      "second_hash": "99ad81a07cbf1e2b1afa1da2fbb60355e2a794766888016ceef0737c72ba6cc9",
+      "kind": "VISUALLY_CONFIRMED_TRANSFORMED_PHOTO",
+      "reason": "Identical field photograph, complete lesion constellation, leaf contour and soil/grass background after crop. Labels conflict; exclude the entire connected family without choosing or changing a disease label.",
+      "pair_number": 35,
+      "first_relative_path": "Northern_Corn_Leaf_Blight/Northern_Corn_Leaf_Blight (1995).jpg",
+      "second_relative_path": "Gray_Leaf_Spot/Gray_Leaf_Spot (928).jpg",
+      "first_partition_v1": "train",
+      "second_partition_v1": "validation",
+      "geometry": {
+        "keypoints": [
+          2500,
+          2500
+        ],
+        "ratio_test_matches": 1391,
+        "inliers": 1391,
+        "inlier_fraction": 1.0,
+        "matched_source_hull_fraction": 0.6039214070222398,
+        "matched_target_hull_fraction": 0.8625308339287995,
+        "median_reprojection_pixels": 0.08017785847187042,
+        "warped_pixel_coverage": 1.0,
+        "registered_gray_correlation": 0.9994338835125364,
+        "registered_gray_ssim": 0.9903541207313538,
+        "registered_rgb_mae_0_255": 1.3700512217397298
+      }
+    },
+    {
+      "first_hash": "4350be846fec732e7ae31d5c8b29ecd33736a3f1570b2c4b7d47e5eb3c883c94",
+      "second_hash": "5aad94abd7b113d9b8ae446e3c84d1fe91da824354a26013f5a6799c31dc8a32",
+      "kind": "VISUALLY_CONFIRMED_SHARED_LEAF_REGION",
+      "reason": "Distinctive branched necrotic scars, peripheral puncta, vein and leaf-edge landmarks align across the photographed region. Shared leaf-region parent identity is confirmed; identical exposure versus another capture of the same physical leaf is not asserted.",
+      "pair_number": 36,
+      "first_relative_path": "Northern_Corn_Leaf_Blight/Northern_Corn_Leaf_Blight (1349).JPG",
+      "second_relative_path": "Northern_Corn_Leaf_Blight/Northern_Corn_Leaf_Blight (128).jpg",
+      "first_partition_v1": "train",
+      "second_partition_v1": "validation",
+      "geometry": {
+        "keypoints": [
+          333,
+          433
+        ],
+        "ratio_test_matches": 73,
+        "inliers": 55,
+        "inlier_fraction": 0.7534246575342466,
+        "matched_source_hull_fraction": 0.5270287957589104,
+        "matched_target_hull_fraction": 0.6335106770208567,
+        "median_reprojection_pixels": 0.5703147053718567,
+        "warped_pixel_coverage": 1.0,
+        "registered_gray_correlation": 0.8846706191033338,
+        "registered_gray_ssim": 0.5859243869781494,
+        "registered_rgb_mae_0_255": 9.650192260742188
+      }
+    },
+    {
+      "first_hash": "6fb3ac72f6bcae59e68b8d59823c2cd0f1d6e02b4ebdb104582bb4f174ca3f40",
+      "second_hash": "a5778b6f26c7c6df8f48048a6f32cc203cc09b039480fda08a0bf73ddb6de17f",
+      "kind": "VISUALLY_CONFIRMED_SHARED_LEAF_REGION",
+      "reason": "Distinctive branched necrotic scars, peripheral puncta, vein and leaf-edge landmarks align across the photographed region. Shared leaf-region parent identity is confirmed; identical exposure versus another capture of the same physical leaf is not asserted.",
+      "pair_number": 37,
+      "first_relative_path": "Northern_Corn_Leaf_Blight/Northern_Corn_Leaf_Blight (15).JPG",
+      "second_relative_path": "Northern_Corn_Leaf_Blight/Northern_Corn_Leaf_Blight (1484).jpg",
+      "first_partition_v1": "train",
+      "second_partition_v1": "validation",
+      "geometry": {
+        "keypoints": [
+          535,
+          526
+        ],
+        "ratio_test_matches": 114,
+        "inliers": 101,
+        "inlier_fraction": 0.8859649122807017,
+        "matched_source_hull_fraction": 0.7843766866063693,
+        "matched_target_hull_fraction": 0.8252706096264212,
+        "median_reprojection_pixels": 0.4318837523460388,
+        "warped_pixel_coverage": 1.0,
+        "registered_gray_correlation": 0.9208024375980713,
+        "registered_gray_ssim": 0.6277264356613159,
+        "registered_rgb_mae_0_255": 11.177591959635416
+      }
+    },
+    {
+      "first_hash": "1f21f42dd7c29d874c17262aaa08045805faa6c69ec41d71417935c97b16f1be",
+      "second_hash": "533def71437e6b09560b57f5ec10fdf337658bbe318a0bd45ebd5872cbf09fa2",
+      "kind": "VISUALLY_CONFIRMED_SHARED_LEAF_REGION",
+      "reason": "Two matching irregular holes plus distinctive vein/shadow geometry. Shared leaf-region parent identity is confirmed; identical exposure versus another capture of the same physical leaf is not asserted.",
+      "pair_number": 39,
+      "first_relative_path": "Healthy/Healthy (1909).jpg",
+      "second_relative_path": "Healthy/Healthy (1551).jpg",
+      "first_partition_v1": "train",
+      "second_partition_v1": "train",
+      "geometry": {
+        "keypoints": [
+          377,
+          336
+        ],
+        "ratio_test_matches": 47,
+        "inliers": 35,
+        "inlier_fraction": 0.7446808510638298,
+        "matched_source_hull_fraction": 0.5702793960634028,
+        "matched_target_hull_fraction": 0.5813894782569218,
+        "median_reprojection_pixels": 0.5758828520774841,
+        "warped_pixel_coverage": 0.9266204833984375,
+        "registered_gray_correlation": 0.9322661633707016,
+        "registered_gray_ssim": 0.49312907457351685,
+        "registered_rgb_mae_0_255": 11.767560832359028
+      }
+    },
+    {
+      "first_hash": "55f02728739315c61a1c9d28b976226bfb5ae951e363d13f99dfe73816fc17ab",
+      "second_hash": "381d55d1be384b9e5bf71fcfab7fbb7bf376cb00de6af99eb6bceb81138cb421",
+      "kind": "VISUALLY_CONFIRMED_SHARED_LEAF_REGION",
+      "reason": "Distinctive branched necrotic scars, peripheral puncta, vein and leaf-edge landmarks align across the photographed region. Shared leaf-region parent identity is confirmed; identical exposure versus another capture of the same physical leaf is not asserted.",
+      "pair_number": 42,
+      "first_relative_path": "Northern_Corn_Leaf_Blight/Northern_Corn_Leaf_Blight (1253).jpg",
+      "second_relative_path": "Northern_Corn_Leaf_Blight/Northern_Corn_Leaf_Blight (1560).JPG",
+      "first_partition_v1": "train",
+      "second_partition_v1": "train",
+      "geometry": {
+        "keypoints": [
+          364,
+          332
+        ],
+        "ratio_test_matches": 40,
+        "inliers": 23,
+        "inlier_fraction": 0.575,
+        "matched_source_hull_fraction": 0.1995282904922444,
+        "matched_target_hull_fraction": 0.20864578755494345,
+        "median_reprojection_pixels": 0.6201140284538269,
+        "warped_pixel_coverage": 0.8675079345703125,
+        "registered_gray_correlation": 0.9176650894679478,
+        "registered_gray_ssim": 0.5664314031600952,
+        "registered_rgb_mae_0_255": 10.906671591648637
+      }
+    },
+    {
+      "first_hash": "d188dac9dfffbad0727a8d92c99ae2feb5c3f3ad96ced26e7800d91502be3ba5",
+      "second_hash": "831fb8491facdc93152b407c8a203554abebb002ad92f7d7c67a4ca6e8213304",
+      "kind": "VISUALLY_CONFIRMED_SHARED_LEAF_REGION",
+      "reason": "Distinctive branched necrotic scars, peripheral puncta, vein and leaf-edge landmarks align across the photographed region. Shared leaf-region parent identity is confirmed; identical exposure versus another capture of the same physical leaf is not asserted.",
+      "pair_number": 45,
+      "first_relative_path": "Northern_Corn_Leaf_Blight/Northern_Corn_Leaf_Blight (333).JPG",
+      "second_relative_path": "Northern_Corn_Leaf_Blight/Northern_Corn_Leaf_Blight (1315).jpg",
+      "first_partition_v1": "train",
+      "second_partition_v1": "train",
+      "geometry": {
+        "keypoints": [
+          456,
+          490
+        ],
+        "ratio_test_matches": 111,
+        "inliers": 101,
+        "inlier_fraction": 0.9099099099099099,
+        "matched_source_hull_fraction": 0.3831143984444163,
+        "matched_target_hull_fraction": 0.429644911349084,
+        "median_reprojection_pixels": 0.5261560678482056,
+        "warped_pixel_coverage": 0.9538116455078125,
+        "registered_gray_correlation": 0.9608000463029441,
+        "registered_gray_ssim": 0.7509897947311401,
+        "registered_rgb_mae_0_255": 5.780132994182171
+      }
+    },
+    {
+      "first_hash": "fdd5b4ff8cf23f946c8f45d98e4257d4b50ab7183a5282202e0b3836f86ea3e8",
+      "second_hash": "b8edc738dfbc1015fd856650f261e0aefb7ce7d1ece7c47c037a34ac85b4718d",
+      "kind": "VISUALLY_CONFIRMED_SHARED_LEAF_REGION",
+      "reason": "Matching elongated yellow-stripe constellation around the white midrib. Shared leaf-region parent identity is confirmed; identical exposure versus another capture of the same physical leaf is not asserted.",
+      "pair_number": 46,
+      "first_relative_path": "Northern_Corn_Leaf_Blight/Northern_Corn_Leaf_Blight (346).jpg",
+      "second_relative_path": "Northern_Corn_Leaf_Blight/Northern_Corn_Leaf_Blight (124).jpg",
+      "first_partition_v1": "train",
+      "second_partition_v1": "train",
+      "geometry": {
+        "keypoints": [
+          2500,
+          1616
+        ],
+        "ratio_test_matches": 292,
+        "inliers": 284,
+        "inlier_fraction": 0.9726027397260274,
+        "matched_source_hull_fraction": 0.6031572479844424,
+        "matched_target_hull_fraction": 0.6658742990710136,
+        "median_reprojection_pixels": 0.2890830636024475,
+        "warped_pixel_coverage": 1.0,
+        "registered_gray_correlation": 0.9893414160269406,
+        "registered_gray_ssim": 0.9143229722976685,
+        "registered_rgb_mae_0_255": 4.3738933023673034
+      }
+    },
+    {
+      "first_hash": "c0e31c3044e24803359a5499288b7af95f6d1a6691f255a8c3503b865ccded4b",
+      "second_hash": "9d980f54f2c84d87a4d853e5284e254a45c169c555909c9305c761bcd8192be4",
+      "kind": "VISUALLY_CONFIRMED_SHARED_LEAF_REGION",
+      "reason": "Matching localized crease, thin dark streak and microgroove configuration. Shared leaf-region parent identity is confirmed; identical exposure versus another capture of the same physical leaf is not asserted.",
+      "pair_number": 54,
+      "first_relative_path": "Healthy/Healthy (1606).jpg",
+      "second_relative_path": "Healthy/Healthy (1255).jpg",
+      "first_partition_v1": "test",
+      "second_partition_v1": "train",
+      "geometry": {
+        "keypoints": [
+          496,
+          590
+        ],
+        "ratio_test_matches": 85,
+        "inliers": 45,
+        "inlier_fraction": 0.5294117647058824,
+        "matched_source_hull_fraction": 0.38829049329274934,
+        "matched_target_hull_fraction": 0.37170389593269865,
+        "median_reprojection_pixels": 0.6862140893936157,
+        "warped_pixel_coverage": 0.8850555419921875,
+        "registered_gray_correlation": 0.9633602668588395,
+        "registered_gray_ssim": 0.6545320749282837,
+        "registered_rgb_mae_0_255": 14.413398157566563
+      }
+    },
+    {
+      "first_hash": "ff1c976d0c0804c4477cfdcb0cf5597fe27c3b66b4c2c18d5b021e3d23c56e19",
+      "second_hash": "4713b10521040b12bd472f7d83aca182cb240f99d6a214ec2c904cca3316e30a",
+      "kind": "VISUALLY_CONFIRMED_TRANSFORMED_PHOTO",
+      "reason": "Identical field photograph, complete lesion constellation and field background after crop/re-encoding. Labels conflict; exclude the entire connected family without choosing or changing a disease label.",
+      "pair_number": 56,
+      "first_relative_path": "Gray_Leaf_Spot/Gray_Leaf_Spot (600).jpg",
+      "second_relative_path": "Northern_Corn_Leaf_Blight/Northern_Corn_Leaf_Blight (1822).jpg",
+      "first_partition_v1": "train",
+      "second_partition_v1": "train",
+      "geometry": {
+        "keypoints": [
+          2500,
+          2500
+        ],
+        "ratio_test_matches": 1238,
+        "inliers": 1216,
+        "inlier_fraction": 0.9822294022617124,
+        "matched_source_hull_fraction": 0.7529836340678177,
+        "matched_target_hull_fraction": 0.9209461087897355,
+        "median_reprojection_pixels": 0.3744041621685028,
+        "warped_pixel_coverage": 0.9896296296296296,
+        "registered_gray_correlation": 0.9947818929819079,
+        "registered_gray_ssim": 0.9203843474388123,
+        "registered_rgb_mae_0_255": 8.073752253946214
+      }
+    },
+    {
+      "first_hash": "7267ec4c415da6562c9db6e772e72b7f4643bee43ff05bf1e6ba2bcd448a227d",
+      "second_hash": "91ac6b6b90bde080027b6b861f210eae5308493a5062d25bd849542d08928099",
+      "kind": "VISUALLY_CONFIRMED_SHARED_LEAF_REGION",
+      "reason": "Matching many distinctive tan slit/scar arrangements plus vein/outline despite focus/exposure changes. Shared leaf-region parent identity is confirmed; identical exposure versus another capture of the same physical leaf is not asserted.",
+      "pair_number": 61,
+      "first_relative_path": "Gray_Leaf_Spot/Gray_Leaf_Spot (1067).JPG",
+      "second_relative_path": "Gray_Leaf_Spot/Gray_Leaf_Spot (46).JPG",
+      "first_partition_v1": "train",
+      "second_partition_v1": "validation",
+      "geometry": {
+        "keypoints": [
+          611,
+          563
+        ],
+        "ratio_test_matches": 64,
+        "inliers": 44,
+        "inlier_fraction": 0.6875,
+        "matched_source_hull_fraction": 0.43475093958328537,
+        "matched_target_hull_fraction": 0.38288926931287803,
+        "median_reprojection_pixels": 1.0443084239959717,
+        "warped_pixel_coverage": 0.8478240966796875,
+        "registered_gray_correlation": 0.750397121839571,
+        "registered_gray_ssim": 0.26878684759140015,
+        "registered_rgb_mae_0_255": 24.140801132648225
+      }
+    }
+  ],
+  "candidate_review": [
+    {
+      "pair_number": 1,
+      "first_hash": "0269c07a3081df41e9e8e5a7ee3c18394bb81fd8b0c6bff78b610d993b72a14d",
+      "second_hash": "8f22a1471132f061c984e6cdb3722ef1dee08e68374dac0d92aefa873151dc62",
+      "decision": "CONFIRMED_PARENT_RELATION",
+      "reason": "Identical field photograph, lesion constellation, full leaf contour and background under 90-degree rotation. Labels conflict; exclude the entire connected family without choosing or changing a disease label."
+    },
+    {
+      "pair_number": 2,
+      "first_hash": "eef5a57824278ec80ddf58e5daa1eb7bc3064d6750854292b4886621791ec148",
+      "second_hash": "1540ae24bb5b56d3371bcf66a9ab5ee0691c3d1fea002b7efb1afbf36c48526e",
+      "decision": "CONFIRMED_PARENT_RELATION",
+      "reason": "Distinctive branched necrotic scars, peripheral puncta, vein and leaf-edge landmarks align across the photographed region. Shared leaf-region parent identity is confirmed; identical exposure versus another capture of the same physical leaf is not asserted."
+    },
+    {
+      "pair_number": 3,
+      "first_hash": "c1e4ed369415d54d77632271a5d7c741200ccb9357d4e9fceee7db3cb028f8dd",
+      "second_hash": "858c88af4a614df72e30fe773ef55c5aa46861d3f0ed1f73d7a8a8b6400f2a71",
+      "decision": "CONFIRMED_PARENT_RELATION",
+      "reason": "Distinctive branched necrotic scars, peripheral puncta, vein and leaf-edge landmarks align across the photographed region. Shared leaf-region parent identity is confirmed; identical exposure versus another capture of the same physical leaf is not asserted."
+    },
+    {
+      "pair_number": 4,
+      "first_hash": "3b616d93a4aa72ad932f05dd2ff1a0392139ce355a1b9d24f0e78cf71405a62c",
+      "second_hash": "1816338ef66a7c08c1d385bce179f6a846ceedef5bb91eb31effabd155412aed",
+      "decision": "CONFIRMED_PARENT_RELATION",
+      "reason": "Identical watermarked field photograph, elongated lesion distribution, midrib and dark background under rotated crop. Labels conflict; exclude the entire connected family without choosing or changing a disease label."
+    },
+    {
+      "pair_number": 5,
+      "first_hash": "2f7f2b5279b7ef07b63c5dc4869df28679170ef3c15a90335583d9a34fe9f138",
+      "second_hash": "e9663732ef042db247af05d84a989d2e4e06d2b0690362e38891d1da4b4e510d",
+      "decision": "CONFIRMED_PARENT_RELATION",
+      "reason": "Distinctive branched necrotic scars, peripheral puncta, vein and leaf-edge landmarks align across the photographed region. Shared leaf-region parent identity is confirmed; identical exposure versus another capture of the same physical leaf is not asserted."
+    },
+    {
+      "pair_number": 6,
+      "first_hash": "314cb6de570e01a3a7ab10f2e23a741a129f6053ed951dcacecf289e7a640fa9",
+      "second_hash": "b602dae65b4cb04861c53a3ca3fdb32dd235ca12b87d7f37c7f422e4ba6be71b",
+      "decision": "CONFIRMED_PARENT_RELATION",
+      "reason": "Distinctive branched necrotic scars, peripheral puncta, vein and leaf-edge landmarks align across the photographed region. Shared leaf-region parent identity is confirmed; identical exposure versus another capture of the same physical leaf is not asserted."
+    },
+    {
+      "pair_number": 7,
+      "first_hash": "1ca22fbfd1daf3bde55e6341838302c498c59259308e83d0f0825c0e7d41cd57",
+      "second_hash": "da5b711afd5654b00f44310d2de001150182e8548bf9b6e751b1adea2a922dba",
+      "decision": "CONFIRMED_PARENT_RELATION",
+      "reason": "Matching irregular triangular shadow boundary, vein texture and localized leaf-surface landmarks after registration. Shared leaf-region parent identity is confirmed; identical exposure versus another capture of the same physical leaf is not asserted."
+    },
+    {
+      "pair_number": 8,
+      "first_hash": "8ab213989053fff2cf51905155c44379bbed4102a0ace6bb759d4bc6a27b6a35",
+      "second_hash": "75c80b935cefdae8cfd186006d0e71cd776314769e3a8b7ffbcdee8d0b06b723",
+      "decision": "CONFIRMED_PARENT_RELATION",
+      "reason": "Distinctive branched necrotic scars, peripheral puncta, vein and leaf-edge landmarks align across the photographed region. Shared leaf-region parent identity is confirmed; identical exposure versus another capture of the same physical leaf is not asserted."
+    },
+    {
+      "pair_number": 9,
+      "first_hash": "db69d8c010c4712299de0f0037469bbd9d08bdef51a57e6c8a3b4afe52e4c186",
+      "second_hash": "0ad1a073ce0b555bc76a3a357f83284db244d4625be40602b01396550f429d0d",
+      "decision": "CONFIRMED_PARENT_RELATION",
+      "reason": "Distinctive branched necrotic scars, peripheral puncta, vein and leaf-edge landmarks align across the photographed region. Shared leaf-region parent identity is confirmed; identical exposure versus another capture of the same physical leaf is not asserted."
+    },
+    {
+      "pair_number": 10,
+      "first_hash": "6d6da75cbfcf1533e60ca92057ad06e851adb824329ce343537d940306df55f7",
+      "second_hash": "ef5f76888a0e7b72684ba6a4ff0de4be13e7fc33b62092e2aa4aa23add241e84",
+      "decision": "CONFIRMED_PARENT_RELATION",
+      "reason": "Distinctive branched necrotic scars, peripheral puncta, vein and leaf-edge landmarks align across the photographed region. Shared leaf-region parent identity is confirmed; identical exposure versus another capture of the same physical leaf is not asserted."
+    },
+    {
+      "pair_number": 11,
+      "first_hash": "17215ca4a1247cf6c2d3754f97e0d4b35860a722ba32f7dbb5ef1faa41ce885d",
+      "second_hash": "3908a7924faf7d45ce849142ba238876839a882a0bc6a50e0c056b98dc2b2b3a",
+      "decision": "CONFIRMED_PARENT_RELATION",
+      "reason": "Distinctive branched necrotic scars, peripheral puncta, vein and leaf-edge landmarks align across the photographed region. Shared leaf-region parent identity is confirmed; identical exposure versus another capture of the same physical leaf is not asserted."
+    },
+    {
+      "pair_number": 12,
+      "first_hash": "258ccc4da2fd7c5d979b5658b009e9e15d45703306a58fa0d94716c022757979",
+      "second_hash": "9ea1eefc1c0e683ddd90f1085faf77b9b762409a276126b1b7666a0dda0a4ca0",
+      "decision": "CONFIRMED_PARENT_RELATION",
+      "reason": "Distinctive branched necrotic scars, peripheral puncta, vein and leaf-edge landmarks align across the photographed region. Shared leaf-region parent identity is confirmed; identical exposure versus another capture of the same physical leaf is not asserted."
+    },
+    {
+      "pair_number": 13,
+      "first_hash": "2b4a4ed882ea80bb0bdc1417458c0c2a40d99ffdf4d903dff6ec90896dcd5a49",
+      "second_hash": "c36806054ee13ef5abaa329d29babce57b9d7adf72e5aa78db2cf4bcee9381f6",
+      "decision": "REJECTED_AS_IDENTITY_EVIDENCE",
+      "reason": "Visual identity evidence insufficient: different contour/lesion layout or no broad stable correspondences. Rejection is not proof of independent physical plants."
+    },
+    {
+      "pair_number": 14,
+      "first_hash": "2aae06514f4951ad0db642654a940d9c043445d1aba75f3ad902c3abd716b9b0",
+      "second_hash": "ac01e4c4824ff19bbe38a290113e3716754913fdc330fbbe717afb3df6b32a48",
+      "decision": "CONFIRMED_PARENT_RELATION",
+      "reason": "Distinctive branched necrotic scars, peripheral puncta, vein and leaf-edge landmarks align across the photographed region. Shared leaf-region parent identity is confirmed; identical exposure versus another capture of the same physical leaf is not asserted."
+    },
+    {
+      "pair_number": 15,
+      "first_hash": "c6acc7eb47f198961ddfdc2f3ed5148e2bfa90ff9ef43a39da7debc3280e7d2c",
+      "second_hash": "faf5987565e0b4352b8670191f35fd64b1ce5c5111f33482aa3006cbe8ca5864",
+      "decision": "CONFIRMED_PARENT_RELATION",
+      "reason": "Distinctive branched necrotic scars, peripheral puncta, vein and leaf-edge landmarks align across the photographed region. Shared leaf-region parent identity is confirmed; identical exposure versus another capture of the same physical leaf is not asserted."
+    },
+    {
+      "pair_number": 16,
+      "first_hash": "c7a51c90e69969e7d9166bb35c795c039dfa770ba14a9cb57b721c30edcb3549",
+      "second_hash": "340590c324ba36db7bd281b75d668fc427d13a27f943cdfbf4eae3a4f757d373",
+      "decision": "CONFIRMED_PARENT_RELATION",
+      "reason": "Matching unique rust-punctum arrangement, central vein and leaf contour despite perspective/exposure changes. Shared leaf-region parent identity is confirmed; identical exposure versus another capture of the same physical leaf is not asserted."
+    },
+    {
+      "pair_number": 17,
+      "first_hash": "3aa0c53a6fe1d8c0c3e8ba8831e2f5e76588eda192d3be57b866a937e3e47dd7",
+      "second_hash": "28e343bc7770ab8a6436239257bea0d48464b5aeaed27bc1e2e431036281a1c5",
+      "decision": "CONFIRMED_PARENT_RELATION",
+      "reason": "Distinctive branched necrotic scars, peripheral puncta, vein and leaf-edge landmarks align across the photographed region. Shared leaf-region parent identity is confirmed; identical exposure versus another capture of the same physical leaf is not asserted."
+    },
+    {
+      "pair_number": 18,
+      "first_hash": "5da03fe49b6be4b953ffbbb3d945c334b896eb4857cc718e3a606e7f486c4c9d",
+      "second_hash": "863ddd25e742c69b10991ceaddaa32948e6d100a66ff034039620599c30e70c9",
+      "decision": "CONFIRMED_PARENT_RELATION",
+      "reason": "Matching distinctive cross-vein/crease and leaf microtexture over a broad region after registration. Shared leaf-region parent identity is confirmed; identical exposure versus another capture of the same physical leaf is not asserted."
+    },
+    {
+      "pair_number": 19,
+      "first_hash": "d65adfb57a6c81fb6c58b3a3a31ac56329dd2680f4389c02c93478c300d19acc",
+      "second_hash": "bb6513c8d45b22472dd5e8ee2c28bd5eac6ab2655f53a7ec7a9bcd9c1b7e77ca",
+      "decision": "CONFIRMED_PARENT_RELATION",
+      "reason": "Identical distinctive rust-covered strip photograph after rotation/crop, with corresponding lesion distribution. Shared leaf-region parent identity is confirmed; identical exposure versus another capture of the same physical leaf is not asserted."
+    },
+    {
+      "pair_number": 20,
+      "first_hash": "cdaa1b4a7adc90108d55f29ea3f7bec2bfdc4d05b54eebc9ab30b234da614aca",
+      "second_hash": "54f203dc51c628aa43f12836845417b1bfe6c8f1b244075761c1db4bd07fb42f",
+      "decision": "CONFIRMED_PARENT_RELATION",
+      "reason": "Matching broken/dead tissue contours and split/scar pattern, with registered distinctive background features. Shared leaf-region parent identity is confirmed; identical exposure versus another capture of the same physical leaf is not asserted."
+    },
+    {
+      "pair_number": 21,
+      "first_hash": "e8c3ae9b3d759a09088ba0862146fed9926dda685f8512849086f874a48ec430",
+      "second_hash": "1ef67c035b390e85bbcd63b5daac7cab87c564e3d8f0250390a792dfebc35bb1",
+      "decision": "CONFIRMED_PARENT_RELATION",
+      "reason": "Matching curved midrib, localized isolated marks and crease/vein microtexture, not merely green color. Shared leaf-region parent identity is confirmed; identical exposure versus another capture of the same physical leaf is not asserted."
+    },
+    {
+      "pair_number": 22,
+      "first_hash": "1ebf14863b5eac43dfd7d799c879b4edecfbaf10816641cea033afc76d6c1773",
+      "second_hash": "54f702d351d0fa85b40bd4deaccad06a092058796558788fa32c2f1f7bad5faa",
+      "decision": "CONFIRMED_PARENT_RELATION",
+      "reason": "Matching distinctive tapered necrotic tip and branched scar/vein arrangement after registration. Shared leaf-region parent identity is confirmed; identical exposure versus another capture of the same physical leaf is not asserted."
+    },
+    {
+      "pair_number": 23,
+      "first_hash": "fc2a3f5eeec7277750aa5fcb750ddeca6ec5303aeb8c6143a5accd0b7ce1bfa3",
+      "second_hash": "5a98cdc9194b65b6844177ab6ebfd61b41853fc09a4ebbc2a6a7d5bb9bcb0ed4",
+      "decision": "CONFIRMED_PARENT_RELATION",
+      "reason": "Distinctive branched necrotic scars, peripheral puncta, vein and leaf-edge landmarks align across the photographed region. Shared leaf-region parent identity is confirmed; identical exposure versus another capture of the same physical leaf is not asserted."
+    },
+    {
+      "pair_number": 24,
+      "first_hash": "3e60dcf908093513d93e27e56bc6d07fcab1b229c3cba4caff04a732b6466e27",
+      "second_hash": "1a274e71d6f7c3bd3c6c4b98fdb31337681785d105a15d320abf0217b460e6ae",
+      "decision": "UNRESOLVED_PARENT_CANDIDATE",
+      "reason": "Sparse geometric matches and repetitive curved-vein/crease texture lack enough distinctive isolated landmarks to establish parent identity. Do not automatically group, exclude or relabel."
+    },
+    {
+      "pair_number": 25,
+      "first_hash": "24fbf0bd8988344e27b4dcfd9e7046012ed75704278045c59258933f987a76c5",
+      "second_hash": "e97525592f286b0dd593010fe970a8f35935e3a28e8c76d9f3b73339ebbaff59",
+      "decision": "CONFIRMED_PARENT_RELATION",
+      "reason": "Matching distinctive branched lesion and peripheral puncta configuration despite exposure/pose changes. Shared leaf-region parent identity is confirmed; identical exposure versus another capture of the same physical leaf is not asserted."
+    },
+    {
+      "pair_number": 26,
+      "first_hash": "b30a45368624c07ddef0537b6bb5d8c40df7b18a8c08fecbf3a871cb921053d5",
+      "second_hash": "a63b7dfefdbfec41e2e8d975a1f813a7d34e16e4e2584f52170645290854fb21",
+      "decision": "REJECTED_AS_IDENTITY_EVIDENCE",
+      "reason": "Visual identity evidence insufficient: different contour/lesion layout or no broad stable correspondences. Rejection is not proof of independent physical plants."
+    },
+    {
+      "pair_number": 27,
+      "first_hash": "318f9a221b3064141854c931dcbe6c5e3b852da021048dcd3903a33124b65f64",
+      "second_hash": "a31e43c38f72c7546d60fde1531888e97fe9b26dd5e72d6f7de9e84d840299b2",
+      "decision": "REJECTED_AS_IDENTITY_EVIDENCE",
+      "reason": "Visual identity evidence insufficient: different contour/lesion layout or no broad stable correspondences. Rejection is not proof of independent physical plants."
+    },
+    {
+      "pair_number": 28,
+      "first_hash": "62fc063d13fe533bf3f87bfbfff803f0caf2dfa55e027d377cec7ff282617c70",
+      "second_hash": "b5b9ba44c055a8170758ade8abd9fc5e9662218631e128bf6ec2f69bdd0f6678",
+      "decision": "REJECTED_AS_IDENTITY_EVIDENCE",
+      "reason": "Visual identity evidence insufficient: different contour/lesion layout or no broad stable correspondences. Rejection is not proof of independent physical plants."
+    },
+    {
+      "pair_number": 29,
+      "first_hash": "04812fb142968b3f0f45b20020602437dc9860694da96cd26f0ebb9ac096796e",
+      "second_hash": "17c121716b95edfe209097e6d2a5c152fb4a21e9e02e8f4f21afc643c18c9d17",
+      "decision": "CONFIRMED_PARENT_RELATION",
+      "reason": "Distinctive branched necrotic scars, peripheral puncta, vein and leaf-edge landmarks align across the photographed region. Shared leaf-region parent identity is confirmed; identical exposure versus another capture of the same physical leaf is not asserted."
+    },
+    {
+      "pair_number": 30,
+      "first_hash": "3edc21af50b07fd38aa902974309a7e77a72065682659cc061164f08af873b99",
+      "second_hash": "9eda930724f7d1779914b966dcd986bc0b22dcd06cfce3ad2c8597dd1a1d17b8",
+      "decision": "REJECTED_AS_IDENTITY_EVIDENCE",
+      "reason": "Visual identity evidence insufficient: different contour/lesion layout or no broad stable correspondences. Rejection is not proof of independent physical plants."
+    },
+    {
+      "pair_number": 31,
+      "first_hash": "7ded0cf1f932619a380f15f66be39ba05bc7c35fcf7528cf7e6f0f8dab7026ad",
+      "second_hash": "fbdf57f347e949440e1d42d8a9dfc410673963326c52f7f91cf3f430d31b7965",
+      "decision": "REJECTED_AS_IDENTITY_EVIDENCE",
+      "reason": "Visual identity evidence insufficient: different contour/lesion layout or no broad stable correspondences. Rejection is not proof of independent physical plants."
+    },
+    {
+      "pair_number": 32,
+      "first_hash": "8a029a83af9dbb012d0f3ff917fc487f60822fbad6ea97f62b8d7842cde87782",
+      "second_hash": "8aace910c1cb5a05645d1e50d573ab7c7904403c910c1b8304b1293c472e0f08",
+      "decision": "CONFIRMED_PARENT_RELATION",
+      "reason": "Distinctive branched necrotic scars, peripheral puncta, vein and leaf-edge landmarks align across the photographed region. Shared leaf-region parent identity is confirmed; identical exposure versus another capture of the same physical leaf is not asserted."
+    },
+    {
+      "pair_number": 33,
+      "first_hash": "3ce8480083a9e1f3dd68d5700ea3ea3d6f57f2ffb388fb75650fd33b02a7ec23",
+      "second_hash": "55733fe811a3a5328e0a09bd2b7dbbcfea6321679e1a8a32cda12b48ea29c192",
+      "decision": "REJECTED_AS_IDENTITY_EVIDENCE",
+      "reason": "Visual identity evidence insufficient: different contour/lesion layout or no broad stable correspondences. Rejection is not proof of independent physical plants."
+    },
+    {
+      "pair_number": 34,
+      "first_hash": "bf65279b92c34fd6eb6dd6f2b1611b55c1ab4314a67059e5e0cf3c2a618ae79d",
+      "second_hash": "34712be4e6eb9ac2757a1d2290022720763d3cc01e9f22eeb938bb41439b9b02",
+      "decision": "CONFIRMED_PARENT_RELATION",
+      "reason": "Distinctive branched necrotic scars, peripheral puncta, vein and leaf-edge landmarks align across the photographed region. Shared leaf-region parent identity is confirmed; identical exposure versus another capture of the same physical leaf is not asserted."
+    },
+    {
+      "pair_number": 35,
+      "first_hash": "366cac0649df317e9cdfbc64ec11c8b3da8e15aa7db164a9bf84db5c6236dfa3",
+      "second_hash": "99ad81a07cbf1e2b1afa1da2fbb60355e2a794766888016ceef0737c72ba6cc9",
+      "decision": "CONFIRMED_PARENT_RELATION",
+      "reason": "Identical field photograph, complete lesion constellation, leaf contour and soil/grass background after crop. Labels conflict; exclude the entire connected family without choosing or changing a disease label."
+    },
+    {
+      "pair_number": 36,
+      "first_hash": "4350be846fec732e7ae31d5c8b29ecd33736a3f1570b2c4b7d47e5eb3c883c94",
+      "second_hash": "5aad94abd7b113d9b8ae446e3c84d1fe91da824354a26013f5a6799c31dc8a32",
+      "decision": "CONFIRMED_PARENT_RELATION",
+      "reason": "Distinctive branched necrotic scars, peripheral puncta, vein and leaf-edge landmarks align across the photographed region. Shared leaf-region parent identity is confirmed; identical exposure versus another capture of the same physical leaf is not asserted."
+    },
+    {
+      "pair_number": 37,
+      "first_hash": "6fb3ac72f6bcae59e68b8d59823c2cd0f1d6e02b4ebdb104582bb4f174ca3f40",
+      "second_hash": "a5778b6f26c7c6df8f48048a6f32cc203cc09b039480fda08a0bf73ddb6de17f",
+      "decision": "CONFIRMED_PARENT_RELATION",
+      "reason": "Distinctive branched necrotic scars, peripheral puncta, vein and leaf-edge landmarks align across the photographed region. Shared leaf-region parent identity is confirmed; identical exposure versus another capture of the same physical leaf is not asserted."
+    },
+    {
+      "pair_number": 38,
+      "first_hash": "99203b4ff820a694e45081ad0ac06ba39438d62e10d87a2ef68006604f55aeb5",
+      "second_hash": "d59fca02546fe844ba930d996e38e747f38849dd9020207cd1789b87d4336788",
+      "decision": "REJECTED_AS_IDENTITY_EVIDENCE",
+      "reason": "Visual identity evidence insufficient: different contour/lesion layout or no broad stable correspondences. Rejection is not proof of independent physical plants."
+    },
+    {
+      "pair_number": 39,
+      "first_hash": "1f21f42dd7c29d874c17262aaa08045805faa6c69ec41d71417935c97b16f1be",
+      "second_hash": "533def71437e6b09560b57f5ec10fdf337658bbe318a0bd45ebd5872cbf09fa2",
+      "decision": "CONFIRMED_PARENT_RELATION",
+      "reason": "Two matching irregular holes plus distinctive vein/shadow geometry. Shared leaf-region parent identity is confirmed; identical exposure versus another capture of the same physical leaf is not asserted."
+    },
+    {
+      "pair_number": 40,
+      "first_hash": "23f914729e9e3705e0e9844cdad21a32b1b5fffbb1fdc44441c123718eb8d32d",
+      "second_hash": "5fb1cb77a64c83d22d1be42ea51f07bde8033bac379c7609637f5ddd6dd6d95e",
+      "decision": "REJECTED_AS_IDENTITY_EVIDENCE",
+      "reason": "Visual identity evidence insufficient: different contour/lesion layout or no broad stable correspondences. Rejection is not proof of independent physical plants."
+    },
+    {
+      "pair_number": 41,
+      "first_hash": "62fc063d13fe533bf3f87bfbfff803f0caf2dfa55e027d377cec7ff282617c70",
+      "second_hash": "2400e7f6f7f3c27b225aabd4c9ec60ad836f100eb9be51b4d3ebdef976665e3c",
+      "decision": "REJECTED_AS_IDENTITY_EVIDENCE",
+      "reason": "Visual identity evidence insufficient: different contour/lesion layout or no broad stable correspondences. Rejection is not proof of independent physical plants."
+    },
+    {
+      "pair_number": 42,
+      "first_hash": "55f02728739315c61a1c9d28b976226bfb5ae951e363d13f99dfe73816fc17ab",
+      "second_hash": "381d55d1be384b9e5bf71fcfab7fbb7bf376cb00de6af99eb6bceb81138cb421",
+      "decision": "CONFIRMED_PARENT_RELATION",
+      "reason": "Distinctive branched necrotic scars, peripheral puncta, vein and leaf-edge landmarks align across the photographed region. Shared leaf-region parent identity is confirmed; identical exposure versus another capture of the same physical leaf is not asserted."
+    },
+    {
+      "pair_number": 43,
+      "first_hash": "620ec3d715cf788f53720089e7f2af57cb7e3593a0def4eab5c0dc7050e18dcc",
+      "second_hash": "5704a4b83fed9967844bfe326fc9b68317c7bcf8c9d1f315c971c716e8fbaa49",
+      "decision": "REJECTED_AS_IDENTITY_EVIDENCE",
+      "reason": "Visual identity evidence insufficient: different contour/lesion layout or no broad stable correspondences. Rejection is not proof of independent physical plants."
+    },
+    {
+      "pair_number": 44,
+      "first_hash": "c60767fac59c3b76ea7b20ee5e04f5a9dff63ab1f382359a09b051a027b05365",
+      "second_hash": "4886cdb9748f995d8713a6f50a58444a81b744b5d4ee0c9122cfc989ebd75c88",
+      "decision": "REJECTED_AS_IDENTITY_EVIDENCE",
+      "reason": "Visual identity evidence insufficient: different contour/lesion layout or no broad stable correspondences. Rejection is not proof of independent physical plants."
+    },
+    {
+      "pair_number": 45,
+      "first_hash": "d188dac9dfffbad0727a8d92c99ae2feb5c3f3ad96ced26e7800d91502be3ba5",
+      "second_hash": "831fb8491facdc93152b407c8a203554abebb002ad92f7d7c67a4ca6e8213304",
+      "decision": "CONFIRMED_PARENT_RELATION",
+      "reason": "Distinctive branched necrotic scars, peripheral puncta, vein and leaf-edge landmarks align across the photographed region. Shared leaf-region parent identity is confirmed; identical exposure versus another capture of the same physical leaf is not asserted."
+    },
+    {
+      "pair_number": 46,
+      "first_hash": "fdd5b4ff8cf23f946c8f45d98e4257d4b50ab7183a5282202e0b3836f86ea3e8",
+      "second_hash": "b8edc738dfbc1015fd856650f261e0aefb7ce7d1ece7c47c037a34ac85b4718d",
+      "decision": "CONFIRMED_PARENT_RELATION",
+      "reason": "Matching elongated yellow-stripe constellation around the white midrib. Shared leaf-region parent identity is confirmed; identical exposure versus another capture of the same physical leaf is not asserted."
+    },
+    {
+      "pair_number": 47,
+      "first_hash": "fe3eebfab0aabcc69ce6d9416811ee7dac82bc5454acb60d36ac30ea09233e63",
+      "second_hash": "64f81241cf2fc6dd16c9bba1e7db6315a8f82bbb4cd0586bc16452ac701b2642",
+      "decision": "REJECTED_AS_IDENTITY_EVIDENCE",
+      "reason": "Visual identity evidence insufficient: different contour/lesion layout or no broad stable correspondences. Rejection is not proof of independent physical plants."
+    },
+    {
+      "pair_number": 48,
+      "first_hash": "3e053c92275f8b82e68e9e7b405a94e1ed9adf037d55d7971d9a354e5ed12459",
+      "second_hash": "109efe2da94a3a9220d1f9d4615e5596be3501d319a844cb048ee37ea981b4b6",
+      "decision": "REJECTED_AS_IDENTITY_EVIDENCE",
+      "reason": "Visual identity evidence insufficient: different contour/lesion layout or no broad stable correspondences. Rejection is not proof of independent physical plants."
+    },
+    {
+      "pair_number": 49,
+      "first_hash": "14e657279fcbe6aa5da3f3f5095d822b1a80c8026fe67e85fe27de0418e522ea",
+      "second_hash": "64606e8dcf131f0ce7e928d07081c244762b505f7c12e5beb53df0870ad8dedc",
+      "decision": "REJECTED_AS_IDENTITY_EVIDENCE",
+      "reason": "Visual identity evidence insufficient: different contour/lesion layout or no broad stable correspondences. Rejection is not proof of independent physical plants."
+    },
+    {
+      "pair_number": 50,
+      "first_hash": "1a4b1f2e0c954b0287d8571348fad4b982437788cac661a6c7ce33b446985470",
+      "second_hash": "3ddf3ee49e1cb7caa6dd6c0cc2da7e2511125c7c59d4e5c20047cbd5d142d7aa",
+      "decision": "REJECTED_AS_IDENTITY_EVIDENCE",
+      "reason": "Visual identity evidence insufficient: different contour/lesion layout or no broad stable correspondences. Rejection is not proof of independent physical plants."
+    },
+    {
+      "pair_number": 51,
+      "first_hash": "5bf4bc7d2c614bfdc90a18b5ff659c890991f3cdee4863638f5123f1069080d1",
+      "second_hash": "f64553297e5e9e564757d221521d5c295e8b654257aa82efcfdaadcb22f686be",
+      "decision": "REJECTED_AS_IDENTITY_EVIDENCE",
+      "reason": "Visual identity evidence insufficient: different contour/lesion layout or no broad stable correspondences. Rejection is not proof of independent physical plants."
+    },
+    {
+      "pair_number": 52,
+      "first_hash": "6d0d1e39f09ba7ab70cae2048916a48d398bc22490954d32d3a4b584272ddebb",
+      "second_hash": "ad7ecbca19117a26418670e57da41f427cb43deed9c1c3eaf35f96aa32335d08",
+      "decision": "REJECTED_AS_IDENTITY_EVIDENCE",
+      "reason": "Visual identity evidence insufficient: different contour/lesion layout or no broad stable correspondences. Rejection is not proof of independent physical plants."
+    },
+    {
+      "pair_number": 53,
+      "first_hash": "9f107f8d056e097d75f2ca5dccc4e1a200e5ea50cbed8c9d3de47eadd3cb3926",
+      "second_hash": "62fc063d13fe533bf3f87bfbfff803f0caf2dfa55e027d377cec7ff282617c70",
+      "decision": "REJECTED_AS_IDENTITY_EVIDENCE",
+      "reason": "Visual identity evidence insufficient: different contour/lesion layout or no broad stable correspondences. Rejection is not proof of independent physical plants."
+    },
+    {
+      "pair_number": 54,
+      "first_hash": "c0e31c3044e24803359a5499288b7af95f6d1a6691f255a8c3503b865ccded4b",
+      "second_hash": "9d980f54f2c84d87a4d853e5284e254a45c169c555909c9305c761bcd8192be4",
+      "decision": "CONFIRMED_PARENT_RELATION",
+      "reason": "Matching localized crease, thin dark streak and microgroove configuration. Shared leaf-region parent identity is confirmed; identical exposure versus another capture of the same physical leaf is not asserted."
+    },
+    {
+      "pair_number": 55,
+      "first_hash": "fb064b73972798f27758601257dc07e0ea3ae2f2c700cf0f688d34ccac298fc0",
+      "second_hash": "2400e7f6f7f3c27b225aabd4c9ec60ad836f100eb9be51b4d3ebdef976665e3c",
+      "decision": "REJECTED_AS_IDENTITY_EVIDENCE",
+      "reason": "Visual identity evidence insufficient: different contour/lesion layout or no broad stable correspondences. Rejection is not proof of independent physical plants."
+    },
+    {
+      "pair_number": 56,
+      "first_hash": "ff1c976d0c0804c4477cfdcb0cf5597fe27c3b66b4c2c18d5b021e3d23c56e19",
+      "second_hash": "4713b10521040b12bd472f7d83aca182cb240f99d6a214ec2c904cca3316e30a",
+      "decision": "CONFIRMED_PARENT_RELATION",
+      "reason": "Identical field photograph, complete lesion constellation and field background after crop/re-encoding. Labels conflict; exclude the entire connected family without choosing or changing a disease label."
+    },
+    {
+      "pair_number": 57,
+      "first_hash": "114675e4de1372d1bd9e2b01e7fda41b96f45428900f0238ce8c01786284c45a",
+      "second_hash": "6bf2b4a327d1619278c348657ceafffe2027c17550c0c3444c1e014809f3639d",
+      "decision": "REJECTED_AS_IDENTITY_EVIDENCE",
+      "reason": "Visual identity evidence insufficient: different contour/lesion layout or no broad stable correspondences. Rejection is not proof of independent physical plants."
+    },
+    {
+      "pair_number": 58,
+      "first_hash": "1b4ed8a14b641ee3f1ef86c8ca1130f39615b9c8f91b4fa2e07ccf1483963cf6",
+      "second_hash": "ba6d9f71522dbaf0b16ce68ab13c5b40ce6229f54204ba0948672937010a24c8",
+      "decision": "UNRESOLVED_PARENT_CANDIDATE",
+      "reason": "Sparse geometric matches and repetitive curved-vein/crease texture lack enough distinctive isolated landmarks to establish parent identity. Do not automatically group, exclude or relabel."
+    },
+    {
+      "pair_number": 59,
+      "first_hash": "5bb5b71febff555cd71b70f176e1db7d5d9cb70efca5f55342a6b528573122bf",
+      "second_hash": "6bf2b4a327d1619278c348657ceafffe2027c17550c0c3444c1e014809f3639d",
+      "decision": "REJECTED_AS_IDENTITY_EVIDENCE",
+      "reason": "Visual identity evidence insufficient: different contour/lesion layout or no broad stable correspondences. Rejection is not proof of independent physical plants."
+    },
+    {
+      "pair_number": 60,
+      "first_hash": "67eaeb7cb37d19cb5534654b0d3f504f99e49620a44af1f3b9969539f772cef8",
+      "second_hash": "e169df59404ea9ba0eb27fc31899cd6edabaad2da7f1828f66d7d7344bdfc479",
+      "decision": "REJECTED_AS_IDENTITY_EVIDENCE",
+      "reason": "Visual identity evidence insufficient: different contour/lesion layout or no broad stable correspondences. Rejection is not proof of independent physical plants."
+    },
+    {
+      "pair_number": 61,
+      "first_hash": "7267ec4c415da6562c9db6e772e72b7f4643bee43ff05bf1e6ba2bcd448a227d",
+      "second_hash": "91ac6b6b90bde080027b6b861f210eae5308493a5062d25bd849542d08928099",
+      "decision": "CONFIRMED_PARENT_RELATION",
+      "reason": "Matching many distinctive tan slit/scar arrangements plus vein/outline despite focus/exposure changes. Shared leaf-region parent identity is confirmed; identical exposure versus another capture of the same physical leaf is not asserted."
+    },
+    {
+      "pair_number": 62,
+      "first_hash": "76ab6397a8da27f021ec869458ae308bd7b61b13b6b72ced06c8c10c8b908b61",
+      "second_hash": "8cea75ef034851e70f750d18a6081bb6c00ddd72e81645ee0f63eb715832b279",
+      "decision": "REJECTED_AS_IDENTITY_EVIDENCE",
+      "reason": "Visual identity evidence insufficient: different contour/lesion layout or no broad stable correspondences. Rejection is not proof of independent physical plants."
+    },
+    {
+      "pair_number": 63,
+      "first_hash": "7ded0cf1f932619a380f15f66be39ba05bc7c35fcf7528cf7e6f0f8dab7026ad",
+      "second_hash": "6dc523e3b174f90f6ca5a44ce16c1a3b1bf0304d950330b03a791f64e30156c7",
+      "decision": "REJECTED_AS_IDENTITY_EVIDENCE",
+      "reason": "Visual identity evidence insufficient: different contour/lesion layout or no broad stable correspondences. Rejection is not proof of independent physical plants."
+    },
+    {
+      "pair_number": 64,
+      "first_hash": "82dac5f47ef9ad89b0cd08ae79ebdf725b30b20bc06b6cd696fe5a98bb6c4020",
+      "second_hash": "d34cc876cff4fe8efb656275cf4d3184e360efd79144e20def49f623241adcdb",
+      "decision": "REJECTED_AS_IDENTITY_EVIDENCE",
+      "reason": "Visual identity evidence insufficient: different contour/lesion layout or no broad stable correspondences. Rejection is not proof of independent physical plants."
+    },
+    {
+      "pair_number": 65,
+      "first_hash": "a6dc29e76bd1f03425f71720a20061eb77db9a2971c758ef4d9331a8ccb68a01",
+      "second_hash": "266975832d8db3c8e7ad25daaf7f0ed522d8c2aab8437b1a1b64c8feb4a628f7",
+      "decision": "REJECTED_AS_IDENTITY_EVIDENCE",
+      "reason": "Visual identity evidence insufficient: different contour/lesion layout or no broad stable correspondences. Rejection is not proof of independent physical plants."
+    },
+    {
+      "pair_number": 66,
+      "first_hash": "f00d6f64077cb8e923c9ae35e64ebb6fb516341c9a65e66660a2226c4630a5f6",
+      "second_hash": "e0e0f2d7f9407c7844e6cfe811cf55445ab561a8be597e5100f668f8536b1f5c",
+      "decision": "REJECTED_AS_IDENTITY_EVIDENCE",
+      "reason": "Visual identity evidence insufficient: different contour/lesion layout or no broad stable correspondences. Rejection is not proof of independent physical plants."
+    },
+    {
+      "pair_number": 67,
+      "first_hash": "f60038e150eb2418ab8badc78b622d47328b3afbdb6d40a3425b099dc8f3bab1",
+      "second_hash": "aa2180e410461ca4501054f9fdeb7ebddd85b301ab94cfec1a44767dc384fc8a",
+      "decision": "REJECTED_AS_IDENTITY_EVIDENCE",
+      "reason": "Visual identity evidence insufficient: different contour/lesion layout or no broad stable correspondences. Rejection is not proof of independent physical plants."
+    },
+    {
+      "pair_number": 68,
+      "first_hash": "2400e7f6f7f3c27b225aabd4c9ec60ad836f100eb9be51b4d3ebdef976665e3c",
+      "second_hash": "f64553297e5e9e564757d221521d5c295e8b654257aa82efcfdaadcb22f686be",
+      "decision": "REJECTED_AS_IDENTITY_EVIDENCE",
+      "reason": "Visual identity evidence insufficient: different contour/lesion layout or no broad stable correspondences. Rejection is not proof of independent physical plants."
+    },
+    {
+      "pair_number": 69,
+      "first_hash": "29eb3eba6174fb4edafd4e4c1bfe6ce7036acc7fc382e2ef5003787a3388334f",
+      "second_hash": "9e8d6dda83508b6c753088ad2c07f61734359593320784bae0fa667521fec903",
+      "decision": "REJECTED_AS_IDENTITY_EVIDENCE",
+      "reason": "Visual identity evidence insufficient: different contour/lesion layout or no broad stable correspondences. Rejection is not proof of independent physical plants."
+    },
+    {
+      "pair_number": 70,
+      "first_hash": "2fd9ad0b36927ec7b4c77e167f67879f7a4400d3d4895cbcd74e3c4f6b621b60",
+      "second_hash": "42d3ccb9f4e3de13718ed0ec6209f2a38bcb8558237390ad64071fbb05b9b667",
+      "decision": "REJECTED_AS_IDENTITY_EVIDENCE",
+      "reason": "Visual identity evidence insufficient: different contour/lesion layout or no broad stable correspondences. Rejection is not proof of independent physical plants."
+    },
+    {
+      "pair_number": 71,
+      "first_hash": "32144fb85628657994668e14c90e405ffc0fcf2a8fe8d7455f9b1bdc8e48e7e2",
+      "second_hash": "87b30373c316832e5bae6a05020c5490a8e5544c2154ce6789d8cb8560d5ea92",
+      "decision": "REJECTED_AS_IDENTITY_EVIDENCE",
+      "reason": "Visual identity evidence insufficient: different contour/lesion layout or no broad stable correspondences. Rejection is not proof of independent physical plants."
+    },
+    {
+      "pair_number": 72,
+      "first_hash": "42dc53b0bcffc148dfed536f17e3932511ef9a821245fe7867167630852fa112",
+      "second_hash": "4886cdb9748f995d8713a6f50a58444a81b744b5d4ee0c9122cfc989ebd75c88",
+      "decision": "REJECTED_AS_IDENTITY_EVIDENCE",
+      "reason": "Visual identity evidence insufficient: different contour/lesion layout or no broad stable correspondences. Rejection is not proof of independent physical plants."
+    },
+    {
+      "pair_number": 73,
+      "first_hash": "7ca8bb9d6c0ed9a5441c73bc095cf3b0a5753caec759bfcf090f9237c788c88d",
+      "second_hash": "62fc063d13fe533bf3f87bfbfff803f0caf2dfa55e027d377cec7ff282617c70",
+      "decision": "REJECTED_AS_IDENTITY_EVIDENCE",
+      "reason": "Visual identity evidence insufficient: different contour/lesion layout or no broad stable correspondences. Rejection is not proof of independent physical plants."
+    },
+    {
+      "pair_number": 74,
+      "first_hash": "932ad8e9a5609174bc1bf7f16dd63f51254ba136313929c0148e124b44137fba",
+      "second_hash": "947994ac352a865a2dc6f91accb187c539c2b0aa14b0079ba1f153b82220e9a8",
+      "decision": "REJECTED_AS_IDENTITY_EVIDENCE",
+      "reason": "Visual identity evidence insufficient: different contour/lesion layout or no broad stable correspondences. Rejection is not proof of independent physical plants."
+    },
+    {
+      "pair_number": 75,
+      "first_hash": "b1a64117f6cc3d752d30837d81ca103961f6ec8f771bad4a21b3ee3196139a5d",
+      "second_hash": "7713a41bb2146fc8326db8fd15e35269165a69d10368e611dc4ac10402c17d4c",
+      "decision": "REJECTED_AS_IDENTITY_EVIDENCE",
+      "reason": "Visual identity evidence insufficient: different contour/lesion layout or no broad stable correspondences. Rejection is not proof of independent physical plants."
+    },
+    {
+      "pair_number": 76,
+      "first_hash": "b9bbbb70136e126f1beab1f7e6b16d2e83689b26284a35f1080a507d048fbc47",
+      "second_hash": "5fb1cb77a64c83d22d1be42ea51f07bde8033bac379c7609637f5ddd6dd6d95e",
+      "decision": "REJECTED_AS_IDENTITY_EVIDENCE",
+      "reason": "Visual identity evidence insufficient: different contour/lesion layout or no broad stable correspondences. Rejection is not proof of independent physical plants."
+    }
+  ],
+  "v1_confirmed_relation_audit": {
+    "known_identity_overlap_count": 0,
+    "pairwise_intersections": {
+      "train/validation": {
+        "sample_id": 0,
+        "content_hash": 0,
+        "pixel_hash": 0,
+        "group_id": 0,
+        "original_id": 0,
+        "original_uuid": 0,
+        "relative_path": 0
+      },
+      "train/test": {
+        "sample_id": 0,
+        "content_hash": 0,
+        "pixel_hash": 0,
+        "group_id": 0,
+        "original_id": 0,
+        "original_uuid": 0,
+        "relative_path": 0
+      },
+      "validation/test": {
+        "sample_id": 0,
+        "content_hash": 0,
+        "pixel_hash": 0,
+        "group_id": 0,
+        "original_id": 0,
+        "original_uuid": 0,
+        "relative_path": 0
+      }
+    },
+    "confirmed_edge_counts": {
+      "same_partition": 14,
+      "cross_partition": 22
+    },
+    "confirmed_edge_crossings": [
+      {
+        "first_hash": "1540ae24bb5b56d3371bcf66a9ab5ee0691c3d1fea002b7efb1afbf36c48526e",
+        "second_hash": "eef5a57824278ec80ddf58e5daa1eb7bc3064d6750854292b4886621791ec148",
+        "first_partitions": [
+          "validation"
+        ],
+        "second_partitions": [
+          "train"
+        ]
+      },
+      {
+        "first_hash": "17215ca4a1247cf6c2d3754f97e0d4b35860a722ba32f7dbb5ef1faa41ce885d",
+        "second_hash": "3908a7924faf7d45ce849142ba238876839a882a0bc6a50e0c056b98dc2b2b3a",
+        "first_partitions": [
+          "test"
+        ],
+        "second_partitions": [
+          "train"
+        ]
+      },
+      {
+        "first_hash": "1ca22fbfd1daf3bde55e6341838302c498c59259308e83d0f0825c0e7d41cd57",
+        "second_hash": "da5b711afd5654b00f44310d2de001150182e8548bf9b6e751b1adea2a922dba",
+        "first_partitions": [
+          "test"
+        ],
+        "second_partitions": [
+          "train"
+        ]
+      },
+      {
+        "first_hash": "1ef67c035b390e85bbcd63b5daac7cab87c564e3d8f0250390a792dfebc35bb1",
+        "second_hash": "e8c3ae9b3d759a09088ba0862146fed9926dda685f8512849086f874a48ec430",
+        "first_partitions": [
+          "validation"
+        ],
+        "second_partitions": [
+          "train"
+        ]
+      },
+      {
+        "first_hash": "258ccc4da2fd7c5d979b5658b009e9e15d45703306a58fa0d94716c022757979",
+        "second_hash": "9ea1eefc1c0e683ddd90f1085faf77b9b762409a276126b1b7666a0dda0a4ca0",
+        "first_partitions": [
+          "validation"
+        ],
+        "second_partitions": [
+          "train"
+        ]
+      },
+      {
+        "first_hash": "28e343bc7770ab8a6436239257bea0d48464b5aeaed27bc1e2e431036281a1c5",
+        "second_hash": "3aa0c53a6fe1d8c0c3e8ba8831e2f5e76588eda192d3be57b866a937e3e47dd7",
+        "first_partitions": [
+          "train"
+        ],
+        "second_partitions": [
+          "validation"
+        ]
+      },
+      {
+        "first_hash": "2aae06514f4951ad0db642654a940d9c043445d1aba75f3ad902c3abd716b9b0",
+        "second_hash": "ac01e4c4824ff19bbe38a290113e3716754913fdc330fbbe717afb3df6b32a48",
+        "first_partitions": [
+          "train"
+        ],
+        "second_partitions": [
+          "validation"
+        ]
+      },
+      {
+        "first_hash": "2f7f2b5279b7ef07b63c5dc4869df28679170ef3c15a90335583d9a34fe9f138",
+        "second_hash": "e9663732ef042db247af05d84a989d2e4e06d2b0690362e38891d1da4b4e510d",
+        "first_partitions": [
+          "train"
+        ],
+        "second_partitions": [
+          "test"
+        ]
+      },
+      {
+        "first_hash": "314cb6de570e01a3a7ab10f2e23a741a129f6053ed951dcacecf289e7a640fa9",
+        "second_hash": "b602dae65b4cb04861c53a3ca3fdb32dd235ca12b87d7f37c7f422e4ba6be71b",
+        "first_partitions": [
+          "train"
+        ],
+        "second_partitions": [
+          "validation"
+        ]
+      },
+      {
+        "first_hash": "34712be4e6eb9ac2757a1d2290022720763d3cc01e9f22eeb938bb41439b9b02",
+        "second_hash": "bf65279b92c34fd6eb6dd6f2b1611b55c1ab4314a67059e5e0cf3c2a618ae79d",
+        "first_partitions": [
+          "train"
+        ],
+        "second_partitions": [
+          "test"
+        ]
+      },
+      {
+        "first_hash": "366cac0649df317e9cdfbc64ec11c8b3da8e15aa7db164a9bf84db5c6236dfa3",
+        "second_hash": "99ad81a07cbf1e2b1afa1da2fbb60355e2a794766888016ceef0737c72ba6cc9",
+        "first_partitions": [
+          "train"
+        ],
+        "second_partitions": [
+          "validation"
+        ]
+      },
+      {
+        "first_hash": "4350be846fec732e7ae31d5c8b29ecd33736a3f1570b2c4b7d47e5eb3c883c94",
+        "second_hash": "5aad94abd7b113d9b8ae446e3c84d1fe91da824354a26013f5a6799c31dc8a32",
+        "first_partitions": [
+          "train"
+        ],
+        "second_partitions": [
+          "validation"
+        ]
+      },
+      {
+        "first_hash": "5a98cdc9194b65b6844177ab6ebfd61b41853fc09a4ebbc2a6a7d5bb9bcb0ed4",
+        "second_hash": "fc2a3f5eeec7277750aa5fcb750ddeca6ec5303aeb8c6143a5accd0b7ce1bfa3",
+        "first_partitions": [
+          "train"
+        ],
+        "second_partitions": [
+          "validation"
+        ]
+      },
+      {
+        "first_hash": "5da03fe49b6be4b953ffbbb3d945c334b896eb4857cc718e3a606e7f486c4c9d",
+        "second_hash": "863ddd25e742c69b10991ceaddaa32948e6d100a66ff034039620599c30e70c9",
+        "first_partitions": [
+          "train"
+        ],
+        "second_partitions": [
+          "validation"
+        ]
+      },
+      {
+        "first_hash": "6d6da75cbfcf1533e60ca92057ad06e851adb824329ce343537d940306df55f7",
+        "second_hash": "ef5f76888a0e7b72684ba6a4ff0de4be13e7fc33b62092e2aa4aa23add241e84",
+        "first_partitions": [
+          "test"
+        ],
+        "second_partitions": [
+          "train"
+        ]
+      },
+      {
+        "first_hash": "6fb3ac72f6bcae59e68b8d59823c2cd0f1d6e02b4ebdb104582bb4f174ca3f40",
+        "second_hash": "a5778b6f26c7c6df8f48048a6f32cc203cc09b039480fda08a0bf73ddb6de17f",
+        "first_partitions": [
+          "train"
+        ],
+        "second_partitions": [
+          "validation"
+        ]
+      },
+      {
+        "first_hash": "7267ec4c415da6562c9db6e772e72b7f4643bee43ff05bf1e6ba2bcd448a227d",
+        "second_hash": "91ac6b6b90bde080027b6b861f210eae5308493a5062d25bd849542d08928099",
+        "first_partitions": [
+          "train"
+        ],
+        "second_partitions": [
+          "validation"
+        ]
+      },
+      {
+        "first_hash": "75c80b935cefdae8cfd186006d0e71cd776314769e3a8b7ffbcdee8d0b06b723",
+        "second_hash": "8ab213989053fff2cf51905155c44379bbed4102a0ace6bb759d4bc6a27b6a35",
+        "first_partitions": [
+          "validation"
+        ],
+        "second_partitions": [
+          "train"
+        ]
+      },
+      {
+        "first_hash": "858c88af4a614df72e30fe773ef55c5aa46861d3f0ed1f73d7a8a8b6400f2a71",
+        "second_hash": "c1e4ed369415d54d77632271a5d7c741200ccb9357d4e9fceee7db3cb028f8dd",
+        "first_partitions": [
+          "train"
+        ],
+        "second_partitions": [
+          "validation"
+        ]
+      },
+      {
+        "first_hash": "8a029a83af9dbb012d0f3ff917fc487f60822fbad6ea97f62b8d7842cde87782",
+        "second_hash": "8aace910c1cb5a05645d1e50d573ab7c7904403c910c1b8304b1293c472e0f08",
+        "first_partitions": [
+          "train"
+        ],
+        "second_partitions": [
+          "test"
+        ]
+      },
+      {
+        "first_hash": "9d980f54f2c84d87a4d853e5284e254a45c169c555909c9305c761bcd8192be4",
+        "second_hash": "c0e31c3044e24803359a5499288b7af95f6d1a6691f255a8c3503b865ccded4b",
+        "first_partitions": [
+          "train"
+        ],
+        "second_partitions": [
+          "test"
+        ]
+      },
+      {
+        "first_hash": "c6acc7eb47f198961ddfdc2f3ed5148e2bfa90ff9ef43a39da7debc3280e7d2c",
+        "second_hash": "faf5987565e0b4352b8670191f35fd64b1ce5c5111f33482aa3006cbe8ca5864",
+        "first_partitions": [
+          "train"
+        ],
+        "second_partitions": [
+          "validation"
+        ]
+      }
+    ],
+    "excluded_contents_in_partitions": [],
+    "mixed_label_group_ids": [],
+    "eligible_unique_contents": 4170,
+    "eligible_groups": 4161,
+    "known_relationships_disjoint": false,
+    "limitation": "Known identities do not prove unknown photo, plant or capture independence."
+  },
+  "same_label_confirmed_partition_counts": {
+    "train/validation": 14,
+    "test/train": 7,
+    "train/train": 10,
+    "test/test": 1
+  },
+  "scientific_limitations": [
+    "No byte/pixel/hash/original-ID/UUID overlap existed in v1; the expanded visual-parent evidence nevertheless proves evaluation relationships omitted by v1 grouping.",
+    "Lightweight fingerprints/geometric correspondence plus manual landmarks are not exhaustive for arbitrary edits, perspective changes, or unidentified plant/session relationships.",
+    "Two unresolved candidates are disclosed, not forcibly confirmed; complete plant/field independence is unavailable.",
+    "Existing v1 metrics are invalid for independent evaluation. A repaired partition requires a new fresh model and cannot be called a newly collected or never-inspected external test dataset."
+  ],
+  "raw_source_modified": false,
+  "raw_image_redistribution": false,
+  "classifier_inference_performed": false
+}

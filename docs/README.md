@@ -12,6 +12,7 @@ The remaining feature documents describe intended behavior.
 | [Pre-Phase-10 audit](23-pre-phase-10-audit.md) | Phase 0–9 compatibility, APIs, environments, security, tests and specific user prerequisites |
 | [Dataset intake and real-image review](24-dataset-intake-preprocessing-review.md) | Phase 9.5 configured inventory, exact labels, recovered provenance/rights, duplicate conflicts, shared-policy comparison, real parity and training readiness |
 | [ML training and evaluation](25-ml-training-evaluation.md) | Phase 10 research/exclusion policy, immutable grouped partitions, shared full-frame baseline, smoke, transfer learning, checkpoints and evaluation |
+| [Model fitness and generalization audit](26-model-fitness-validation.md) | Phase 10.5 transformed-photo leakage investigation, immutable grouped repair, fresh training, validation-only calibration/robustness and frozen descriptive final evaluation |
 | [System overview](01-system-overview.md) | Purpose, users, boundaries, and primary flow |
 | [HLA](02-hla.md) | Logical components and trust boundaries |
 | [HLD](03-hld.md) | Runtime interactions and failures |

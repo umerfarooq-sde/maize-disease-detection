@@ -1,0 +1,134 @@
+[
+  {
+    "sample_id": "00b9be713d9db53a34ecc1bf7bf02e735b44bd6d7e8bb64aae3642d99883267a",
+    "group_id": "d716b2558aaa5759329c5c366509417e1d68222689b4b444e78100caa196cc97",
+    "partition": "train",
+    "relative_path": "Common_Rust/Common_Rust (1467).JPG",
+    "label": "Common_Rust",
+    "seeds": [
+      20261008,
+      20261009,
+      20261010
+    ]
+  },
+  {
+    "sample_id": "00c45e284314d90a3f33f476ab6bbc4d5408a7c5c53486d049dd35fcd3545085",
+    "group_id": "dbddc7b0143a2736b50159de2ed5208c15aaeb82a961158535f1403dbc698c46",
+    "partition": "train",
+    "relative_path": "Common_Rust/Common_Rust (1819).JPG",
+    "label": "Common_Rust",
+    "seeds": [
+      20261009,
+      20261010,
+      20261011
+    ]
+  },
+  {
+    "sample_id": "04cfdf7dd6686ca8a6dccd08c968df23ec7b61742d7c80ecd5a53aa7957cdf19",
+    "group_id": "b913518bf379eec7d5f562525380b757e72e71db58ace4249037d438bcd8f2f6",
+    "partition": "train",
+    "relative_path": "Common_Rust/Common_Rust (1816).jpg",
+    "label": "Common_Rust",
+    "seeds": [
+      20261010,
+      20261011,
+      20261012
+    ]
+  },
+  {
+    "sample_id": "0013fe55fe0d5d2397bcce7ea20747589b1ab34c18a0d34c8efb48d3ef5cbc80",
+    "group_id": "8def0f63576f1b183ad39d47661897e708021728978a8e30437ce10d5e713149",
+    "partition": "train",
+    "relative_path": "Gray_Leaf_Spot/Gray_Leaf_Spot (641).JPG",
+    "label": "Gray_Leaf_Spot",
+    "seeds": [
+      20261011,
+      20261012,
+      20261013
+    ]
+  },
+  {
+    "sample_id": "00a39428a5fb85724f4c463df464c76a6f65d4b85c1406d8184fb9f9f9447988",
+    "group_id": "acf5811b75ca8d85f1ec63322e43c38e1f603c2a8a22b02963765d4c909339fc",
+    "partition": "train",
+    "relative_path": "Gray_Leaf_Spot/Gray_Leaf_Spot (231).JPG",
+    "label": "Gray_Leaf_Spot",
+    "seeds": [
+      20261012,
+      20261013,
+      20261014
+    ]
+  },
+  {
+    "sample_id": "0a7b7262c4b4bc086913125e36696b5b89e377f662a7bf7aca95a43d8eb811a1",
+    "group_id": "0d5fd51ef6175a7f63f1c8f5f717ec564dbd9fbffd18e92b1bddae07e3f60f94",
+    "partition": "train",
+    "relative_path": "Gray_Leaf_Spot/Gray_Leaf_Spot (880).jpg",
+    "label": "Gray_Leaf_Spot",
+    "seeds": [
+      20261013,
+      20261014,
+      20261015
+    ]
+  },
+  {
+    "sample_id": "004de1ce5ed3aaf376fe971e96c3aa4e70595ec54efb430869ceb91b4a0abc71",
+    "group_id": "9b2f153d50d2273d9df4e34ca6d54c1afffde84b903eefe3c4d3f4f79de6b5a6",
+    "partition": "train",
+    "relative_path": "Healthy/Healthy (1246).jpg",
+    "label": "Healthy",
+    "seeds": [
+      20261014,
+      20261015,
+      20261016
+    ]
+  },
+  {
+    "sample_id": "00a17aa1f7df29160c0fce5a48079e6658eb4f5539a648985687ebe55c527ac1",
+    "group_id": "ad64f7ff68d885df76164e12f9f6b27cce683047a2c41041bb46ffbac7a21ba0",
+    "partition": "train",
+    "relative_path": "Healthy/Healthy (1595).jpg",
+    "label": "Healthy",
+    "seeds": [
+      20261015,
+      20261016,
+      20261017
+    ]
+  },
+  {
+    "sample_id": "00126ef33b1f603fcf705fe5b3d186f7932d2348fe52aca404752233586a86e7",
+    "group_id": "30a16ead55bcad4aec0352d751aeceeb4c2c8c280d15d626883b557ef8aad16b",
+    "partition": "train",
+    "relative_path": "Northern_Corn_Leaf_Blight/Northern_Corn_Leaf_Blight (1128).JPG",
+    "label": "Northern_Corn_Leaf_Blight",
+    "seeds": [
+      20261016,
+      20261017,
+      20261018
+    ]
+  },
+  {
+    "sample_id": "0024a015776ef9867fc9c25fbca8d9dfb2ab38c46b0f5d38aff4f102523eef0f",
+    "group_id": "d97a2f601067ea2ea3ec10e78a3686e85d11d3507556548c7ce24ea70c4e562c",
+    "partition": "train",
+    "relative_path": "Northern_Corn_Leaf_Blight/Northern_Corn_Leaf_Blight (1548).JPG",
+    "label": "Northern_Corn_Leaf_Blight",
+    "seeds": [
+      20261017,
+      20261018,
+      20261019
+    ]
+  },
+  {
+    "sample_id": "00582457c5b6fa2d95261f0727637c7ddf62d56712d2cd182ddcb59fa18b2258",
+    "group_id": "2f4ae91cb68be090538c6bc098c0f293f55da304a2f91815a9b6c06510d526da",
+    "partition": "train",
+    "relative_path": "Northern_Corn_Leaf_Blight/Northern_Corn_Leaf_Blight (751).jpg",
+    "label": "Northern_Corn_Leaf_Blight",
+    "seeds": [
+      20261018,
+      20261019,
+      20261020
+    ]
+  }
+]

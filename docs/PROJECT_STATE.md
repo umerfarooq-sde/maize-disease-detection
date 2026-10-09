@@ -1,24 +1,26 @@
 # Project state
 
-Updated: 2026-10-08 (Asia/Karachi).
+Updated: 2026-10-09 (Asia/Karachi).
 
 ## Current phase
 
-Phase 10 dataset preparation, training foundation and baseline evaluation are implemented
-and verified. The foreground fitting process was externally interrupted during epoch 11:
-**ten complete epochs (two warmup/eight fine-tune), out of twelve maximum**. The original
-run is unchanged. Separate immutable recovery evaluates its unchanged epoch-10 validation
-winner: **95.20% test accuracy / 0.9396 macro F1** on 625 held-out contents. No completed
-twelve-epoch budget, early-stopping, convergence or exact optimizer/RNG resume is claimed.
-The approved metadata index has **4,170 unique contents / 4,161 groups** and fixed
-**2,917 train / 628 validation / 625 test** partitions with zero content/group leakage.
-All 8,040 source names, bytes, sizes and mtimes remain unchanged. Reason-coded invalid/
-contradictory-family exclusions, full-frame shared configuration and academic/FYP
-non-commercial restrictions are locked. Sources and labels were recovered automatically;
-no manual metadata inventory or new service secret is required. Read
-[training results and interruption](25-ml-training-evaluation.md).
-Read the [dataset review](24-dataset-intake-preprocessing-review.md),
-[historical foundation audit](23-pre-phase-10-audit.md) and [known issues](KNOWN_ISSUES.md).
+Phase 10.5 is complete. **FIT WITH DOCUMENTED LIMITATIONS** for a local FYP
+research inference prototype. The original v1 scoring arithmetic is preserved, but
+confirmed transformed-parent leakage invalidates its independent-evaluation claim.
+The corrected v2 index and fresh model are verified; all 8,040 original files remain
+unchanged. The new evaluation is descriptive on a previously inspected corpus,
+without independent field/plant validation or commercial clearance.
+
+Selected model version `mobilenet-v3-small-v2-20261009`, experiment
+`mobilenet-v3-small-20261009-v2-01`, checkpoint `checkpoints/epoch-008.pt`,
+SHA-256 `e95a2e83262637fc1a08b919e6003bddb2fe70664b9c51418f059b7c8287dc66`.
+The completed run stops at epoch 11 under patience 3, out of 12 maximum. Validation:
+**96.81% accuracy / 0.9589 macro F1**. One post-freeze final test: **95.83% / 0.9452**,
+598 correct of 624. Test Gray Leaf Spot recall is **83.53%**, F1 **0.8659**. These are
+internal benchmark scores, not measured farmer-field accuracy. Calibration remains
+disabled (`T=1`): group cross-fitting worsens NLL/Brier/ECE. No confidence threshold
+is locked. Read [the fitness report](26-model-fitness-validation.md) and
+[safe numerical/artifact evidence](../ml-training/reports/mobilenet-v3-small-20261009-v2-01-fitness/README.md).
 
 The preceding Phase 0–9 audit verified 77 checked-in backend cases, a live farmer
 WebP/auth lifecycle probe, five migration replay/checksum checks, 52 isolated Flutter
@@ -42,7 +44,7 @@ native mobile refresh-cookie integration and deployment/platform limitations are
 The recovered backend database client matches HEAD and works. Phase 6 remains explicitly
 skipped. Phase 9.5 added configured read-only intake; the subsequent approved exclusions,
 use restrictions, full-frame policy and Phase 10 baseline are recorded in DECISIONS.md.
-Stop after Phase 10; inference, Node/FastAPI orchestration, mobile sign-in,
+Stop after Phase 10.5; inference, Node/FastAPI orchestration, mobile sign-in,
 disease/business APIs, calculators, admin functionality and RAG/Gemini remain deferred.
 
 ## Initial workspace findings
@@ -76,8 +78,8 @@ disease/business APIs, calculators, admin functionality and RAG/Gemini remain de
 | Mobile | Flutter 3.41.9/Dart 3.11.5, Material 3 farmer shell, scoped Provider MVVM, go_router 17.5.0/http 1.6.0/image_picker 1.2.2, gallery/camera/preview/progress/retry/pending confirmation; 52 isolated tests, two optional live tests and separately verified real upload; debug Android APK builds |
 | Backend | Express 5 health/auth/scans, strict TS/Zod, Argon2id, rotating/revocable JWT sessions/RBAC, upload signature/full decode validation, Cloudinary authenticated assets, durable scan-upload retry/cleanup; shared Prisma 7.10.0, 21 tables/five migrations, 77 passing tests across five suites |
 | AI service | Python 3.11/FastAPI 0.142.2/Uvicorn 0.54.0 foundation and exact shared preprocessing exports; health reports preprocessing library available without importing heavy modules; 50 tests and Ruff/mypy pass; no inference operations |
-| Shared preprocessing | One independently buildable typed package at `shared/preprocessing`, version 1.0.0, explicit JSON configuration, file/byte entrypoints, conservative extraction/fallback, optional unchanged CPU tensor and debug CLI; 78 tests pass in each consumer environment and eight parity cases pass |
-| ML training | Python 3.11 locked CPU environment, reusable DATASET_PATH, immutable 4,170-content research index and grouped 2,917/628/625 splits, shared full-frame MobileNetV3 Small, train-only augmentation, validation selection and versioned artifacts; 92 tests, Ruff/strict mypy, 12 synthetic/16 real baseline parity, actual 32/16 smoke pass; ten-epoch interrupted-budget baseline independently evaluated once on test: 95.20% accuracy/0.9396 macro F1 |
+| Shared preprocessing | One independently buildable typed package at `shared/preprocessing`, version 1.0.0, explicit JSON configuration, file/byte entrypoints, conservative extraction/fallback, optional unchanged CPU tensor and debug CLI; 78 tests pass in each consumer environment and 12 synthetic baseline parity cases pass |
+| ML training | Corrected immutable v2: 4,162 contents/4,121 groups, 2,911/627/624 partitions, no confirmed leakage; fresh MobileNetV3 Small completed 11 epochs, best epoch 8; validation 96.81% accuracy/0.9589 macro F1, single descriptive test 95.83%/0.9452; raw probabilities, no threshold; 219 tests, Ruff over 32 files, mypy over 15 modules and 16 actual TRAIN cases with AI compatibility pass; limited FYP prototype |
 | Infrastructure | Neon PostgreSQL 18.6 with pgvector 0.8.6 migrated; pgvector 0.8.7/PostgreSQL 18 Compose configuration; preserved native 18.4 cluster; private local settings ignored |
 | Documentation | Architecture, database/operations, auth, Flutter foundation, scan uploads/recovery, FastAPI startup/contracts/network, shared preprocessing/configuration/versioning/limitations, decisions, roadmap and verification history |
 | Scripts | Repository/environment/auth/admin/PostgreSQL/Python/development checks including shared preprocessing and actual cross-environment parity; FastAPI start/check scripts, full live Flutter scan-upload harness and backend cleanup CLI |
@@ -1046,6 +1048,10 @@ implementation, not completed files. Stop after this audit.
 
 ## Phase 10 dataset preparation, training and evaluation (2026-10-07)
 
+Historical v1 record: confirmed transformed-parent leakage found in Phase 10.5
+invalidates independent-evaluation claims below. Preserve its artifacts; use v2 for
+current fitness.
+
 - Approved dataset policy is persisted in `ml-training/configs/research-policy.json`
   and hash-pinned family/invalid/confirmed-relative evidence in `group-evidence.json`.
   Exclude 18 filenames/16 unique contents: eleven shared-rejected inputs plus all seven
@@ -1100,21 +1106,48 @@ implementation, not completed files. Stop after this audit.
   mobile, database, AI service and shared package source remain unchanged. No production
   model promotion or application inference occurs; stop after Phase 10.
 
+## Phase 10.5 completion and verification
+
+- Expanded transformed-photo review confirms 36 additional parent relations,
+  including 22 crossings of the v1 partitions. V1 independent-evaluation claims
+  are invalid; the original experiments and reported arithmetic remain preserved.
+- New immutable `maize-research-20261008-v2` applies the existing contradictory-family
+  policy to four newly confirmed families, groups all known relatives and retains
+  the original splitter/seed. It contains 4,162 unique eligible contents in 4,121
+  groups, split 2,911/627/624; all 8,040 raw files remain unchanged.
+- A real 32/16 smoke passes before a fresh bounded classifier fit. Epoch 8 is selected
+  by validation macro F1; patience 3 ends the run at epoch 11. Validation diagnostics,
+  group-fold calibration, errors/CAM, TRAIN augmentation, source membership and ten
+  fixed perturbation probes are reviewed before the candidate freeze.
+- All 48 pre-test candidate references and 13 final artifact references validate.
+  One post-freeze test scores 598/624 correct; no post-test model/policy change occurs.
+  Critical-field rejection checks, independent saved-CSV arithmetic and exact 16-case
+  TRAIN model compatibility across training/AI environments pass.
+- Checks pass: 219 ML tests, 50 AI tests, 78 shared tests in each environment,
+  12 synthetic preprocessing parity cases, Ruff formatting/lint and strict mypy.
+  The safe aggregate export contains 98 files, including 93 byte-identical copies
+  and 16 numerical plots; raw images and weights stay local/ignored.
+- Updated the fitness report, project/ML documentation, known issues, roadmap and
+  finalized decisions. No Phase 11 API or application integration is implemented.
+  Read [model fitness](26-model-fitness-validation.md) for exact class counts, metrics,
+  commands, artifact hashes and remaining limits.
+
 ## Current limitations and pending decisions
 
-- The baseline fitting process was interrupted after ten complete epochs of twelve maximum.
-  Optimizer/RNG state was not saved, so exact training resume is unavailable. Evaluation
-  recovery preserves the original run and completes a valid ten-epoch result, without
-  establishing completion of the planned budget or convergence. Future long training
-  should run independently of an interactive tool terminal; the documented hidden
-  launcher redirects logs and retains immutable outputs.
-- Selected unaugmented train/validation accuracy gap is 3.888 percentage points and
-  macro-F1 gap 0.0537, a generalization/overfitting signal rather than proof. Losses
-  decreased overall; underfitting is not established. Gray_Leaf_Spot test F1 is 0.8621;
-  23/30 errors are its pairwise confusion with Northern_Corn_Leaf_Blight. Known-content
-  grouping does not establish independent plants/fields or remove unknown relatives,
-  background/source/watermark bias. Field validation and commercial licensing/source
-  replacement remain future requirements; these internal scores are research evidence.
+- V1 transformed-parent leakage invalidates historical independence claims; original
+  run/recovery/artifacts remain immutable. Corrected v2 repairs all confirmed families
+  and excludes four newly contradictory families without raw edits. Unresolved pair 24
+  may relate TRAIN/VAL Healthy images; physical plant/session identity remains unavailable.
+- Fresh v2 fits successfully with patience 3, stopping at epoch 11 with epoch 8 selected;
+  mild internal overfitting (unaugmented accuracy gap 2.57 percentage points), no
+  significant task underfitting. Test GLS recall 83.53%/F1 0.8659; Corn-only VAL GLS
+  recall 2/9 and source accuracy 77.08% show domain weakness. Confident wrong
+  predictions persist (three test errors above 0.99). Calibration cross-fitting does
+  not improve diagnostics; calibration is disabled, T=1, and no threshold is locked.
+- The corpus was previously inspected/its v1 test consumed. V2's single final test is
+  descriptive; it is not fresh external/field validation. Classifier seed stability,
+  plant/field independence, OOD/maize rejection and clinical/agronomic validity remain
+  unestablished. Commercial clearance and deployment uncertainty policy remain open.
 
 - Starlette TestClient emits one upstream deprecation warning recommending httpx2.
   Existing HTTPX remains locked and tests pass; a test-client migration is maintenance
@@ -1193,9 +1226,9 @@ implementation, not completed files. Stop after this audit.
 
 ## Next step
 
-Stop after Phase 10. The fixed index, ten-epoch interrupted-budget baseline, immutable
-recovery evaluation and checks are preserved. Wait for the next user instruction and
-reconcile it with the [roadmap](14-roadmap.md). Inference/model promotion, Node/FastAPI
-integration, mobile authentication, disease/business APIs, RAG/Gemini/calculators and
-admin functionality remain future work. Current research use does not clear commercial
-deployment or establish independent field accuracy.
+Stop after Phase 10.5. **Phase 11 may begin** for a separately authorized FYP research
+prototype using the frozen v2 candidate and shared configuration. This turn adds no
+inference API or application integration. Independent field validation and commercial
+licensing/source replacement remain requirements before real farmer/commercial use.
+Read [model fitness](26-model-fitness-validation.md) and reconcile the next instruction
+with the [roadmap](14-roadmap.md).

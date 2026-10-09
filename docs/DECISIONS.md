@@ -107,6 +107,15 @@ See [database design](05-database-design.md) and [project state](PROJECT_STATE.m
 | Grouped stratified 70/15/15 split, seed 20261007 | No official split exists. Group content-identical and confirmed derivative relatives first; persist class mapping, eligibility, exclusions and partition manifests with checksums. Test is reserved for final evaluation, never augmentation or tuning. |
 | CPU MobileNetV3 Small transfer-learning baseline | Lightweight architecture suits the existing four-core CPU environment. Verify dataset/index/splits and a small train/validation smoke test before the full run. Select checkpoints using validation only; retain versioned experiment outputs. |
 
+## Final Phase 10.5 candidate decisions (2026-10-09)
+
+| Decision | Evidence and boundary |
+|---|---|
+| Versioned v2 lineage repair, full contradictory-family exclusion | Actual transformed-parent leakage invalidates v1 independence; preserve all originals/labels/artifacts, union confirmed families and apply existing exclusion policy to four newly contradictory components. Keep existing grouped splitter/seed; record all moves/reasons. |
+| Research/FYP MobileNetV3 Small v2 candidate, epoch 8 | Fresh bounded correction selects highest validation macro F1 only. Freeze checkpoint/config/source/data/class hashes before single descriptive test. FIT WITH DOCUMENTED LIMITATIONS; no field/commercial certificate or Phase 11 implementation. |
+| Calibration disabled, method none, T=1 | Validation-group cross-fit worsens NLL/Brier/ECE; apparent all-validation fitted-T improvement is in-sample. Preserve raw probabilities rather than promote unsupported temperature scaling. |
+| Confidence threshold remains unlocked | Validation cutoff 0.95 retains confident errors and reduces GLS coverage; risk/coverage/class-cost objectives undefined. Null is an explicit pending product policy, not approval for a default arbitrary cutoff. |
+
 Pending decisions:
 curated agricultural sources, full JSON validation contracts, retention and
 completed-scan retention/delivery/deletion, production least-privilege roles,

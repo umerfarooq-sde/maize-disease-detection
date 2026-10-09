@@ -1,20 +1,24 @@
 # Known issues
 
-Updated: 2026-10-08 (Asia/Karachi), after Phase 10 interrupted-budget baseline and
-verified recovery evaluation. See [training results](25-ml-training-evaluation.md),
-[historical dataset review](24-dataset-intake-preprocessing-review.md),
-[historical Phase 0–9 audit](23-pre-phase-10-audit.md), [project state](PROJECT_STATE.md)
-and [shared preprocessing contract](22-shared-preprocessing.md) for evidence.
+Updated: 2026-10-09 (Asia/Karachi), after Phase 10.5.
 
-**Phase 10 implementation and evaluation are verified:** the user-approved exclusions,
-deduplication/grouping, academic/FYP non-commercial use and full-frame policy are locked.
-The original fit was interrupted during epoch 11 after ten complete epochs of twelve
-maximum; immutable recovery evaluates the unchanged validation-selected epoch-10 model
-once on 625 test contents: 95.20% accuracy/0.9396 macro F1. No convergence, completed
-twelve-epoch optimization or exact-resume claim is made. The
-previous missing-dataset/labels and synthetic-only review blockers are resolved.
-No new P0 issue or P1 application-code
-defect was established. Future feature absence remains outside the implemented phases.
+Phase 10.5 is complete. **FIT WITH DOCUMENTED LIMITATIONS** for a local FYP
+research inference prototype. The original v1 scoring arithmetic is preserved, but
+confirmed transformed-parent leakage invalidates its independent-evaluation claim.
+The corrected v2 index and fresh model are verified; all 8,040 original files remain
+unchanged. The new evaluation is descriptive on a previously inspected corpus,
+without independent field/plant validation or commercial clearance.
+
+Selected model version `mobilenet-v3-small-v2-20261009`, experiment
+`mobilenet-v3-small-20261009-v2-01`, checkpoint `checkpoints/epoch-008.pt`,
+SHA-256 `e95a2e83262637fc1a08b919e6003bddb2fe70664b9c51418f059b7c8287dc66`.
+The completed run stops at epoch 11 under patience 3, out of 12 maximum. Validation:
+**96.81% accuracy / 0.9589 macro F1**. One post-freeze final test: **95.83% / 0.9452**,
+598 correct of 624. Test Gray Leaf Spot recall is **83.53%**, F1 **0.8659**. These are
+internal benchmark scores, not measured farmer-field accuracy. Calibration remains
+disabled (`T=1`): group cross-fitting worsens NLL/Brier/ECE. No confidence threshold
+is locked. Read [the fitness report](26-model-fitness-validation.md) and
+[safe numerical/artifact evidence](../ml-training/reports/mobilenet-v3-small-20261009-v2-01-fitness/README.md).
 
 ## P0 — project, data-loss or serious security blockers
 
@@ -35,8 +39,10 @@ The configured `DATASET_PATH` resolves to 8,040 actual images in the exact folde
 match recovered source-archive bytes. The merge has 4,186 byte-unique contents,
 3,854 excess copies and ten reviewed near-content pairs/20 contents; all PlantVillage
 color contents already occur in the other source. No official split exists to preserve.
-Phase 10 collapses copies and groups recovered original identities and confirmed
-relatives in immutable 2,917/628/625 partitions with zero content/group overlap.
+Phase 10.5 repairs the incomplete v1 grouping. V2 collapses copies and groups all
+confirmed relatives in immutable 2,911/627/624 partitions (4,162 contents/4,121 groups),
+with zero known content/group intersections. One unresolved possible Healthy parent
+pair spans TRAIN/VAL; this is a disclosed risk, not confirmed leakage.
 Augment only training after splitting; never train or tune on test data. No manually
 preprocessed second dataset is created. All 8,040 raw names/bytes/sizes/mtimes remain unchanged.
 
@@ -145,24 +151,37 @@ are **not required now**. No unresolved choice is recorded as an architectural d
 - Repository/template/ignore, documentation links, whitespace and private-path/secret
   checks pass. All image-bearing comparison and source metadata artifacts remain ignored.
 
-## Phase 10 execution and model limitations
+## Phase 10.5 model limitations and resolved data defect
 
-- Training/checks: 92 tests, Ruff19/strict mypy9, locked dependency compatibility,
-  twelve synthetic/sixteen real baseline parity cases and actual 32/16 smoke pass.
-  Independent saved-CSV metrics, strict zero-input model restores, parent/recovery/
-  export integrity and all-source immutability checks pass. No additional test inference.
-- Foreground-terminal interruption left ten fully scored epochs, not the twelve-epoch
-  maximum. Optimizer/RNG state was not saved; exact resume/convergence is unavailable.
-  A separate immutable evaluation recovery preserves every parent artifact and evaluates
-  its validation-only winner without more fitting. Future long runs should use the
-  documented independent hidden process/log launcher.
-- Selected train/validation accuracy gap is 3.888 percentage points, with macro-F1
-  gap 0.0537. Overall losses decreased; underfitting and final loss divergence are not
-  established. Gray_Leaf_Spot F1 is 0.8621, with 23/30 errors in its pairwise confusion
-  with Northern_Corn_Leaf_Blight. No post-test tuning occurred.
-- Known-content grouping does not prove field/plant independence, remove unconfirmed
-  relatives or quantify background/source/watermark bias. Perfect Healthy test scores
-  apply only to the 174 benchmark contents. Further field validation, calibrated product
-  decisions and commercial licensing/source replacement remain future work.
+- **Resolved confirmed v1 leakage:** 36 new parent relations, 22 crossing old partitions;
+  four additional contradictory families excluded in full. New immutable v2 verified
+  against all original filenames/bytes/sizes/mtimes; old artifacts unchanged. V1 scores
+  remain historical and cannot establish independent evaluation.
+- **Remaining identity uncertainty:** two unresolved Healthy pairs, including one
+  TRAIN/VAL candidate. Screening/known hashes do not prove complete physical plant,
+  session or field independence. Do not claim 4,162 contents are independent plants.
+- **Internal evaluation only:** earlier v1 test was consumed. New fresh classifier,
+  val-only decisions and single frozen v2 test prevent new test-driven tuning; they
+  cannot establish an untouched external field holdout. Multi-seed/CV classifier
+  stability remains unmeasured on the current CPU correction budget.
+- **Source/class weakness:** VAL archive-overlap accuracy 570/579 (98.45%), Corn-only
+  37/48 (77.08%), Corn-only GLS recall 2/9; no Healthy in the latter. Test GLS recall
+  83.53%, F1 0.8659. Background/letterbox/watermark activation and class morphology ambiguity
+  require external validation; coarse CAM is diagnostic rather than causal proof.
+- **Confidence:** two validation/three test wrong predictions ≥0.99 remain. Group-fold
+  temperature fitting worsens NLL/Brier/ECE; calibration is disabled (T=1). No operational cutoff is
+  approved without risk/coverage/class-cost objectives; greater confidence does not
+  establish correct farmer advice or OOD detection.
+- **Training/artifacts verified:** completed patience 3 stop at epoch 11 (best epoch 8),
+  mild selected train/VAL gap of 2.57 percentage points, no significant internal
+  underfitting. 219 ML/50 AI/78 shared tests in each environment, 12 synthetic parity
+  and 16 actual TRAIN compatibility cases pass; strict metadata/hash/
+  independent metric checks pass. Exact optimizer/RNG resume remains unavailable.
+- **Deployment boundary:** local AI forward-only latency/memory are measured, excluding
+  preprocessing and concurrency. Maintain exact shared full-frame 1.0.0 config; align
+  Node/Python admission or handle processing errors in later integration. No inference
+  API, commercial permission or field-accuracy certification is added in this audit.
 
-Stop after Phase 10; later inference and application integration remain separately scoped.
+Stop after Phase 10.5. Phase 11 may begin only as separately instructed research/FYP
+prototype work with these limits; new independent field data and commercial licensing
+or replacement remain future requirements.

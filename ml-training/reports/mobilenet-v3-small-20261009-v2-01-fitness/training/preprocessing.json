@@ -1,0 +1,40 @@
+{
+  "preprocessing_version": "1.0.0",
+  "target_height": 224,
+  "target_width": 224,
+  "max_bytes": 5242880,
+  "max_pixels": 16000000,
+  "min_side": 16,
+  "background_rgb": [
+    255,
+    255,
+    255
+  ],
+  "crop_padding_fraction": 0.08,
+  "crop_min_padding_pixels": 2,
+  "interpolation": "bilinear",
+  "normalization": {
+    "mean": [
+      0.485,
+      0.456,
+      0.406
+    ],
+    "std": [
+      0.229,
+      0.224,
+      0.225
+    ]
+  },
+  "segmentation": {
+    "mode": "disabled",
+    "uncertain_policy": "preserve",
+    "max_working_dimension": 512,
+    "border_fraction": 0.03,
+    "background_tolerance": 12.0,
+    "max_border_variation": 6.0,
+    "min_foreground_fraction": 0.02,
+    "max_foreground_fraction": 0.9,
+    "min_component_fraction": 0.001,
+    "mask_margin_pixels": 2
+  }
+}
