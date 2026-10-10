@@ -1,5 +1,11 @@
 # Mobile
 
+Phase 12 validates typed Node scan outcomes and prediction metadata, shows honest
+processing/completed/failed and uncertainty states, and retains the selected photo
+and private request key for retry after failed analysis. It never calls FastAPI.
+The detailed disease-result UI remains a later phase. See
+[Node/FastAPI integration](../docs/28-node-fastapi-integration.md).
+
 Phase 7 adds leaf gallery/supported camera selection, security preview validation,
 photo review, upload progress, safe error/retry and PENDING scan confirmation.
 See [scan uploads](../docs/20-scan-uploads.md). Default uploads are anonymous; the

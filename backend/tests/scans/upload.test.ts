@@ -66,7 +66,8 @@ test('anonymous creation, farmer ownership and payload-bound retry produce one s
   const key = randomUUID();
   const first = await service.create(file, key, null);
   const again = await service.create(file, key, null);
-  assert.equal(first.scan.status, 'PENDING');
+  assert.equal(first.scan.status, 'FAILED');
+  assert.equal(first.scan.analysisError?.code, 'INFERENCE_UNAVAILABLE');
   assert.equal(first.scan.id, again.scan.id);
   assert.equal(again.replayed, true);
   assert.equal(assets.size, 1);
@@ -93,7 +94,7 @@ test('database failure compensates the asset and permits retry after confirmed d
   assert.equal([...records.values()][0]?.state, 'FAILED');
   assert.equal([...records.values()][0]?.scan, null);
   repository.complete = complete;
-  assert.equal((await service.create(file, key, null)).scan.status, 'PENDING');
+  assert.equal((await service.create(file, key, null)).scan.status, 'FAILED');
 });
 test('lost commit acknowledgement preserves the committed scan and image', async () => {
   const { repository } = memoryScans();

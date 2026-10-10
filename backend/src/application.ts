@@ -27,9 +27,10 @@ export async function startApplication(
   database: ApplicationDatabase = getDatabaseClient(environment.DATABASE_URL),
 ): Promise<RunningApplication> {
   const repository = createHealthRepository(database);
+  const app = createApp(environment, logger, repository);
   const server = createServer(
     { requestTimeout: 60000, headersTimeout: 10000, keepAliveTimeout: 5000 },
-    createApp(environment, logger, repository),
+    app,
   );
   try {
     await database.$connect();
@@ -52,11 +53,35 @@ export async function startApplication(
   }
   logger.info({ host: environment.HOST, port: environment.PORT }, 'Backend ready');
 
+  // Bounded conditional recovery handles process crashes without a separate queue.
+  // One recovery per process at a time; attempt UUIDs fence delayed workers.
+  let recovery: Promise<void> | undefined;
+  const recoveryTimer = setInterval(() => {
+    if (recovery) return;
+    const recover = app.locals.recoverScans as () => Promise<number>;
+    recovery = recover()
+      .then((count) => {
+        if (count)
+          logger.warn({ code: 'INFERENCE_INTERRUPTED', count }, 'Interrupted scans marked failed');
+      })
+      .catch(() => {
+        logger.error(
+          { code: 'SCAN_RECOVERY_PENDING' },
+          'Scan recovery requires database availability',
+        );
+      })
+      .finally(() => {
+        recovery = undefined;
+      });
+  }, 60_000);
+  recoveryTimer.unref();
+
   let stopping: Promise<void> | undefined;
   return {
     server,
     stop() {
       stopping ??= (async () => {
+        clearInterval(recoveryTimer);
         let deadline: NodeJS.Timeout | undefined;
         const timedOut = new Promise<never>((_resolve, reject) => {
           deadline = setTimeout(() => {
@@ -67,6 +92,7 @@ export async function startApplication(
         const cleanup = (async () => {
           try {
             await closeServer(server);
+            await recovery;
           } finally {
             await database.$disconnect();
           }

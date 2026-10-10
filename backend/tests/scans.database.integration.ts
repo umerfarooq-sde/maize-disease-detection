@@ -39,7 +39,8 @@ test('PostgreSQL scan persistence, idempotency race, compensation and journal co
       scanIds.add(first.scan.id);
       const scan = await database.scan.findUniqueOrThrow({ where: { id: first.scan.id } });
       assert.equal(scan.userId, null);
-      assert.equal(scan.status, 'PENDING');
+      assert.equal(scan.status, 'FAILED');
+      assert.equal(scan.errorCode, 'INFERENCE_UNAVAILABLE');
       assert.equal(scan.imageBytes, file.buffer.length);
       assert.ok(scan.uploadedAt instanceof Date);
       assert.equal((await service.create(file, key, null)).scan.id, scan.id);

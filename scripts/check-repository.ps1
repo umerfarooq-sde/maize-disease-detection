@@ -51,6 +51,20 @@ $architectureDocs = @(
     '11-security.md', '12-testing.md', '13-deployment.md'
 )
 $requiredFiles += @(
+    'docs/28-node-fastapi-integration.md',
+    'backend/prisma/migrations/20261009000000_scan_inference/migration.sql',
+    'backend/src/modules/inference/inference.client.ts',
+    'backend/src/modules/inference/inference.types.ts',
+    'backend/src/modules/inference/model-registration.ts',
+    'backend/src/modules/inference/model.repository.ts', 'backend/src/cli/register-model.ts',
+    'backend/src/modules/scans/image-admission.ts', 'backend/tests/inference/client.test.ts',
+    'backend/tests/inference/model-registration.test.ts', 'backend/tests/inference/logger.test.ts',
+    'backend/tests/scans/inference.test.ts', 'backend/tests/scans/read-http.test.ts',
+    'backend/tests/scans/admission.test.ts', 'backend/tests/scans.inference.integration.ts',
+    'backend/tests/scans.inference.live.integration.ts', 'mobile/lib/data/models/scan_prediction.dart',
+    'scripts/check-image-admission-contract.py', 'scripts/check-image-admission-contract.mjs'
+)
+$requiredFiles += @(
     'docs/21-ai-service-foundation.md', 'scripts/start-ai.ps1',
     'ai-service/app/main.py', 'ai-service/app/server.py',
     'ai-service/app/config/settings.py', 'ai-service/app/api/security.py',
@@ -152,7 +166,7 @@ foreach ($file in $requiredFiles) {
 Write-Output 'PASS: Required directories, documentation, and templates exist.'
 
 $templateKeys = @{
-    'backend' = @('NODE_ENV', 'PORT', 'HOST', 'CORS_ORIGINS', 'LOG_LEVEL', 'SHUTDOWN_TIMEOUT_MS', 'RATE_LIMIT_MAX', 'AUTH_RATE_LIMIT_MAX', 'SCAN_RATE_LIMIT_MAX', 'DATABASE_URL', 'DIRECT_DATABASE_URL', 'JWT_SECRET', 'JWT_REFRESH_SECRET', 'JWT_ISSUER', 'JWT_ACCESS_TTL_SECONDS', 'JWT_REFRESH_TTL_SECONDS', 'CLOUDINARY_CLOUD_NAME', 'CLOUDINARY_API_KEY', 'CLOUDINARY_API_SECRET', 'AI_SERVICE_URL', 'AI_SERVICE_TOKEN')
+    'backend' = @('NODE_ENV', 'PORT', 'HOST', 'CORS_ORIGINS', 'LOG_LEVEL', 'SHUTDOWN_TIMEOUT_MS', 'RATE_LIMIT_MAX', 'AUTH_RATE_LIMIT_MAX', 'SCAN_RATE_LIMIT_MAX', 'DATABASE_URL', 'DIRECT_DATABASE_URL', 'JWT_SECRET', 'JWT_REFRESH_SECRET', 'JWT_ISSUER', 'JWT_ACCESS_TTL_SECONDS', 'JWT_REFRESH_TTL_SECONDS', 'CLOUDINARY_CLOUD_NAME', 'CLOUDINARY_API_KEY', 'CLOUDINARY_API_SECRET', 'AI_SERVICE_URL', 'AI_SERVICE_TOKEN', 'AI_SERVICE_TIMEOUT_MS', 'AI_MODEL_VERSION', 'AI_PREPROCESSING_VERSION')
     'ai-service' = @('ENVIRONMENT', 'HOST', 'PORT', 'LOG_LEVEL', 'DATABASE_URL', 'GEMINI_API_KEY', 'AI_SERVICE_TOKEN', 'INFERENCE_ENABLED', 'MODEL_PATH', 'MODEL_METADATA_PATH', 'MODEL_METADATA_SHA256', 'MODEL_VERSION', 'PREPROCESSING_VERSION', 'INFERENCE_THREADS', 'INFERENCE_MAX_CONCURRENCY', 'INFERENCE_UPLOAD_TIMEOUT_SECONDS', 'CONFIDENCE_POLICY_PATH', 'CONFIDENCE_POLICY_SHA256')
     'infrastructure' = @('POSTGRES_DB', 'POSTGRES_USER', 'POSTGRES_PASSWORD', 'POSTGRES_PORT')
     'mobile' = @('API_BASE_URL')

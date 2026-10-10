@@ -12,6 +12,9 @@ import { createHealthRepository } from '../backend/dist/modules/health/health.re
 import { createScanRepository } from '../backend/dist/modules/scans/scan.repository.js';
 import { createScanService } from '../backend/dist/modules/scans/scan.service.js';
 import { createImageStorage } from '../backend/dist/modules/scans/scan.storage.js';
+import { createAiInferenceClient } from '../backend/dist/modules/inference/inference.client.js';
+
+const inference = process.argv.includes('--inference');
 
 const environment = loadEnvironment();
 const database = createDatabaseClient(environment.DATABASE_URL, 30000);
@@ -27,7 +30,8 @@ const storage = {
 const logger = createLogger({ LOG_LEVEL: 'silent' });
 const app = createApp(
   environment, logger, createHealthRepository(database), createAuthRepository(database),
-  createScanService(createScanRepository(database), storage, logger),
+  createScanService(createScanRepository(database), storage, logger,
+    inference ? createAiInferenceClient(environment) : undefined),
 );
 const server = createServer(app);
 try {
@@ -38,6 +42,7 @@ try {
   const args = [
     'test', '--no-pub', '--reporter', 'expanded', 'test/integration/scan_upload_test.dart',
     '--dart-define=RUN_LIVE_SCAN_CHECK=true',
+    `--dart-define=RUN_LIVE_SCAN_INFERENCE=${inference}`,
     `--dart-define=API_BASE_URL=http://127.0.0.1:${port}/api/v1`,
   ];
   const windows = process.platform === 'win32';
@@ -51,7 +56,9 @@ try {
   const [code] = await once(child, 'exit');
   assert.equal(code, 0);
   assert.equal(ids.size, 1);
-  console.log('PASS: complete Flutter upload chain against real Cloudinary/PostgreSQL.');
+  console.log(inference
+    ? 'PASS: Flutter -> Node -> FastAPI -> shared/model -> PostgreSQL -> Flutter; real Cloudinary.'
+    : 'PASS: complete Flutter upload chain against real Cloudinary/PostgreSQL.');
 } finally {
   await new Promise((resolve) => server.close(resolve));
   try {
@@ -59,6 +66,7 @@ try {
     for (const record of records) await real.destroy(record.publicId);
     const scanIds = records.flatMap((record) => record.scanId ? [record.scanId] : []);
     await database.scanUpload.deleteMany({ where: { id: { in: [...ids] } } });
+    await database.scanPrediction.deleteMany({ where: { scanId: { in: scanIds } } });
     await database.scan.deleteMany({ where: { id: { in: scanIds } } });
   } finally {
     await database.$disconnect();

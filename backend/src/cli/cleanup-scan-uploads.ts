@@ -9,13 +9,15 @@ let database: ReturnType<typeof getDatabaseClient> | undefined;
 try {
   const environment = loadEnvironment();
   database = getDatabaseClient(environment.DATABASE_URL);
-  const result = await createScanService(
+  const service = createScanService(
     createScanRepository(database),
     createImageStorage(environment),
     createLogger(environment),
-  ).cleanup();
+  );
+  const interrupted = await service.recoverStale();
+  const result = await service.cleanup();
   console.log(
-    `Scan upload cleanup: ${result.removed} recovered, ${result.failed} pending retry, ${result.pruned} expired failed attempts removed (maximum 100 each per run).`,
+    `Scan cleanup: ${interrupted} interrupted inferences failed; ${result.removed} uploads recovered, ${result.failed} pending retry, ${result.pruned} expired failed attempts removed (maximum 100 each per run).`,
   );
   if (result.failed) process.exitCode = 1;
 } catch {

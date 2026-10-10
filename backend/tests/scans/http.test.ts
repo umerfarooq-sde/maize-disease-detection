@@ -73,7 +73,7 @@ test('multipart API enforces authentication, farmer ownership, limits, shape and
       requestId: string;
     };
     assert.equal(json.success, true);
-    assert.equal(json.data.status, 'PENDING');
+    assert.equal(json.data.status, 'FAILED');
     assert.equal(created.headers.get('cache-control'), 'no-store');
     assert.equal((await send({ key })).status, 200);
     assert.equal(scans.records.size, 1);

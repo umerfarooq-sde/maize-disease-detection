@@ -119,3 +119,72 @@ test('JWT keys are required, independent and strong-format; TTLs are bounded', (
     );
   }
 });
+
+test('AI integration defaults disabled and requires explicit origin, token and expected versions', () => {
+  const disabled = parseEnvironment(database);
+  assert.equal(disabled.AI_SERVICE_URL, '');
+  assert.equal(disabled.AI_SERVICE_TOKEN, '');
+  assert.equal(disabled.AI_MODEL_VERSION, '');
+  assert.equal(disabled.AI_PREPROCESSING_VERSION, '');
+  assert.equal(disabled.AI_SERVICE_TIMEOUT_MS, 10000);
+  const ai = {
+    AI_SERVICE_URL: 'http://ai-service:8000/',
+    AI_SERVICE_TOKEN: randomBytes(32).toString('base64url'),
+    AI_MODEL_VERSION: 'synthetic-model-v1',
+    AI_PREPROCESSING_VERSION: '1.0.0',
+  };
+  assert.equal(parseEnvironment({ ...database, ...ai }).AI_SERVICE_URL, 'http://ai-service:8000');
+  assert.equal(
+    parseEnvironment({ ...database, ...ai, NODE_ENV: 'production' }).AI_SERVICE_URL,
+    'http://ai-service:8000',
+  );
+  for (const partial of [
+    { AI_SERVICE_URL: ai.AI_SERVICE_URL },
+    { AI_SERVICE_TOKEN: ai.AI_SERVICE_TOKEN },
+    { AI_MODEL_VERSION: ai.AI_MODEL_VERSION },
+    { AI_PREPROCESSING_VERSION: ai.AI_PREPROCESSING_VERSION },
+    { ...ai, AI_MODEL_VERSION: '' },
+    { ...ai, AI_PREPROCESSING_VERSION: '' },
+    { ...ai, AI_SERVICE_TOKEN: '' },
+  ]) {
+    assert.throws(() => parseEnvironment({ ...database, ...partial }), /AI_SERVICE/);
+  }
+});
+
+test('AI origins, token format and deadlines are bounded without leaking service secrets', () => {
+  const ai = {
+    AI_SERVICE_URL: 'https://private-ai.example',
+    AI_SERVICE_TOKEN: randomBytes(32).toString('base64url'),
+    AI_MODEL_VERSION: 'synthetic-model-v1',
+    AI_PREPROCESSING_VERSION: '1.0.0',
+  };
+  for (const changes of [
+    { AI_SERVICE_URL: 'ftp://private-ai.example' },
+    { AI_SERVICE_URL: 'https://user:private-service-secret@private-ai.example' },
+    { AI_SERVICE_URL: 'https://private-ai.example/path' },
+    { AI_SERVICE_URL: 'https://private-ai.example?secret=private-service-secret' },
+    { AI_SERVICE_URL: 'https://private-ai.example#fragment' },
+    { AI_SERVICE_URL: ' https://private-ai.example' },
+    { AI_SERVICE_URL: 'https://private-ai.example/' + '../' },
+    { AI_SERVICE_TOKEN: 'weak-private-service-secret' },
+    { AI_SERVICE_TOKEN: `${randomBytes(32).toString('base64url')}=` },
+    { AI_SERVICE_TOKEN: randomBytes(200).toString('base64url') },
+    { AI_MODEL_VERSION: 'model\nprivate-service-secret' },
+    { AI_MODEL_VERSION: 'm'.repeat(81) },
+    { AI_PREPROCESSING_VERSION: 'p'.repeat(121) },
+    { AI_SERVICE_TIMEOUT_MS: '999' },
+    { AI_SERVICE_TIMEOUT_MS: '20001' },
+    { AI_SERVICE_TIMEOUT_MS: 'Infinity' },
+    { AI_SERVICE_TIMEOUT_MS: '1000.5' },
+  ]) {
+    assert.throws(
+      () => parseEnvironment({ ...database, ...ai, ...changes }),
+      (error: unknown) => {
+        assert.ok(error instanceof Error);
+        assert.ok(!error.message.includes('private-service-secret'));
+        assert.ok(!error.message.includes(ai.AI_SERVICE_TOKEN));
+        return true;
+      },
+    );
+  }
+});

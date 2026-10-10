@@ -17,7 +17,7 @@
 | Create account / sign in | `POST /api/v1/auth/...` | Public, rate-limited |
 | Refresh / revoke session | `POST /api/v1/auth/...` | Refresh-token policy |
 | Create disease scan | `POST /api/v1/scans` | Anonymous or authenticated |
-| Read scan result | `GET /api/v1/scans/{scanId}` | Owner/admin policy; no implicit anonymous read |
+| Read scan result | `GET /api/v1/scans/{scanId}` | Own FARMER scan, or anonymous scan with original private request key; ADMIN denied |
 | List farmer scan history | `GET /api/v1/scans` | Authenticated farmer, owner-scoped |
 | Read service health | `GET /api/v1/health` | Public or restricted details |
 
@@ -35,14 +35,18 @@ Phase 11 implements private FastAPI `POST /api/v1/predict` and
 `GET /api/v1/model-health`, protected by a server service token. These accept raw
 encoded image bytes and return the AI service's single `data/meta` envelope. See
 [the exact internal contract](27-production-ml-inference.md). They are separate
-from Node's public scan/auth routes; Node does not call them until Phase 12.
+from Node's public scan/auth routes; Phase 12 calls prediction through a dedicated
+configured server client and never exposes the FastAPI endpoint to Flutter.
 
 `POST /api/v1/scans` is now implemented with exactly one multipart image,
 JPEG/PNG/WebP validation, 5 MiB/16-megapixel bounds and required idempotency/custom
-headers. Returns 201 for new PENDING scans or 200 for a completed retry. No diagnosis
-is returned. See [scan upload contract](20-scan-uploads.md) for the full implementation,
-safe errors, ownership, retries, provider privacy and failure recovery. Scan read,
-history, status polling and predictions remain candidate future routes.
+headers. Phase 12 returns 201 for a newly saved scan or 200 for a same-key retry,
+with explicit lifecycle, nullable prediction and safe analysisError. These statuses
+describe scan persistence; inference failure is explicitly `FAILED`, never a
+successful diagnosis. `GET /api/v1/scans/:scanId` reads the same representation;
+anonymous callers need their original private `Idempotency-Key`, farmers need their
+own valid access token. See [integration contract](28-node-fastapi-integration.md).
+History and detailed diagnosis/guidance UI remain future work.
 
 Future inference responses must define predicted class, confidence semantics, model
 version, and grounded guidance/provenance. Include an unavailable/insufficient-evidence

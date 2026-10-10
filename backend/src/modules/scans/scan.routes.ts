@@ -1,12 +1,13 @@
 import { type RequestHandler, Router } from 'express';
 import multer from 'multer';
+import { z } from 'zod';
 import type { Environment } from '../../config/environment.js';
 import { AppError } from '../../errors/app-error.js';
 import { optionallyAuthenticate } from '../../middleware/authentication.js';
 import { optionallyAuthorize } from '../../middleware/authorization.js';
 import { requestRateLimit } from '../../middleware/rate-limit.js';
 import type { AuthService } from '../auth/auth.service.js';
-import { createScanController } from './scan.controller.js';
+import { createScanController, readScanController } from './scan.controller.js';
 import type { ScanService } from './scan.service.js';
 import { scanLimits } from './scan.types.js';
 import { scanRequest } from './scan.validation.js';
@@ -17,6 +18,29 @@ export function scanRoutes(
   service: ScanService,
 ): Router {
   const router = Router();
+  const readRequest = z.strictObject({
+    params: z.strictObject({ scanId: z.uuid() }),
+    query: z.strictObject({}),
+    key: scanRequest.shape.key.optional(),
+  });
+  router.get(
+    '/:scanId',
+    requestRateLimit(60),
+    optionallyAuthenticate(auth),
+    optionallyAuthorize('FARMER'),
+    (request, response, next) => {
+      response.setHeader('Cache-Control', 'no-store');
+      const parsed = readRequest.safeParse({
+        params: request.params,
+        query: request.query,
+        key: request.get('idempotency-key'),
+      });
+      if (!parsed.success) throw new AppError('VALIDATION_ERROR');
+      response.locals.validated = parsed.data;
+      next();
+    },
+    readScanController(service),
+  );
   const parser = multer({
     storage: multer.memoryStorage(),
     limits: {

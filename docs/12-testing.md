@@ -1,8 +1,8 @@
 # Testing Strategy
 
-> **Status:** Foundation suites exist through Phase 9.5. Phase 10 dataset preparation,
-> training/evaluation tests, shared baseline-config parity and the actual CPU smoke
-> have passed; the full training run is in progress. The
+> **Status:** Checks are implemented through Phase 12: trained artifact serving,
+> Node/FastAPI scan orchestration, transaction/recovery tests and Flutter compatibility.
+> Frozen Phase 10.5 evidence is preserved; integration QA uses synthetic images. The
 > [historical foundation audit](23-pre-phase-10-audit.md) distinguishes implemented
 > checks from future feature tests. The
 > [dataset review](24-dataset-intake-preprocessing-review.md) records real-image evidence.
@@ -82,5 +82,27 @@ Do not tune from held-out results or treat these scores as independent field per
 - Unit-test deterministic agricultural calculations independently; verify the language model cannot override numeric results.
 
 ## CI and release gates
+
+### Phase 12 executed checks (2026-10-10)
+
+- Backend format/lint/strict TypeScript/build/environment and **156 isolated tests** pass.
+- Six migration replay/deployment/status checks pass with no structural drift; new
+  inference/database suite **7 tests** verifies registration, real persistence,
+  rollback, ownership, stale attempt fencing and SQL constraints.
+- AI **219 tests**, Ruff formatting/lint and strict mypy pass. Shared **78 tests in
+  each environment**, strict checks and **12 exact synthetic parity cases** pass.
+- Cross-language admission QA **56 cases**, 21 accepted and 35 rejected, passes
+  without dataset/model access. Flutter **59 tests** and analyzer pass; two live
+  tests are opt-in. Detailed live integration results are recorded in
+  [integration verification](28-node-fastapi-integration.md).
+
+From `backend`: `npm.cmd run check`, `npm.cmd run db:check`,
+`npm.cmd run test:auth:database`, `npm.cmd run test:scans:database`,
+`npm.cmd run test:inference:database`, `npm.cmd run db:check:migrations`,
+`npm.cmd run db:status` and `npm.cmd run db:diff`.
+AI/shared checks use `scripts/check-development.ps1 -Component AI/Preprocessing`.
+Run the admission script with the AI environment's Python. The optional real
+provider/model API and Flutter tests require a configured running FastAPI service
+and registered approved model; no test partition is read or rescored.
 
 Run focused tests on changed components, then required full suites before release. Require formatting, linting, static/type checks, migration validation, and integration/contract checks. Record test data and model versions to make results reproducible. Do not use the held-out ML test set for training or repeated tuning.

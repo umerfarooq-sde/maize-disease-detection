@@ -1,15 +1,17 @@
 # Project state
 
-Updated: 2026-10-09 (Asia/Karachi).
+Updated: 2026-10-10 (Asia/Karachi).
 
 ## Current phase
 
-Phase 11 is complete. FastAPI serves the approved classifier through authenticated
-internal prediction/model-health endpoints, validates pinned artifacts at startup
-and loads one model per lifespan using the exact shared full-frame pipeline.
-All 219 AI tests, Ruff and strict mypy pass; 16 real TRAIN tensor/logit hashes match
-the frozen Phase 10.5 evidence exactly. Representative preprocessing-plus-inference
-averages 17.75 ms on the local CPU. Read [inference contracts](27-production-ml-inference.md).
+Phase 12 is complete and verified.
+Node preserves the upload/Cloudinary journal and invokes authenticated FastAPI with
+unchanged image bytes. Validated predictions are persisted transactionally with
+immutable model/preprocessing identity, explicit uncertainty and inference timing.
+Owned/private-key GET, safe retries and stale-attempt recovery are implemented;
+Flutter handles the public lifecycle without calling FastAPI.
+Read [integration contracts](28-node-fastapi-integration.md) and
+[artifact/serving contracts](27-production-ml-inference.md).
 
 The Phase 10.5 candidate remains **FIT WITH DOCUMENTED LIMITATIONS** for a local FYP
 research inference prototype. The original v1 scoring arithmetic is preserved, but
@@ -52,7 +54,7 @@ native mobile refresh-cookie integration and deployment/platform limitations are
 The recovered backend database client matches HEAD and works. Phase 6 remains explicitly
 skipped. Phase 9.5 added configured read-only intake; the subsequent approved exclusions,
 use restrictions, full-frame policy and Phase 10 baseline are recorded in DECISIONS.md.
-Stop after Phase 11; Node/FastAPI orchestration, mobile sign-in,
+Stop after Phase 12; detailed disease-result UI, mobile sign-in,
 disease/business APIs, calculators, admin functionality and RAG/Gemini remain deferred.
 
 ## Initial workspace findings
@@ -83,8 +85,8 @@ disease/business APIs, calculators, admin functionality and RAG/Gemini remain de
 
 | Component | Verified implementation |
 |---|---|
-| Mobile | Flutter 3.41.9/Dart 3.11.5, Material 3 farmer shell, scoped Provider MVVM, go_router 17.5.0/http 1.6.0/image_picker 1.2.2, gallery/camera/preview/progress/retry/pending confirmation; 52 isolated tests, two optional live tests and separately verified real upload; debug Android APK builds |
-| Backend | Express 5 health/auth/scans, strict TS/Zod, Argon2id, rotating/revocable JWT sessions/RBAC, upload signature/full decode validation, Cloudinary authenticated assets, durable scan-upload retry/cleanup; shared Prisma 7.10.0, 21 tables/five migrations, 77 passing tests across five suites |
+| Mobile | Flutter 3.41.9/Dart 3.11.5, Material 3 farmer shell, scoped Provider MVVM, gallery/camera/preview/progress; typed lifecycle/prediction parsing, honest uncertainty and saved-analysis retry; 59 isolated tests, two optional live tests; Android debug APK previously verified |
+| Backend | Express 5 health/auth/scans/read, strict TS/Zod, Argon2id/JWT sessions/RBAC, aligned upload admission, Cloudinary journal, authenticated bounded FastAPI byte client, transactional predictions and attempt-fenced recovery; Prisma 7.10.0, 21 tables/six migrations, 156 isolated tests plus database suites |
 | AI service | Python 3.11/FastAPI 0.142.2/Uvicorn 0.54.0; strict pinned model startup, once-per-lifespan CPU classifier, exact shared full-frame pipeline, authenticated predict/model health, bounded upload/concurrency and explicit uncertainty; 219 tests, Ruff and strict mypy pass; factory remains free of heavy imports |
 | Shared preprocessing | One independently buildable typed package at `shared/preprocessing`, version 1.0.0, explicit JSON configuration, file/byte entrypoints, conservative extraction/fallback, optional unchanged CPU tensor and debug CLI; 78 tests pass in each consumer environment and 12 synthetic baseline parity cases pass |
 | ML training | Corrected immutable v2: 4,162 contents/4,121 groups, 2,911/627/624 partitions, no confirmed leakage; fresh MobileNetV3 Small completed 11 epochs, best epoch 8; validation 96.81% accuracy/0.9589 macro F1, single descriptive test 95.83%/0.9452; raw probabilities, no threshold; 219 tests, Ruff over 32 files, mypy over 15 modules and 16 actual TRAIN cases with AI compatibility pass; limited FYP prototype |
@@ -92,7 +94,7 @@ disease/business APIs, calculators, admin functionality and RAG/Gemini remain de
 | Documentation | Architecture, database/operations, auth, Flutter foundation, scan uploads/recovery, FastAPI startup/contracts/network, shared preprocessing/configuration/versioning/limitations, decisions, roadmap and verification history |
 | Scripts | Repository/environment/auth/admin/PostgreSQL/Python/development checks including shared preprocessing and actual cross-environment parity; configured FastAPI startup and 16-TRAIN serving parity/timing verifier; full live Flutter scan-upload harness and backend cleanup CLI |
 
-Mobile authentication workflows, disease-result APIs, Node inference orchestration, RAG, calculator
+Mobile authentication workflows, detailed disease-result UI, RAG, calculator
 execution, notification delivery and the admin dashboard remain future work. Flutter
 feature introduction/empty screens are foundation UI; FastAPI now exposes internal
 prediction/model health alongside process health, without retrieval/generation endpoints.
@@ -1183,6 +1185,55 @@ current fitness.
   and 171 frozen Phase 10.5 files match working/committed byte hashes. Existing
   unrelated workspace changes are preserved outside the Phase 11 commit.
 
+## Phase 12 implementation and verification (2026-10-10)
+
+- Preserved Phase 7 upload validation, Cloudinary storage, nullable anonymous ownership,
+  authenticated farmer ownership and durable upload journal/compensation. Node sends
+  unchanged validated bytes to a configured fixed FastAPI endpoint with a server-only
+  token, no redirects/URL fetching, bounded deadline and 64 KiB response limit.
+- Enforced compatible minimum side/container/orientation/still-image checks without
+  ML transforms. Cross-language admission passes all **56 synthetic cases**, 21 accepted
+  and 35 rejected. FastAPI stays authoritative; no shared/Python ML source changes.
+- Added validated atomic ScanPrediction + COMPLETED transitions, immutable model
+  reference, explicit LOW_CONFIDENCE semantics, all four probabilities and inference
+  timing. Controlled SHA-pinned registration stores the approved model as VALIDATED
+  research, with no production promotion or artifact replacement.
+- Added owner/private-key `GET /api/v1/scans/:scanId`, safe FAILED outcomes, same-key
+  inference retry without another upload, two-minute attempt UUID fencing and one-minute
+  bounded stale recovery. Inference failures preserve saved images/scans. Cleanup CLI
+  also recovers interrupted inference; upload scheduling still needs deployment setup.
+- Flutter validates typed scan/prediction contracts, communicates uncertainty and saved
+  failures, and retains photo/key for retry. It calls only Node; detailed disease-result
+  UI and native sign-in remain outside this phase.
+- Backend **156 isolated tests** pass with formatting, lint, strict TypeScript,
+  build and environment checks. Real PostgreSQL suites pass: **13 domain**, **6 auth**,
+  **7 upload** and **7 inference** tests. Adjusted only the negative-auth SQL fixture's
+  transaction deadline to 30 seconds after remote latency exceeded its default five
+  seconds; application timeouts and assertions remain unchanged.
+- Prisma format/validation/client generation pass. All **six atomic migrations** replay
+  in an isolated schema; new migration is deployed, history is current and structural
+  diff is empty. Catalog has **21 tables / 23 checks / 37 custom triggers**.
+- AI **219 tests**, Ruff format/lint and strict mypy pass; one existing upstream warning
+  remains. Shared **78 tests in each environment**, strict checks and **12 synthetic
+  parity cases** pass. Admission script strict typing and both Node QA syntax checks pass.
+- Flutter format/analyzer and **59 isolated tests** pass. Actual loopback FastAPI with
+  approved weights passes four live Node JPEG/PNG/WebP scans (anonymous/farmer), owned
+  reads and exact same-key replay. Mean synthetic preprocessing/inference is **41.69 ms**,
+  excluding upload/network/DB time; this is neither an SLA nor an accuracy claim.
+  Complete live Flutter -> Node -> FastAPI -> shared/model -> PostgreSQL -> Flutter
+  passes with real Cloudinary. Only owned synthetic assets/rows are removed afterward.
+- The live test fixture initially used the safe public account DTO as a database ID;
+  corrected to repository lookup, cleaned its temporary account and reran successfully.
+  The real AI process loads once and shuts down cleanly. No retraining, TEST evaluation,
+  dataset-image reads or raw-file changes occur; 171 frozen ML identities and approved
+  weights, AI/shared source and all five earlier applied migrations remain unchanged.
+- Updated API/database/architecture/operations/decision/testing documentation. Stop
+  after Phase 12; no Phase 13 or subsequent feature starts automatically.
+- Final repository/template/ignore and whitespace checks pass; 249 local Markdown
+  links resolve and 471 source candidates contain no private environment credentials
+  or machine-specific dataset path. Existing unrelated workspace changes are preserved
+  outside the Phase 12 commit.
+
 ## Current limitations and pending decisions
 
 - V1 transformed-parent leakage invalidates historical independence claims; original
@@ -1212,12 +1263,12 @@ current fitness.
   academic/FYP use. Commercial licensing or source replacement remains required. Future
   deployment needs worst-case memory/time profiling and target-platform codec parity;
   representative local latency and bounded six-request concurrency are now verified.
-- Node security decoding accepts valid 1×1 PNG and PNG trailing bytes that the shared
-  minimum-dimension/container policy rejects. Actual Phase 11 FastAPI rejects both;
-  its exact contract is documented. Align Node eligibility or explicitly handle
-  accepted-scan processing failure in Phase 12 without duplicating ML transforms.
+- Phase 12 resolves the observed Node/shared admission mismatch: minimum-side,
+  container termination/length, malformed orientation and animated PNG guards agree
+  on 56 synthetic cases. FastAPI remains authoritative for ML/profile/codec validation;
+  accepted-scan failures retain the asset/record and explicit FAILED outcome.
 - FastAPI provides classifier readiness, validated startup and internal predictions;
-  retrieval/generation and Node orchestration remain future work. Deployment
+  Node orchestration is implemented. Retrieval/generation remain future work. Deployment
   requires private networking, TLS, coordinated token rotation and deployment-specific
   limits. Generic library/server log events intentionally omit diagnostic messages
   to protect secrets. Python 3.11.0 remains the workstation baseline; provision a
@@ -1277,9 +1328,9 @@ current fitness.
 
 ## Next step
 
-Stop after Phase 11. Phase 12 Node/Python integration requires the next explicit
-instruction and must use the documented admission/uncertainty contract. Independent
+Stop after Phase 12. Detailed disease-result UI and subsequent phases require the
+next explicit instruction. Independent
 field validation and commercial
 licensing/source replacement remain requirements before real farmer/commercial use.
-Read [inference contracts](27-production-ml-inference.md), [model fitness](26-model-fitness-validation.md) and reconcile the next instruction
+Read [integration contracts](28-node-fastapi-integration.md), [inference contracts](27-production-ml-inference.md), [model fitness](26-model-fitness-validation.md) and reconcile the next instruction
 with the [roadmap](14-roadmap.md).

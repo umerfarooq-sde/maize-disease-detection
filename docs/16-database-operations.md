@@ -10,7 +10,8 @@ See [backend foundation](17-backend-foundation.md). Business routes remain futur
 Phase 4 adds [authentication](18-authentication.md), one session table and a fourth
 additive migration. Runtime authentication and health reuse the same Prisma client.
 Phase 7 adds a fifth atomic migration, upload journal and scan upload timestamp.
-The complete schema now has 21 tables, 21 checks and 37 custom triggers. Upload
+Phase 12 adds a sixth atomic migration for inference attempt fencing and validated
+prediction outcome metadata. The complete schema has 21 tables, 23 checks and 37 custom triggers. Upload
 repositories also reuse the shared client. Run `scans:cleanup` periodically as
 described in [upload operations](20-scan-uploads.md); completed scans are preserved.
 Generated client source is ignored and must be regenerated after install/schema changes.
@@ -66,6 +67,8 @@ There is no default user/password or automatic model download.
 ```powershell
 npm.cmd run db:check
 npm.cmd run test:auth:database
+npm.cmd run test:scans:database
+npm.cmd run test:inference:database
 npm.cmd run db:check:migrations
 npm.cmd run db:diff
 npm.cmd run check:database
@@ -79,6 +82,7 @@ npm.cmd run check:database
 | `db:status` | Applied migration history versus migration directory |
 | `check:database` | Authenticated PostgreSQL connection and temporary-table SQL round trip with rollback |
 | `test:auth:database` | Real auth/HTTP, hashed session storage, concurrent rotation/replay revocation and SQL session guards; removes only its newly created fixture user/sessions |
+| `test:inference:database` | Synthetic model registration/identity, nullable/farmer ownership, transactional prediction persistence/rollback, lease fencing, SQL outcome guards and recovery; removes only its fixture records |
 
 Integration writes run in a transaction that intentionally rolls back; invalid cases
 use savepoints. No cloud images, model weights, agricultural data, or provider calls

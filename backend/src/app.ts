@@ -11,6 +11,7 @@ import { requestContext } from './middleware/request-context.js';
 import { type AuthRepository, createAuthRepository } from './modules/auth/auth.repository.js';
 import { createAuthService } from './modules/auth/auth.service.js';
 import type { HealthRepository } from './modules/health/health.repository.js';
+import { createAiInferenceClient } from './modules/inference/inference.client.js';
 import { createScanRepository } from './modules/scans/scan.repository.js';
 import { createScanService, type ScanService } from './modules/scans/scan.service.js';
 import { createImageStorage } from './modules/scans/scan.storage.js';
@@ -27,9 +28,11 @@ export function createApp(
     createScanRepository(getDatabaseClient(environment.DATABASE_URL)),
     createImageStorage(environment),
     logger,
+    createAiInferenceClient(environment),
   ),
 ): Express {
   const app = express();
+  app.locals.recoverScans = () => scanService.recoverStale();
   app.disable('x-powered-by');
   app.set('query parser', 'simple');
   app.use(requestContext(logger));

@@ -93,4 +93,48 @@ void main() {
     await pending;
     expect(model.scan, isNull);
   });
+  test(
+    'failed analysis keeps the saved photo and retries the same scan key without picking again',
+    () async {
+      final repo = FakeScanRepository()
+        ..result = ScanRecord.fromJson(scanJson(status: ScanStatus.failed));
+      final model = ScanViewModel(repo);
+      addTearDown(model.dispose);
+      await model.select(LeafImageSource.gallery);
+      await model.upload();
+      expect(model.analysisFailed, true);
+      expect(model.image, leafImage);
+      expect(model.error, isNull);
+      final failed = model.scan;
+      repo.uploadError = const AppException(AppErrorKind.network);
+      await model.retry();
+      expect(model.scan, failed);
+      expect(model.image, leafImage);
+      expect(model.error?.kind, AppErrorKind.network);
+      repo.uploadError = null;
+      repo.result = ScanRecord.fromJson(scanJson(status: ScanStatus.completed));
+      await model.retry();
+      expect(model.scan?.status, ScanStatus.completed);
+      expect(model.analysisFailed, false);
+      expect(model.error, isNull);
+      expect(repo.keys, hasLength(3));
+      expect(repo.keys.toSet(), hasLength(1));
+      expect(repo.sources, [LeafImageSource.gallery]);
+      await model.upload();
+      expect(repo.keys, hasLength(3));
+    },
+  );
+  test('pending and processing scans block accidental re-upload', () async {
+    for (final status in [ScanStatus.pending, ScanStatus.processing]) {
+      final repo = FakeScanRepository()
+        ..result = ScanRecord.fromJson(scanJson(status: status));
+      final model = ScanViewModel(repo);
+      addTearDown(model.dispose);
+      await model.select(LeafImageSource.gallery);
+      await model.upload();
+      await model.upload();
+      expect(model.scan?.status, status);
+      expect(repo.keys, hasLength(1));
+    }
+  });
 }

@@ -62,6 +62,14 @@ runs the opt-in Flutter upload ViewModel against real Cloudinary/PostgreSQL, and
 removes only its synthetic asset/journal/scan. Requires Flutter on PATH and backend
 server-only environment configuration. It does not deploy a server or print secrets.
 
+Phase 12 extends that owned-fixture harness with `npm.cmd run test:inference:mobile`
+(`--inference`): an already-running configured FastAPI classifier and a registered
+approved model are required. It verifies Flutter -> Node -> FastAPI -> PostgreSQL ->
+Flutter with actual Cloudinary and removes only its synthetic records/asset.
+[check-image-admission-contract.py](check-image-admission-contract.py) and its Node
+helper compare 56 generated cases against authoritative shared preprocessing without
+dataset/model/network access. Run from root with the AI environment's Python.
+
 Run `./scripts/check-repository.ps1` from any working directory using PowerShell and Git.
 It resolves the repository relative to the script, verifies foundation and development configuration files/directories,
 checks that templates contain no credentials, and checks Git ignore behavior without

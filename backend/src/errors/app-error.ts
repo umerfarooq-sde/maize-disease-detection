@@ -28,6 +28,34 @@ const errorDefinitions = {
     status: 409,
     message: 'This upload is already being processed. Please retry shortly.',
   },
+  INFERENCE_UNAVAILABLE: {
+    status: 503,
+    message: 'Disease analysis is temporarily unavailable. Please try again later.',
+  },
+  INFERENCE_TIMEOUT: {
+    status: 504,
+    message: 'Disease analysis took too long. Please try again later.',
+  },
+  INFERENCE_FAILED: {
+    status: 502,
+    message: 'Disease analysis could not be completed. Please try again later.',
+  },
+  INFERENCE_INVALID_RESPONSE: {
+    status: 502,
+    message: 'Disease analysis returned an invalid result. Please try again later.',
+  },
+  SCAN_PROCESSING_UNAVAILABLE: {
+    status: 503,
+    message: 'This scan cannot be processed right now. Please try again later.',
+  },
+  INFERENCE_PERSISTENCE_FAILED: {
+    status: 503,
+    message: 'The analysis result could not be saved. Please retry this scan later.',
+  },
+  INFERENCE_INTERRUPTED: {
+    status: 503,
+    message: 'This analysis was interrupted. Please retry this scan later.',
+  },
 } as const;
 
 export type ErrorCode = keyof typeof errorDefinitions;

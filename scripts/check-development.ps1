@@ -24,9 +24,9 @@ foreach ($target in $components) {
                     $python = Join-Path $PWD '.venv/Scripts/python.exe'
                     if (-not (Test-Path -LiteralPath $python)) { throw "Run setup-python.ps1 for $directory first." }
                     if ($target -eq 'AI') {
-                        & $python -m ruff format --check app tests ../scripts/check-inference-parity.py
+                        & $python -m ruff format --config pyproject.toml --check app tests ../scripts/check-inference-parity.py ../scripts/check-image-admission-contract.py
                         if ($LASTEXITCODE -ne 0) { throw 'AI formatting check failed.' }
-                        & $python -m ruff check app tests ../scripts/check-inference-parity.py
+                        & $python -m ruff check --config pyproject.toml app tests ../scripts/check-inference-parity.py ../scripts/check-image-admission-contract.py
                         if ($LASTEXITCODE -ne 0) { throw 'AI lint check failed.' }
                         & $python -m mypy
                         if ($LASTEXITCODE -ne 0) { throw 'AI strict type check failed.' }

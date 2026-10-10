@@ -14,6 +14,7 @@ The remaining feature documents describe intended behavior.
 | [ML training and evaluation](25-ml-training-evaluation.md) | Phase 10 research/exclusion policy, immutable grouped partitions, shared full-frame baseline, smoke, transfer learning, checkpoints and evaluation |
 | [Model fitness and generalization audit](26-model-fitness-validation.md) | Phase 10.5 transformed-photo leakage investigation, immutable grouped repair, fresh training, validation-only calibration/robustness and frozen descriptive final evaluation |
 | [Production ML inference](27-production-ml-inference.md) | Phase 11 pinned artifact startup, exact shared full-frame serving, internal prediction/model-health contracts, image admission, uncertainty and parity/timing verification |
+| [Node/FastAPI integration](28-node-fastapi-integration.md) | Phase 12 compatible admission, unchanged-byte internal client, durable scan lifecycle/predictions, owned reads, recovery and Flutter response compatibility |
 | [System overview](01-system-overview.md) | Purpose, users, boundaries, and primary flow |
 | [HLA](02-hla.md) | Logical components and trust boundaries |
 | [HLD](03-hld.md) | Runtime interactions and failures |

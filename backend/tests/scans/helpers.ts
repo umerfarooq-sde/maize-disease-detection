@@ -1,8 +1,45 @@
 import { randomUUID } from 'node:crypto';
 import sharp from 'sharp';
-import type { Scan } from '../../src/generated/prisma/client.js';
+import type {
+  AiInferenceClient,
+  InferencePrediction,
+} from '../../src/modules/inference/inference.types.js';
 import type { ScanRepository } from '../../src/modules/scans/scan.repository.js';
-import type { ImageStorage, UploadRecord } from '../../src/modules/scans/scan.types.js';
+import type {
+  ImageStorage,
+  ScanRecord,
+  UploadRecord,
+  ValidatedImage,
+} from '../../src/modules/scans/scan.types.js';
+
+export function fakeInference(overrides: Partial<InferencePrediction> = {}) {
+  const calls: ValidatedImage[] = [];
+  const result: InferencePrediction = {
+    predictedClass: 'Common_Rust',
+    confidence: 0.8,
+    topProbabilities: [
+      { className: 'Common_Rust', probability: 0.8 },
+      { className: 'Gray_Leaf_Spot', probability: 0.1 },
+      { className: 'Healthy', probability: 0.05 },
+      { className: 'Northern_Corn_Leaf_Blight', probability: 0.05 },
+    ],
+    modelVersion: 'fixture-model-v1',
+    preprocessingVersion: '1.0.0',
+    inferenceDurationMs: 12.5,
+    predictionStatus: 'LOW_CONFIDENCE',
+    uncertaintyReason: 'THRESHOLD_UNCONFIGURED',
+    confidenceThreshold: null,
+    ...overrides,
+  };
+  const client: AiInferenceClient = {
+    enabled: true,
+    async predict(image) {
+      calls.push(image);
+      return result;
+    },
+  };
+  return { client, calls, result };
+}
 
 export async function imageFile(
   format: 'png' | 'jpeg' | 'webp' = 'png',
@@ -46,7 +83,102 @@ export function fakeStorage() {
 }
 export function memoryScans() {
   const records = new Map<string, UploadRecord>();
+  const findScan = (id: string) =>
+    [...records.values()].find((record) => record.scan?.id === id)?.scan ?? null;
   const repository: ScanRepository = {
+    async findScan(id) {
+      return findScan(id);
+    },
+    async read(id, userId, keyHash) {
+      const record = [...records.values()].find((item) => item.scan?.id === id);
+      return record?.scan?.userId === userId &&
+        (userId !== null || record?.requestKeyHash === keyHash)
+        ? (record?.scan ?? null)
+        : null;
+    },
+    async startInference(id) {
+      const scan = findScan(id);
+      if (!scan || !['PENDING', 'FAILED'].includes(scan.status) || scan.predictions.length)
+        return null;
+      const attemptId = randomUUID();
+      Object.assign(scan, {
+        status: 'PROCESSING',
+        inferenceAttemptId: attemptId,
+        errorCode: null,
+        finishedAt: null,
+        processingTimeMs: null,
+        updatedAt: new Date(),
+      });
+      return attemptId;
+    },
+    async completeInference(id, attemptId, result) {
+      const scan = findScan(id);
+      if (scan?.status !== 'PROCESSING' || scan.inferenceAttemptId !== attemptId)
+        throw new Error('Expired inference attempt');
+      const now = new Date();
+      scan.predictions.push({
+        id: randomUUID(),
+        scanId: id,
+        modelVersionId: randomUUID(),
+        diseaseId: null,
+        predictedClass: result.predictedClass,
+        confidence: result.confidence,
+        probabilities: Object.fromEntries(
+          result.topProbabilities.map((item) => [item.className, item.probability]),
+        ),
+        predictionStatus: result.predictionStatus,
+        uncertaintyReason: result.uncertaintyReason,
+        confidenceThreshold: result.confidenceThreshold,
+        inferenceDurationMs: result.inferenceDurationMs,
+        inferredAt: now,
+        createdAt: now,
+        modelVersion: {
+          version: result.modelVersion,
+          preprocessingVersion: result.preprocessingVersion,
+        },
+      });
+      Object.assign(scan, {
+        status: 'COMPLETED',
+        inferenceAttemptId: null,
+        errorCode: null,
+        finishedAt: now,
+        processingTimeMs: Math.ceil(result.inferenceDurationMs),
+        updatedAt: now,
+      });
+      return scan;
+    },
+    async failInference(id, code, before, attemptId) {
+      const scan = findScan(id);
+      if (
+        !scan ||
+        !['PENDING', 'PROCESSING'].includes(scan.status) ||
+        (before && scan.updatedAt >= before) ||
+        (attemptId && scan.inferenceAttemptId !== attemptId)
+      )
+        return;
+      Object.assign(scan, {
+        status: 'FAILED',
+        inferenceAttemptId: null,
+        errorCode: code,
+        finishedAt: new Date(),
+        updatedAt: new Date(),
+      });
+    },
+    async failStaleInference(before) {
+      let count = 0;
+      for (const record of records.values()) {
+        if (
+          record.state === 'COMPLETED' &&
+          record.scan &&
+          ['PENDING', 'PROCESSING'].includes(record.scan.status) &&
+          record.scan.updatedAt < before
+        ) {
+          await repository.failInference(record.scan.id, 'INFERENCE_INTERRUPTED', before);
+          count++;
+        }
+      }
+      return count;
+    },
     async claim(requestKeyHash, imageHash, id) {
       const existing = [...records.values()].find((r) => r.requestKeyHash === requestKeyHash);
       if (existing) {
@@ -74,7 +206,7 @@ export function memoryScans() {
     async complete(id, input) {
       const record = records.get(id);
       if (record?.state !== 'UPLOADING') throw new Error('No active upload');
-      const scan: Scan = {
+      const scan: ScanRecord = {
         id: randomUUID(),
         userId: input.userId,
         imageUrl: input.stored.url,
@@ -84,6 +216,8 @@ export function memoryScans() {
         uploadedAt: input.stored.uploadedAt,
         status: 'PENDING',
         processingTimeMs: null,
+        inferenceAttemptId: null,
+        predictions: [],
         errorCode: null,
         finishedAt: null,
         expiresAt: null,

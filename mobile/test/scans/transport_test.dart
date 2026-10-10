@@ -7,6 +7,7 @@ import 'package:maizedoctor/core/network/api_client.dart';
 import 'package:maizedoctor/core/network/app_config.dart';
 import 'package:maizedoctor/core/storage/access_token_source.dart';
 import 'package:maizedoctor/data/datasources/scan_datasource.dart';
+import 'package:maizedoctor/data/models/scan_prediction.dart';
 import 'package:maizedoctor/data/models/scan_record.dart';
 import 'helpers.dart';
 
@@ -15,6 +16,7 @@ class RecordingClient extends http.BaseClient {
   String body = '';
   int status = 201;
   String? errorCode;
+  Map<String, Object?> responseData = scanJson();
   @override
   Future<http.StreamedResponse> send(http.BaseRequest request) async {
     sent = request;
@@ -24,7 +26,7 @@ class RecordingClient extends http.BaseClient {
         utf8.encode(
           jsonEncode({
             'success': errorCode == null,
-            'data': scanJson(),
+            'data': responseData,
             'error': {
               'code': errorCode,
               'message': 'secret unsafe provider error',
@@ -172,11 +174,150 @@ void main() {
   test('scan response rejects non-HTTPS URLs and unsupported states', () {
     final data = scanJson();
     expect(ScanRecord.fromJson(data).bytes, leafImage.bytes.length);
-    data['status'] = 'COMPLETED';
+    data['status'] = 'UNKNOWN';
     expect(() => ScanRecord.fromJson(data), throwsA(isA<AppException>()));
     data['status'] = 'PENDING';
     (data['image'] as Map<String, Object?>)['url'] =
         'http://unsafe.example/image';
     expect(() => ScanRecord.fromJson(data), throwsA(isA<AppException>()));
   });
+  test(
+    'Node completed response retains typed prediction and unlocked uncertainty',
+    () async {
+      final client = RecordingClient()
+        ..responseData = scanJson(status: ScanStatus.completed);
+      final api = ApiClient(config: config, client: client);
+      addTearDown(api.close);
+      final record = await ScanDatasource(api).upload(leafImage, key, (_) {});
+      expect(record.status, ScanStatus.completed);
+      expect(record.finishedAt, isNotNull);
+      expect(record.prediction?.predictedClass, 'Healthy');
+      expect(record.prediction?.modelVersion, 'mobilenet-v3-small-v2-20261009');
+      expect(record.prediction?.preprocessingVersion, '1.0.0');
+      expect(record.prediction?.confidence, 0.7);
+      expect(record.prediction?.confidenceThreshold, isNull);
+      expect(
+        record.prediction?.predictionStatus,
+        ScanPredictionStatus.lowConfidence,
+      );
+      expect(
+        record.prediction?.uncertaintyReason,
+        ScanUncertaintyReason.thresholdUnconfigured,
+      );
+      expect(record.prediction?.inferenceDurationMs, 17.75);
+      expect(record.prediction?.probabilities.length, 4);
+    },
+  );
+  test(
+    'typed class labels and configured uncertainty stay coherent at the threshold',
+    () {
+      for (final label in ScanPrediction.classLabels) {
+        final data = scanJson(status: ScanStatus.completed);
+        final prediction = data['prediction'] as Map<String, Object?>;
+        prediction['predictedClass'] = label;
+        prediction['probabilities'] = {
+          for (final name in ScanPrediction.classLabels)
+            name: name == label ? 0.7 : 0.1,
+        };
+        prediction['confidenceThreshold'] = 0.7;
+        prediction['predictionStatus'] = 'CONFIDENT';
+        prediction['uncertaintyReason'] = null;
+        final parsed = ScanRecord.fromJson(data).prediction!;
+        expect(parsed.predictedClass, label);
+        expect(parsed.predictionStatus, ScanPredictionStatus.confident);
+        expect(() => parsed.probabilities[label] = 0.5, throwsUnsupportedError);
+        prediction['confidenceThreshold'] = 0.8;
+        prediction['predictionStatus'] = 'LOW_CONFIDENCE';
+        prediction['uncertaintyReason'] = 'BELOW_VALIDATION_THRESHOLD';
+        expect(
+          ScanRecord.fromJson(data).prediction?.uncertaintyReason,
+          ScanUncertaintyReason.belowValidationThreshold,
+        );
+      }
+    },
+  );
+  test(
+    'malformed predictions and mismatched scan lifecycle are rejected safely',
+    () {
+      final mutations = <void Function(Map<String, Object?>)>[
+        (data) => data['prediction'] = null,
+        (data) => data['finishedAt'] = null,
+        (data) => data['status'] = 'PROCESSING',
+        (data) => data['analysisError'] = {'code': 'INFERENCE_FAILED'},
+        (data) =>
+            (data['prediction'] as Map<String, Object?>)['predictedClass'] =
+                'invented_class',
+        (data) => (data['prediction'] as Map<String, Object?>)['confidence'] =
+            double.nan,
+        (data) =>
+            (data['prediction'] as Map<String, Object?>)['probabilities'] = {
+              'Healthy': 1.0,
+              'internalSecret': 0.0,
+            },
+        (data) =>
+            (data['prediction'] as Map<String, Object?>)['confidence'] = 0.9,
+        (data) =>
+            (data['prediction'] as Map<String, Object?>)['predictionStatus'] =
+                'CONFIDENT',
+        (data) =>
+            (data['prediction']
+                    as Map<String, Object?>)['confidenceThreshold'] =
+                0.8,
+        (data) =>
+            (data['prediction']
+                    as Map<String, Object?>)['confidenceThreshold'] =
+                1.0,
+        (data) => (data['prediction'] as Map<String, Object?>).remove(
+          'confidenceThreshold',
+        ),
+        (data) => (data['prediction'] as Map<String, Object?>)['modelVersion'] =
+            'unsafe/path',
+        (data) => (data['prediction'] as Map<String, Object?>).remove(
+          'preprocessingVersion',
+        ),
+        (data) =>
+            (data['prediction']
+                    as Map<String, Object?>)['inferenceDurationMs'] =
+                double.infinity,
+        (data) => (data['prediction'] as Map<String, Object?>)['inferredAt'] =
+            '2020-01-01T00:00:00Z',
+      ];
+      for (final mutate in mutations) {
+        final data = scanJson(status: ScanStatus.completed);
+        mutate(data);
+        expect(
+          () => ScanRecord.fromJson(data),
+          throwsA(
+            isA<AppException>().having(
+              (e) => e.kind,
+              'kind',
+              AppErrorKind.invalidResponse,
+            ),
+          ),
+        );
+      }
+      final failed = scanJson(status: ScanStatus.failed);
+      failed['analysisError'] = {'code': 'PRIVATE_IMPLEMENTATION_DETAIL'};
+      expect(() => ScanRecord.fromJson(failed), throwsA(isA<AppException>()));
+    },
+  );
+  test(
+    'processing and saved failure responses are valid outcomes, not upload errors',
+    () async {
+      for (final status in [ScanStatus.processing, ScanStatus.failed]) {
+        final client = RecordingClient()
+          ..responseData = scanJson(status: status);
+        final api = ApiClient(config: config, client: client);
+        addTearDown(api.close);
+        final record = await ScanDatasource(api).upload(leafImage, key, (_) {});
+        expect(record.status, status);
+        expect(record.prediction, isNull);
+        expect(
+          record.analysisErrorCode,
+          status == ScanStatus.failed ? 'INFERENCE_TIMEOUT' : null,
+        );
+        expect(record.toString(), isNot(contains('unsafe internal')));
+      }
+    },
+  );
 }

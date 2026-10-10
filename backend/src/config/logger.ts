@@ -21,6 +21,7 @@ export function createLogger(
           'JWT_REFRESH_SECRET',
           'CLOUDINARY_API_KEY',
           'CLOUDINARY_API_SECRET',
+          'AI_SERVICE_TOKEN',
           'api_key',
           'api_secret',
           'token',

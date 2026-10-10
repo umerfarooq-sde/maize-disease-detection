@@ -21,6 +21,7 @@ class ScanViewModel extends ChangeNotifier {
   bool _uploadFailed = false;
   bool get busy => selecting || uploading;
   bool get cameraSupported => _repository.cameraSupported;
+  bool get analysisFailed => scan?.status == ScanStatus.failed;
 
   Future<void> recoverSelection() => _select(null);
   Future<void> select(LeafImageSource source) => _select(source);
@@ -57,7 +58,11 @@ class ScanViewModel extends ChangeNotifier {
   Future<void> upload() async {
     final selected = image;
     final key = _requestKey;
-    if (busy || _disposed || selected == null || key == null || scan != null) {
+    if (busy ||
+        _disposed ||
+        selected == null ||
+        key == null ||
+        (scan != null && !analysisFailed)) {
       return;
     }
     uploading = true;
@@ -74,7 +79,7 @@ class ScanViewModel extends ChangeNotifier {
       });
       if (!_disposed) {
         scan = result;
-        _uploadFailed = false;
+        _uploadFailed = result.status == ScanStatus.failed;
       }
     } on AppException catch (failure) {
       if (!_disposed) error = failure;

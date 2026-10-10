@@ -124,6 +124,16 @@ See [database design](05-database-design.md) and [project state](PROJECT_STATE.m
 | Raw image bytes on authenticated internal versioned routes | Reuse existing constant-time server-token authentication for predict/model health, required even on loopback inference startup. Shared image validation is authoritative. Reserve bounded capacity before buffering, limit bytes/upload time and run CPU work off the event loop; Node/Flutter orchestration is deferred to Phase 12. |
 | Null certainty policy remains explicit; optional separately pinned validation-derived policy | Phase 10.5 did not approve an operational cutoff. All current predictions are LOW_CONFIDENCE/THRESHOLD_UNCONFIGURED. Any future research policy must bind the exact model/checkpoint/validation predictions and record an approved validation-only rationale; no threshold selection, calibration or TEST tuning occurs here. |
 
+## Phase 12 integration decisions (2026-10-10)
+
+| Decision | Rationale and boundary |
+|---|---|
+| Configured origin and unchanged raw image bytes | Fixed internal prediction path, server-only token, bounded deadline/body and no redirects or user-controlled URL fetching. Node validates eligibility without implementing ML transforms; FastAPI stays authoritative. |
+| Synchronous bounded inference after durable upload completion | Reuse Cloudinary and upload journal; inference failure retains image/scan with safe FAILED outcome. Same owner/key/bytes retries inference without uploading again. No queue, stored-image download or automatic inference replay is invented. |
+| Conditional attempt UUID and bounded stale recovery | Prevent expired writers from overwriting a later retry. Two-minute lease, one-minute lifecycle sweep and cleanup CLI mark interrupted work failed; max100 rows with DB locking. Recovery preserves completed assets and never fabricates results. |
+| Prediction outcome columns, immutable ModelVersion reference | Sixth additive migration, no extra tables. Validate all probabilities and uncertainty before atomic insert/completion; historical predictions keep absent metadata. Register pinned approved metadata as VALIDATED research, never silently promote/overwrite. |
+| Farmer ownership or anonymous private original request key for GET | Scan UUID alone grants no anonymous access. Existing request-key digest provides bounded rate-limited/no-store reads and retry capability; ADMIN remains denied until an explicit admin access policy exists. |
+
 Pending decisions:
 curated agricultural sources, full JSON validation contracts, retention and
 completed-scan retention/delivery/deletion, production least-privilege roles,

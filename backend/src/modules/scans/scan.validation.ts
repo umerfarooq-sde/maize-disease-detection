@@ -2,6 +2,7 @@ import { extname } from 'node:path';
 import sharp from 'sharp';
 import { z } from 'zod';
 import { AppError } from '../../errors/app-error.js';
+import { checkImageContainer, checkImageOrientation, minimumImageSide } from './image-admission.js';
 import { type ImageMime, scanLimits, type ValidatedImage } from './scan.types.js';
 
 export const scanRequest = z.object({
@@ -38,6 +39,7 @@ export async function validateImage(
     throw new AppError('UNSUPPORTED_MEDIA_TYPE');
   }
   try {
+    checkImageContainer(file.buffer, mimeType);
     // Security decoding only. Original bytes remain unchanged; no ML preprocessing.
     const decoder = sharp(file.buffer, {
       limitInputPixels: scanLimits.pixels,
@@ -48,18 +50,13 @@ export async function validateImage(
     if (
       !metadata.width ||
       !metadata.height ||
+      Math.min(metadata.width, metadata.height) < minimumImageSide ||
       (metadata.pages ?? 1) !== 1 ||
       metadata.width * metadata.height > scanLimits.pixels
     ) {
       throw new Error('Invalid image dimensions or animation');
     }
-    if (
-      metadata.orientation !== undefined &&
-      (!Number.isInteger(metadata.orientation) ||
-        metadata.orientation < 1 ||
-        metadata.orientation > 8)
-    )
-      throw new Error('Invalid image orientation');
+    checkImageOrientation(metadata.exif, metadata.orientation);
     // metadata() alone accepts some truncated files: require complete pixel decoding.
     await decoder.timeout({ seconds: 5 }).raw().toBuffer();
     return {

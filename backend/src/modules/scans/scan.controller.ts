@@ -18,3 +18,14 @@ export function createScanController(service: ScanService): RequestHandler {
     }
   };
 }
+
+export function readScanController(service: ScanService): RequestHandler {
+  return async (_request, response) => {
+    const input = response.locals.validated as { params: { scanId: string }; key?: string };
+    response.setHeader('Cache-Control', 'no-store');
+    sendSuccess(
+      response,
+      await service.read(input.params.scanId, response.locals.principal?.userId ?? null, input.key),
+    );
+  };
+}

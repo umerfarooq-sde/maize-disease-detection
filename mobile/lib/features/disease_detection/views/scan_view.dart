@@ -4,6 +4,8 @@ import '../../../core/theme/design_tokens.dart';
 import '../../../core/widgets/app_page.dart';
 import '../../../core/widgets/app_states.dart';
 import '../../../data/datasources/leaf_image_datasource.dart';
+import '../../../data/models/scan_prediction.dart';
+import '../../../data/models/scan_record.dart';
 import '../view_models/scan_view_model.dart';
 import '../widgets/scan_preview.dart';
 
@@ -50,24 +52,51 @@ class ScanView extends StatelessWidget {
                 ],
               ),
             ),
-          if (model.scan != null)
+          if (model.scan case final scan?)
             Card(
-              color: AppColors.sage,
+              color: scan.status == ScanStatus.failed
+                  ? AppColors.wheat
+                  : AppColors.sage,
               child: Padding(
                 padding: const EdgeInsets.all(AppSpacing.xl),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    const Icon(
-                      Icons.check_circle_outline,
-                      color: AppColors.forest,
+                    Icon(
+                      scan.status == ScanStatus.failed
+                          ? Icons.warning_amber_outlined
+                          : Icons.check_circle_outline,
+                      color: scan.status == ScanStatus.failed
+                          ? AppColors.amber
+                          : AppColors.forest,
                     ),
                     const SizedBox(height: AppSpacing.md),
                     Text('Photo saved', style: text.titleLarge),
                     const SizedBox(height: AppSpacing.sm),
-                    const Text(
-                      'Your scan is saved. Disease analysis is not available yet.',
-                    ),
+                    Text(switch (scan.status) {
+                      ScanStatus.pending =>
+                        'Your photo is saved. Analysis is pending.',
+                      ScanStatus.processing =>
+                        'Your photo is saved. Analysis is in progress.',
+                      ScanStatus.completed =>
+                        'Your photo is saved. Analysis is complete.',
+                      ScanStatus.failed =>
+                        'Your photo is saved. Analysis could not be completed. You can retry with this photo.',
+                    }),
+                    if (scan.prediction?.predictionStatus ==
+                        ScanPredictionStatus.lowConfidence) ...[
+                      const SizedBox(height: AppSpacing.sm),
+                      const Text('The analysis is uncertain.'),
+                    ],
+                    if (scan.status == ScanStatus.failed) ...[
+                      const SizedBox(height: AppSpacing.md),
+                      OutlinedButton.icon(
+                        key: const Key('analysis-retry-action'),
+                        onPressed: model.busy ? null : model.upload,
+                        icon: const Icon(Icons.refresh),
+                        label: const Text('Retry analysis'),
+                      ),
+                    ],
                   ],
                 ),
               ),

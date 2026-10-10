@@ -1,5 +1,10 @@
 # Phase 7: leaf image upload and pending scans
 
+This document records the original Phase 7 contract. Phase 12 preserves the upload
+journal/storage foundation and adds compatible admission, inference, prediction
+persistence, owned reads and failed-analysis retry. Current response/lifecycle
+behavior is documented in [Node/FastAPI integration](28-node-fastapi-integration.md).
+
 Implemented on 2026-10-06. This phase saves a leaf image and a PENDING scan only.
 There is no leaf/disease classifier, ML preprocessing, inference, prediction,
 AI/RAG call, scan polling/history API or completed diagnosis. Phase 6 was not

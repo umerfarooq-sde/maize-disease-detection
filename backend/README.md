@@ -1,5 +1,12 @@
 # Backend
 
+Phase 12 adds unchanged-byte FastAPI inference, strict model-output validation,
+transactional prediction persistence, attempt-fenced recovery and
+`GET /api/v1/scans/:scanId`. The sixth migration adds outcome metadata and an
+inference-attempt token without additional tables. Upload/Cloudinary behavior is
+preserved; saved images and scan records survive failed inference. See
+[integration/setup/contracts](../docs/28-node-fastapi-integration.md).
+
 Phase 7 adds `POST /api/v1/scans`: validated multipart images, server-only Cloudinary
 storage, anonymous/farmer PENDING scans, idempotent retries and durable compensation.
 The fifth migration adds only the required upload journal and upload timestamp.
@@ -59,4 +66,5 @@ ignored and regenerated with `db:generate`. The pgvector extension is required f
 migrations. Seed groups are empty until reviewed project data is supplied.
 See [database operations](../docs/16-database-operations.md) for checks and permissions,
 and [development setup](../docs/15-development-environment.md) for other toolchains.
-No inference, disease knowledge, calculator, AI/ML/RAG functionality is implemented.
+Inference orchestration is implemented; Python retains all ML transforms and inference.
+Disease knowledge, calculator and RAG functionality remain future work.

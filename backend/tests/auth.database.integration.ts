@@ -121,37 +121,40 @@ test('Prisma-backed authentication, rotation races, revocation and session const
         const grant = await service.login(credentials);
         const { sessionId } = await service.authenticate(grant.accessToken);
         await assert.rejects(
-          database.$transaction(async (tx) => {
-            await assertSqlRejects(
-              tx,
-              "UPDATE auth_sessions SET expires_at = expires_at + interval '1 day' WHERE id=$1::uuid",
-              [sessionId],
-              '23514',
-            );
-            await assertSqlRejects(
-              tx,
-              'UPDATE auth_sessions SET user_id = $1::uuid WHERE id=$2::uuid',
-              [randomUUID(), sessionId],
-              '23514',
-            );
-            await assertSqlRejects(
-              tx,
-              "UPDATE auth_sessions SET refresh_token_hash = 'invalid' WHERE id=$1::uuid",
-              [sessionId],
-              '23514',
-            );
-            await tx.authSession.update({
-              where: { id: sessionId },
-              data: { revokedAt: new Date() },
-            });
-            await assertSqlRejects(
-              tx,
-              'UPDATE auth_sessions SET revoked_at = NULL WHERE id=$1::uuid',
-              [sessionId],
-              '23514',
-            );
-            throw rollbackFixture;
-          }),
+          database.$transaction(
+            async (tx) => {
+              await assertSqlRejects(
+                tx,
+                "UPDATE auth_sessions SET expires_at = expires_at + interval '1 day' WHERE id=$1::uuid",
+                [sessionId],
+                '23514',
+              );
+              await assertSqlRejects(
+                tx,
+                'UPDATE auth_sessions SET user_id = $1::uuid WHERE id=$2::uuid',
+                [randomUUID(), sessionId],
+                '23514',
+              );
+              await assertSqlRejects(
+                tx,
+                "UPDATE auth_sessions SET refresh_token_hash = 'invalid' WHERE id=$1::uuid",
+                [sessionId],
+                '23514',
+              );
+              await tx.authSession.update({
+                where: { id: sessionId },
+                data: { revokedAt: new Date() },
+              });
+              await assertSqlRejects(
+                tx,
+                'UPDATE auth_sessions SET revoked_at = NULL WHERE id=$1::uuid',
+                [sessionId],
+                '23514',
+              );
+              throw rollbackFixture;
+            },
+            { maxWait: 10000, timeout: 30000 },
+          ),
           (error: unknown) => error === rollbackFixture,
         );
         await service.authenticate(grant.accessToken);

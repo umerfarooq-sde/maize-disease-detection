@@ -141,3 +141,13 @@ No threshold is approved or selected here; current predictions explicitly report
 Node/Flutter integration or RAG/Gemini is included. Read
 [production inference](27-production-ml-inference.md). Stop after Phase 11;
 Phase 12 requires a separate explicit instruction.
+
+## Phase 12 scope clarification
+
+The user authorized Node/FastAPI integration of the existing Cloudinary scan workflow:
+compatible admission, configured authenticated byte transport, strict prediction
+validation, transactional version-bound outcomes, explicit lifecycle/recovery,
+owner/private-key reads, retry and Flutter response compatibility. ML preprocessing,
+model parameters/class mapping and the unconfigured certainty policy stay frozen.
+Read [integration](28-node-fastapi-integration.md). Stop after Phase 12; detailed result
+UI, mobile authentication, RAG/Gemini and deployment require separate authorization.

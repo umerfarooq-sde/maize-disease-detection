@@ -47,12 +47,41 @@ void main() {
       await tapVisible(tester, find.text('Try again'));
       expect(find.text('Photo saved'), findsOneWidget);
       expect(
-        find.text('Your scan is saved. Disease analysis is not available yet.'),
+        find.text('Your photo is saved. Analysis is pending.'),
         findsOneWidget,
       );
       expect(repo.keys[0], repo.keys[1]);
       await tapVisible(tester, find.text('Start a new scan'));
       expect(find.byKey(const Key('leaf-image-preview')), findsNothing);
+      expect(tester.takeException(), isNull);
+    },
+  );
+  testWidgets(
+    'failed analysis offers same-photo retry and completed uncertainty stays explicit',
+    (tester) async {
+      final repo = FakeScanRepository()
+        ..result = ScanRecord.fromJson(scanJson(status: ScanStatus.failed));
+      await pumpScan(tester, repo, scale: 2);
+      await tapVisible(tester, find.byKey(const Key('gallery-leaf-action')));
+      await tapVisible(tester, find.byKey(const Key('upload-leaf-action')));
+      expect(find.text('Photo saved'), findsOneWidget);
+      expect(
+        find.textContaining('Analysis could not be completed.'),
+        findsOneWidget,
+      );
+      expect(find.byKey(const Key('leaf-image-preview')), findsOneWidget);
+      repo.result = ScanRecord.fromJson(scanJson(status: ScanStatus.completed));
+      await tapVisible(tester, find.byKey(const Key('analysis-retry-action')));
+      expect(
+        find.text('Your photo is saved. Analysis is complete.'),
+        findsOneWidget,
+      );
+      expect(find.text('The analysis is uncertain.'), findsOneWidget);
+      expect(find.text('Healthy'), findsNothing);
+      expect(find.byKey(const Key('analysis-retry-action')), findsNothing);
+      expect(repo.keys, hasLength(2));
+      expect(repo.keys.toSet(), hasLength(1));
+      expect(repo.sources, hasLength(1));
       expect(tester.takeException(), isNull);
     },
   );

@@ -40,6 +40,11 @@ enum ScanStatus {
   FAILED
 }
 
+enum PredictionStatus {
+  CONFIDENT
+  LOW_CONFIDENCE
+}
+
 enum ScanUploadState {
   UPLOADING
   COMPLETED
@@ -250,6 +255,7 @@ model Scan {
   uploadedAt         DateTime         @default(now()) @map("uploaded_at") @db.Timestamptz(6)
   status             ScanStatus       @default(PENDING)
   processingTimeMs   Int?             @map("processing_time_ms")
+  inferenceAttemptId String?          @map("inference_attempt_id") @db.Uuid
   errorCode          String?          @map("error_code") @db.VarChar(64)
   finishedAt         DateTime?        @map("finished_at") @db.Timestamptz(6)
   expiresAt          DateTime?        @map("expires_at") @db.Timestamptz(6)
@@ -287,17 +293,23 @@ model ScanUpload {
 }
 
 model ScanPrediction {
-  id             String       @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
-  scanId         String       @map("scan_id") @db.Uuid
-  modelVersionId String       @map("model_version_id") @db.Uuid
-  diseaseId      String?      @map("disease_id") @db.Uuid
-  predictedClass String       @map("predicted_class") @db.VarChar(120)
-  confidence     Float        @db.DoublePrecision
-  probabilities  Json         @db.JsonB
-  createdAt      DateTime     @default(now()) @map("created_at") @db.Timestamptz(6)
-  scan           Scan         @relation(fields: [scanId], references: [id], onDelete: Restrict)
-  modelVersion   ModelVersion @relation(fields: [modelVersionId], references: [id], onDelete: Restrict)
-  disease        Disease?     @relation(fields: [diseaseId], references: [id], onDelete: Restrict)
+  id                  String            @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  scanId              String            @map("scan_id") @db.Uuid
+  modelVersionId      String            @map("model_version_id") @db.Uuid
+  diseaseId           String?           @map("disease_id") @db.Uuid
+  predictedClass      String            @map("predicted_class") @db.VarChar(120)
+  confidence          Float             @db.DoublePrecision
+  probabilities       Json              @db.JsonB
+  // Nullable only for historical pre-inference records; Phase 12 writes all outcome metadata.
+  predictionStatus    PredictionStatus? @map("prediction_status")
+  uncertaintyReason   String?           @map("uncertainty_reason") @db.VarChar(64)
+  confidenceThreshold Float?            @map("confidence_threshold") @db.DoublePrecision
+  inferenceDurationMs Float?            @map("inference_duration_ms") @db.DoublePrecision
+  inferredAt          DateTime?         @map("inferred_at") @db.Timestamptz(6)
+  createdAt           DateTime          @default(now()) @map("created_at") @db.Timestamptz(6)
+  scan                Scan              @relation(fields: [scanId], references: [id], onDelete: Restrict)
+  modelVersion        ModelVersion      @relation(fields: [modelVersionId], references: [id], onDelete: Restrict)
+  disease             Disease?          @relation(fields: [diseaseId], references: [id], onDelete: Restrict)
 
   @@unique([scanId, modelVersionId])
   @@index([modelVersionId, createdAt])

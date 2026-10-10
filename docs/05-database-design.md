@@ -177,6 +177,13 @@ writes; auth integration removes only its newly created synthetic user and sessi
 
 ## Remaining decisions
 
+Phase 12 stores prediction uncertainty, nullable threshold, inference duration and
+inferred timestamp on ScanPrediction. Historical outcomes may retain all five fields
+NULL; new outcomes must be complete and coherent. A Scan attempt UUID fences expired
+workers. ModelVersion supplies immutable model/preprocessing identity; the controlled
+operator registration pins approved metadata/checkpoint hashes and records research
+restrictions without production promotion. See [integration](28-node-fastapi-integration.md).
+
 Disease taxonomy, curated and licensed knowledge, application JSON contracts,
 calculator equations and units, scan retention/deletion of Cloudinary assets,
 embedding model/dimensions/indexes, and model artifacts are later-phase inputs.

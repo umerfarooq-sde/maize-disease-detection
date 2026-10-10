@@ -28,20 +28,17 @@ def main() -> None:
     sys.path.insert(0, str(REPOSITORY / "ml-training"))
     sys.path.insert(0, str(REPOSITORY / "ai-service"))
     import torch
-    from app.config.settings import load_settings
-    from app.inference.service import InferenceService
-    from app.main import create_app
     from configuration import load_dataset_path
     from dataset_preparation import load_manifest
     from fastapi.testclient import TestClient
     from torch import nn
 
-    report = (
-        REPOSITORY / "ml-training/reports/mobilenet-v3-small-20261009-v2-01-fitness"
-    )
-    offline = json.loads(
-        (report / "audits/offline-model-compatibility-v2.json").read_bytes()
-    )
+    from app.config.settings import load_settings
+    from app.inference.service import InferenceService
+    from app.main import create_app
+
+    report = REPOSITORY / "ml-training/reports/mobilenet-v3-small-20261009-v2-01-fitness"
+    offline = json.loads((report / "audits/offline-model-compatibility-v2.json").read_bytes())
     manifest = load_manifest(
         REPOSITORY / "ml-training/manifests/maize-research-20261008-v2/manifest.json"
     )
@@ -51,28 +48,20 @@ def main() -> None:
     dataset = load_dataset_path()
     settings = load_settings()
     application = create_app(settings)
-    headers = {
-        "Authorization": f"Bearer {settings.ai_service_token.get_secret_value()}"
-    }
+    headers = {"Authorization": f"Bearer {settings.ai_service_token.get_secret_value()}"}
     captured: dict[str, str] = {}
 
-    def capture(
-        _model: nn.Module, arguments: tuple[object, ...], result: object
-    ) -> None:
+    def capture(_model: nn.Module, arguments: tuple[object, ...], result: object) -> None:
         tensor = arguments[0]
         assert isinstance(tensor, torch.Tensor) and isinstance(result, torch.Tensor)
-        captured["tensor_sha256"] = hashlib.sha256(
-            tensor[0].numpy().tobytes()
-        ).hexdigest()
+        captured["tensor_sha256"] = hashlib.sha256(tensor[0].numpy().tobytes()).hexdigest()
         captured["logits_sha256"] = hashlib.sha256(result.numpy().tobytes()).hexdigest()
 
     cases = []
     with TestClient(application) as client:
         service = cast(InferenceService, application.state.inference_service)
         loaded = service.loaded_model
-        assert (
-            loaded.checkpoint_sha256 == offline["environments"][0]["checkpoint_sha256"]
-        )
+        assert loaded.checkpoint_sha256 == offline["environments"][0]["checkpoint_sha256"]
         assert loaded.config.fingerprint == manifest.preprocessing_hash
         assert loaded.manifest_fingerprint == manifest.fingerprint
         hook = loaded.model.register_forward_hook(capture)
@@ -139,7 +128,9 @@ def main() -> None:
             "includes_decode_preprocessing_tensor_model_probability_response_data": True,
             "includes_http_transfer": False,
             "threads": settings.inference_threads,
-            "limitation": "Local representative TRAIN inputs, not a concurrency SLA or field accuracy.",
+            "limitation": (
+                "Local representative TRAIN inputs, not a concurrency SLA or field accuracy."
+            ),
         },
         "cases": cases,
     }

@@ -1,6 +1,6 @@
 # Known issues
 
-Updated: 2026-10-09 (Asia/Karachi), after Phase 11.
+Updated: 2026-10-10 (Asia/Karachi), Phase 12 integration.
 
 Phase 11 internal classifier serving is complete: approved-artifact startup/readiness,
 authenticated prediction/model health, exact shared full-frame preprocessing and
@@ -8,7 +8,7 @@ bounded requests are verified. All 219 AI tests and 16 frozen TRAIN serving pari
 cases pass; representative end-to-end preprocessing/inference averages 17.75 ms
 locally. No operational threshold is approved: all current results explicitly report
 `LOW_CONFIDENCE/THRESHOLD_UNCONFIGURED`. See [the inference contract](27-production-ml-inference.md).
-Node orchestration and deployment remain deferred; scientific/use limitations below
+Node orchestration is implemented; deployment and detailed result UI remain deferred. Scientific/use limitations below
 are preserved and no final TEST evaluation is repeated.
 
 Phase 10.5 is complete. **FIT WITH DOCUMENTED LIMITATIONS** for a local FYP
@@ -70,9 +70,9 @@ replacement remains a future requirement; research approval is not commercial cl
 
 | Issue | Current behavior / risk | Boundary and action |
 |---|---|---|
-| Node upload acceptance differs from shared preprocessing | Node accepts a 1×1 PNG and PNG trailing bytes; actual Phase 11 FastAPI rejects both under the strict shared contract. Normal PNG passes both. | The [authoritative admission contract](27-production-ml-inference.md) is implemented. In Phase 12 align upload eligibility or explicitly persist accepted-scan processing failure. Keep ML transforms in Python; current Node scans remain pending. |
+| Admission alignment resolved in Phase 12 | Node now rejects tiny/trailing/malformed containers, invalid EXIF orientation and multi-frame APNG declarations; 56 shared synthetic cases agree (21 accepted/35 rejected). | FastAPI remains authoritative for codec/profile/preprocessing failures; persist safe FAILED outcomes and preserve the accepted scan/image. Target deployment codec parity still needs verification. |
 | Native Flutter authentication lifecycle is deferred | Upload transport can use an injected bearer token. Mobile login, secure token persistence, HttpOnly refresh-cookie handling and serialized refresh are not implemented. | Add the native session/cookie lifecycle when mobile authentication is authorized. Backend auth is verified; this is future client work, not an existing login regression. |
-| Node/FastAPI integration is deferred | Protected FastAPI prediction/model-health contracts now exist; Node does not call inference. | Phase 12 must use the documented raw-image/result/error contract, private URL/server token and bounded calls/retries. Flutter continues to call Node. |
+| Node/FastAPI integration resolved in Phase 12 | Dedicated server byte client, strict output checks, version-bound transactions, owned reads and safe retries/recovery are implemented. | Flutter calls Node; complete diagnosis UI, deployment policy and native auth remain later work. See [integration](28-node-fastapi-integration.md). |
 | Four high npm advisory entries remain | The Phase 0–9 full and omit-dev audits reported `deepmerge-ts` 7.1.5 and `mysql2` 3.15.3, plus propagated `@prisma/config`/`prisma` 7.10.0 entries. PostgreSQL application paths do not use MySQL or recursively merge client object graphs. | Track a compatible remediation for Prisma's dependency/optional-peer graph. Do not apply npm's suggested Prisma 6 downgrade or an unverified transitive override. |
 | Python patch baseline is old | Both environments run Python 3.11.0 and pass the configured `>=3.11,<3.12` constraints/tests. Installed PyTorch is CPU-only. | Provision a maintained compatible 3.11 patch for a new/production environment and revalidate parity. GPU/CUDA is an explicit later environment choice, not a required local-training credential. |
 

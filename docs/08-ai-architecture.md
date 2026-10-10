@@ -1,6 +1,6 @@
 # AI Service Architecture
 
-> **Status:** Phase 11 internal classifier serving, Phase 8 FastAPI foundation and Phase 9 shared preprocessing are implemented. Node orchestration, retrieval/generation and deployment remain future work.
+> **Status:** Phase 12 Node orchestration, Phase 11 classifier serving, Phase 8 FastAPI foundation and Phase 9 shared preprocessing are implemented. Retrieval/generation and deployment remain future work.
 
 Both Python environments now install the same [shared preprocessing package](22-shared-preprocessing.md).
 Serving and training re-export identical functions and must pin the same configuration
@@ -13,7 +13,8 @@ classifier before requests. It exposes safe `GET /health`, authenticated
 enables no browser CORS and requires the server-only shared token for inference.
 See [inference contracts](27-production-ml-inference.md) for startup, exact image
 admission, bounded resources, uncertainty and verification. Flutter calls Node; Node
-orchestration of FastAPI is still deferred to its authorized integration phase.
+orchestrates FastAPI through authenticated unchanged image bytes, validates output
+and persists model-bound predictions. See [integration](28-node-fastapi-integration.md).
 
 ## Ownership boundary
 

@@ -23,7 +23,7 @@ test('database catalog matches the committed relational and SQL invariants', asy
       SELECT count(*) FROM pg_constraint c JOIN pg_namespace n ON n.oid=c.connamespace
       WHERE n.nspname=${schema} AND c.contype='c'
     `;
-    assert.equal(checks[0]?.count, 21n);
+    assert.equal(checks[0]?.count, 23n);
     const triggers = await prisma.$queryRaw<{ count: bigint }[]>`
       SELECT count(*) FROM pg_trigger t JOIN pg_class c ON c.oid=t.tgrelid
       JOIN pg_namespace n ON n.oid=c.relnamespace WHERE n.nspname=${schema} AND NOT t.tgisinternal

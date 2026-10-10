@@ -10,6 +10,33 @@ const signingSecret = z
     return key.length >= 32 && key.toString('base64url') === value;
   }, 'Must be canonical base64url with at least 32 decoded bytes.');
 
+const internalServiceUrl = z
+  .string()
+  .max(2048)
+  .default('')
+  .refine((value) => {
+    if (value === '') return true;
+    try {
+      const url = new URL(value);
+      return (
+        ['http:', 'https:'].includes(url.protocol) &&
+        url.username === '' &&
+        url.password === '' &&
+        url.search === '' &&
+        url.hash === '' &&
+        (value === url.origin || value === `${url.origin}/`)
+      );
+    } catch {
+      return false;
+    }
+  }, 'Must be a configured HTTP(S) origin without credentials, path, query or fragment.')
+  .transform((value) => (value ? new URL(value).origin : ''));
+
+const artifactVersion = z
+  .string()
+  .max(120)
+  .regex(/^(?:[A-Za-z0-9][A-Za-z0-9._-]*)?$/);
+
 const environmentSchema = z
   .object({
     NODE_ENV: z.enum(['development', 'test', 'production']).default('development'),
@@ -70,6 +97,11 @@ const environmentSchema = z
       .max(64)
       .default(''),
     CLOUDINARY_API_SECRET: z.string().max(256).default(''),
+    AI_SERVICE_URL: internalServiceUrl,
+    AI_SERVICE_TOKEN: z.union([z.literal(''), signingSecret.max(256)]).default(''),
+    AI_SERVICE_TIMEOUT_MS: z.coerce.number().int().min(1000).max(20000).default(10000),
+    AI_MODEL_VERSION: artifactVersion.max(80).default(''),
+    AI_PREPROCESSING_VERSION: artifactVersion.default(''),
     JWT_SECRET: signingSecret,
     JWT_REFRESH_SECRET: signingSecret,
     JWT_ISSUER: z.string().min(1).max(160).default('maizedoctor'),
@@ -97,7 +129,22 @@ const environmentSchema = z
   .refine((value) => value.JWT_SECRET !== value.JWT_REFRESH_SECRET, {
     path: ['JWT_REFRESH_SECRET'],
     message: 'Access and refresh signing keys must be different.',
-  });
+  })
+  .refine(
+    (value) =>
+      value.AI_SERVICE_URL === ''
+        ? value.AI_SERVICE_TOKEN === '' &&
+          value.AI_MODEL_VERSION === '' &&
+          value.AI_PREPROCESSING_VERSION === ''
+        : value.AI_SERVICE_TOKEN !== '' &&
+          value.AI_MODEL_VERSION !== '' &&
+          value.AI_PREPROCESSING_VERSION !== '',
+    {
+      path: ['AI_SERVICE_URL'],
+      message:
+        'Supply the AI service origin, token and both expected artifact versions together, or leave all blank to disable inference.',
+    },
+  );
 
 export type Environment = z.infer<typeof environmentSchema>;
 
