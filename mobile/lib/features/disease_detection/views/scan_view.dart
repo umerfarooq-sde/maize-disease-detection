@@ -4,16 +4,38 @@ import '../../../core/theme/design_tokens.dart';
 import '../../../core/widgets/app_page.dart';
 import '../../../core/widgets/app_states.dart';
 import '../../../data/datasources/leaf_image_datasource.dart';
-import '../../../data/models/scan_prediction.dart';
 import '../../../data/models/scan_record.dart';
+import '../view_models/scan_result_arguments.dart';
 import '../view_models/scan_view_model.dart';
 import '../widgets/scan_preview.dart';
+import '../widgets/scan_result_card.dart';
 
-class ScanView extends StatelessWidget {
-  const ScanView({super.key});
+class ScanView extends StatefulWidget {
+  const ScanView({this.onResult, super.key});
+  final ValueChanged<ScanResultArguments>? onResult;
+  @override
+  State<ScanView> createState() => _ScanViewState();
+}
+
+class _ScanViewState extends State<ScanView> {
+  String? _deliveredScanId;
   @override
   Widget build(BuildContext context) {
     final model = context.watch<ScanViewModel>();
+    if (model.scan == null) _deliveredScanId = null;
+    final result = model.resultArguments;
+    if (widget.onResult != null &&
+        result?.scan.status == ScanStatus.completed &&
+        _deliveredScanId != result!.scan.id) {
+      _deliveredScanId = result.scan.id;
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        if (mounted &&
+            model.scan?.id == result.scan.id &&
+            model.scan?.status == ScanStatus.completed) {
+          widget.onResult?.call(result);
+        }
+      });
+    }
     final text = Theme.of(context).textTheme;
     return AppPage(
       storageKey: 'scan-page',
@@ -23,7 +45,7 @@ class ScanView extends StatelessWidget {
           Text('Scan a maize leaf', style: text.headlineMedium),
           const SizedBox(height: AppSpacing.sm),
           Text(
-            'Start with a clear photo of one leaf. Review it before saving.',
+            'Start with a clear photo of one leaf. Review it before analysis.',
             style: text.bodyLarge,
           ),
           const SizedBox(height: AppSpacing.xl),
@@ -46,60 +68,21 @@ class ScanView extends StatelessWidget {
                   Text(
                     model.progress < 1
                         ? 'Uploading photo… ${(model.progress * 100).round()}%'
-                        : 'Saving your scan…',
+                        : 'Waiting for analysis…',
                   ),
                   const SizedBox(height: AppSpacing.lg),
                 ],
               ),
             ),
+          if (model.polling)
+            const AppLoadingState(message: 'Checking analysis status…'),
           if (model.scan case final scan?)
-            Card(
-              color: scan.status == ScanStatus.failed
-                  ? AppColors.wheat
-                  : AppColors.sage,
-              child: Padding(
-                padding: const EdgeInsets.all(AppSpacing.xl),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Icon(
-                      scan.status == ScanStatus.failed
-                          ? Icons.warning_amber_outlined
-                          : Icons.check_circle_outline,
-                      color: scan.status == ScanStatus.failed
-                          ? AppColors.amber
-                          : AppColors.forest,
-                    ),
-                    const SizedBox(height: AppSpacing.md),
-                    Text('Photo saved', style: text.titleLarge),
-                    const SizedBox(height: AppSpacing.sm),
-                    Text(switch (scan.status) {
-                      ScanStatus.pending =>
-                        'Your photo is saved. Analysis is pending.',
-                      ScanStatus.processing =>
-                        'Your photo is saved. Analysis is in progress.',
-                      ScanStatus.completed =>
-                        'Your photo is saved. Analysis is complete.',
-                      ScanStatus.failed =>
-                        'Your photo is saved. Analysis could not be completed. You can retry with this photo.',
-                    }),
-                    if (scan.prediction?.predictionStatus ==
-                        ScanPredictionStatus.lowConfidence) ...[
-                      const SizedBox(height: AppSpacing.sm),
-                      const Text('The analysis is uncertain.'),
-                    ],
-                    if (scan.status == ScanStatus.failed) ...[
-                      const SizedBox(height: AppSpacing.md),
-                      OutlinedButton.icon(
-                        key: const Key('analysis-retry-action'),
-                        onPressed: model.busy ? null : model.upload,
-                        icon: const Icon(Icons.refresh),
-                        label: const Text('Retry analysis'),
-                      ),
-                    ],
-                  ],
-                ),
-              ),
+            ScanResultCard(
+              scan: scan,
+              showImage: false,
+              busy: model.busy,
+              onRetry: model.analysisFailed ? model.upload : null,
+              onRefresh: model.refreshAnalysis,
             ),
           if (model.error case final error?)
             Padding(
@@ -111,7 +94,7 @@ class ScanView extends StatelessWidget {
               key: const Key('upload-leaf-action'),
               onPressed: model.busy ? null : model.upload,
               icon: const Icon(Icons.cloud_upload_outlined),
-              label: const Text('Save leaf photo'),
+              label: const Text('Analyze leaf'),
             ),
             const SizedBox(height: AppSpacing.md),
           ],
@@ -141,7 +124,9 @@ class ScanView extends StatelessWidget {
           if (model.image != null) ...[
             const SizedBox(height: AppSpacing.sm),
             TextButton(
-              onPressed: model.busy ? null : model.clear,
+              onPressed: model.selecting || model.uploading
+                  ? null
+                  : model.clear,
               child: Text(
                 model.scan == null ? 'Remove photo' : 'Start a new scan',
               ),

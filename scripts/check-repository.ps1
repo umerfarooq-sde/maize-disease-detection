@@ -44,6 +44,24 @@ $requiredFiles += @(
     'mobile/test/scans/view_model_test.dart', 'mobile/test/scans/widget_test.dart',
     'mobile/test/integration/scan_upload_test.dart'
 )
+$requiredFiles += @(
+    'docs/29-farmer-detection-history.md', 'backend/tests/scans/history-http.test.ts',
+    'backend/tests/scans/history.database.integration.ts',
+    'mobile/lib/core/storage/memory_session_tokens.dart',
+    'mobile/lib/data/models/farmer_account.dart', 'mobile/lib/data/models/scan_history_page.dart',
+    'mobile/lib/data/repositories/farmer_session_repository.dart',
+    'mobile/lib/data/repositories/scan_records_repository.dart',
+    'mobile/lib/features/auth/view_models/farmer_session_view_model.dart',
+    'mobile/lib/features/disease_detection/view_models/scan_result_arguments.dart',
+    'mobile/lib/features/disease_detection/view_models/scan_result_view_model.dart',
+    'mobile/lib/features/disease_detection/views/result_view.dart',
+    'mobile/lib/features/disease_detection/widgets/scan_result_card.dart',
+    'mobile/lib/features/scan_history/view_models/scan_history_view_model.dart',
+    'mobile/test/auth/session_test.dart', 'mobile/test/farmer_flow_test.dart',
+    'mobile/test/history/repository_test.dart', 'mobile/test/history/view_model_test.dart',
+    'mobile/test/history/widget_test.dart', 'mobile/test/scans/result_view_model_test.dart',
+    'mobile/test/scans/result_widget_test.dart', 'mobile/test/integration/farmer_scan_test.dart'
+)
 $architectureDocs = @(
     '01-system-overview.md', '02-hla.md', '03-hld.md', '04-lld.md',
     '05-database-design.md', '06-api-design.md', '07-flutter-architecture.md',

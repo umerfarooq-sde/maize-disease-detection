@@ -19,7 +19,7 @@ checks, fix failures, and update [project state](PROJECT_STATE.md).
 | 10 | ML training pipeline |
 | 11 | Disease inference |
 | 12 | Node/Python integration |
-| 13 | Disease result UI |
+| 13 | Complete farmer disease detection, result UX and private history (user scope) |
 | 14 | RAG knowledge system |
 | 15 | Gemini integration |
 | 16 | AI assistant |
@@ -151,3 +151,14 @@ owner/private-key reads, retry and Flutter response compatibility. ML preprocess
 model parameters/class mapping and the unconfigured certainty policy stay frozen.
 Read [integration](28-node-fastapi-integration.md). Stop after Phase 12; detailed result
 UI, mobile authentication, RAG/Gemini and deployment require separate authorization.
+
+## Phase 13 scope clarification
+
+The user authorized complete farmer scanning/results through the real Node/FastAPI
+flow, anonymous scans without personal history, owned paginated farmer history,
+MVVM/scoped Provider, safe loading/error/retry/uncertainty UX and component/live
+contract tests. Minimal volatile farmer login/logout enables the existing backend
+identity flow; registration/persistent sessions/admin features are not included.
+ML artifacts, class mapping, preprocessing and confidence policy remain unchanged.
+Read [farmer detection/history](29-farmer-detection-history.md). Stop after Phase 13;
+RAG/Gemini and subsequent phases need a new explicit instruction.

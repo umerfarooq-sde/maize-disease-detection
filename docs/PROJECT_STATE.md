@@ -4,7 +4,15 @@ Updated: 2026-10-10 (Asia/Karachi).
 
 ## Current phase
 
-Phase 12 is complete and verified.
+Phase 13 is complete and verified.
+Flutter now completes image selection/preview, upload/progress, real model results
+with honest uncertainty and private paginated farmer history/detail. Minimal native
+farmer login/logout and serialized refresh use volatile credentials only; guests
+remain anonymous without personal history. Ownership and stale-session privacy are
+verified by API, PostgreSQL, widget and live contract tests. Read
+[farmer detection/history](29-farmer-detection-history.md).
+
+The preceding Phase 12 integration remains intact.
 Node preserves the upload/Cloudinary journal and invokes authenticated FastAPI with
 unchanged image bytes. Validated predictions are persisted transactionally with
 immutable model/preprocessing identity, explicit uncertainty and inference timing.
@@ -54,8 +62,8 @@ native mobile refresh-cookie integration and deployment/platform limitations are
 The recovered backend database client matches HEAD and works. Phase 6 remains explicitly
 skipped. Phase 9.5 added configured read-only intake; the subsequent approved exclusions,
 use restrictions, full-frame policy and Phase 10 baseline are recorded in DECISIONS.md.
-Stop after Phase 12; detailed disease-result UI, mobile sign-in,
-disease/business APIs, calculators, admin functionality and RAG/Gemini remain deferred.
+Stop after Phase 13; persistent mobile sessions, disease knowledge/business APIs,
+calculators, admin functionality and RAG/Gemini remain deferred.
 
 ## Initial workspace findings
 
@@ -85,8 +93,8 @@ disease/business APIs, calculators, admin functionality and RAG/Gemini remain de
 
 | Component | Verified implementation |
 |---|---|
-| Mobile | Flutter 3.41.9/Dart 3.11.5, Material 3 farmer shell, scoped Provider MVVM, gallery/camera/preview/progress; typed lifecycle/prediction parsing, honest uncertainty and saved-analysis retry; 59 isolated tests, two optional live tests; Android debug APK previously verified |
-| Backend | Express 5 health/auth/scans/read, strict TS/Zod, Argon2id/JWT sessions/RBAC, aligned upload admission, Cloudinary journal, authenticated bounded FastAPI byte client, transactional predictions and attempt-fenced recovery; Prisma 7.10.0, 21 tables/six migrations, 156 isolated tests plus database suites |
+| Mobile | Flutter 3.41.9/Dart 3.11.5, Material 3 farmer shell, scoped Provider MVVM, selection/preview/progress, real model results, private paginated history/detail, volatile native farmer login/logout/serialized refresh and stale-session fencing; 110 isolated tests, three opt-in live tests; live guest and farmer scan chains pass; Android debug APK rebuilt successfully |
+| Backend | Express 5 health/auth/scans/read/private history, strict TS/Zod, Argon2id/JWT sessions/RBAC, aligned upload admission, Cloudinary journal, authenticated bounded FastAPI byte client, transactional predictions and attempt-fenced recovery; Prisma 7.10.0, 21 tables/six migrations, 162 isolated tests plus database suites including four real history checks |
 | AI service | Python 3.11/FastAPI 0.142.2/Uvicorn 0.54.0; strict pinned model startup, once-per-lifespan CPU classifier, exact shared full-frame pipeline, authenticated predict/model health, bounded upload/concurrency and explicit uncertainty; 219 tests, Ruff and strict mypy pass; factory remains free of heavy imports |
 | Shared preprocessing | One independently buildable typed package at `shared/preprocessing`, version 1.0.0, explicit JSON configuration, file/byte entrypoints, conservative extraction/fallback, optional unchanged CPU tensor and debug CLI; 78 tests pass in each consumer environment and 12 synthetic baseline parity cases pass |
 | ML training | Corrected immutable v2: 4,162 contents/4,121 groups, 2,911/627/624 partitions, no confirmed leakage; fresh MobileNetV3 Small completed 11 epochs, best epoch 8; validation 96.81% accuracy/0.9589 macro F1, single descriptive test 95.83%/0.9452; raw probabilities, no threshold; 219 tests, Ruff over 32 files, mypy over 15 modules and 16 actual TRAIN cases with AI compatibility pass; limited FYP prototype |
@@ -94,7 +102,7 @@ disease/business APIs, calculators, admin functionality and RAG/Gemini remain de
 | Documentation | Architecture, database/operations, auth, Flutter foundation, scan uploads/recovery, FastAPI startup/contracts/network, shared preprocessing/configuration/versioning/limitations, decisions, roadmap and verification history |
 | Scripts | Repository/environment/auth/admin/PostgreSQL/Python/development checks including shared preprocessing and actual cross-environment parity; configured FastAPI startup and 16-TRAIN serving parity/timing verifier; full live Flutter scan-upload harness and backend cleanup CLI |
 
-Mobile authentication workflows, detailed disease-result UI, RAG, calculator
+Persistent mobile authentication, RAG, calculator
 execution, notification delivery and the admin dashboard remain future work. Flutter
 feature introduction/empty screens are foundation UI; FastAPI now exposes internal
 prediction/model health alongside process health, without retrieval/generation endpoints.
@@ -1234,6 +1242,40 @@ current fitness.
   or machine-specific dataset path. Existing unrelated workspace changes are preserved
   outside the Phase 12 commit.
 
+## Phase 13 implementation and verification (2026-10-10)
+
+- Completed the farmer scan/results flow with friendly literal-class presentation,
+  model score/uncertainty, image, local scan/inference time, lifecycle/model versions,
+  safe invalid-image/offline/timeout/failed-analysis retry and bounded pending polling.
+  Same-image retry preserves bytes/private key; a new scan clears the draft.
+- Added FARMER-only `GET /api/v1/scans` with default20/max50 pagination, UUID cursor,
+  native timestamp/ID ordering, safe shared projections, no-store/rate limits and
+  owner checks. Guests have no history; ADMIN and other-farmer access are denied.
+  No tables or migrations added; the six existing migrations remain unchanged.
+- Added minimal farmer login/logout with in-memory credentials/restricted refresh
+  cookie, serialized expiry refresh and identity revisions. Current401 clears the
+  session; delayed old401/refresh failures cannot clear a new login. Routes discard
+  old private extras and scoped state after identity changes. Offline logout clears
+  local state with honest feedback; persistent/browser sessions remain deferred.
+- Flutter formatting/analyzer and **110 isolated tests** pass (three live opt-ins
+  skipped in the isolated suite). Android debug APK build passes. New coverage includes 20 history cases, 14 result/
+  scan cases, 14 native-session cases and three complete route/widget flows.
+- Backend format/lint/strict TypeScript/build/environment and **162 isolated tests**
+  pass. New actual PostgreSQL history suite **4 tests** passes, including microsecond
+  ordering, tied IDs, new inserts between pages and foreign/anonymous cursor isolation.
+  Prisma validation and six-migration status pass; database is up to date.
+- FastAPI regression **219 tests**, Ruff format/lint and strict mypy pass, with one
+  existing upstream TestClient deprecation warning. AI/shared/model/training source,
+  class mapping, preprocessing and unapproved confidence policy remain unchanged.
+- Actual live Flutter guest and farmer chains both pass through Node, real Cloudinary,
+  private FastAPI/shared/model and PostgreSQL. Farmer login/history/detail, cross-farmer
+  detail/cursor denial and logout pass. Two synthetic images and two throwaway farmers
+  were cleaned. FastAPI loads once and exits gracefully with code0. No dataset or
+  test-partition images were read, no evaluation repeated and no model overwritten.
+- Updated [workflow/API/session documentation](29-farmer-detection-history.md),
+  architecture, decisions, roadmap, checks and component READMEs. Existing unrelated
+  workspace changes remain preserved outside the Phase 13 commit.
+
 ## Current limitations and pending decisions
 
 - V1 transformed-parent leakage invalidates historical independence claims; original
@@ -1295,9 +1337,10 @@ current fitness.
   management and expired-session cleanup remain future work. Future password/status
   management must revoke affected sessions; current access checks already reject inactive accounts.
 
-- Mobile authentication/secure token persistence, session-aware admin navigation,
-  localization, dark theme and remaining business workflows are future work. Upload
-  supports guest mode and an injected farmer token source; no mobile login is invented.
+- Persistent secure token storage, browser/mobile registration, session-aware admin
+  navigation, localization, dark theme and remaining business workflows are future work.
+  Native farmer login/logout/refresh are now implemented with volatile credentials;
+  restarting requires sign-in and offline logout cannot confirm server revocation.
   Android debug APK builds; physical devices, iOS scaffolding/permissions and release
   packaging/signing remain unverified. Public API configuration is required for upload.
 - Interactive Android gallery/capture needs a responsive emulator or physical device;
@@ -1328,9 +1371,9 @@ current fitness.
 
 ## Next step
 
-Stop after Phase 12. Detailed disease-result UI and subsequent phases require the
+Stop after Phase 13. RAG/Gemini and subsequent phases require the
 next explicit instruction. Independent
 field validation and commercial
 licensing/source replacement remain requirements before real farmer/commercial use.
-Read [integration contracts](28-node-fastapi-integration.md), [inference contracts](27-production-ml-inference.md), [model fitness](26-model-fitness-validation.md) and reconcile the next instruction
+Read [farmer workflow](29-farmer-detection-history.md), [integration contracts](28-node-fastapi-integration.md), [inference contracts](27-production-ml-inference.md), [model fitness](26-model-fitness-validation.md) and reconcile the next instruction
 with the [roadmap](14-roadmap.md).

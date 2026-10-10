@@ -5,23 +5,43 @@ import '../../../data/datasources/leaf_image_datasource.dart';
 import '../../../data/models/scan_record.dart';
 import '../../../data/models/selected_leaf_image.dart';
 import '../../../data/repositories/scan_repository.dart';
+import '../../../data/repositories/scan_records_repository.dart';
+import '../utils/scan_polling.dart';
+import 'scan_result_arguments.dart';
 
 class ScanViewModel extends ChangeNotifier {
-  ScanViewModel(this._repository);
+  ScanViewModel(
+    this._repository, {
+    ScanRecordsRepository? records,
+    this.pollInterval = const Duration(seconds: 2),
+    this.maxPollAttempts = 6,
+  }) : _records = records;
   final ScanRepository _repository;
+  final ScanRecordsRepository? _records;
+  final Duration pollInterval;
+  final int maxPollAttempts;
   SelectedLeafImage? image;
   ScanRecord? scan;
   AppException? error;
   bool selecting = false;
   bool uploading = false;
+  bool polling = false;
   double progress = 0;
   String? _requestKey;
   bool _disposed = false;
   LeafImageSource? _lastSource;
   bool _uploadFailed = false;
-  bool get busy => selecting || uploading;
+  int _generation = 0;
+  bool get busy => selecting || uploading || polling;
   bool get cameraSupported => _repository.cameraSupported;
   bool get analysisFailed => scan?.status == ScanStatus.failed;
+  ScanResultArguments? get resultArguments => scan == null
+      ? null
+      : ScanResultArguments(
+          scan: scan!,
+          selectedImage: image,
+          requestKey: _requestKey,
+        );
 
   Future<void> recoverSelection() => _select(null);
   Future<void> select(LeafImageSource source) => _select(source);
@@ -38,6 +58,7 @@ class ScanViewModel extends ChangeNotifier {
           : await _repository.select(source);
       if (_disposed) return;
       if (selected != null) {
+        _generation++;
         image = selected;
         scan = null;
         _requestKey = _newKey();
@@ -91,11 +112,65 @@ class ScanViewModel extends ChangeNotifier {
         _notify();
       }
     }
+    if (!_disposed &&
+        scan != null &&
+        analysisPending(scan!) &&
+        _records != null) {
+      await refreshAnalysis();
+    }
   }
 
-  Future<void> retry() => _uploadFailed ? upload() : _select(_lastSource);
+  Future<void> refreshAnalysis() async {
+    final current = scan;
+    final records = _records;
+    if (busy ||
+        _disposed ||
+        current == null ||
+        records == null ||
+        !analysisPending(current)) {
+      return;
+    }
+    final generation = _generation;
+    bool active() => !_disposed && generation == _generation;
+    polling = true;
+    error = null;
+    _notify();
+    try {
+      await pollScanAnalysis(
+        records,
+        current,
+        anonymousKey: _requestKey,
+        interval: pollInterval,
+        maxAttempts: maxPollAttempts,
+        isActive: active,
+        onUpdate: (updated) {
+          scan = updated;
+          _uploadFailed = updated.status == ScanStatus.failed;
+          _notify();
+        },
+      );
+    } on AppException catch (failure) {
+      if (active()) error = failure;
+    } catch (_) {
+      if (active()) error = const AppException(AppErrorKind.network);
+    } finally {
+      if (active()) {
+        polling = false;
+        _notify();
+      }
+    }
+  }
+
+  Future<void> retry() =>
+      scan != null && analysisPending(scan!) && _records != null
+      ? refreshAnalysis()
+      : _uploadFailed
+      ? upload()
+      : _select(_lastSource);
   void clear() {
-    if (busy || _disposed) return;
+    if (selecting || uploading || _disposed) return;
+    _generation++;
+    polling = false;
     image = null;
     scan = null;
     error = null;
@@ -110,6 +185,7 @@ class ScanViewModel extends ChangeNotifier {
 
   @override
   void dispose() {
+    _generation++;
     _disposed = true;
     super.dispose();
   }

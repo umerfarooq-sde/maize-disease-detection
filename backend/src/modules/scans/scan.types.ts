@@ -35,6 +35,10 @@ export type StoredPrediction = ScanPrediction & {
 };
 export type ScanRecord = Scan & { predictions: StoredPrediction[] };
 export type UploadRecord = ScanUpload & { scan: ScanRecord | null };
+export interface ScanHistoryPage {
+  items: ScanRecord[];
+  nextCursor: string | null;
+}
 export interface ScanInput {
   userId: string | null;
   image: ValidatedImage;

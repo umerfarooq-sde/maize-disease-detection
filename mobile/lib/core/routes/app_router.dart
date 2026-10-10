@@ -3,6 +3,12 @@ import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 import '../../data/repositories/backend_repository.dart';
 import '../../data/repositories/scan_repository.dart';
+import '../../data/repositories/scan_records_repository.dart';
+import '../../features/auth/view_models/farmer_session_view_model.dart';
+import '../../features/scan_history/view_models/scan_history_view_model.dart';
+import '../../features/disease_detection/view_models/scan_result_arguments.dart';
+import '../../features/disease_detection/view_models/scan_result_view_model.dart';
+import '../../features/disease_detection/views/result_view.dart';
 import '../../features/disease_detection/view_models/scan_view_model.dart';
 import '../../features/admin/views/admin_access_view.dart';
 import '../../features/ai_assistant/views/assistant_view.dart';
@@ -44,12 +50,25 @@ GoRouter createAppRouter({String initialLocation = AppRoutes.home}) => GoRouter(
           routes: [
             GoRoute(
               path: AppRoutes.scan,
-              builder: (context, _) => ChangeNotifierProvider(
-                create: (_) =>
-                    ScanViewModel(context.read<ScanRepository>())
-                      ..recoverSelection(),
-                child: const ScanView(),
+              builder: (context, state) => ChangeNotifierProvider(
+                key: ValueKey(
+                  'scan-${context.watch<FarmerSessionViewModel>().revision}-${state.uri.queryParameters['new']}',
+                ),
+                create: (_) => ScanViewModel(
+                  context.read<ScanRepository>(),
+                  records: context.read<ScanRecordsRepository>(),
+                )..recoverSelection(),
+                child: ScanView(
+                  onResult: (arguments) => context.push(
+                    '${AppRoutes.scan}/result/${arguments.scan.id}',
+                    extra: _ResultNavigation(
+                      arguments,
+                      context.read<FarmerSessionViewModel>().revision,
+                    ),
+                  ),
+                ),
               ),
+              routes: [GoRoute(path: 'result/:scanId', builder: _resultPage)],
             ),
           ],
         ),
@@ -107,10 +126,29 @@ GoRouter createAppRouter({String initialLocation = AppRoutes.home}) => GoRouter(
                 ),
                 GoRoute(
                   path: 'history',
-                  builder: (_, _) => const _DetailPage(
+                  builder: (context, _) => _DetailPage(
                     title: 'Scan history',
-                    child: HistoryView(),
+                    child: ChangeNotifierProvider(
+                      key: ValueKey(
+                        'history-${context.watch<FarmerSessionViewModel>().revision}',
+                      ),
+                      create: (_) => ScanHistoryViewModel(
+                        context.read<ScanRecordsRepository>(),
+                      )..load(),
+                      child: HistoryView(
+                        onOpenScan: (scan) => context.push(
+                          '${AppRoutes.history}/scans/${scan.id}',
+                          extra: _ResultNavigation(
+                            ScanResultArguments(scan: scan),
+                            context.read<FarmerSessionViewModel>().revision,
+                          ),
+                        ),
+                      ),
+                    ),
                   ),
+                  routes: [
+                    GoRoute(path: 'scans/:scanId', builder: _resultPage),
+                  ],
                 ),
                 GoRoute(
                   path: 'analytics',
@@ -140,6 +178,39 @@ GoRouter createAppRouter({String initialLocation = AppRoutes.home}) => GoRouter(
     ),
   ),
 );
+
+class _ResultNavigation {
+  const _ResultNavigation(this.arguments, this.revision);
+  final ScanResultArguments arguments;
+  final int revision;
+}
+
+Widget _resultPage(BuildContext context, GoRouterState state) {
+  final revision = context.watch<FarmerSessionViewModel>().revision;
+  final extra = state.extra;
+  // Old session results and guest capabilities are never reused after sign-in/out.
+  final initial = extra is _ResultNavigation && extra.revision == revision
+      ? extra.arguments
+      : null;
+  final id = state.pathParameters['scanId'] ?? '';
+  return _DetailPage(
+    title: 'Model prediction',
+    child: ChangeNotifierProvider(
+      key: ValueKey('result-$revision-$id'),
+      create: (_) => ScanResultViewModel(
+        context.read<ScanRecordsRepository>(),
+        scanId: id,
+        initial: initial,
+        uploads: context.read<ScanRepository>(),
+      )..load(),
+      child: ScanResultView(
+        onNewScan: () => context.go(
+          '${AppRoutes.scan}?new=${DateTime.now().microsecondsSinceEpoch}',
+        ),
+      ),
+    ),
+  );
+}
 
 class _DetailPage extends StatelessWidget {
   const _DetailPage({required this.title, required this.child});

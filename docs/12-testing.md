@@ -1,7 +1,8 @@
 # Testing Strategy
 
-> **Status:** Checks are implemented through Phase 12: trained artifact serving,
-> Node/FastAPI scan orchestration, transaction/recovery tests and Flutter compatibility.
+> **Status:** Checks are implemented through Phase 13: trained artifact serving,
+> Node/FastAPI scan orchestration, transaction/recovery, complete farmer results/history
+> and session privacy tests.
 > Frozen Phase 10.5 evidence is preserved; integration QA uses synthetic images. The
 > [historical foundation audit](23-pre-phase-10-audit.md) distinguishes implemented
 > checks from future feature tests. The
@@ -82,6 +83,26 @@ Do not tune from held-out results or treat these scores as independent field per
 - Unit-test deterministic agricultural calculations independently; verify the language model cannot override numeric results.
 
 ## CI and release gates
+
+### Phase 13 executed checks (2026-10-10)
+
+- Flutter **110 isolated tests** pass; three live tests are opt-in by default.
+  Format/analyzer pass. New cases cover typed history/ownership contracts, scan/result
+  loading/error/retry, bounded polling/disposal, private guest capabilities, pagination,
+  high-score uncertainty, native sessions/serialized refresh, delayed previous-session
+  responses, login/logout and complete route transitions.
+- Backend **162 isolated tests**, format/lint/strict TypeScript/build/environment pass.
+  New history PostgreSQL suite **4 tests** verifies microsecond/tied ordering,
+  new inserts between pages and private cursor isolation. Prisma validation and
+  six-migration status pass; no migration is introduced.
+- FastAPI **219 tests**, Ruff format/lint and strict mypy pass; model/shared sources
+  are unchanged. Frozen ML artifact checks read hashes only, never dataset partitions.
+- Both live Flutter guest and farmer tests pass against real Cloudinary/PostgreSQL
+  and the approved FastAPI model. Farmer check verifies owned history/detail and
+  another farmer's denial. Generated fixture assets/rows/users are removed; actual
+  FastAPI loads once and shuts down cleanly. Physical-device picker remains unverified.
+
+See [farmer workflow verification](29-farmer-detection-history.md).
 
 ### Phase 12 executed checks (2026-10-10)
 

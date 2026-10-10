@@ -1,6 +1,6 @@
 # API Design
 
-> **Status:** Health, authentication and Phase 7 pending-scan upload are implemented. Other candidate business routes remain design guidance.
+> **Status:** Health, authentication, scan upload/inference/read and private farmer history are implemented through Phase 13. Other candidate business routes remain design guidance.
 
 ## Conventions
 
@@ -46,7 +46,12 @@ describe scan persistence; inference failure is explicitly `FAILED`, never a
 successful diagnosis. `GET /api/v1/scans/:scanId` reads the same representation;
 anonymous callers need their original private `Idempotency-Key`, farmers need their
 own valid access token. See [integration contract](28-node-fastapi-integration.md).
-History and detailed diagnosis/guidance UI remain future work.
+`GET /api/v1/scans` now returns owned FARMER history with a validated UUID cursor,
+default limit 20/max50, descending timestamp/ID ordering and `nextCursor`.
+Guests/admins cannot list farmer scans; foreign cursors return 404. Flutter now
+provides result/history UI with explicit model uncertainty. See
+[farmer workflow and history contracts](29-farmer-detection-history.md).
+Grounded guidance remains future work.
 
 Future inference responses must define predicted class, confidence semantics, model
 version, and grounded guidance/provenance. Include an unavailable/insufficient-evidence

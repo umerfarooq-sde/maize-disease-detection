@@ -33,6 +33,18 @@ class ApiClient {
   final Duration timeout;
   final Duration uploadTimeout;
   bool _closed = false;
+  String? _refreshCookie;
+  bool get hasRefreshCookie => _refreshCookie != null;
+  bool get hasAuthenticatedSession =>
+      _tokens is SessionTokenSource ? _tokens.hasSession : _tokens != null;
+  int? get _revision => _tokens is SessionTokenSource ? _tokens.revision : null;
+  void clearSessionCredentials() => _refreshCookie = null;
+  void _checkRevision(int? revision) {
+    if (_closed) throw const AppException(AppErrorKind.network);
+    if (revision != _revision) {
+      throw const AppException(AppErrorKind.authentication);
+    }
+  }
 
   Future<ApiResponse> uploadImage({
     required Uint8List bytes,
@@ -54,6 +66,8 @@ class ApiClient {
       throw const AppException(AppErrorKind.validation);
     }
     final abort = Completer<void>();
+    final revision = _revision;
+    final authenticated = hasAuthenticatedSession;
     try {
       final request =
           UploadRequest(
@@ -81,9 +95,18 @@ class ApiClient {
       Future<ApiResponse> send() async {
         // A supplied secure token source means authenticated mode. Missing/invalid
         // credentials fail closed; they never silently become an anonymous scan.
-        if (_tokens != null) await _authenticate(request);
+        if (authenticated) await _authenticate(request);
+        _checkRevision(revision);
         if (abort.isCompleted) throw const AppException(AppErrorKind.timeout);
-        return _readResponse(await _client.send(request), const {}, abort);
+        final response = await _readResponse(
+          await _client.send(request),
+          const {},
+          abort,
+          authenticated: authenticated,
+          revision: revision,
+        );
+        _checkRevision(revision);
+        return response;
       }
 
       return await send().timeout(
@@ -118,12 +141,14 @@ class ApiClient {
     String path, {
     Map<String, String>? query,
     bool authenticated = false,
+    Map<String, String> headers = const {},
     Set<int> acceptedStatuses = const {},
   }) => request(
     ApiMethod.get,
     path,
     query: query,
     authenticated: authenticated,
+    headers: headers,
     acceptedStatuses: acceptedStatuses,
   );
 
@@ -133,6 +158,7 @@ class ApiClient {
     Map<String, Object?>? body,
     Map<String, String>? query,
     bool authenticated = false,
+    Map<String, String> headers = const {},
     Set<int> acceptedStatuses = const {},
   }) async {
     if (_closed) throw const AppException(AppErrorKind.network);
@@ -141,7 +167,14 @@ class ApiClient {
     if (!RegExp(r'^[a-zA-Z0-9_-]+(?:/[a-zA-Z0-9_-]+)*$').hasMatch(path)) {
       throw ArgumentError('Use a relative API resource path.');
     }
+    if (headers.keys.any((key) => key != 'Idempotency-Key') ||
+        headers.values.any(
+          (value) => !RegExp(r'^[a-f0-9-]{36}$').hasMatch(value),
+        )) {
+      throw const AppException(AppErrorKind.validation);
+    }
     final abort = Completer<void>();
+    final revision = _revision;
     try {
       return await _send(
         method,
@@ -150,6 +183,8 @@ class ApiClient {
         authenticated,
         acceptedStatuses,
         abort,
+        headers,
+        revision,
       ).timeout(
         timeout,
         onTimeout: () {
@@ -176,6 +211,8 @@ class ApiClient {
     bool authenticated,
     Set<int> acceptedStatuses,
     Completer<void> abort,
+    Map<String, String> headers,
+    int? revision,
   ) async {
     final request =
         http.AbortableRequest(
@@ -185,10 +222,12 @@ class ApiClient {
           )
           ..followRedirects = false
           ..headers['Accept'] = 'application/json';
+    request.headers.addAll(headers);
     if (authenticated) {
       await _authenticate(request);
     }
     if (abort.isCompleted) throw const AppException(AppErrorKind.timeout);
+    _checkRevision(revision);
     if (method != ApiMethod.get) {
       request.headers['Content-Type'] = 'application/json; charset=utf-8';
       request.headers['X-Auth-Request'] = '1';
@@ -198,15 +237,76 @@ class ApiClient {
         throw const AppException(AppErrorKind.validation);
       }
     }
+    final sessionRoute =
+        method == ApiMethod.post &&
+        const [
+          'auth/login',
+          'auth/refresh',
+          'auth/logout',
+        ].any((path) => uri.path.endsWith('/$path'));
+    if (sessionRoute &&
+        !uri.path.endsWith('/auth/login') &&
+        _refreshCookie != null) {
+      request.headers['Cookie'] = _refreshCookie!;
+    }
     final response = await _client.send(request);
-    return _readResponse(response, acceptedStatuses, abort);
+    _checkRevision(revision);
+    final result = await _readResponse(
+      response,
+      acceptedStatuses,
+      abort,
+      authenticated: authenticated,
+      revision: revision,
+    );
+    _checkRevision(revision);
+    if (sessionRoute) _receiveCookie(response.headers['set-cookie']);
+    return result;
+  }
+
+  void _receiveCookie(String? header) {
+    if (header == null) return;
+    if (header.length > 8192) {
+      throw const AppException(AppErrorKind.invalidResponse);
+    }
+    final match = RegExp(
+      r'^(__Host-maizedoctor_refresh|maizedoctor_refresh)=([^;]*);',
+    ).firstMatch(header);
+    final attributes = header
+        .toLowerCase()
+        .split(';')
+        .skip(1)
+        .map((part) => part.trim())
+        .toSet();
+    if (match == null ||
+        !attributes.contains('httponly') ||
+        !attributes.contains('path=/') ||
+        !attributes.contains('samesite=strict') ||
+        attributes.any((part) => part.startsWith('domain=')) ||
+        (match.group(1)!.startsWith('__Host-') &&
+            (!attributes.contains('secure') ||
+                _config.baseUrl?.scheme != 'https'))) {
+      throw const AppException(AppErrorKind.invalidResponse);
+    }
+    final value = match.group(2)!;
+    if (value.isEmpty || attributes.contains('max-age=0')) {
+      _refreshCookie = null;
+    } else if (value.length <= 4096 &&
+        RegExp(
+          r'^[A-Za-z0-9_-]+\.[A-Za-z0-9_-]+\.[A-Za-z0-9_-]+$',
+        ).hasMatch(value)) {
+      _refreshCookie = '${match.group(1)}=$value';
+    } else {
+      throw const AppException(AppErrorKind.invalidResponse);
+    }
   }
 
   Future<ApiResponse> _readResponse(
     http.StreamedResponse response,
     Set<int> acceptedStatuses,
-    Completer<void> abort,
-  ) async {
+    Completer<void> abort, {
+    bool authenticated = false,
+    int? revision,
+  }) async {
     final bytes = <int>[];
     await for (final chunk in response.stream) {
       if (bytes.length + chunk.length > AppConstants.maxResponseBytes) {
@@ -223,11 +323,18 @@ class ApiClient {
       throw const AppException(AppErrorKind.invalidResponse);
     }
     final decoded = jsonDecode(utf8.decode(bytes));
+    _checkRevision(revision);
     if (decoded is! Map<String, dynamic> || decoded['success'] is! bool) {
       throw const AppException(AppErrorKind.invalidResponse);
     }
     final requestId = _requestId(decoded['requestId']);
     if (decoded['success'] == false) {
+      if (response.statusCode == 401 &&
+          authenticated &&
+          _tokens is SessionTokenSource) {
+        _tokens.invalidate();
+        clearSessionCredentials();
+      }
       final error = decoded['error'];
       final code = error is Map<String, dynamic> ? error['code'] : null;
       throw AppException(
@@ -278,6 +385,7 @@ class ApiClient {
   void close() {
     if (!_closed) {
       _closed = true;
+      clearSessionCredentials();
       _client.close();
     }
   }

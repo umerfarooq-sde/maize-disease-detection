@@ -1,10 +1,9 @@
 # Flutter Architecture
 
-> **Status:** Phase 5 implements the mobile foundation, design system and farmer shell.
-> Phase 7 adds selection/capture, preview, upload and pending-scan states through
-> scoped Scan MVVM. See [foundation](19-flutter-foundation.md) and
-> [uploads](20-scan-uploads.md). Mobile authentication, disease analysis and other
-> business/AI workflows remain future work.
+> **Status:** Phase 13 completes selection/preview/upload, real model results,
+> minimal farmer sign-in/logout and private paginated history. See
+> [farmer workflow](29-farmer-detection-history.md), [foundation](19-flutter-foundation.md)
+> and [uploads](20-scan-uploads.md). Other business/AI workflows remain future work.
 
 ## Pattern
 
@@ -27,7 +26,7 @@ features/
   home/             views and scoped ChangeNotifier ViewModel
   shell/            farmer navigation shell
   tools/            tool navigation hub
-  auth/             reserved sign-in introduction
+  auth/             farmer sign-in and app identity ChangeNotifier
   disease_detection/
   disease_knowledge/
   ai_assistant/
@@ -39,9 +38,11 @@ features/
   admin/            reserved access boundary; no privileged dashboard
 ```
 
-Home and Scan have concrete scoped ViewModels, repositories and datasources. Home
-calls the Node health API on intent; Scan selects/previews images and uploads them
-to the pending-scan API. Other features contain routed foundation views only. Add
+Home, Scan, Result and History have concrete scoped ViewModels, repositories and
+datasources. Home calls the Node health API on intent; Scan uploads to the real
+inference API. Result and History read only the public owned/private-key Node
+contracts. Farmer identity is app-scoped; route state is keyed by identity revision
+and late previous-session responses are discarded. Other features retain foundation views. Add
 ViewModels/models/repositories when their workflows exist; do not create empty layers.
 
 ## Scan experience
@@ -54,7 +55,11 @@ Represent loading, success, empty, and failure states explicitly in ViewModels. 
 
 ## Authentication and privacy
 
-Store tokens using platform-appropriate secure storage. Never embed backend, Cloudinary, or Gemini secrets in the app. Avoid persisting sensitive image data or tokens in logs. Clear session-specific state on sign-out and apply server-side authorization regardless of client navigation.
+Current native sign-in keeps access credentials and the restricted refresh cookie
+only in app memory; app restart requires sign-in. Persistent sessions must use
+platform-appropriate secure storage in a separately authorized change. Never embed
+backend, Cloudinary or Gemini secrets. No credentials/images are written to logs.
+Clear session-specific state on sign-out and enforce authorization on the server.
 
 ## Accessibility and UX
 

@@ -70,6 +70,13 @@ Flutter with actual Cloudinary and removes only its synthetic records/asset.
 helper compare 56 generated cases against authoritative shared preprocessing without
 dataset/model/network access. Run from root with the AI environment's Python.
 
+Phase 13 adds `--inference --farmer` to the same upload harness. From `backend`,
+run `node ../scripts/check-scan-upload.mjs --inference --farmer` after build.
+It creates two throwaway farmers, supplies only generated credentials through the
+Flutter child environment, verifies real native login/scan/history/detail/ownership/
+logout, and removes its own asset/rows/users. The guest check remains unchanged.
+See [farmer detection/history](../docs/29-farmer-detection-history.md).
+
 Run `./scripts/check-repository.ps1` from any working directory using PowerShell and Git.
 It resolves the repository relative to the script, verifies foundation and development configuration files/directories,
 checks that templates contain no credentials, and checks Git ignore behavior without

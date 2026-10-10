@@ -131,6 +131,11 @@ export function createScanService(
       }
       return scanResponse(scan);
     },
+    async history(userId: string, limit: number, cursor?: string) {
+      const page = await repository.history(userId, limit, cursor);
+      if (!page) throw new AppError('NOT_FOUND');
+      return { items: page.items.map(scanResponse), nextCursor: page.nextCursor };
+    },
     recoverStale(now = new Date()) {
       return repository.failStaleInference(new Date(now.getTime() - scanLimits.inferenceLeaseMs));
     },

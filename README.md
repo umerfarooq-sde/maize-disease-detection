@@ -5,9 +5,10 @@ with administrative tools for maintaining knowledge and monitoring the system.
 
 ## Current status
 
-Phase 12 integrates the existing upload workflow with authenticated FastAPI inference,
-validated transactional PostgreSQL predictions and owner/private-key scan reads.
-Flutter calls Node and handles completed, failed and retry states. See
+Phase 13 completes Flutter scanning, model results with uncertainty, farmer sign-in/
+logout and private paginated history/detail through the existing Node/FastAPI flow.
+Guest scans remain anonymous without personal history. See
+[farmer detection/history](docs/29-farmer-detection-history.md),
 [Node/FastAPI integration](docs/28-node-fastapi-integration.md) for setup and contracts,
 and [production ML inference](docs/27-production-ml-inference.md) for artifact startup.
 
@@ -25,7 +26,7 @@ raw probabilities are retained and no confidence threshold is locked. See
 [model fitness](docs/26-model-fitness-validation.md). Use remains non-commercial
 academic/FYP research without raw redistribution or commercial clearance. Shared
 preprocessing, existing FastAPI/Flutter/backend/database features are preserved;
-The detailed disease-result UI, mobile sign-in and RAG remain future work.
+Persistent mobile sign-in, RAG/Gemini and other business workflows remain future work.
 With no approved operational cutoff, every current prediction is `LOW_CONFIDENCE`
 with `THRESHOLD_UNCONFIGURED`; numerical scores do not establish field correctness.
 See [project state](docs/PROJECT_STATE.md) for verified progress and outstanding decisions.

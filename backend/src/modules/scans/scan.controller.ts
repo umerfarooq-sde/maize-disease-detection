@@ -1,4 +1,5 @@
 import type { RequestHandler } from 'express';
+import { AppError } from '../../errors/app-error.js';
 import { sendSuccess } from '../../utils/respond.js';
 import type { ScanService } from './scan.service.js';
 
@@ -27,5 +28,14 @@ export function readScanController(service: ScanService): RequestHandler {
       response,
       await service.read(input.params.scanId, response.locals.principal?.userId ?? null, input.key),
     );
+  };
+}
+
+export function scanHistoryController(service: ScanService): RequestHandler {
+  return async (_request, response) => {
+    const principal = response.locals.principal;
+    if (!principal) throw new AppError('AUTHENTICATION_ERROR');
+    const input = response.locals.validated as { limit: number; cursor?: string };
+    sendSuccess(response, await service.history(principal.userId, input.limit, input.cursor));
   };
 }

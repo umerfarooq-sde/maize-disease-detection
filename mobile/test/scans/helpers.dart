@@ -3,8 +3,10 @@ import 'dart:convert';
 import 'package:maizedoctor/core/exceptions/app_exception.dart';
 import 'package:maizedoctor/data/datasources/leaf_image_datasource.dart';
 import 'package:maizedoctor/data/models/scan_record.dart';
+import 'package:maizedoctor/data/models/scan_history_page.dart';
 import 'package:maizedoctor/data/models/selected_leaf_image.dart';
 import 'package:maizedoctor/data/repositories/scan_repository.dart';
+import 'package:maizedoctor/data/repositories/scan_records_repository.dart';
 
 final leafImage = SelectedLeafImage(
   bytes: base64Decode(
@@ -97,4 +99,25 @@ class FakeScanRepository implements ScanRepository {
     if (uploadError case final error?) throw error;
     return pending?.future ?? Future.value(result);
   }
+}
+
+class FakeScanRecordsRepository implements ScanRecordsRepository {
+  @override
+  bool hasAuthenticatedSession = false;
+  ScanRecord result = savedScan;
+  final responses = <ScanRecord>[];
+  final reads = <(String, String?)>[];
+  AppException? error;
+  Completer<ScanRecord>? pending;
+  @override
+  Future<ScanRecord> read(String id, {String? anonymousKey}) async {
+    reads.add((id, anonymousKey));
+    if (error case final failure?) throw failure;
+    if (responses.isNotEmpty) return responses.removeAt(0);
+    return pending?.future ?? Future.value(result);
+  }
+
+  @override
+  Future<ScanHistoryPage> history({String? cursor, int limit = 20}) async =>
+      ScanHistoryPage(items: [], nextCursor: null);
 }

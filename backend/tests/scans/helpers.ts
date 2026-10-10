@@ -96,6 +96,19 @@ export function memoryScans() {
         ? (record?.scan ?? null)
         : null;
     },
+    async history(userId, limit, cursor) {
+      const owned = [...records.values()]
+        .flatMap((record) => (record.scan?.userId === userId ? [record.scan] : []))
+        .sort(
+          (left, right) =>
+            right.createdAt.getTime() - left.createdAt.getTime() || right.id.localeCompare(left.id),
+        );
+      const offset = cursor ? owned.findIndex((scan) => scan.id === cursor) + 1 : 0;
+      if (cursor && offset === 0) return null;
+      const rows = owned.slice(offset, offset + limit + 1);
+      const items = rows.slice(0, limit);
+      return { items, nextCursor: rows.length > limit ? (items.at(-1)?.id ?? null) : null };
+    },
     async startInference(id) {
       const scan = findScan(id);
       if (!scan || !['PENDING', 'FAILED'].includes(scan.status) || scan.predictions.length)

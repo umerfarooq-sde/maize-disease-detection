@@ -1,5 +1,11 @@
 # Backend
 
+Phase 13 adds FARMER-only `GET /api/v1/scans` with validated limit/UUID cursor,
+owner-scoped stable pagination and the existing safe scan projection. No database
+migration or ML orchestration change. See [farmer history](../docs/29-farmer-detection-history.md).
+Verify real PostgreSQL pagination with
+`npx.cmd tsx --test tests/scans/history.database.integration.ts`.
+
 Phase 12 adds unchanged-byte FastAPI inference, strict model-output validation,
 transactional prediction persistence, attempt-fenced recovery and
 `GET /api/v1/scans/:scanId`. The sixth migration adds outcome metadata and an

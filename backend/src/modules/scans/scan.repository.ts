@@ -5,7 +5,7 @@ import {
   type InferencePrediction,
   predictionSchema,
 } from '../inference/inference.types.js';
-import type { ScanInput, ScanRecord, UploadRecord } from './scan.types.js';
+import type { ScanHistoryPage, ScanInput, ScanRecord, UploadRecord } from './scan.types.js';
 
 export interface ScanRepository {
   claim(
@@ -17,6 +17,7 @@ export interface ScanRepository {
   complete(id: string, input: ScanInput): Promise<UploadRecord>;
   findScan(id: string): Promise<ScanRecord | null>;
   read(id: string, userId: string | null, keyHash?: string): Promise<ScanRecord | null>;
+  history(userId: string, limit: number, cursor?: string): Promise<ScanHistoryPage | null>;
   startInference(id: string): Promise<string | null>;
   completeInference(
     id: string,
@@ -55,6 +56,22 @@ export function createScanRepository(database: PrismaClient): ScanRepository {
         },
         include: scanInclude,
       });
+    },
+    async history(userId, limit, cursor) {
+      if (
+        cursor &&
+        !(await database.scan.findFirst({ where: { id: cursor, userId }, select: { id: true } }))
+      )
+        return null;
+      const rows = await database.scan.findMany({
+        where: { userId },
+        orderBy: [{ createdAt: 'desc' }, { id: 'desc' }],
+        ...(cursor ? { cursor: { id: cursor }, skip: 1 } : {}),
+        take: limit + 1,
+        include: scanInclude,
+      });
+      const items = rows.slice(0, limit);
+      return { items, nextCursor: rows.length > limit ? (items.at(-1)?.id ?? null) : null };
     },
     async startInference(id) {
       const attemptId = randomUUID();

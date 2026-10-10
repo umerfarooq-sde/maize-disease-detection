@@ -1,10 +1,12 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:maizedoctor/app.dart';
+import 'package:provider/provider.dart';
 import 'package:maizedoctor/core/exceptions/app_exception.dart';
-import 'package:maizedoctor/core/routes/app_routes.dart';
+import 'package:maizedoctor/core/theme/app_theme.dart';
 import 'package:maizedoctor/data/models/scan_record.dart';
+import 'package:maizedoctor/features/disease_detection/view_models/scan_view_model.dart';
+import 'package:maizedoctor/features/disease_detection/views/scan_view.dart';
 import 'helpers.dart';
 
 Future<void> pumpScan(
@@ -21,7 +23,15 @@ Future<void> pumpScan(
     tester.platformDispatcher.clearTextScaleFactorTestValue();
   });
   await tester.pumpWidget(
-    MainApp(initialLocation: AppRoutes.scan, scanRepository: repository),
+    MaterialApp(
+      theme: AppTheme.light,
+      home: Scaffold(
+        body: ChangeNotifierProvider(
+          create: (_) => ScanViewModel(repository),
+          child: const ScanView(),
+        ),
+      ),
+    ),
   );
   await tester.pumpAndSettle();
 }
@@ -45,9 +55,9 @@ void main() {
       expect(find.text('Try again'), findsOneWidget);
       repo.uploadError = null;
       await tapVisible(tester, find.text('Try again'));
-      expect(find.text('Photo saved'), findsOneWidget);
+      expect(find.text('Waiting for analysis'), findsOneWidget);
       expect(
-        find.text('Your photo is saved. Analysis is pending.'),
+        find.text('Your photo is saved. The service is still analyzing it.'),
         findsOneWidget,
       );
       expect(repo.keys[0], repo.keys[1]);
@@ -64,20 +74,14 @@ void main() {
       await pumpScan(tester, repo, scale: 2);
       await tapVisible(tester, find.byKey(const Key('gallery-leaf-action')));
       await tapVisible(tester, find.byKey(const Key('upload-leaf-action')));
-      expect(find.text('Photo saved'), findsOneWidget);
-      expect(
-        find.textContaining('Analysis could not be completed.'),
-        findsOneWidget,
-      );
+      expect(find.text('Analysis failed'), findsOneWidget);
+      expect(find.textContaining('Analysis took too long.'), findsOneWidget);
       expect(find.byKey(const Key('leaf-image-preview')), findsOneWidget);
       repo.result = ScanRecord.fromJson(scanJson(status: ScanStatus.completed));
       await tapVisible(tester, find.byKey(const Key('analysis-retry-action')));
-      expect(
-        find.text('Your photo is saved. Analysis is complete.'),
-        findsOneWidget,
-      );
-      expect(find.text('The analysis is uncertain.'), findsOneWidget);
-      expect(find.text('Healthy'), findsNothing);
+      expect(find.text('Analysis complete'), findsOneWidget);
+      expect(find.text('Uncertain result'), findsOneWidget);
+      expect(find.text('Healthy'), findsOneWidget);
       expect(find.byKey(const Key('analysis-retry-action')), findsNothing);
       expect(repo.keys, hasLength(2));
       expect(repo.keys.toSet(), hasLength(1));
@@ -110,7 +114,7 @@ void main() {
       );
       repo.reportProgress!(1);
       await tester.pump();
-      expect(find.text('Saving your scan…'), findsOneWidget);
+      expect(find.text('Waiting for analysis…'), findsOneWidget);
       repo.pending!.complete(savedScan);
       await tester.pumpAndSettle();
       expect(tester.takeException(), isNull);

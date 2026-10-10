@@ -4,6 +4,7 @@ This document records the original Phase 7 contract. Phase 12 preserves the uplo
 journal/storage foundation and adds compatible admission, inference, prediction
 persistence, owned reads and failed-analysis retry. Current response/lifecycle
 behavior is documented in [Node/FastAPI integration](28-node-fastapi-integration.md).
+Phase 13 adds current [farmer sessions, result screens and private history](29-farmer-detection-history.md).
 
 Implemented on 2026-10-06. This phase saves a leaf image and a PENDING scan only.
 There is no leaf/disease classifier, ML preprocessing, inference, prediction,
@@ -43,10 +44,11 @@ in authenticated mode are never downgraded to anonymous. FARMER owns its scan th
 the middleware principal. ADMIN is denied on the farmer upload route. User ID, role,
 image URL, public ID, status and provider options cannot be supplied in multipart fields.
 
-The default app currently uploads as a guest. `MainApp.tokenSource` accepts the
-existing AccessTokenSource interface for a securely supplied farmer access token;
-when supplied, a missing/invalid token fails closed. This phase does not invent a
-login screen, store tokens in preferences or embed server credentials in Flutter.
+Originally, the app defaulted to guest uploads with an injected token-source seam.
+Phase 13 now shares one native session between mobile identity and API transport,
+preventing different UI/network principals. The API client's AccessTokenSource
+interface remains for isolated transport checks. Login does not store tokens in
+preferences or embed server credentials in Flutter.
 
 ## API
 

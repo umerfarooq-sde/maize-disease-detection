@@ -5,6 +5,8 @@ Flutter 3.41.9 / Dart 3.11.5 and Provider 6.1.5+1 are preserved. The resolver ad
 compatible go_router 17.5.0 and http 1.6.0; the lockfile records exact versions.
 Phase 7 extends the Scan branch with scoped MVVM selection/preview/upload state and
 multipart transport; see [scan uploads](20-scan-uploads.md) for current behavior.
+The structure and availability below record the original foundation. Phase 13
+implements [farmer sessions, real results and private history](29-farmer-detection-history.md).
 
 ## Important structure
 

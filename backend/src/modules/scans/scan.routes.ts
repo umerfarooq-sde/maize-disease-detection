@@ -3,11 +3,15 @@ import multer from 'multer';
 import { z } from 'zod';
 import type { Environment } from '../../config/environment.js';
 import { AppError } from '../../errors/app-error.js';
-import { optionallyAuthenticate } from '../../middleware/authentication.js';
-import { optionallyAuthorize } from '../../middleware/authorization.js';
+import { authenticate, optionallyAuthenticate } from '../../middleware/authentication.js';
+import { authorize, optionallyAuthorize } from '../../middleware/authorization.js';
 import { requestRateLimit } from '../../middleware/rate-limit.js';
 import type { AuthService } from '../auth/auth.service.js';
-import { createScanController, readScanController } from './scan.controller.js';
+import {
+  createScanController,
+  readScanController,
+  scanHistoryController,
+} from './scan.controller.js';
 import type { ScanService } from './scan.service.js';
 import { scanLimits } from './scan.types.js';
 import { scanRequest } from './scan.validation.js';
@@ -18,6 +22,27 @@ export function scanRoutes(
   service: ScanService,
 ): Router {
   const router = Router();
+  const historyQuery = z.strictObject({
+    limit: z.coerce.number().int().min(1).max(50).default(20),
+    cursor: z.uuid().optional(),
+  });
+  router.get(
+    '/',
+    (_request, response, next) => {
+      response.setHeader('Cache-Control', 'no-store');
+      next();
+    },
+    requestRateLimit(60),
+    authenticate(auth),
+    authorize('FARMER'),
+    (request, response, next) => {
+      const parsed = historyQuery.safeParse(request.query);
+      if (!parsed.success) throw new AppError('VALIDATION_ERROR');
+      response.locals.validated = parsed.data;
+      next();
+    },
+    scanHistoryController(service),
+  );
   const readRequest = z.strictObject({
     params: z.strictObject({ scanId: z.uuid() }),
     query: z.strictObject({}),

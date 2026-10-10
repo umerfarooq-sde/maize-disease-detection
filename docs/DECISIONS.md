@@ -134,6 +134,15 @@ See [database design](05-database-design.md) and [project state](PROJECT_STATE.m
 | Prediction outcome columns, immutable ModelVersion reference | Sixth additive migration, no extra tables. Validate all probabilities and uncertainty before atomic insert/completion; historical predictions keep absent metadata. Register pinned approved metadata as VALIDATED research, never silently promote/overwrite. |
 | Farmer ownership or anonymous private original request key for GET | Scan UUID alone grants no anonymous access. Existing request-key digest provides bounded rate-limited/no-store reads and retry capability; ADMIN remains denied until an explicit admin access policy exists. |
 
+## Phase 13 farmer experience decisions (2026-10-10)
+
+| Decision | Rationale and boundary |
+|---|---|
+| Reuse public scan projection for private FARMER history | Add one bounded owner-filtered GET, UUID cursor and native timestamp/ID ordering. No extra tables, migration, public guest history or ADMIN listing. Foreign cursor access is 404. |
+| Minimal volatile native farmer sessions | Enable authenticated scans/history through existing backend login/rotation/logout. App identity and HTTP share one credential source, replacing the unused app-level raw-token injection seam so UI/network cannot represent different farmers. Transport tests retain AccessTokenSource injection. Credentials/cookie remain only in memory; serialize refresh and fence delayed responses. Restart requires login; no persistence/browser implementation. |
+| Route-scoped result/history state bound to identity revision | One shared result presentation, local private guest key and same-byte retry; remount on identity changes and ignore old route extras. No signed URLs/private keys in navigation URLs. Original-byte-free history details start a fresh scan rather than fetching/reuploading stored images. |
+| Display model score and explicit uncertainty | Preserve literal labels and current null threshold; even high scores remain uncertain. No advice, arbitrary cutoff, calibration, preprocessing or model changes. |
+
 Pending decisions:
 curated agricultural sources, full JSON validation contracts, retention and
 completed-scan retention/delivery/deletion, production least-privilege roles,
