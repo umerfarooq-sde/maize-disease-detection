@@ -17,6 +17,7 @@ from app import SERVICE_NAME, SERVICE_VERSION
 from app.api.middleware import RequestContextMiddleware
 from app.api.routes.health import router as health_router
 from app.api.routes.prediction import router as prediction_router
+from app.api.routes.retrieval import router as retrieval_router
 from app.config.settings import Settings, load_settings
 from app.schemas.errors import ErrorResponse
 from app.utils.errors import install_exception_handlers
@@ -24,6 +25,7 @@ from app.utils.logging import LOGGER_NAME
 
 if TYPE_CHECKING:
     from app.model_management.artifacts import LoadedModel
+    from app.rag.service import RetrievalService
 
 
 class ModelLoader(Protocol):
@@ -40,7 +42,10 @@ class ModelLoader(Protocol):
 
 
 def create_app(
-    settings: Settings | None = None, *, model_loader: ModelLoader | None = None
+    settings: Settings | None = None,
+    *,
+    model_loader: ModelLoader | None = None,
+    retrieval_service: RetrievalService | None = None,
 ) -> FastAPI:
     configuration = settings if settings is not None else load_settings()
     logger = logging.getLogger(LOGGER_NAME)
@@ -99,13 +104,35 @@ def create_app(
                 )
                 raise ModelStartupError("MODEL_STARTUP_FAILED") from None
         application.state.started_at = perf_counter()
-        application.state.running = True
-        logger.info("service_started", extra={"event": "service_started"})
         try:
+            if configuration.rag_enabled:
+                from app.rag.service import create_retrieval_service
+                from app.utils.errors import AppError, ErrorCode
+
+                try:
+                    application.state.retrieval_service = (
+                        retrieval_service
+                        if retrieval_service is not None
+                        else create_retrieval_service(configuration)
+                    )
+                except Exception:
+                    logger.error(
+                        "retrieval_startup_failed",
+                        extra={
+                            "event": "retrieval_startup_failed",
+                            "error_code": "RETRIEVAL_UNAVAILABLE",
+                        },
+                    )
+                    raise AppError(ErrorCode.RETRIEVAL_UNAVAILABLE) from None
+            application.state.running = True
+            logger.info("service_started", extra={"event": "service_started"})
             yield
         finally:
             application.state.running = False
             application.state.inference_service = None
+            if application.state.retrieval_service is not None:
+                application.state.retrieval_service.close()
+            application.state.retrieval_service = None
             logger.info("service_stopped", extra={"event": "service_stopped"})
 
     development = configuration.environment != "production"
@@ -124,9 +151,11 @@ def create_app(
     app.state.started_at = None
     app.state.running = False
     app.state.inference_service = None
+    app.state.retrieval_service = None
     app.state.prediction_slots = BoundedSemaphore(configuration.inference_max_concurrency)
     install_exception_handlers(app)
     app.add_middleware(RequestContextMiddleware)
     app.include_router(health_router)
     app.include_router(prediction_router)
+    app.include_router(retrieval_router)
     return app

@@ -162,3 +162,12 @@ identity flow; registration/persistent sessions/admin features are not included.
 ML artifacts, class mapping, preprocessing and confidence policy remain unchanged.
 Read [farmer detection/history](29-farmer-detection-history.md). Stop after Phase 13;
 RAG/Gemini and subsequent phases need a new explicit instruction.
+
+## Phase 14 scope clarification
+
+The user authorized completing skipped Phase 6 database/backend foundations needed
+for grounded retrieval, intentional authoritative curation, deterministic/versioned
+chunking, configured Google/Gemini embeddings, PostgreSQL/pgvector persistence and
+semantic filters/evaluation. The embedding provider was explicitly approved.
+Read [knowledge/retrieval](30-knowledge-retrieval.md). No answer generation,
+Flutter knowledge UI, full admin editing or later phase begins automatically.

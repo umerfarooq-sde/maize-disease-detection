@@ -16,6 +16,7 @@ The remaining feature documents describe intended behavior.
 | [Production ML inference](27-production-ml-inference.md) | Phase 11 pinned artifact startup, exact shared full-frame serving, internal prediction/model-health contracts, image admission, uncertainty and parity/timing verification |
 | [Node/FastAPI integration](28-node-fastapi-integration.md) | Phase 12 compatible admission, unchanged-byte internal client, durable scan lifecycle/predictions, owned reads, recovery and Flutter response compatibility |
 | [Farmer detection and history](29-farmer-detection-history.md) | Phase 13 complete scan/results, honest uncertainty, volatile farmer sessions, private paginated history, scoped MVVM and integration checks |
+| [Knowledge and retrieval](30-knowledge-retrieval.md) | Phase 14 sourced catalogue, immutable ingestion/chunks, Google embeddings, pgvector, public/internal contracts and real retrieval evaluation |
 | [System overview](01-system-overview.md) | Purpose, users, boundaries, and primary flow |
 | [HLA](02-hla.md) | Logical components and trust boundaries |
 | [HLD](03-hld.md) | Runtime interactions and failures |

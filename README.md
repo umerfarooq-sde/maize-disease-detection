@@ -5,6 +5,11 @@ with administrative tools for maintaining knowledge and monitoring the system.
 
 ## Current status
 
+Phase 14 adds sourced disease knowledge, versioned ingestion and semantic retrieval
+through Google embeddings and PostgreSQL/pgvector. See
+[knowledge/retrieval](docs/30-knowledge-retrieval.md) for source provenance, setup,
+contracts and evaluation. No generated answers are added.
+
 Phase 13 completes Flutter scanning, model results with uncertainty, farmer sign-in/
 logout and private paginated history/detail through the existing Node/FastAPI flow.
 Guest scans remain anonymous without personal history. See
@@ -26,7 +31,7 @@ raw probabilities are retained and no confidence threshold is locked. See
 [model fitness](docs/26-model-fitness-validation.md). Use remains non-commercial
 academic/FYP research without raw redistribution or commercial clearance. Shared
 preprocessing, existing FastAPI/Flutter/backend/database features are preserved;
-Persistent mobile sign-in, RAG/Gemini and other business workflows remain future work.
+Persistent mobile sign-in, Gemini answer generation and other business workflows remain future work.
 With no approved operational cutoff, every current prediction is `LOW_CONFIDENCE`
 with `THRESHOLD_UNCONFIGURED`; numerical scores do not establish field correctness.
 See [project state](docs/PROJECT_STATE.md) for verified progress and outstanding decisions.

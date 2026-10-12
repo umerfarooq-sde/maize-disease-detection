@@ -1,5 +1,13 @@
 # AI service
 
+Phase 14 adds authenticated `POST /api/v1/retrieve`, controlled sourced ingestion,
+Google/Gemini embeddings and exact PostgreSQL/pgvector search. Read
+[knowledge retrieval](../docs/30-knowledge-retrieval.md) for explicit configuration,
+local commands, versions, corpus provenance, tests and limitations. Generation remains
+unimplemented. `RAG_ENABLED=false` independently disables retrieval; missing configured
+database/schema fails retrieval startup. Provider/service secrets stay server-side;
+public source references accompany evidence through Node.
+
 Phase 11 serves the approved `mobilenet-v3-small-v2-20261009` research/FYP classifier.
 The lifespan validates pinned metadata, checkpoint and calibration sidecar, then
 loads one frozen CPU model. Requests import the exact
@@ -19,8 +27,8 @@ Endpoints:
 Current results always report `LOW_CONFIDENCE/THRESHOLD_UNCONFIGURED`, with a null
 threshold and raw probabilities. No numerical cutoff or calibration is fitted here.
 The model remains non-commercial academic/FYP research with documented source/domain,
-GLS, confident-error and field-validation limitations. No Node orchestration, training,
-RAG or Gemini is implemented in this phase.
+GLS, confident-error and field-validation limitations. Phase 12 supplies Node
+orchestration; Phase 14 retrieval does not change the classifier or train it.
 
 The isolated Python 3.11 environment and existing locked CPU/image dependencies are
 preserved. `pyproject.toml` and `uv.lock` additionally configure Pydantic settings,
@@ -57,7 +65,7 @@ approved metadata hash and expected model/preprocessing versions. Missing/invali
 artifacts fail startup. Explicit `INFERENCE_ENABLED=false` is health-only mode;
 predictions/model readiness then return unavailable. No browser CORS is enabled: Flutter talks
 to Node, and Node will call FastAPI over a private network. Production docs are disabled.
-Database/Gemini template values remain unused. Optional confidence-policy path/hash
+Database/Gemini template values are required only when retrieval is enabled. Optional confidence-policy path/hash
 must both be supplied or blank; both remain blank for the approved model.
 
 All 219 AI tests pass, including model lifecycle, artifact compatibility, authenticated

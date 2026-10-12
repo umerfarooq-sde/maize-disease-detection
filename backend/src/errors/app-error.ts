@@ -56,6 +56,18 @@ const errorDefinitions = {
     status: 503,
     message: 'This analysis was interrupted. Please retry this scan later.',
   },
+  KNOWLEDGE_UNAVAILABLE: {
+    status: 503,
+    message: 'Knowledge search is temporarily unavailable. Please try again later.',
+  },
+  KNOWLEDGE_TIMEOUT: {
+    status: 504,
+    message: 'Knowledge search took too long. Please try again later.',
+  },
+  KNOWLEDGE_INVALID_RESPONSE: {
+    status: 502,
+    message: 'Knowledge search returned an invalid result. Please try again later.',
+  },
 } as const;
 
 export type ErrorCode = keyof typeof errorDefinitions;

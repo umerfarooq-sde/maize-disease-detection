@@ -1,6 +1,6 @@
 # AI Service Architecture
 
-> **Status:** Phase 12 Node orchestration, Phase 11 classifier serving, Phase 8 FastAPI foundation and Phase 9 shared preprocessing are implemented. Retrieval/generation and deployment remain future work.
+> **Status:** Phase 14 adds sourced retrieval to the existing Phase 12 Node orchestration and Phase 11 classifier service. Generation and deployment remain future work. Read [knowledge/retrieval](30-knowledge-retrieval.md) for the PostgreSQL/Google embedding flow.
 
 Both Python environments now install the same [shared preprocessing package](22-shared-preprocessing.md).
 Serving and training re-export identical functions and must pin the same configuration
@@ -37,7 +37,8 @@ Backend request
 Each stage should fail explicitly. Reject unsupported or corrupt images before inference; reject malformed model output instead of returning a success-shaped fallback.
 
 The current classifier flow ends with typed probabilities and uncertainty.
-Retrieval/generation in this target diagram is deferred. No operational threshold is
+Retrieval is independently available; classifier prediction does not invoke it automatically.
+Generation in this target diagram is deferred. No operational threshold is
 approved: current predictions report `LOW_CONFIDENCE/THRESHOLD_UNCONFIGURED`.
 
 ## Service interface

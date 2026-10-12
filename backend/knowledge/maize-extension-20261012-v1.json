@@ -1,0 +1,721 @@
+{
+  "version": "maize-extension-20261012-v1",
+  "diseases": [
+    {
+      "label": "Common_Rust",
+      "slug": "common-rust",
+      "name": "Common Rust",
+      "scientificName": "Puccinia sorghi",
+      "description": "A fungal maize leaf disease associated with rust pustules.",
+      "status": "ACTIVE"
+    },
+    {
+      "label": "Gray_Leaf_Spot",
+      "slug": "gray-leaf-spot",
+      "name": "Gray Leaf Spot",
+      "scientificName": "Cercospora zeae-maydis",
+      "description": "A fungal maize leaf disease associated with rectangular lesions.",
+      "status": "ACTIVE"
+    },
+    {
+      "label": "Healthy",
+      "slug": "healthy",
+      "name": "Healthy / scouting context",
+      "description": "A classifier label with field-scouting context, not a disease diagnosis.",
+      "status": "ACTIVE"
+    },
+    {
+      "label": "Northern_Corn_Leaf_Blight",
+      "slug": "northern-corn-leaf-blight",
+      "name": "Northern Corn Leaf Blight",
+      "scientificName": "Exserohilum turcicum",
+      "description": "A fungal maize leaf disease associated with elongated blighted lesions.",
+      "status": "ACTIVE"
+    }
+  ],
+  "documents": [
+    {
+      "documentKey": "maize-common-rust-overview",
+      "version": 1,
+      "diseaseLabel": "Common_Rust",
+      "title": "Common Rust: overview",
+      "knowledgeType": "OVERVIEW",
+      "content": "Common rust is a fungal leaf disease of maize; severe infections can injure leaves.",
+      "source": {
+        "url": "https://extension.umn.edu/agriculture/crop-production/corn/common-rust-on-corn",
+        "title": "Common rust on corn",
+        "publisher": "University of Minnesota Extension",
+        "authors": [
+          "Dean Malvick"
+        ],
+        "publishedAt": null,
+        "retrievedAt": "2026-10-12",
+        "rights": "Copyright Regents of the University of Minnesota; the page states all rights reserved. Independently worded factual summaries and attribution only; no source images or reproduced page text. No open licence or commercial reuse permission is asserted."
+      },
+      "metadata": {
+        "region": "United States (northern U.S.)",
+        "language": "en",
+        "review": "INTENTIONALLY_CURATED_AUTHORITATIVE",
+        "sourceReviewedAt": "2018",
+        "sourceSection": "Introduction",
+        "scope": "GENERAL_EDUCATION_NOT_LOCAL_PESTICIDE_PRESCRIPTION"
+      }
+    },
+    {
+      "documentKey": "maize-common-rust-symptoms",
+      "version": 1,
+      "diseaseLabel": "Common_Rust",
+      "title": "Common Rust: symptoms",
+      "knowledgeType": "SYMPTOMS",
+      "content": "Elongated cinnamon-brown pustules occur on both leaf surfaces and darken with age. Severe infection may yellow or kill leaves; distinguish other rusts through examination.",
+      "source": {
+        "url": "https://extension.umn.edu/agriculture/crop-production/corn/common-rust-on-corn",
+        "title": "Common rust on corn",
+        "publisher": "University of Minnesota Extension",
+        "authors": [
+          "Dean Malvick"
+        ],
+        "publishedAt": null,
+        "retrievedAt": "2026-10-12",
+        "rights": "Copyright Regents of the University of Minnesota; the page states all rights reserved. Independently worded factual summaries and attribution only; no source images or reproduced page text. No open licence or commercial reuse permission is asserted."
+      },
+      "metadata": {
+        "region": "United States (northern U.S.)",
+        "language": "en",
+        "review": "INTENTIONALLY_CURATED_AUTHORITATIVE",
+        "sourceReviewedAt": "2018",
+        "sourceSection": "Symptoms",
+        "scope": "GENERAL_EDUCATION_NOT_LOCAL_PESTICIDE_PRESCRIPTION"
+      }
+    },
+    {
+      "documentKey": "maize-common-rust-causes",
+      "version": 1,
+      "diseaseLabel": "Common_Rust",
+      "title": "Common Rust: causes",
+      "knowledgeType": "CAUSES",
+      "content": "The rust fungus Puccinia sorghi causes common rust. Wind carries infectious spores.",
+      "source": {
+        "url": "https://extension.umn.edu/agriculture/crop-production/corn/common-rust-on-corn",
+        "title": "Common rust on corn",
+        "publisher": "University of Minnesota Extension",
+        "authors": [
+          "Dean Malvick"
+        ],
+        "publishedAt": null,
+        "retrievedAt": "2026-10-12",
+        "rights": "Copyright Regents of the University of Minnesota; the page states all rights reserved. Independently worded factual summaries and attribution only; no source images or reproduced page text. No open licence or commercial reuse permission is asserted."
+      },
+      "metadata": {
+        "region": "United States (northern U.S.)",
+        "language": "en",
+        "review": "INTENTIONALLY_CURATED_AUTHORITATIVE",
+        "sourceReviewedAt": "2018",
+        "sourceSection": "Causal pathogen; Conditions and timing that favor disease",
+        "scope": "GENERAL_EDUCATION_NOT_LOCAL_PESTICIDE_PRESCRIPTION"
+      }
+    },
+    {
+      "documentKey": "maize-common-rust-conditions",
+      "version": 1,
+      "diseaseLabel": "Common_Rust",
+      "title": "Common Rust: conditions",
+      "knowledgeType": "CONDITIONS",
+      "content": "Cool, damp weather, heavy dew, high humidity and sustained leaf wetness favor common rust. Young leaves are particularly susceptible.",
+      "source": {
+        "url": "https://extension.umn.edu/agriculture/crop-production/corn/common-rust-on-corn",
+        "title": "Common rust on corn",
+        "publisher": "University of Minnesota Extension",
+        "authors": [
+          "Dean Malvick"
+        ],
+        "publishedAt": null,
+        "retrievedAt": "2026-10-12",
+        "rights": "Copyright Regents of the University of Minnesota; the page states all rights reserved. Independently worded factual summaries and attribution only; no source images or reproduced page text. No open licence or commercial reuse permission is asserted."
+      },
+      "metadata": {
+        "region": "United States (northern U.S.)",
+        "language": "en",
+        "review": "INTENTIONALLY_CURATED_AUTHORITATIVE",
+        "sourceReviewedAt": "2018",
+        "sourceSection": "Conditions and timing that favor disease",
+        "scope": "GENERAL_EDUCATION_NOT_LOCAL_PESTICIDE_PRESCRIPTION"
+      }
+    },
+    {
+      "documentKey": "maize-common-rust-management",
+      "version": 1,
+      "diseaseLabel": "Common_Rust",
+      "title": "Common Rust: management",
+      "knowledgeType": "MANAGEMENT",
+      "content": "Resistant maize hybrids are the main control option. The source notes that early fungicide use can help, without supplying a locally applicable prescription.",
+      "source": {
+        "url": "https://extension.umn.edu/agriculture/crop-production/corn/common-rust-on-corn",
+        "title": "Common rust on corn",
+        "publisher": "University of Minnesota Extension",
+        "authors": [
+          "Dean Malvick"
+        ],
+        "publishedAt": null,
+        "retrievedAt": "2026-10-12",
+        "rights": "Copyright Regents of the University of Minnesota; the page states all rights reserved. Independently worded factual summaries and attribution only; no source images or reproduced page text. No open licence or commercial reuse permission is asserted."
+      },
+      "metadata": {
+        "region": "United States (northern U.S.)",
+        "language": "en",
+        "review": "INTENTIONALLY_CURATED_AUTHORITATIVE",
+        "sourceReviewedAt": "2018",
+        "sourceSection": "Disease management",
+        "scope": "GENERAL_EDUCATION_NOT_LOCAL_PESTICIDE_PRESCRIPTION"
+      }
+    },
+    {
+      "documentKey": "maize-common-rust-prevention",
+      "version": 1,
+      "diseaseLabel": "Common_Rust",
+      "title": "Common Rust: prevention",
+      "knowledgeType": "PREVENTION",
+      "content": "Select hybrids rated resistant to common rust for future planting.",
+      "source": {
+        "url": "https://extension.umn.edu/agriculture/crop-production/corn/common-rust-on-corn",
+        "title": "Common rust on corn",
+        "publisher": "University of Minnesota Extension",
+        "authors": [
+          "Dean Malvick"
+        ],
+        "publishedAt": null,
+        "retrievedAt": "2026-10-12",
+        "rights": "Copyright Regents of the University of Minnesota; the page states all rights reserved. Independently worded factual summaries and attribution only; no source images or reproduced page text. No open licence or commercial reuse permission is asserted."
+      },
+      "metadata": {
+        "region": "United States (northern U.S.)",
+        "language": "en",
+        "review": "INTENTIONALLY_CURATED_AUTHORITATIVE",
+        "sourceReviewedAt": "2018",
+        "sourceSection": "Disease management",
+        "scope": "GENERAL_EDUCATION_NOT_LOCAL_PESTICIDE_PRESCRIPTION"
+      }
+    },
+    {
+      "documentKey": "maize-common-rust-references",
+      "version": 1,
+      "diseaseLabel": "Common_Rust",
+      "title": "Common Rust: references",
+      "knowledgeType": "REFERENCES",
+      "content": "Dean Malvick, University of Minnesota Extension: Common rust on corn, reviewed 2018. Scope: northern U.S.; consult local guidance before applying management advice.",
+      "source": {
+        "url": "https://extension.umn.edu/agriculture/crop-production/corn/common-rust-on-corn",
+        "title": "Common rust on corn",
+        "publisher": "University of Minnesota Extension",
+        "authors": [
+          "Dean Malvick"
+        ],
+        "publishedAt": null,
+        "retrievedAt": "2026-10-12",
+        "rights": "Copyright Regents of the University of Minnesota; the page states all rights reserved. Independently worded factual summaries and attribution only; no source images or reproduced page text. No open licence or commercial reuse permission is asserted."
+      },
+      "metadata": {
+        "region": "United States (northern U.S.)",
+        "language": "en",
+        "review": "INTENTIONALLY_CURATED_AUTHORITATIVE",
+        "sourceReviewedAt": "2018",
+        "sourceSection": "Authorship; review date; regional introduction",
+        "scope": "GENERAL_EDUCATION_NOT_LOCAL_PESTICIDE_PRESCRIPTION"
+      }
+    },
+    {
+      "documentKey": "maize-gray-leaf-spot-overview",
+      "version": 1,
+      "diseaseLabel": "Gray_Leaf_Spot",
+      "title": "Gray Leaf Spot: overview",
+      "knowledgeType": "OVERVIEW",
+      "content": "Gray leaf spot is a fungal maize leaf disease; its importance depends on local growing conditions.",
+      "source": {
+        "url": "https://extension.umn.edu/agriculture/crop-production/corn/gray-leaf-spot-on-corn",
+        "title": "Gray leaf spot on corn",
+        "publisher": "University of Minnesota Extension",
+        "authors": [
+          "Dean Malvick"
+        ],
+        "publishedAt": null,
+        "retrievedAt": "2026-10-12",
+        "rights": "Copyright Regents of the University of Minnesota; the page states all rights reserved. Independently worded factual summaries and attribution only; no source images or reproduced page text. No open licence or commercial reuse permission is asserted."
+      },
+      "metadata": {
+        "region": "United States (Corn Belt)",
+        "language": "en",
+        "review": "INTENTIONALLY_CURATED_AUTHORITATIVE",
+        "sourceReviewedAt": "2018",
+        "sourceSection": "Introduction; Causal pathogen",
+        "scope": "GENERAL_EDUCATION_NOT_LOCAL_PESTICIDE_PRESCRIPTION"
+      }
+    },
+    {
+      "documentKey": "maize-gray-leaf-spot-symptoms",
+      "version": 1,
+      "diseaseLabel": "Gray_Leaf_Spot",
+      "title": "Gray Leaf Spot: symptoms",
+      "knowledgeType": "SYMPTOMS",
+      "content": "Small dead spots with halos enlarge into gray or brown rectangular lesions, usually bordered by leaf veins. Other leaf diseases can look similar.",
+      "source": {
+        "url": "https://extension.umn.edu/agriculture/crop-production/corn/gray-leaf-spot-on-corn",
+        "title": "Gray leaf spot on corn",
+        "publisher": "University of Minnesota Extension",
+        "authors": [
+          "Dean Malvick"
+        ],
+        "publishedAt": null,
+        "retrievedAt": "2026-10-12",
+        "rights": "Copyright Regents of the University of Minnesota; the page states all rights reserved. Independently worded factual summaries and attribution only; no source images or reproduced page text. No open licence or commercial reuse permission is asserted."
+      },
+      "metadata": {
+        "region": "United States (Corn Belt)",
+        "language": "en",
+        "review": "INTENTIONALLY_CURATED_AUTHORITATIVE",
+        "sourceReviewedAt": "2018",
+        "sourceSection": "Symptoms",
+        "scope": "GENERAL_EDUCATION_NOT_LOCAL_PESTICIDE_PRESCRIPTION"
+      }
+    },
+    {
+      "documentKey": "maize-gray-leaf-spot-causes",
+      "version": 1,
+      "diseaseLabel": "Gray_Leaf_Spot",
+      "title": "Gray Leaf Spot: causes",
+      "knowledgeType": "CAUSES",
+      "content": "The cited source identifies Cercospora zeae-maydis and notes survival in maize residue on the soil surface.",
+      "source": {
+        "url": "https://extension.umn.edu/agriculture/crop-production/corn/gray-leaf-spot-on-corn",
+        "title": "Gray leaf spot on corn",
+        "publisher": "University of Minnesota Extension",
+        "authors": [
+          "Dean Malvick"
+        ],
+        "publishedAt": null,
+        "retrievedAt": "2026-10-12",
+        "rights": "Copyright Regents of the University of Minnesota; the page states all rights reserved. Independently worded factual summaries and attribution only; no source images or reproduced page text. No open licence or commercial reuse permission is asserted."
+      },
+      "metadata": {
+        "region": "United States (Corn Belt)",
+        "language": "en",
+        "review": "INTENTIONALLY_CURATED_AUTHORITATIVE",
+        "sourceReviewedAt": "2018",
+        "sourceSection": "Causal pathogen",
+        "scope": "GENERAL_EDUCATION_NOT_LOCAL_PESTICIDE_PRESCRIPTION"
+      }
+    },
+    {
+      "documentKey": "maize-gray-leaf-spot-conditions",
+      "version": 1,
+      "diseaseLabel": "Gray_Leaf_Spot",
+      "title": "Gray Leaf Spot: conditions",
+      "knowledgeType": "CONDITIONS",
+      "content": "Prolonged humid or wet weather with moderate to warm temperatures favors infection. Continuous maize and retained infected residue can increase risk.",
+      "source": {
+        "url": "https://extension.umn.edu/agriculture/crop-production/corn/gray-leaf-spot-on-corn",
+        "title": "Gray leaf spot on corn",
+        "publisher": "University of Minnesota Extension",
+        "authors": [
+          "Dean Malvick"
+        ],
+        "publishedAt": null,
+        "retrievedAt": "2026-10-12",
+        "rights": "Copyright Regents of the University of Minnesota; the page states all rights reserved. Independently worded factual summaries and attribution only; no source images or reproduced page text. No open licence or commercial reuse permission is asserted."
+      },
+      "metadata": {
+        "region": "United States (Corn Belt)",
+        "language": "en",
+        "review": "INTENTIONALLY_CURATED_AUTHORITATIVE",
+        "sourceReviewedAt": "2018",
+        "sourceSection": "Conditions and timing that favor disease; Causal pathogen",
+        "scope": "GENERAL_EDUCATION_NOT_LOCAL_PESTICIDE_PRESCRIPTION"
+      }
+    },
+    {
+      "documentKey": "maize-gray-leaf-spot-management",
+      "version": 1,
+      "diseaseLabel": "Gray_Leaf_Spot",
+      "title": "Gray Leaf Spot: management",
+      "knowledgeType": "MANAGEMENT",
+      "content": "Resistant hybrids, rotation and appropriate residue management are options. Fungicides require disease-risk and economic assessment; this source supplies no local product prescription.",
+      "source": {
+        "url": "https://extension.umn.edu/agriculture/crop-production/corn/gray-leaf-spot-on-corn",
+        "title": "Gray leaf spot on corn",
+        "publisher": "University of Minnesota Extension",
+        "authors": [
+          "Dean Malvick"
+        ],
+        "publishedAt": null,
+        "retrievedAt": "2026-10-12",
+        "rights": "Copyright Regents of the University of Minnesota; the page states all rights reserved. Independently worded factual summaries and attribution only; no source images or reproduced page text. No open licence or commercial reuse permission is asserted."
+      },
+      "metadata": {
+        "region": "United States (Corn Belt)",
+        "language": "en",
+        "review": "INTENTIONALLY_CURATED_AUTHORITATIVE",
+        "sourceReviewedAt": "2018",
+        "sourceSection": "Disease management",
+        "scope": "GENERAL_EDUCATION_NOT_LOCAL_PESTICIDE_PRESCRIPTION"
+      }
+    },
+    {
+      "documentKey": "maize-gray-leaf-spot-prevention",
+      "version": 1,
+      "diseaseLabel": "Gray_Leaf_Spot",
+      "title": "Gray Leaf Spot: prevention",
+      "knowledgeType": "PREVENTION",
+      "content": "Rotate away from maize and choose resistant hybrids. Any tillage decision should reflect whether it is appropriate for the field.",
+      "source": {
+        "url": "https://extension.umn.edu/agriculture/crop-production/corn/gray-leaf-spot-on-corn",
+        "title": "Gray leaf spot on corn",
+        "publisher": "University of Minnesota Extension",
+        "authors": [
+          "Dean Malvick"
+        ],
+        "publishedAt": null,
+        "retrievedAt": "2026-10-12",
+        "rights": "Copyright Regents of the University of Minnesota; the page states all rights reserved. Independently worded factual summaries and attribution only; no source images or reproduced page text. No open licence or commercial reuse permission is asserted."
+      },
+      "metadata": {
+        "region": "United States (Corn Belt)",
+        "language": "en",
+        "review": "INTENTIONALLY_CURATED_AUTHORITATIVE",
+        "sourceReviewedAt": "2018",
+        "sourceSection": "Disease management",
+        "scope": "GENERAL_EDUCATION_NOT_LOCAL_PESTICIDE_PRESCRIPTION"
+      }
+    },
+    {
+      "documentKey": "maize-gray-leaf-spot-references",
+      "version": 1,
+      "diseaseLabel": "Gray_Leaf_Spot",
+      "title": "Gray Leaf Spot: references",
+      "knowledgeType": "REFERENCES",
+      "content": "Dean Malvick, University of Minnesota Extension: Gray leaf spot on corn, reviewed 2018. Scope: U.S. Corn Belt; consult local guidance before applying management advice.",
+      "source": {
+        "url": "https://extension.umn.edu/agriculture/crop-production/corn/gray-leaf-spot-on-corn",
+        "title": "Gray leaf spot on corn",
+        "publisher": "University of Minnesota Extension",
+        "authors": [
+          "Dean Malvick"
+        ],
+        "publishedAt": null,
+        "retrievedAt": "2026-10-12",
+        "rights": "Copyright Regents of the University of Minnesota; the page states all rights reserved. Independently worded factual summaries and attribution only; no source images or reproduced page text. No open licence or commercial reuse permission is asserted."
+      },
+      "metadata": {
+        "region": "United States (Corn Belt)",
+        "language": "en",
+        "review": "INTENTIONALLY_CURATED_AUTHORITATIVE",
+        "sourceReviewedAt": "2018",
+        "sourceSection": "Authorship; review date; regional introduction",
+        "scope": "GENERAL_EDUCATION_NOT_LOCAL_PESTICIDE_PRESCRIPTION"
+      }
+    },
+    {
+      "documentKey": "maize-northern-corn-leaf-blight-overview",
+      "version": 1,
+      "diseaseLabel": "Northern_Corn_Leaf_Blight",
+      "title": "Northern Corn Leaf Blight: overview",
+      "knowledgeType": "OVERVIEW",
+      "content": "Northern corn leaf blight damages maize foliage. Early infection can threaten grain yield in susceptible hybrids.",
+      "source": {
+        "url": "https://extension.umn.edu/agriculture/crop-production/corn/northern-corn-leaf-blight",
+        "title": "Northern corn leaf blight",
+        "publisher": "University of Minnesota Extension",
+        "authors": [
+          "Dean Malvick"
+        ],
+        "publishedAt": null,
+        "retrievedAt": "2026-10-12",
+        "rights": "Copyright Regents of the University of Minnesota; the page states all rights reserved. Independently worded factual summaries and attribution only; no source images or reproduced page text. No open licence or commercial reuse permission is asserted."
+      },
+      "metadata": {
+        "region": "United States (Midwest)",
+        "language": "en",
+        "review": "INTENTIONALLY_CURATED_AUTHORITATIVE",
+        "sourceReviewedAt": "2018",
+        "sourceSection": "Introduction",
+        "scope": "GENERAL_EDUCATION_NOT_LOCAL_PESTICIDE_PRESCRIPTION"
+      }
+    },
+    {
+      "documentKey": "maize-northern-corn-leaf-blight-symptoms",
+      "version": 1,
+      "diseaseLabel": "Northern_Corn_Leaf_Blight",
+      "title": "Northern Corn Leaf Blight: symptoms",
+      "knowledgeType": "SYMPTOMS",
+      "content": "Long canoe-shaped lesions start with gray-green margins and become tan, sometimes with dark fungal growth. Symptoms often progress from lower to upper leaves; other diseases can resemble them.",
+      "source": {
+        "url": "https://extension.umn.edu/agriculture/crop-production/corn/northern-corn-leaf-blight",
+        "title": "Northern corn leaf blight",
+        "publisher": "University of Minnesota Extension",
+        "authors": [
+          "Dean Malvick"
+        ],
+        "publishedAt": null,
+        "retrievedAt": "2026-10-12",
+        "rights": "Copyright Regents of the University of Minnesota; the page states all rights reserved. Independently worded factual summaries and attribution only; no source images or reproduced page text. No open licence or commercial reuse permission is asserted."
+      },
+      "metadata": {
+        "region": "United States (Midwest)",
+        "language": "en",
+        "review": "INTENTIONALLY_CURATED_AUTHORITATIVE",
+        "sourceReviewedAt": "2018",
+        "sourceSection": "Symptoms",
+        "scope": "GENERAL_EDUCATION_NOT_LOCAL_PESTICIDE_PRESCRIPTION"
+      }
+    },
+    {
+      "documentKey": "maize-northern-corn-leaf-blight-causes",
+      "version": 1,
+      "diseaseLabel": "Northern_Corn_Leaf_Blight",
+      "title": "Northern Corn Leaf Blight: causes",
+      "knowledgeType": "CAUSES",
+      "content": "Exserohilum turcicum causes this disease and survives on maize leaf debris. Pathogen races interact differently with hybrid resistance genes.",
+      "source": {
+        "url": "https://extension.umn.edu/agriculture/crop-production/corn/northern-corn-leaf-blight",
+        "title": "Northern corn leaf blight",
+        "publisher": "University of Minnesota Extension",
+        "authors": [
+          "Dean Malvick"
+        ],
+        "publishedAt": null,
+        "retrievedAt": "2026-10-12",
+        "rights": "Copyright Regents of the University of Minnesota; the page states all rights reserved. Independently worded factual summaries and attribution only; no source images or reproduced page text. No open licence or commercial reuse permission is asserted."
+      },
+      "metadata": {
+        "region": "United States (Midwest)",
+        "language": "en",
+        "review": "INTENTIONALLY_CURATED_AUTHORITATIVE",
+        "sourceReviewedAt": "2018",
+        "sourceSection": "Causal pathogen",
+        "scope": "GENERAL_EDUCATION_NOT_LOCAL_PESTICIDE_PRESCRIPTION"
+      }
+    },
+    {
+      "documentKey": "maize-northern-corn-leaf-blight-conditions",
+      "version": 1,
+      "diseaseLabel": "Northern_Corn_Leaf_Blight",
+      "title": "Northern Corn Leaf Blight: conditions",
+      "knowledgeType": "CONDITIONS",
+      "content": "Moderate temperatures and prolonged moisture favor disease. Infections established before silking can be more damaging.",
+      "source": {
+        "url": "https://extension.umn.edu/agriculture/crop-production/corn/northern-corn-leaf-blight",
+        "title": "Northern corn leaf blight",
+        "publisher": "University of Minnesota Extension",
+        "authors": [
+          "Dean Malvick"
+        ],
+        "publishedAt": null,
+        "retrievedAt": "2026-10-12",
+        "rights": "Copyright Regents of the University of Minnesota; the page states all rights reserved. Independently worded factual summaries and attribution only; no source images or reproduced page text. No open licence or commercial reuse permission is asserted."
+      },
+      "metadata": {
+        "region": "United States (Midwest)",
+        "language": "en",
+        "review": "INTENTIONALLY_CURATED_AUTHORITATIVE",
+        "sourceReviewedAt": "2018",
+        "sourceSection": "Conditions and timing that favor disease; Introduction",
+        "scope": "GENERAL_EDUCATION_NOT_LOCAL_PESTICIDE_PRESCRIPTION"
+      }
+    },
+    {
+      "documentKey": "maize-northern-corn-leaf-blight-management",
+      "version": 1,
+      "diseaseLabel": "Northern_Corn_Leaf_Blight",
+      "title": "Northern Corn Leaf Blight: management",
+      "knowledgeType": "MANAGEMENT",
+      "content": "Resistant hybrids are preferred. The source discusses early fungicides for susceptible seed-production inbreds, rather than a universal treatment for every maize field.",
+      "source": {
+        "url": "https://extension.umn.edu/agriculture/crop-production/corn/northern-corn-leaf-blight",
+        "title": "Northern corn leaf blight",
+        "publisher": "University of Minnesota Extension",
+        "authors": [
+          "Dean Malvick"
+        ],
+        "publishedAt": null,
+        "retrievedAt": "2026-10-12",
+        "rights": "Copyright Regents of the University of Minnesota; the page states all rights reserved. Independently worded factual summaries and attribution only; no source images or reproduced page text. No open licence or commercial reuse permission is asserted."
+      },
+      "metadata": {
+        "region": "United States (Midwest)",
+        "language": "en",
+        "review": "INTENTIONALLY_CURATED_AUTHORITATIVE",
+        "sourceReviewedAt": "2018",
+        "sourceSection": "Disease management",
+        "scope": "GENERAL_EDUCATION_NOT_LOCAL_PESTICIDE_PRESCRIPTION"
+      }
+    },
+    {
+      "documentKey": "maize-northern-corn-leaf-blight-prevention",
+      "version": 1,
+      "diseaseLabel": "Northern_Corn_Leaf_Blight",
+      "title": "Northern Corn Leaf Blight: prevention",
+      "knowledgeType": "PREVENTION",
+      "content": "Crop rotation and appropriate residue or tillage management can help in some circumstances; resistance varies by pathogen race.",
+      "source": {
+        "url": "https://extension.umn.edu/agriculture/crop-production/corn/northern-corn-leaf-blight",
+        "title": "Northern corn leaf blight",
+        "publisher": "University of Minnesota Extension",
+        "authors": [
+          "Dean Malvick"
+        ],
+        "publishedAt": null,
+        "retrievedAt": "2026-10-12",
+        "rights": "Copyright Regents of the University of Minnesota; the page states all rights reserved. Independently worded factual summaries and attribution only; no source images or reproduced page text. No open licence or commercial reuse permission is asserted."
+      },
+      "metadata": {
+        "region": "United States (Midwest)",
+        "language": "en",
+        "review": "INTENTIONALLY_CURATED_AUTHORITATIVE",
+        "sourceReviewedAt": "2018",
+        "sourceSection": "Disease management; Causal pathogen",
+        "scope": "GENERAL_EDUCATION_NOT_LOCAL_PESTICIDE_PRESCRIPTION"
+      }
+    },
+    {
+      "documentKey": "maize-northern-corn-leaf-blight-references",
+      "version": 1,
+      "diseaseLabel": "Northern_Corn_Leaf_Blight",
+      "title": "Northern Corn Leaf Blight: references",
+      "knowledgeType": "REFERENCES",
+      "content": "Dean Malvick, University of Minnesota Extension: Northern corn leaf blight, reviewed 2018. Scope: Midwestern U.S.; consult local guidance before applying management advice.",
+      "source": {
+        "url": "https://extension.umn.edu/agriculture/crop-production/corn/northern-corn-leaf-blight",
+        "title": "Northern corn leaf blight",
+        "publisher": "University of Minnesota Extension",
+        "authors": [
+          "Dean Malvick"
+        ],
+        "publishedAt": null,
+        "retrievedAt": "2026-10-12",
+        "rights": "Copyright Regents of the University of Minnesota; the page states all rights reserved. Independently worded factual summaries and attribution only; no source images or reproduced page text. No open licence or commercial reuse permission is asserted."
+      },
+      "metadata": {
+        "region": "United States (Midwest)",
+        "language": "en",
+        "review": "INTENTIONALLY_CURATED_AUTHORITATIVE",
+        "sourceReviewedAt": "2018",
+        "sourceSection": "Authorship; review date; regional introduction",
+        "scope": "GENERAL_EDUCATION_NOT_LOCAL_PESTICIDE_PRESCRIPTION"
+      }
+    },
+    {
+      "documentKey": "maize-healthy-overview",
+      "version": 1,
+      "diseaseLabel": "Healthy",
+      "title": "Healthy / scouting context: overview",
+      "knowledgeType": "OVERVIEW",
+      "content": "Scouting starts by recognizing normal plant growth and detecting deviations. The source concerns early-season field assessment, not an image classifier's definition of Healthy.",
+      "source": {
+        "url": "https://crops.extension.iastate.edu/encyclopedia/early-season-crop-scouting",
+        "title": "Early Season Crop Scouting",
+        "publisher": "Iowa State University Extension and Outreach",
+        "authors": [
+          "Meaghan Anderson",
+          "Angie Rieck-Hinz",
+          "Rebecca Vittetoe"
+        ],
+        "publishedAt": null,
+        "retrievedAt": "2026-10-12",
+        "rights": "The page carries an Iowa State University copyright notice. Independently worded factual summaries and attribution only; no source images or reproduced page text. No open licence or commercial reuse permission is asserted."
+      },
+      "metadata": {
+        "region": "United States (Iowa; early-season scouting)",
+        "language": "en",
+        "review": "INTENTIONALLY_CURATED_AUTHORITATIVE",
+        "sourceReviewedAt": "2026-05-11",
+        "sourceSection": "Early Season Crop Diseases",
+        "scope": "SCOUTING_CONTEXT_NOT_HEALTH_CERTIFICATION"
+      }
+    },
+    {
+      "documentKey": "maize-healthy-symptoms",
+      "version": 1,
+      "diseaseLabel": "Healthy",
+      "title": "Healthy / scouting context: symptoms",
+      "knowledgeType": "SYMPTOMS",
+      "content": "During early-season scouting, check for yellowing, wilting, stunting, dead or missing plants, and discolored or decaying maize roots or mesocotyls. These observations warrant investigation, not an automatic disease diagnosis.",
+      "source": {
+        "url": "https://crops.extension.iastate.edu/encyclopedia/early-season-crop-scouting",
+        "title": "Early Season Crop Scouting",
+        "publisher": "Iowa State University Extension and Outreach",
+        "authors": [
+          "Meaghan Anderson",
+          "Angie Rieck-Hinz",
+          "Rebecca Vittetoe"
+        ],
+        "publishedAt": null,
+        "retrievedAt": "2026-10-12",
+        "rights": "The page carries an Iowa State University copyright notice. Independently worded factual summaries and attribution only; no source images or reproduced page text. No open licence or commercial reuse permission is asserted."
+      },
+      "metadata": {
+        "region": "United States (Iowa; early-season scouting)",
+        "language": "en",
+        "review": "INTENTIONALLY_CURATED_AUTHORITATIVE",
+        "sourceReviewedAt": "2026-05-11",
+        "sourceSection": "Early Season Crop Diseases",
+        "scope": "SCOUTING_CONTEXT_NOT_HEALTH_CERTIFICATION"
+      }
+    },
+    {
+      "documentKey": "maize-healthy-prevention",
+      "version": 1,
+      "diseaseLabel": "Healthy",
+      "title": "Healthy / scouting context: prevention",
+      "knowledgeType": "PREVENTION",
+      "content": "Record crop growth stage and seek an agronomist's help when problems are unclear. Laboratory examination may be needed to identify a seedling pathogen.",
+      "source": {
+        "url": "https://crops.extension.iastate.edu/encyclopedia/early-season-crop-scouting",
+        "title": "Early Season Crop Scouting",
+        "publisher": "Iowa State University Extension and Outreach",
+        "authors": [
+          "Meaghan Anderson",
+          "Angie Rieck-Hinz",
+          "Rebecca Vittetoe"
+        ],
+        "publishedAt": null,
+        "retrievedAt": "2026-10-12",
+        "rights": "The page carries an Iowa State University copyright notice. Independently worded factual summaries and attribution only; no source images or reproduced page text. No open licence or commercial reuse permission is asserted."
+      },
+      "metadata": {
+        "region": "United States (Iowa; early-season scouting)",
+        "language": "en",
+        "review": "INTENTIONALLY_CURATED_AUTHORITATIVE",
+        "sourceReviewedAt": "2026-05-11",
+        "sourceSection": "Crop Growth Stage; Early Season Crop Diseases; Summary",
+        "scope": "SCOUTING_CONTEXT_NOT_HEALTH_CERTIFICATION"
+      }
+    },
+    {
+      "documentKey": "maize-healthy-references",
+      "version": 1,
+      "diseaseLabel": "Healthy",
+      "title": "Healthy / scouting context: references",
+      "knowledgeType": "REFERENCES",
+      "content": "Meaghan Anderson, Angie Rieck-Hinz and Rebecca Vittetoe, Iowa State University Extension: Early Season Crop Scouting; reviewed May 11, 2026. Scope: Iowa early-season scouting.",
+      "source": {
+        "url": "https://crops.extension.iastate.edu/encyclopedia/early-season-crop-scouting",
+        "title": "Early Season Crop Scouting",
+        "publisher": "Iowa State University Extension and Outreach",
+        "authors": [
+          "Meaghan Anderson",
+          "Angie Rieck-Hinz",
+          "Rebecca Vittetoe"
+        ],
+        "publishedAt": null,
+        "retrievedAt": "2026-10-12",
+        "rights": "The page carries an Iowa State University copyright notice. Independently worded factual summaries and attribution only; no source images or reproduced page text. No open licence or commercial reuse permission is asserted."
+      },
+      "metadata": {
+        "region": "United States (Iowa; early-season scouting)",
+        "language": "en",
+        "review": "INTENTIONALLY_CURATED_AUTHORITATIVE",
+        "sourceReviewedAt": "2026-05-11",
+        "sourceSection": "Authorship; Last Reviewed",
+        "scope": "SCOUTING_CONTEXT_NOT_HEALTH_CERTIFICATION"
+      }
+    }
+  ]
+}

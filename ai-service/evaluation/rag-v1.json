@@ -1,0 +1,191 @@
+{
+  "version": "rag-curated-relevance-v1",
+  "corpusVersion": "maize-extension-20261012-v1",
+  "description": "Intentionally reviewed development queries for filtered retrieval relevance and missing-evidence behavior. These are not independent agronomic validation or generation evaluation.",
+  "cases": [
+    {
+      "id": "rust-overview",
+      "query": "What is common rust in maize?",
+      "diseaseLabel": "Common_Rust",
+      "knowledgeType": "OVERVIEW",
+      "expectedDocumentKeys": [
+        "maize-common-rust-overview"
+      ],
+      "expectedEmpty": false
+    },
+    {
+      "id": "rust-symptoms",
+      "query": "What do common rust pustules look like and where do they occur?",
+      "diseaseLabel": "Common_Rust",
+      "knowledgeType": "SYMPTOMS",
+      "expectedDocumentKeys": [
+        "maize-common-rust-symptoms"
+      ],
+      "expectedEmpty": false
+    },
+    {
+      "id": "rust-cause",
+      "query": "Which fungus causes common rust?",
+      "diseaseLabel": "Common_Rust",
+      "knowledgeType": "CAUSES",
+      "expectedDocumentKeys": [
+        "maize-common-rust-causes"
+      ],
+      "expectedEmpty": false
+    },
+    {
+      "id": "rust-weather",
+      "query": "Which weather conditions favor common rust?",
+      "diseaseLabel": "Common_Rust",
+      "knowledgeType": "CONDITIONS",
+      "expectedDocumentKeys": [
+        "maize-common-rust-conditions"
+      ],
+      "expectedEmpty": false
+    },
+    {
+      "id": "gray-symptoms",
+      "query": "What shape and color are gray leaf spot lesions?",
+      "diseaseLabel": "Gray_Leaf_Spot",
+      "knowledgeType": "SYMPTOMS",
+      "expectedDocumentKeys": [
+        "maize-gray-leaf-spot-symptoms"
+      ],
+      "expectedEmpty": false
+    },
+    {
+      "id": "gray-cause",
+      "query": "Which organism causes gray leaf spot and where does it survive?",
+      "diseaseLabel": "Gray_Leaf_Spot",
+      "knowledgeType": "CAUSES",
+      "expectedDocumentKeys": [
+        "maize-gray-leaf-spot-causes"
+      ],
+      "expectedEmpty": false
+    },
+    {
+      "id": "gray-management",
+      "query": "What general management options are documented for gray leaf spot?",
+      "diseaseLabel": "Gray_Leaf_Spot",
+      "knowledgeType": "MANAGEMENT",
+      "expectedDocumentKeys": [
+        "maize-gray-leaf-spot-management"
+      ],
+      "expectedEmpty": false
+    },
+    {
+      "id": "gray-prevention",
+      "query": "How can hybrid choice and rotation reduce gray leaf spot risk?",
+      "diseaseLabel": "Gray_Leaf_Spot",
+      "knowledgeType": "PREVENTION",
+      "expectedDocumentKeys": [
+        "maize-gray-leaf-spot-prevention"
+      ],
+      "expectedEmpty": false
+    },
+    {
+      "id": "northern-overview",
+      "query": "Why can early northern corn leaf blight infection be important?",
+      "diseaseLabel": "Northern_Corn_Leaf_Blight",
+      "knowledgeType": "OVERVIEW",
+      "expectedDocumentKeys": [
+        "maize-northern-corn-leaf-blight-overview"
+      ],
+      "expectedEmpty": false
+    },
+    {
+      "id": "northern-symptoms",
+      "query": "How do northern corn leaf blight lesions change and spread up the plant?",
+      "diseaseLabel": "Northern_Corn_Leaf_Blight",
+      "knowledgeType": "SYMPTOMS",
+      "expectedDocumentKeys": [
+        "maize-northern-corn-leaf-blight-symptoms"
+      ],
+      "expectedEmpty": false
+    },
+    {
+      "id": "northern-weather",
+      "query": "Which conditions favor northern corn leaf blight?",
+      "diseaseLabel": "Northern_Corn_Leaf_Blight",
+      "knowledgeType": "CONDITIONS",
+      "expectedDocumentKeys": [
+        "maize-northern-corn-leaf-blight-conditions"
+      ],
+      "expectedEmpty": false
+    },
+    {
+      "id": "northern-management",
+      "query": "What general northern corn leaf blight management does the cited extension source discuss?",
+      "diseaseLabel": "Northern_Corn_Leaf_Blight",
+      "knowledgeType": "MANAGEMENT",
+      "expectedDocumentKeys": [
+        "maize-northern-corn-leaf-blight-management"
+      ],
+      "expectedEmpty": false
+    },
+    {
+      "id": "healthy-overview",
+      "query": "What is the role of scouting when a maize plant appears normal?",
+      "diseaseLabel": "Healthy",
+      "knowledgeType": "OVERVIEW",
+      "expectedDocumentKeys": [
+        "maize-healthy-overview"
+      ],
+      "expectedEmpty": false
+    },
+    {
+      "id": "healthy-scouting-signs",
+      "query": "Which abnormal maize seedling signs should I investigate while scouting?",
+      "diseaseLabel": "Healthy",
+      "knowledgeType": "SYMPTOMS",
+      "expectedDocumentKeys": [
+        "maize-healthy-symptoms"
+      ],
+      "expectedEmpty": false
+    },
+    {
+      "id": "healthy-scouting-context",
+      "query": "What field information should I record and who can help with uncertain problems?",
+      "diseaseLabel": "Healthy",
+      "knowledgeType": "PREVENTION",
+      "expectedDocumentKeys": [
+        "maize-healthy-prevention"
+      ],
+      "expectedEmpty": false
+    },
+    {
+      "id": "healthy-references",
+      "query": "Which source supports this early-season maize scouting context?",
+      "diseaseLabel": "Healthy",
+      "knowledgeType": "REFERENCES",
+      "expectedDocumentKeys": [
+        "maize-healthy-references"
+      ],
+      "expectedEmpty": false
+    },
+    {
+      "id": "healthy-no-pathogen",
+      "query": "What pathogen causes the Healthy class?",
+      "diseaseLabel": "Healthy",
+      "knowledgeType": "CAUSES",
+      "expectedDocumentKeys": [],
+      "expectedEmpty": true
+    },
+    {
+      "id": "healthy-no-conditions",
+      "query": "Which disease-favoring conditions define Healthy?",
+      "diseaseLabel": "Healthy",
+      "knowledgeType": "CONDITIONS",
+      "expectedDocumentKeys": [],
+      "expectedEmpty": true
+    },
+    {
+      "id": "healthy-no-treatment",
+      "query": "What treatment or pesticide dose cures Healthy maize?",
+      "diseaseLabel": "Healthy",
+      "knowledgeType": "MANAGEMENT",
+      "expectedDocumentKeys": [],
+      "expectedEmpty": true
+    }
+  ]
+}

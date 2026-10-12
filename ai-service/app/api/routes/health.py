@@ -27,7 +27,12 @@ async def health(
             version=SERVICE_VERSION,
             status="ok" if running else "starting",
             uptime_seconds=round(max(0, perf_counter() - started_at), 3) if started_at else 0,
-            capabilities=Capabilities(inference="ready" if ready else "unavailable"),
+            capabilities=Capabilities(
+                inference="ready" if ready else "unavailable",
+                rag="ready"
+                if running and request.app.state.retrieval_service is not None
+                else "unavailable",
+            ),
             model=ModelHealth(
                 status="ready" if ready else "not_loaded",
                 version=service.loaded_model.model_version if ready else None,

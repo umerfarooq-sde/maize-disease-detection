@@ -17,7 +17,7 @@ class ConfigurationError(Exception):
     def __init__(self) -> None:
         super().__init__(
             "Invalid AI service configuration; check ENVIRONMENT, HOST, PORT, "
-            "LOG_LEVEL, AI_SERVICE_TOKEN and model/inference settings."
+            "LOG_LEVEL, AI_SERVICE_TOKEN and model/inference/retrieval settings."
         )
 
 
@@ -68,6 +68,46 @@ class Settings(BaseSettings):
         default=None, validation_alias="CONFIDENCE_POLICY_PATH", repr=False
     )
     confidence_policy_sha256: str = Field(default="", validation_alias="CONFIDENCE_POLICY_SHA256")
+    rag_enabled: bool = Field(default=False, validation_alias="RAG_ENABLED")
+    database_url: SecretStr = Field(
+        default=SecretStr(""), validation_alias="DATABASE_URL", repr=False
+    )
+    gemini_api_key: SecretStr = Field(
+        default=SecretStr(""), validation_alias="GEMINI_API_KEY", repr=False
+    )
+    embedding_model: str = Field(default="", validation_alias="EMBEDDING_MODEL", max_length=100)
+    embedding_version: str = Field(default="", validation_alias="EMBEDDING_VERSION", max_length=160)
+    embedding_dimensions: int = Field(
+        default=768, ge=128, le=3072, validation_alias="EMBEDDING_DIMENSIONS"
+    )
+    embedding_timeout_seconds: float = Field(
+        default=8, ge=1, le=20, allow_inf_nan=False, validation_alias="EMBEDDING_TIMEOUT_SECONDS"
+    )
+    rag_chunk_chars: int = Field(default=1000, ge=200, le=1500, validation_alias="RAG_CHUNK_CHARS")
+    rag_chunk_overlap: int = Field(default=120, ge=0, le=300, validation_alias="RAG_CHUNK_OVERLAP")
+    rag_max_concurrency: int = Field(default=4, ge=1, le=8, validation_alias="RAG_MAX_CONCURRENCY")
+
+    @model_validator(mode="after")
+    def validate_retrieval_configuration(self) -> Self:
+        if self.rag_chunk_overlap >= self.rag_chunk_chars:
+            raise ValueError("Chunk overlap must be smaller than chunk size")
+        if self.rag_enabled:
+            from urllib.parse import urlsplit
+
+            parsed = urlsplit(self.database_url.get_secret_value())
+            if (
+                parsed.scheme not in {"postgresql", "postgres"}
+                or not parsed.hostname
+                or not parsed.path.strip("/")
+            ):
+                raise ValueError("Retrieval requires a PostgreSQL connection")
+            if not self.gemini_api_key or not self.ai_service_token:
+                raise ValueError("Retrieval requires server credentials")
+            if not re.fullmatch(r"[a-z0-9][a-z0-9._-]{1,99}", self.embedding_model):
+                raise ValueError("Configure an explicit Google text embedding model")
+            if not re.fullmatch(r"[A-Za-z0-9][A-Za-z0-9._-]{1,159}", self.embedding_version):
+                raise ValueError("Configure an explicit embedding version")
+        return self
 
     @field_validator("model_path", "model_metadata_path", "confidence_policy_path", mode="before")
     @classmethod

@@ -86,6 +86,7 @@ const environmentSchema = z
     RATE_LIMIT_MAX: z.coerce.number().int().min(1).max(10000).default(120),
     AUTH_RATE_LIMIT_MAX: z.coerce.number().int().min(1).max(1000).default(10),
     SCAN_RATE_LIMIT_MAX: z.coerce.number().int().min(1).max(100).default(10),
+    KNOWLEDGE_RATE_LIMIT_MAX: z.coerce.number().int().min(1).max(1000).default(20),
     CLOUDINARY_CLOUD_NAME: z
       .string()
       .regex(/^[a-zA-Z0-9_-]*$/)

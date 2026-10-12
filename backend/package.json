@@ -8,6 +8,7 @@
     "node": ">=24.12.0 <25"
   },
   "scripts": {
+    "test:knowledge:live": "tsx --test tests/knowledge.live.integration.ts",
     "dev": "tsx watch src/server.ts",
     "start": "node dist/server.js",
     "typecheck": "tsc -p tsconfig.database.json",
@@ -15,7 +16,7 @@
     "lint": "biome lint .",
     "format": "biome format --write .",
     "format:check": "biome format .",
-    "test": "tsx --test tests/foundation/*.test.ts tests/auth/*.test.ts tests/scans/*.test.ts tests/inference/*.test.ts",
+    "test": "tsx --test tests/foundation/*.test.ts tests/auth/*.test.ts tests/scans/*.test.ts tests/inference/*.test.ts tests/knowledge/*.test.ts",
     "test:inference:database": "tsx --test tests/scans.inference.integration.ts",
     "test:inference:live": "tsx --test tests/scans.inference.live.integration.ts",
     "models:register": "tsx src/cli/register-model.ts",

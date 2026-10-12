@@ -30,11 +30,11 @@ try {
   const constraints = await client.query<{ count: string }>(
     "SELECT count(*) FROM pg_constraint c JOIN pg_namespace n ON n.oid=c.connamespace WHERE n.nspname=$1 AND c.contype='c'", [schema],
   );
-  assert.equal(Number(constraints.rows[0]?.count), 23);
+  assert.equal(Number(constraints.rows[0]?.count), 26);
   const triggers = await client.query<{ count: string }>(
     'SELECT count(*) FROM pg_trigger t JOIN pg_class c ON c.oid=t.tgrelid JOIN pg_namespace n ON n.oid=c.relnamespace WHERE n.nspname=$1 AND NOT t.tgisinternal', [schema],
   );
-  assert.equal(Number(triggers.rows[0]?.count), 37);
+  assert.equal(Number(triggers.rows[0]?.count), 38);
   console.log(`PASS: ${migrations.length} atomic migrations replay in an isolated schema with ${applicationTables.length} tables, checks, and triggers.`);
 } catch (error) {
   // PostgreSQL diagnostics contain schema/statement context, never the connection URL.

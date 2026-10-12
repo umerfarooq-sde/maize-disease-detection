@@ -1,0 +1,239 @@
+{
+  "version": "maize-extension-20261012-v1",
+  "reviewedAt": "2026-10-12",
+  "reviewStatus": "INTENTIONALLY_CURATED_AUTHORITATIVE",
+  "reviewScope": "Engineering curation of independently worded facts from identified university extension pages; no independent agronomist approval or publisher endorsement claimed.",
+  "corpusFile": "maize-extension-20261012-v1.json",
+  "canonicalCorpusSha256": "aff8fd211c32ebe4eee760533903cec5105f16deffd1436ba31e52c29cf45151",
+  "hashAlgorithm": "SHA256",
+  "canonicalJson": "UTF-8; recursively sorted object keys; array order retained; ensure_ascii=false; compact comma/colon separators; no trailing newline",
+  "sourceRetention": [
+    {
+      "url": "https://extension.umn.edu/agriculture/crop-production/corn/common-rust-on-corn",
+      "provenanceSha256": "e7b668c288327bf5752f10cdfb62ce80fb45bed696fe77faf5258cb801a4acf7",
+      "publisherFileSha256": null,
+      "retention": "ATTRIBUTED_SHORT_PARAPHRASE_AND_SOURCE_PROVENANCE_ONLY",
+      "publisherPageArchived": false,
+      "publisherFileHashUnavailableReason": "DIRECT_HTTP_FETCH_UNAVAILABLE; reviewed with browser retrieval"
+    },
+    {
+      "url": "https://extension.umn.edu/agriculture/crop-production/corn/gray-leaf-spot-on-corn",
+      "provenanceSha256": "638d6eeed2a49966e3108c56f2e4cb686f886a196d508b01ccddef1e010b62ec",
+      "publisherFileSha256": null,
+      "retention": "ATTRIBUTED_SHORT_PARAPHRASE_AND_SOURCE_PROVENANCE_ONLY",
+      "publisherPageArchived": false,
+      "publisherFileHashUnavailableReason": "DIRECT_HTTP_FETCH_UNAVAILABLE; reviewed with browser retrieval"
+    },
+    {
+      "url": "https://extension.umn.edu/agriculture/crop-production/corn/northern-corn-leaf-blight",
+      "provenanceSha256": "ed47e7f311b091e1487a40b521c5c7fac74e81f5cd82a09c59267e7097c7dcff",
+      "publisherFileSha256": null,
+      "retention": "ATTRIBUTED_SHORT_PARAPHRASE_AND_SOURCE_PROVENANCE_ONLY",
+      "publisherPageArchived": false,
+      "publisherFileHashUnavailableReason": "DIRECT_HTTP_FETCH_UNAVAILABLE; reviewed with browser retrieval"
+    },
+    {
+      "url": "https://crops.extension.iastate.edu/encyclopedia/early-season-crop-scouting",
+      "provenanceSha256": "86e83d3ec51aba4aa85883a0e08072f1e97d93aef28ae778db460a5e695ca351",
+      "publisherFileSha256": null,
+      "retention": "ATTRIBUTED_SHORT_PARAPHRASE_AND_SOURCE_PROVENANCE_ONLY",
+      "publisherPageArchived": false,
+      "publisherFileHashUnavailableReason": "DIRECT_HTTP_FETCH_UNAVAILABLE; reviewed with browser retrieval"
+    }
+  ],
+  "documents": [
+    {
+      "documentKey": "maize-common-rust-overview",
+      "version": 1,
+      "contentSha256": "6bb1ae97eee0034a342c20319e1a585dc57bbd4a5e0292c616fc9afec770f3c6",
+      "sourceProvenanceSha256": "e7b668c288327bf5752f10cdfb62ce80fb45bed696fe77faf5258cb801a4acf7",
+      "reviewDecision": "INCLUDE_SHORT_ATTRIBUTED_PARAPHRASE"
+    },
+    {
+      "documentKey": "maize-common-rust-symptoms",
+      "version": 1,
+      "contentSha256": "597b6cb46e6c85fc635eec4a46b479963d31f70e5c866fd682ed0a57e6848a54",
+      "sourceProvenanceSha256": "e7b668c288327bf5752f10cdfb62ce80fb45bed696fe77faf5258cb801a4acf7",
+      "reviewDecision": "INCLUDE_SHORT_ATTRIBUTED_PARAPHRASE"
+    },
+    {
+      "documentKey": "maize-common-rust-causes",
+      "version": 1,
+      "contentSha256": "24ac9261d3c468e949ec32af39635537efa6875a94bb4332c3dcc5edca9961f0",
+      "sourceProvenanceSha256": "e7b668c288327bf5752f10cdfb62ce80fb45bed696fe77faf5258cb801a4acf7",
+      "reviewDecision": "INCLUDE_SHORT_ATTRIBUTED_PARAPHRASE"
+    },
+    {
+      "documentKey": "maize-common-rust-conditions",
+      "version": 1,
+      "contentSha256": "c968753e16aa33ab9decd0f41f96bdb3653eaeb27350899060b45d7528c0534d",
+      "sourceProvenanceSha256": "e7b668c288327bf5752f10cdfb62ce80fb45bed696fe77faf5258cb801a4acf7",
+      "reviewDecision": "INCLUDE_SHORT_ATTRIBUTED_PARAPHRASE"
+    },
+    {
+      "documentKey": "maize-common-rust-management",
+      "version": 1,
+      "contentSha256": "67270bcf34b307410f458b8e5b6e1cf07f120544cd53495c086760ece76a35c0",
+      "sourceProvenanceSha256": "e7b668c288327bf5752f10cdfb62ce80fb45bed696fe77faf5258cb801a4acf7",
+      "reviewDecision": "INCLUDE_SHORT_ATTRIBUTED_PARAPHRASE"
+    },
+    {
+      "documentKey": "maize-common-rust-prevention",
+      "version": 1,
+      "contentSha256": "74997e7e3180bc7c0b89b5f0556bd1313ae3a1b95afad6b5d2470905ff3b63ec",
+      "sourceProvenanceSha256": "e7b668c288327bf5752f10cdfb62ce80fb45bed696fe77faf5258cb801a4acf7",
+      "reviewDecision": "INCLUDE_SHORT_ATTRIBUTED_PARAPHRASE"
+    },
+    {
+      "documentKey": "maize-common-rust-references",
+      "version": 1,
+      "contentSha256": "4c78e656f94f3610348d5966bcec31d8472d4c8f98062a15e65764a932216929",
+      "sourceProvenanceSha256": "e7b668c288327bf5752f10cdfb62ce80fb45bed696fe77faf5258cb801a4acf7",
+      "reviewDecision": "INCLUDE_SHORT_ATTRIBUTED_PARAPHRASE"
+    },
+    {
+      "documentKey": "maize-gray-leaf-spot-overview",
+      "version": 1,
+      "contentSha256": "5370ea468118da81862b0eaaca38a1dffd1ec26588cf472b70cca4ff89c72e2a",
+      "sourceProvenanceSha256": "638d6eeed2a49966e3108c56f2e4cb686f886a196d508b01ccddef1e010b62ec",
+      "reviewDecision": "INCLUDE_SHORT_ATTRIBUTED_PARAPHRASE"
+    },
+    {
+      "documentKey": "maize-gray-leaf-spot-symptoms",
+      "version": 1,
+      "contentSha256": "97dcbfd5bae743e9346e1d9066891f38303165fdd1a18ad3e28680d487d1b884",
+      "sourceProvenanceSha256": "638d6eeed2a49966e3108c56f2e4cb686f886a196d508b01ccddef1e010b62ec",
+      "reviewDecision": "INCLUDE_SHORT_ATTRIBUTED_PARAPHRASE"
+    },
+    {
+      "documentKey": "maize-gray-leaf-spot-causes",
+      "version": 1,
+      "contentSha256": "91fa0533a0529d414d588a1bae92fbdfe86ad1fafb26372cf0ddda7c65cb640e",
+      "sourceProvenanceSha256": "638d6eeed2a49966e3108c56f2e4cb686f886a196d508b01ccddef1e010b62ec",
+      "reviewDecision": "INCLUDE_SHORT_ATTRIBUTED_PARAPHRASE"
+    },
+    {
+      "documentKey": "maize-gray-leaf-spot-conditions",
+      "version": 1,
+      "contentSha256": "f23646c681741240f5bdee84efd5672c77429065f27ef75c187d57fffd206082",
+      "sourceProvenanceSha256": "638d6eeed2a49966e3108c56f2e4cb686f886a196d508b01ccddef1e010b62ec",
+      "reviewDecision": "INCLUDE_SHORT_ATTRIBUTED_PARAPHRASE"
+    },
+    {
+      "documentKey": "maize-gray-leaf-spot-management",
+      "version": 1,
+      "contentSha256": "513ca0f8f9daf51a8c7dd332f330545cadbc78bc8640f1389178261efb980559",
+      "sourceProvenanceSha256": "638d6eeed2a49966e3108c56f2e4cb686f886a196d508b01ccddef1e010b62ec",
+      "reviewDecision": "INCLUDE_SHORT_ATTRIBUTED_PARAPHRASE"
+    },
+    {
+      "documentKey": "maize-gray-leaf-spot-prevention",
+      "version": 1,
+      "contentSha256": "58cb7b2b10543259756828079534047ecbda48daa0fa488486aab3317ef5988d",
+      "sourceProvenanceSha256": "638d6eeed2a49966e3108c56f2e4cb686f886a196d508b01ccddef1e010b62ec",
+      "reviewDecision": "INCLUDE_SHORT_ATTRIBUTED_PARAPHRASE"
+    },
+    {
+      "documentKey": "maize-gray-leaf-spot-references",
+      "version": 1,
+      "contentSha256": "321ff769bb4bac4c92fc6abe694b8b943eb2deacf6d46a395f1d0b45050bfe73",
+      "sourceProvenanceSha256": "638d6eeed2a49966e3108c56f2e4cb686f886a196d508b01ccddef1e010b62ec",
+      "reviewDecision": "INCLUDE_SHORT_ATTRIBUTED_PARAPHRASE"
+    },
+    {
+      "documentKey": "maize-northern-corn-leaf-blight-overview",
+      "version": 1,
+      "contentSha256": "c5bebf0a50b45a78dc9001b66a96133818f180af4362fe3fd8df20d008b2f3ef",
+      "sourceProvenanceSha256": "ed47e7f311b091e1487a40b521c5c7fac74e81f5cd82a09c59267e7097c7dcff",
+      "reviewDecision": "INCLUDE_SHORT_ATTRIBUTED_PARAPHRASE"
+    },
+    {
+      "documentKey": "maize-northern-corn-leaf-blight-symptoms",
+      "version": 1,
+      "contentSha256": "14399f26bbf4614208ae0cd292616166be3701c3962e610e898394cfa968ad7c",
+      "sourceProvenanceSha256": "ed47e7f311b091e1487a40b521c5c7fac74e81f5cd82a09c59267e7097c7dcff",
+      "reviewDecision": "INCLUDE_SHORT_ATTRIBUTED_PARAPHRASE"
+    },
+    {
+      "documentKey": "maize-northern-corn-leaf-blight-causes",
+      "version": 1,
+      "contentSha256": "b6572d8ce009f5155b0681b4cece97f6e1fde2f0cfcce2819509dc18de7c40c2",
+      "sourceProvenanceSha256": "ed47e7f311b091e1487a40b521c5c7fac74e81f5cd82a09c59267e7097c7dcff",
+      "reviewDecision": "INCLUDE_SHORT_ATTRIBUTED_PARAPHRASE"
+    },
+    {
+      "documentKey": "maize-northern-corn-leaf-blight-conditions",
+      "version": 1,
+      "contentSha256": "82e2dca2058e5471889ce42c65661486883d3e42aa8db3e368356bde0bb29378",
+      "sourceProvenanceSha256": "ed47e7f311b091e1487a40b521c5c7fac74e81f5cd82a09c59267e7097c7dcff",
+      "reviewDecision": "INCLUDE_SHORT_ATTRIBUTED_PARAPHRASE"
+    },
+    {
+      "documentKey": "maize-northern-corn-leaf-blight-management",
+      "version": 1,
+      "contentSha256": "578000886642c9834b1c5a5e71ab65363ac36d9624ca33ec3b8c1daf0120d37c",
+      "sourceProvenanceSha256": "ed47e7f311b091e1487a40b521c5c7fac74e81f5cd82a09c59267e7097c7dcff",
+      "reviewDecision": "INCLUDE_SHORT_ATTRIBUTED_PARAPHRASE"
+    },
+    {
+      "documentKey": "maize-northern-corn-leaf-blight-prevention",
+      "version": 1,
+      "contentSha256": "35ff9e7c40919bfd004a79dadbd4a5a68af2383d9004bfb004053211a6c71954",
+      "sourceProvenanceSha256": "ed47e7f311b091e1487a40b521c5c7fac74e81f5cd82a09c59267e7097c7dcff",
+      "reviewDecision": "INCLUDE_SHORT_ATTRIBUTED_PARAPHRASE"
+    },
+    {
+      "documentKey": "maize-northern-corn-leaf-blight-references",
+      "version": 1,
+      "contentSha256": "7baeb50759149de85ce9fa8f079ab2ef6829aaf37fc964d0d9ba1db9b64decc5",
+      "sourceProvenanceSha256": "ed47e7f311b091e1487a40b521c5c7fac74e81f5cd82a09c59267e7097c7dcff",
+      "reviewDecision": "INCLUDE_SHORT_ATTRIBUTED_PARAPHRASE"
+    },
+    {
+      "documentKey": "maize-healthy-overview",
+      "version": 1,
+      "contentSha256": "e1fd55f647dbb0f1f63131521178ad07961abdf1662e8e6229eda07fb6c5ae05",
+      "sourceProvenanceSha256": "86e83d3ec51aba4aa85883a0e08072f1e97d93aef28ae778db460a5e695ca351",
+      "reviewDecision": "INCLUDE_SHORT_ATTRIBUTED_PARAPHRASE"
+    },
+    {
+      "documentKey": "maize-healthy-symptoms",
+      "version": 1,
+      "contentSha256": "7cba94f3110a708e918f4f5074dfdbc7cc71386cd22e53f665280f177a7dfd61",
+      "sourceProvenanceSha256": "86e83d3ec51aba4aa85883a0e08072f1e97d93aef28ae778db460a5e695ca351",
+      "reviewDecision": "INCLUDE_SHORT_ATTRIBUTED_PARAPHRASE"
+    },
+    {
+      "documentKey": "maize-healthy-prevention",
+      "version": 1,
+      "contentSha256": "e3d20608f6b8babeb4bfe7a91a571e602ce0806c2ccdeb9deb4a3d0a76ebea8a",
+      "sourceProvenanceSha256": "86e83d3ec51aba4aa85883a0e08072f1e97d93aef28ae778db460a5e695ca351",
+      "reviewDecision": "INCLUDE_SHORT_ATTRIBUTED_PARAPHRASE"
+    },
+    {
+      "documentKey": "maize-healthy-references",
+      "version": 1,
+      "contentSha256": "3ffbe69682d48f1b7c8335549f4f88928eaa007123f40ab91b626f0856300713",
+      "sourceProvenanceSha256": "86e83d3ec51aba4aa85883a0e08072f1e97d93aef28ae778db460a5e695ca351",
+      "reviewDecision": "INCLUDE_SHORT_ATTRIBUTED_PARAPHRASE"
+    }
+  ],
+  "unavailableSections": [
+    {
+      "diseaseLabel": "Healthy",
+      "knowledgeType": "CAUSES",
+      "reasonCode": "NOT_A_DISEASE_NO_REVIEWED_TOPIC_EVIDENCE"
+    },
+    {
+      "diseaseLabel": "Healthy",
+      "knowledgeType": "CONDITIONS",
+      "reasonCode": "NOT_A_DISEASE_NO_REVIEWED_TOPIC_EVIDENCE"
+    },
+    {
+      "diseaseLabel": "Healthy",
+      "knowledgeType": "MANAGEMENT",
+      "reasonCode": "NOT_A_DISEASE_NO_REVIEWED_TOPIC_EVIDENCE"
+    }
+  ],
+  "changePolicy": "Immutable version payload; amendments require a new corpus/document version and review ledger."
+}

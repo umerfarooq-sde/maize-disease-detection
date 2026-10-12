@@ -1,0 +1,435 @@
+{
+  "evaluationVersion": "rag-curated-relevance-v1",
+  "corpusVersion": "maize-extension-20261012-v1",
+  "retrievalIdentity": "9557269af3887ae36c970c53edf7eb6d7bf1d0408e48b589222abb939828aedc",
+  "embeddingModel": "gemini-embedding-001",
+  "embeddingVersion": "google-task-v1-20261012",
+  "dimensions": 768,
+  "totals": {
+    "filtered": {
+      "hits": 16,
+      "positiveCases": 16,
+      "emptyPasses": 3,
+      "emptyCases": 3
+    },
+    "semanticUnfiltered": {
+      "hits": 16,
+      "positiveCases": 16
+    }
+  },
+  "meanDurationMs": 3899.32,
+  "cases": [
+    {
+      "id": "rust-overview",
+      "mode": "filtered",
+      "retrievedKeys": [
+        "maize-common-rust-overview"
+      ],
+      "hitAt3": true,
+      "expectedEmpty": false,
+      "empty": false,
+      "durationMs": 4290.88
+    },
+    {
+      "id": "rust-overview",
+      "mode": "semanticUnfiltered",
+      "retrievedKeys": [
+        "maize-common-rust-overview",
+        "maize-common-rust-causes",
+        "maize-common-rust-management"
+      ],
+      "hitAt3": true,
+      "expectedEmpty": false,
+      "empty": false,
+      "durationMs": 3788.13
+    },
+    {
+      "id": "rust-symptoms",
+      "mode": "filtered",
+      "retrievedKeys": [
+        "maize-common-rust-symptoms"
+      ],
+      "hitAt3": true,
+      "expectedEmpty": false,
+      "empty": false,
+      "durationMs": 3441.8
+    },
+    {
+      "id": "rust-symptoms",
+      "mode": "semanticUnfiltered",
+      "retrievedKeys": [
+        "maize-common-rust-symptoms",
+        "maize-common-rust-overview",
+        "maize-common-rust-causes"
+      ],
+      "hitAt3": true,
+      "expectedEmpty": false,
+      "empty": false,
+      "durationMs": 3600.88
+    },
+    {
+      "id": "rust-cause",
+      "mode": "filtered",
+      "retrievedKeys": [
+        "maize-common-rust-causes"
+      ],
+      "hitAt3": true,
+      "expectedEmpty": false,
+      "empty": false,
+      "durationMs": 3535.15
+    },
+    {
+      "id": "rust-cause",
+      "mode": "semanticUnfiltered",
+      "retrievedKeys": [
+        "maize-common-rust-causes",
+        "maize-common-rust-overview",
+        "maize-common-rust-conditions"
+      ],
+      "hitAt3": true,
+      "expectedEmpty": false,
+      "empty": false,
+      "durationMs": 3522.4
+    },
+    {
+      "id": "rust-weather",
+      "mode": "filtered",
+      "retrievedKeys": [
+        "maize-common-rust-conditions"
+      ],
+      "hitAt3": true,
+      "expectedEmpty": false,
+      "empty": false,
+      "durationMs": 3395.02
+    },
+    {
+      "id": "rust-weather",
+      "mode": "semanticUnfiltered",
+      "retrievedKeys": [
+        "maize-common-rust-conditions",
+        "maize-common-rust-causes",
+        "maize-common-rust-overview"
+      ],
+      "hitAt3": true,
+      "expectedEmpty": false,
+      "empty": false,
+      "durationMs": 3397.62
+    },
+    {
+      "id": "gray-symptoms",
+      "mode": "filtered",
+      "retrievedKeys": [
+        "maize-gray-leaf-spot-symptoms"
+      ],
+      "hitAt3": true,
+      "expectedEmpty": false,
+      "empty": false,
+      "durationMs": 5508.35
+    },
+    {
+      "id": "gray-symptoms",
+      "mode": "semanticUnfiltered",
+      "retrievedKeys": [
+        "maize-gray-leaf-spot-symptoms",
+        "maize-northern-corn-leaf-blight-symptoms",
+        "maize-gray-leaf-spot-overview"
+      ],
+      "hitAt3": true,
+      "expectedEmpty": false,
+      "empty": false,
+      "durationMs": 4285.56
+    },
+    {
+      "id": "gray-cause",
+      "mode": "filtered",
+      "retrievedKeys": [
+        "maize-gray-leaf-spot-causes"
+      ],
+      "hitAt3": true,
+      "expectedEmpty": false,
+      "empty": false,
+      "durationMs": 3252.49
+    },
+    {
+      "id": "gray-cause",
+      "mode": "semanticUnfiltered",
+      "retrievedKeys": [
+        "maize-gray-leaf-spot-causes",
+        "maize-gray-leaf-spot-prevention",
+        "maize-gray-leaf-spot-overview"
+      ],
+      "hitAt3": true,
+      "expectedEmpty": false,
+      "empty": false,
+      "durationMs": 3918.21
+    },
+    {
+      "id": "gray-management",
+      "mode": "filtered",
+      "retrievedKeys": [
+        "maize-gray-leaf-spot-management"
+      ],
+      "hitAt3": true,
+      "expectedEmpty": false,
+      "empty": false,
+      "durationMs": 3388.96
+    },
+    {
+      "id": "gray-management",
+      "mode": "semanticUnfiltered",
+      "retrievedKeys": [
+        "maize-gray-leaf-spot-management",
+        "maize-gray-leaf-spot-prevention",
+        "maize-gray-leaf-spot-references"
+      ],
+      "hitAt3": true,
+      "expectedEmpty": false,
+      "empty": false,
+      "durationMs": 3633.66
+    },
+    {
+      "id": "gray-prevention",
+      "mode": "filtered",
+      "retrievedKeys": [
+        "maize-gray-leaf-spot-prevention"
+      ],
+      "hitAt3": true,
+      "expectedEmpty": false,
+      "empty": false,
+      "durationMs": 3611.15
+    },
+    {
+      "id": "gray-prevention",
+      "mode": "semanticUnfiltered",
+      "retrievedKeys": [
+        "maize-gray-leaf-spot-prevention",
+        "maize-gray-leaf-spot-management",
+        "maize-gray-leaf-spot-conditions"
+      ],
+      "hitAt3": true,
+      "expectedEmpty": false,
+      "empty": false,
+      "durationMs": 3508.91
+    },
+    {
+      "id": "northern-overview",
+      "mode": "filtered",
+      "retrievedKeys": [
+        "maize-northern-corn-leaf-blight-overview"
+      ],
+      "hitAt3": true,
+      "expectedEmpty": false,
+      "empty": false,
+      "durationMs": 3765.91
+    },
+    {
+      "id": "northern-overview",
+      "mode": "semanticUnfiltered",
+      "retrievedKeys": [
+        "maize-northern-corn-leaf-blight-overview",
+        "maize-northern-corn-leaf-blight-conditions",
+        "maize-northern-corn-leaf-blight-symptoms"
+      ],
+      "hitAt3": true,
+      "expectedEmpty": false,
+      "empty": false,
+      "durationMs": 4072.09
+    },
+    {
+      "id": "northern-symptoms",
+      "mode": "filtered",
+      "retrievedKeys": [
+        "maize-northern-corn-leaf-blight-symptoms"
+      ],
+      "hitAt3": true,
+      "expectedEmpty": false,
+      "empty": false,
+      "durationMs": 4111.57
+    },
+    {
+      "id": "northern-symptoms",
+      "mode": "semanticUnfiltered",
+      "retrievedKeys": [
+        "maize-northern-corn-leaf-blight-symptoms",
+        "maize-northern-corn-leaf-blight-overview",
+        "maize-northern-corn-leaf-blight-references"
+      ],
+      "hitAt3": true,
+      "expectedEmpty": false,
+      "empty": false,
+      "durationMs": 4073.12
+    },
+    {
+      "id": "northern-weather",
+      "mode": "filtered",
+      "retrievedKeys": [
+        "maize-northern-corn-leaf-blight-conditions"
+      ],
+      "hitAt3": true,
+      "expectedEmpty": false,
+      "empty": false,
+      "durationMs": 3927.73
+    },
+    {
+      "id": "northern-weather",
+      "mode": "semanticUnfiltered",
+      "retrievedKeys": [
+        "maize-northern-corn-leaf-blight-conditions",
+        "maize-northern-corn-leaf-blight-overview",
+        "maize-gray-leaf-spot-conditions"
+      ],
+      "hitAt3": true,
+      "expectedEmpty": false,
+      "empty": false,
+      "durationMs": 3993.99
+    },
+    {
+      "id": "northern-management",
+      "mode": "filtered",
+      "retrievedKeys": [
+        "maize-northern-corn-leaf-blight-management"
+      ],
+      "hitAt3": true,
+      "expectedEmpty": false,
+      "empty": false,
+      "durationMs": 3973.8
+    },
+    {
+      "id": "northern-management",
+      "mode": "semanticUnfiltered",
+      "retrievedKeys": [
+        "maize-northern-corn-leaf-blight-references",
+        "maize-northern-corn-leaf-blight-management",
+        "maize-northern-corn-leaf-blight-prevention"
+      ],
+      "hitAt3": true,
+      "expectedEmpty": false,
+      "empty": false,
+      "durationMs": 3950.54
+    },
+    {
+      "id": "healthy-overview",
+      "mode": "filtered",
+      "retrievedKeys": [
+        "maize-healthy-overview"
+      ],
+      "hitAt3": true,
+      "expectedEmpty": false,
+      "empty": false,
+      "durationMs": 3907.59
+    },
+    {
+      "id": "healthy-overview",
+      "mode": "semanticUnfiltered",
+      "retrievedKeys": [
+        "maize-healthy-symptoms",
+        "maize-healthy-overview",
+        "maize-healthy-references"
+      ],
+      "hitAt3": true,
+      "expectedEmpty": false,
+      "empty": false,
+      "durationMs": 3842.35
+    },
+    {
+      "id": "healthy-scouting-signs",
+      "mode": "filtered",
+      "retrievedKeys": [
+        "maize-healthy-symptoms"
+      ],
+      "hitAt3": true,
+      "expectedEmpty": false,
+      "empty": false,
+      "durationMs": 3998.99
+    },
+    {
+      "id": "healthy-scouting-signs",
+      "mode": "semanticUnfiltered",
+      "retrievedKeys": [
+        "maize-healthy-symptoms",
+        "maize-healthy-prevention",
+        "maize-healthy-references"
+      ],
+      "hitAt3": true,
+      "expectedEmpty": false,
+      "empty": false,
+      "durationMs": 3842.62
+    },
+    {
+      "id": "healthy-scouting-context",
+      "mode": "filtered",
+      "retrievedKeys": [
+        "maize-healthy-prevention"
+      ],
+      "hitAt3": true,
+      "expectedEmpty": false,
+      "empty": false,
+      "durationMs": 4238.4
+    },
+    {
+      "id": "healthy-scouting-context",
+      "mode": "semanticUnfiltered",
+      "retrievedKeys": [
+        "maize-healthy-prevention",
+        "maize-healthy-references",
+        "maize-healthy-symptoms"
+      ],
+      "hitAt3": true,
+      "expectedEmpty": false,
+      "empty": false,
+      "durationMs": 3919.05
+    },
+    {
+      "id": "healthy-references",
+      "mode": "filtered",
+      "retrievedKeys": [
+        "maize-healthy-references"
+      ],
+      "hitAt3": true,
+      "expectedEmpty": false,
+      "empty": false,
+      "durationMs": 3927.71
+    },
+    {
+      "id": "healthy-references",
+      "mode": "semanticUnfiltered",
+      "retrievedKeys": [
+        "maize-healthy-references",
+        "maize-healthy-overview",
+        "maize-healthy-symptoms"
+      ],
+      "hitAt3": true,
+      "expectedEmpty": false,
+      "empty": false,
+      "durationMs": 4054.5
+    },
+    {
+      "id": "healthy-no-pathogen",
+      "mode": "filtered",
+      "retrievedKeys": [],
+      "hitAt3": false,
+      "expectedEmpty": true,
+      "empty": true,
+      "durationMs": 4414.55
+    },
+    {
+      "id": "healthy-no-conditions",
+      "mode": "filtered",
+      "retrievedKeys": [],
+      "hitAt3": false,
+      "expectedEmpty": true,
+      "empty": true,
+      "durationMs": 4159.13
+    },
+    {
+      "id": "healthy-no-treatment",
+      "mode": "filtered",
+      "retrievedKeys": [],
+      "hitAt3": false,
+      "expectedEmpty": true,
+      "empty": true,
+      "durationMs": 4223.39
+    }
+  ],
+  "limitations": "Small curated development queries; filtered hits are not independent semantic validation. No generation/field validation or calibrated relevance cutoff."
+}

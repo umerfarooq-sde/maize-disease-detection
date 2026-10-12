@@ -7,6 +7,8 @@
       "tests/auth/**",
       "tests/scans/**",
       "tests/inference/**",
+      "tests/knowledge/**",
+      "tests/knowledge.live.integration.ts",
       "tests/scans.inference.integration.ts",
       "tests/scans.inference.live.integration.ts",
       "tests/scans.database.integration.ts",

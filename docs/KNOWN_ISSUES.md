@@ -1,6 +1,16 @@
 # Known issues
 
-Updated: 2026-10-10 (Asia/Karachi), Phase 13 farmer detection/history.
+Updated: 2026-10-12 (Asia/Karachi), Phase 14 sourced knowledge/retrieval.
+
+Phase 14 retrieval is implemented and verified; generation remains deferred.
+The initial 25-document corpus is small and U.S. regional, with Minnesota sources
+reviewed in 2018. Local agronomic/source-freshness review and larger independent,
+out-of-domain retrieval evaluation are required. The current score is cosine ranking,
+not calibrated evidence confidence; candidates alone do not authorize generated advice.
+Development reuses existing PostgreSQL credentials; production retrieval/ingestion
+need separate least-privilege roles and operational/shared rate limits. Provider/DB
+network latency averages about 3.9 seconds in the small local retrieval evaluation.
+Read [knowledge/retrieval](30-knowledge-retrieval.md) for evidence and exact contracts.
 
 Phase 11 internal classifier serving is complete: approved-artifact startup/readiness,
 authenticated prediction/model health, exact shared full-frame preprocessing and
@@ -72,7 +82,7 @@ replacement remains a future requirement; research approval is not commercial cl
 |---|---|---|
 | Admission alignment resolved in Phase 12 | Node now rejects tiny/trailing/malformed containers, invalid EXIF orientation and multi-frame APNG declarations; 56 shared synthetic cases agree (21 accepted/35 rejected). | FastAPI remains authoritative for codec/profile/preprocessing failures; persist safe FAILED outcomes and preserve the accepted scan/image. Target deployment codec parity still needs verification. |
 | Persistent native sessions remain deferred | Phase 13 now supports native farmer login/logout, a restricted in-memory refresh cookie, serialized renewal and stale-session fencing. Restart requires login; offline logout cannot confirm remote revocation. | Persistent sign-in requires platform secure storage. Native Android is the current target; browser HttpOnly cookie handling and additional platforms need separate checks. |
-| Node/FastAPI integration resolved in Phase 12 | Dedicated server byte client, strict output checks, version-bound transactions, owned reads and safe retries/recovery are implemented. | Phase 13 verifies real Flutter farmer results/history and native sessions. Deployment policy and RAG remain later work. See [farmer experience](29-farmer-detection-history.md). |
+| Node/FastAPI integration resolved in Phase 12 | Dedicated server byte client, strict output checks, version-bound transactions, owned reads and safe retries/recovery are implemented. | Phase 13 verifies real Flutter farmer results/history and native sessions; Phase 14 adds retrieval. Deployment policy and generation remain later work. See [farmer experience](29-farmer-detection-history.md). |
 | Four high npm advisory entries remain | The Phase 0–9 full and omit-dev audits reported `deepmerge-ts` 7.1.5 and `mysql2` 3.15.3, plus propagated `@prisma/config`/`prisma` 7.10.0 entries. PostgreSQL application paths do not use MySQL or recursively merge client object graphs. | Track a compatible remediation for Prisma's dependency/optional-peer graph. Do not apply npm's suggested Prisma 6 downgrade or an unverified transitive override. |
 | Python patch baseline is old | Both environments run Python 3.11.0 and pass the configured `>=3.11,<3.12` constraints/tests. Installed PyTorch is CPU-only. | Provision a maintained compatible 3.11 patch for a new/production environment and revalidate parity. GPU/CUDA is an explicit later environment choice, not a required local-training credential. |
 
@@ -133,10 +143,11 @@ No manual labels, split manifests, provenance files, augmentation inventory or i
 plant metadata are requested. The user approved the exclusion/use/preprocessing decisions
 and explicitly authorized Phase 10. No further approval is needed for its implementation.
 
-Model/artifact compatibility is verified in Phase 11. Later phases require native mobile
-authentication, production deployment/privacy, reviewed agricultural knowledge,
-embeddings and Gemini. Gemini credentials, embedding services and production hosting
-are **not required now**. No unresolved choice is recorded as an architectural decision.
+Model/artifact compatibility is verified in Phase 11, native farmer sessions in Phase 13,
+and sourced knowledge/Google embeddings in Phase 14. Provider credentials are required
+server-side when retrieval is enabled, and are unnecessary for isolated tests/disabled
+retrieval. Generation and production deployment/privacy remain future work; unresolved
+deployment/relevance-policy choices remain pending rather than implied approval.
 
 ## Historical Phase 0–9 verified baseline
 

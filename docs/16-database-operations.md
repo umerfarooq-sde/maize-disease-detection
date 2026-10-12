@@ -11,7 +11,10 @@ Phase 4 adds [authentication](18-authentication.md), one session table and a fou
 additive migration. Runtime authentication and health reuse the same Prisma client.
 Phase 7 adds a fifth atomic migration, upload journal and scan upload timestamp.
 Phase 12 adds a sixth atomic migration for inference attempt fencing and validated
-prediction outcome metadata. The complete schema has 21 tables, 23 checks and 37 custom triggers. Upload
+prediction outcome metadata. Phase 14 adds a seventh atomic migration for knowledge
+topic/provenance metadata and immutable READY embedding versions, then an eighth
+correction for the READY guard under restricted schema search paths. The complete schema
+has 21 tables, 26 checks and 38 custom triggers. Upload
 repositories also reuse the shared client. Run `scans:cleanup` periodically as
 described in [upload operations](20-scan-uploads.md); completed scans are preserved.
 Generated client source is ignored and must be regenerated after install/schema changes.

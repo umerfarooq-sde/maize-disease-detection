@@ -9,6 +9,9 @@ dependencies = [
     "uvicorn>=0.47.0,<1",
     "pydantic>=2.13,<3",
     "pydantic-settings>=2.12,<3",
+    "httpx>=0.28.1,<1",
+    "certifi>=2026,<2027",
+    "psycopg[binary]>=3.3,<4",
     "numpy>=2.4.2,<3",
     "opencv-python==4.13.0.92; sys_platform == 'win32'",
     "opencv-python-headless==4.13.0.92; sys_platform != 'win32'",
@@ -18,7 +21,7 @@ dependencies = [
 ]
 
 [dependency-groups]
-dev = ["httpx>=0.28.1,<1", "pytest>=8.4,<10", "ruff>=0.15,<1", "mypy>=1.19,<2"]
+dev = ["pytest>=8.4,<10", "ruff>=0.15,<1", "mypy>=1.19,<2"]
 
 [tool.uv]
 package = false

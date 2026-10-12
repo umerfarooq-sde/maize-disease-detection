@@ -38,7 +38,7 @@ def test_health_reports_running_foundation_without_provider_details(client: Test
     assert payload["data"]["capabilities"] == {
         "preprocessing": "library_available",
         "inference": "unavailable",
-        "rag": "not_implemented",
+        "rag": "unavailable",
         "generation": "not_implemented",
     }
     assert payload["data"]["model"] == {"status": "not_loaded", "version": None}
@@ -161,7 +161,12 @@ def test_production_disables_interactive_docs_but_keeps_health() -> None:
 def test_development_openapi_describes_health_without_private_config(client: TestClient) -> None:
     response = client.get("/openapi.json")
     assert response.status_code == 200
-    assert set(response.json()["paths"]) == {"/health", "/api/v1/predict", "/api/v1/model-health"}
+    assert set(response.json()["paths"]) == {
+        "/health",
+        "/api/v1/predict",
+        "/api/v1/model-health",
+        "/api/v1/retrieve",
+    }
     contracts = response.json()["paths"]["/health"]["get"]["responses"]
     for status in ("422", "500"):
         assert contracts[status]["content"]["application/json"]["schema"] == {

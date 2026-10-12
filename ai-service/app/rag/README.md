@@ -1,6 +1,8 @@
 # Retrieval and generation boundary
 
-Retrieval and Gemini integration are not implemented. Future retrieval must use
-reviewed agricultural documents and versioned embeddings, preserve sources and
-explicitly report insufficient evidence. Gemini may explain retrieved facts or
-deterministic calculator results; it must not invent facts or critical arithmetic.
+Phase 14 implements deterministic chunking, Google text embeddings, immutable
+PostgreSQL/pgvector publication, filtered exact cosine retrieval and evaluation.
+The controlled CLI verifies a local reviewed corpus/ledger before ingestion.
+The internal API returns evidence candidates with original sources and versions.
+No answer generation or numerical calculation occurs here. See
+[the contracts and operations guide](../../../docs/30-knowledge-retrieval.md).

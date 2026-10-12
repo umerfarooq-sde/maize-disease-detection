@@ -1,5 +1,12 @@
 # Backend
 
+Phase 14 completes the missing disease-knowledge read foundation and adds
+`GET /api/v1/diseases`, `GET /api/v1/diseases/:slug` and
+`POST /api/v1/knowledge/search`. The latter orchestrates authenticated FastAPI
+retrieval without embedding or generation logic in Node. See
+[knowledge/retrieval](../docs/30-knowledge-retrieval.md) for sources, versioning,
+configuration and checks. Controlled ingestion belongs to the Python operator CLI.
+
 Phase 13 adds FARMER-only `GET /api/v1/scans` with validated limit/UUID cursor,
 owner-scoped stable pagination and the existing safe scan projection. No database
 migration or ML orchestration change. See [farmer history](../docs/29-farmer-detection-history.md).

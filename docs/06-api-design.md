@@ -1,6 +1,6 @@
 # API Design
 
-> **Status:** Health, authentication, scan upload/inference/read and private farmer history are implemented through Phase 13. Other candidate business routes remain design guidance.
+> **Status:** Phase 14 adds active disease catalogue/detail and semantic knowledge search to the existing health/auth/scan/history routes. Read [knowledge contracts](30-knowledge-retrieval.md); other candidate business routes remain design guidance.
 
 ## Conventions
 
@@ -20,6 +20,8 @@
 | Read scan result | `GET /api/v1/scans/{scanId}` | Own FARMER scan, or anonymous scan with original private request key; ADMIN denied |
 | List farmer scan history | `GET /api/v1/scans` | Authenticated farmer, owner-scoped |
 | Read service health | `GET /api/v1/health` | Public or restricted details |
+| Read sourced diseases | `GET /api/v1/diseases`, `GET /api/v1/diseases/:slug` | Public, active sourced content only |
+| Retrieve knowledge evidence | `POST /api/v1/knowledge/search` | Public, bounded/rate-limited; Node invokes internal FastAPI |
 
 Health returns 200 when the database is reachable, 503 with a safe degraded
 report otherwise. See [backend foundation](17-backend-foundation.md) for its exact

@@ -33,9 +33,18 @@ class ErrorCode(StrEnum):
     INFERENCE_BUSY = "INFERENCE_BUSY"
     INFERENCE_FAILED = "INFERENCE_FAILED"
     REQUEST_TIMEOUT = "REQUEST_TIMEOUT"
+    EMBEDDING_UNAVAILABLE = "EMBEDDING_UNAVAILABLE"
+    EMBEDDING_INVALID_RESPONSE = "EMBEDDING_INVALID_RESPONSE"
+    RETRIEVAL_UNAVAILABLE = "RETRIEVAL_UNAVAILABLE"
 
 
 ERRORS: dict[ErrorCode, tuple[int, str]] = {
+    ErrorCode.EMBEDDING_UNAVAILABLE: (503, "The embedding provider is unavailable."),
+    ErrorCode.EMBEDDING_INVALID_RESPONSE: (
+        502,
+        "The embedding provider returned an invalid result.",
+    ),
+    ErrorCode.RETRIEVAL_UNAVAILABLE: (503, "Knowledge retrieval is unavailable."),
     ErrorCode.VALIDATION_ERROR: (422, "The request is invalid."),
     ErrorCode.AUTHENTICATION_ERROR: (401, "Valid service authentication is required."),
     ErrorCode.AUTHORIZATION_ERROR: (403, "This operation is not allowed."),

@@ -1,6 +1,6 @@
 # RAG Architecture
 
-> **Status:** Target knowledge-grounding design. Source corpus, embedding model, retrieval settings, and storage backend are open decisions.
+> **Status:** Phase 14 implements sourced knowledge, versioned deterministic chunking, configured Google embeddings and filtered PostgreSQL/pgvector retrieval. Answer generation remains target design. Read [knowledge/retrieval](30-knowledge-retrieval.md) for actual contracts, sources, configuration and evaluation.
 
 ## Grounding flow
 

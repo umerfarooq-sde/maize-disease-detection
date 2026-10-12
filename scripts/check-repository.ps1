@@ -190,6 +190,14 @@ $templateKeys = @{
     'mobile' = @('API_BASE_URL')
     'ml-training' = @('DATASET_PATH')
 }
+$templateKeys['backend'] += @('KNOWLEDGE_RATE_LIMIT_MAX')
+$guardMigration = 'backend/prisma/migrations/20261012010000_knowledge_embedding_guard_scope/migration.sql'
+if (-not (Test-Path -LiteralPath (Join-Path $repositoryRoot $guardMigration) -PathType Leaf)) { throw 'Missing knowledge embedding guard migration.' }
+$templateKeys['ai-service'] += @('RAG_ENABLED', 'EMBEDDING_MODEL', 'EMBEDDING_VERSION', 'EMBEDDING_DIMENSIONS', 'EMBEDDING_TIMEOUT_SECONDS', 'RAG_CHUNK_CHARS', 'RAG_CHUNK_OVERLAP', 'RAG_MAX_CONCURRENCY')
+$requiredKnowledgeFiles = @('docs/30-knowledge-retrieval.md', 'backend/prisma/migrations/20261012000000_knowledge_retrieval/migration.sql', 'backend/knowledge/maize-extension-20261012-v1.json', 'backend/knowledge/maize-extension-20261012-v1.review.json', 'backend/src/modules/knowledge/knowledge.routes.ts', 'ai-service/app/rag/service.py', 'ai-service/app/api/routes/retrieval.py', 'ai-service/evaluation/rag-v1.json')
+foreach ($file in $requiredKnowledgeFiles) {
+    if (-not (Test-Path -LiteralPath (Join-Path $repositoryRoot $file) -PathType Leaf)) { throw "Missing knowledge foundation file: $file" }
+}
 $blankKeys = @('DATABASE_URL', 'DIRECT_DATABASE_URL', 'JWT_SECRET', 'JWT_REFRESH_SECRET', 'CLOUDINARY_CLOUD_NAME', 'CLOUDINARY_API_KEY', 'CLOUDINARY_API_SECRET', 'GEMINI_API_KEY', 'AI_SERVICE_TOKEN', 'POSTGRES_USER', 'POSTGRES_PASSWORD', 'DATASET_PATH')
 foreach ($component in $templateKeys.Keys) {
     $seenKeys = @{}

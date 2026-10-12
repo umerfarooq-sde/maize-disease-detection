@@ -72,6 +72,16 @@ enum EmbeddingStatus {
   FAILED
 }
 
+enum KnowledgeType {
+  OVERVIEW
+  SYMPTOMS
+  CAUSES
+  CONDITIONS
+  MANAGEMENT
+  PREVENTION
+  REFERENCES
+}
+
 enum CalculatorKind {
   FERTILIZER
   YIELD
@@ -325,6 +335,8 @@ model KnowledgeDocument {
   content         String           @db.Text
   contentHash     String           @map("content_hash") @db.Char(64)
   sourceReference String           @map("source_reference") @db.Text
+  knowledgeType   KnowledgeType?   @map("knowledge_type")
+  metadata        Json             @default("{}") @db.JsonB
   topic           KnowledgeTopic
   language        String           @default("en") @db.VarChar(16)
   status          KnowledgeStatus  @default(DRAFT)
@@ -343,6 +355,7 @@ model KnowledgeDocument {
   @@index([diseaseId])
   @@index([fertilizerId])
   @@index([createdById])
+  @@index([diseaseId, status, knowledgeType])
   @@map("knowledge_documents")
 }
 
@@ -355,6 +368,8 @@ model KnowledgeChunk {
   tokenCount          Int?                   @map("token_count")
   embedding           Unsupported("vector")?
   embeddingModel      String?                @map("embedding_model") @db.VarChar(160)
+  embeddingVersion    String?                @map("embedding_version") @db.VarChar(160)
+  metadata            Json                   @default("{}") @db.JsonB
   embeddingDimensions Int?                   @map("embedding_dimensions")
   embeddingStatus     EmbeddingStatus        @default(PENDING) @map("embedding_status")
   createdAt           DateTime               @default(now()) @map("created_at") @db.Timestamptz(6)

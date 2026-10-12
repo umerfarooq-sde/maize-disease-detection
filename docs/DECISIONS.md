@@ -143,8 +143,21 @@ See [database design](05-database-design.md) and [project state](PROJECT_STATE.m
 | Route-scoped result/history state bound to identity revision | One shared result presentation, local private guest key and same-byte retry; remount on identity changes and ignore old route extras. No signed URLs/private keys in navigation URLs. Original-byte-free history details start a fresh scan rather than fetching/reuploading stored images. |
 | Display model score and explicit uncertainty | Preserve literal labels and current null threshold; even high scores remain uncertain. No advice, arbitrary cutoff, calibration, preprocessing or model changes. |
 
+## Phase 14 knowledge/retrieval decisions (2026-10-12)
+
+| Decision | Rationale and boundary |
+|---|---|
+| Complete the missing Phase 6 foundation within Phase 14 | Existing knowledge tables were empty and had no ingestion/read API. Add sourced catalogue/read APIs and only required topic/provenance/embedding-version columns; seventh additive migration plus an eighth correction for the READY guard under restricted search paths. No new tables or full admin UI. |
+| Intentionally curated university-extension summaries | Preserve four literal labels, original publisher/source/date/rights/region and content/review hashes. No automatic scraping, copied pages/images or generated facts. Healthy has scouting context only; unsupported topics remain absent. |
+| User-approved Google embeddings, explicit text-only model configuration | Select `gemini-embedding-001`, deployment version `google-task-v1-20261012`, 768 dimensions and L2 normalization. No hardcoded model fallback or Flutter secrets. Live verify explicit task/output fields; incompatible vectors fail closed. |
+| Python owns ingestion/embedding/pgvector retrieval; Node owns public read/orchestration | Prisma repositories serve the catalogue; typed authenticated fixed-origin Node client invokes internal retrieval. Python uses parameterized PostgreSQL for unsupported vector fields; this follows the existing AI ownership boundary. |
+| Immutable versions and atomic publication after provider work | Persist source/config/content/chunk lineage; unchanged re-ingestion skips network embeddings, changed same-version payload conflicts. Archive prior active versions without deleting historical chunks; READY vectors cannot be replaced. |
+| Deterministic character windows and exact cosine search | Explicit chunk size/overlap, canonical NFC/line endings, offset/hash identities. Actual initial corpus has 25 chunks; no premature ANN index. Filters require active English documents, active diseases and matching embedding/config identity. |
+| Retrieval returns evidence candidates with no calibrated cutoff | Small filtered and unfiltered development evaluations support basic relevance; they do not establish agronomic accuracy or out-of-domain rejection. Similarity is a ranking score, and no answer is generated in Phase 14. |
+
 Pending decisions:
-curated agricultural sources, full JSON validation contracts, retention and
+full business JSON validation contracts, retention and
 completed-scan retention/delivery/deletion, production least-privilege roles,
-production hosting/promotion and operational confidence policy, and embedding model/dimensions/distance/indexes. Address these
+production hosting/promotion and operational confidence policy, larger retrieval evaluation/relevance policy,
+source freshness/local agronomic review and future vector-index scaling. Address these
 only in a phase explicitly authorized by the user.

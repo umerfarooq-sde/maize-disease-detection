@@ -23,12 +23,12 @@ test('database catalog matches the committed relational and SQL invariants', asy
       SELECT count(*) FROM pg_constraint c JOIN pg_namespace n ON n.oid=c.connamespace
       WHERE n.nspname=${schema} AND c.contype='c'
     `;
-    assert.equal(checks[0]?.count, 23n);
+    assert.equal(checks[0]?.count, 26n);
     const triggers = await prisma.$queryRaw<{ count: bigint }[]>`
       SELECT count(*) FROM pg_trigger t JOIN pg_class c ON c.oid=t.tgrelid
       JOIN pg_namespace n ON n.oid=c.relnamespace WHERE n.nspname=${schema} AND NOT t.tgisinternal
     `;
-    assert.equal(triggers[0]?.count, 37n);
+    assert.equal(triggers[0]?.count, 38n);
     const indexes = await prisma.$queryRaw<{ indexname: string }[]>`
       SELECT indexname FROM pg_indexes WHERE schemaname=${schema} AND indexdef LIKE '% WHERE %'
     `;
@@ -208,13 +208,16 @@ test('Prisma round trips all 19 tables and PostgreSQL rejects invalid data; fixt
           await rejects("INSERT INTO knowledge_documents (document_key,version,title,content,content_hash,source_reference,topic,status) SELECT document_key,2,title,content,content_hash,source_reference,topic,'ACTIVE' FROM knowledge_documents WHERE id=$1", [document.id], '23505');
           await rejects("UPDATE knowledge_chunks SET embedding='[1,2,3]'::public.vector,embedding_model='synthetic',embedding_dimensions=2,embedding_status='READY' WHERE id=$1", [chunk.id]);
           await tx.$executeRaw`UPDATE knowledge_chunks SET embedding='[1,2,3]'::public.vector,
-            embedding_model='synthetic',embedding_dimensions=3,embedding_status='READY' WHERE id=${chunk.id}::uuid`;
+            embedding_model='synthetic',embedding_version='synthetic-v1',embedding_dimensions=3,embedding_status='READY' WHERE id=${chunk.id}::uuid`;
           const vectors = await tx.$queryRaw<{ dimensions: number; distance: number }[]>`
             SELECT public.vector_dims(embedding) AS dimensions, embedding OPERATOR(public.<->) '[1,2,3]'::public.vector AS distance
             FROM knowledge_chunks WHERE id=${chunk.id}::uuid
           `;
           assert.equal(vectors[0]?.dimensions, 3);
           assert.equal(vectors[0]?.distance, 0);
+          await rejects("UPDATE knowledge_chunks SET embedding='[3,2,1]'::public.vector WHERE id=$1", [chunk.id]);
+          await rejects("UPDATE knowledge_chunks SET metadata='[]'::jsonb WHERE id=$1", [chunk.id]);
+          await rejects("UPDATE knowledge_documents SET metadata='{}'::jsonb || jsonb_build_object('new','source') WHERE id=$1", [document.id]);
         });
         await t.test('fertilizer composition and versioned calculator/rule configurations are constrained', async () => {
           await rejects('UPDATE fertilizers SET nitrogen_percent=101 WHERE id=$1', [fertilizer.id]);

@@ -29,6 +29,16 @@ def isolated_settings_environment(monkeypatch: pytest.MonkeyPatch) -> None:
         "INFERENCE_UPLOAD_TIMEOUT_SECONDS",
         "CONFIDENCE_POLICY_PATH",
         "CONFIDENCE_POLICY_SHA256",
+        "RAG_ENABLED",
+        "DATABASE_URL",
+        "GEMINI_API_KEY",
+        "EMBEDDING_MODEL",
+        "EMBEDDING_VERSION",
+        "EMBEDDING_DIMENSIONS",
+        "EMBEDDING_TIMEOUT_SECONDS",
+        "RAG_CHUNK_CHARS",
+        "RAG_CHUNK_OVERLAP",
+        "RAG_MAX_CONCURRENCY",
     ):
         monkeypatch.delenv(name, raising=False)
 

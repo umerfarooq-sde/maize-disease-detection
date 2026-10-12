@@ -6,7 +6,10 @@ structure; [versioned SQL migrations](../backend/prisma/migrations/) additionall
 checks, partial indexes, and triggers. Read both when changing the database.
 Phase 4 adds the required auth session table and authentication API, documented in
 [authentication](18-authentication.md). Inference, retrieval, calculator and
-notification delivery remain future work.
+notification delivery remain future work in that historical scope. Phase 12 adds
+version-bound prediction outcomes; Phase 14 extends existing knowledge documents/chunks
+with topic, provenance/config metadata and embedding version. Source content and READY
+vectors are immutable. See [knowledge retrieval](30-knowledge-retrieval.md).
 Phase 7 adds the upload recovery journal and explicit scan upload timestamp; see
 [scan uploads](20-scan-uploads.md). No image bytes or predictions are created by upload.
 
