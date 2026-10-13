@@ -39,6 +39,14 @@ def isolated_settings_environment(monkeypatch: pytest.MonkeyPatch) -> None:
         "RAG_CHUNK_CHARS",
         "RAG_CHUNK_OVERLAP",
         "RAG_MAX_CONCURRENCY",
+        "GENERATION_ENABLED",
+        "GEMINI_MODEL",
+        "GENERATION_TIMEOUT_SECONDS",
+        "GENERATION_MAX_CONCURRENCY",
+        "GENERATION_CONTEXT_CHARS",
+        "GENERATION_MAX_CHUNKS",
+        "GENERATION_CORPUS_PATH",
+        "GENERATION_REVIEW_PATH",
     ):
         monkeypatch.delenv(name, raising=False)
 

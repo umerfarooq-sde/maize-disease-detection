@@ -1,6 +1,6 @@
 # AI Service Architecture
 
-> **Status:** Phase 14 adds sourced retrieval to the existing Phase 12 Node orchestration and Phase 11 classifier service. Generation and deployment remain future work. Read [knowledge/retrieval](30-knowledge-retrieval.md) for the PostgreSQL/Google embedding flow.
+> **Status:** Phase 15 adds bounded Gemini evidence selection and cited reviewed-corpus excerpts to Phase 14 retrieval, Phase 12 Node orchestration and the Phase 11 classifier. Read [grounded generation](31-grounded-generation.md) and [knowledge/retrieval](30-knowledge-retrieval.md) for implemented contracts. Flutter assistant UI and deployment remain later work.
 
 Both Python environments now install the same [shared preprocessing package](22-shared-preprocessing.md).
 Serving and training re-export identical functions and must pin the same configuration
@@ -38,7 +38,9 @@ Each stage should fail explicitly. Reject unsupported or corrupt images before i
 
 The current classifier flow ends with typed probabilities and uncertainty.
 Retrieval is independently available; classifier prediction does not invoke it automatically.
-Generation in this target diagram is deferred. No operational threshold is
+An explicit owner-checked scan explanation uses persisted classifier context and
+retrieved evidence without rerunning or changing inference. Gemini selects reviewed
+evidence IDs; the server renders verified excerpts and citations. No operational threshold is
 approved: current predictions report `LOW_CONFIDENCE/THRESHOLD_UNCONFIGURED`.
 
 ## Service interface

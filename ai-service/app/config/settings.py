@@ -86,6 +86,44 @@ class Settings(BaseSettings):
     rag_chunk_chars: int = Field(default=1000, ge=200, le=1500, validation_alias="RAG_CHUNK_CHARS")
     rag_chunk_overlap: int = Field(default=120, ge=0, le=300, validation_alias="RAG_CHUNK_OVERLAP")
     rag_max_concurrency: int = Field(default=4, ge=1, le=8, validation_alias="RAG_MAX_CONCURRENCY")
+    generation_enabled: bool = Field(default=False, validation_alias="GENERATION_ENABLED")
+    gemini_model: str = Field(default="", max_length=100, validation_alias="GEMINI_MODEL")
+    generation_timeout_seconds: float = Field(
+        default=12, ge=1, le=30, allow_inf_nan=False, validation_alias="GENERATION_TIMEOUT_SECONDS"
+    )
+    generation_max_concurrency: int = Field(
+        default=2, ge=1, le=4, validation_alias="GENERATION_MAX_CONCURRENCY"
+    )
+    generation_context_chars: int = Field(
+        default=6000, ge=1000, le=12000, validation_alias="GENERATION_CONTEXT_CHARS"
+    )
+    generation_max_chunks: int = Field(
+        default=8, ge=1, le=10, validation_alias="GENERATION_MAX_CHUNKS"
+    )
+    generation_corpus_path: Path | None = Field(
+        default=None, validation_alias="GENERATION_CORPUS_PATH", repr=False
+    )
+    generation_review_path: Path | None = Field(
+        default=None, validation_alias="GENERATION_REVIEW_PATH", repr=False
+    )
+
+    @field_validator("generation_corpus_path", "generation_review_path", mode="before")
+    @classmethod
+    def resolve_generation_path(cls, value: object) -> object:
+        return cls.resolve_artifact_path(value)
+
+    @model_validator(mode="after")
+    def require_generation_configuration(self) -> Self:
+        if self.generation_enabled:
+            if not self.rag_enabled or not self.gemini_api_key or not self.ai_service_token:
+                raise ValueError(
+                    "Generation requires authenticated retrieval and provider configuration"
+                )
+            if not re.fullmatch(r"[a-z0-9][a-z0-9._-]{1,99}", self.gemini_model):
+                raise ValueError("An explicit generation model is required")
+            if self.generation_corpus_path is None or self.generation_review_path is None:
+                raise ValueError("Generation requires the pinned reviewed corpus")
+        return self
 
     @model_validator(mode="after")
     def validate_retrieval_configuration(self) -> Self:

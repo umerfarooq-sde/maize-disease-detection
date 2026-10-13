@@ -1,10 +1,27 @@
 # Project state
 
-Updated: 2026-10-12 (Asia/Karachi).
+Updated: 2026-10-13 (Asia/Karachi).
 
 ## Current phase
 
-Phase 14 is complete and verified. The skipped Phase 6 foundation had empty
+Phase 15 is complete and verified. Node exposes grounded knowledge questions and
+ownership-protected scan explanations through authenticated FastAPI retrieval and
+Gemini. The official `google-genai` SDK is locked to 2.29.0; the configured local
+generation model is `gemini-3.5-flash-lite`. Gemini selects reviewed evidence;
+the server returns complete verified corpus excerpts with document/chunk/source
+citations, honest abstention and unchanged classifier scores/uncertainty.
+Read [grounded generation](31-grounded-generation.md).
+
+All four class answers, unrelated/missing Healthy evidence, anonymous capabilities,
+farmer ownership and unchanged LOW_CONFIDENCE context pass the real-provider contract.
+Six representative FastAPI retrieval-plus-generation calls average **4,937.62 ms**
+locally (3,891.36–6,694.37 ms), excluding Node authorization/network overhead.
+This is development contract evidence, not agronomic/field validation, exhaustive
+semantic safety or a production load benchmark. Sources retain regional/freshness
+limits; generation is independently opt-in and server-only. No Flutter assistant UI,
+conversation retention, new migration or later phase is introduced. Stop after Phase 15.
+
+The preceding Phase 14 is complete and verified. The skipped Phase 6 foundation had empty
 knowledge tables and no
 knowledge APIs; it is now completed for this scope. Twenty-five reviewed source-backed
 documents, four catalogue entries and four sources are persisted with 25 READY
@@ -16,8 +33,9 @@ Read [knowledge/retrieval](30-knowledge-retrieval.md).
 Real-provider evaluation passes 16/16 positive expected-document top-three hits both
 with filters and across the full corpus; three unsupported Healthy sections return
 empty. Mean retrieval is 3,899.32 ms locally. This is a small development relevance
-check, not independent agronomic validation. Results are evidence candidates; no
-Gemini answer generation, Flutter knowledge UI or full admin editing is implemented.
+check, not independent agronomic validation. Retrieval results remain evidence
+candidates; Phase 15 applies the separately documented reviewed-excerpt admission
+policy. Flutter knowledge UI and full admin editing remain deferred.
 
 Phase 13 remains complete and verified.
 Flutter now completes image selection/preview, upload/progress, real model results
@@ -78,8 +96,8 @@ The recovered backend database client matches HEAD and works. Phase 6 was explic
 skipped during that audit; Phase 14 completes the missing retrieval foundation.
 Phase 9.5 added configured read-only intake; the subsequent approved exclusions,
 use restrictions, full-frame policy and Phase 10 baseline are recorded in DECISIONS.md.
-Stop after Phase 14; persistent mobile sessions, calculators, full admin functionality
-and Gemini answer generation remain deferred.
+Stop after Phase 15; persistent mobile sessions, calculators, full admin functionality
+and Flutter assistant UI remain deferred.
 
 ## Initial workspace findings
 
@@ -110,18 +128,18 @@ and Gemini answer generation remain deferred.
 | Component | Verified implementation |
 |---|---|
 | Mobile | Flutter 3.41.9/Dart 3.11.5, Material 3 farmer shell, scoped Provider MVVM, selection/preview/progress, real model results, private paginated history/detail, volatile native farmer login/logout/serialized refresh and stale-session fencing; 110 isolated tests, three opt-in live tests; live guest and farmer scan chains pass; Android debug APK rebuilt successfully |
-| Backend | Existing health/auth/scans/private history plus active sourced disease list/detail and bounded Node-to-FastAPI semantic knowledge client; Prisma 7.10.0, 21 tables/eight migrations, 180 isolated tests, 13 PostgreSQL checks and a real retrieval contract test |
-| AI service | Existing strict once-loaded classifier and exact shared preprocessing plus authenticated retrieval, reviewed ingestion, deterministic chunks, configured Google embeddings and parameterized pgvector; 260 isolated tests plus three opt-in PostgreSQL checks, Ruff/strict mypy; factory remains free of heavy provider/model imports |
+| Backend | Existing health/auth/scans/private history plus sourced disease list/detail, semantic knowledge retrieval and ownership-protected grounded generation; Prisma 7.10.0, 21 tables/eight unchanged migrations, 202 isolated tests, 13 PostgreSQL checks and nine live generation contract checks |
+| AI service | Existing once-loaded classifier/shared preprocessing and reviewed pgvector retrieval plus official SDK Gemini evidence selection, bounded pinned context, exact excerpts/citations and safe abstention; 321 isolated tests plus three enabled PostgreSQL checks, Ruff/strict mypy; 61 generation/boundary cases; factory remains free of heavy provider/model imports |
 | Shared preprocessing | One independently buildable typed package at `shared/preprocessing`, version 1.0.0, explicit JSON configuration, file/byte entrypoints, conservative extraction/fallback, optional unchanged CPU tensor and debug CLI; 78 tests pass in each consumer environment and 12 synthetic baseline parity cases pass |
 | ML training | Corrected immutable v2: 4,162 contents/4,121 groups, 2,911/627/624 partitions, no confirmed leakage; fresh MobileNetV3 Small completed 11 epochs, best epoch 8; validation 96.81% accuracy/0.9589 macro F1, single descriptive test 95.83%/0.9452; raw probabilities, no threshold; 219 tests, Ruff over 32 files, mypy over 15 modules and 16 actual TRAIN cases with AI compatibility pass; limited FYP prototype |
 | Infrastructure | Neon PostgreSQL 18.6 with pgvector 0.8.6 migrated; pgvector 0.8.7/PostgreSQL 18 Compose configuration; preserved native 18.4 cluster; private local settings ignored |
 | Documentation | Architecture, database/operations, auth, Flutter foundation, scan uploads/recovery, FastAPI startup/contracts/network, shared preprocessing/configuration/versioning/limitations, decisions, roadmap and verification history |
 | Scripts | Repository/environment/auth/admin/PostgreSQL/Python/development checks including shared preprocessing and actual cross-environment parity; configured FastAPI startup and 16-TRAIN serving parity/timing verifier; full live Flutter scan-upload harness and backend cleanup CLI |
 
-Persistent mobile authentication, Gemini answer generation, calculator
+Persistent mobile authentication, Flutter assistant UI, calculator
 execution, notification delivery and the admin dashboard remain future work. Flutter
 feature introduction/empty screens are foundation UI; FastAPI exposes internal
-prediction/model health and retrieval alongside process health, without generation.
+prediction/model health, retrieval and grounded generation alongside process health.
 
 ## Phase 0 verification history
 
@@ -1446,9 +1464,76 @@ mobile persistence/platform and dependency advisory limitations remain documente
 See [knowledge/retrieval](30-knowledge-retrieval.md) and
 [saved evaluation](../ai-service/evaluation/results/maize-extension-v1-google-task-v1-20261012.json).
 
+## Phase 15 grounded generation verification (2026-10-13)
+
+- Added centralized versioned prompts, strict evidence-selection schema, bounded
+  reviewed context and official SDK client. Only retrieved complete canonical
+  paragraphs covered by verified offsets are rendered; overlapping chunks merge,
+  gaps and inconsistent repeated chunk IDs fail closed. Content/source/curation
+  identity must match the pinned reviewed corpus/ledger. Competing approved topic
+  documents abstain; fresh database versions require a reviewed deployment update.
+- General questions use one literal maize class/topic with conservative English
+  recognition or explicit filters. Missing Healthy disease topics, multiple inferred
+  topics, unrelated/numerical requests and recognized injection patterns abstain.
+  These are bounded admission rules, not comprehensive semantic relevance or
+  injection detection; no arbitrary cosine cutoff is invented.
+- Node adds `POST /api/v1/knowledge/ask` and
+  `POST /api/v1/scans/:scanId/explanation`. FastAPI exposes protected internal
+  `POST /api/v1/generate` and `POST /api/v1/explain`. Existing farmer ownership and
+  anonymous original-key capabilities precede provider work. Caller-submitted
+  classifier/context/knowledge payloads are rejected. No widget calls FastAPI.
+- Persisted classifier label, confidence, model/preprocessing versions and all
+  uncertainty fields round-trip unchanged. Gemini selects evidence IDs only;
+  factual sections/source references are server-built reviewed corpus excerpts.
+  Even a high score keeps `LOW_CONFIDENCE/THRESHOLD_UNCONFIGURED` explicit.
+- Credentials and generation model are server-configured, never supplied to Flutter.
+  Generation is opt-in; invalid startup review/config fails safely. One SDK/custom
+  HTTPX client is owned and closed per lifespan. Provider raw JSON is limited to
+  128 KiB before SDK parsing, one attempt, no redirects/compression, and structured
+  text is capped at 8 KiB. HTTPX I/O timeout plus elapsed checks is not a strict
+  total deadline; Node independently enforces its configured 30-second full deadline.
+  Five requests/minute per IP and two concurrent generation slots are defaults.
+- Operational logs retain only allowlisted metadata, not question/prompt/body/key
+  content. Existing AI conversation tables are unused until retention is defined.
+  No migration, corpus mutation, classifier retraining or ML threshold change occurs.
+
+| Check | Result |
+|---|---|
+| `scripts/check-development.ps1 -Component AI` | Ruff format/check, strict mypy over 43 modules, 321 tests pass; three opt-in PostgreSQL tests separately enabled below |
+| AI `RUN_RAG_DATABASE_TESTS=1 pytest tests/test_rag_database.py -q` | Three pass in owned disposable schemas, including version/pgvector/source/filter/immutability behavior |
+| Backend `npm run check` | Format/lint, strict TypeScript, build, 202 isolated tests and dependency import probe pass |
+| `scripts/check-development.ps1 -Component Prisma` | Prisma validation/client generation/typecheck, 13 real PostgreSQL checks and migration status pass; all eight migrations current |
+| Backend `RUN_LIVE_GENERATION=1 npm run test:generation:live` | Nine checks pass (parent plus eight subchecks); four class answers, four local abstentions, guest/farmer explanations, ownership/body-forgery rejection; fixtures cleaned |
+| Owned actual AI lifespan | Model, RAG and generation ready; unauthorized internal calls fail; unchanged classifier processes generated PNG; one startup/shutdown and clean exit; no raw dataset reads |
+| Shared preprocessing regression | 78 tests in each consumer environment, strict types/lint/format and 12 synthetic training-serving parity cases pass |
+| Repository/security/artifact checks | Templates, ignores, documentation links, whitespace, secret/private-path scans and frozen source/weight/corpus/migration proof pass |
+
+[Saved metadata-only live evaluation](../ai-service/evaluation/results/grounded-evidence-selection-v1-20261013.json)
+records ten case outcomes, model/prompt/context/review identities and six provider
+timings. Mean 4,937.62 ms measures FastAPI retrieval/context/Gemini processing,
+excluding Node authorization/database/network overhead. Ownership explanation
+fixtures are controlled persisted synthetic predictions; a separate generated PNG
+verifies the unchanged actual classifier in the same lifespan. No class accuracy,
+agronomic truth, independent field usefulness or final-test performance is inferred.
+
+All test-created model/scan/journal/account rows are removed; no Cloudinary asset
+is created by these Phase 15 fixtures. Knowledge counts remain four diseases/four
+sources/25 documents/25 READY vectors. The 171 hash-bound ML files, approved
+checkpoint, shared/mobile source, eight migrations and reviewed corpus remain
+unchanged. Unrelated user ignore/ML workspace/state-section edits are preserved
+outside the phase commit.
+
+Remaining issues: independent/local agronomic and source-freshness review, narrow
+English single-topic support, uncalibrated retrieval relevance, no exhaustive semantic
+injection guarantee, private production hosting/least-privilege credentials/shared
+rate limits and retention policy. Existing model/domain/commercial licensing limits
+remain. Test tools emit existing Starlette/httpx and pg query deprecation warnings;
+these do not fail checks. Flutter knowledge/assistant UI, admin editing, persistence
+and free-form model-authored factual paraphrases remain outside this baseline.
+
 ## Next step
 
-Stop after Phase 14. Gemini answer generation and subsequent phases require the
+Stop after Phase 15. Subsequent phases require the
 next explicit instruction. Independent
 field validation and commercial
 licensing/source replacement remain requirements before real farmer/commercial use.

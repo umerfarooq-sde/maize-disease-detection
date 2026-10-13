@@ -2,6 +2,8 @@ import { Router } from 'express';
 import type { Environment } from '../config/environment.js';
 import { authRoutes } from '../modules/auth/auth.routes.js';
 import type { AuthService } from '../modules/auth/auth.service.js';
+import { generationRoutes } from '../modules/generation/generation.routes.js';
+import type { GenerationService } from '../modules/generation/generation.service.js';
 import type { HealthRepository } from '../modules/health/health.repository.js';
 import { healthRoutes } from '../modules/health/health.routes.js';
 import { createHealthService } from '../modules/health/health.service.js';
@@ -16,11 +18,13 @@ export function apiRoutes(
   authService: AuthService,
   scanService: ScanService,
   knowledgeService: KnowledgeService,
+  generationService: GenerationService,
 ): Router {
   const router = Router();
   router.use(healthRoutes(createHealthService(repository)));
   router.use('/auth', authRoutes(environment, authService));
   router.use('/scans', scanRoutes(environment, authService, scanService));
   router.use(knowledgeRoutes(environment, knowledgeService));
+  router.use(generationRoutes(environment, authService, generationService));
   return router;
 }

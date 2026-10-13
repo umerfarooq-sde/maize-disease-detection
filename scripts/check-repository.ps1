@@ -190,10 +190,15 @@ $templateKeys = @{
     'mobile' = @('API_BASE_URL')
     'ml-training' = @('DATASET_PATH')
 }
-$templateKeys['backend'] += @('KNOWLEDGE_RATE_LIMIT_MAX')
+$templateKeys['backend'] += @('KNOWLEDGE_RATE_LIMIT_MAX', 'GENERATION_RATE_LIMIT_MAX', 'GENERATION_TIMEOUT_MS')
 $guardMigration = 'backend/prisma/migrations/20261012010000_knowledge_embedding_guard_scope/migration.sql'
 if (-not (Test-Path -LiteralPath (Join-Path $repositoryRoot $guardMigration) -PathType Leaf)) { throw 'Missing knowledge embedding guard migration.' }
 $templateKeys['ai-service'] += @('RAG_ENABLED', 'EMBEDDING_MODEL', 'EMBEDDING_VERSION', 'EMBEDDING_DIMENSIONS', 'EMBEDDING_TIMEOUT_SECONDS', 'RAG_CHUNK_CHARS', 'RAG_CHUNK_OVERLAP', 'RAG_MAX_CONCURRENCY')
+$templateKeys['ai-service'] += @('GENERATION_ENABLED', 'GEMINI_MODEL', 'GENERATION_TIMEOUT_SECONDS', 'GENERATION_MAX_CONCURRENCY', 'GENERATION_CONTEXT_CHARS', 'GENERATION_MAX_CHUNKS', 'GENERATION_CORPUS_PATH', 'GENERATION_REVIEW_PATH')
+$requiredGenerationFiles = @('docs/31-grounded-generation.md', 'backend/src/modules/generation/generation.routes.ts', 'backend/src/modules/generation/generation.service.ts', 'backend/src/modules/generation/generation.client.ts', 'backend/tests/generation/client.test.ts', 'backend/tests/generation/http.test.ts', 'backend/tests/generation.live.integration.ts', 'ai-service/app/generation/service.py', 'ai-service/app/generation/context.py', 'ai-service/app/generation/provider.py', 'ai-service/app/generation/prompts.py', 'ai-service/app/api/routes/generation.py', 'ai-service/tests/test_generation.py', 'ai-service/tests/test_generation_boundaries.py')
+foreach ($file in $requiredGenerationFiles) {
+    if (-not (Test-Path -LiteralPath (Join-Path $repositoryRoot $file) -PathType Leaf)) { throw "Missing grounded generation file: $file" }
+}
 $requiredKnowledgeFiles = @('docs/30-knowledge-retrieval.md', 'backend/prisma/migrations/20261012000000_knowledge_retrieval/migration.sql', 'backend/knowledge/maize-extension-20261012-v1.json', 'backend/knowledge/maize-extension-20261012-v1.review.json', 'backend/src/modules/knowledge/knowledge.routes.ts', 'ai-service/app/rag/service.py', 'ai-service/app/api/routes/retrieval.py', 'ai-service/evaluation/rag-v1.json')
 foreach ($file in $requiredKnowledgeFiles) {
     if (-not (Test-Path -LiteralPath (Join-Path $repositoryRoot $file) -PathType Leaf)) { throw "Missing knowledge foundation file: $file" }

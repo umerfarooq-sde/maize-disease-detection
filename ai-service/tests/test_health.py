@@ -39,7 +39,7 @@ def test_health_reports_running_foundation_without_provider_details(client: Test
         "preprocessing": "library_available",
         "inference": "unavailable",
         "rag": "unavailable",
-        "generation": "not_implemented",
+        "generation": "unavailable",
     }
     assert payload["data"]["model"] == {"status": "not_loaded", "version": None}
     assert payload["meta"] == {"requestId": response.headers["X-Request-Id"]}
@@ -139,7 +139,8 @@ def test_no_browser_cors_or_future_business_endpoints(client: TestClient) -> Non
     assert preflight.status_code == 405
     assert "Access-Control-Allow-Origin" not in preflight.headers
     assert client.get("/api/v1/predict").status_code == 405
-    for route in ("/api/v1/rag", "/api/v1/generate", "/health/"):
+    assert client.get("/api/v1/generate").status_code == 405
+    for route in ("/api/v1/rag", "/health/"):
         assert client.get(route).status_code == 404
 
 
@@ -166,6 +167,8 @@ def test_development_openapi_describes_health_without_private_config(client: Tes
         "/api/v1/predict",
         "/api/v1/model-health",
         "/api/v1/retrieve",
+        "/api/v1/generate",
+        "/api/v1/explain",
     }
     contracts = response.json()["paths"]["/health"]["get"]["responses"]
     for status in ("422", "500"):

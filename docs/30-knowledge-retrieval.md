@@ -1,6 +1,9 @@
 # Phase 14 — sourced knowledge and retrieval
 
 Implemented 2026-10-12. No answer generation or Flutter knowledge content is added.
+This document records the Phase 14 boundary. Phase 15 subsequently adds
+[grounded Gemini generation](31-grounded-generation.md) above these preserved
+retrieval/ingestion contracts.
 The skipped Phase 6 database/backend foundation was inspected: disease, source,
 document and chunk tables existed but were empty, with no knowledge APIs or ingestion.
 This phase completes the foundations needed for retrieval using those same tables.

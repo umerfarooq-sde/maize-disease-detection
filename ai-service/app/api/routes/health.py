@@ -32,6 +32,9 @@ async def health(
                 rag="ready"
                 if running and request.app.state.retrieval_service is not None
                 else "unavailable",
+                generation="ready"
+                if running and request.app.state.generation_service is not None
+                else "unavailable",
             ),
             model=ModelHealth(
                 status="ready" if ready else "not_loaded",

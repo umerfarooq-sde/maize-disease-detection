@@ -1,5 +1,12 @@
 # Backend
 
+Phase 15 adds `POST /api/v1/knowledge/ask` and
+`POST /api/v1/scans/:scanId/explanation`. The dedicated internal client calls FastAPI;
+Node validates cited answer contracts and unchanged persisted classifier context.
+Scan explanations reuse farmer ownership or the anonymous original request-key
+capability; ADMIN access is not introduced. See [grounded generation](../docs/31-grounded-generation.md)
+for request bodies, uncertainty, deadlines, server-only settings and remaining limits.
+
 Phase 14 completes the missing disease-knowledge read foundation and adds
 `GET /api/v1/diseases`, `GET /api/v1/diseases/:slug` and
 `POST /api/v1/knowledge/search`. The latter orchestrates authenticated FastAPI
@@ -80,4 +87,6 @@ migrations. Seed groups are empty until reviewed project data is supplied.
 See [database operations](../docs/16-database-operations.md) for checks and permissions,
 and [development setup](../docs/15-development-environment.md) for other toolchains.
 Inference orchestration is implemented; Python retains all ML transforms and inference.
-Disease knowledge, calculator and RAG functionality remain future work.
+Disease knowledge reads, retrieval and grounded generation are implemented through
+their documented boundaries. Calculator features, Flutter assistant UI, conversation
+retention and full admin editing remain future work.

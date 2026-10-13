@@ -36,9 +36,18 @@ class ErrorCode(StrEnum):
     EMBEDDING_UNAVAILABLE = "EMBEDDING_UNAVAILABLE"
     EMBEDDING_INVALID_RESPONSE = "EMBEDDING_INVALID_RESPONSE"
     RETRIEVAL_UNAVAILABLE = "RETRIEVAL_UNAVAILABLE"
+    GENERATION_UNAVAILABLE = "GENERATION_UNAVAILABLE"
+    GENERATION_TIMEOUT = "GENERATION_TIMEOUT"
+    GENERATION_INVALID_RESPONSE = "GENERATION_INVALID_RESPONSE"
 
 
 ERRORS: dict[ErrorCode, tuple[int, str]] = {
+    ErrorCode.GENERATION_UNAVAILABLE: (503, "Grounded explanation is unavailable."),
+    ErrorCode.GENERATION_TIMEOUT: (504, "Grounded explanation timed out."),
+    ErrorCode.GENERATION_INVALID_RESPONSE: (
+        502,
+        "Grounded explanation could not be safely verified.",
+    ),
     ErrorCode.EMBEDDING_UNAVAILABLE: (503, "The embedding provider is unavailable."),
     ErrorCode.EMBEDDING_INVALID_RESPONSE: (
         502,

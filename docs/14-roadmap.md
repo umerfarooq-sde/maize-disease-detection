@@ -21,7 +21,7 @@ checks, fix failures, and update [project state](PROJECT_STATE.md).
 | 12 | Node/Python integration |
 | 13 | Complete farmer disease detection, result UX and private history (user scope) |
 | 14 | RAG knowledge system |
-| 15 | Gemini integration |
+| 15 | Grounded Gemini generation with reviewed evidence/citations (user scope) |
 | 16 | AI assistant |
 | 17 | Deterministic fertilizer calculator |
 | 18 | Deterministic yield calculator |
@@ -171,3 +171,16 @@ chunking, configured Google/Gemini embeddings, PostgreSQL/pgvector persistence a
 semantic filters/evaluation. The embedding provider was explicitly approved.
 Read [knowledge/retrieval](30-knowledge-retrieval.md). No answer generation,
 Flutter knowledge UI, full admin editing or later phase begins automatically.
+
+## Phase 15 scope clarification
+
+The user authorized grounded generation above Phase 14 retrieval: official configured
+Gemini SDK, centralized/versioned prompts, bounded deduplicated reviewed context,
+structured cited responses, honest missing/conflicting evidence handling, immutable
+classifier explanations, safety/provider/ownership tests and operational metadata logs.
+The conservative first baseline lets Gemini select evidence and renders exact excerpts
+of reviewed project documents. It does not publish unchecked factual paraphrases,
+change ML predictions or add an arbitrary retrieval/confidence cutoff. No Flutter
+assistant UI, conversation persistence, calculators, admin editing or deployment is
+included. Read [grounded generation](31-grounded-generation.md). Stop after Phase 15;
+Phase 16 and subsequent work require another explicit instruction.

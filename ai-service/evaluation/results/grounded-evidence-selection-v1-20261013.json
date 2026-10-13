@@ -1,0 +1,166 @@
+{
+  "liveGeneration": "PASS",
+  "evaluatedAt": "2026-10-13T06:11:30.441Z",
+  "groundedProviderCalls": 6,
+  "representativeMeanMs": 4937.619166666666,
+  "representativeMinMs": 3891.364,
+  "representativeMaxMs": 6694.369,
+  "cases": [
+    {
+      "caseId": "ask-Common_Rust-symptoms",
+      "status": "GROUNDED",
+      "providerUsed": true,
+      "generationModel": "gemini-3.5-flash-lite",
+      "promptVersion": "grounded-evidence-selection-v1",
+      "contextPolicyVersion": "reviewed-excerpts-v1",
+      "reviewSetVersion": "maize-extension-20261012-v1",
+      "durationMs": 6694.369,
+      "documentKeys": [
+        "maize-common-rust-symptoms"
+      ]
+    },
+    {
+      "caseId": "ask-Gray_Leaf_Spot-symptoms",
+      "status": "GROUNDED",
+      "providerUsed": true,
+      "generationModel": "gemini-3.5-flash-lite",
+      "promptVersion": "grounded-evidence-selection-v1",
+      "contextPolicyVersion": "reviewed-excerpts-v1",
+      "reviewSetVersion": "maize-extension-20261012-v1",
+      "durationMs": 4700.021,
+      "documentKeys": [
+        "maize-gray-leaf-spot-symptoms"
+      ]
+    },
+    {
+      "caseId": "ask-Northern_Corn_Leaf_Blight-symptoms",
+      "status": "GROUNDED",
+      "providerUsed": true,
+      "generationModel": "gemini-3.5-flash-lite",
+      "promptVersion": "grounded-evidence-selection-v1",
+      "contextPolicyVersion": "reviewed-excerpts-v1",
+      "reviewSetVersion": "maize-extension-20261012-v1",
+      "durationMs": 4828.526,
+      "documentKeys": [
+        "maize-northern-corn-leaf-blight-symptoms"
+      ]
+    },
+    {
+      "caseId": "ask-Healthy-symptoms",
+      "status": "GROUNDED",
+      "providerUsed": true,
+      "generationModel": "gemini-3.5-flash-lite",
+      "promptVersion": "grounded-evidence-selection-v1",
+      "contextPolicyVersion": "reviewed-excerpts-v1",
+      "reviewSetVersion": "maize-extension-20261012-v1",
+      "durationMs": 3891.364,
+      "documentKeys": [
+        "maize-healthy-symptoms"
+      ]
+    },
+    {
+      "caseId": "unrelated",
+      "status": "OUT_OF_SCOPE",
+      "providerUsed": false,
+      "generationModel": "gemini-3.5-flash-lite",
+      "promptVersion": "grounded-evidence-selection-v1",
+      "contextPolicyVersion": "reviewed-excerpts-v1",
+      "reviewSetVersion": "maize-extension-20261012-v1",
+      "durationMs": 0.042,
+      "documentKeys": []
+    },
+    {
+      "caseId": "healthy-management-unavailable",
+      "status": "INSUFFICIENT_INFORMATION",
+      "providerUsed": false,
+      "generationModel": "gemini-3.5-flash-lite",
+      "promptVersion": "grounded-evidence-selection-v1",
+      "contextPolicyVersion": "reviewed-excerpts-v1",
+      "reviewSetVersion": "maize-extension-20261012-v1",
+      "durationMs": 1.651,
+      "documentKeys": []
+    },
+    {
+      "caseId": "healthy-causes-unavailable",
+      "status": "INSUFFICIENT_INFORMATION",
+      "providerUsed": false,
+      "generationModel": "gemini-3.5-flash-lite",
+      "promptVersion": "grounded-evidence-selection-v1",
+      "contextPolicyVersion": "reviewed-excerpts-v1",
+      "reviewSetVersion": "maize-extension-20261012-v1",
+      "durationMs": 0.098,
+      "documentKeys": []
+    },
+    {
+      "caseId": "healthy-conditions-unavailable",
+      "status": "INSUFFICIENT_INFORMATION",
+      "providerUsed": false,
+      "generationModel": "gemini-3.5-flash-lite",
+      "promptVersion": "grounded-evidence-selection-v1",
+      "contextPolicyVersion": "reviewed-excerpts-v1",
+      "reviewSetVersion": "maize-extension-20261012-v1",
+      "durationMs": 0.256,
+      "documentKeys": []
+    },
+    {
+      "caseId": "anonymous-scan-explanation",
+      "status": "GROUNDED",
+      "providerUsed": true,
+      "generationModel": "gemini-3.5-flash-lite",
+      "promptVersion": "grounded-evidence-selection-v1",
+      "contextPolicyVersion": "reviewed-excerpts-v1",
+      "reviewSetVersion": "maize-extension-20261012-v1",
+      "durationMs": 5279.691,
+      "documentKeys": [
+        "maize-common-rust-management",
+        "maize-common-rust-overview",
+        "maize-common-rust-prevention",
+        "maize-common-rust-symptoms"
+      ]
+    },
+    {
+      "caseId": "farmer-scan-explanation",
+      "status": "GROUNDED",
+      "providerUsed": true,
+      "generationModel": "gemini-3.5-flash-lite",
+      "promptVersion": "grounded-evidence-selection-v1",
+      "contextPolicyVersion": "reviewed-excerpts-v1",
+      "reviewSetVersion": "maize-extension-20261012-v1",
+      "durationMs": 4231.744,
+      "documentKeys": [
+        "maize-common-rust-management",
+        "maize-common-rust-overview",
+        "maize-common-rust-prevention",
+        "maize-common-rust-symptoms"
+      ]
+    }
+  ],
+  "scanFixtures": "controlled persisted synthetic predictions; not live classifier outputs",
+  "ownership": "anonymous capability and two real FARMER accounts",
+  "noDatasetReads": true,
+  "cloudinaryAssetsCreated": 0,
+  "fixtureCleanup": "completed",
+  "noClassAccuracyClaim": true,
+  "evaluationVersion": "grounded-generation-development-v1",
+  "runtimeDependencies": {
+    "googleGenai": "2.29.0",
+    "python": "3.11.0"
+  },
+  "reproduction": "From backend with a configured running AI service: RUN_LIVE_GENERATION=1 npm run test:generation:live",
+  "lifespan": {
+    "passed": true,
+    "internalAuth": true,
+    "realNodeFastapiGooglePgvector": true,
+    "unchangedClassifierSyntheticImage": true,
+    "loadsPerLifespan": 1,
+    "gracefulExitCode": 0,
+    "datasetPartitionsUsed": []
+  },
+  "timingScope": "FastAPI retrieval, verification and Gemini generation duration only; excludes Node authorization/database/network overhead.",
+  "limitations": [
+    "Small curated development contract checks; not independent agronomic/field validation.",
+    "Source text correspondence and cited lineage do not prove truth, local suitability or exhaustive semantic relevance.",
+    "Ownership explanations use persisted synthetic Common_Rust classifier fixtures; a separate generated PNG verifies unchanged real classifier startup/inference.",
+    "No calibrated retrieval cutoff, real dataset images, test partition reads, classifier accuracy measurement or production load benchmark."
+  ]
+}

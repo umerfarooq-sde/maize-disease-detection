@@ -10,6 +10,11 @@ import { requestRateLimit } from './middleware/rate-limit.js';
 import { requestContext } from './middleware/request-context.js';
 import { type AuthRepository, createAuthRepository } from './modules/auth/auth.repository.js';
 import { createAuthService } from './modules/auth/auth.service.js';
+import { createGenerationClient } from './modules/generation/generation.client.js';
+import {
+  createGenerationService,
+  type GenerationService,
+} from './modules/generation/generation.service.js';
 import type { HealthRepository } from './modules/health/health.repository.js';
 import { createAiInferenceClient } from './modules/inference/inference.client.js';
 import { createKnowledgeClient } from './modules/knowledge/knowledge.client.js';
@@ -40,6 +45,10 @@ export function createApp(
     createKnowledgeRepository(getDatabaseClient(environment.DATABASE_URL)),
     createKnowledgeClient(environment),
   ),
+  generationService: GenerationService = createGenerationService(
+    scanService,
+    createGenerationClient(environment),
+  ),
 ): Express {
   const app = express();
   app.locals.recoverScans = () => scanService.recoverStale();
@@ -68,6 +77,7 @@ export function createApp(
       createAuthService(environment, authRepository),
       scanService,
       knowledgeService,
+      generationService,
     ),
   );
   app.use(notFound);

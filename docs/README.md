@@ -17,6 +17,7 @@ The remaining feature documents describe intended behavior.
 | [Node/FastAPI integration](28-node-fastapi-integration.md) | Phase 12 compatible admission, unchanged-byte internal client, durable scan lifecycle/predictions, owned reads, recovery and Flutter response compatibility |
 | [Farmer detection and history](29-farmer-detection-history.md) | Phase 13 complete scan/results, honest uncertainty, volatile farmer sessions, private paginated history, scoped MVVM and integration checks |
 | [Knowledge and retrieval](30-knowledge-retrieval.md) | Phase 14 sourced catalogue, immutable ingestion/chunks, Google embeddings, pgvector, public/internal contracts and real retrieval evaluation |
+| [Grounded generation](31-grounded-generation.md) | Phase 15 bounded reviewed context, official Gemini SDK, verified excerpts/citations, immutable scan explanations, abstention, access controls and server-only setup |
 | [System overview](01-system-overview.md) | Purpose, users, boundaries, and primary flow |
 | [HLA](02-hla.md) | Logical components and trust boundaries |
 | [HLD](03-hld.md) | Runtime interactions and failures |
@@ -24,7 +25,7 @@ The remaining feature documents describe intended behavior.
 | [Database design](05-database-design.md) | Implemented 21-table schema (19 domain plus auth/upload journals), ERD, ownership, constraints, versions, and vectors |
 | [API design](06-api-design.md) | Implemented health/response contracts and future candidate routes |
 | [Flutter architecture](07-flutter-architecture.md) | Implemented MVVM foundation and future farmer workflows |
-| [AI architecture](08-ai-architecture.md) | Implemented FastAPI classifier service and future retrieval/generation ownership |
+| [AI architecture](08-ai-architecture.md) | FastAPI classifier, retrieval/generation ownership and architectural boundaries |
 | [ML pipeline](09-ml-pipeline.md) | Shared preprocessing, dataset hygiene, and evaluation |
 | [RAG architecture](10-rag-architecture.md) | Source-grounded retrieval and generation |
 | [Security](11-security.md) | Identity, uploads, credentials, and access controls |

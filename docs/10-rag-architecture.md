@@ -1,6 +1,6 @@
 # RAG Architecture
 
-> **Status:** Phase 14 implements sourced knowledge, versioned deterministic chunking, configured Google embeddings and filtered PostgreSQL/pgvector retrieval. Answer generation remains target design. Read [knowledge/retrieval](30-knowledge-retrieval.md) for actual contracts, sources, configuration and evaluation.
+> **Status:** Phase 14 implements sourced/versioned knowledge, configured Google embeddings and PostgreSQL/pgvector retrieval. Phase 15 adds bounded reviewed context, official Gemini SDK evidence selection and server-verified corpus excerpts with citations. Read [knowledge/retrieval](30-knowledge-retrieval.md) and [grounded generation](31-grounded-generation.md) for contracts, sources, setup and limitations.
 
 ## Grounding flow
 
@@ -12,7 +12,8 @@ Reviewed agricultural knowledge
   -> indexed storage / vector retrieval
   -> relevance filtering
   -> grounded context
-  -> Gemini explanation
+  -> Gemini evidence selection
+  -> verified reviewed-corpus excerpts and source citations
   -> response with evidence or insufficient-information state
 ```
 
@@ -25,6 +26,14 @@ Maintain curated and attributable sources with metadata such as title, publisher
 ## Retrieval and generation
 
 Retrieve only relevant material, apply appropriate filters, and retain source references for the response. Pass clear instructions that generation must remain within provided evidence. If evidence is missing, conflicting, or below a validated relevance criterion, report that the system cannot provide a grounded answer and direct the user to an appropriate expert/source.
+
+The current baseline has no calibrated retrieval cutoff. It instead admits pinned,
+reviewed content with complete retrieved coverage, scoped disease/topic filters and
+honest abstention. General questions support one known English label/topic; scan
+explanations preserve the trusted model result and uncertainty separately. Gemini
+returns a structured status/evidence selection; arbitrary factual paraphrases are
+not published. Exact excerpt/citation checks do not establish local agronomic truth
+or comprehensive semantic relevance and injection safety.
 
 Do not rely on Gemini for deterministic fertilizer or yield arithmetic. A deterministic calculator should produce numerical results; retrieved knowledge and Gemini may explain those results.
 

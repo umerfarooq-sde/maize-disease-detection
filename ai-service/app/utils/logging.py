@@ -6,7 +6,20 @@ from datetime import UTC, datetime
 from logging.config import dictConfig
 
 LOGGER_NAME = "maizedoctor.ai"
-SAFE_FIELDS = ("request_id", "method", "route", "status_code", "duration_ms", "error_code")
+SAFE_FIELDS = (
+    "request_id",
+    "method",
+    "route",
+    "status_code",
+    "duration_ms",
+    "error_code",
+    "generation_model",
+    "prompt_version",
+    "context_version",
+    "evidence_count",
+    "provider_used",
+    "generation_status",
+)
 
 
 class JsonFormatter(logging.Formatter):

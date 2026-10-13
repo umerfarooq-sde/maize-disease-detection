@@ -68,6 +68,19 @@ const errorDefinitions = {
     status: 502,
     message: 'Knowledge search returned an invalid result. Please try again later.',
   },
+  GEN_UNAVAILABLE: {
+    status: 503,
+    message: 'The assistant is temporarily unavailable. Please try again later.',
+  },
+  GEN_TIMEOUT: { status: 504, message: 'The assistant took too long. Please try again later.' },
+  GEN_INVALID_RESPONSE: {
+    status: 502,
+    message: 'The assistant returned an invalid result. Please try again later.',
+  },
+  SCAN_EXPLANATION_UNAVAILABLE: {
+    status: 409,
+    message: 'This scan does not have a completed, compatible prediction to explain.',
+  },
 } as const;
 
 export type ErrorCode = keyof typeof errorDefinitions;

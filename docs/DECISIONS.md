@@ -155,6 +155,19 @@ See [database design](05-database-design.md) and [project state](PROJECT_STATE.m
 | Deterministic character windows and exact cosine search | Explicit chunk size/overlap, canonical NFC/line endings, offset/hash identities. Actual initial corpus has 25 chunks; no premature ANN index. Filters require active English documents, active diseases and matching embedding/config identity. |
 | Retrieval returns evidence candidates with no calibrated cutoff | Small filtered and unfiltered development evaluations support basic relevance; they do not establish agronomic accuracy or out-of-domain rejection. Similarity is a ranking score, and no answer is generated in Phase 14. |
 
+## Phase 15 grounded-generation decisions (2026-10-13)
+
+| Decision | Rationale and boundary |
+|---|---|
+| Official Google GenAI SDK with explicit deployment model | Lock `google-genai` 2.29.0 in the existing AI environment; keep Phase 14 REST embeddings unchanged. One owned SDK/HTTPX client per lifespan, no source-code model fallback, server-only key. The local selection is `gemini-3.5-flash-lite`; availability is verified separately from startup readiness. |
+| Gemini selects evidence; server renders reviewed document excerpts | Structured `{status, evidenceIds}` avoids publishing unchecked paraphrases whose truth cannot be established merely from citation IDs. Pin corpus/review hashes, verify text offsets/content/source/curation and full retrieved coverage, deduplicate overlap and bound context. This is a conservative first generation policy, not a claim of agronomic entailment or calibrated answer safety. |
+| Scoped English questions and explicit honest abstention | Support one known label/topic per general question and four relevant topics for scan explanation. Refuse unsupported numerical/local prescriptions, missing evidence, ambiguous competing documents and recognized injection. Lexical scope guards do not provide comprehensive semantic out-of-domain or injection detection; no arbitrary cosine cutoff is introduced. |
+| Explain only authorized, persisted classifier context | Node reads through the existing owner/private-key scan policy, then sends seven immutable scalar prediction fields. Reject changed class/score/versions/uncertainty in the reply. No image URLs, account IDs or anonymous capabilities go to Gemini; high scores retain the approved model's LOW_CONFIDENCE/null-threshold warning. |
+| Bounded provider calls and metadata-only logs without conversation persistence | Fixed service/provider origins, strict structured contracts, response limits and safe error mapping preserve the existing trust boundary. Node enforces a whole-call deadline; SDK I/O timeout plus between-read budget is not a strict total deadline. No new table/migration, private-content logs, `ai_queries`/`ai_responses` writes or retention policy. |
+
+See [grounded generation](31-grounded-generation.md) for complete contracts, setup,
+official SDK/model references and remaining evaluation/source limitations.
+
 Pending decisions:
 full business JSON validation contracts, retention and
 completed-scan retention/delivery/deletion, production least-privilege roles,

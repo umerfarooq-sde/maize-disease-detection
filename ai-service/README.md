@@ -1,10 +1,17 @@
 # AI service
 
+Phase 15 adds authenticated `POST /api/v1/generate` and `/api/v1/explain` on the
+Phase 14 retrieval layer. The official Google GenAI SDK selects reviewed evidence;
+the server returns verified document excerpts and original citations, preserving
+classifier uncertainty. Generation is independently opt-in and requires an explicit
+model and pinned corpus/review pair. Read [grounded generation](../docs/31-grounded-generation.md)
+for contracts, startup, safety boundaries and limitations. Keys stay server-side.
+
 Phase 14 adds authenticated `POST /api/v1/retrieve`, controlled sourced ingestion,
 Google/Gemini embeddings and exact PostgreSQL/pgvector search. Read
 [knowledge retrieval](../docs/30-knowledge-retrieval.md) for explicit configuration,
-local commands, versions, corpus provenance, tests and limitations. Generation remains
-unimplemented. `RAG_ENABLED=false` independently disables retrieval; missing configured
+local commands, versions, corpus provenance, tests and limitations.
+`RAG_ENABLED=false` disables retrieval and cannot be combined with enabled generation; missing configured
 database/schema fails retrieval startup. Provider/service secrets stay server-side;
 public source references accompany evidence through Node.
 
@@ -19,6 +26,9 @@ setup, complete contracts, security, tests and limitations.
 Endpoints:
 
 - `GET /health`: safe process status and basic model readiness.
+- `POST /api/v1/retrieve`: authenticated semantic evidence retrieval.
+- `POST /api/v1/generate`: authenticated scoped question JSON and cited excerpt response.
+- `POST /api/v1/explain`: authenticated trusted classifier context, unchanged in the response.
 - `GET /api/v1/model-health`: authenticated readiness, class mapping and confidence policy.
 - `POST /api/v1/predict?top_k=4`: authenticated raw JPEG/PNG/WebP bytes, at most 5 MiB,
   each side at least 16 pixels and at most 16 million pixels total; shared full decode
@@ -65,12 +75,13 @@ approved metadata hash and expected model/preprocessing versions. Missing/invali
 artifacts fail startup. Explicit `INFERENCE_ENABLED=false` is health-only mode;
 predictions/model readiness then return unavailable. No browser CORS is enabled: Flutter talks
 to Node, and Node will call FastAPI over a private network. Production docs are disabled.
-Database/Gemini template values are required only when retrieval is enabled. Optional confidence-policy path/hash
+Database/Gemini template values are required when retrieval is enabled; enabled
+generation additionally requires explicit `GEMINI_MODEL` and reviewed corpus/ledger
+paths. `GENERATION_ENABLED=false` disables only generation. Optional confidence-policy path/hash
 must both be supplied or blank; both remain blank for the approved model.
 
-All 219 AI tests pass, including model lifecycle, artifact compatibility, authenticated
-API/image admission, uncertainty, repeated inference and bounded concurrency. Ruff and
-strict mypy pass. Shared tests pass 78 cases in each environment; 16 actual TRAIN
-serving cases match frozen Phase 10.5 tensors/logits exactly. Real Uvicorn and safe
-missing-checkpoint startup checks pass without reading TEST images. See the
-[development setup](../docs/15-development-environment.md) for bootstrap tooling.
+Checks include model lifecycle/artifact compatibility, image admission, shared
+preprocessing parity, retrieval/versioning, reviewed generation, uncertainty,
+authentication, provider failures and concurrency. See [project state](../docs/PROJECT_STATE.md)
+for final verified totals and enabled live checks; [development setup](../docs/15-development-environment.md)
+documents bootstrap tooling. No Phase 15 check requires reading raw dataset partitions.

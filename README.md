@@ -5,10 +5,15 @@ with administrative tools for maintaining knowledge and monitoring the system.
 
 ## Current status
 
+Phase 15 adds Gemini selection of verified reviewed evidence, cited knowledge answers
+and owner-checked scan explanations. Classifier results and uncertainty remain
+unchanged. See [grounded generation](docs/31-grounded-generation.md) for configuration,
+contracts, excerpt policy and limitations. No Flutter assistant UI is added.
+
 Phase 14 adds sourced disease knowledge, versioned ingestion and semantic retrieval
 through Google embeddings and PostgreSQL/pgvector. See
 [knowledge/retrieval](docs/30-knowledge-retrieval.md) for source provenance, setup,
-contracts and evaluation. No generated answers are added.
+contracts and evaluation.
 
 Phase 13 completes Flutter scanning, model results with uncertainty, farmer sign-in/
 logout and private paginated history/detail through the existing Node/FastAPI flow.
@@ -31,7 +36,7 @@ raw probabilities are retained and no confidence threshold is locked. See
 [model fitness](docs/26-model-fitness-validation.md). Use remains non-commercial
 academic/FYP research without raw redistribution or commercial clearance. Shared
 preprocessing, existing FastAPI/Flutter/backend/database features are preserved;
-Persistent mobile sign-in, Gemini answer generation and other business workflows remain future work.
+Persistent mobile sign-in, Flutter assistant UI and other business workflows remain future work.
 With no approved operational cutoff, every current prediction is `LOW_CONFIDENCE`
 with `THRESHOLD_UNCONFIGURED`; numerical scores do not establish field correctness.
 See [project state](docs/PROJECT_STATE.md) for verified progress and outstanding decisions.
@@ -130,7 +135,7 @@ This does not change the machine's persistent execution policy.
 
 ## Next step
 
-Stop after Phase 11. Phase 12 Node/Python integration requires the next explicit
-instruction. Preserve the frozen v2 candidate and its documented limitations. See
-[inference contracts](docs/27-production-ml-inference.md), [fitness audit](docs/26-model-fitness-validation.md) and
+Stop after Phase 15. Later workflows require the next explicit instruction.
+Preserve the frozen v2 candidate and its documented limitations. See
+[grounded generation](docs/31-grounded-generation.md), [fitness audit](docs/26-model-fitness-validation.md) and
 [roadmap](docs/14-roadmap.md).

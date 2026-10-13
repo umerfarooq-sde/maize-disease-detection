@@ -15,6 +15,7 @@ from fastapi import FastAPI
 
 from app import SERVICE_NAME, SERVICE_VERSION
 from app.api.middleware import RequestContextMiddleware
+from app.api.routes.generation import router as generation_router
 from app.api.routes.health import router as health_router
 from app.api.routes.prediction import router as prediction_router
 from app.api.routes.retrieval import router as retrieval_router
@@ -24,6 +25,7 @@ from app.utils.errors import install_exception_handlers
 from app.utils.logging import LOGGER_NAME
 
 if TYPE_CHECKING:
+    from app.generation.service import GenerationService
     from app.model_management.artifacts import LoadedModel
     from app.rag.service import RetrievalService
 
@@ -46,6 +48,7 @@ def create_app(
     *,
     model_loader: ModelLoader | None = None,
     retrieval_service: RetrievalService | None = None,
+    generation_service: GenerationService | None = None,
 ) -> FastAPI:
     configuration = settings if settings is not None else load_settings()
     logger = logging.getLogger(LOGGER_NAME)
@@ -124,15 +127,47 @@ def create_app(
                         },
                     )
                     raise AppError(ErrorCode.RETRIEVAL_UNAVAILABLE) from None
+            if configuration.generation_enabled:
+                from app.generation.service import create_generation_service
+                from app.utils.errors import AppError, ErrorCode
+
+                try:
+                    application.state.generation_service = (
+                        generation_service
+                        if generation_service is not None
+                        else create_generation_service(
+                            configuration, application.state.retrieval_service
+                        )
+                    )
+                except Exception:
+                    logger.error(
+                        "generation_startup_failed",
+                        extra={
+                            "event": "generation_startup_failed",
+                            "error_code": "GENERATION_UNAVAILABLE",
+                        },
+                    )
+                    raise AppError(ErrorCode.GENERATION_UNAVAILABLE) from None
             application.state.running = True
             logger.info("service_started", extra={"event": "service_started"})
             yield
         finally:
             application.state.running = False
             application.state.inference_service = None
-            if application.state.retrieval_service is not None:
-                application.state.retrieval_service.close()
-            application.state.retrieval_service = None
+            for name in ("generation_service", "retrieval_service"):
+                service = getattr(application.state, name)
+                setattr(application.state, name, None)
+                if service is not None:
+                    try:
+                        service.close()
+                    except Exception:
+                        logger.error(
+                            "dependency_shutdown_failed",
+                            extra={
+                                "event": "dependency_shutdown_failed",
+                                "error_code": "DEPENDENCY_SHUTDOWN_FAILED",
+                            },
+                        )
             logger.info("service_stopped", extra={"event": "service_stopped"})
 
     development = configuration.environment != "production"
@@ -152,10 +187,12 @@ def create_app(
     app.state.running = False
     app.state.inference_service = None
     app.state.retrieval_service = None
+    app.state.generation_service = None
     app.state.prediction_slots = BoundedSemaphore(configuration.inference_max_concurrency)
     install_exception_handlers(app)
     app.add_middleware(RequestContextMiddleware)
     app.include_router(health_router)
     app.include_router(prediction_router)
     app.include_router(retrieval_router)
+    app.include_router(generation_router)
     return app
