@@ -6,6 +6,10 @@ reviewed documents; it does not publish unchecked model-authored agricultural
 paragraphs. The independently worded project summaries retain their original
 extension sources. No publisher pages or images are copied into model responses.
 
+Phase 16 presents these APIs in the [farmer assistant](32-farmer-ai-assistant.md).
+Explicitly validated disease filters now supply bounded follow-up scope even when
+the current question omits the word maize; all other evidence/domain checks remain.
+
 ## Flow and responsibility
 
 ```text

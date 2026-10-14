@@ -168,6 +168,19 @@ See [database design](05-database-design.md) and [project state](PROJECT_STATE.m
 See [grounded generation](31-grounded-generation.md) for complete contracts, setup,
 official SDK/model references and remaining evaluation/source limitations.
 
+## Phase 16 farmer-assistant decisions (2026-10-13)
+
+| Decision | Rationale and boundary |
+|---|---|
+| Route-local bounded conversation without persistence | Keep at most 12 temporary turns in a feature-scoped ChangeNotifier; send only the current question and explicit enum filters, never chat transcripts. Existing AI query/response tables remain unused. Guests have no account history; farmer scan history remains a separate owned resource. A retention/privacy design is required before future conversation storage. |
+| Explicit condition/topic focus for short follow-ups | Flutter exposes the four existing literal labels and seven reviewed topics. FastAPI accepts a validated known label as a maize-domain hint while retaining unsupported-topic/injection/conflicting-label checks, reviewed-context admission and provider abstention. No hidden history inference, general chatbot or arbitrary similarity cutoff. |
+| FARMER-only scan-context UI through the existing ownership API | Reuse private paginated history and completed-result navigation with identity revision binding. Send the scan ID and empty JSON under authentication; Node obtains the persisted seven-field prediction and verifies ownership. Preserve the existing guest capability API, but guest assistant UI handles questions only. Classifier scores/uncertainty remain unchanged. |
+| Strict typed evidence and selectable source presentation | Reuse Node's versioned answer contract, rejecting malformed/unused citations and incompatible classifier context. Show verified evidence, source/date/rights and uncertainty using existing design tokens and plain selectable text/URLs. No HTML execution, URL launcher or Gemini credential in Flutter. |
+| Volatile identity/draft boundaries and assistant-specific deadline | Remount on identity revision, ignore stale navigation extras and fence cleared/disposed requests. Closing the route or Clear discards conversation; switching tabs can retain the mounted route. Use a 40-second assistant deadline above Node's existing 30-second deadline without changing ordinary 15-second calls or upload behavior. Clear is state cancellation, not a guarantee of provider-worker cancellation. |
+
+See [farmer AI assistant](32-farmer-ai-assistant.md) for the public flow, privacy,
+input/response contracts and verification.
+
 Pending decisions:
 full business JSON validation contracts, retention and
 completed-scan retention/delivery/deletion, production least-privilege roles,

@@ -1,9 +1,11 @@
 # Flutter Architecture
 
-> **Status:** Phase 13 completes selection/preview/upload, real model results,
+> **Status:** Phase 16 adds the scoped farmer assistant with cited reviewed answers,
+> bounded local conversation and private scan explanations. Phase 13 completes selection/preview/upload, real model results,
 > minimal farmer sign-in/logout and private paginated history. See
 > [farmer workflow](29-farmer-detection-history.md), [foundation](19-flutter-foundation.md)
-> and [uploads](20-scan-uploads.md). Other business/AI workflows remain future work.
+> [farmer assistant](32-farmer-ai-assistant.md) and [uploads](20-scan-uploads.md).
+> Calculators, full knowledge browsing and admin workflows remain future work.
 
 ## Pattern
 
@@ -38,7 +40,7 @@ features/
   admin/            reserved access boundary; no privileged dashboard
 ```
 
-Home, Scan, Result and History have concrete scoped ViewModels, repositories and
+Home, Scan, Result, History and Assistant have concrete scoped ViewModels, repositories and
 datasources. Home calls the Node health API on intent; Scan uploads to the real
 inference API. Result and History read only the public owned/private-key Node
 contracts. Farmer identity is app-scoped; route state is keyed by identity revision
@@ -48,6 +50,23 @@ ViewModels/models/repositories when their workflows exist; do not create empty l
 ## Scan experience
 
 Make scanning the primary farmer action. Provide clear camera/gallery selection, upload/progress state, validation errors, retry behavior, and an accessible result view. Communicate model uncertainty and distinguish model prediction from knowledge-grounded recommendations. Do not present missing AI/RAG information as a confident factual answer.
+
+## Farmer assistant
+
+The route-local `AssistantViewModel` owns at most 12 temporary turns, selected condition/
+topic and an optional explicit completed scan. The globally provided repository is
+a dependency, not shared chat state. `AssistantDatasource` sends only the current
+question plus enum filters, or the owned scan ID with an empty explanation body;
+widgets never call HTTP, FastAPI or Gemini. Node verifies scan ownership and obtains
+its persisted classifier context before invoking the internal AI service.
+
+No chat transcript or conversation database write is introduced. Closing the route,
+clearing conversation or changing identity discards state; the indexed tab shell may
+keep the mounted route alive until closed. Identity-revision keys and generation
+fences prevent stale account or cleared-request data from reappearing. Strict immutable
+models validate sources/citations and preserve the scan's seven classifier fields.
+Plain selectable source URLs and reviewed evidence remain distinct from model scores
+and low-confidence warnings. See [Phase 16 contracts](32-farmer-ai-assistant.md).
 
 ## State and errors
 
@@ -67,4 +86,4 @@ Use readable typography, strong contrast, localized and plain-language labels, l
 
 ## Tests
 
-Test ViewModels and repositories independently, including loading/error transitions, anonymous scan submission, authenticated history access, and serialization. Add widget tests for high-value flows and accessibility-sensitive states.
+Test ViewModels and repositories independently, including loading/error transitions, anonymous scan submission, authenticated history access, and serialization. Assistant tests cover source/citation validation, scope/abstention, provider failure, bounded input/turns, authorized scan explanation, retries and session privacy. Add widget tests for high-value flows and accessibility-sensitive states.

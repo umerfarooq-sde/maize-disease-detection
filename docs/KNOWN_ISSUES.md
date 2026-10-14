@@ -1,8 +1,17 @@
 # Known issues
 
-Updated: 2026-10-12 (Asia/Karachi), Phase 14 sourced knowledge/retrieval.
+Updated: 2026-10-14 (Asia/Karachi), Phase 16 farmer assistant.
 
-Phase 14 retrieval is implemented and verified; generation remains deferred.
+Phase 14 retrieval, Phase 15 reviewed-excerpt generation and the Phase 16 farmer
+assistant are implemented. Conversations are capped at 12 volatile turns and are
+not saved under an account. Independent local agronomic evaluation, broad semantic
+scope/injection evaluation, durable privacy/retention and production hosting remain
+pending. The configured Gemini service returned repeated 503 responses during the
+initial live attempt and later recovered; provider availability must not be inferred
+from startup readiness. The UI reports safe failures and offers explicit retry.
+Read [the assistant guide](32-farmer-ai-assistant.md) and current verification in
+[project state](PROJECT_STATE.md).
+
 The initial 25-document corpus is small and U.S. regional, with Minnesota sources
 reviewed in 2018. Local agronomic/source-freshness review and larger independent,
 out-of-domain retrieval evaluation are required. The current score is cosine ranking,

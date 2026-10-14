@@ -51,7 +51,9 @@ def resolve_scope(request: QuestionRequest) -> Scope:
     ):
         return Scope(None, None, "MISSING_SCOPE", True)
     label = request.disease_label or (recognized[0] if recognized else None)
-    maize_scope = bool(recognized or re.search(r"\b(maize|corn)\b", question))
+    maize_scope = bool(
+        request.disease_label or recognized or re.search(r"\b(maize|corn)\b", question)
+    )
     if not maize_scope:
         return Scope(None, None, "MISSING_SCOPE", True)
     topic = request.knowledge_type

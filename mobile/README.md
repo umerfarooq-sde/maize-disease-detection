@@ -1,5 +1,13 @@
 # Mobile
 
+Phase 16 adds the farmer assistant at Tools → Ask your assistant. Guests can ask
+scoped maize questions; farmers can choose a completed private scan or open an
+explanation from its result screen. Reviewed answers show citations, source provenance
+and honest uncertainty, with loading, retry and empty/error states. At most 12 local
+turns are retained; no transcript or conversation is stored under an account. Explicit
+condition/topic filters support bounded follow-ups. See
+[farmer AI assistant](../docs/32-farmer-ai-assistant.md).
+
 Phase 13 completes camera/gallery preview, progress, real model results, minimal
 farmer sign-in/logout and private paginated history/detail. Shared result components
 show the model label/score, uncertainty, image, timestamps and lifecycle. Flutter
@@ -30,8 +38,10 @@ See [implementation/setup/tests](../docs/19-flutter-foundation.md).
 The environment example contains public build configuration only; it is not bundled
 or loaded automatically. Omit API_BASE_URL to explore the offline shell. The existing
 health API demonstrates the full MVVM data flow through an explicit connection check.
-Farmer sign-in/results/history are implemented. Registration, calculators, RAG/Gemini
-and admin dashboard remain future work. Camera uses the configured platform picker; unsupported
+Farmer sign-in/results/history and the grounded assistant are implemented. Registration,
+calculators, full disease-knowledge browsing and admin dashboard remain future work.
+The assistant calls Node only; Gemini/provider secrets stay server-side. Camera uses
+the configured platform picker; unsupported
 platforms hide that action. Only Android platform scaffolding currently exists.
 
 ```powershell
@@ -42,6 +52,12 @@ flutter test
 flutter run --dart-define=API_BASE_URL=http://10.0.2.2:3000/api/v1
 flutter doctor -v
 ```
+
+Assistant data/ViewModel/widget/navigation tests run with `flutter test`. The opt-in
+real Flutter → Node → FastAPI/retrieval/Google contract is launched from the repository
+root with `node --env-file=backend/.env scripts/check-assistant.mjs`; it needs the
+configured Phase 14/15 services and approved model record, and removes only its own
+throwaway account/scan fixtures. See the assistant guide for scope and results.
 
 Release API URLs must use HTTPS. HTTP permissions are debug-only. Do not use backend
 environment files or provider/signing secrets in Dart defines or Flutter assets.

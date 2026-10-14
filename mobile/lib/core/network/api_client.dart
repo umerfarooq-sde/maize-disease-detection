@@ -160,7 +160,12 @@ class ApiClient {
     bool authenticated = false,
     Map<String, String> headers = const {},
     Set<int> acceptedStatuses = const {},
+    Duration? requestTimeout,
   }) async {
+    final deadline = requestTimeout ?? timeout;
+    if (deadline <= Duration.zero) {
+      throw ArgumentError('Timeout must be positive.');
+    }
     if (_closed) throw const AppException(AppErrorKind.network);
     final base = _config.baseUrl;
     if (base == null) throw const AppException(AppErrorKind.configuration);
@@ -186,7 +191,7 @@ class ApiClient {
         headers,
         revision,
       ).timeout(
-        timeout,
+        deadline,
         onTimeout: () {
           if (!abort.isCompleted) abort.complete();
           throw const AppException(AppErrorKind.timeout);

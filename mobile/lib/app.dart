@@ -11,6 +11,8 @@ import 'core/theme/app_theme.dart';
 import 'core/storage/memory_session_tokens.dart';
 import 'data/repositories/farmer_session_repository.dart';
 import 'data/repositories/scan_records_repository.dart';
+import 'data/repositories/assistant_repository.dart';
+import 'data/datasources/assistant_datasource.dart';
 import 'features/auth/view_models/farmer_session_view_model.dart';
 import 'data/datasources/leaf_image_datasource.dart';
 import 'data/datasources/scan_datasource.dart';
@@ -73,6 +75,9 @@ class _MainAppState extends State<MainApp> {
       ChangeNotifierProvider<FarmerSessionViewModel>.value(value: _session),
       Provider<ScanRecordsRepository>(
         create: (_) => ApiScanRecordsRepository(ScanDatasource(_api)),
+      ),
+      Provider<AssistantRepository>(
+        create: (_) => ApiAssistantRepository(AssistantDatasource(_api)),
       ),
       Provider<BackendDatasource>(
         create: (context) => BackendDatasource(context.read<ApiClient>()),

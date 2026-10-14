@@ -199,6 +199,10 @@ $requiredGenerationFiles = @('docs/31-grounded-generation.md', 'backend/src/modu
 foreach ($file in $requiredGenerationFiles) {
     if (-not (Test-Path -LiteralPath (Join-Path $repositoryRoot $file) -PathType Leaf)) { throw "Missing grounded generation file: $file" }
 }
+$requiredAssistantFiles = @('docs/32-farmer-ai-assistant.md', 'mobile/lib/data/models/assistant_answer.dart', 'mobile/lib/data/models/assistant_question.dart', 'mobile/lib/data/datasources/assistant_datasource.dart', 'mobile/lib/data/repositories/assistant_repository.dart', 'mobile/lib/features/ai_assistant/view_models/assistant_view_model.dart', 'mobile/lib/features/ai_assistant/views/assistant_scan_picker.dart', 'mobile/test/assistant/model_test.dart', 'mobile/test/assistant/repository_test.dart', 'mobile/test/assistant/view_model_test.dart', 'mobile/test/assistant/widget_test.dart', 'mobile/test/assistant/navigation_test.dart', 'mobile/test/integration/assistant_test.dart', 'scripts/check-assistant.mjs')
+foreach ($file in $requiredAssistantFiles) {
+    if (-not (Test-Path -LiteralPath (Join-Path $repositoryRoot $file) -PathType Leaf)) { throw "Missing farmer assistant file: $file" }
+}
 $requiredKnowledgeFiles = @('docs/30-knowledge-retrieval.md', 'backend/prisma/migrations/20261012000000_knowledge_retrieval/migration.sql', 'backend/knowledge/maize-extension-20261012-v1.json', 'backend/knowledge/maize-extension-20261012-v1.review.json', 'backend/src/modules/knowledge/knowledge.routes.ts', 'ai-service/app/rag/service.py', 'ai-service/app/api/routes/retrieval.py', 'ai-service/evaluation/rag-v1.json')
 foreach ($file in $requiredKnowledgeFiles) {
     if (-not (Test-Path -LiteralPath (Join-Path $repositoryRoot $file) -PathType Leaf)) { throw "Missing knowledge foundation file: $file" }

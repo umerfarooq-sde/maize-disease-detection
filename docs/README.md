@@ -18,6 +18,7 @@ The remaining feature documents describe intended behavior.
 | [Farmer detection and history](29-farmer-detection-history.md) | Phase 13 complete scan/results, honest uncertainty, volatile farmer sessions, private paginated history, scoped MVVM and integration checks |
 | [Knowledge and retrieval](30-knowledge-retrieval.md) | Phase 14 sourced catalogue, immutable ingestion/chunks, Google embeddings, pgvector, public/internal contracts and real retrieval evaluation |
 | [Grounded generation](31-grounded-generation.md) | Phase 15 bounded reviewed context, official Gemini SDK, verified excerpts/citations, immutable scan explanations, abstention, access controls and server-only setup |
+| [Farmer AI assistant](32-farmer-ai-assistant.md) | Phase 16 scoped Flutter conversation, MVVM/repositories, visible sources, private farmer scan explanations, bounded follow-ups, volatile privacy boundaries and tests |
 | [System overview](01-system-overview.md) | Purpose, users, boundaries, and primary flow |
 | [HLA](02-hla.md) | Logical components and trust boundaries |
 | [HLD](03-hld.md) | Runtime interactions and failures |

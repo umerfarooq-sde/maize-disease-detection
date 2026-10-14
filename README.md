@@ -5,10 +5,16 @@ with administrative tools for maintaining knowledge and monitoring the system.
 
 ## Current status
 
+Phase 16 adds the Flutter farmer assistant with reviewed answers, visible references,
+bounded local conversation and ownership-protected scan explanations. Guests can ask
+questions; signed-in farmers can select their private scans. Conversations are not
+stored under an account or sent as unlimited history. See
+[farmer AI assistant](docs/32-farmer-ai-assistant.md).
+
 Phase 15 adds Gemini selection of verified reviewed evidence, cited knowledge answers
 and owner-checked scan explanations. Classifier results and uncertainty remain
 unchanged. See [grounded generation](docs/31-grounded-generation.md) for configuration,
-contracts, excerpt policy and limitations. No Flutter assistant UI is added.
+contracts, excerpt policy and limitations.
 
 Phase 14 adds sourced disease knowledge, versioned ingestion and semantic retrieval
 through Google embeddings and PostgreSQL/pgvector. See
@@ -36,7 +42,7 @@ raw probabilities are retained and no confidence threshold is locked. See
 [model fitness](docs/26-model-fitness-validation.md). Use remains non-commercial
 academic/FYP research without raw redistribution or commercial clearance. Shared
 preprocessing, existing FastAPI/Flutter/backend/database features are preserved;
-Persistent mobile sign-in, Flutter assistant UI and other business workflows remain future work.
+Persistent mobile sign-in, calculators, full admin tools and other business workflows remain future work.
 With no approved operational cutoff, every current prediction is `LOW_CONFIDENCE`
 with `THRESHOLD_UNCONFIGURED`; numerical scores do not establish field correctness.
 See [project state](docs/PROJECT_STATE.md) for verified progress and outstanding decisions.
@@ -135,7 +141,8 @@ This does not change the machine's persistent execution policy.
 
 ## Next step
 
-Stop after Phase 15. Later workflows require the next explicit instruction.
+Stop after Phase 16. Later workflows require the next explicit instruction.
 Preserve the frozen v2 candidate and its documented limitations. See
+[farmer assistant](docs/32-farmer-ai-assistant.md),
 [grounded generation](docs/31-grounded-generation.md), [fitness audit](docs/26-model-fitness-validation.md) and
 [roadmap](docs/14-roadmap.md).

@@ -22,7 +22,7 @@ checks, fix failures, and update [project state](PROJECT_STATE.md).
 | 13 | Complete farmer disease detection, result UX and private history (user scope) |
 | 14 | RAG knowledge system |
 | 15 | Grounded Gemini generation with reviewed evidence/citations (user scope) |
-| 16 | AI assistant |
+| 16 | Farmer AI assistant using existing grounded retrieval/generation (user scope) |
 | 17 | Deterministic fertilizer calculator |
 | 18 | Deterministic yield calculator |
 | 19 | Farmer analytics |
@@ -184,3 +184,15 @@ change ML predictions or add an arbitrary retrieval/confidence cutoff. No Flutte
 assistant UI, conversation persistence, calculators, admin editing or deployment is
 included. Read [grounded generation](31-grounded-generation.md). Stop after Phase 15;
 Phase 16 and subsequent work require another explicit instruction.
+
+## Phase 16 scope clarification
+
+The user authorized the farmer-facing Flutter assistant above the existing Phase 14/15
+services: scoped maize questions, visible references, explicit owned scan context,
+MVVM/Provider, loading/retry/empty/error and low-confidence UX, bounded conversation
+and component/integration tests. Conversation remains route-local with at most 12
+turns and no transcript/database retention; anonymous questions and private farmer
+scan history are intentionally separate. Explicit known condition/topic filters enable
+short follow-ups without opening a general chatbot or changing reviewed evidence/ML
+policies. Read [farmer AI assistant](32-farmer-ai-assistant.md). Stop after Phase 16;
+calculators, admin tools, chat retention and subsequent phases require a new instruction.

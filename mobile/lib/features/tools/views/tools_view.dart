@@ -20,7 +20,7 @@ class ToolsView extends StatelessWidget {
         ),
         const SizedBox(height: AppSpacing.sm),
         Text(
-          'Planning tools are coming soon. Explore what is being prepared.',
+          'Ask your field assistant or explore the planning tools being prepared.',
           style: Theme.of(
             context,
           ).textTheme.bodyLarge?.copyWith(color: AppColors.muted),

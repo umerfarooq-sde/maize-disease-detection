@@ -1,0 +1,76 @@
+{
+  "verificationVersion": "farmer-assistant-contract-v1",
+  "verifiedAt": "2026-10-14T03:45:44.554211+00:00",
+  "clientDate": "2026-10-14",
+  "result": "PASS",
+  "flow": "Flutter -> Node -> authenticated FastAPI -> pgvector/Google embeddings -> Gemini -> cited response",
+  "lifespan": {
+    "passed": true,
+    "realFlutterNodeFastapiGooglePgvector": true,
+    "generationResponses": 6,
+    "providerCalls": 3,
+    "loadsPerLifespan": 1,
+    "gracefulExitCode": 0,
+    "datasetPartitionsUsed": []
+  },
+  "modelChanged": false,
+  "generationModel": "gemini-3.5-flash-lite",
+  "promptVersion": "grounded-evidence-selection-v1",
+  "reviewSetVersion": "maize-extension-20261012-v1",
+  "outcomes": [
+    {
+      "status": "GROUNDED",
+      "providerUsed": true,
+      "evidenceCount": 1,
+      "durationMs": 5945.616
+    },
+    {
+      "status": "GROUNDED",
+      "providerUsed": true,
+      "evidenceCount": 1,
+      "durationMs": 4740.243
+    },
+    {
+      "status": "OUT_OF_SCOPE",
+      "providerUsed": false,
+      "evidenceCount": 0,
+      "durationMs": 0.12
+    },
+    {
+      "status": "OUT_OF_SCOPE",
+      "providerUsed": false,
+      "evidenceCount": 0,
+      "durationMs": 0.034
+    },
+    {
+      "status": "INSUFFICIENT_INFORMATION",
+      "providerUsed": false,
+      "evidenceCount": 0,
+      "durationMs": 0.162
+    },
+    {
+      "status": "GROUNDED",
+      "providerUsed": true,
+      "evidenceCount": 4,
+      "durationMs": 5887.641
+    }
+  ],
+  "providerMeanDurationMs": 5524.5,
+  "timingScope": "FastAPI retrieval/context/generation only, excludes Node authorization and Flutter network overhead.",
+  "contractsVerified": [
+    "sourced normal question",
+    "explicit enum-filter follow-up",
+    "unsupported question",
+    "recognized injection",
+    "missing Healthy management",
+    "client/server long-input limits",
+    "no transcript or forged classifier payload",
+    "owned scan explanation and seven-field parity",
+    "LOW_CONFIDENCE/null threshold preserved",
+    "anonymous scan explanation rejected by farmer UI repository",
+    "different farmer scan rejected by Node with404"
+  ],
+  "fixtureCleanup": "Two temporary FARMER accounts and own synthetic scan/prediction/journal removed; no Cloudinary assets or new model versions.",
+  "initialAttempt": "Upstream Gemini503 observed on2026-10-13; safe error surfaced and fixtures cleaned. Original model recovered; successful run used unchanged configured model.",
+  "limitations": "Controlled persisted synthetic Common_Rust scores; no raw dataset images, classifier accuracy/field evaluation, independent agronomic validation or production load benchmark."
+}

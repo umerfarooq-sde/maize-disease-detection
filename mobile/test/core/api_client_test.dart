@@ -40,6 +40,41 @@ class FakeTokenSource implements AccessTokenSource {
 void main() {
   final config = AppConfig(apiBaseUrl: 'https://api.example.test/api/v1');
   test(
+    'request-specific deadline preserves default and rejects invalid values',
+    () async {
+      final api = ApiClient(
+        config: config,
+        timeout: const Duration(milliseconds: 1),
+        client: MockClient((_) async {
+          await Future<void>.delayed(const Duration(milliseconds: 25));
+          return jsonResponse({});
+        }),
+      );
+      addTearDown(api.close);
+      expect(
+        (await api.request(
+          ApiMethod.post,
+          'knowledge/ask',
+          requestTimeout: const Duration(seconds: 1),
+        )).isSuccessful,
+        true,
+      );
+      expect(api.timeout, const Duration(milliseconds: 1));
+      await expectLater(
+        api.request(ApiMethod.post, 'knowledge/ask'),
+        throwsA(errorKind(AppErrorKind.timeout)),
+      );
+      await expectLater(
+        api.request(
+          ApiMethod.post,
+          'knowledge/ask',
+          requestTimeout: Duration.zero,
+        ),
+        throwsArgumentError,
+      );
+    },
+  );
+  test(
     'missing configuration keeps shell usable; invalid/release HTTP URLs fail safely',
     () {
       expect(AppConfig().isConfigured, false);

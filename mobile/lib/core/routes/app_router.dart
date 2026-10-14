@@ -4,6 +4,8 @@ import 'package:provider/provider.dart';
 import '../../data/repositories/backend_repository.dart';
 import '../../data/repositories/scan_repository.dart';
 import '../../data/repositories/scan_records_repository.dart';
+import '../../data/models/scan_record.dart';
+import '../../data/repositories/assistant_repository.dart';
 import '../../features/auth/view_models/farmer_session_view_model.dart';
 import '../../features/scan_history/view_models/scan_history_view_model.dart';
 import '../../features/disease_detection/view_models/scan_result_arguments.dart';
@@ -12,6 +14,8 @@ import '../../features/disease_detection/views/result_view.dart';
 import '../../features/disease_detection/view_models/scan_view_model.dart';
 import '../../features/admin/views/admin_access_view.dart';
 import '../../features/ai_assistant/views/assistant_view.dart';
+import '../../features/ai_assistant/views/assistant_scan_picker.dart';
+import '../../features/ai_assistant/view_models/assistant_view_model.dart';
 import '../../features/analytics/views/analytics_view.dart';
 import '../../features/auth/views/auth_intro_view.dart';
 import '../../features/disease_detection/views/scan_view.dart';
@@ -100,13 +104,7 @@ GoRouter createAppRouter({String initialLocation = AppRoutes.home}) => GoRouter(
                     child: YieldView(),
                   ),
                 ),
-                GoRoute(
-                  path: 'assistant',
-                  builder: (_, _) => const _DetailPage(
-                    title: 'Field assistant',
-                    child: AssistantView(),
-                  ),
-                ),
+                GoRoute(path: 'assistant', builder: _assistantPage),
               ],
             ),
           ],
@@ -204,12 +202,67 @@ Widget _resultPage(BuildContext context, GoRouterState state) {
         uploads: context.read<ScanRepository>(),
       )..load(),
       child: ScanResultView(
+        onExplainScan: context.watch<FarmerSessionViewModel>().signedIn
+            ? (scan) => context.push(
+                AppRoutes.assistant,
+                extra: _AssistantNavigation(
+                  scan,
+                  context.read<FarmerSessionViewModel>().revision,
+                ),
+              )
+            : null,
         onNewScan: () => context.go(
           '${AppRoutes.scan}?new=${DateTime.now().microsecondsSinceEpoch}',
         ),
       ),
     ),
   );
+}
+
+class _AssistantNavigation {
+  const _AssistantNavigation(this.scan, this.revision);
+  final ScanRecord scan;
+  final int revision;
+}
+
+Widget _assistantPage(BuildContext context, GoRouterState state) {
+  final session = context.watch<FarmerSessionViewModel>();
+  final extra = state.extra;
+  final scan =
+      session.signedIn &&
+          extra is _AssistantNavigation &&
+          extra.revision == session.revision
+      ? extra.scan
+      : null;
+  return _DetailPage(
+    title: 'Field assistant',
+    child: ChangeNotifierProvider(
+      key: ValueKey('assistant-${session.revision}'),
+      create: (_) {
+        final model = AssistantViewModel(context.read<AssistantRepository>());
+        if (scan != null) model.explainScan(scan);
+        return model;
+      },
+      child: Builder(
+        builder: (context) =>
+            AssistantView(onChooseScan: () => _chooseAssistantScan(context)),
+      ),
+    ),
+  );
+}
+
+Future<void> _chooseAssistantScan(BuildContext context) async {
+  final session = context.read<FarmerSessionViewModel>();
+  if (!session.signedIn) return;
+  final revision = session.revision;
+  final scan = await showModalBottomSheet<ScanRecord>(
+    context: context,
+    isScrollControlled: true,
+    useSafeArea: true,
+    builder: (_) => const AssistantScanPicker(),
+  );
+  if (!context.mounted || session.revision != revision || scan == null) return;
+  await context.read<AssistantViewModel>().explainScan(scan);
 }
 
 class _DetailPage extends StatelessWidget {

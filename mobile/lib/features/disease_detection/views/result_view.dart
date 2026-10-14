@@ -3,12 +3,14 @@ import 'package:provider/provider.dart';
 import '../../../core/theme/design_tokens.dart';
 import '../../../core/widgets/app_page.dart';
 import '../../../core/widgets/app_states.dart';
+import '../../../data/models/scan_record.dart';
 import '../view_models/scan_result_view_model.dart';
 import '../widgets/scan_result_card.dart';
 
 class ScanResultView extends StatelessWidget {
-  const ScanResultView({this.onNewScan, super.key});
+  const ScanResultView({this.onNewScan, this.onExplainScan, super.key});
   final VoidCallback? onNewScan;
+  final ValueChanged<ScanRecord>? onExplainScan;
 
   @override
   Widget build(BuildContext context) {
@@ -48,6 +50,15 @@ class ScanResultView extends StatelessWidget {
                   : model.refresh,
             ),
           ],
+          if (onExplainScan != null &&
+              model.scan?.status == ScanStatus.completed &&
+              model.scan?.prediction != null)
+            OutlinedButton.icon(
+              key: const Key('explain-scan-action'),
+              onPressed: model.busy ? null : () => onExplainScan!(model.scan!),
+              icon: const Icon(Icons.chat_bubble_outline),
+              label: const Text('Ask about this scan'),
+            ),
           const SizedBox(height: AppSpacing.xl),
           FilledButton.icon(
             key: const Key('new-scan-action'),

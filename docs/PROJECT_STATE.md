@@ -1,10 +1,28 @@
 # Project state
 
-Updated: 2026-10-13 (Asia/Karachi).
+Updated: 2026-10-14 (Asia/Karachi).
 
 ## Current phase
 
-Phase 15 is complete and verified. Node exposes grounded knowledge questions and
+Phase 16 is complete and verified. Flutter provides the farmer assistant with
+reviewed cited answers, explicit disease/topic focus, safe loading/retry/error and
+low-confidence notices, private paginated scan selection and result-to-assistant
+navigation. The route-local conversation keeps at most 12 volatile turns; previous
+messages are never sent as a transcript or saved under an account. Guest knowledge
+questions and authenticated farmer scan history remain intentionally separate.
+Account changes clear the chat, draft and selected scan and fence delayed responses.
+Read [farmer AI assistant](32-farmer-ai-assistant.md).
+
+Verification passes 175 isolated Flutter tests (four opt-in tests skipped by default),
+202 backend tests and 325 AI tests (three opt-in database tests skipped by default).
+The separately enabled real Flutter -> Node -> FastAPI -> Google/pgvector/Gemini
+contract passes grounded questions/follow-ups, citations, unsupported/injected/long
+input, absent Healthy knowledge, owned scan explanation and foreign-farmer denial.
+Temporary fixture accounts/scan/prediction/journal are removed. Gemini initially
+returned 503 and later recovered; the successful check uses the unchanged configured
+generation model, without automatic fallback. Stop after Phase 16.
+
+The preceding Phase 15 is complete and verified. Node exposes grounded knowledge questions and
 ownership-protected scan explanations through authenticated FastAPI retrieval and
 Gemini. The official `google-genai` SDK is locked to 2.29.0; the configured local
 generation model is `gemini-3.5-flash-lite`. Gemini selects reviewed evidence;
@@ -18,8 +36,8 @@ Six representative FastAPI retrieval-plus-generation calls average **4,937.62 ms
 locally (3,891.36–6,694.37 ms), excluding Node authorization/network overhead.
 This is development contract evidence, not agronomic/field validation, exhaustive
 semantic safety or a production load benchmark. Sources retain regional/freshness
-limits; generation is independently opt-in and server-only. No Flutter assistant UI,
-conversation retention, new migration or later phase is introduced. Stop after Phase 15.
+limits; generation is independently opt-in and server-only. Phase 16 supplies the
+Flutter assistant UI. Conversation retention and new migrations remain deferred.
 
 The preceding Phase 14 is complete and verified. The skipped Phase 6 foundation had empty
 knowledge tables and no
@@ -96,8 +114,8 @@ The recovered backend database client matches HEAD and works. Phase 6 was explic
 skipped during that audit; Phase 14 completes the missing retrieval foundation.
 Phase 9.5 added configured read-only intake; the subsequent approved exclusions,
 use restrictions, full-frame policy and Phase 10 baseline are recorded in DECISIONS.md.
-Stop after Phase 15; persistent mobile sessions, calculators, full admin functionality
-and Flutter assistant UI remain deferred.
+Stop after Phase 16; persistent mobile sessions, calculators and full admin
+functionality remain deferred.
 
 ## Initial workspace findings
 
@@ -127,16 +145,16 @@ and Flutter assistant UI remain deferred.
 
 | Component | Verified implementation |
 |---|---|
-| Mobile | Flutter 3.41.9/Dart 3.11.5, Material 3 farmer shell, scoped Provider MVVM, selection/preview/progress, real model results, private paginated history/detail, volatile native farmer login/logout/serialized refresh and stale-session fencing; 110 isolated tests, three opt-in live tests; live guest and farmer scan chains pass; Android debug APK rebuilt successfully |
+| Mobile | Flutter 3.41.9/Dart 3.11.5, Material 3 farmer shell, scoped Provider MVVM, detection/private history and grounded farmer assistant; at most12 volatile turns, enum-filter follow-ups, cited sources, private scan picker/explanation and identity fences; 175 isolated tests, four opt-in live tests; actual assistant contract passes; prior Android debug APK packaging verified |
 | Backend | Existing health/auth/scans/private history plus sourced disease list/detail, semantic knowledge retrieval and ownership-protected grounded generation; Prisma 7.10.0, 21 tables/eight unchanged migrations, 202 isolated tests, 13 PostgreSQL checks and nine live generation contract checks |
-| AI service | Existing once-loaded classifier/shared preprocessing and reviewed pgvector retrieval plus official SDK Gemini evidence selection, bounded pinned context, exact excerpts/citations and safe abstention; 321 isolated tests plus three enabled PostgreSQL checks, Ruff/strict mypy; 61 generation/boundary cases; factory remains free of heavy provider/model imports |
+| AI service | Existing once-loaded classifier/shared preprocessing and reviewed pgvector retrieval plus official SDK Gemini evidence selection, bounded pinned context, exact excerpts/citations and safe abstention; explicit validated class-filter follow-up scope; 325 isolated tests, three opt-in PostgreSQL checks verified in Phase 15, Ruff/strict mypy; 65 generation/boundary cases; factory remains free of heavy provider/model imports |
 | Shared preprocessing | One independently buildable typed package at `shared/preprocessing`, version 1.0.0, explicit JSON configuration, file/byte entrypoints, conservative extraction/fallback, optional unchanged CPU tensor and debug CLI; 78 tests pass in each consumer environment and 12 synthetic baseline parity cases pass |
 | ML training | Corrected immutable v2: 4,162 contents/4,121 groups, 2,911/627/624 partitions, no confirmed leakage; fresh MobileNetV3 Small completed 11 epochs, best epoch 8; validation 96.81% accuracy/0.9589 macro F1, single descriptive test 95.83%/0.9452; raw probabilities, no threshold; 219 tests, Ruff over 32 files, mypy over 15 modules and 16 actual TRAIN cases with AI compatibility pass; limited FYP prototype |
 | Infrastructure | Neon PostgreSQL 18.6 with pgvector 0.8.6 migrated; pgvector 0.8.7/PostgreSQL 18 Compose configuration; preserved native 18.4 cluster; private local settings ignored |
 | Documentation | Architecture, database/operations, auth, Flutter foundation, scan uploads/recovery, FastAPI startup/contracts/network, shared preprocessing/configuration/versioning/limitations, decisions, roadmap and verification history |
 | Scripts | Repository/environment/auth/admin/PostgreSQL/Python/development checks including shared preprocessing and actual cross-environment parity; configured FastAPI startup and 16-TRAIN serving parity/timing verifier; full live Flutter scan-upload harness and backend cleanup CLI |
 
-Persistent mobile authentication, Flutter assistant UI, calculator
+Persistent mobile authentication, conversation retention, calculator
 execution, notification delivery and the admin dashboard remain future work. Flutter
 feature introduction/empty screens are foundation UI; FastAPI exposes internal
 prediction/model health, retrieval and grounded generation alongside process health.
@@ -1531,9 +1549,71 @@ remain. Test tools emit existing Starlette/httpx and pg query deprecation warnin
 these do not fail checks. Flutter knowledge/assistant UI, admin editing, persistence
 and free-form model-authored factual paraphrases remain outside this baseline.
 
+## Phase 16 farmer assistant verification (2026-10-14)
+
+- Replaced the assistant placeholder with route-scoped Provider/ChangeNotifier
+  MVVM: View -> ViewModel -> repository -> datasource -> shared API client -> Node.
+  Six composed assistant widgets handle suggested questions, explicit focus,
+  conversation turns, verified answer sections/references and selected scan context.
+  No widget calls HTTP, Gemini or FastAPI directly, and no new dependency is added.
+- Store at most 12 volatile turns in this screen; no database/local-file conversation
+  history is written. Each request carries the current question and optional known
+  disease/topic enums only. Clears/route disposal/account revision changes remove
+  state and discard late results. Switching tabs may retain the open route; closing
+  the assistant or changing identity clears it, as described in the UI.
+- Support 3–1,000 Unicode code points, at most 1,800 UTF-8 bytes and safe controls.
+  Shared pure client validation avoids inconsistent limits; Node remains authoritative.
+  An explicit known class filter now supplies bounded maize scope for a short follow-up.
+  Existing unsupported-topic/injection, missing-evidence and reviewed-source checks remain.
+- Immutable typed response parsing enforces statuses/policy versions, citations/source
+  membership and provenance, finite numbers and coherent classifier uncertainty.
+  Reviewed content and source URLs render as plain/selectable text, without HTML,
+  executable links or source fetching. Non-grounded answers display honest abstention.
+- Farmer scan context uses private paginated history or an explicit completed-result
+  action. The request sends only scan ID and `{}` with the existing bearer session;
+  Node verifies ownership and uses its persisted prediction. The seven returned
+  classifier fields must match, and high scores retain LOW_CONFIDENCE/null-threshold
+  warnings. Guest UI supports questions without personal scan/conversation history.
+- Loading, clear, retry, no-network, timeout/provider failure, empty/missing evidence,
+  long input, keyboard, narrow phones and large text are verified. The assistant uses
+  a 40-second request-specific deadline; the generic 15-second timeout and Node's
+  strict 30-second generation deadline remain unchanged.
+
+| Check | Result |
+|---|---|
+| Dart formatting and `flutter analyze` | 99 Dart files formatted, analyzer has no issues |
+| Complete `flutter test` | 175 pass, four explicitly opt-in live tests skipped in the default run |
+| Assistant coverage | 36 model/repository, 10 ViewModel, 15 widget, three navigation/privacy/pagination cases plus shared request-timeout regression pass |
+| Real `scripts/check-assistant.mjs` | One enabled Flutter contract passes questions/follow-ups/sources, scope/injection/long-input limits, absent Healthy management, owned scan explanation/unchanged uncertainty and cross-farmer denial |
+| Backend `scripts/check-development.ps1 -Component Backend` | Format/lint/strict types/build, all 202 tests and dependency probe pass; existing server application source unchanged |
+| AI `scripts/check-development.ps1 -Component AI` | Ruff format/check, strict mypy over 43 modules and 325 tests pass; three opt-in SQL checks default-skip, previously verified in Phase 15 |
+| Prisma validation/migration status | Valid schema; eight unchanged migrations current, no Phase 16 migration required |
+| Repository/security/frozen proof | Required files/templates/ignores, local links, whitespace, secret/private-path scans pass; 171 ML files/approved checkpoint/shared package/corpus/backend/eight migrations unchanged |
+
+[Saved metadata-only live evidence](../ai-service/evaluation/results/farmer-assistant-contract-v1-20261014.json)
+records six generation outcomes with three actual provider calls, the unchanged
+generation model/prompt/review identities and one clean startup/shutdown. Mean
+FastAPI retrieval/context/generation time is 5,524.50 ms, excluding Node authorization
+and Flutter/network overhead. The ownership fixture is a controlled persisted synthetic
+Common_Rust prediction; this is a contract check, not classifier accuracy, field-image
+validation or independent agronomic assessment. No raw dataset partition is read.
+
+The initial attempt on October 13 returned genuine Google 503 responses. Local safe
+error handling passed; test-created rows were cleaned. On October 14 the original
+configured model recovered and the full contract passed without model switching,
+fallback output or relaxed validation. Knowledge counts remain four diseases/four
+sources/25 documents/25 READY vectors, and no Cloudinary asset is created by these tests.
+
+Remaining limits: small English single-topic corpus, source freshness/local agronomic
+review and wider semantic/injection evaluation; no durable conversation/session
+retention, offline factual assistant, new calculators/admin functions or production
+hosting/shared limits. Existing classifier research/commercial restrictions remain.
+No deployment, new platform or ML/data change is introduced. Unrelated user workspace
+edits remain outside the phase commit. Stop after Phase 16.
+
 ## Next step
 
-Stop after Phase 15. Subsequent phases require the
+Stop after Phase 16. Subsequent phases require the
 next explicit instruction. Independent
 field validation and commercial
 licensing/source replacement remain requirements before real farmer/commercial use.
