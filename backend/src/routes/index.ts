@@ -1,5 +1,7 @@
 import { Router } from 'express';
 import type { Environment } from '../config/environment.js';
+import { dashboardRoutes } from '../modules/admin/dashboard.routes.js';
+import type { DashboardService } from '../modules/admin/dashboard.service.js';
 import { analyticsRoutes } from '../modules/analytics/analytics.routes.js';
 import type { AnalyticsService } from '../modules/analytics/analytics.service.js';
 import { authRoutes } from '../modules/auth/auth.routes.js';
@@ -28,6 +30,7 @@ export function apiRoutes(
   fertilizerService: FertilizerService,
   yieldService: YieldService,
   analyticsService: AnalyticsService,
+  dashboardService: DashboardService,
 ): Router {
   const router = Router();
   router.use(healthRoutes(createHealthService(repository)));
@@ -38,5 +41,6 @@ export function apiRoutes(
   router.use(fertilizerRoutes(environment, authService, fertilizerService));
   router.use(yieldRoutes(environment, authService, yieldService));
   router.use(analyticsRoutes(environment, authService, analyticsService));
+  router.use(dashboardRoutes(environment, authService, dashboardService));
   return router;
 }

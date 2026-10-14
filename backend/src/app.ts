@@ -8,6 +8,11 @@ import { AppError } from './errors/app-error.js';
 import { errorHandler, notFound } from './middleware/error-handler.js';
 import { requestRateLimit } from './middleware/rate-limit.js';
 import { requestContext } from './middleware/request-context.js';
+import { createDashboardRepository } from './modules/admin/dashboard.repository.js';
+import {
+  createDashboardService,
+  type DashboardService,
+} from './modules/admin/dashboard.service.js';
 import { createAnalyticsRepository } from './modules/analytics/analytics.repository.js';
 import {
   type AnalyticsService,
@@ -70,6 +75,10 @@ export function createApp(
   analyticsService: AnalyticsService = createAnalyticsService(
     createAnalyticsRepository(getDatabaseClient(environment.DATABASE_URL)),
   ),
+  dashboardService: DashboardService = createDashboardService(
+    createDashboardRepository(getDatabaseClient(environment.DATABASE_URL)),
+    environment,
+  ),
 ): Express {
   const app = express();
   app.locals.recoverScans = () => scanService.recoverStale();
@@ -102,6 +111,7 @@ export function createApp(
       fertilizerService,
       yieldService,
       analyticsService,
+      dashboardService,
     ),
   );
   app.use(notFound);

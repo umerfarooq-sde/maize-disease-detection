@@ -106,6 +106,26 @@ export const analyticsAggregateSchema = z
     );
   }, 'Analytics counts must reconcile.');
 export type AnalyticsAggregate = z.infer<typeof analyticsAggregateSchema>;
+/** Pad only bounded buckets; aggregation itself always remains in PostgreSQL. */
+export function completeAnalyticsAggregate(
+  aggregate: AnalyticsAggregate,
+  range: AnalyticsRange,
+): AnalyticsAggregate {
+  const counts = new Map(aggregate.distribution.map((item) => [item.label, item.count]));
+  const days = new Map(aggregate.daily.map((item) => [item.date, item.count]));
+  return {
+    ...aggregate,
+    distribution: analyticsLabels.map((label) => ({ label, count: counts.get(label) ?? 0 })),
+    daily: Array.from({ length: range.days }, (_, index) => {
+      const date = new Date(
+        new Date(`${range.from}T00:00:00.000Z`).getTime() + index * analyticsDayMs,
+      )
+        .toISOString()
+        .slice(0, 10);
+      return { date, count: days.get(date) ?? 0 };
+    }),
+  };
+}
 export interface AnalyticsSummary extends AnalyticsAggregate {
   range: AnalyticsRange;
   asOf: string;

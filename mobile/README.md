@@ -1,5 +1,11 @@
 # Mobile
 
+Phase 20 adds `/admin` outside the farmer shell: separate volatile Admin sign-in,
+overview cards/charts, real account/scan aggregates, model registry/configuration,
+recent activity and loading/retry/empty states. Shared rotation/revocation code
+keeps Admin and Farmer credential stores, cookies and clients separate. See
+[Admin dashboard](../docs/36-admin-dashboard.md).
+
 Phase 19 replaces the Field insights placeholder with private saved-scan cards,
 label distribution, UTC activity periods and recent activity pagination. Date
 presets/custom filters, guest/empty/loading/retry states and uncertainty wording

@@ -33,6 +33,12 @@ for validation, safe DTOs, cookie transport, expiry, CSRF protection and RBAC.
 
 ## Scan contract considerations
 
+Phase 20 adds ADMIN-only `GET /api/v1/admin/dashboard` for system-wide account/scan
+aggregates and ten recent minimal activity entries. FARMER access is denied; paired
+bounded UTC dates reuse analytics validation. Registered production/configured
+inference versions remain distinct and unrecorded/unchecked telemetry is explicit.
+See [Admin dashboard](36-admin-dashboard.md).
+
 Phase 19 adds private FARMER-only `GET /api/v1/analytics/scans` and
 `GET /api/v1/analytics/scans/activity`. Both derive ownership from the session,
 accept bounded paired UTC dates and omit anonymous scans. Activity supports

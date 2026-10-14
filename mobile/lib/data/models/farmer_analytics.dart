@@ -27,7 +27,7 @@ DateTime _date(Object? value) {
   return parsed;
 }
 
-DateTime _timestamp(Object? value) {
+DateTime analyticsTimestamp(Object? value) {
   if (value is! String ||
       !RegExp(
         r'^\d{4}-\d{2}-\d{2}T(?:[01]\d|2[0-3]):[0-5]\d:[0-5]\d(?:\.\d{1,6})?Z$',
@@ -203,7 +203,7 @@ class FarmerAnalytics {
     }
     return FarmerAnalytics._(
       range,
-      _timestamp(data['asOf']),
+      analyticsTimestamp(data['asOf']),
       totals,
       uncertainty,
       distribution,
@@ -247,7 +247,7 @@ class AnalyticsActivity {
     return AnalyticsActivity._(
       _uuid(data['id']),
       status,
-      _timestamp(data['createdAt']),
+      analyticsTimestamp(data['createdAt']),
       label as String?,
     );
   }

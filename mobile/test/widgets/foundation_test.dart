@@ -156,7 +156,7 @@ void main() {
       }
       router.go(AppRoutes.admin);
       await tester.pumpAndSettle();
-      expect(find.text('Admin workspace is not available'), findsOneWidget);
+      expect(find.text('Administrator sign-in'), findsOneWidget);
       router.go('/unknown/private-path');
       await tester.pumpAndSettle();
       expect(find.text('This page is not available'), findsOneWidget);

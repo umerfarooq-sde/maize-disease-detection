@@ -17,6 +17,10 @@ import 'data/datasources/fertilizer_datasource.dart';
 import 'data/repositories/fertilizer_repository.dart';
 import 'data/repositories/yield_repository.dart';
 import 'data/repositories/analytics_repository.dart';
+import 'data/models/session_account.dart';
+import 'data/repositories/session_repository.dart';
+import 'data/repositories/admin_dashboard_repository.dart';
+import 'features/admin/view_models/admin_session_view_model.dart';
 import 'features/auth/view_models/farmer_session_view_model.dart';
 import 'data/datasources/leaf_image_datasource.dart';
 import 'data/datasources/scan_datasource.dart';
@@ -48,6 +52,9 @@ class _MainAppState extends State<MainApp> {
   late final ApiClient _api;
   late final MemorySessionTokens _tokens;
   late final FarmerSessionViewModel _session;
+  late final MemorySessionTokens _adminTokens;
+  late final ApiClient _adminApi;
+  late final AdminSessionViewModel _adminSession;
   @override
   void initState() {
     super.initState();
@@ -59,6 +66,19 @@ class _MainAppState extends State<MainApp> {
       tokenSource: _tokens,
     );
     _session = FarmerSessionViewModel(FarmerSessionRepository(_api, _tokens));
+    _adminTokens = MemorySessionTokens();
+    _adminApi = ApiClient(
+      config: _config,
+      client: widget.httpClient,
+      tokenSource: _adminTokens,
+    );
+    _adminSession = AdminSessionViewModel(
+      SessionRepository(
+        _adminApi,
+        _adminTokens,
+        requiredRole: AccountRole.admin,
+      ),
+    );
     _router = createAppRouter(initialLocation: widget.initialLocation);
   }
 
@@ -68,6 +88,9 @@ class _MainAppState extends State<MainApp> {
     _session.dispose();
     _tokens.dispose();
     _api.close();
+    _adminSession.dispose();
+    _adminTokens.dispose();
+    _adminApi.close();
     super.dispose();
   }
 
@@ -87,6 +110,10 @@ class _MainAppState extends State<MainApp> {
         create: (_) => ApiFertilizerRepository(FertilizerDatasource(_api)),
       ),
       Provider<YieldRepository>(create: (_) => ApiYieldRepository(_api)),
+      ChangeNotifierProvider<AdminSessionViewModel>.value(value: _adminSession),
+      Provider<AdminDashboardRepository>(
+        create: (_) => ApiAdminDashboardRepository(_adminApi),
+      ),
       Provider<AnalyticsRepository>(
         create: (_) => ApiAnalyticsRepository(_api),
       ),

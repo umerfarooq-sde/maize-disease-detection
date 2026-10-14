@@ -229,3 +229,15 @@ are not ground-truth performance or disease-prevalence measurements. Anonymous
 ownership stays null. Existing tables/indexes suffice; no model, inference,
 calculator, admin dashboard or later-phase behavior is added. Read
 [farmer analytics](35-farmer-analytics.md). Stop after Phase 19.
+
+## Phase 20 scope clarification
+
+The user authorized a real-data Admin dashboard with ADMIN-only backend aggregates,
+access-denial tests, overview cards/charts/system summary and distinct Flutter
+Admin navigation. Reuse saved scan/account/model registry data and existing
+validated date/count semantics. Independent volatile Admin authentication reuses
+tested session mechanics while preserving Farmer-only login and private history.
+Do not fabricate unrecorded AI metrics or claim runtime readiness from database
+status. No model promotion, knowledge editing, detailed live ML health, new data
+retention, deployment or later phase is included. Read
+[Admin dashboard](36-admin-dashboard.md). Stop after Phase 20.

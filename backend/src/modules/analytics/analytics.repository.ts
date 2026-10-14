@@ -26,7 +26,8 @@ export interface AnalyticsRepository {
   } | null>;
 }
 /** One owner/date-indexed query returns aggregates, never every scan to Node. */
-export function analyticsSummarySql(userId: string, range: AnalyticsRange): Prisma.Sql {
+// Null selects system totals only for the separately ADMIN-authorized dashboard.
+export function analyticsSummarySql(userId: string | null, range: AnalyticsRange): Prisma.Sql {
   const { from, until } = analyticsBounds(range);
   return Prisma.sql`
     WITH owned AS MATERIALIZED (
@@ -39,7 +40,7 @@ export function analyticsSummarySql(userId: string, range: AnalyticsRange): Pris
         WHERE scan_id=s.id AND s.status='COMPLETED'
         ORDER BY created_at DESC, id DESC LIMIT 1
       ) p ON true
-      WHERE s.user_id=${userId}::uuid AND s.created_at>=${from} AND s.created_at<${until}
+      WHERE ${userId === null ? Prisma.sql`true` : Prisma.sql`s.user_id=${userId}::uuid`} AND s.created_at>=${from} AND s.created_at<${until}
     ), daily AS (
       SELECT to_char(created_at AT TIME ZONE 'UTC','YYYY-MM-DD') AS date, count(*) AS count
       FROM owned GROUP BY 1

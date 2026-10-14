@@ -5,6 +5,8 @@ import { once } from 'node:events';
 import { mkdirSync, writeFileSync } from 'node:fs';
 import { createServer } from 'node:http';
 import { fileURLToPath } from 'node:url';
+import { createDashboardRepository, dashboardSummarySql } from '../backend/dist/modules/admin/dashboard.repository.js';
+import { createDashboardService } from '../backend/dist/modules/admin/dashboard.service.js';
 import { createApp } from '../backend/dist/app.js';
 import { loadEnvironment } from '../backend/dist/config/environment.js';
 import { createLogger } from '../backend/dist/config/logger.js';
@@ -30,6 +32,7 @@ import { createYieldService } from '../backend/dist/modules/yield/yield.service.
 
 // Opt-in synthetic PostgreSQL/API/Flutter contract. Every fixture write is private
 // to ONE rollback transaction. No actual user data, model bytes, image, ML or AI call.
+const adminMode = process.argv.includes('--admin');
 const environment = { ...loadEnvironment(), ANALYTICS_RATE_LIMIT_MAX: 1000 };
 const database = createDatabaseClient(environment.DATABASE_URL, 30000);
 const logger = createLogger({ LOG_LEVEL: 'silent' });
@@ -41,6 +44,7 @@ const inventory = async () => Promise.all([database.user.count(), database.authS
   database.scanPrediction.count(), database.modelVersion.count(), database.history.count(), database.auditLog.count()]);
 try {
   const before = await inventory();
+  const baseline = adminMode ? await createDashboardRepository(database).summary(resolveAnalyticsRange(range, new Date())) : null;
   await assert.rejects(database.$transaction(async (transaction) => {
     const fixture = new Proxy(transaction, { get(target, key, receiver) {
       if (key === '$transaction') return (operation) => operation(transaction);
@@ -132,16 +136,33 @@ try {
         FROM generate_series(1,${count}::int)
       `;
     }
-    const planRows = await transaction.$queryRaw(Prisma.sql`EXPLAIN (ANALYZE, BUFFERS, FORMAT JSON) ${analyticsSummarySql(ids.OWNER, resolveAnalyticsRange(range, new Date()))}`);
+    const dashboard = createDashboardService(createDashboardRepository(fixture), environment);
+    const dashboardData = adminMode ? await dashboard.summary(range) : null;
+    if (adminMode) {
+      assert.equal(dashboardData.scans.totals.totalScans, baseline.scans.totals.totalScans + 6010);
+      assert.equal(dashboardData.ownership.authenticated, baseline.ownership.authenticated + 4009);
+      assert.equal(dashboardData.ownership.anonymous, baseline.ownership.anonymous + 2001);
+      assert.equal(dashboardData.farmers.total, baseline.farmers.total + 3);
+      assert.equal(dashboardData.scans.totals.withPrediction, baseline.scans.totals.withPrediction + 4);
+      assert.equal(dashboardData.scans.totals.failedScans, baseline.scans.totals.failedScans + 1);
+      assert.equal(dashboardData.recent.length, 10);
+      assert.equal(dashboardData.model.readiness, 'NOT_CHECKED');
+      assert.equal(dashboardData.aiRequestStatistics, 'NOT_RECORDED');
+      for (const forbidden of ['userId','email','imageUrl','artifactUri','accuracy','sessionId'])
+        assert.ok(!JSON.stringify(dashboardData).includes(forbidden));
+    }
+    const sql = adminMode ? dashboardSummarySql(resolveAnalyticsRange(range,new Date())) : analyticsSummarySql(ids.OWNER,resolveAnalyticsRange(range,new Date()));
+    const planRows = await transaction.$queryRaw(Prisma.sql`EXPLAIN (ANALYZE, BUFFERS, FORMAT JSON) ${sql}`);
     const plan = planRows[0]['QUERY PLAN'][0]; const indexes = new Set();
     function walk(node) { if (node['Index Name']) indexes.add(node['Index Name']); for (const child of node.Plans ?? []) walk(child); }
     walk(plan.Plan);
     assert.equal((await service.summary(ids.OWNER, range)).totals.totalScans, 8);
-    const evidence = { synthetic: true, bulkExcludedScans: 7000, eligibleScans: 8,
+    const evidence = { synthetic: true, mode: adminMode ? 'ADMIN_SYSTEM' : 'FARMER_OWNED', bulkFixtureScans: 7000, selectedFixtureScans: adminMode ? 6010 : 8,
       aggregateStatements: 1, maximumDailyRows: 366, maximumDistributionRows: 5,
       executionTimeMs: plan['Execution Time'], planningTimeMs: plan['Planning Time'], indexes: [...indexes] };
-    mkdirSync(new URL('../.cache/phase19/', import.meta.url), { recursive: true });
-    writeFileSync(new URL('../.cache/phase19/query-plan.json', import.meta.url), JSON.stringify(evidence, null, 2) + '\n');
+    const evidenceDirectory = new URL(adminMode ? '../.cache/phase20/' : '../.cache/phase19/', import.meta.url);
+    mkdirSync(evidenceDirectory, { recursive: true });
+    writeFileSync(new URL('query-plan.json',evidenceDirectory), JSON.stringify(evidence, null, 2) + '\n');
     console.log(JSON.stringify(evidence));
     const scans = createScanService(createScanRepository(fixture), {
       enabled: false, async upload() { throw new Error('No upload in analytics checks.'); },
@@ -150,16 +171,17 @@ try {
     const app = createApp(environment, logger, createHealthRepository(fixture), auth, scans,
       createKnowledgeService(createKnowledgeRepository(fixture), createKnowledgeClient(environment)),
       createGenerationService(scans, createGenerationClient(environment)),
-      createFertilizerService(createFertilizerRepository(fixture)), createYieldService(createYieldRepository(fixture)), service);
+      createFertilizerService(createFertilizerRepository(fixture)), createYieldService(createYieldRepository(fixture)), service, dashboard);
     server = createServer(app); await new Promise((resolve) => server.listen(0, '127.0.0.1', resolve));
     const port = server.address().port; assert.ok(Number.isInteger(port));
     stage = 'real Flutter authenticated analytics contract';
-    const args = ['test', '--no-pub', '--reporter', 'expanded', 'test/integration/analytics_test.dart',
-      '--dart-define=RUN_LIVE_ANALYTICS_CHECK=true', `--dart-define=API_BASE_URL=http://127.0.0.1:${port}/api/v1`];
+    const args = ['test', '--no-pub', '--reporter', 'expanded', adminMode ? 'test/integration/admin_dashboard_test.dart' : 'test/integration/analytics_test.dart',
+      adminMode ? '--dart-define=RUN_LIVE_ADMIN_CHECK=true' : '--dart-define=RUN_LIVE_ANALYTICS_CHECK=true', `--dart-define=API_BASE_URL=http://127.0.0.1:${port}/api/v1`];
     const allowed = new Set(['PATH', 'PATHEXT', 'SYSTEMROOT', 'WINDIR', 'COMSPEC', 'USERPROFILE', 'APPDATA', 'LOCALAPPDATA',
       'TEMP', 'TMP', 'HOME', 'PUB_CACHE', 'FLUTTER_ROOT', 'ANDROID_HOME', 'ANDROID_SDK_ROOT', 'JAVA_HOME', 'CI', 'TERM',
       'NO_COLOR', 'FLUTTER_SUPPRESS_ANALYTICS', 'DART_SUPPRESS_ANALYTICS']);
     const childEnvironment = Object.fromEntries(Object.entries(process.env).filter(([key]) => allowed.has(key.toUpperCase())));
+    if (adminMode) childEnvironment.ADMIN_DASHBOARD_EXPECTED = JSON.stringify(dashboardData);
     for (const role of ['OWNER', 'EMPTY', 'ADMIN']) {
       childEnvironment[`ANALYTICS_${role}_EMAIL`] = accounts[role].email;
       childEnvironment[`ANALYTICS_${role}_PASSWORD`] = accounts[role].password;

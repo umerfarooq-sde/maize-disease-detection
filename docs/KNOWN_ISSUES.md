@@ -1,6 +1,15 @@
 # Known issues
 
-Updated: 2026-10-15 (Asia/Karachi), Phase 19 farmer analytics.
+Updated: 2026-10-15 (Asia/Karachi), Phase 20 Admin dashboard.
+
+The Admin dashboard exposes real account/scan aggregates and registry/configuration
+state. AI request statistics remain unavailable because the current assistant does
+not persist request telemetry; no zero-usage claim is made. Live model readiness is
+explicitly NOT_CHECKED and a configured research classifier is not automatically
+a promoted production model. Native Admin credentials, like Farmer credentials,
+remain in memory and require sign-in after restart. Larger global workloads,
+multi-instance rate limiting and durable/browser session policy need separate
+deployment work. Read [Admin dashboard](36-admin-dashboard.md).
 
 Farmer analytics is implemented with owner/date-filtered SQL aggregates and private
 Flutter charts. Results count scans and latest predictions, not verified disease

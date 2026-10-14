@@ -217,6 +217,17 @@ requirements and verification. Stop after Phase 18.
 See [farmer analytics](35-farmer-analytics.md) for contracts, semantics and verification.
 Stop after Phase 19.
 
+## Phase 20 Admin dashboard decisions (2026-10-15)
+
+| Decision | Rationale and boundary |
+|---|---|
+| One ADMIN-only system aggregate API | Query current FARMER account statuses, date-filtered lifecycle/ownership/latest-label counts and ten minimal activity entries in PostgreSQL. Reuse shared Phase 19 SQL/date/zero-bucket behavior; no client raw-scan aggregation, user identities, extra migration/cache or model-performance claim. |
+| Separate volatile Admin session and navigation | Admin route sits outside the farmer shell, with independent credential/cookie stores and API clients. Extract existing refresh/revocation mechanics for reuse; role-specific admission retains Farmer-only login and rejects/revokes wrong-role grants. Restart requires sign-in; no credential persistence or public Admin registration. |
+| Explicit registry/configuration and missing telemetry | Report only a single actual PRODUCTION row as current registry version; multiple rows are a conflict. Configured inference is separate and live readiness remains NOT_CHECKED. The assistant does not journal requests, so AI totals are NOT_RECORDED rather than inferred from unrelated tables. Detailed runtime ML health remains later scope. |
+
+See [Admin dashboard](36-admin-dashboard.md) for contracts and verification.
+Stop after Phase 20.
+
 Pending decisions:
 full business JSON validation contracts, retention and
 completed-scan retention/delivery/deletion, production least-privilege roles,

@@ -203,6 +203,28 @@ $requiredAssistantFiles = @('docs/32-farmer-ai-assistant.md', 'mobile/lib/data/m
 foreach ($file in $requiredAssistantFiles) {
     if (-not (Test-Path -LiteralPath (Join-Path $repositoryRoot $file) -PathType Leaf)) { throw "Missing farmer assistant file: $file" }
 }
+$requiredAdminFiles = @(
+    'docs/36-admin-dashboard.md',
+    'backend/src/modules/admin/dashboard.types.ts', 'backend/src/modules/admin/dashboard.repository.ts',
+    'backend/src/modules/admin/dashboard.service.ts', 'backend/src/modules/admin/dashboard.controller.ts',
+    'backend/src/modules/admin/dashboard.routes.ts', 'backend/tests/admin/service.test.ts',
+    'backend/tests/admin/http.test.ts',
+    'mobile/lib/data/models/session_account.dart', 'mobile/lib/data/repositories/session_repository.dart',
+    'mobile/lib/features/auth/view_models/session_view_model.dart',
+    'mobile/lib/data/models/admin_dashboard.dart', 'mobile/lib/data/models/analytics_period.dart',
+    'mobile/lib/data/repositories/admin_dashboard_repository.dart',
+    'mobile/lib/features/admin/view_models/admin_session_view_model.dart',
+    'mobile/lib/features/admin/view_models/admin_dashboard_view_model.dart',
+    'mobile/lib/features/admin/views/admin_access_view.dart',
+    'mobile/lib/features/admin/views/admin_sign_in_view.dart',
+    'mobile/lib/features/admin/views/admin_dashboard_view.dart',
+    'mobile/lib/features/admin/widgets/admin_system_summary.dart',
+    'mobile/test/admin/model_repository_test.dart', 'mobile/test/admin/view_model_test.dart',
+    'mobile/test/admin/widget_test.dart', 'mobile/test/integration/admin_dashboard_test.dart'
+)
+foreach ($file in $requiredAdminFiles) {
+    if (-not (Test-Path -LiteralPath (Join-Path $repositoryRoot $file) -PathType Leaf)) { throw "Missing Admin dashboard file: $file" }
+}
 $requiredAnalyticsFiles = @(
     'docs/35-farmer-analytics.md', 'scripts/check-analytics.mjs',
     'backend/src/modules/analytics/analytics.types.ts', 'backend/src/modules/analytics/analytics.routes.ts',

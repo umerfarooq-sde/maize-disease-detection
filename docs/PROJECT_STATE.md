@@ -4,7 +4,28 @@ Updated: 2026-10-15 (Asia/Karachi).
 
 ## Current phase
 
-Phase 19 is complete and verified for private farmer analytics. Node exposes
+Phase 20 is complete and verified for the Admin dashboard. ADMIN-only
+`GET /api/v1/admin/dashboard` returns real PostgreSQL account/status/ownership/
+latest-prediction/time/distribution aggregates and ten minimal recent scan entries.
+Flutter `/admin` sits outside farmer navigation with independent volatile Admin
+sign-in/cookies/tokens, shared tested refresh/revocation mechanics, scoped MVVM,
+responsive cards/charts and loading/retry/empty states. Farmer access is denied.
+Read [Admin dashboard](36-admin-dashboard.md).
+
+Registered production models and configured research inference versions are
+distinct. Missing/multiple production rows are explicit; live readiness remains
+NOT_CHECKED. The current assistant does not record AI request telemetry, so the
+dashboard reports those statistics unavailable. No model performance, field-health
+or disease-prevalence claim is inferred from user predictions. No model is promoted.
+
+Checks pass 286 backend tests, 282 Flutter tests (eight opt-in live contracts skip
+by default), format/lint/strict TypeScript/build and Flutter analysis. The enabled
+real PostgreSQL/Node/Flutter Admin contract verifies global counts, Farmer denial,
+filters, sign-in/logout and rollback. Prisma validates; all eight migrations remain
+current. No schema, dependencies, AI, corpus, ML/shared-preprocessing or model
+artifacts are changed. Stop after Phase 20.
+
+The preceding Phase 19 is complete and verified for private farmer analytics. Node exposes
 owner-filtered scan summary/activity endpoints with bounded UTC dates, one SQL
 aggregate, deterministic latest-per-completed-scan counting and private pagination.
 Anonymous ownership remains null. Flutter Profile → Field insights uses scoped
@@ -1850,9 +1871,64 @@ new provider/cloud/raw-dataset operation, ML evaluation/training or Phase 20 wor
 is performed. Unrelated user ignore/ML/state edits stay outside the phase commit.
 Stop after Phase 19.
 
+## Phase 20 Admin dashboard verification (2026-10-15)
+
+- Inspected instructions, state/decisions, Prisma, scan/auth/analytics/inference/
+  generation code and Flutter session/routes/Admin placeholder before implementation.
+  Existing backend ADMIN provisioning/RBAC works; Flutter previously accepted
+  FARMER grants only. AI generation does not journal request data.
+- Added one ADMIN-only dashboard route through controller/service/repository. One
+  parameterized SQL statement returns current all-time FARMER status counts,
+  selected-window global scan lifecycle/ownership/latest-prediction counts, daily
+  dates/class distribution, bounded production registry status and ten minimal
+  recent entries. Shared Phase 19 logic keeps counting/ties/date validation/zero
+  buckets consistent. No emails, owner/scan IDs, image URLs or artifact paths leak.
+- Reused 1–366-day UTC paired dates (default last 30), analytics rate-limit setting,
+  no-store/central errors and safe count conservation. ADMIN authorization precedes
+  query execution; missing/invalid/revoked access is 401, FARMER is 403. Unknown,
+  partial, invalid/future/reversed/excessive filters are 400.
+- Production registry reports NOT_PROMOTED/SINGLE_PRODUCTION/MULTIPLE_PRODUCTION,
+  returning a version only for one actual production row. Configured inference
+  version is separate, readiness NOT_CHECKED. AI statistics NOT_RECORDED reflects
+  actual persistence coverage, not a fabricated zero or provider health claim.
+- Extracted tested shared SessionAccount/Repository/ViewModel mechanics, retaining
+  Farmer-only wrappers/admission. Admin uses separate volatile token/cookie/client/
+  Provider identity; wrong-role grants are logged out and discarded. Admin route
+  is outside farmer navigation with explicit return/sign-out, shared visual
+  tokens/cards/bars/time periods, date presets, loading/retry/error, empty scans
+  with real account/system summary and recent activity without identities/photos.
+  Revision/disposal/filter fences prevent delayed responses restoring private data.
+
+| Check | Result |
+|---|---|
+| Backend `npm run check` | Format/lint/strict TypeScript/build/environment imports and all 286 tests pass; eight new Admin service/repository/API cases |
+| Flutter format/analyzer | All 157 Dart files formatted; analyzer reports no issues |
+| Full `flutter test --no-pub` | 282 pass, eight opt-in live checks default-skip; 12 new Admin session/model/repository/ViewModel/widget tests |
+| Real `scripts/check-analytics.mjs --admin` | Enabled Flutter → Node → PostgreSQL Admin contract and global/count/ownership/latest-result/UTC checks pass; synthetic writes all roll back |
+| Existing no-flag analytics contract | Farmer ownership/date/native-microsecond/cursor/DTO regression passes after shared session/aggregate extraction; synthetic writes roll back |
+| Global aggregate query plan | 6,010 selected fixture scans plus older/boundary rows, one aggregate statement; 24.241 ms execution/0.620 ms planning locally, existing scan status/date index used; not a production load benchmark |
+| Prisma validation/status | Valid schema; eight migrations current, no schema/index/seed/dependency change |
+| Repository/security/frozen checks | Required files/templates/ignores, local links, whitespace and configured-secret/private-path checks pass; 171 frozen files/checkpoint/shared/AI/corpus/schema/migrations and unrelated user edits preserved |
+
+Live fixture deltas cover 6,010 selected scans: 4,009 authenticated, 2,001 anonymous;
+three additional Farmer accounts, four latest completed predictions and one failed
+scan. Multi-model ties still count once and other/anonymous ownership remains
+unchanged. Only ten recent minimal entries cross the API. All fixture accounts,
+sessions, scans, predictions and metadata remain in one private rollback transaction;
+before/after production row counts match. No raw dataset, provider/cloud call,
+inference/training run, model promotion or source editing occurs.
+
+Remaining limits: live runtime ML health and AI request recording are deliberately
+unavailable, not fabricated. Production-scale global workload measurements,
+distributed limiting and durable/browser sessions/retention remain later work.
+Existing classifier/source/licensing/calculator-content limitations remain. Full
+admin knowledge management and detailed ML-health/deployment phases are untouched.
+Unrelated user ignore/ML/state edits are preserved outside the phase commit.
+Stop after Phase 20.
+
 ## Next step
 
-Stop after Phase 19. Subsequent phases require the
+Stop after Phase 20. Subsequent phases require the
 next explicit instruction. Independent
 field validation and commercial
 licensing/source replacement remain requirements before real farmer/commercial use.

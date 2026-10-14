@@ -100,6 +100,15 @@ Requires the configured PostgreSQL and Flutter on PATH; no AI/cloud/raw-dataset
 request or production recommendation change occurs. Read
 [farmer analytics](../docs/35-farmer-analytics.md).
 
+Phase 20 extends that harness with `--admin`:
+`node --env-file=backend/.env scripts/check-analytics.mjs --admin` from root.
+The same private rollback fixture verifies system-wide aggregate/account/ownership
+counts, bounded recent entries, the natural global query plan and enabled Flutter
+Admin authentication/transport/Farmer-denial contract. It records only synthetic
+plan metadata under ignored `.cache/phase20`; no model promotion or live provider
+call occurs. The original no-flag Farmer checks remain supported. See
+[Admin dashboard](../docs/36-admin-dashboard.md).
+
 Phase 17 adds [check-fertilizer.mjs](check-fertilizer.mjs). Build the backend, then run
 `node --env-file=backend/.env scripts/check-fertilizer.mjs` from root. With the current
 empty recommendation catalogue it verifies actual ADMIN draft/publication/audit and

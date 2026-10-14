@@ -7,8 +7,7 @@ import {
   type AnalyticsSummary,
   activityItemSchema,
   type activityQuery,
-  analyticsDayMs,
-  analyticsLabels,
+  completeAnalyticsAggregate,
   type analyticsQuery,
   resolveAnalyticsRange,
 } from './analytics.types.js';
@@ -26,21 +25,10 @@ export function createAnalyticsService(
       const timestamp = now();
       const range = resolveAnalyticsRange(query, timestamp);
       const aggregate = await repository.summary(userId, range);
-      const counts = new Map(aggregate.distribution.map((item) => [item.label, item.count]));
-      const days = new Map(aggregate.daily.map((item) => [item.date, item.count]));
       return {
-        ...aggregate,
+        ...completeAnalyticsAggregate(aggregate, range),
         range,
         asOf: timestamp.toISOString(),
-        distribution: analyticsLabels.map((label) => ({ label, count: counts.get(label) ?? 0 })),
-        daily: Array.from({ length: range.days }, (_, index) => {
-          const date = new Date(
-            new Date(`${range.from}T00:00:00.000Z`).getTime() + index * analyticsDayMs,
-          )
-            .toISOString()
-            .slice(0, 10);
-          return { date, count: days.get(date) ?? 0 };
-        }),
       };
     },
     async activity(userId, query) {

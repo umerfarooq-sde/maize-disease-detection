@@ -112,6 +112,12 @@ class ProfileView extends StatelessWidget {
             tint: AppColors.wheat,
             onTap: () => context.push(AppRoutes.analytics),
           ),
+          const SizedBox(height: AppSpacing.lg),
+          TextButton.icon(
+            onPressed: () => context.push(AppRoutes.admin),
+            icon: const Icon(Icons.admin_panel_settings_outlined),
+            label: const Text('Administrator workspace'),
+          ),
         ],
       ),
     );

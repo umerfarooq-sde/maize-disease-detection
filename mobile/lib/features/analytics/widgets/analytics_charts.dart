@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import '../../../core/theme/design_tokens.dart';
 import '../../../data/models/farmer_analytics.dart';
 import '../../disease_detection/utils/scan_presentation.dart';
-import '../view_models/analytics_view_model.dart';
+import '../../../data/models/analytics_period.dart';
 
 String analyticsLabel(String label) =>
     label == 'OTHER' ? 'Other / legacy label' : diseaseLabel(label);

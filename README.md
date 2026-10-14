@@ -5,6 +5,12 @@ with administrative tools for maintaining knowledge and monitoring the system.
 
 ## Current status
 
+Phase 20 adds an Admin dashboard with server-aggregated account/scan statistics,
+charts, recent activity and stored model registry/configuration summaries. The
+Admin workspace has separate volatile sign-in/navigation and ADMIN-only access;
+Farmer access is denied. Unrecorded AI metrics and unchecked live model readiness
+are explicitly unavailable. See [Admin dashboard](docs/36-admin-dashboard.md).
+
 Phase 19 adds private farmer scan statistics: saved-scan totals/statuses, healthy
 versus disease model labels, distribution, time periods, confidence-policy flags
 and paginated recent activity. Profile → Field insights uses scoped Flutter MVVM

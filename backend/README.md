@@ -1,5 +1,11 @@
 # Backend
 
+Phase 20 adds ADMIN-only `GET /api/v1/admin/dashboard`, one SQL statement for
+bounded system scan/account aggregates and recent activity. It reuses the Phase 19
+UTC/latest-prediction rules, distinguishes registered production models from
+configured inference, and does not invent AI telemetry or live readiness. See
+[Admin dashboard](../docs/36-admin-dashboard.md) for the response and tests.
+
 Phase 19 adds FARMER-only `GET /api/v1/analytics/scans` and
 `GET /api/v1/analytics/scans/activity`: bounded UTC date filters, SQL aggregates,
 latest-per-scan predictions and private cursor pagination. No user-ID override,
