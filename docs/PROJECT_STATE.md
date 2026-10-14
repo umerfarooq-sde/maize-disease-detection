@@ -229,19 +229,21 @@ functionality remain deferred.
 
 | Component | Verified implementation |
 |---|---|
-| Mobile | Flutter 3.41.9/Dart 3.11.5, Material 3 farmer shell, scoped Provider MVVM, detection/private history and grounded farmer assistant; at most12 volatile turns, enum-filter follow-ups, cited sources, private scan picker/explanation and identity fences; 175 isolated tests, four opt-in live tests; actual assistant contract passes; prior Android debug APK packaging verified |
-| Backend | Existing health/auth/scans/private history plus sourced disease list/detail, semantic knowledge retrieval and ownership-protected grounded generation; Prisma 7.10.0, 21 tables/eight unchanged migrations, 202 isolated tests, 13 PostgreSQL checks and nine live generation contract checks |
+| Mobile | Flutter 3.41.9/Dart 3.11.5, Material 3 farmer shell, scoped Provider MVVM, detection/private history, grounded assistant, pending-content deterministic calculator UX and private farmer analytics; separate volatile Admin sign-in/navigation and real dashboard; 282 isolated tests, eight opt-in live tests; actual Admin/Farmer statistics contracts pass; prior Android debug APK packaging verified |
+| Backend | Health/auth/scans/private history, sourced knowledge/retrieval and grounded generation, deterministic versioned fertilizer/yield frameworks, owner-filtered Farmer analytics and ADMIN-only global dashboard; Prisma 7.10.0, 21 tables/eight unchanged migrations, 286 isolated tests; real rollback account/scan/calculator/statistics contracts verified |
 | AI service | Existing once-loaded classifier/shared preprocessing and reviewed pgvector retrieval plus official SDK Gemini evidence selection, bounded pinned context, exact excerpts/citations and safe abstention; explicit validated class-filter follow-up scope; 325 isolated tests, three opt-in PostgreSQL checks verified in Phase 15, Ruff/strict mypy; 65 generation/boundary cases; factory remains free of heavy provider/model imports |
 | Shared preprocessing | One independently buildable typed package at `shared/preprocessing`, version 1.0.0, explicit JSON configuration, file/byte entrypoints, conservative extraction/fallback, optional unchanged CPU tensor and debug CLI; 78 tests pass in each consumer environment and 12 synthetic baseline parity cases pass |
 | ML training | Corrected immutable v2: 4,162 contents/4,121 groups, 2,911/627/624 partitions, no confirmed leakage; fresh MobileNetV3 Small completed 11 epochs, best epoch 8; validation 96.81% accuracy/0.9589 macro F1, single descriptive test 95.83%/0.9452; raw probabilities, no threshold; 219 tests, Ruff over 32 files, mypy over 15 modules and 16 actual TRAIN cases with AI compatibility pass; limited FYP prototype |
 | Infrastructure | Neon PostgreSQL 18.6 with pgvector 0.8.6 migrated; pgvector 0.8.7/PostgreSQL 18 Compose configuration; preserved native 18.4 cluster; private local settings ignored |
 | Documentation | Architecture, database/operations, auth, Flutter foundation, scan uploads/recovery, FastAPI startup/contracts/network, shared preprocessing/configuration/versioning/limitations, decisions, roadmap and verification history |
-| Scripts | Repository/environment/auth/admin/PostgreSQL/Python/development checks including shared preprocessing and actual cross-environment parity; configured FastAPI startup and 16-TRAIN serving parity/timing verifier; full live Flutter scan-upload harness and backend cleanup CLI |
+| Scripts | Repository/environment/auth/admin/PostgreSQL/Python/development checks including shared preprocessing/parity; configured FastAPI startup and 16-TRAIN serving parity/timing verifier; live Flutter scan/assistant/calculator and Farmer/Admin statistics harnesses, rollback/query-plan checks and backend cleanup CLI |
 
-Persistent mobile authentication, conversation retention, calculator
-execution, notification delivery and the admin dashboard remain future work. Flutter
-feature introduction/empty screens are foundation UI; FastAPI exposes internal
-prediction/model health, retrieval and grounded generation alongside process health.
+Persistent/browser mobile authentication, conversation retention, authoritative
+calculator formula/rate content, notification delivery, Admin knowledge editing
+and detailed runtime ML health remain future work. Deterministic calculator
+execution frameworks and the real-data Admin overview are implemented. FastAPI
+exposes internal prediction/model health, retrieval and grounded generation
+alongside process health; the Admin overview does not probe live model readiness.
 
 ## Phase 0 verification history
 
