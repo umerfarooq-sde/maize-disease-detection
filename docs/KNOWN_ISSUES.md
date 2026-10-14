@@ -1,6 +1,14 @@
 # Known issues
 
-Updated: 2026-10-15 (Asia/Karachi), Phase 17 fertilizer calculator.
+Updated: 2026-10-15 (Asia/Karachi), Phase 18 expected-yield calculator.
+
+The expected-yield framework and Flutter UX are implemented, but **authoritative
+agronomic configuration remains pending**. There is no approved project yield
+formula or applicable kg/ha data, and the production YIELD catalogue is empty.
+Dimensional area-rate projection is a template, not a validated field forecast.
+An authorized reviewer must justify source/model/rate/applicability before publishing
+a version; no empirical formula, default rate or harvest guarantee is invented.
+See [expected yield](34-expected-yield-calculator.md).
 
 The deterministic fertilizer calculator foundation is implemented, but **real
 recommendation content remains pending**. There are no approved product/rate rules

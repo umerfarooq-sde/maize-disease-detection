@@ -1,13 +1,7 @@
 import '../../core/exceptions/app_exception.dart';
+import 'calculator_input.dart';
 
-enum FertilizerAreaUnit {
-  hectare('HECTARE', 'Hectares'),
-  acre('ACRE', 'Acres');
-
-  const FertilizerAreaUnit(this.wireValue, this.label);
-  final String wireValue;
-  final String label;
-}
+typedef FertilizerAreaUnit = CalculatorAreaUnit;
 
 enum FertilizerMassUnit {
   kg('KG', 'kg'),
@@ -20,25 +14,7 @@ enum FertilizerMassUnit {
 
 /// Decimal text is preserved for the server's deterministic engine. This client
 /// validates syntax; it never computes fertilizer quantities or converts area.
-String normalizeFertilizerArea(String value) {
-  final normalized = value.trim();
-  if (normalized.length > 24 ||
-      !RegExp(r'^(?:0|[1-9][0-9]*)(?:\.[0-9]{1,6})?$').hasMatch(normalized) ||
-      BigInt.parse(normalized.replaceAll('.', '')) == BigInt.zero ||
-      _exceedsMaximum(normalized)) {
-    throw const AppException(AppErrorKind.validation);
-  }
-  return normalized;
-}
-
-bool _exceedsMaximum(String area) {
-  final parts = area.split('.');
-  final whole = BigInt.parse(parts.first);
-  return whole > BigInt.from(1000000) ||
-      (whole == BigInt.from(1000000) &&
-          parts.length > 1 &&
-          BigInt.parse(parts.last) > BigInt.zero);
-}
+String normalizeFertilizerArea(String value) => normalizeCalculatorArea(value);
 
 class FertilizerInput {
   FertilizerInput({

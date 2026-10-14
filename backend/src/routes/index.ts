@@ -13,6 +13,8 @@ import { knowledgeRoutes } from '../modules/knowledge/knowledge.routes.js';
 import type { KnowledgeService } from '../modules/knowledge/knowledge.service.js';
 import { scanRoutes } from '../modules/scans/scan.routes.js';
 import type { ScanService } from '../modules/scans/scan.service.js';
+import { yieldRoutes } from '../modules/yield/yield.routes.js';
+import type { YieldService } from '../modules/yield/yield.service.js';
 
 export function apiRoutes(
   repository: HealthRepository,
@@ -22,6 +24,7 @@ export function apiRoutes(
   knowledgeService: KnowledgeService,
   generationService: GenerationService,
   fertilizerService: FertilizerService,
+  yieldService: YieldService,
 ): Router {
   const router = Router();
   router.use(healthRoutes(createHealthService(repository)));
@@ -30,5 +33,6 @@ export function apiRoutes(
   router.use(knowledgeRoutes(environment, knowledgeService));
   router.use(generationRoutes(environment, authService, generationService));
   router.use(fertilizerRoutes(environment, authService, fertilizerService));
+  router.use(yieldRoutes(environment, authService, yieldService));
   return router;
 }

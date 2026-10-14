@@ -1,5 +1,5 @@
 import '../../core/exceptions/app_exception.dart';
-import 'fertilizer_contract.dart';
+import 'calculator_contract.dart';
 import 'fertilizer_input.dart';
 import 'fertilizer_rule.dart';
 
@@ -27,7 +27,7 @@ class FertilizerResult {
   final FertilizerUnitReference unitReference;
 
   factory FertilizerResult.fromJson(Object? value) {
-    final data = fertilizerObject(value, const {
+    final data = calculatorObject(value, const {
       'input',
       'normalizedArea',
       'quantity',
@@ -38,7 +38,7 @@ class FertilizerResult {
       'assumptions',
       'unitReference',
     });
-    final rawInput = fertilizerObject(data['input'], const {
+    final rawInput = calculatorObject(data['input'], const {
       'area',
       'areaUnit',
       'outputUnit',
@@ -57,7 +57,7 @@ class FertilizerResult {
         quantity.unit != input.outputUnit ||
         rounding.decimalPlaces != rule.config.quantityDecimalPlaces ||
         !_fixedPrecision(quantity.value, rounding.decimalPlaces)) {
-      throw invalidFertilizerResponse();
+      throw invalidCalculatorResponse();
     }
     return FertilizerResult._(
       input: input,
@@ -68,11 +68,11 @@ class FertilizerResult {
       rounding: rounding,
       rule: rule,
       engineVersion: data['engineVersion'] as String,
-      explanation: fertilizerText(data['explanation'], 4000),
-      assumptions: fertilizerList(
+      explanation: calculatorText(data['explanation'], 4000),
+      assumptions: calculatorList(
         data['assumptions'],
         20,
-      ).map((value) => fertilizerText(value, 2000)).toList(),
+      ).map((value) => calculatorText(value, 2000)).toList(),
       unitReference: FertilizerUnitReference._fromJson(data['unitReference']),
     );
   }
@@ -88,19 +88,19 @@ class FertilizerResult {
   static FertilizerInput _readInput(Map<String, dynamic> input) {
     try {
       return FertilizerInput(
-        area: fertilizerText(input['area'], 24),
+        area: calculatorText(input['area'], 24),
         areaUnit: switch (input['areaUnit']) {
           'HECTARE' => FertilizerAreaUnit.hectare,
           'ACRE' => FertilizerAreaUnit.acre,
-          _ => throw invalidFertilizerResponse(),
+          _ => throw invalidCalculatorResponse(),
         },
         outputUnit: _massUnit(input['outputUnit']),
-        ruleId: fertilizerText(input['ruleId'], 36),
-        ruleVersion: fertilizerInteger(input['ruleVersion']),
-        configVersion: fertilizerInteger(input['configVersion']),
+        ruleId: calculatorText(input['ruleId'], 36),
+        ruleVersion: calculatorInteger(input['ruleVersion']),
+        configVersion: calculatorInteger(input['configVersion']),
       );
     } on AppException {
-      throw invalidFertilizerResponse();
+      throw invalidCalculatorResponse();
     }
   }
 
@@ -117,11 +117,11 @@ class FertilizerNormalizedArea {
   final String value;
   final FertilizerAreaUnit unit;
   factory FertilizerNormalizedArea._fromJson(Object? value) {
-    final data = fertilizerObject(value, const {'value', 'unit'});
-    if (data['unit'] != 'HECTARE') throw invalidFertilizerResponse();
-    final area = fertilizerDecimal(data['value']);
+    final data = calculatorObject(value, const {'value', 'unit'});
+    if (data['unit'] != 'HECTARE') throw invalidCalculatorResponse();
+    final area = calculatorDecimal(data['value']);
     if (BigInt.parse(area.replaceAll('.', '')) == BigInt.zero) {
-      throw invalidFertilizerResponse();
+      throw invalidCalculatorResponse();
     }
     return FertilizerNormalizedArea._(area, FertilizerAreaUnit.hectare);
   }
@@ -133,15 +133,15 @@ class FertilizerQuantity {
   final FertilizerMassUnit unit;
   final String unroundedValue;
   factory FertilizerQuantity._fromJson(Object? value) {
-    final data = fertilizerObject(value, const {
+    final data = calculatorObject(value, const {
       'value',
       'unit',
       'unroundedValue',
     });
     return FertilizerQuantity._(
-      fertilizerDecimal(data['value'], maximumDecimalPlaces: 6),
+      calculatorDecimal(data['value'], maximumDecimalPlaces: 6),
       _massUnit(data['unit']),
-      fertilizerDecimal(data['unroundedValue']),
+      calculatorDecimal(data['unroundedValue']),
     );
   }
 }
@@ -151,11 +151,11 @@ class FertilizerRounding {
   final String mode;
   final int decimalPlaces;
   factory FertilizerRounding._fromJson(Object? value) {
-    final data = fertilizerObject(value, const {'mode', 'decimalPlaces'});
-    if (data['mode'] != 'HALF_UP') throw invalidFertilizerResponse();
+    final data = calculatorObject(value, const {'mode', 'decimalPlaces'});
+    if (data['mode'] != 'HALF_UP') throw invalidCalculatorResponse();
     return FertilizerRounding._(
       data['mode'] as String,
-      fertilizerInteger(data['decimalPlaces'], minimum: 0, maximum: 6),
+      calculatorInteger(data['decimalPlaces'], minimum: 0, maximum: 6),
     );
   }
 }
@@ -165,10 +165,10 @@ class FertilizerUnitReference {
   final String title;
   final Uri url;
   factory FertilizerUnitReference._fromJson(Object? value) {
-    final data = fertilizerObject(value, const {'title', 'url'});
+    final data = calculatorObject(value, const {'title', 'url'});
     return FertilizerUnitReference._(
-      fertilizerText(data['title'], 255),
-      fertilizerHttpsUrl(data['url']),
+      calculatorText(data['title'], 255),
+      calculatorHttpsUrl(data['url']),
     );
   }
 }
@@ -176,5 +176,5 @@ class FertilizerUnitReference {
 FertilizerMassUnit _massUnit(Object? value) => switch (value) {
   'KG' => FertilizerMassUnit.kg,
   'G' => FertilizerMassUnit.grams,
-  _ => throw invalidFertilizerResponse(),
+  _ => throw invalidCalculatorResponse(),
 };

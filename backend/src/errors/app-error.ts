@@ -89,6 +89,15 @@ const errorDefinitions = {
     status: 503,
     message: 'This fertilizer rule cannot be used safely. Please choose another available rule.',
   },
+  YIELD_CONFIGURATION_CHANGED: {
+    status: 409,
+    message: 'The yield configuration has changed. Please reload the available configurations.',
+  },
+  YIELD_CONFIGURATION_INVALID: {
+    status: 503,
+    message:
+      'This yield configuration cannot be used safely. Please choose another available configuration.',
+  },
 } as const;
 
 export type ErrorCode = keyof typeof errorDefinitions;

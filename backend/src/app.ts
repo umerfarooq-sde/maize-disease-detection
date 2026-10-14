@@ -31,6 +31,8 @@ import {
 import { createScanRepository } from './modules/scans/scan.repository.js';
 import { createScanService, type ScanService } from './modules/scans/scan.service.js';
 import { createImageStorage } from './modules/scans/scan.storage.js';
+import { createYieldRepository } from './modules/yield/yield.repository.js';
+import { createYieldService, type YieldService } from './modules/yield/yield.service.js';
 import { apiRoutes } from './routes/index.js';
 
 export function createApp(
@@ -56,6 +58,9 @@ export function createApp(
   ),
   fertilizerService: FertilizerService = createFertilizerService(
     createFertilizerRepository(getDatabaseClient(environment.DATABASE_URL)),
+  ),
+  yieldService: YieldService = createYieldService(
+    createYieldRepository(getDatabaseClient(environment.DATABASE_URL)),
   ),
 ): Express {
   const app = express();
@@ -87,6 +92,7 @@ export function createApp(
       knowledgeService,
       generationService,
       fertilizerService,
+      yieldService,
     ),
   );
   app.use(notFound);

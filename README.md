@@ -5,6 +5,12 @@ with administrative tools for maintaining knowledge and monitoring the system.
 
 ## Current status
 
+Phase 18 adds the expected-yield framework, exact hectare/acre and kg/metric-tonne
+conversion, versioned reviewed configurations and Flutter planning UX. **Real yield
+configuration remains pending** because no authoritative project formula/rate exists.
+Only a future reviewed configuration can enable a conditional estimate; Gemini does
+no numerical calculation. See [expected yield](docs/34-expected-yield-calculator.md).
+
 Phase 17 adds the deterministic fertilizer calculator, exact hectare/acre and kg/gram
 conversion, versioned ADMIN rule publication and Flutter input/result/error UX.
 **Real fertilizer recommendations remain pending** until approved source-backed
@@ -48,7 +54,7 @@ raw probabilities are retained and no confidence threshold is locked. See
 [model fitness](docs/26-model-fitness-validation.md). Use remains non-commercial
 academic/FYP research without raw redistribution or commercial clearance. Shared
 preprocessing, existing FastAPI/Flutter/backend/database features are preserved;
-Persistent mobile sign-in, yield calculations, full admin tools and other business workflows remain future work.
+Persistent mobile sign-in, approved calculator content, full admin tools and other business workflows remain future work.
 With no approved operational cutoff, every current prediction is `LOW_CONFIDENCE`
 with `THRESHOLD_UNCONFIGURED`; numerical scores do not establish field correctness.
 See [project state](docs/PROJECT_STATE.md) for verified progress and outstanding decisions.

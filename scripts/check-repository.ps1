@@ -203,6 +203,25 @@ $requiredAssistantFiles = @('docs/32-farmer-ai-assistant.md', 'mobile/lib/data/m
 foreach ($file in $requiredAssistantFiles) {
     if (-not (Test-Path -LiteralPath (Join-Path $repositoryRoot $file) -PathType Leaf)) { throw "Missing farmer assistant file: $file" }
 }
+$requiredYieldFiles = @(
+    'docs/34-expected-yield-calculator.md', 'scripts/check-yield.mjs',
+    'backend/src/modules/calculators/calculator.contract.ts', 'backend/src/modules/calculators/exact-units.ts',
+    'backend/src/modules/yield/yield.types.ts', 'backend/src/modules/yield/yield.engine.ts',
+    'backend/src/modules/yield/yield.repository.ts', 'backend/src/modules/yield/yield.service.ts',
+    'backend/src/modules/yield/yield.controller.ts', 'backend/src/modules/yield/yield.routes.ts',
+    'backend/tests/yield/engine.test.ts', 'backend/tests/yield/service.test.ts', 'backend/tests/yield/http.test.ts',
+    'mobile/lib/data/models/calculator_contract.dart', 'mobile/lib/data/models/calculator_input.dart',
+    'mobile/lib/data/models/yield_models.dart', 'mobile/lib/data/repositories/yield_repository.dart',
+    'mobile/lib/features/tools/widgets/calculator_inputs.dart',
+    'mobile/lib/features/yield_calculator/view_models/yield_view_model.dart',
+    'mobile/lib/features/yield_calculator/views/yield_view.dart',
+    'mobile/lib/features/yield_calculator/widgets/yield_details.dart',
+    'mobile/test/yield/model_repository_test.dart', 'mobile/test/yield/view_model_test.dart',
+    'mobile/test/yield/widget_test.dart', 'mobile/test/integration/yield_test.dart'
+)
+foreach ($file in $requiredYieldFiles) {
+    if (-not (Test-Path -LiteralPath (Join-Path $repositoryRoot $file) -PathType Leaf)) { throw "Missing expected-yield calculator file: $file" }
+}
 $requiredFertilizerFiles = @(
     'docs/33-fertilizer-calculator.md', 'scripts/check-fertilizer.mjs',
     'backend/src/modules/fertilizer/fertilizer.engine.ts', 'backend/src/modules/fertilizer/fertilizer.types.ts',

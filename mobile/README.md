@@ -1,5 +1,12 @@
 # Mobile
 
+Phase 18 replaces Tools → Yield with a scoped planning form using the same area/unit
+components as fertilizer. It displays reviewed scenario/source/assumptions and exact
+server results with versions, loading/retry and stale-configuration handling.
+Production calculation stays disabled until authoritative yield configuration is
+approved. No client yield arithmetic or Gemini call is added. See
+[expected yield](../docs/34-expected-yield-calculator.md).
+
 Phase 17 replaces Tools → Fertilizer with a scoped MVVM form for explicit area/units,
 reviewed rule selection, deterministic results, source/assumption/version display and
 loading/error/retry. Real recommendations remain pending; no sample rate or client
@@ -43,9 +50,9 @@ See [implementation/setup/tests](../docs/19-flutter-foundation.md).
 The environment example contains public build configuration only; it is not bundled
 or loaded automatically. Omit API_BASE_URL to explore the offline shell. The existing
 health API demonstrates the full MVVM data flow through an explicit connection check.
-Farmer sign-in/results/history, the grounded assistant and fertilizer calculator
-foundation are implemented. Approved fertilizer recommendations, registration, yield
-calculations, full disease-knowledge browsing and admin dashboard remain future work.
+Farmer sign-in/results/history, the grounded assistant and fertilizer/yield calculator
+foundations are implemented. Approved agronomic calculator content, registration,
+full disease-knowledge browsing and admin dashboard remain future work.
 The assistant calls Node only; Gemini/provider secrets stay server-side. Camera uses
 the configured platform picker; unsupported
 platforms hide that action. Only Android platform scaffolding currently exists.

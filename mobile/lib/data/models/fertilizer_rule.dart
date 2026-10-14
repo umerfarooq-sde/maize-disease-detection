@@ -1,4 +1,4 @@
-import 'fertilizer_contract.dart';
+import 'calculator_contract.dart';
 
 enum FertilizerCatalogueStatus { ready, pendingRules }
 
@@ -16,7 +16,7 @@ class FertilizerCatalogue {
   final List<FertilizerRule> items;
 
   factory FertilizerCatalogue.fromJson(Object? value) {
-    final data = fertilizerObject(value, const {
+    final data = calculatorObject(value, const {
       'status',
       'message',
       'engineVersion',
@@ -25,9 +25,9 @@ class FertilizerCatalogue {
     final status = switch (data['status']) {
       'READY' => FertilizerCatalogueStatus.ready,
       'PENDING_RULES' => FertilizerCatalogueStatus.pendingRules,
-      _ => throw invalidFertilizerResponse(),
+      _ => throw invalidCalculatorResponse(),
     };
-    final items = fertilizerList(
+    final items = calculatorList(
       data['items'],
       100,
     ).map(FertilizerRule.fromJson).toList();
@@ -36,11 +36,11 @@ class FertilizerCatalogue {
             ? items.isEmpty
             : items.isNotEmpty) ||
         items.map((rule) => rule.id).toSet().length != items.length) {
-      throw invalidFertilizerResponse();
+      throw invalidCalculatorResponse();
     }
     return FertilizerCatalogue._(
       status: status,
-      message: fertilizerText(data['message'], 2000),
+      message: calculatorText(data['message'], 2000),
       engineVersion: data['engineVersion'] as String,
       items: items,
     );
@@ -75,7 +75,7 @@ class FertilizerRule {
   final FertilizerRuleConfig config;
 
   factory FertilizerRule.fromJson(Object? value) {
-    final data = fertilizerObject(value, const {
+    final data = calculatorObject(value, const {
       'id',
       'ruleKey',
       'version',
@@ -88,8 +88,8 @@ class FertilizerRule {
       'source',
       'config',
     });
-    if (data['crop'] != 'MAIZE') throw invalidFertilizerResponse();
-    final rate = fertilizerDecimal(
+    if (data['crop'] != 'MAIZE') throw invalidCalculatorResponse();
+    final rate = calculatorDecimal(
       data['rateKgPerHectare'],
       maximumDecimalPlaces: 6,
     );
@@ -98,27 +98,27 @@ class FertilizerRule {
         (parts.first == '1000000' &&
             parts.length > 1 &&
             BigInt.parse(parts.last) > BigInt.zero)) {
-      throw invalidFertilizerResponse();
+      throw invalidCalculatorResponse();
     }
     return FertilizerRule._(
-      id: fertilizerPattern(
+      id: calculatorPattern(
         data['id'],
         36,
         r'^[a-f0-9]{8}-[a-f0-9]{4}-[1-8][a-f0-9]{3}-[89ab][a-f0-9]{3}-[a-f0-9]{12}$',
       ),
-      ruleKey: fertilizerPattern(
+      ruleKey: calculatorPattern(
         data['ruleKey'],
         120,
         r'^[a-z0-9][a-z0-9._-]*$',
       ),
-      version: fertilizerInteger(data['version']),
-      title: fertilizerText(data['title'], 255),
+      version: calculatorInteger(data['version']),
+      title: calculatorText(data['title'], 255),
       crop: data['crop'] as String,
       fertilizer: FertilizerProduct._fromJson(data['fertilizer']),
       rateKgPerHectare: rate,
-      applicability: fertilizerText(data['applicability'], 2000),
+      applicability: calculatorText(data['applicability'], 2000),
       assumptions: _assumptions(data['assumptions']),
-      source: FertilizerRuleSource._fromJson(data['source']),
+      source: FertilizerRuleSource.fromJson(data['source']),
       config: FertilizerRuleConfig._fromJson(data['config']),
     );
   }
@@ -129,45 +129,20 @@ class FertilizerProduct {
   final String slug;
   final String name;
   factory FertilizerProduct._fromJson(Object? value) {
-    final data = fertilizerObject(value, const {'slug', 'name'});
+    final data = calculatorObject(value, const {'slug', 'name'});
     return FertilizerProduct._(
-      fertilizerPattern(data['slug'], 120, r'^[a-z0-9][a-z0-9-]*$'),
-      fertilizerText(data['name'], 160),
+      calculatorPattern(data['slug'], 120, r'^[a-z0-9][a-z0-9-]*$'),
+      calculatorText(data['name'], 160),
     );
   }
 }
 
-class FertilizerRuleSource {
-  const FertilizerRuleSource._({
-    required this.title,
-    required this.publisher,
-    required this.url,
-    required this.citation,
-  });
-  final String title;
-  final String publisher;
-  final Uri url;
-  final String citation;
-  factory FertilizerRuleSource._fromJson(Object? value) {
-    final data = fertilizerObject(value, const {
-      'title',
-      'publisher',
-      'url',
-      'citation',
-    });
-    return FertilizerRuleSource._(
-      title: fertilizerText(data['title'], 255),
-      publisher: fertilizerText(data['publisher'], 255),
-      url: fertilizerHttpsUrl(data['url']),
-      citation: fertilizerText(data['citation'], 1000),
-    );
-  }
-}
+typedef FertilizerRuleSource = CalculatorSource;
 
 List<String> _assumptions(Object? value) {
-  final assumptions = fertilizerList(value, 8);
-  if (assumptions.isEmpty) throw invalidFertilizerResponse();
-  return assumptions.map((value) => fertilizerText(value, 400)).toList();
+  final assumptions = calculatorList(value, 8);
+  if (assumptions.isEmpty) throw invalidCalculatorResponse();
+  return assumptions.map((value) => calculatorText(value, 400)).toList();
 }
 
 class FertilizerRuleConfig {
@@ -184,7 +159,7 @@ class FertilizerRuleConfig {
   final int quantityDecimalPlaces;
   final String roundingMode;
   factory FertilizerRuleConfig._fromJson(Object? value) {
-    final data = fertilizerObject(value, const {
+    final data = calculatorObject(value, const {
       'key',
       'version',
       'engineVersion',
@@ -194,13 +169,13 @@ class FertilizerRuleConfig {
     if (data['key'] != 'maize-area-rate' ||
         data['engineVersion'] != 'area-rate-v1' ||
         data['roundingMode'] != 'HALF_UP') {
-      throw invalidFertilizerResponse();
+      throw invalidCalculatorResponse();
     }
     return FertilizerRuleConfig._(
       key: data['key'] as String,
-      version: fertilizerInteger(data['version']),
+      version: calculatorInteger(data['version']),
       engineVersion: data['engineVersion'] as String,
-      quantityDecimalPlaces: fertilizerInteger(
+      quantityDecimalPlaces: calculatorInteger(
         data['quantityDecimalPlaces'],
         minimum: 0,
         maximum: 6,

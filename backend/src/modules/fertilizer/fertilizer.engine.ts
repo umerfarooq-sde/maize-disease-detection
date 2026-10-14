@@ -1,4 +1,5 @@
 import { AppError } from '../../errors/app-error.js';
+import { scaleAreaRate } from '../calculators/exact-units.js';
 import {
   type CalculatorInput,
   calculatorInputSchema,
@@ -10,32 +11,6 @@ import {
   fertilizerDecimalSchema,
   type PublicFertilizerRule,
 } from './fertilizer.types.js';
-
-interface ExactDecimal {
-  atoms: bigint;
-  scale: number;
-}
-function decimal(value: string): ExactDecimal {
-  const [whole = '0', fraction = ''] = value.split('.');
-  return { atoms: BigInt(whole + fraction), scale: fraction.length };
-}
-function exactText(value: ExactDecimal): string {
-  if (!value.atoms) return '0';
-  if (!value.scale) return String(value.atoms);
-  const digits = value.atoms.toString().padStart(value.scale + 1, '0');
-  return `${digits.slice(0, -value.scale)}.${digits.slice(-value.scale)}`.replace(/\.?0+$/, '');
-}
-function roundedText(value: ExactDecimal, places: number): string {
-  let atoms: bigint;
-  if (value.scale > places) {
-    const divisor = 10n ** BigInt(value.scale - places);
-    atoms = value.atoms / divisor;
-    if ((value.atoms % divisor) * 2n >= divisor) atoms++;
-  } else atoms = value.atoms * 10n ** BigInt(places - value.scale);
-  if (!places) return String(atoms);
-  const digits = atoms.toString().padStart(places + 1, '0');
-  return `${digits.slice(0, -places)}.${digits.slice(-places)}`;
-}
 
 /** Scale a reviewed product rate. This does not select or invent an agronomic rate. */
 export function calculateFertilizer(
@@ -61,22 +36,18 @@ export function calculateFertilizer(
   if (!config.success || rule.config.key !== FERTILIZER_CONFIG_KEY || !admittedRate.success) {
     throw new AppError('FERTILIZER_CONFIGURATION_INVALID');
   }
-  const area = decimal(parsed.data.area);
-  // NIST's international-acre definition is exactly 0.40468564224 hectares.
-  const hectares =
-    parsed.data.areaUnit === 'ACRE'
-      ? { atoms: area.atoms * 40468564224n, scale: area.scale + 11 }
-      : area;
-  const rate = decimal(admittedRate.data);
-  const quantity = { atoms: hectares.atoms * rate.atoms, scale: hectares.scale + rate.scale };
-  if (parsed.data.outputUnit === 'G') quantity.atoms *= 1000n;
   const places = config.data.quantityDecimalPlaces;
-  const value = roundedText(quantity, places);
-  const unroundedValue = exactText(quantity);
+  const { normalizedArea, quantity, positiveRoundedZero } = scaleAreaRate({
+    area: parsed.data.area,
+    areaUnit: parsed.data.areaUnit,
+    rateKgPerHectare: admittedRate.data,
+    outputUnit: parsed.data.outputUnit,
+    decimalPlaces: places,
+  });
   return {
     input: parsed.data,
-    normalizedArea: { value: exactText(hectares), unit: 'HECTARE' },
-    quantity: { value, unit: parsed.data.outputUnit, unroundedValue },
+    normalizedArea,
+    quantity,
     rounding: { mode: 'HALF_UP', decimalPlaces: places },
     rule,
     engineVersion: FERTILIZER_ENGINE_VERSION,
@@ -88,7 +59,7 @@ export function calculateFertilizer(
       ...rule.assumptions,
       'This scales the selected product rate; it does not assess soil nutrient need or choose a fertilizer dose.',
       'ACRE means the international acre: exactly 0.40468564224 hectares.',
-      ...(value.replace(/[0.]/g, '') === '' && quantity.atoms > 0n
+      ...(positiveRoundedZero
         ? [
             'The positive quantity is below the selected display precision; a rounded zero is not a recommendation to apply nothing.',
           ]

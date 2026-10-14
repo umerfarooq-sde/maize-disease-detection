@@ -1,5 +1,12 @@
 # Backend
 
+Phase 18 adds the versioned expected-yield framework and controlled ADMIN
+configuration publication using existing `YIELD` calculator records. It shares
+exact unit arithmetic with Phase 17, preserving fertilizer behavior. Production
+yield configuration remains pending; no agronomic model/rate is invented or seeded.
+See [expected yield](../docs/34-expected-yield-calculator.md) for public/admin APIs,
+contracts, immutable source/version review and rollback integration checks.
+
 Phase 17 adds public fertilizer rule/calculation endpoints and ADMIN-only reviewed
 draft/publication endpoints. Exact decimal arithmetic scales a reviewed product
 kg/ha rate; Gemini is not involved. Existing rule/config tables and immutable guards
@@ -97,5 +104,5 @@ and [development setup](../docs/15-development-environment.md) for other toolcha
 Inference orchestration is implemented; Python retains all ML transforms and inference.
 Disease knowledge reads, retrieval and grounded generation are implemented through
 their documented boundaries. The fertilizer foundation and Flutter assistant are
-implemented. Approved fertilizer content, yield calculations, conversation retention
-and full admin editing remain future work.
+implemented alongside the yield framework. Approved agronomic calculator content,
+conversation retention and full admin editing remain future work.

@@ -194,6 +194,18 @@ input/response contracts and verification.
 See [fertilizer calculator](33-fertilizer-calculator.md) for contracts, unit provenance,
 publication semantics, verification and the real-content prerequisite.
 
+## Phase 18 expected-yield decisions (2026-10-15)
+
+| Decision | Rationale and boundary |
+|---|---|
+| Pending agronomic configuration with dimensional projection framework | No project-approved yield model/rate exists. Implement only area scaling of a future reviewed kg/ha scenario; no crop-performance coefficients, arbitrary formula eval, population/history/soil/weather inputs or default forecast. Production stays PENDING_CONFIGURATION. |
+| Reuse exact calculator units/admission and Flutter form primitives | One BigInt coefficient/scale implementation serves fertilizer and yield. Preserve Phase 17's kg/gram API; yield adds kg/metric-tonne output with exact international-acre conversion and one final HALF_UP round. Share area validation/wire helpers/source parsing/form, retaining feature-local ViewModels. |
+| Existing immutable YIELD configuration and controlled publication | No migration/table is required. Server-owned template/engine/formula/review identity, source/applicability/assumptions and pinned ID/version bind each result. ADMIN transactions retire prior active config and audit changes; invalid/legacy/unreviewed metadata fails closed. Human approval remains the source-review trust boundary. |
+| Conditional, stateless farmer planning UX | Show assumptions/source before calculation and exact decimal results/version/uncertainty afterward. Guests/farmers use public Node calls with no personal calculation history. Edits/disposal fence late results; stale retry refreshes without silent recalculation. Gemini is absent from the numeric and explanation flow. |
+
+See [expected yield](34-expected-yield-calculator.md) for contracts, pending source
+requirements and verification. Stop after Phase 18.
+
 Pending decisions:
 full business JSON validation contracts, retention and
 completed-scan retention/delivery/deletion, production least-privilege roles,

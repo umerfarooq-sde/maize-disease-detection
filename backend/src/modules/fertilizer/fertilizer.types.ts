@@ -1,62 +1,25 @@
 import { z } from 'zod';
+import {
+  CALCULATOR_UNIT_REFERENCE,
+  calculatorDecimalSchema,
+  calculatorSourceSchema,
+  decimalWithin,
+  calculatorHttpsReference as httpsReference,
+  calculatorVersionSchema as positiveVersion,
+  calculatorText as safeText,
+} from '../calculators/calculator.contract.js';
+
+export {
+  AREA_INPUT_SCALE,
+  decimalWithin,
+  MAXIMUM_INPUT_AREA,
+} from '../calculators/calculator.contract.js';
 
 export const FERTILIZER_CONFIG_KEY = 'maize-area-rate' as const;
 export const FERTILIZER_ENGINE_VERSION = 'area-rate-v1' as const;
-export const FERTILIZER_UNIT_REFERENCE = {
-  title: 'NIST Handbook 44 (2026), Appendix C: General Tables of Units of Measurement',
-  url: 'https://www.nist.gov/system/files/documents/2025/12/30/appc-26-HB44-20251222.pdf',
-} as const;
-export const AREA_INPUT_SCALE = 6;
-export const MAXIMUM_INPUT_AREA = '1000000';
-
-/** Nonnegative fixed decimal; no binary floating-point, exponent or locale coercion. */
-export function decimalWithin(value: string, maximum: string, scale = AREA_INPUT_SCALE): boolean {
-  if (!new RegExp(`^(?:0|[1-9][0-9]{0,6})(?:\\.[0-9]{1,${scale}})?$`).test(value)) return false;
-  const [whole = '0', fractional = ''] = value.split('.');
-  return (
-    BigInt(whole) * 10n ** BigInt(scale) + BigInt(fractional.padEnd(scale, '0')) <=
-    BigInt(maximum) * 10n ** BigInt(scale)
-  );
-}
-
-export const fertilizerDecimalSchema = z
-  .string()
-  .max(14)
-  .trim()
-  .refine((value) => decimalWithin(value, MAXIMUM_INPUT_AREA));
-const positiveVersion = z.number().int().min(1).max(2_147_483_647);
-const safeText = (maximum: number) =>
-  z
-    .string()
-    .trim()
-    .min(1)
-    .max(maximum)
-    .refine((value) => !value.includes('\0'));
-const httpsReference = z
-  .string()
-  .max(2048)
-  .refine((value) => {
-    try {
-      const url = new URL(value);
-      return (
-        url.protocol === 'https:' &&
-        !url.username &&
-        !url.password &&
-        !Array.from(value).some((char) => {
-          const code = char.codePointAt(0) ?? 0;
-          return code <= 32 || code === 127 || /\s/u.test(char);
-        })
-      );
-    } catch {
-      return false;
-    }
-  });
-export const fertilizerSourceSchema = z.strictObject({
-  title: safeText(255),
-  publisher: safeText(255),
-  url: httpsReference,
-  citation: safeText(1000),
-});
+export const FERTILIZER_UNIT_REFERENCE = CALCULATOR_UNIT_REFERENCE;
+export const fertilizerDecimalSchema = calculatorDecimalSchema;
+export const fertilizerSourceSchema = calculatorSourceSchema;
 export const fertilizerProductSnapshotSchema = z.strictObject({
   slug: z
     .string()

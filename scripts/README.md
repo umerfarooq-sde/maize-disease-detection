@@ -1,5 +1,13 @@
 # Scripts
 
+Phase 18 adds [check-yield.mjs](check-yield.mjs). After building the backend, run
+`node --env-file=backend/.env scripts/check-yield.mjs` from root. It checks real
+Node/Prisma/PostgreSQL reviewed-config publication/immutability/version/audit and
+Flutter guest/farmer exact-unit contracts in one private rollback transaction.
+No synthetic yield config or account/session/audit is committed. It requires the
+current empty yield catalogue; no AI/Cloudinary/dataset access is used. See
+[expected yield](../docs/34-expected-yield-calculator.md).
+
 Phase 11 adds [serving parity verification](check-inference-parity.py). It uses
 the configured approved model and `DATASET_PATH` loader, sends 16 frozen TRAIN
 cases through the FastAPI app and compares exact tensor/logit hashes with saved

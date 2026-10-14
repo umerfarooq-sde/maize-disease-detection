@@ -7,6 +7,8 @@ import '../../data/repositories/scan_records_repository.dart';
 import '../../data/models/scan_record.dart';
 import '../../data/repositories/assistant_repository.dart';
 import '../../data/repositories/fertilizer_repository.dart';
+import '../../data/repositories/yield_repository.dart';
+import '../../features/yield_calculator/view_models/yield_view_model.dart';
 import '../../features/auth/view_models/farmer_session_view_model.dart';
 import '../../features/scan_history/view_models/scan_history_view_model.dart';
 import '../../features/disease_detection/view_models/scan_result_arguments.dart';
@@ -106,9 +108,14 @@ GoRouter createAppRouter({String initialLocation = AppRoutes.home}) => GoRouter(
                 ),
                 GoRoute(
                   path: 'yield',
-                  builder: (_, _) => const _DetailPage(
+                  builder: (context, _) => _DetailPage(
                     title: 'Yield planning',
-                    child: YieldView(),
+                    child: ChangeNotifierProvider(
+                      create: (_) =>
+                          YieldViewModel(context.read<YieldRepository>())
+                            ..load(),
+                      child: const YieldView(),
+                    ),
                   ),
                 ),
                 GoRoute(path: 'assistant', builder: _assistantPage),

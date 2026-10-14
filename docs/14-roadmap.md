@@ -207,3 +207,15 @@ rule/configuration tables, while keeping real recommendations explicitly pending
 Tests contain synthetic arithmetic fixtures only; no recommendation seed or Gemini
 calculation/explanation is added. Read [fertilizer calculator](33-fertilizer-calculator.md).
 Stop after Phase 17; yield calculations and later phases need a new instruction.
+
+## Phase 18 scope clarification
+
+The user authorized a deterministic expected-yield calculator, explicit units,
+versioned source/assumption provenance and Flutter UX consistent with Phase 17.
+No authoritative yield formula/rate is available in project sources or the database.
+Implement the dimensional area-rate framework with controlled immutable YIELD
+configuration publication, leaving real agronomic configuration pending. Do not
+invent forecasting coefficients or add soil/plant/weather inputs without an approved
+model. Reuse exact unit arithmetic and form components, keep synthetic fixtures
+private/rolled back and preserve fertilizer behavior. Read
+[expected yield](34-expected-yield-calculator.md). Stop after Phase 18.

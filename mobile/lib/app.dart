@@ -15,6 +15,7 @@ import 'data/repositories/assistant_repository.dart';
 import 'data/datasources/assistant_datasource.dart';
 import 'data/datasources/fertilizer_datasource.dart';
 import 'data/repositories/fertilizer_repository.dart';
+import 'data/repositories/yield_repository.dart';
 import 'features/auth/view_models/farmer_session_view_model.dart';
 import 'data/datasources/leaf_image_datasource.dart';
 import 'data/datasources/scan_datasource.dart';
@@ -84,6 +85,7 @@ class _MainAppState extends State<MainApp> {
       Provider<FertilizerRepository>(
         create: (_) => ApiFertilizerRepository(FertilizerDatasource(_api)),
       ),
+      Provider<YieldRepository>(create: (_) => ApiYieldRepository(_api)),
       Provider<BackendDatasource>(
         create: (context) => BackendDatasource(context.read<ApiClient>()),
       ),

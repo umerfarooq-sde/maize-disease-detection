@@ -4,7 +4,32 @@ Updated: 2026-10-15 (Asia/Karachi).
 
 ## Current phase
 
-Phase 17 is complete and verified for the authorized calculator foundation scope.
+Phase 18 is complete and verified for the authorized expected-yield framework scope.
+No authoritative project yield formula or applicable rate exists, so **real agronomic
+configuration remains pending** and the production YIELD catalogue is empty. The
+implemented template performs dimensional area scaling of a future explicitly reviewed
+kg/ha scenario; it does not invent an agronomic forecast, coefficients, default rate,
+soil/weather/loss/population inputs or a harvest guarantee. Gemini is absent from
+the calculation and explanation flow. Read [expected yield](34-expected-yield-calculator.md).
+
+Node adds public configuration/calculation endpoints and controlled ADMIN immutable
+draft/publication/audit support using existing YIELD calculator records. One shared
+exact-decimal/unit implementation now serves both calculators; fertilizer's API and
+kg/gram behavior are preserved. Flutter Tools → Yield uses route-scoped MVVM with
+shared area/unit form components, source/applicability/assumption review, exact
+server kg/metric-tonne results, versions, loading/error/retry and stale-result fencing.
+Pending configuration disables calculation without blocking input editing.
+
+Verification passes 266 backend tests, 249 Flutter tests (six opt-in live tests skip
+by default), analyzer/format/lint/strict TypeScript/build and Prisma validation.
+Enabled real Flutter → Node → Prisma → PostgreSQL contracts pass for both yield
+and fertilizer. Synthetic accounts/configurations/sessions/audits/rules remain in
+private rollback transactions; production yield and fertilizer configuration counts
+remain zero. All eight migrations are current; no migration or dependency was added.
+Frozen ML/preprocessing/AI/corpus/schema and unrelated user edits remain unchanged.
+Stop after Phase 18.
+
+The preceding Phase 17 is complete and verified for the authorized calculator foundation scope.
 Node provides an exact decimal fertilizer product-area-rate engine, explicit
 international-acre/hectare and kg/gram conversion, one final configurable HALF_UP
 rounding, version-pinned input, reviewed source/assumption provenance and controlled
@@ -1697,9 +1722,70 @@ remain outside this phase. Existing classifier/corpus/commercial restrictions an
 shared production rate-limit requirements remain. Unrelated user ignore/ML/state
 workspace edits are preserved outside the phase commit. Stop after Phase 17.
 
+## Phase 18 expected-yield verification (2026-10-15)
+
+- Read AGENTS/state/decisions/schema, Phase 17 code/docs, current Flutter yield
+  placeholder and project sources. Repository seeds contain no approved yield data;
+  read-only PostgreSQL inventory confirms zero YIELD configurations. Implemented a
+  framework with explicit pending agronomic configuration instead of guessed formulas.
+- Template `AREA_TIMES_REVIEWED_YIELD_RATE_V1`, formula version
+  `area-times-reviewed-yield-rate-v1`, engine `area-yield-v1` supports only cultivated
+  area and a selected reviewed kg/ha configuration. Input pins UUID/version; area
+  is positive up to 1000000 in HECTARE/ACRE with six decimal places. Configuration
+  rate is a nonnegative decimal string up to 1000000 kg/ha. Operational limits do
+  not assert plausible yields. Output is KG or metric TONNE; one tonne is 1000 kg.
+- Extracted one common BigInt decimal/unit implementation and admission contract
+  from Phase 17. International acres retain exactly 0.40468564224 ha, no intermediate
+  rounding; output uses configured zero to six places with HALF_UP. Results preserve
+  exact unrounded quantity, assumptions, source, config/formula/engine versions,
+  unit reference and conditional planning language. Tiny positive rounded zeros are
+  disclosed. Fertilizer kg/gram values, public API and `area-rate-v1` remain intact.
+- Existing immutable CalculatorConfig/YIELD and audit records suffice. ADMIN
+  creation fixes template/crop/rounding and stamps review actor/time. Source URL,
+  citation, applicability/assumptions, review note and known model versions are
+  required. Activation validates and atomically retires the prior active version;
+  write locking and bounded metadata transactions preserve historical payloads.
+  Stale/retired selections return 409, incompatible data 503, bad input 400.
+  Public responses omit internal JSON, reviewer IDs/secrets; no personal calculation
+  history, arbitrary formula evaluation or automatic source fetching is introduced.
+- Flutter keeps feature-local Provider/ChangeNotifier state and typed repository
+  calls through the existing API client. Shared wire helpers/area validation/source
+  models/form controls avoid duplicated calculator logic while preserving old type
+  names. Widgets perform no HTTP or quantity math. Applicability/assumptions/source
+  are visible before calculation, and result strings/precision/versions remain exact.
+  Edits/reload/disposal fence late results; stale retry refreshes for explicit review
+  and recalculation. Keyboard, 320px/200% text, scrolling and long references pass.
+
+| Check | Result |
+|---|---|
+| Backend `npm run check` | Format/lint/strict TypeScript/build, dependency imports and all 266 tests pass, including 27 yield engine/service/HTTP cases |
+| Expanded stored-config admission check | Five service cases pass after explicitly testing unknown formula/engine/algorithm/crop, missing approval and invalid rate/rounding |
+| Dart format / `flutter analyze` | 131 Dart files checked/formatted; analyzer reports no issues |
+| Complete `flutter test --no-pub` | 249 pass, six opt-in live contracts default-skip; 22 yield input/model/repository/ViewModel and six widget cases pass |
+| `node --env-file=backend/.env scripts/check-yield.mjs` | Real ADMIN/auth/source/review/audit/publication, SQL immutable/one-active constraints, version replacement/stale rejection/retirement and enabled Flutter guest/farmer acre/kg/tonne/ADMIN-denial contract pass |
+| `node --env-file=backend/.env scripts/check-fertilizer.mjs` | Prior calculator real HTTP/Prisma/PostgreSQL/Flutter contract passes after exact-unit/form/source reuse; every synthetic write rolls back |
+| Prisma validation/migration status | Valid schema; all eight existing migrations current; no schema/seed/dependency change |
+| Repository/security/frozen proof | Required files/templates/ignores, local links, whitespace, configured-secret/private-dataset-path checks pass; all 171 frozen ML files/checkpoint/shared/AI/corpus/schema/eight migrations unchanged |
+
+The live contracts verify unchanged production counts after rollback, including
+yield configurations/accounts/sessions/audits/history and fertilizer configuration.
+No provider, ML, Cloudinary or raw dataset operation is performed. Synthetic test
+values and review attestations establish arithmetic and access/version contracts
+only; they do not approve any real agronomic model or rate.
+
+Remaining prerequisite: authoritative project-approved yield formula and applicable
+data with source, crop/region/conditions and local agronomic review. The current
+projection template may be published only if that review justifies area-rate use;
+a different empirical model requires a separately implemented/versioned template.
+No guaranteed harvest, disease/soil/weather adjustment, AI explanation, calculator
+history, full admin dashboard, analytics or deployment is added. Existing source,
+classifier/commercial and production rate-limit/retention limitations remain.
+Unrelated user ignore/ML/state edits are preserved outside the phase commit.
+Stop after Phase 18.
+
 ## Next step
 
-Stop after Phase 17. Subsequent phases require the
+Stop after Phase 18. Subsequent phases require the
 next explicit instruction. Independent
 field validation and commercial
 licensing/source replacement remain requirements before real farmer/commercial use.
