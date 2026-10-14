@@ -36,11 +36,11 @@ export interface ScanRepository {
 export function createScanRepository(database: PrismaClient): ScanRepository {
   const scanInclude = {
     predictions: {
-      orderBy: { createdAt: 'desc' },
+      orderBy: [{ createdAt: 'desc' }, { id: 'desc' }],
       take: 1,
       include: { modelVersion: { select: { version: true, preprocessingVersion: true } } },
     },
-  } as const;
+  } satisfies Prisma.ScanInclude;
   const include = { scan: { include: scanInclude } } as const;
   return {
     findScan(id) {

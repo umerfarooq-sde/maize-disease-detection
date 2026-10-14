@@ -1,5 +1,13 @@
 # Mobile
 
+Phase 19 replaces the Field insights placeholder with private saved-scan cards,
+label distribution, UTC activity periods and recent activity pagination. Date
+presets/custom filters, guest/empty/loading/retry states and uncertainty wording
+use the existing design system. A route-local Provider/ViewModel and repository
+use the shared authenticated Node API client; account changes fence old results.
+These are usage/prediction statistics, not measured accuracy. See
+[farmer analytics](../docs/35-farmer-analytics.md).
+
 Phase 18 replaces Tools → Yield with a scoped planning form using the same area/unit
 components as fertilizer. It displays reviewed scenario/source/assumptions and exact
 server results with versions, loading/retry and stale-configuration handling.

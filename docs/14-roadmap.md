@@ -219,3 +219,13 @@ invent forecasting coefficients or add soil/plant/weather inputs without an appr
 model. Reuse exact unit arithmetic and form components, keep synthetic fixtures
 private/rolled back and preserve fertilizer behavior. Read
 [expected yield](34-expected-yield-calculator.md). Stop after Phase 18.
+
+## Phase 19 scope clarification
+
+The user authorized farmer-level statistics derived only from that farmer's saved
+scans: efficient backend aggregates, bounded dates, paginated recent activity and
+responsive Flutter cards/charts with private/empty/error states. Model predictions
+are not ground-truth performance or disease-prevalence measurements. Anonymous
+ownership stays null. Existing tables/indexes suffice; no model, inference,
+calculator, admin dashboard or later-phase behavior is added. Read
+[farmer analytics](35-farmer-analytics.md). Stop after Phase 19.

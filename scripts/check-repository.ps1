@@ -190,7 +190,7 @@ $templateKeys = @{
     'mobile' = @('API_BASE_URL')
     'ml-training' = @('DATASET_PATH')
 }
-$templateKeys['backend'] += @('KNOWLEDGE_RATE_LIMIT_MAX', 'GENERATION_RATE_LIMIT_MAX', 'GENERATION_TIMEOUT_MS', 'CALCULATOR_RATE_LIMIT_MAX')
+$templateKeys['backend'] += @('KNOWLEDGE_RATE_LIMIT_MAX', 'GENERATION_RATE_LIMIT_MAX', 'GENERATION_TIMEOUT_MS', 'CALCULATOR_RATE_LIMIT_MAX', 'ANALYTICS_RATE_LIMIT_MAX')
 $guardMigration = 'backend/prisma/migrations/20261012010000_knowledge_embedding_guard_scope/migration.sql'
 if (-not (Test-Path -LiteralPath (Join-Path $repositoryRoot $guardMigration) -PathType Leaf)) { throw 'Missing knowledge embedding guard migration.' }
 $templateKeys['ai-service'] += @('RAG_ENABLED', 'EMBEDDING_MODEL', 'EMBEDDING_VERSION', 'EMBEDDING_DIMENSIONS', 'EMBEDDING_TIMEOUT_SECONDS', 'RAG_CHUNK_CHARS', 'RAG_CHUNK_OVERLAP', 'RAG_MAX_CONCURRENCY')
@@ -202,6 +202,23 @@ foreach ($file in $requiredGenerationFiles) {
 $requiredAssistantFiles = @('docs/32-farmer-ai-assistant.md', 'mobile/lib/data/models/assistant_answer.dart', 'mobile/lib/data/models/assistant_question.dart', 'mobile/lib/data/datasources/assistant_datasource.dart', 'mobile/lib/data/repositories/assistant_repository.dart', 'mobile/lib/features/ai_assistant/view_models/assistant_view_model.dart', 'mobile/lib/features/ai_assistant/views/assistant_scan_picker.dart', 'mobile/test/assistant/model_test.dart', 'mobile/test/assistant/repository_test.dart', 'mobile/test/assistant/view_model_test.dart', 'mobile/test/assistant/widget_test.dart', 'mobile/test/assistant/navigation_test.dart', 'mobile/test/integration/assistant_test.dart', 'scripts/check-assistant.mjs')
 foreach ($file in $requiredAssistantFiles) {
     if (-not (Test-Path -LiteralPath (Join-Path $repositoryRoot $file) -PathType Leaf)) { throw "Missing farmer assistant file: $file" }
+}
+$requiredAnalyticsFiles = @(
+    'docs/35-farmer-analytics.md', 'scripts/check-analytics.mjs',
+    'backend/src/modules/analytics/analytics.types.ts', 'backend/src/modules/analytics/analytics.routes.ts',
+    'backend/src/modules/analytics/analytics.controller.ts', 'backend/src/modules/analytics/analytics.service.ts',
+    'backend/src/modules/analytics/analytics.repository.ts', 'backend/tests/analytics/service.test.ts',
+    'backend/tests/analytics/http.test.ts', 'backend/tests/analytics/repository.test.ts',
+    'mobile/lib/data/models/farmer_analytics.dart', 'mobile/lib/data/repositories/analytics_repository.dart',
+    'mobile/lib/features/analytics/view_models/analytics_view_model.dart',
+    'mobile/lib/features/analytics/views/analytics_view.dart',
+    'mobile/lib/features/analytics/widgets/analytics_cards.dart',
+    'mobile/lib/features/analytics/widgets/analytics_charts.dart',
+    'mobile/test/analytics/model_repository_test.dart', 'mobile/test/analytics/view_model_test.dart',
+    'mobile/test/analytics/widget_test.dart', 'mobile/test/integration/analytics_test.dart'
+)
+foreach ($file in $requiredAnalyticsFiles) {
+    if (-not (Test-Path -LiteralPath (Join-Path $repositoryRoot $file) -PathType Leaf)) { throw "Missing farmer analytics file: $file" }
 }
 $requiredYieldFiles = @(
     'docs/34-expected-yield-calculator.md', 'scripts/check-yield.mjs',

@@ -5,6 +5,13 @@ with administrative tools for maintaining knowledge and monitoring the system.
 
 ## Current status
 
+Phase 19 adds private farmer scan statistics: saved-scan totals/statuses, healthy
+versus disease model labels, distribution, time periods, confidence-policy flags
+and paginated recent activity. Profile → Field insights uses scoped Flutter MVVM
+and owner-filtered Node/PostgreSQL aggregates. Guest scans remain anonymous;
+prediction statistics do not establish model accuracy or field prevalence.
+See [farmer analytics](docs/35-farmer-analytics.md).
+
 Phase 18 adds the expected-yield framework, exact hectare/acre and kg/metric-tonne
 conversion, versioned reviewed configurations and Flutter planning UX. **Real yield
 configuration remains pending** because no authoritative project formula/rate exists.

@@ -105,7 +105,8 @@ class ProfileView extends StatelessWidget {
           const SizedBox(height: AppSpacing.lg),
           FeatureCard(
             title: 'Field insights',
-            description: 'A future view of your crop activity.',
+            description:
+                'See your saved scan activity and model label patterns.',
             icon: Icons.insights_outlined,
             tone: AppColors.amber,
             tint: AppColors.wheat,

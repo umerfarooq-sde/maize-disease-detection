@@ -8,6 +8,11 @@ import { AppError } from './errors/app-error.js';
 import { errorHandler, notFound } from './middleware/error-handler.js';
 import { requestRateLimit } from './middleware/rate-limit.js';
 import { requestContext } from './middleware/request-context.js';
+import { createAnalyticsRepository } from './modules/analytics/analytics.repository.js';
+import {
+  type AnalyticsService,
+  createAnalyticsService,
+} from './modules/analytics/analytics.service.js';
 import { type AuthRepository, createAuthRepository } from './modules/auth/auth.repository.js';
 import { createAuthService } from './modules/auth/auth.service.js';
 import { createFertilizerRepository } from './modules/fertilizer/fertilizer.repository.js';
@@ -62,6 +67,9 @@ export function createApp(
   yieldService: YieldService = createYieldService(
     createYieldRepository(getDatabaseClient(environment.DATABASE_URL)),
   ),
+  analyticsService: AnalyticsService = createAnalyticsService(
+    createAnalyticsRepository(getDatabaseClient(environment.DATABASE_URL)),
+  ),
 ): Express {
   const app = express();
   app.locals.recoverScans = () => scanService.recoverStale();
@@ -93,6 +101,7 @@ export function createApp(
       generationService,
       fertilizerService,
       yieldService,
+      analyticsService,
     ),
   );
   app.use(notFound);

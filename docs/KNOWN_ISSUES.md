@@ -1,6 +1,15 @@
 # Known issues
 
-Updated: 2026-10-15 (Asia/Karachi), Phase 18 expected-yield calculator.
+Updated: 2026-10-15 (Asia/Karachi), Phase 19 farmer analytics.
+
+Farmer analytics is implemented with owner/date-filtered SQL aggregates and private
+Flutter charts. Results count scans and latest predictions, not verified disease
+prevalence or model accuracy. Confidence-policy flags are not calibration measures.
+Date ranges are bounded to 366 UTC days; separate summary/activity requests are
+not a frozen snapshot while scans change. The existing indexes pass a local
+synthetic volume check; production concurrency and very large per-farmer histories
+still require workload measurement. In-memory/IP rate limits need a shared-store
+strategy for multi-instance deployment. See [farmer analytics](35-farmer-analytics.md).
 
 The expected-yield framework and Flutter UX are implemented, but **authoritative
 agronomic configuration remains pending**. There is no approved project yield

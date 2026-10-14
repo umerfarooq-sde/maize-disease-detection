@@ -90,6 +90,16 @@ It resolves the repository relative to the script, verifies foundation and devel
 checks that templates contain no credentials, and checks Git ignore behavior without
 creating probe files. It exits nonzero on failure and does not modify the repository.
 
+Phase 19 adds [check-analytics.mjs](check-analytics.mjs). After backend build, run
+`node --env-file=backend/.env scripts/check-analytics.mjs` from root. It verifies
+real SQL aggregates, UTC/microsecond boundaries, multi-model counting, ownership,
+empty users, date/cursor validation, natural query plans and the enabled Flutter
+analytics contract. Synthetic accounts/sessions/scans/predictions/model metadata
+remain in one private rollback transaction; before/after table counts must match.
+Requires the configured PostgreSQL and Flutter on PATH; no AI/cloud/raw-dataset
+request or production recommendation change occurs. Read
+[farmer analytics](../docs/35-farmer-analytics.md).
+
 Phase 17 adds [check-fertilizer.mjs](check-fertilizer.mjs). Build the backend, then run
 `node --env-file=backend/.env scripts/check-fertilizer.mjs` from root. With the current
 empty recommendation catalogue it verifies actual ADMIN draft/publication/audit and

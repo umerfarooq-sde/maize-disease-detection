@@ -206,6 +206,17 @@ publication semantics, verification and the real-content prerequisite.
 See [expected yield](34-expected-yield-calculator.md) for contracts, pending source
 requirements and verification. Stop after Phase 18.
 
+## Phase 19 farmer analytics decisions (2026-10-15)
+
+| Decision | Rationale and boundary |
+|---|---|
+| Own-scan usage and latest-prediction counts | Use the live FARMER session ID only. Anonymous scans stay anonymous; ADMIN has no implicit access. Count one latest prediction per COMPLETED scan, deterministically by timestamp/UUID, with missing and unknown legacy labels explicit. Do not infer correctness, prevalence or calibrated confidence from user predictions. |
+| Bounded UTC SQL aggregates without a new schema | Inclusive 1–366-day creation-date windows, one parameterized summary statement and bounded native-timestamp cursor activity reuse existing owner/date and prediction indexes. Avoid returning raw histories to Node or adding premature caches/summary tables/indexes. |
+| Route-local private Flutter analytics | Provider/ChangeNotifier → repository → shared authenticated API client. Session revisions hide old data and fence delayed results. Responsive cards/count bars and at most six contiguous time periods retain every day; no persisted statistics, chart dependency or ML evaluation is added. |
+
+See [farmer analytics](35-farmer-analytics.md) for contracts, semantics and verification.
+Stop after Phase 19.
+
 Pending decisions:
 full business JSON validation contracts, retention and
 completed-scan retention/delivery/deletion, production least-privilege roles,

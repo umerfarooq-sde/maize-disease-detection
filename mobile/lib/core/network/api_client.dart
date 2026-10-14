@@ -37,6 +37,8 @@ class ApiClient {
   bool get hasRefreshCookie => _refreshCookie != null;
   bool get hasAuthenticatedSession =>
       _tokens is SessionTokenSource ? _tokens.hasSession : _tokens != null;
+  // Public identity revision only; credentials remain private to this transport.
+  int? get sessionRevision => _revision;
   int? get _revision => _tokens is SessionTokenSource ? _tokens.revision : null;
   void clearSessionCredentials() => _refreshCookie = null;
   void _checkRevision(int? revision) {

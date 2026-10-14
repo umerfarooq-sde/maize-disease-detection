@@ -4,7 +4,23 @@ Updated: 2026-10-15 (Asia/Karachi).
 
 ## Current phase
 
-Phase 18 is complete and verified for the authorized expected-yield framework scope.
+Phase 19 is complete and verified for private farmer analytics. Node exposes
+owner-filtered scan summary/activity endpoints with bounded UTC dates, one SQL
+aggregate, deterministic latest-per-completed-scan counting and private pagination.
+Anonymous ownership remains null. Flutter Profile → Field insights uses scoped
+MVVM/Provider, responsive cards/charts, filters, loading/retry/empty states and
+account-revision fencing. These are usage and prediction statistics, not measured
+model accuracy, field health or disease prevalence. Read
+[farmer analytics](35-farmer-analytics.md).
+
+Backend checks pass all 278 tests; Flutter checks pass 270 tests with seven opt-in
+live contracts skipped by default. The separately enabled real PostgreSQL/Node/
+Flutter analytics contract passes aggregate/ownership/UTC/microsecond pagination
+and query-plan checks with all synthetic writes rolled back. Prisma validates and
+all eight migrations remain current. No schema, dependency, ML/shared-preprocessing,
+AI/corpus or model artifact changes are required. Stop after Phase 19.
+
+The preceding Phase 18 is complete and verified for the authorized expected-yield framework scope.
 No authoritative project yield formula or applicable rate exists, so **real agronomic
 configuration remains pending** and the production YIELD catalogue is empty. The
 implemented template performs dimensional area scaling of a future explicitly reviewed
@@ -1783,9 +1799,60 @@ classifier/commercial and production rate-limit/retention limitations remain.
 Unrelated user ignore/ML/state edits are preserved outside the phase commit.
 Stop after Phase 18.
 
+## Phase 19 farmer analytics verification (2026-10-15)
+
+- Read project instructions/state/decisions, Prisma schema, scan persistence/history,
+  auth/session middleware, Flutter routing/session/API/design system before changes.
+- Added FARMER-only `GET /api/v1/analytics/scans` and
+  `GET /api/v1/analytics/scans/activity`, through route/controller/service/repository.
+  Every query derives ownership from the live session. Guest/invalid sessions get
+  401, ADMIN 403, foreign/anonymous/out-of-window cursors 404. No anonymous scan is
+  attached to an account. Responses use no-store and omit private configuration.
+- Strict filters require actual paired UTC dates, ordered/not future, at most 366
+  days; default last 30 inclusive. Activity limits 1–50 (default 10), native database
+  timestamp/UUID cursors and owner/range checks avoid JavaScript microsecond loss.
+  Added validated `ANALYTICS_RATE_LIMIT_MAX` default 30/minute/IP, sharing the
+  endpoint limiter and retaining global rate limiting.
+- One parameterized SQL aggregate uses existing owner/date and prediction indexes.
+  Total/lifecycle counts, healthy/disease/legacy labels, policy-flag counts and all
+  UTC daily buckets reconcile. Only the latest result of each COMPLETED scan
+  contributes a prediction; missing results remain explicit. Multi-model ties use
+  prediction timestamp/UUID descending consistently with scan detail. No model
+  accuracy, average confidence correctness or prevalence is inferred.
+- Flutter uses feature-local ChangeNotifier/Provider, repository and shared bearer
+  client. Private data clears/hides across session revision changes, delayed replies
+  are fenced, and statistics are not persisted. Date presets/custom dates, summary
+  cards, accessible count bars, up to six contiguous time periods, recent activity,
+  load-more and existing owned detail support guest/empty/loading/error/retry states.
+
+| Check | Result |
+|---|---|
+| Backend `npm run check` | Format/lint/strict TypeScript/build/environment imports and all 278 tests pass; 12 new analytics service/repository/HTTP tests |
+| Dart format / `flutter analyze` | All 141 Dart files formatted; analyzer reports no issues |
+| Full `flutter test --no-pub` | 270 pass, seven opt-in live contracts default-skip; 21 new analytics model/repository/ViewModel/widget cases |
+| Real `node --env-file=backend/.env scripts/check-analytics.mjs` | SQL/latest-model/status/legacy/empty/UTC/microsecond/cursor/ownership/API and enabled Flutter contracts pass; all synthetic writes rolled back |
+| Local query plan | Eight eligible scans amid 7,000 bulk excluded rows plus individual boundary fixtures; existing owner/date index selected; execution 0.268 ms, planning 0.299 ms, excluding network; no production benchmark claim |
+| Prisma validation/status | Valid schema; all eight migrations current, no schema/seed/index/dependency change |
+| Repository/privacy/frozen checks | Required files/templates/ignores, local Markdown links, whitespace and private-secret/path checks pass; 171 frozen files/checkpoint/shared/AI/corpus/schema/migrations and unrelated user edits preserved |
+
+The rollback fixture yields eight own scans: five completed, one pending, one
+processing, one failed. Four latest predictions comprise one Healthy, two disease
+and one legacy label; one completed result is missing. Flags are two LOW_CONFIDENCE,
+one CONFIDENT and one legacy/unavailable. UTC daily counts are five and three.
+Other farmers/anonymous/out-of-window scans never contribute. Multiple model
+versions count once, and tied microseconds paginate without loss/duplication.
+
+Production-scale concurrency/very large histories need workload measurements.
+Separate summary/activity HTTP requests do not form a frozen snapshot during new
+scans/status changes. Deployment still needs shared rate-limit/retention policy;
+existing classifier/source/licensing/calculator-content limitations remain. No
+new provider/cloud/raw-dataset operation, ML evaluation/training or Phase 20 work
+is performed. Unrelated user ignore/ML/state edits stay outside the phase commit.
+Stop after Phase 19.
+
 ## Next step
 
-Stop after Phase 18. Subsequent phases require the
+Stop after Phase 19. Subsequent phases require the
 next explicit instruction. Independent
 field validation and commercial
 licensing/source replacement remain requirements before real farmer/commercial use.

@@ -8,6 +8,8 @@ import '../../data/models/scan_record.dart';
 import '../../data/repositories/assistant_repository.dart';
 import '../../data/repositories/fertilizer_repository.dart';
 import '../../data/repositories/yield_repository.dart';
+import '../../data/repositories/analytics_repository.dart';
+import '../../features/analytics/view_models/analytics_view_model.dart';
 import '../../features/yield_calculator/view_models/yield_view_model.dart';
 import '../../features/auth/view_models/farmer_session_view_model.dart';
 import '../../features/scan_history/view_models/scan_history_view_model.dart';
@@ -164,9 +166,17 @@ GoRouter createAppRouter({String initialLocation = AppRoutes.home}) => GoRouter(
                 ),
                 GoRoute(
                   path: 'analytics',
-                  builder: (_, _) => const _DetailPage(
+                  builder: (context, _) => _DetailPage(
                     title: 'Field insights',
-                    child: AnalyticsView(),
+                    child: ChangeNotifierProvider(
+                      key: ValueKey(
+                        'analytics-${context.watch<FarmerSessionViewModel>().revision}',
+                      ),
+                      create: (_) => AnalyticsViewModel(
+                        context.read<AnalyticsRepository>(),
+                      )..load(),
+                      child: const AnalyticsView(),
+                    ),
                   ),
                 ),
               ],

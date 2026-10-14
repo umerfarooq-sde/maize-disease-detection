@@ -33,6 +33,12 @@ for validation, safe DTOs, cookie transport, expiry, CSRF protection and RBAC.
 
 ## Scan contract considerations
 
+Phase 19 adds private FARMER-only `GET /api/v1/analytics/scans` and
+`GET /api/v1/analytics/scans/activity`. Both derive ownership from the session,
+accept bounded paired UTC dates and omit anonymous scans. Activity supports
+bounded UUID cursor pages. Summary describes usage/latest-prediction counts,
+not measured model accuracy. See [farmer analytics](35-farmer-analytics.md).
+
 Phase 11 implements private FastAPI `POST /api/v1/predict` and
 `GET /api/v1/model-health`, protected by a server service token. These accept raw
 encoded image bytes and return the AI service's single `data/meta` envelope. See

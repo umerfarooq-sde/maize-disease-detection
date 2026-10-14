@@ -1,5 +1,12 @@
 # Backend
 
+Phase 19 adds FARMER-only `GET /api/v1/analytics/scans` and
+`GET /api/v1/analytics/scans/activity`: bounded UTC date filters, SQL aggregates,
+latest-per-scan predictions and private cursor pagination. No user-ID override,
+anonymous reassignment or model-accuracy claim is supported. Configure the
+server-only `ANALYTICS_RATE_LIMIT_MAX` (default 30/minute/IP). See
+[farmer analytics](../docs/35-farmer-analytics.md) for contracts and rollback checks.
+
 Phase 18 adds the versioned expected-yield framework and controlled ADMIN
 configuration publication using existing `YIELD` calculator records. It shares
 exact unit arithmetic with Phase 17, preserving fertilizer behavior. Production
