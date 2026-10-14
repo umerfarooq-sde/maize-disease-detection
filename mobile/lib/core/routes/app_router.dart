@@ -6,6 +6,7 @@ import '../../data/repositories/scan_repository.dart';
 import '../../data/repositories/scan_records_repository.dart';
 import '../../data/models/scan_record.dart';
 import '../../data/repositories/assistant_repository.dart';
+import '../../data/repositories/fertilizer_repository.dart';
 import '../../features/auth/view_models/farmer_session_view_model.dart';
 import '../../features/scan_history/view_models/scan_history_view_model.dart';
 import '../../features/disease_detection/view_models/scan_result_arguments.dart';
@@ -21,6 +22,7 @@ import '../../features/auth/views/auth_intro_view.dart';
 import '../../features/disease_detection/views/scan_view.dart';
 import '../../features/disease_knowledge/views/knowledge_view.dart';
 import '../../features/fertilizer_calculator/views/fertilizer_view.dart';
+import '../../features/fertilizer_calculator/view_models/fertilizer_view_model.dart';
 import '../../features/home/view_models/home_view_model.dart';
 import '../../features/home/views/home_view.dart';
 import '../../features/profile/views/profile_view.dart';
@@ -92,9 +94,14 @@ GoRouter createAppRouter({String initialLocation = AppRoutes.home}) => GoRouter(
               routes: [
                 GoRoute(
                   path: 'fertilizer',
-                  builder: (_, _) => const _DetailPage(
+                  builder: (context, _) => _DetailPage(
                     title: 'Fertilizer planning',
-                    child: FertilizerView(),
+                    child: ChangeNotifierProvider(
+                      create: (_) => FertilizerViewModel(
+                        context.read<FertilizerRepository>(),
+                      )..load(),
+                      child: const FertilizerView(),
+                    ),
                   ),
                 ),
                 GoRoute(

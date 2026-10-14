@@ -10,6 +10,11 @@ import { requestRateLimit } from './middleware/rate-limit.js';
 import { requestContext } from './middleware/request-context.js';
 import { type AuthRepository, createAuthRepository } from './modules/auth/auth.repository.js';
 import { createAuthService } from './modules/auth/auth.service.js';
+import { createFertilizerRepository } from './modules/fertilizer/fertilizer.repository.js';
+import {
+  createFertilizerService,
+  type FertilizerService,
+} from './modules/fertilizer/fertilizer.service.js';
 import { createGenerationClient } from './modules/generation/generation.client.js';
 import {
   createGenerationService,
@@ -49,6 +54,9 @@ export function createApp(
     scanService,
     createGenerationClient(environment),
   ),
+  fertilizerService: FertilizerService = createFertilizerService(
+    createFertilizerRepository(getDatabaseClient(environment.DATABASE_URL)),
+  ),
 ): Express {
   const app = express();
   app.locals.recoverScans = () => scanService.recoverStale();
@@ -78,6 +86,7 @@ export function createApp(
       scanService,
       knowledgeService,
       generationService,
+      fertilizerService,
     ),
   );
   app.use(notFound);

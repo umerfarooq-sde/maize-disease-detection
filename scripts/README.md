@@ -82,6 +82,14 @@ It resolves the repository relative to the script, verifies foundation and devel
 checks that templates contain no credentials, and checks Git ignore behavior without
 creating probe files. It exits nonzero on failure and does not modify the repository.
 
+Phase 17 adds [check-fertilizer.mjs](check-fertilizer.mjs). Build the backend, then run
+`node --env-file=backend/.env scripts/check-fertilizer.mjs` from root. With the current
+empty recommendation catalogue it verifies actual ADMIN draft/publication/audit and
+version/source behavior plus Flutter guest/farmer exact-unit contracts. All synthetic
+accounts/rules/configurations/audits are visible only inside one private rolled-back
+PostgreSQL transaction; no recommendation, cloud asset or AI call is committed.
+See [fertilizer calculator](../docs/33-fertilizer-calculator.md) for prerequisites.
+
 Phase 1 adds these scripts, invoked from the repository root:
 
 | Script | Purpose |

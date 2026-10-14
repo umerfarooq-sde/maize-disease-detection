@@ -9,6 +9,8 @@
       "tests/inference/**",
       "tests/knowledge/**",
       "tests/generation/**",
+      "tests/fertilizer/**",
+      "tests/fertilizer.database.integration.ts",
       "tests/knowledge.live.integration.ts",
       "tests/generation.live.integration.ts",
       "tests/scans.inference.integration.ts",

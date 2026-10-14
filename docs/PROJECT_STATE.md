@@ -1,10 +1,32 @@
 # Project state
 
-Updated: 2026-10-14 (Asia/Karachi).
+Updated: 2026-10-15 (Asia/Karachi).
 
 ## Current phase
 
-Phase 16 is complete and verified. Flutter provides the farmer assistant with
+Phase 17 is complete and verified for the authorized calculator foundation scope.
+Node provides an exact decimal fertilizer product-area-rate engine, explicit
+international-acre/hectare and kg/gram conversion, one final configurable HALF_UP
+rounding, version-pinned input, reviewed source/assumption provenance and controlled
+ADMIN draft/publication/audit support. Flutter Tools → Fertilizer uses route-scoped
+MVVM with input editing, pending content, loading/retry/error, stale-rule refresh
+and unchanged server quantity/source/version display. Gemini performs no calculation.
+**Real recommendation content remains pending:** the configured database has zero
+fertilizer products, rules or fertilizer configurations. No agronomic dosage is
+invented, seeded or inferred. An authorized reviewer must supply authoritative
+product/rate sources and deliberately publish compatible versions before farmers
+receive recommendations. Read [fertilizer calculator](33-fertilizer-calculator.md).
+
+Verification passes 239 backend tests, 221 isolated Flutter tests, five PostgreSQL
+guard/snapshot checks and the separately enabled real Flutter → Node → Prisma →
+PostgreSQL calculator contract. Four existing live tests plus the new calculator
+live test are opt-in/default-skipped. Final lint/format/strict TypeScript/build and
+Flutter analyzer pass; Prisma validates and all eight existing migrations are current.
+Synthetic ADMIN/farmer/rule/config/audit fixtures are isolated inside a private
+rolled-back transaction; production recommendation counts remain zero. No AI/provider,
+Cloudinary or raw dataset request is made. Stop after Phase 17.
+
+The preceding Phase 16 is complete and verified. Flutter provides the farmer assistant with
 reviewed cited answers, explicit disease/topic focus, safe loading/retry/error and
 low-confidence notices, private paginated scan selection and result-to-assistant
 navigation. The route-local conversation keeps at most 12 volatile turns; previous
@@ -1611,9 +1633,73 @@ hosting/shared limits. Existing classifier research/commercial restrictions rema
 No deployment, new platform or ML/data change is introduced. Unrelated user workspace
 edits remain outside the phase commit. Stop after Phase 16.
 
+## Phase 17 fertilizer calculator verification (2026-10-15)
+
+- Reused existing Fertilizer/FertilizerRule/CalculatorConfig/AuditLog tables and
+  immutable payload/identity guards; no migration, dependency or seed data added.
+  Public catalogue/calculation routes and authenticated ADMIN draft/status routes
+  follow Route → Controller → Service → Repository → Prisma. Controllers stay thin.
+- Engine `area-rate-v1` supports positive decimal-string area up to 1000000 in the
+  entered unit, six decimal places, HECTARE/ACRE and KG/G. Reviewed product rate
+  strings are nonnegative up to 1000000 kg/ha. Exact BigInt coefficients preserve
+  international-acre conversion `0.40468564224` ha and 1000 g/kg; no intermediate
+  rounding. Config pins zero to six output places and HALF_UP; exact unrounded
+  value and positive-rounded-zero warning remain visible. Bounds are operational,
+  not agronomic advice; N/P2O5/K2O label percentages are not dosage inputs.
+- Admission requires known MAIZE algorithm/engine, exact rule/config units,
+  reviewed source/actor/time/note, applicability/assumptions and a frozen full
+  product snapshot. Mutable product drift and incompatible stored JSON fail closed.
+  Unknown caller rates/formulas/review fields are rejected. One repeatable-read
+  snapshot binds rule/config; stale pins return 409 and require explicit review/retry.
+- ADMIN writes use existing JWT/live-session RBAC, shared advisory locking and
+  bounded 10-second acquisition/15-second metadata transactions. Activation retires
+  prior active rule/config versions atomically without rewriting historical payloads.
+  Same-version/different payload conflicts; CREATE/ACTIVATE/DEACTIVATE audit retains
+  actor/request/version. Public responses omit reviewer IDs/internal JSON/secrets.
+  Review attestation remains an authorized human trust boundary, not URL validation
+  of agronomic truth. Publishing a new global config needs compatible rule versions.
+- Feature-local ChangeNotifier state sits above typed repository/datasource/shared
+  API client. Widgets make no HTTP calls or quantity conversions; exact server
+  decimal strings are preserved. Editing, reload/disposal fence delayed results;
+  stale-rule retry refreshes only and requires a new explicit calculation. Sources
+  are plain selectable references, and guest/farmer calculations have no account
+  association, credentials on public requests or persisted calculation history.
+- Final code review removed duplicate snapshot comparison/unused error code, used
+  executeRaw for PostgreSQL void-returning locks and fixed malformed percentage
+  refinements to return 400 instead of Decimal errors. Twelve malformed N/P2O5/K2O
+  inputs and all existing valid/boundary/version/error cases pass. No TypeScript any,
+  frontend secrets, fake production rates or Gemini numeric path is introduced.
+
+| Check | Result |
+|---|---|
+| Backend `npm run check` | Format/lint/strict types/build, dependency imports and 239 tests pass, including 37 calculator cases |
+| Final changed-core checks | Format/lint/typecheck/build pass; all 37 focused cases pass, then 17 HTTP/service cases verify the malformed-percentage fix |
+| `npm run test:fertilizer:database` | Five real PostgreSQL checks pass: active snapshots, immutable rule/config payloads, one-active constraints and inactive exclusion; fixtures roll back |
+| Dart formatting / `flutter analyze` | Formatting passes and analyzer has no issues, including final live-test source |
+| Complete `flutter test` | 221 isolated tests pass; four existing live tests skip by default; the new opt-in calculator test separately default-skips and passes when enabled |
+| Calculator Flutter coverage | 34 input/model/repository/ViewModel plus 12 widget cases pass; includes pending content, error/retry/stale rules, exact string/units, 320px/200% text/keyboard/long sources |
+| `node --env-file=backend/.env scripts/check-fertilizer.mjs` | Real Node/Prisma/PostgreSQL ADMIN draft/publish/source/review/audit/replacement/drift/deactivation checks and one enabled Flutter guest/farmer contract pass; every synthetic write rolls back |
+| Prisma validation / migration status | Schema valid; eight unchanged migrations current, no Phase 17 migration needed |
+| Repository/security/frozen checks | Required files/templates/ignores, local documentation links, whitespace, secret/private-path scan pass; 171 ML files/checkpoint/shared/AI/corpus/schema/migrations unchanged; user edits preserved |
+
+The first live-contract attempt reached valid results but its test omitted the
+authentication flag for the FARMER admin-denial assertion, producing 401. Correcting
+the test to send its existing bearer session verifies the intended 403; the entire
+contract then passes. Both attempts roll back all synthetic data. No actual dosage
+source is approved by these tests, and no Gemini/model/Cloudinary call is involved.
+
+Remaining prerequisite: authoritative project-approved fertilizer products/rates
+with applicable region/crop/conditions and local agronomic review. Production
+catalogue remains honestly PENDING_RULES; the calculator scales a reviewed rate
+rather than diagnosing nutrient needs. Full admin UI, AI calculator explanation,
+calculation retention, offline recommendation data, yield calculator and deployment
+remain outside this phase. Existing classifier/corpus/commercial restrictions and
+shared production rate-limit requirements remain. Unrelated user ignore/ML/state
+workspace edits are preserved outside the phase commit. Stop after Phase 17.
+
 ## Next step
 
-Stop after Phase 16. Subsequent phases require the
+Stop after Phase 17. Subsequent phases require the
 next explicit instruction. Independent
 field validation and commercial
 licensing/source replacement remain requirements before real farmer/commercial use.

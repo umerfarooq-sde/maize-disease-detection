@@ -1,5 +1,10 @@
 # Mobile
 
+Phase 17 replaces Tools → Fertilizer with a scoped MVVM form for explicit area/units,
+reviewed rule selection, deterministic results, source/assumption/version display and
+loading/error/retry. Real recommendations remain pending; no sample rate or client
+fertilizer arithmetic is bundled. See [fertilizer calculator](../docs/33-fertilizer-calculator.md).
+
 Phase 16 adds the farmer assistant at Tools → Ask your assistant. Guests can ask
 scoped maize questions; farmers can choose a completed private scan or open an
 explanation from its result screen. Reviewed answers show citations, source provenance
@@ -38,8 +43,9 @@ See [implementation/setup/tests](../docs/19-flutter-foundation.md).
 The environment example contains public build configuration only; it is not bundled
 or loaded automatically. Omit API_BASE_URL to explore the offline shell. The existing
 health API demonstrates the full MVVM data flow through an explicit connection check.
-Farmer sign-in/results/history and the grounded assistant are implemented. Registration,
-calculators, full disease-knowledge browsing and admin dashboard remain future work.
+Farmer sign-in/results/history, the grounded assistant and fertilizer calculator
+foundation are implemented. Approved fertilizer recommendations, registration, yield
+calculations, full disease-knowledge browsing and admin dashboard remain future work.
 The assistant calls Node only; Gemini/provider secrets stay server-side. Camera uses
 the configured platform picker; unsupported
 platforms hide that action. Only Android platform scaffolding currently exists.

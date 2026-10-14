@@ -5,6 +5,12 @@ with administrative tools for maintaining knowledge and monitoring the system.
 
 ## Current status
 
+Phase 17 adds the deterministic fertilizer calculator, exact hectare/acre and kg/gram
+conversion, versioned ADMIN rule publication and Flutter input/result/error UX.
+**Real fertilizer recommendations remain pending** until approved source-backed
+rates are provided and reviewed. No fabricated rate is seeded; Gemini never computes
+the quantities. See [fertilizer calculator](docs/33-fertilizer-calculator.md).
+
 Phase 16 adds the Flutter farmer assistant with reviewed answers, visible references,
 bounded local conversation and ownership-protected scan explanations. Guests can ask
 questions; signed-in farmers can select their private scans. Conversations are not
@@ -42,7 +48,7 @@ raw probabilities are retained and no confidence threshold is locked. See
 [model fitness](docs/26-model-fitness-validation.md). Use remains non-commercial
 academic/FYP research without raw redistribution or commercial clearance. Shared
 preprocessing, existing FastAPI/Flutter/backend/database features are preserved;
-Persistent mobile sign-in, calculators, full admin tools and other business workflows remain future work.
+Persistent mobile sign-in, yield calculations, full admin tools and other business workflows remain future work.
 With no approved operational cutoff, every current prediction is `LOW_CONFIDENCE`
 with `THRESHOLD_UNCONFIGURED`; numerical scores do not establish field correctness.
 See [project state](docs/PROJECT_STATE.md) for verified progress and outstanding decisions.

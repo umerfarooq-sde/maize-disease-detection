@@ -181,6 +181,19 @@ official SDK/model references and remaining evaluation/source limitations.
 See [farmer AI assistant](32-farmer-ai-assistant.md) for the public flow, privacy,
 input/response contracts and verification.
 
+## Phase 17 fertilizer decisions (2026-10-15)
+
+| Decision | Rationale and boundary |
+|---|---|
+| Reviewed product-area-rate engine with pending content | No authoritative rate exists in repository/seeds/database. Scale an intentionally approved MAIZE product kg/ha rate; do not infer soil/NPK need, invent defaults or seed synthetic fixtures. Empty catalogue stays PENDING_RULES. |
+| Exact decimal strings/BigInt and one final HALF_UP rounding | Preserve input and every international-acre conversion digit, then optionally convert kg to grams. Round only in the selected output unit under a pinned config; disclose exact unrounded value and tiny-positive rounded-zero warning. NIST's international acre is exactly 0.40468564224 ha. |
+| Reuse immutable rule/configuration tables with frozen product snapshot | Existing SQL guards/one-active constraints suffice without migrations. Rules bind source/review and full product snapshot/config version; mutable product drift or unknown/legacy parameters fail closed. Input pins reject stale versions rather than silently substituting a new rate. |
+| Controlled ADMIN draft/publication and source-review attestation | Existing JWT/live-session RBAC protects management. Stamp server-owned actor/time, require source/citation/applicability/assumptions/review note, serialize publication and retain audit/version lineage. An authorized review is a trust boundary, not automated URL verification. No full admin dashboard or historical payload editing. |
+| Public stateless Flutter MVVM calculator without AI | Guests/farmers use the same public catalogue/calculation and no personal calculation history. Route-local form/result state preserves server decimal strings; stale-rule retry only refreshes for explicit recalculation. No Flutter/provider secrets, client quantity math or Gemini explanation is introduced. |
+
+See [fertilizer calculator](33-fertilizer-calculator.md) for contracts, unit provenance,
+publication semantics, verification and the real-content prerequisite.
+
 Pending decisions:
 full business JSON validation contracts, retention and
 completed-scan retention/delivery/deletion, production least-privilege roles,

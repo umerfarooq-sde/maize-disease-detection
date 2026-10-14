@@ -196,3 +196,14 @@ scan history are intentionally separate. Explicit known condition/topic filters 
 short follow-ups without opening a general chatbot or changing reviewed evidence/ML
 policies. Read [farmer AI assistant](32-farmer-ai-assistant.md). Stop after Phase 16;
 calculators, admin tools, chat retention and subsequent phases require a new instruction.
+
+## Phase 17 scope clarification
+
+The user authorized a deterministic fertilizer requirement calculator, explicit unit
+conversion, input validation, version/source provenance and Flutter MVVM UX. No
+authoritative fertilizer rates exist in the current repository/database. Implement
+the engine and reviewed ADMIN rule-publication support using existing immutable
+rule/configuration tables, while keeping real recommendations explicitly pending.
+Tests contain synthetic arithmetic fixtures only; no recommendation seed or Gemini
+calculation/explanation is added. Read [fertilizer calculator](33-fertilizer-calculator.md).
+Stop after Phase 17; yield calculations and later phases need a new instruction.

@@ -1,5 +1,13 @@
 # Backend
 
+Phase 17 adds public fertilizer rule/calculation endpoints and ADMIN-only reviewed
+draft/publication endpoints. Exact decimal arithmetic scales a reviewed product
+kg/ha rate; Gemini is not involved. Existing rule/config tables and immutable guards
+are reused without migrations. The production recommendation catalogue remains
+empty/PENDING_RULES until authoritative rates are approved. See
+[fertilizer calculator](../docs/33-fertilizer-calculator.md) for request contracts,
+version/source controls and `npm.cmd run test:fertilizer:database`.
+
 Phase 15 adds `POST /api/v1/knowledge/ask` and
 `POST /api/v1/scans/:scanId/explanation`. The dedicated internal client calls FastAPI;
 Node validates cited answer contracts and unchanged persisted classifier context.
@@ -88,5 +96,6 @@ See [database operations](../docs/16-database-operations.md) for checks and perm
 and [development setup](../docs/15-development-environment.md) for other toolchains.
 Inference orchestration is implemented; Python retains all ML transforms and inference.
 Disease knowledge reads, retrieval and grounded generation are implemented through
-their documented boundaries. Calculator features, Flutter assistant UI, conversation
-retention and full admin editing remain future work.
+their documented boundaries. The fertilizer foundation and Flutter assistant are
+implemented. Approved fertilizer content, yield calculations, conversation retention
+and full admin editing remain future work.

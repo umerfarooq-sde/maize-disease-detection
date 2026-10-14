@@ -190,7 +190,7 @@ $templateKeys = @{
     'mobile' = @('API_BASE_URL')
     'ml-training' = @('DATASET_PATH')
 }
-$templateKeys['backend'] += @('KNOWLEDGE_RATE_LIMIT_MAX', 'GENERATION_RATE_LIMIT_MAX', 'GENERATION_TIMEOUT_MS')
+$templateKeys['backend'] += @('KNOWLEDGE_RATE_LIMIT_MAX', 'GENERATION_RATE_LIMIT_MAX', 'GENERATION_TIMEOUT_MS', 'CALCULATOR_RATE_LIMIT_MAX')
 $guardMigration = 'backend/prisma/migrations/20261012010000_knowledge_embedding_guard_scope/migration.sql'
 if (-not (Test-Path -LiteralPath (Join-Path $repositoryRoot $guardMigration) -PathType Leaf)) { throw 'Missing knowledge embedding guard migration.' }
 $templateKeys['ai-service'] += @('RAG_ENABLED', 'EMBEDDING_MODEL', 'EMBEDDING_VERSION', 'EMBEDDING_DIMENSIONS', 'EMBEDDING_TIMEOUT_SECONDS', 'RAG_CHUNK_CHARS', 'RAG_CHUNK_OVERLAP', 'RAG_MAX_CONCURRENCY')
@@ -202,6 +202,25 @@ foreach ($file in $requiredGenerationFiles) {
 $requiredAssistantFiles = @('docs/32-farmer-ai-assistant.md', 'mobile/lib/data/models/assistant_answer.dart', 'mobile/lib/data/models/assistant_question.dart', 'mobile/lib/data/datasources/assistant_datasource.dart', 'mobile/lib/data/repositories/assistant_repository.dart', 'mobile/lib/features/ai_assistant/view_models/assistant_view_model.dart', 'mobile/lib/features/ai_assistant/views/assistant_scan_picker.dart', 'mobile/test/assistant/model_test.dart', 'mobile/test/assistant/repository_test.dart', 'mobile/test/assistant/view_model_test.dart', 'mobile/test/assistant/widget_test.dart', 'mobile/test/assistant/navigation_test.dart', 'mobile/test/integration/assistant_test.dart', 'scripts/check-assistant.mjs')
 foreach ($file in $requiredAssistantFiles) {
     if (-not (Test-Path -LiteralPath (Join-Path $repositoryRoot $file) -PathType Leaf)) { throw "Missing farmer assistant file: $file" }
+}
+$requiredFertilizerFiles = @(
+    'docs/33-fertilizer-calculator.md', 'scripts/check-fertilizer.mjs',
+    'backend/src/modules/fertilizer/fertilizer.engine.ts', 'backend/src/modules/fertilizer/fertilizer.types.ts',
+    'backend/src/modules/fertilizer/fertilizer.routes.ts', 'backend/src/modules/fertilizer/fertilizer.controller.ts',
+    'backend/src/modules/fertilizer/fertilizer.service.ts', 'backend/src/modules/fertilizer/fertilizer.repository.ts',
+    'backend/src/modules/fertilizer/fertilizer.validators.ts', 'backend/tests/fertilizer/engine.test.ts',
+    'backend/tests/fertilizer/http.test.ts', 'backend/tests/fertilizer/service.test.ts',
+    'backend/tests/fertilizer/repository.test.ts', 'backend/tests/fertilizer.database.integration.ts',
+    'mobile/lib/data/datasources/fertilizer_datasource.dart', 'mobile/lib/data/models/fertilizer_models.dart',
+    'mobile/lib/data/models/fertilizer_input.dart', 'mobile/lib/data/models/fertilizer_result.dart',
+    'mobile/lib/data/models/fertilizer_rule.dart', 'mobile/lib/data/repositories/fertilizer_repository.dart',
+    'mobile/lib/features/fertilizer_calculator/view_models/fertilizer_view_model.dart',
+    'mobile/test/fertilizer/model_test.dart', 'mobile/test/fertilizer/repository_test.dart',
+    'mobile/test/fertilizer/view_model_test.dart', 'mobile/test/fertilizer/widget_test.dart',
+    'mobile/test/integration/fertilizer_test.dart'
+)
+foreach ($file in $requiredFertilizerFiles) {
+    if (-not (Test-Path -LiteralPath (Join-Path $repositoryRoot $file) -PathType Leaf)) { throw "Missing fertilizer calculator file: $file" }
 }
 $requiredKnowledgeFiles = @('docs/30-knowledge-retrieval.md', 'backend/prisma/migrations/20261012000000_knowledge_retrieval/migration.sql', 'backend/knowledge/maize-extension-20261012-v1.json', 'backend/knowledge/maize-extension-20261012-v1.review.json', 'backend/src/modules/knowledge/knowledge.routes.ts', 'ai-service/app/rag/service.py', 'ai-service/app/api/routes/retrieval.py', 'ai-service/evaluation/rag-v1.json')
 foreach ($file in $requiredKnowledgeFiles) {

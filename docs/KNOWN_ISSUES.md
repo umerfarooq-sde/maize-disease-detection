@@ -1,6 +1,15 @@
 # Known issues
 
-Updated: 2026-10-14 (Asia/Karachi), Phase 16 farmer assistant.
+Updated: 2026-10-15 (Asia/Karachi), Phase 17 fertilizer calculator.
+
+The deterministic fertilizer calculator foundation is implemented, but **real
+recommendation content remains pending**. There are no approved product/rate rules
+or calculator configurations in the production catalogue. An authorized project
+reviewer must provide authoritative sources, applicable crop/region/conditions and
+deliberately publish immutable reviewed versions before farmers receive quantities.
+The engine scales a product mass rate; it does not assess soil nutrient need or choose
+a dose. No Gemini numerical calculation, fabricated seed or AI explanation is enabled.
+See [fertilizer calculator](33-fertilizer-calculator.md).
 
 Phase 14 retrieval, Phase 15 reviewed-excerpt generation and the Phase 16 farmer
 assistant are implemented. Conversations are capped at 12 volatile turns and are

@@ -19,6 +19,7 @@ The remaining feature documents describe intended behavior.
 | [Knowledge and retrieval](30-knowledge-retrieval.md) | Phase 14 sourced catalogue, immutable ingestion/chunks, Google embeddings, pgvector, public/internal contracts and real retrieval evaluation |
 | [Grounded generation](31-grounded-generation.md) | Phase 15 bounded reviewed context, official Gemini SDK, verified excerpts/citations, immutable scan explanations, abstention, access controls and server-only setup |
 | [Farmer AI assistant](32-farmer-ai-assistant.md) | Phase 16 scoped Flutter conversation, MVVM/repositories, visible sources, private farmer scan explanations, bounded follow-ups, volatile privacy boundaries and tests |
+| [Fertilizer calculator](33-fertilizer-calculator.md) | Phase 17 exact decimal quantities/units, reviewed immutable rules/configurations, ADMIN publication, Flutter MVVM and pending real recommendation content |
 | [System overview](01-system-overview.md) | Purpose, users, boundaries, and primary flow |
 | [HLA](02-hla.md) | Logical components and trust boundaries |
 | [HLD](03-hld.md) | Runtime interactions and failures |

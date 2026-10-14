@@ -89,6 +89,7 @@ const environmentSchema = z
     KNOWLEDGE_RATE_LIMIT_MAX: z.coerce.number().int().min(1).max(1000).default(20),
     GENERATION_RATE_LIMIT_MAX: z.coerce.number().int().min(1).max(60).default(5),
     GENERATION_TIMEOUT_MS: z.coerce.number().int().min(1000).max(60000).default(30000),
+    CALCULATOR_RATE_LIMIT_MAX: z.coerce.number().int().min(1).max(1000).default(30),
     CLOUDINARY_CLOUD_NAME: z
       .string()
       .regex(/^[a-zA-Z0-9_-]*$/)

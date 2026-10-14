@@ -81,6 +81,14 @@ const errorDefinitions = {
     status: 409,
     message: 'This scan does not have a completed, compatible prediction to explain.',
   },
+  FERTILIZER_CONFIGURATION_CHANGED: {
+    status: 409,
+    message: 'The fertilizer rule or configuration has changed. Please reload the available rules.',
+  },
+  FERTILIZER_CONFIGURATION_INVALID: {
+    status: 503,
+    message: 'This fertilizer rule cannot be used safely. Please choose another available rule.',
+  },
 } as const;
 
 export type ErrorCode = keyof typeof errorDefinitions;

@@ -2,6 +2,8 @@ import { Router } from 'express';
 import type { Environment } from '../config/environment.js';
 import { authRoutes } from '../modules/auth/auth.routes.js';
 import type { AuthService } from '../modules/auth/auth.service.js';
+import { fertilizerRoutes } from '../modules/fertilizer/fertilizer.routes.js';
+import type { FertilizerService } from '../modules/fertilizer/fertilizer.service.js';
 import { generationRoutes } from '../modules/generation/generation.routes.js';
 import type { GenerationService } from '../modules/generation/generation.service.js';
 import type { HealthRepository } from '../modules/health/health.repository.js';
@@ -19,6 +21,7 @@ export function apiRoutes(
   scanService: ScanService,
   knowledgeService: KnowledgeService,
   generationService: GenerationService,
+  fertilizerService: FertilizerService,
 ): Router {
   const router = Router();
   router.use(healthRoutes(createHealthService(repository)));
@@ -26,5 +29,6 @@ export function apiRoutes(
   router.use('/scans', scanRoutes(environment, authService, scanService));
   router.use(knowledgeRoutes(environment, knowledgeService));
   router.use(generationRoutes(environment, authService, generationService));
+  router.use(fertilizerRoutes(environment, authService, fertilizerService));
   return router;
 }
