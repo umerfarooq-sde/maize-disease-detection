@@ -1,6 +1,25 @@
 # Known issues
 
-Updated: 2026-10-15 (Asia/Karachi), Phase 22 model health.
+Updated: 2026-10-15 (Asia/Karachi), Phase 23 comprehensive verification.
+
+Phase 23 explicitly identifies incomplete farmer journeys: registration is available
+through the backend API but has no farmer registration screen, and the Knowledge
+tab remains a placeholder despite working sourced disease APIs. Fertilizer/yield
+engines pass synthetic versioned arithmetic contracts; real recommendation content
+is still pending approved sources. Only Windows/Chrome/Edge targets are available locally, so
+no physical Android camera/permissions or device acceptance is claimed. Android
+APK packaging and Flutter widget/API/MVVM checks pass. A live Healthy scouting
+question can safely abstain even when a test expects grounded evidence; see the
+[verification matrix](39-testing-e2e-verification.md) and project state for recheck
+results. These gaps are recorded without implementing unrelated features.
+
+Phase 23 fixed the reproduced model-health cold-connection transaction acquisition
+failure by matching the existing ten-second pool/analytics bound; the real
+read-only registry/model/Flutter contract passes afterward. A live management
+knowledge search also returned 503 before a later full recheck passed. Provider
+availability/grounding variability is retained as an operational risk, not hidden
+by the successful rechecks. See the matrix for failed run IDs and cleanup limits.
+
 
 Admin knowledge/configuration management is implemented. An authorized source
 review remains a human trust boundary, not automatic agricultural/legal validation.

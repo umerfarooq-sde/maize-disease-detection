@@ -38,7 +38,9 @@ export function createModelHealthRepository(
             productionVersions: production.map((row) => row.version),
           };
         },
-        { isolationLevel: 'RepeatableRead' },
+        // Cold remote connections can exceed Prisma's two-second acquisition
+        // default. Match the pool connection budget and the analytics queries.
+        { isolationLevel: 'RepeatableRead', maxWait: 10000 },
       ),
   };
 }

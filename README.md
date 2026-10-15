@@ -5,6 +5,13 @@ with administrative tools for maintaining knowledge and monitoring the system.
 
 ## Current status
 
+Phase 23 verifies component and real cross-service contracts, including a connected
+Flutter/API/MVVM farmer/Admin journey. The [test matrix](docs/39-testing-e2e-verification.md)
+explicitly records skipped tests, failed attempts and remaining registration/knowledge
+UI, approved calculator-content and physical-device gaps. No new business feature.
+Verification also fixes an existing Admin model-health transaction acquisition
+failure on cold database connections; component and live rechecks pass afterward.
+
 Phase 22 adds the Admin model-health dashboard with pinned offline test/per-class/
 confusion-matrix evidence, explicit registry versus live readiness, and bounded
 process-local inference counters. No runtime statistic is called model accuracy or

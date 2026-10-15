@@ -178,7 +178,11 @@ test('real Node -> authenticated FastAPI -> Google -> PostgreSQL grounded explan
   }
 
   async function verifiedEvidence(result: GenerationData, label: DiseaseLabel) {
-    assert.equal(result.status, 'GROUNDED');
+    assert.equal(
+      result.status,
+      'GROUNDED',
+      `Expected grounded ${label} evidence; status=${result.status}, reason=${result.reason}, providerUsed=${result.providerUsed}`,
+    );
     assert.equal(result.providerUsed, true);
     assert.ok(result.sources.length > 0);
     assert.equal(result.reviewSetVersion, 'maize-extension-20261012-v1');

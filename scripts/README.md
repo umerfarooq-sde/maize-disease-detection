@@ -1,5 +1,16 @@
 # Scripts
 
+Phase 23 adds [check-e2e.py](check-e2e.py), its connected Flutter
+[journey helper](check-e2e.mjs), and a [test-only schema preloader](e2e-database-context.mjs).
+Run the Python script with the AI environment from root, after backend build. It
+requires existing direct DB/Cloudinary/model/Google/Gemini configuration and Flutter
+on PATH. Each run creates an owned schema, copies sourced knowledge/model metadata,
+runs explicit live checks and records separate logs/results under `.cache/phase23`.
+`--only journey` or selected check names restrict the run; every run still verifies
+raw SQL/Prisma schema isolation. Only generated accounts/images/owned assets and
+synthetic calculator values are used. No source dataset or final-test rerun. See
+the [test matrix](../docs/39-testing-e2e-verification.md).
+
 Phase 22 adds [check-model-health.py](check-model-health.py) and its Node helper
 [check-model-health.mjs](check-model-health.mjs). Run the Python script with the
 AI virtual environment from root for a real pinned-model/Node/Flutter contract.

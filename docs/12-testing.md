@@ -1,12 +1,11 @@
 # Testing Strategy
 
-> **Status:** Checks are implemented through Phase 13: trained artifact serving,
-> Node/FastAPI scan orchestration, transaction/recovery, complete farmer results/history
-> and session privacy tests.
-> Frozen Phase 10.5 evidence is preserved; integration QA uses synthetic images. The
-> [historical foundation audit](23-pre-phase-10-audit.md) distinguishes implemented
-> checks from future feature tests. The
-> [dataset review](24-dataset-intake-preprocessing-review.md) records real-image evidence.
+> **Status:** Phase 23 verifies component, real database/provider and connected
+> Flutter/API/MVVM workflows. The [test matrix](39-testing-e2e-verification.md)
+> separates passing live checks, mocked failures, default skips and missing UI/device/
+> content acceptance. No new model training or final-test evaluation is performed.
+> Frozen Phase 10.5 evidence remains unchanged. Read [project state](PROJECT_STATE.md)
+> for measured totals, failed attempts and final live run outcomes.
 
 ## Flutter
 

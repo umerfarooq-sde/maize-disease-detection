@@ -4,6 +4,12 @@ $repositoryRoot = Split-Path -Parent $PSScriptRoot
 $requiredDirectories = @('mobile', 'backend', 'ai-service', 'ml-training', 'docs', 'scripts', 'infrastructure')
 $requiredFiles = @('AGENTS.md', 'README.md', '.gitignore', 'docs/README.md', 'docs/PROJECT_STATE.md', 'docs/DECISIONS.md', 'docs/14-roadmap.md')
 $requiredFiles += @(
+    'docs/39-testing-e2e-verification.md', 'scripts/check-e2e.py',
+    'scripts/check-e2e.mjs', 'scripts/e2e-database-context.mjs',
+    'mobile/test/integration/e2e_test.dart',
+    'backend/tests/foundation/dependency-failures.test.ts'
+)
+$requiredFiles += @(
     'docs/15-development-environment.md', 'backend/package.json', 'backend/package-lock.json',
     'backend/tsconfig.json', 'backend/.node-version', 'backend/src/environment-check.ts',
     'backend/src/database-check.ts', 'ai-service/pyproject.toml', 'ai-service/uv.lock',

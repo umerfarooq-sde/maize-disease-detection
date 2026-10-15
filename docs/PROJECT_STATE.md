@@ -4,7 +4,45 @@ Updated: 2026-10-15 (Asia/Karachi).
 
 ## Current phase
 
-Phase 22 is complete and verified for the Admin ML model-health dashboard.
+Phase 23 verification is complete, with the acceptance limits below. Component checks pass:
+299 backend tests, 346 AI tests (three default opt-in SQL skips), 296 Flutter tests
+(eleven default opt-in skips), 219 ML-tooling fixture tests and 78 shared preprocessing
+tests in each Python environment. Twelve synthetic preprocessing parity cases and
+all 56 Node/shared image-admission cases pass. Android debug APK packaging, Prisma
+schema/client checks and migration status, repository and Compose validation pass.
+
+A new connected Flutter/API/MVVM farmer/Admin journey passes registration, login,
+real Cloudinary upload and pinned-model inference, private history/detail, source-
+grounded AI, synthetic fertilizer/yield calculations, farmer/Admin statistics,
+immutable knowledge version edits with real Google indexing, model health, cookie
+refresh and logout. The test uses a disposable schema, generated accounts/images,
+and existing source-backed knowledge. Its owned cloud asset was removed, its schema
+dropped, and all 21 production application-table counts are unchanged.
+
+Verification is not a claim that every planned product screen is implemented:
+farmer registration has an API but no registration screen; the farmer Knowledge tab
+is still a placeholder; real agronomic calculator content awaits approved sources.
+No Android device/emulator is connected, so camera/permissions and physical device
+acceptance remain unverified. Synthetic scans measure integration, not accuracy.
+Read the [Phase 23 test matrix](39-testing-e2e-verification.md).
+
+Early harness/schema/preload failures and a database connection timeout are recorded.
+One live generation check abstained on a Healthy scouting question where the test
+expected GROUNDED; that failure is retained and all nine focused generation tests
+passed on recheck. A later management search returned 503; a separate complete
+management/Flutter recheck passed. Provider/grounding variability remains a risk.
+Disk exhaustion caused Flutter compilation failures and an Admin analytics timeout;
+generated outputs were cleaned and the affected checks rerun. Recovery removed
+only verified abandoned test schemas; the original broad run's final count
+comparison is unavailable, while recovery and successful runs verify unchanged counts.
+Verification found and fixed a real model-health P2028 transaction-start failure:
+its acquisition wait now matches the existing ten-second pool/analytics bound.
+Both the actual read-only model/Flutter contract and full backend checks pass.
+No model, preprocessing, schema, source corpus, provider setting or business feature
+is changed. No real classifier training, final-test rerun or promotion.
+Stop after Phase 23.
+
+The preceding Phase 22 is complete and verified for the Admin ML model-health dashboard.
 `/admin/model-health` shows safe registry promotion/status separately from actual
 loaded-model readiness, pinned offline test/per-class/confusion-matrix evidence,
 and process-local runtime requests/failures/latency/uncertainty/output counts.
@@ -280,12 +318,13 @@ functionality remain deferred.
 
 | Component | Verified implementation |
 |---|---|
-| Mobile | Flutter 3.41.9/Dart 3.11.5, farmer MVVM workflows/assistant/calculators/private analytics; separate volatile Admin sign-in, dashboard, model-health/offline-runtime view and knowledge/configuration forms with source review, rebuild, confirmed publication, validation and session fences; 296 isolated tests, ten opt-in live tests; actual management/statistics contracts pass; prior Android debug APK packaging verified |
-| Backend | Health/auth/scans/history, sourced knowledge/retrieval/generation, deterministic versioned fertilizer/yield frameworks, Farmer analytics and ADMIN dashboard/management/model health; optimistic display edits, immutable reviewed drafts, index orchestration and audited source/version publication; Prisma 7.10.0, 21 tables/eight unchanged migrations, 296 isolated tests; real isolated-schema management and rollback contracts verified |
+| Mobile | Flutter 3.41.9/Dart 3.11.5, farmer MVVM workflows/assistant/calculators/private analytics; separate volatile Admin sign-in, dashboard, model-health/offline-runtime view and knowledge/configuration forms with source review, rebuild, confirmed publication, validation and session fences; 296 isolated tests, eleven opt-in live tests; actual management/statistics contracts pass; prior Android debug APK packaging verified |
+| Backend | Health/auth/scans/history, sourced knowledge/retrieval/generation, deterministic versioned fertilizer/yield frameworks, Farmer analytics and ADMIN dashboard/management/model health; optimistic display edits, immutable reviewed drafts, index orchestration and audited source/version publication; Prisma 7.10.0, 21 tables/eight unchanged migrations, 299 isolated tests; real isolated-schema management and rollback contracts verified |
 | AI service | Once-loaded classifier with pinned development metrics, protected health dashboard and lifespan runtime counters; shared preprocessing unchanged; reviewed pgvector retrieval, protected Admin prepare/index/check with existing chunker/Google provider, official Gemini verified evidence selection and request-local reviewed Admin context alongside pinned originals; 346 isolated tests, three opt-in PostgreSQL checks; Ruff/strict mypy; 76 targeted generation/management regression cases pass; factory remains free of heavy provider/model imports |
 | Shared preprocessing | One independently buildable typed package at `shared/preprocessing`, version 1.0.0, explicit JSON configuration, file/byte entrypoints, conservative extraction/fallback, optional unchanged CPU tensor and debug CLI; 78 tests pass in each consumer environment and 12 synthetic baseline parity cases pass |
 | ML training | Corrected immutable v2: 4,162 contents/4,121 groups, 2,911/627/624 partitions, no confirmed leakage; fresh MobileNetV3 Small completed 11 epochs, best epoch 8; validation 96.81% accuracy/0.9589 macro F1, single descriptive test 95.83%/0.9452; raw probabilities, no threshold; 219 tests, Ruff over 32 files, mypy over 15 modules and 16 actual TRAIN cases with AI compatibility pass; limited FYP prototype |
 | Infrastructure | Neon PostgreSQL 18.6 with pgvector 0.8.6 migrated; pgvector 0.8.7/PostgreSQL 18 Compose configuration; preserved native 18.4 cluster; private local settings ignored |
+| Verification | Phase 23 component, SQL/provider, cross-service and connected Flutter/API/MVVM matrices; isolated schemas, actual cloud/provider calls and explicit UI/device/content gaps |
 | Documentation | Architecture, database/operations, auth, Flutter foundation, scan uploads/recovery, FastAPI startup/contracts/network, shared preprocessing/configuration/versioning/limitations, decisions, roadmap and verification history |
 | Scripts | Repository/environment/auth/admin/PostgreSQL/Python/development checks including shared preprocessing/parity; configured FastAPI startup and 16-TRAIN serving parity/timing verifier; live Flutter scan/assistant/calculator and Farmer/Admin statistics harnesses, rollback/query-plan checks and backend cleanup CLI |
 
@@ -2075,9 +2114,59 @@ Offline evidence cannot be served by this screen when its pinned model service i
 unavailable. Existing upstream Starlette/httpx deprecation warning remains.
 Stop after Phase 22.
 
+## Phase 23 verification
+
+Added a connected Flutter/API/MVVM farmer/Admin journey, actual unreachable-DB/
+FastAPI and stalled-HTTP failure checks, explicit live orchestration and a
+test-only database search-path preflight. Each owned schema replays the eight
+existing migrations and copies sourced knowledge/model metadata, never accounts,
+scans, private requests or real calculator recommendations. Results/logs are
+timestamped under ignored `.cache/phase23/`. Skips, nonzero exits and timeouts
+cannot be reported as passing live tasks. Cleanup uses a fresh control connection,
+saves results incrementally and preserves compensation records if cleanup is unknown.
+
+The only application change fixes the Admin model-health registry transaction's
+default two-second acquisition deadline (`P2028`) on cold remote connections.
+`maxWait: 10000` matches existing pool/analytics acquisition bounds; isolation and
+query/execution deadlines remain intact. The real read-only registry/model/Flutter
+case reproduces the failure before the change and passes afterward. No new feature,
+schema, dependency, classifier, shared preprocessing or corpus change is included.
+
+| Command/check | Measured result |
+|---|---|
+| `scripts/check-development.ps1 -Component Backend` / final `backend: npm.cmd run check` | 299 tests pass, zero skips; format/lint/strict TypeScript/build/import checks pass after the transaction fix |
+| `-Component AI` | 346 pass, three opt-in SQL skips; Ruff format/lint and mypy pass; all three SQL tests enabled separately and pass |
+| `-Component Flutter`, `dart format`, final `flutter analyze` | 296 pass, 11 default opt-in skips; analyzer has no issues and formatting passes; opt-in contracts have separate live evidence |
+| `-Component Training` | 219 fixture tests pass, Ruff/mypy pass; no real classifier fitting or held-out evaluation |
+| `-Component Preprocessing` | 78 tests pass in each Python environment; 12 exact synthetic training/serving parity cases pass; Ruff/mypy pass |
+| `check-image-admission-contract.py` | 56 pass: 21 admitted, 35 rejected; no source dataset |
+| `-Component Prisma`, live database and replay tasks | 13 Prisma checks and 42 live integration cases pass; schema/client/type checks pass, eight migrations current; fresh replay passes |
+| `-Component Docker`, `check-repository.ps1` | Compose configuration and repository/templates/ignore checks pass; running containers/deployment not verified |
+| `flutter build apk --debug --no-pub` | Android debug APK built successfully in 62.4 s; generated outputs later removed by `flutter clean` to resolve disk exhaustion |
+| Broad live run `20261015T094831Z-10991b2b` | DB/replay, Python SQL, real Google/pgvector, enabled upload API, anonymous/farmer cloud/model/history, assistant, calculators and farmer analytics pass; generation/late Admin failures retained in recovered results |
+| Journey `20261015T095107Z-f4a8650c` | Two Flutter tests pass in 220.92 s; 16 connected API/MVVM steps, real cloud/model/provider calls; owned cloud cleanup, schema removal and 21 unchanged production counts verified |
+| Generation `20261015T095657Z-9c32f04d` | Nine tests pass, zero skips in 163.94 s, covering all four literal classes and scan contexts; earlier Healthy abstention remains recorded |
+| Admin recheck `20261015T122146Z-1b3315f1` | Analytics/Flutter pass in 66.55 s with 7,000 synthetic scans and one aggregate statement; management 503 and pre-fix model-health failure retained; schema removed/counts unchanged |
+| Management recheck `20261015T122903Z-77aa6aeb` | Complete source/version/index/archive/Gemini/audit/calculator/Flutter contract passes in 337.20 s; this run also retains its pre-fix model-health failure |
+| Model-health final `20261015T123435Z-5233c9e0` | After fix, actual read-only registry + pinned FastAPI + Node + Flutter repository/ViewModel passes in 55.69 s; no skipped live case |
+| Integrity/privacy review | 171 frozen files and approved checkpoint checked, eight migrations/corpus/shared/ML and unrelated user edits preserved; local documentation links and configured-secret/path checks pass |
+
+The matrix distinguishes actual service calls from mocked failures, API contracts
+from widget/device acceptance, and synthetic calculator fixtures from approved
+agronomic content. Farmer registration UI and Knowledge UI remain missing; real
+fertilizer/yield rules await sources. No Android device/emulator was available for
+physical camera/permission/tap-through acceptance. Intermittent upstream 503 and
+safe grounding abstention mean this is not an uninterrupted all-green provider run.
+The original disk-failed batch lost its final cleanup comparison; its recovered
+log and separate verified cleanup proof are retained. Saved final-test metrics
+remain historical evidence, not newly measured field accuracy or commercial clearance.
+Final cleanup inspection found no generated Phase 21/23 schema remaining and all
+21 production counts match the final run's baseline.
+Read the [full test matrix](39-testing-e2e-verification.md). Stop after Phase 23.
+
 ## Next step
 
-Stop after Phase 22. Subsequent phases require the
+Stop after Phase 23. Subsequent phases require the
 next explicit instruction. Independent
 field validation and commercial
 licensing/source replacement remain requirements before real farmer/commercial use.

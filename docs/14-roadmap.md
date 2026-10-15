@@ -259,3 +259,11 @@ Read [Admin management](37-admin-management.md). Stop after Phase 21.
 Admin model health now separates pinned offline evaluation, registry promotion and
 live process-local runtime statistics. No formal drift, field accuracy or model
 promotion is inferred. Read [model health](38-model-health-dashboard.md). Stop after Phase 22.
+
+## Phase 23 verification
+
+Component, live database/provider, failure and connected farmer/Admin API/MVVM
+checks are recorded in the [verification matrix](39-testing-e2e-verification.md).
+Missing registration/knowledge UI, approved calculator content and physical-device
+acceptance remain explicit. This phase adds tests/tooling/docs and fixes the verified
+model-health transaction acquisition bound. No new feature. Stop after Phase 23.

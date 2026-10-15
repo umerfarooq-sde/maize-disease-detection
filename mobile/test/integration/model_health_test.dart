@@ -23,13 +23,16 @@ void main() {
         requiredRole: AccountRole.admin,
       );
       final model = ModelHealthViewModel(ApiModelHealthRepository(api));
+      var stage = 'Admin HTTP sign-in';
       try {
         await session.signIn(
           Platform.environment['MODEL_HEALTH_ADMIN_EMAIL']!,
           Platform.environment['MODEL_HEALTH_ADMIN_PASSWORD']!,
         );
         // Exercise the typed repository directly as well as its ViewModel.
+        stage = 'typed model-health repository';
         expect((await ApiModelHealthRepository(api).load()).status, 'READY');
+        stage = 'model-health ViewModel';
         await model.load();
         expect(model.error, isNull);
         final data = model.data!;
@@ -44,8 +47,12 @@ void main() {
           data.productionVersion != null &&
               data.productionVersion == data.modelVersion,
         );
+        stage = 'Admin logout';
         await session.signOut();
         expect(model.data, isNull);
+      } catch (_) {
+        // Stage names contain no credentials, request bodies or private origins.
+        fail('Live model-health contract failed during $stage.');
       } finally {
         model.dispose();
         api.close();
