@@ -194,5 +194,8 @@ def create_app(
     app.include_router(health_router)
     app.include_router(prediction_router)
     app.include_router(retrieval_router)
+    from app.api.routes.knowledge_management import router as knowledge_management_router
+
+    app.include_router(knowledge_management_router)
     app.include_router(generation_router)
     return app

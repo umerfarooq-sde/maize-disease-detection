@@ -1,5 +1,11 @@
 # Mobile
 
+Phase 21 adds `/admin/manage` through the Admin overview settings icon. Named
+forms manage sourced document revisions, fixed-context display metadata and
+reviewed fertilizer/yield drafts, with validation, indexing, confirmed publication/
+deactivation, loading/errors and session fencing. Model class mappings stay
+read-only and rates start blank. See [Admin management](../docs/37-admin-management.md).
+
 Phase 20 adds `/admin` outside the farmer shell: separate volatile Admin sign-in,
 overview cards/charts, real account/scan aggregates, model registry/configuration,
 recent activity and loading/retry/empty states. Shared rotation/revocation code

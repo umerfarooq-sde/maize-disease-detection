@@ -1,3 +1,5 @@
+import { sameJson as sameFertilizerSnapshot } from '../../utils/json-equality.js';
+export { sameJson as sameFertilizerSnapshot } from '../../utils/json-equality.js';
 import { Prisma, type PrismaClient } from '../../generated/prisma/client.js';
 import type { FertilizerProductInput } from './fertilizer.validators.js';
 
@@ -65,31 +67,6 @@ export function fertilizerProductSnapshot(
     precautions: product.precautions,
     sourceReference: product.sourceReference,
   };
-}
-
-export function sameFertilizerSnapshot(left: unknown, right: unknown): boolean {
-  if (left === right) return true;
-  if (left === null || right === null || typeof left !== 'object' || typeof right !== 'object')
-    return false;
-  if (Array.isArray(left) || Array.isArray(right)) {
-    return (
-      Array.isArray(left) &&
-      Array.isArray(right) &&
-      left.length === right.length &&
-      left.every((value, index) => sameFertilizerSnapshot(value, right[index]))
-    );
-  }
-  const leftRecord = left as Record<string, unknown>;
-  const rightRecord = right as Record<string, unknown>;
-  const keys = Object.keys(leftRecord);
-  return (
-    keys.length === Object.keys(rightRecord).length &&
-    keys.every(
-      (key) =>
-        Object.hasOwn(rightRecord, key) &&
-        sameFertilizerSnapshot(leftRecord[key], rightRecord[key]),
-    )
-  );
 }
 
 export function createFertilizerRepository(database: FertilizerDatabase): FertilizerRepository {
@@ -239,6 +216,8 @@ export function createFertilizerRepository(database: FertilizerDatabase): Fertil
             include: ruleInclude,
           });
           if (!rule) return null;
+          let retiredRules: { id: string; version: number }[] = [];
+          let retiredConfigs: { id: string; version: number }[] = [];
           if (status === 'ACTIVE') {
             const parameters = rule.parameters;
             const configVersion =
@@ -257,6 +236,19 @@ export function createFertilizerRepository(database: FertilizerDatabase): Fertil
               },
             });
             if (!config || !admit(rule, config)) return 'INVALID';
+            retiredRules = await transaction.fertilizerRule.findMany({
+              where: {
+                fertilizerId: rule.fertilizerId,
+                ruleKey: rule.ruleKey,
+                status: 'ACTIVE',
+                id: { not: ruleId },
+              },
+              select: { id: true, version: true },
+            });
+            retiredConfigs = await transaction.calculatorConfig.findMany({
+              where: { kind: 'FERTILIZER', configKey, status: 'ACTIVE', id: { not: config.id } },
+              select: { id: true, version: true },
+            });
             await transaction.fertilizerRule.updateMany({
               where: {
                 fertilizerId: rule.fertilizerId,
@@ -301,6 +293,8 @@ export function createFertilizerRepository(database: FertilizerDatabase): Fertil
                 status,
                 ruleKey: rule.ruleKey,
                 version: rule.version,
+                retiredRules,
+                retiredConfigs,
               },
             },
           });

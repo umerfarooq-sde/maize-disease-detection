@@ -185,7 +185,16 @@ GoRouter createAppRouter({String initialLocation = AppRoutes.home}) => GoRouter(
         ),
       ],
     ),
-    GoRoute(path: AppRoutes.admin, builder: (_, _) => const AdminAccessView()),
+    GoRoute(
+      path: AppRoutes.admin,
+      builder: (_, _) => const AdminAccessView(),
+      routes: [
+        GoRoute(
+          path: 'manage',
+          builder: (_, _) => const AdminAccessView(management: true),
+        ),
+      ],
+    ),
   ],
   errorBuilder: (context, _) => Scaffold(
     body: AppPage(

@@ -5,6 +5,12 @@ with administrative tools for maintaining knowledge and monitoring the system.
 
 ## Current status
 
+Phase 21 adds reviewed Admin knowledge/configuration forms, immutable sourced
+document versions, explicit embedding rebuild/publication/archive and audited
+disease display edits. Calculator management reuses existing validated versioned
+services. Model class mappings remain read-only. See
+[Admin management](docs/37-admin-management.md).
+
 Phase 20 adds an Admin dashboard with server-aggregated account/scan statistics,
 charts, recent activity and stored model registry/configuration summaries. The
 Admin workspace has separate volatile sign-in/navigation and ADMIN-only access;

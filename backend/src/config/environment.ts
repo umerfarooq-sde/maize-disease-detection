@@ -87,6 +87,7 @@ const environmentSchema = z
     AUTH_RATE_LIMIT_MAX: z.coerce.number().int().min(1).max(1000).default(10),
     SCAN_RATE_LIMIT_MAX: z.coerce.number().int().min(1).max(100).default(10),
     KNOWLEDGE_RATE_LIMIT_MAX: z.coerce.number().int().min(1).max(1000).default(20),
+    KNOWLEDGE_INDEX_TIMEOUT_MS: z.coerce.number().int().min(1000).max(120000).default(120000),
     GENERATION_RATE_LIMIT_MAX: z.coerce.number().int().min(1).max(60).default(5),
     GENERATION_TIMEOUT_MS: z.coerce.number().int().min(1000).max(60000).default(30000),
     CALCULATOR_RATE_LIMIT_MAX: z.coerce.number().int().min(1).max(1000).default(30),

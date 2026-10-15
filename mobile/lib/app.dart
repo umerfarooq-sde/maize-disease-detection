@@ -20,6 +20,7 @@ import 'data/repositories/analytics_repository.dart';
 import 'data/models/session_account.dart';
 import 'data/repositories/session_repository.dart';
 import 'data/repositories/admin_dashboard_repository.dart';
+import 'data/repositories/admin_management_repository.dart';
 import 'features/admin/view_models/admin_session_view_model.dart';
 import 'features/auth/view_models/farmer_session_view_model.dart';
 import 'data/datasources/leaf_image_datasource.dart';
@@ -113,6 +114,9 @@ class _MainAppState extends State<MainApp> {
       ChangeNotifierProvider<AdminSessionViewModel>.value(value: _adminSession),
       Provider<AdminDashboardRepository>(
         create: (_) => ApiAdminDashboardRepository(_adminApi),
+      ),
+      Provider<AdminManagementRepository>(
+        create: (_) => ApiAdminManagementRepository(_adminApi),
       ),
       Provider<AnalyticsRepository>(
         create: (_) => ApiAnalyticsRepository(_api),

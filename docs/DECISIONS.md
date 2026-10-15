@@ -228,6 +228,18 @@ Stop after Phase 19.
 See [Admin dashboard](36-admin-dashboard.md) for contracts and verification.
 Stop after Phase 20.
 
+## Phase 21 Admin management decisions (2026-10-15)
+
+| Decision | Rationale and boundary |
+|---|---|
+| Immutable reviewed draft → explicit index → explicit publish | Node owns validated versions/status/audits; Python owns canonical text, configured chunking/embedding and atomic READY insertion. Existing immutable tables/locks suffice. Provider failure never publishes a draft or replaces old content, and policy mismatch requires a new version rather than rewriting READY vectors. |
+| Versioned source snapshots and fixed classifier contexts | Source edits accompany a new document version/source record, preserving old citations. Disease name/description/visibility edits use revision checks and audits; class labels/slugs have no rename/delete API. Calculator product snapshot edits require a new product slug; no trained model or algorithm changes. |
+| Request-local admission of reviewed active Admin evidence | Pinned corpus identities remain pinned. Current Admin documents require stamped review/creator/current index identity and activation audit, then the same exact content/hash/offset/source/coverage/injection checks. Archived evidence is not cached as active or silently reused. |
+| Reuse calculator publication and typed Admin forms | Expose admitted draft projections, require fresh review, confirm lifecycle changes and retain immutable old results/versions. Publication audit identifies auto-retired IDs/versions. No arbitrary JSON/formula editor, invented agronomic rate or new history store is added. |
+
+See [Admin management](37-admin-management.md) for API contracts, rebuild semantics,
+human review trust boundary and verification. Stop after Phase 21.
+
 Pending decisions:
 full business JSON validation contracts, retention and
 completed-scan retention/delivery/deletion, production least-privilege roles,

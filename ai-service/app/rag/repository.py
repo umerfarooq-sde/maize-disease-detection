@@ -7,6 +7,7 @@ from collections.abc import Iterator
 from contextlib import contextmanager
 from typing import cast
 from urllib.parse import parse_qsl, urlencode, urlsplit, urlunsplit
+from uuid import UUID
 
 import certifi
 import psycopg
@@ -321,3 +322,141 @@ class KnowledgeRepository:
         for row in rows:
             row["similarity"] = max(-1.0, min(1.0, float(cast(float, row["similarity"]))))
         return [RetrievedChunk.model_validate(row) for row in rows]
+
+    def draft(self, document_id: UUID) -> tuple[DocumentInput, dict[str, object]]:
+        from app.rag.management import document_from_row
+
+        with self.connection() as connection:
+            row = connection.execute(
+                "SELECT d.*,d.knowledge_type::text AS knowledge_type,x.slug AS disease_slug "
+                "FROM knowledge_documents d JOIN diseases x ON x.id=d.disease_id "
+                "WHERE d.id=%s AND d.status='DRAFT'",
+                (document_id,),
+            ).fetchone()
+        if row is None:
+            raise AppError(ErrorCode.CONFLICT)
+        document = document_from_row(row)
+        if row["disease_slug"] != document.disease_label.lower().replace("_", "-"):
+            raise AppError(ErrorCode.CONFLICT)
+        return document, cast(dict[str, object], row["metadata"])
+
+    def _draft_indexed(
+        self, connection: Connection[dict[str, object]], document_id: UUID, chunks: list[Chunk]
+    ) -> bool:
+        rows = connection.execute(
+            "SELECT chunk_index,content,content_hash,metadata,embedding_status::text,"
+            "embedding_model,embedding_version,embedding_dimensions FROM knowledge_chunks "
+            "WHERE document_id=%s ORDER BY chunk_index LIMIT 33",
+            (document_id,),
+        ).fetchall()
+        if not rows:
+            return False
+        if len(rows) != len(chunks):
+            raise AppError(ErrorCode.CONFLICT)
+        for row, chunk in zip(rows, chunks, strict=True):
+            if (
+                row["chunk_index"] != chunk.index
+                or row["content"] != chunk.content
+                or row["content_hash"] != chunk.sha256
+                or row["embedding_status"] != "READY"
+                or row["embedding_model"] != self.settings.embedding_model
+                or row["embedding_version"] != self.settings.embedding_version
+                or row["embedding_dimensions"] != self.settings.embedding_dimensions
+                or row["metadata"]
+                != {
+                    "start": chunk.start,
+                    "end": chunk.end,
+                    "contentHash": chunk.sha256,
+                    "retrievalIdentity": self.identity,
+                }
+            ):
+                raise AppError(ErrorCode.CONFLICT)
+        return True
+
+    def draft_indexed(self, document_id: UUID, chunks: list[Chunk]) -> bool:
+        with self.connection() as connection:
+            return self._draft_indexed(connection, document_id, chunks)
+
+    def save_draft_index(
+        self,
+        document_id: UUID,
+        chunks: list[tuple[Chunk, list[float]]],
+        actor_id: UUID,
+        request_id: UUID,
+    ) -> None:
+        with self.connection() as connection:
+            connection.execute(
+                "SELECT pg_advisory_xact_lock("
+                "hashtextextended('maizedoctor-knowledge-ingestion-v1',0))"
+            )
+            row = connection.execute(
+                "SELECT status::text FROM knowledge_documents WHERE id=%s FOR UPDATE",
+                (document_id,),
+            ).fetchone()
+            actor = connection.execute(
+                "SELECT id FROM users WHERE id=%s AND role='ADMIN' AND status='ACTIVE'", (actor_id,)
+            ).fetchone()
+            if row is None or row["status"] != "DRAFT" or actor is None:
+                raise AppError(ErrorCode.CONFLICT)
+            if self._draft_indexed(connection, document_id, [chunk for chunk, _ in chunks]):
+                return
+            for chunk, vector in chunks:
+                connection.execute(
+                    "INSERT INTO knowledge_chunks(document_id,chunk_index,content,content_hash,"
+                    "embedding,"
+                    "embedding_model,embedding_version,embedding_dimensions,"
+                    "embedding_status,metadata) "
+                    "VALUES (%s,%s,%s,%s,%s::public.vector,%s,%s,%s,'READY',%s)",
+                    (
+                        document_id,
+                        chunk.index,
+                        chunk.content,
+                        chunk.sha256,
+                        json.dumps(vector, allow_nan=False),
+                        self.settings.embedding_model,
+                        self.settings.embedding_version,
+                        self.settings.embedding_dimensions,
+                        Jsonb(
+                            {
+                                "start": chunk.start,
+                                "end": chunk.end,
+                                "contentHash": chunk.sha256,
+                                "retrievalIdentity": self.identity,
+                            }
+                        ),
+                    ),
+                )
+            connection.execute(
+                "INSERT INTO audit_logs(actor_id,action,entity_type,entity_id,request_id,changes) "
+                "VALUES (%s,'UPDATE','knowledge_document',%s,%s,%s)",
+                (
+                    actor_id,
+                    document_id,
+                    str(request_id),
+                    Jsonb(
+                        {
+                            "index": "READY",
+                            "chunkCount": len(chunks),
+                            "retrievalIdentity": self.identity,
+                        }
+                    ),
+                ),
+            )
+
+    def reviewed_documents(self, chunks: list[RetrievedChunk]) -> list[DocumentInput]:
+        from app.rag.management import document_from_row
+
+        ids = list({chunk.document_id for chunk in chunks[:10]})
+        if not ids:
+            return []
+        with self.connection() as connection:
+            rows = connection.execute(
+                "SELECT d.*,d.knowledge_type::text AS knowledge_type FROM knowledge_documents d "
+                "JOIN diseases x ON x.id=d.disease_id WHERE d.id=ANY(%s) AND d.status='ACTIVE' "
+                "AND x.status='ACTIVE' AND d.topic='DISEASE' AND d.language='en' "
+                "AND d.metadata->>'retrievalIdentity'=%s AND d.metadata ? 'adminReview' "
+                "AND EXISTS (SELECT 1 FROM audit_logs a WHERE a.entity_id=d.id "
+                "AND a.entity_type='knowledge_document' AND a.action='ACTIVATE')",
+                (ids, self.identity),
+            ).fetchall()
+        return [document_from_row(row) for row in rows]

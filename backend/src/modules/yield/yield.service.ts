@@ -44,6 +44,9 @@ export function publicYieldConfiguration(
   };
 }
 export interface YieldDraftSummary {
+  draftInput?: YieldDraft | null;
+  createdAt?: string;
+  updatedAt?: string;
   id: string;
   configKey: string;
   version: number;
@@ -52,6 +55,23 @@ export interface YieldDraftSummary {
 }
 const summary = (record: YieldConfigurationRecord): YieldDraftSummary => ({
   id: record.id,
+  createdAt: record.createdAt.toISOString(),
+  updatedAt: record.updatedAt.toISOString(),
+  draftInput: (() => {
+    const data = publicYieldConfiguration(record, false);
+    return data
+      ? {
+          version: data.version,
+          title: data.title,
+          expectedYieldKgPerHectare: data.expectedYieldKgPerHectare,
+          applicability: data.applicability,
+          assumptions: data.assumptions,
+          source: data.source,
+          quantityDecimalPlaces: data.rounding.decimalPlaces,
+          reviewNote: '',
+        }
+      : null;
+  })(),
   configKey: record.configKey,
   version: record.version,
   status: record.status,

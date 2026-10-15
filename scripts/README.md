@@ -140,6 +140,17 @@ write access to the installed SDK cache. See [development setup](../docs/15-deve
 `Prisma` verifies an already migrated pgvector database; it does not apply migrations.
 See [database operations](../docs/16-database-operations.md) for migration/replay/seed commands.
 
+Phase 21 adds [check-admin-management.py](check-admin-management.py) and its Node
+[contract helper](check-admin-management.mjs). From root, after backend build, run
+`ai-service/.venv/Scripts/python.exe scripts/check-admin-management.py`. It requires
+the existing server-side Google/Gemini and database configuration, creates a
+generated disposable schema, starts private services and verifies actual reviewed
+version/index/publication/retirement/source/audit and Flutter management flows.
+Synthetic calculator values are confined to that schema. Cleanup drops only the
+verified owned schema and checks unchanged production counts. No model training,
+classifier promotion or raw dataset use occurs. Read
+[Admin management](../docs/37-admin-management.md).
+
 If Windows blocks script execution, use
 `powershell -NoProfile -ExecutionPolicy Bypass -File ./scripts/check-repository.ps1`
 from the repository root. This override applies only to that process.

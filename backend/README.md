@@ -1,5 +1,11 @@
 # Backend
 
+Phase 21 adds ADMIN-only knowledge/disease management, source-backed immutable
+drafts, explicit FastAPI index/recheck orchestration and audited activation/archive.
+Calculator draft projections support typed Admin forms and replacement audit
+lineage. Class labels/slugs and numerical algorithms remain fixed. See
+[Admin management](../docs/37-admin-management.md).
+
 Phase 20 adds ADMIN-only `GET /api/v1/admin/dashboard`, one SQL statement for
 bounded system scan/account aggregates and recent activity. It reuses the Phase 19
 UTC/latest-prediction rules, distinguishes registered production models from

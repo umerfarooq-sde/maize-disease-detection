@@ -9,6 +9,12 @@ import { errorHandler, notFound } from './middleware/error-handler.js';
 import { requestRateLimit } from './middleware/rate-limit.js';
 import { requestContext } from './middleware/request-context.js';
 import { createDashboardRepository } from './modules/admin/dashboard.repository.js';
+import { createManagementIndexer } from './modules/admin/management.client.js';
+import { createManagementRepository } from './modules/admin/management.repository.js';
+import {
+  createManagementService,
+  type ManagementService,
+} from './modules/admin/management.service.js';
 import {
   createDashboardService,
   type DashboardService,
@@ -79,6 +85,10 @@ export function createApp(
     createDashboardRepository(getDatabaseClient(environment.DATABASE_URL)),
     environment,
   ),
+  managementService: ManagementService = createManagementService(
+    createManagementRepository(getDatabaseClient(environment.DATABASE_URL)),
+    createManagementIndexer(environment),
+  ),
 ): Express {
   const app = express();
   app.locals.recoverScans = () => scanService.recoverStale();
@@ -112,6 +122,7 @@ export function createApp(
       yieldService,
       analyticsService,
       dashboardService,
+      managementService,
     ),
   );
   app.use(notFound);

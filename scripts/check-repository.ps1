@@ -190,7 +190,7 @@ $templateKeys = @{
     'mobile' = @('API_BASE_URL')
     'ml-training' = @('DATASET_PATH')
 }
-$templateKeys['backend'] += @('KNOWLEDGE_RATE_LIMIT_MAX', 'GENERATION_RATE_LIMIT_MAX', 'GENERATION_TIMEOUT_MS', 'CALCULATOR_RATE_LIMIT_MAX', 'ANALYTICS_RATE_LIMIT_MAX')
+$templateKeys['backend'] += @('KNOWLEDGE_RATE_LIMIT_MAX', 'GENERATION_RATE_LIMIT_MAX', 'GENERATION_TIMEOUT_MS', 'CALCULATOR_RATE_LIMIT_MAX', 'ANALYTICS_RATE_LIMIT_MAX', 'KNOWLEDGE_INDEX_TIMEOUT_MS')
 $guardMigration = 'backend/prisma/migrations/20261012010000_knowledge_embedding_guard_scope/migration.sql'
 if (-not (Test-Path -LiteralPath (Join-Path $repositoryRoot $guardMigration) -PathType Leaf)) { throw 'Missing knowledge embedding guard migration.' }
 $templateKeys['ai-service'] += @('RAG_ENABLED', 'EMBEDDING_MODEL', 'EMBEDDING_VERSION', 'EMBEDDING_DIMENSIONS', 'EMBEDDING_TIMEOUT_SECONDS', 'RAG_CHUNK_CHARS', 'RAG_CHUNK_OVERLAP', 'RAG_MAX_CONCURRENCY')
@@ -202,6 +202,25 @@ foreach ($file in $requiredGenerationFiles) {
 $requiredAssistantFiles = @('docs/32-farmer-ai-assistant.md', 'mobile/lib/data/models/assistant_answer.dart', 'mobile/lib/data/models/assistant_question.dart', 'mobile/lib/data/datasources/assistant_datasource.dart', 'mobile/lib/data/repositories/assistant_repository.dart', 'mobile/lib/features/ai_assistant/view_models/assistant_view_model.dart', 'mobile/lib/features/ai_assistant/views/assistant_scan_picker.dart', 'mobile/test/assistant/model_test.dart', 'mobile/test/assistant/repository_test.dart', 'mobile/test/assistant/view_model_test.dart', 'mobile/test/assistant/widget_test.dart', 'mobile/test/assistant/navigation_test.dart', 'mobile/test/integration/assistant_test.dart', 'scripts/check-assistant.mjs')
 foreach ($file in $requiredAssistantFiles) {
     if (-not (Test-Path -LiteralPath (Join-Path $repositoryRoot $file) -PathType Leaf)) { throw "Missing farmer assistant file: $file" }
+}
+$requiredManagementFiles = @(
+    'docs/37-admin-management.md', 'scripts/check-admin-management.py', 'scripts/check-admin-management.mjs',
+    'backend/src/modules/admin/management.types.ts', 'backend/src/modules/admin/management.client.ts',
+    'backend/src/modules/admin/management.repository.ts', 'backend/src/modules/admin/management.service.ts',
+    'backend/src/modules/admin/management.controller.ts', 'backend/src/modules/admin/management.routes.ts',
+    'backend/src/modules/knowledge/knowledge.transport.ts', 'backend/src/utils/json-equality.ts',
+    'backend/tests/admin/management.test.ts', 'ai-service/app/rag/management.py',
+    'ai-service/app/api/routes/knowledge_management.py', 'ai-service/tests/test_knowledge_management.py',
+    'mobile/lib/data/models/admin_management.dart', 'mobile/lib/data/repositories/admin_management_repository.dart',
+    'mobile/lib/features/admin/view_models/admin_management_view_model.dart',
+    'mobile/lib/features/admin/views/admin_management_view.dart',
+    'mobile/lib/features/admin/widgets/management_fields.dart',
+    'mobile/lib/features/admin/widgets/management_editor_form.dart',
+    'mobile/test/admin/management_test.dart', 'mobile/test/admin/management_widget_test.dart',
+    'mobile/test/integration/admin_management_test.dart'
+)
+foreach ($file in $requiredManagementFiles) {
+    if (-not (Test-Path -LiteralPath (Join-Path $repositoryRoot $file) -PathType Leaf)) { throw "Missing Admin management file: $file" }
 }
 $requiredAdminFiles = @(
     'docs/36-admin-dashboard.md',

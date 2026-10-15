@@ -169,6 +169,9 @@ def test_development_openapi_describes_health_without_private_config(client: Tes
         "/api/v1/retrieve",
         "/api/v1/generate",
         "/api/v1/explain",
+        "/api/v1/knowledge/prepare",
+        "/api/v1/knowledge/index",
+        "/api/v1/knowledge/check",
     }
     contracts = response.json()["paths"]["/health"]["get"]["responses"]
     for status in ("422", "500"):

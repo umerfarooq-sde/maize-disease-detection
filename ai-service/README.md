@@ -1,5 +1,11 @@
 # AI service
 
+Phase 21 adds internal protected knowledge prepare/index/check endpoints, reusing
+the existing canonical text/chunker/Google embedding pipeline. New Admin versions
+remain drafts until Node publishes them. Generation can admit current explicitly
+reviewed Admin documents while preserving exact chunk/source/lineage checks and
+the original pinned-corpus policy. See [Admin management](../docs/37-admin-management.md).
+
 Phase 15 adds authenticated `POST /api/v1/generate` and `/api/v1/explain` on the
 Phase 14 retrieval layer. The official Google GenAI SDK selects reviewed evidence;
 the server returns verified document excerpts and original citations, preserving

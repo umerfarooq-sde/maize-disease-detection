@@ -4,7 +4,31 @@ Updated: 2026-10-15 (Asia/Karachi).
 
 ## Current phase
 
-Phase 20 is complete and verified for the Admin dashboard. ADMIN-only
+Phase 21 is complete and verified for Admin management. `/admin/manage` provides
+validated disease display/visibility edits, source-backed immutable knowledge
+versions, explicit indexing and confirmed activation/archive, plus fertilizer/yield
+rule forms through the existing versioned calculator services. All management
+routes require ADMIN; Farmer/guest/revoked access is denied. Model class labels,
+slugs, artifacts and calculator algorithms remain fixed. Read
+[Admin management](37-admin-management.md).
+
+New knowledge drafts use the shared Python canonical text/chunker/Google embedder.
+Provider failure cannot publish a draft. Activation rechecks current index policy,
+then atomically retires the prior active document/source and records audit lineage.
+Historical chunks/citations remain immutable and archived vectors are excluded.
+Generation admits current explicitly reviewed Admin versions through the same
+content/hash/source/offset/coverage checks, retaining pinned original identities.
+
+Checks pass 292 backend tests, 291 Flutter tests (nine live checks default-skip)
+and 336 AI tests (three opt-in database checks default-skip), plus formatting/lint,
+strict types/build, Flutter analysis, Ruff/mypy and Prisma validation. The enabled
+real Flutter → Node → FastAPI → Google/pgvector/Gemini management contract passes
+versions, rebuild/publication/retirement, visibility/CAS, audits and calculator
+management in a disposable schema. Cleanup verifies production counts unchanged.
+All eight migrations remain current; no schema/dependency/ML/shared-preprocessing
+or classifier artifact change occurs. Stop after Phase 21.
+
+The preceding Phase 20 is complete and verified for the Admin dashboard. ADMIN-only
 `GET /api/v1/admin/dashboard` returns real PostgreSQL account/status/ownership/
 latest-prediction/time/distribution aggregates and ten minimal recent scan entries.
 Flutter `/admin` sits outside farmer navigation with independent volatile Admin
@@ -229,9 +253,9 @@ functionality remain deferred.
 
 | Component | Verified implementation |
 |---|---|
-| Mobile | Flutter 3.41.9/Dart 3.11.5, Material 3 farmer shell, scoped Provider MVVM, detection/private history, grounded assistant, pending-content deterministic calculator UX and private farmer analytics; separate volatile Admin sign-in/navigation and real dashboard; 282 isolated tests, eight opt-in live tests; actual Admin/Farmer statistics contracts pass; prior Android debug APK packaging verified |
-| Backend | Health/auth/scans/private history, sourced knowledge/retrieval and grounded generation, deterministic versioned fertilizer/yield frameworks, owner-filtered Farmer analytics and ADMIN-only global dashboard; Prisma 7.10.0, 21 tables/eight unchanged migrations, 286 isolated tests; real rollback account/scan/calculator/statistics contracts verified |
-| AI service | Existing once-loaded classifier/shared preprocessing and reviewed pgvector retrieval plus official SDK Gemini evidence selection, bounded pinned context, exact excerpts/citations and safe abstention; explicit validated class-filter follow-up scope; 325 isolated tests, three opt-in PostgreSQL checks verified in Phase 15, Ruff/strict mypy; 65 generation/boundary cases; factory remains free of heavy provider/model imports |
+| Mobile | Flutter 3.41.9/Dart 3.11.5, farmer MVVM workflows/assistant/calculators/private analytics; separate volatile Admin sign-in, dashboard and knowledge/configuration forms with source review, rebuild, confirmed publication, validation and session fences; 291 isolated tests, nine opt-in live tests; actual management/statistics contracts pass; prior Android debug APK packaging verified |
+| Backend | Health/auth/scans/history, sourced knowledge/retrieval/generation, deterministic versioned fertilizer/yield frameworks, Farmer analytics and ADMIN dashboard/management; optimistic display edits, immutable reviewed drafts, index orchestration and audited source/version publication; Prisma 7.10.0, 21 tables/eight unchanged migrations, 292 isolated tests; real isolated-schema management and rollback contracts verified |
+| AI service | Once-loaded classifier/shared preprocessing unchanged; reviewed pgvector retrieval, protected Admin prepare/index/check with existing chunker/Google provider, official Gemini verified evidence selection and request-local reviewed Admin context alongside pinned originals; 336 isolated tests, three opt-in PostgreSQL checks; Ruff/strict mypy; 76 targeted generation/management regression cases pass; factory remains free of heavy provider/model imports |
 | Shared preprocessing | One independently buildable typed package at `shared/preprocessing`, version 1.0.0, explicit JSON configuration, file/byte entrypoints, conservative extraction/fallback, optional unchanged CPU tensor and debug CLI; 78 tests pass in each consumer environment and 12 synthetic baseline parity cases pass |
 | ML training | Corrected immutable v2: 4,162 contents/4,121 groups, 2,911/627/624 partitions, no confirmed leakage; fresh MobileNetV3 Small completed 11 epochs, best epoch 8; validation 96.81% accuracy/0.9589 macro F1, single descriptive test 95.83%/0.9452; raw probabilities, no threshold; 219 tests, Ruff over 32 files, mypy over 15 modules and 16 actual TRAIN cases with AI compatibility pass; limited FYP prototype |
 | Infrastructure | Neon PostgreSQL 18.6 with pgvector 0.8.6 migrated; pgvector 0.8.7/PostgreSQL 18 Compose configuration; preserved native 18.4 cluster; private local settings ignored |
@@ -239,9 +263,9 @@ functionality remain deferred.
 | Scripts | Repository/environment/auth/admin/PostgreSQL/Python/development checks including shared preprocessing/parity; configured FastAPI startup and 16-TRAIN serving parity/timing verifier; live Flutter scan/assistant/calculator and Farmer/Admin statistics harnesses, rollback/query-plan checks and backend cleanup CLI |
 
 Persistent/browser mobile authentication, conversation retention, authoritative
-calculator formula/rate content, notification delivery, Admin knowledge editing
-and detailed runtime ML health remain future work. Deterministic calculator
-execution frameworks and the real-data Admin overview are implemented. FastAPI
+calculator formula/rate content, notification delivery and detailed runtime ML
+health remain future work. Deterministic calculator frameworks, Admin knowledge/
+configuration management and the real-data Admin overview are implemented. FastAPI
 exposes internal prediction/model health, retrieval and grounded generation
 alongside process health; the Admin overview does not probe live model readiness.
 
@@ -1928,9 +1952,68 @@ admin knowledge management and detailed ML-health/deployment phases are untouche
 Unrelated user ignore/ML/state edits are preserved outside the phase commit.
 Stop after Phase 20.
 
+## Phase 21 Admin management verification (2026-10-15)
+
+- Inspected instructions/state/decisions, disease/document/source schema and SQL
+  immutability guards, RAG ingestion/retrieval, pinned generation, calculator
+  publication and Admin session/router before changes. Existing calculator APIs
+  were reused; no classifier-class editor or generic formula execution was added.
+- Added seven ADMIN knowledge route operations for bounded version listing/detail,
+  source-reviewed new drafts, indexing, activation/archive and disease display/
+  visibility edits. Fixed class contexts/slugs are not writable. Actor/request ID,
+  review time and next document version are server-owned. Strict schemas reject
+  injected actor/model fields, missing approval/provenance and malformed data.
+- Node owns document/source/status/audit transactions; internal Python owns text
+  canonicalization, existing chunking/embedding identity and atomic READY insertion.
+  New source snapshots and immutable document IDs/versions preserve old citations.
+  Provider failure/timeout leaves an inactive draft; repeated completed indexing
+  reuses its index. Current-policy/hash/count checks and the shared ingestion lock
+  prevent stale publication. Activation retires old active documents/sources in
+  the same transaction; archive/deactivated disease filters exclude old vectors.
+- Added request-local generation admission for ACTIVE reviewed Admin records with
+  creator/review/current identity and activation audit. Exact content/hash/offset/
+  coverage/source/class/curation checks still apply; pinned identities cannot be
+  overwritten. The applicability warning now covers each source's region rather
+  than assuming every future Admin source is U.S. material.
+- Calculator lists expose admitted draft input/timestamps for form prefilling.
+  Publication audits identify auto-retired rule/config IDs/versions. Existing
+  numerical engines, source review, version pins and immutable historical payloads
+  remain intact; revised fertilizer product snapshots need a new product slug.
+  No production recommendation or fake agronomic formula/rate is seeded.
+- Flutter management uses the separate Admin client and route-scoped MVVM. Named
+  forms, fixed context selectors, fresh review approval, field/date/decimal/line
+  validation, confirmation, indexing/loading/errors, list refresh and pagination
+  preserve the design system. Account/disposal fences prevent old private state
+  reappearing. No HTTP or numerical calculation is placed in widgets.
+
+| Check | Result |
+|---|---|
+| Backend `npm run check` | Format/lint/strict TypeScript/build/import checks and all 292 tests pass; six new management validation/service/API cases cover every route for guest/Farmer/revoked denial |
+| Flutter format / analysis / full tests | All 166 Dart files formatted; analyzer clean; 291 pass with nine opt-in live checks default-skipped; nine new management model/repository/ViewModel/widget cases |
+| AI Ruff format/lint, mypy, full pytest | 336 pass, three existing opt-in database checks skip; 11 new management/index/policy/provider/generation cases; one existing upstream Starlette/httpx warning remains |
+| Final generation/management checks | 76 relevant cases pass after the source-region warning correction; app/scripts strict checks remain clean using the AI component configuration |
+| `scripts/check-admin-management.py` | Real protected Node/FastAPI/Google indexing/pgvector persistence and Gemini grounding of version 2 pass; optimistic disease edits/visibility, source retirement, archive exclusion, audit identities and calculator replacement lineage pass |
+| Enabled real Flutter management contract | Creates/indexes/publishes/archives a reviewed version and reads both calculator versions; passes in 69 seconds with an explicit five-minute opt-in test timeout |
+| Cleanup and integrity | Generated schema is dropped, production account/knowledge/calculator/model counts unchanged; no raw dataset, training/evaluation, model overwrite or promotion |
+| Prisma validation/status | Valid schema, all eight migrations current; no schema/seed/dependency change |
+| Repository/privacy/frozen checks | Required files/templates/ignores, local Markdown links, whitespace and configured-secret/private-path checks pass; 171 frozen ML files/checkpoint/shared/classifier/corpus/schema/migrations and unrelated user edits preserved |
+
+The first live run passed backend/provider/version/audit controls but its Flutter
+contract exceeded the default 30-second test timeout. The explicit opt-in timeout
+was corrected to cover remote indexing and the complete workflow passed on rerun.
+All synthetic calculator quantities and review attestations are test-only and
+confined to the disposable schema; they do not approve real recommendation content.
+Production knowledge/source files and all model artifacts remain unchanged.
+
+Remaining boundaries: source freshness/local agronomic/legal review is a human
+responsibility; real calculator content remains subject to approved sources.
+Admin credentials remain volatile, and distributed limits/workload testing remain
+deployment work. Detailed runtime ML health and later phases are untouched.
+Unrelated user ignore/ML/state edits stay outside the commit. Stop after Phase 21.
+
 ## Next step
 
-Stop after Phase 20. Subsequent phases require the
+Stop after Phase 21. Subsequent phases require the
 next explicit instruction. Independent
 field validation and commercial
 licensing/source replacement remain requirements before real farmer/commercial use.

@@ -84,6 +84,13 @@ export function createYieldRepository(database: YieldDatabase): YieldRepository 
             where: { id, ...identity },
           });
           if (!previous) return null;
+          const retired =
+            status === 'ACTIVE'
+              ? await transaction.calculatorConfig.findMany({
+                  where: { ...identity, status: 'ACTIVE', id: { not: id } },
+                  select: { id: true, version: true },
+                })
+              : [];
           if (status === 'ACTIVE') {
             if (!admit(previous)) return 'INVALID';
             await transaction.calculatorConfig.updateMany({
@@ -107,6 +114,7 @@ export function createYieldRepository(database: YieldDatabase): YieldRepository 
                 status,
                 version: previous.version,
                 configKey: YIELD_CONFIG_KEY,
+                retiredVersions: retired,
               },
             },
           });

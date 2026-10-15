@@ -85,6 +85,9 @@ export interface FertilizerService {
   ): Promise<FertilizerDraftSummary>;
 }
 export interface FertilizerDraftSummary {
+  draftInput?: FertilizerDraftInput | null;
+  createdAt?: string;
+  updatedAt?: string;
   id: string;
   ruleKey: string;
   version: number;
@@ -100,6 +103,29 @@ function draftSummary(
   const params = fertilizerRuleParametersSchema.safeParse(record.parameters);
   return {
     id: record.id,
+    createdAt: record.createdAt.toISOString(),
+    updatedAt: record.updatedAt.toISOString(),
+    draftInput:
+      params.success && config && publicFertilizerRule(record, config, false)
+        ? {
+            product: params.data.productSnapshot,
+            rule: {
+              ruleKey: record.ruleKey,
+              version: record.version,
+              title: params.data.title,
+              rateKgPerHectare: params.data.rateKgPerHectare,
+              applicability: params.data.applicability,
+              assumptions: params.data.assumptions,
+              source: params.data.source,
+              reviewNote: '',
+            },
+            config: {
+              version: config.version,
+              quantityDecimalPlaces: (config.parameters as { quantityDecimalPlaces: number })
+                .quantityDecimalPlaces,
+            },
+          }
+        : null,
     ruleKey: record.ruleKey,
     version: record.version,
     status: record.status,

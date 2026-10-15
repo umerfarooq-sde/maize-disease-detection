@@ -1,6 +1,7 @@
 """Controlled question/explanation orchestration on the existing retrieval service."""
 
 import logging
+from collections.abc import Callable
 from threading import BoundedSemaphore
 from time import perf_counter
 from typing import Protocol
@@ -19,7 +20,15 @@ from app.generation.schemas import (
     Statement,
 )
 from app.generation.scope import resolve_scope
-from app.rag.schemas import Corpus, DiseaseLabel, KnowledgeType, RetrievalData, RetrievalRequest
+from app.rag.schemas import (
+    Corpus,
+    DiseaseLabel,
+    DocumentInput,
+    KnowledgeType,
+    RetrievalData,
+    RetrievalRequest,
+    RetrievedChunk,
+)
 from app.utils.errors import AppError, ErrorCode
 from app.utils.logging import LOGGER_NAME
 
@@ -40,7 +49,12 @@ class Retriever(Protocol):
 
 class GenerationService:
     def __init__(
-        self, settings: Settings, retrieval: Retriever, corpus: Corpus, generator: Generator
+        self,
+        settings: Settings,
+        retrieval: Retriever,
+        corpus: Corpus,
+        generator: Generator,
+        reviewed_documents: Callable[[list[RetrievedChunk]], list[DocumentInput]] | None = None,
     ) -> None:
         self.settings = settings
         self.retrieval = retrieval
@@ -50,6 +64,7 @@ class GenerationService:
             max_chunks=settings.generation_max_chunks,
         )
         self.generator = generator
+        self.reviewed_documents = reviewed_documents
         self.slots = BoundedSemaphore(settings.generation_max_concurrency)
 
     def close(self) -> None:
@@ -88,8 +103,7 @@ class GenerationService:
         warnings = [
             "This is sourced educational information, not a confirmed diagnosis or a replacement "
             "for a qualified local agricultural expert.",
-            "Sources describe U.S. regional conditions; local applicability and source freshness "
-            "require review.",
+            "Review each source's region, local applicability and freshness before acting.",
         ]
         if prediction is not None:
             warnings.append(
@@ -161,7 +175,12 @@ class GenerationService:
                 top_k=self.settings.generation_max_chunks,
             )
         )
-        context = self.context.build(retrieval.chunks, label, topic)
+        context_builder = self.context
+        if self.reviewed_documents is not None:
+            context_builder = context_builder.with_reviewed_documents(
+                self.reviewed_documents(retrieval.chunks)
+            )
+        context = context_builder.build(retrieval.chunks, label, topic)
         if context.reason:
             return self._result(
                 "CONFLICTING_EVIDENCE" if context.conflict else "INSUFFICIENT_INFORMATION",
@@ -217,4 +236,13 @@ def create_generation_service(settings: Settings, retrieval: Retriever) -> Gener
     if settings.generation_corpus_path is None or settings.generation_review_path is None:
         raise AppError(ErrorCode.GENERATION_UNAVAILABLE)
     corpus = load_corpus(settings.generation_corpus_path, settings.generation_review_path)
-    return GenerationService(settings, retrieval, corpus, GeminiGenerator(settings))
+    from app.rag.repository import KnowledgeRepository
+    from app.rag.service import RetrievalService
+
+    reviewed = (
+        retrieval.repository.reviewed_documents
+        if isinstance(retrieval, RetrievalService)
+        and isinstance(retrieval.repository, KnowledgeRepository)
+        else None
+    )
+    return GenerationService(settings, retrieval, corpus, GeminiGenerator(settings), reviewed)

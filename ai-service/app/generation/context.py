@@ -31,6 +31,20 @@ class ReviewedContext:
         self.max_chars = max_chars
         self.max_chunks = max_chunks
 
+    def with_reviewed_documents(self, documents: list[DocumentInput]) -> "ReviewedContext":
+        # Request-local copy: no mutable global cache of retired Admin versions.
+        from copy import copy
+
+        context = copy(self)
+        context.documents = self.documents.copy()
+        for document in documents:
+            key = (document.document_key, document.version)
+            if key in context.documents and context.documents[key] != document:
+                # Never override an existing pinned file's reviewed identity.
+                continue
+            context.documents[key] = document
+        return context
+
     def _verified(self, chunk: RetrievedChunk, document: DocumentInput) -> bool:
         start, end = chunk.metadata.get("start"), chunk.metadata.get("end")
         content = canonical_content(document.content)

@@ -12,7 +12,9 @@ from app.utils.errors import AppError, ErrorCode
 Payload = TypeVar("Payload", bound=BaseModel)
 
 
-async def read_json_body(request: Request, model: type[Payload]) -> Payload:
+async def read_json_body(
+    request: Request, model: type[Payload], *, max_bytes: int = 8192
+) -> Payload:
     if (
         request.headers.get("content-type", "").split(";")[0].lower() != "application/json"
         or request.headers.get("content-encoding", "identity") != "identity"
@@ -22,7 +24,7 @@ async def read_json_body(request: Request, model: type[Payload]) -> Payload:
     try:
         async with asyncio.timeout(5):
             async for part in request.stream():
-                if len(body) + len(part) > 8192:
+                if len(body) + len(part) > max_bytes:
                     raise AppError(ErrorCode.REQUEST_TOO_LARGE)
                 body.extend(part)
     except TimeoutError:

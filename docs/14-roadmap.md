@@ -241,3 +241,15 @@ Do not fabricate unrecorded AI metrics or claim runtime readiness from database
 status. No model promotion, knowledge editing, detailed live ML health, new data
 retention, deployment or later phase is included. Read
 [Admin dashboard](36-admin-dashboard.md). Stop after Phase 20.
+
+## Phase 21 scope clarification
+
+The user authorized safe Admin management of knowledge and configuration with
+validated, audited version changes and activation/deactivation. Model classes
+remain immutable through these APIs. Reuse calculator engines/publication and
+the AI-owned text/chunker/embedder implementation. New knowledge drafts require
+explicit indexing and publication; old embeddings remain historical and archived
+versions are excluded from retrieval. Extend grounded evidence admission only for
+current reviewed Admin versions, retaining content/source checks. No new model
+training, promotion, numerical formula, source scraping or later phase is included.
+Read [Admin management](37-admin-management.md). Stop after Phase 21.

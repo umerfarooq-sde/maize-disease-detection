@@ -23,6 +23,7 @@ The remaining feature documents describe intended behavior.
 | [Expected-yield calculator](34-expected-yield-calculator.md) | Phase 18 deterministic dimensional framework, exact units, immutable reviewed configuration, Flutter planning UX and pending authoritative agronomic model/rates |
 | [Farmer analytics](35-farmer-analytics.md) | Phase 19 owner-filtered usage/prediction aggregates, bounded UTC dates, recent activity, private Flutter charts and rollback/query-plan verification |
 | [Admin dashboard](36-admin-dashboard.md) | Phase 20 ADMIN-only system aggregates, distinct native sign-in/navigation, account/scan charts, honest model/telemetry state and rollback contracts |
+| [Admin management](37-admin-management.md) | Phase 21 reviewed disease/knowledge/source/version forms, explicit RAG rebuild/publication, immutable calculator management and audit controls |
 | [System overview](01-system-overview.md) | Purpose, users, boundaries, and primary flow |
 | [HLA](02-hla.md) | Logical components and trust boundaries |
 | [HLD](03-hld.md) | Runtime interactions and failures |

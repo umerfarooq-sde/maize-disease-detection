@@ -1,6 +1,15 @@
 # Known issues
 
-Updated: 2026-10-15 (Asia/Karachi), Phase 20 Admin dashboard.
+Updated: 2026-10-15 (Asia/Karachi), Phase 21 Admin management.
+
+Admin knowledge/configuration management is implemented. An authorized source
+review remains a human trust boundary, not automatic agricultural/legal validation.
+Knowledge source changes require a new immutable version and explicit rebuild/
+publication. Archived vectors are excluded from retrieval. An embedding-policy
+change requires a fresh version; ready embeddings are not overwritten. Admin
+product snapshots cannot change under an existing fertilizer slug. Model classes
+remain read-only. Provider outages/latency can leave an inactive draft awaiting
+indexing; refresh before retrying. Read [Admin management](37-admin-management.md).
 
 The Admin dashboard exposes real account/scan aggregates and registry/configuration
 state. AI request statistics remain unavailable because the current assistant does
