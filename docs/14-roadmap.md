@@ -253,3 +253,9 @@ versions are excluded from retrieval. Extend grounded evidence admission only fo
 current reviewed Admin versions, retaining content/source checks. No new model
 training, promotion, numerical formula, source scraping or later phase is included.
 Read [Admin management](37-admin-management.md). Stop after Phase 21.
+
+## Phase 22 verified implementation
+
+Admin model health now separates pinned offline evaluation, registry promotion and
+live process-local runtime statistics. No formal drift, field accuracy or model
+promotion is inferred. Read [model health](38-model-health-dashboard.md). Stop after Phase 22.

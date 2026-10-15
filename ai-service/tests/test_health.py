@@ -166,6 +166,7 @@ def test_development_openapi_describes_health_without_private_config(client: Tes
         "/health",
         "/api/v1/predict",
         "/api/v1/model-health",
+        "/api/v1/model-dashboard",
         "/api/v1/retrieve",
         "/api/v1/generate",
         "/api/v1/explain",

@@ -28,7 +28,12 @@ export type KnowledgeEnvironment = Pick<
 
 export async function requestKnowledge<T>(
   environment: KnowledgeEnvironment,
-  path: 'retrieve' | 'knowledge/prepare' | 'knowledge/index' | 'knowledge/check',
+  path:
+    | 'retrieve'
+    | 'knowledge/prepare'
+    | 'knowledge/index'
+    | 'knowledge/check'
+    | 'model-dashboard',
   input: unknown,
   schema: z.ZodType<T>,
   timeoutMs = environment.AI_SERVICE_TIMEOUT_MS,
@@ -53,15 +58,19 @@ export async function requestKnowledge<T>(
     const body = JSON.stringify(input);
     const response = await Promise.race([
       transport(endpoint, {
-        method: 'POST',
+        method: path === 'model-dashboard' ? 'GET' : 'POST',
         redirect: 'manual',
         signal: controller.signal,
         headers: {
           ...(environment.AI_SERVICE_TOKEN
             ? { Authorization: `Bearer ${environment.AI_SERVICE_TOKEN}` }
             : {}),
-          'Content-Type': 'application/json',
-          'Content-Length': String(Buffer.byteLength(body, 'utf8')),
+          ...(body === undefined
+            ? {}
+            : {
+                'Content-Type': 'application/json',
+                'Content-Length': String(Buffer.byteLength(body, 'utf8')),
+              }),
           Accept: 'application/json',
           'Accept-Encoding': 'identity',
         },

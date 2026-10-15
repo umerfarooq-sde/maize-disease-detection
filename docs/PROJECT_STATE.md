@@ -4,7 +4,34 @@ Updated: 2026-10-15 (Asia/Karachi).
 
 ## Current phase
 
-Phase 21 is complete and verified for Admin management. `/admin/manage` provides
+Phase 22 is complete and verified for the Admin ML model-health dashboard.
+`/admin/model-health` shows safe registry promotion/status separately from actual
+loaded-model readiness, pinned offline test/per-class/confusion-matrix evidence,
+and process-local runtime requests/failures/latency/uncertainty/output counts.
+No production model is promoted. The configured research classifier remains
+`mobilenet-v3-small-v2-20261009`; saved final-test accuracy is 95.8333% on 624 unique
+contents, with the existing inspected-corpus/field-independence limitations.
+Training time is absent from the artifact and is explicitly not recorded;
+registration time is not relabeled as training time.
+
+The internal protected FastAPI dashboard projects already SHA-verified metadata
+once at startup. No offline metric is recalculated from user scans or a new test
+pass. The same shared preprocessing/model/class mapping remains intact. Runtime
+counters are fixed-size, thread-safe and lifespan-local: restart resets them,
+auth/query rejection is excluded, and no cluster-wide/durable history is claimed.
+No validation-approved confidence threshold exists, so the UI explains all outputs
+being LOW_CONFIDENCE. There is no ground-truth feedback or formal drift detection.
+Read [model health](38-model-health-dashboard.md).
+
+Verification: 296 backend tests and 296 Flutter tests pass (ten live contracts
+are default-skipped). 346 AI tests pass (three opt-in database checks default-skip). Formatting,
+lint, strict TypeScript/build, analyzer, Ruff/mypy and Prisma checks pass; eight
+migrations remain current. The enabled read-only registry ? real pinned FastAPI
+model ? Node ? Flutter contract passes. Only synthetic image bytes are inferred;
+no raw dataset, model/metric/account/scan write, training, test rerun or promotion.
+Existing unrelated workspace changes are preserved. Stop after Phase 22.
+
+The preceding Phase 21 is complete and verified for Admin management. `/admin/manage` provides
 validated disease display/visibility edits, source-backed immutable knowledge
 versions, explicit indexing and confirmed activation/archive, plus fertilizer/yield
 rule forms through the existing versioned calculator services. All management
@@ -253,9 +280,9 @@ functionality remain deferred.
 
 | Component | Verified implementation |
 |---|---|
-| Mobile | Flutter 3.41.9/Dart 3.11.5, farmer MVVM workflows/assistant/calculators/private analytics; separate volatile Admin sign-in, dashboard and knowledge/configuration forms with source review, rebuild, confirmed publication, validation and session fences; 291 isolated tests, nine opt-in live tests; actual management/statistics contracts pass; prior Android debug APK packaging verified |
-| Backend | Health/auth/scans/history, sourced knowledge/retrieval/generation, deterministic versioned fertilizer/yield frameworks, Farmer analytics and ADMIN dashboard/management; optimistic display edits, immutable reviewed drafts, index orchestration and audited source/version publication; Prisma 7.10.0, 21 tables/eight unchanged migrations, 292 isolated tests; real isolated-schema management and rollback contracts verified |
-| AI service | Once-loaded classifier/shared preprocessing unchanged; reviewed pgvector retrieval, protected Admin prepare/index/check with existing chunker/Google provider, official Gemini verified evidence selection and request-local reviewed Admin context alongside pinned originals; 336 isolated tests, three opt-in PostgreSQL checks; Ruff/strict mypy; 76 targeted generation/management regression cases pass; factory remains free of heavy provider/model imports |
+| Mobile | Flutter 3.41.9/Dart 3.11.5, farmer MVVM workflows/assistant/calculators/private analytics; separate volatile Admin sign-in, dashboard, model-health/offline-runtime view and knowledge/configuration forms with source review, rebuild, confirmed publication, validation and session fences; 296 isolated tests, ten opt-in live tests; actual management/statistics contracts pass; prior Android debug APK packaging verified |
+| Backend | Health/auth/scans/history, sourced knowledge/retrieval/generation, deterministic versioned fertilizer/yield frameworks, Farmer analytics and ADMIN dashboard/management/model health; optimistic display edits, immutable reviewed drafts, index orchestration and audited source/version publication; Prisma 7.10.0, 21 tables/eight unchanged migrations, 296 isolated tests; real isolated-schema management and rollback contracts verified |
+| AI service | Once-loaded classifier with pinned development metrics, protected health dashboard and lifespan runtime counters; shared preprocessing unchanged; reviewed pgvector retrieval, protected Admin prepare/index/check with existing chunker/Google provider, official Gemini verified evidence selection and request-local reviewed Admin context alongside pinned originals; 346 isolated tests, three opt-in PostgreSQL checks; Ruff/strict mypy; 76 targeted generation/management regression cases pass; factory remains free of heavy provider/model imports |
 | Shared preprocessing | One independently buildable typed package at `shared/preprocessing`, version 1.0.0, explicit JSON configuration, file/byte entrypoints, conservative extraction/fallback, optional unchanged CPU tensor and debug CLI; 78 tests pass in each consumer environment and 12 synthetic baseline parity cases pass |
 | ML training | Corrected immutable v2: 4,162 contents/4,121 groups, 2,911/627/624 partitions, no confirmed leakage; fresh MobileNetV3 Small completed 11 epochs, best epoch 8; validation 96.81% accuracy/0.9589 macro F1, single descriptive test 95.83%/0.9452; raw probabilities, no threshold; 219 tests, Ruff over 32 files, mypy over 15 modules and 16 actual TRAIN cases with AI compatibility pass; limited FYP prototype |
 | Infrastructure | Neon PostgreSQL 18.6 with pgvector 0.8.6 migrated; pgvector 0.8.7/PostgreSQL 18 Compose configuration; preserved native 18.4 cluster; private local settings ignored |
@@ -263,11 +290,12 @@ functionality remain deferred.
 | Scripts | Repository/environment/auth/admin/PostgreSQL/Python/development checks including shared preprocessing/parity; configured FastAPI startup and 16-TRAIN serving parity/timing verifier; live Flutter scan/assistant/calculator and Farmer/Admin statistics harnesses, rollback/query-plan checks and backend cleanup CLI |
 
 Persistent/browser mobile authentication, conversation retention, authoritative
-calculator formula/rate content, notification delivery and detailed runtime ML
-health remain future work. Deterministic calculator frameworks, Admin knowledge/
+calculator formula/rate content, notification delivery, distributed durable ML telemetry and ground-truth feedback
+remain future work. Deterministic calculator frameworks, Admin knowledge/
 configuration management and the real-data Admin overview are implemented. FastAPI
 exposes internal prediction/model health, retrieval and grounded generation
-alongside process health; the Admin overview does not probe live model readiness.
+alongside process health. The overview retains its inexpensive NOT_CHECKED summary;
+the dedicated Admin model-health route now probes live readiness and process statistics.
 
 ## Phase 0 verification history
 
@@ -2011,9 +2039,45 @@ Admin credentials remain volatile, and distributed limits/workload testing remai
 deployment work. Detailed runtime ML health and later phases are untouched.
 Unrelated user ignore/ML/state edits stay outside the commit. Stop after Phase 21.
 
+## Phase 22 verification
+
+- Added ADMIN-only `GET /api/v1/admin/model-health`, safe bounded model registry
+  projections and internal authenticated `GET /api/v1/model-dashboard` probing.
+  Missing/multiple production records, unavailable/not-loaded service and artifact
+  version mismatch are explicit. No arbitrary current model or false zero is used.
+- Added sanitized saved development/evaluation metadata to the startup-loaded model.
+  Label/support/matrix/accuracy inconsistency fails startup. Class constants are
+  shared within model management; shared image preprocessing is unchanged.
+- Added lock-protected constant-space operational counters for handler requests,
+  in-flight work, successes/failures, mean completed-handler latency, low-confidence
+  fraction and prediction distribution. UTC timestamps are normalized by Node for
+  the public Flutter contract. No identity/image/private path is included.
+- Flutter uses scoped MVVM, separate Admin credentials, responsive cards/tables,
+  confusion axes and count bars, refresh/loading/error/empty states and stale-session
+  fencing. Offline evidence, runtime outcomes, research promotion and drift limits
+  are labeled separately; the current unconfigured threshold is explained.
+
+| Check | Result |
+|---|---|
+| Backend full checks | 296 tests pass; formatting/lint/strict types/build/import checks pass |
+| Flutter full checks | 296 tests pass, ten opt-in checks default-skip; analyzer and formatting pass; five new focused model/repository/ViewModel/widget tests |
+| AI full checks | 346 pass, three existing opt-in SQL tests skip; ten new dashboard/evidence/counter/startup cases; full inference/RAG/generation regressions included |
+| Live read-only model-health contract | Real pinned checkpoint + saved 624-content evaluation, one synthetic inference success and one malformed-image rejection, real PostgreSQL registry and enabled Flutter transport/ViewModel pass |
+| Admission/timestamp corrections | Live check fixed a helper assumption about unsupported byte admission and normalized internal UTC offsets to the public ISO-Z contract; no FastAPI image policy was weakened |
+| Database/model boundary | Prisma valid, eight migrations current; read-only PostgreSQL is enforced by the live helper; no model promotion, metric write, final-test rerun or source-dataset access |
+| Integrity/privacy | Frozen ML artifacts/manifests/checkpoint, shared preprocessing, source corpus, Prisma schema/migrations and unrelated user changes remain unchanged |
+
+Remaining limits: model has no approved operational threshold or independent field/
+commercial clearance. Training timestamp is not recorded. Runtime counts are local
+to one process since startup, not durable distributed telemetry; full request rejection
+accounting, cluster aggregation and verified ground-truth feedback need later work.
+Offline evidence cannot be served by this screen when its pinned model service is
+unavailable. Existing upstream Starlette/httpx deprecation warning remains.
+Stop after Phase 22.
+
 ## Next step
 
-Stop after Phase 21. Subsequent phases require the
+Stop after Phase 22. Subsequent phases require the
 next explicit instruction. Independent
 field validation and commercial
 licensing/source replacement remain requirements before real farmer/commercial use.

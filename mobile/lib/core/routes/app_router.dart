@@ -193,6 +193,10 @@ GoRouter createAppRouter({String initialLocation = AppRoutes.home}) => GoRouter(
           path: 'manage',
           builder: (_, _) => const AdminAccessView(management: true),
         ),
+        GoRoute(
+          path: 'model-health',
+          builder: (_, _) => const AdminAccessView(modelHealth: true),
+        ),
       ],
     ),
   ],

@@ -13,6 +13,7 @@ from starlette.requests import ClientDisconnect
 
 from app.api.security import require_service_authentication
 from app.config.settings import Settings
+from app.model_management.dashboard import DevelopmentSnapshot, RuntimeSnapshot, RuntimeStatistics
 from app.schemas.common import ResponseMetadata
 from app.schemas.errors import ErrorResponse
 from app.schemas.health import HealthQuery
@@ -101,6 +102,20 @@ async def read_image(request: Request, maximum: int, timeout_seconds: float) -> 
 async def predict(
     request: Request, query: Annotated[PredictionQuery, Query()]
 ) -> PredictionResponse:
+    statistics = cast(RuntimeStatistics, request.app.state.inference_statistics)
+    started = statistics.begin()
+    label: str | None = None
+    low = False
+    try:
+        result = await _predict(request, query)
+        label = result.data.predicted_class
+        low = result.data.prediction_status == "LOW_CONFIDENCE"
+        return result
+    finally:
+        statistics.finish(started, label, low)
+
+
+async def _predict(request: Request, query: PredictionQuery) -> PredictionResponse:
     service = get_inference_service(request)
     slots = cast(BoundedSemaphore, request.app.state.prediction_slots)
     if not slots.acquire(blocking=False):
@@ -120,6 +135,42 @@ async def predict(
         )
     finally:
         slots.release()
+
+
+class ModelDashboardData(BaseModel):
+    ready: bool
+    modelVersion: str | None
+    preprocessingVersion: str | None
+    confidencePolicy: str
+    development: DevelopmentSnapshot | None
+    runtime: RuntimeSnapshot
+
+
+class ModelDashboardResponse(BaseModel):
+    success: bool = True
+    data: ModelDashboardData
+    meta: ResponseMetadata
+
+
+@router.get("/model-dashboard", response_model=ModelDashboardResponse)
+async def model_dashboard(
+    request: Request, _query: Annotated[HealthQuery, Query()]
+) -> ModelDashboardResponse:
+    service = cast("InferenceService | None", request.app.state.inference_service)
+    loaded = service.loaded_model if service is not None and request.app.state.running else None
+    return ModelDashboardResponse(
+        data=ModelDashboardData(
+            ready=loaded is not None,
+            modelVersion=loaded.model_version if loaded else None,
+            preprocessingVersion=loaded.preprocessing_version if loaded else None,
+            confidencePolicy="VALIDATION_BASED"
+            if loaded and loaded.confidence_threshold is not None
+            else "UNCONFIGURED",
+            development=loaded.development if loaded else None,
+            runtime=cast(RuntimeStatistics, request.app.state.inference_statistics).snapshot(),
+        ),
+        meta=ResponseMetadata(request_id=request_id(request)),
+    )
 
 
 @router.get(

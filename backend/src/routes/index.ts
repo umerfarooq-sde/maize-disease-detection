@@ -1,4 +1,6 @@
 import { Router } from 'express';
+import { modelHealthRoutes } from '../modules/admin/model-health.routes.js';
+import type { ModelHealthService } from '../modules/admin/model-health.service.js';
 import type { Environment } from '../config/environment.js';
 import { dashboardRoutes } from '../modules/admin/dashboard.routes.js';
 import type { DashboardService } from '../modules/admin/dashboard.service.js';
@@ -34,6 +36,7 @@ export function apiRoutes(
   analyticsService: AnalyticsService,
   dashboardService: DashboardService,
   managementService: ManagementService,
+  modelHealthService: ModelHealthService,
 ): Router {
   const router = Router();
   router.use(healthRoutes(createHealthService(repository)));
@@ -46,5 +49,6 @@ export function apiRoutes(
   router.use(analyticsRoutes(environment, authService, analyticsService));
   router.use(dashboardRoutes(environment, authService, dashboardService));
   router.use(managementRoutes(environment, authService, managementService));
+  router.use(modelHealthRoutes(environment, authService, modelHealthService));
   return router;
 }

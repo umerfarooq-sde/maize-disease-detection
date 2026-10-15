@@ -104,3 +104,12 @@ Enforce RBAC and ownership in the backend. A farmer may read only their own hist
 ## Contract governance
 
 Maintain an OpenAPI specification alongside implementation, use schema validation at route boundaries, and add contract tests for success and error responses. Version breaking changes rather than silently changing the meaning or shape of an existing response.
+
+## Phase 22 Admin model health
+
+ADMIN-only `GET /api/v1/admin/model-health` has an empty query contract and the existing
+`{success, data, requestId}` envelope. It returns safe registry/deployment identities,
+separate probed service readiness, saved offline evaluation and process-local runtime
+statistics; no raw artifact/private path, source images or recalculated test metric.
+Node alone calls protected internal `GET /api/v1/model-dashboard`. See the
+[model-health contract](38-model-health-dashboard.md) for exact scopes and limits.

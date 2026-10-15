@@ -20,6 +20,7 @@ from app.api.routes.health import router as health_router
 from app.api.routes.prediction import router as prediction_router
 from app.api.routes.retrieval import router as retrieval_router
 from app.config.settings import Settings, load_settings
+from app.model_management.dashboard import RuntimeStatistics
 from app.schemas.errors import ErrorResponse
 from app.utils.errors import install_exception_handlers
 from app.utils.logging import LOGGER_NAME
@@ -55,6 +56,7 @@ def create_app(
 
     @asynccontextmanager
     async def lifespan(application: FastAPI) -> AsyncIterator[None]:
+        application.state.inference_statistics = RuntimeStatistics()
         if configuration.inference_enabled:
             from app.inference.service import InferenceService
             from app.model_management.artifacts import ModelStartupError, load_model
@@ -186,6 +188,7 @@ def create_app(
     app.state.started_at = None
     app.state.running = False
     app.state.inference_service = None
+    app.state.inference_statistics = RuntimeStatistics()
     app.state.retrieval_service = None
     app.state.generation_service = None
     app.state.prediction_slots = BoundedSemaphore(configuration.inference_max_concurrency)

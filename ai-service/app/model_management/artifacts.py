@@ -27,12 +27,9 @@ from pydantic import BaseModel, ConfigDict, Field, JsonValue, ValidationError
 from torch import Tensor, nn
 from torchvision.models import mobilenet_v3_small  # type: ignore[import-untyped]
 
-CLASS_NAMES = (
-    "Common_Rust",
-    "Gray_Leaf_Spot",
-    "Healthy",
-    "Northern_Corn_Leaf_Blight",
-)
+from app.model_management.dashboard import LABELS, DevelopmentSnapshot, development_snapshot
+
+CLASS_NAMES = LABELS
 _METADATA_LIMIT = 512 * 1024
 _CHECKPOINT_LIMIT = 32 * 1024 * 1024
 
@@ -57,6 +54,7 @@ class LoadedModel:
     validation_predictions_sha256: str
     calibration_temperature: float
     confidence_threshold: float | None
+    development: DevelopmentSnapshot | None = None
 
 
 class _Metadata(BaseModel):
@@ -409,6 +407,7 @@ def load_model(
         )
         torch.set_num_threads(threads)
         model = _restore_model(encoded_checkpoint, artifact, config)
+        development = development_snapshot(encoded_metadata)
     except ModelStartupError:
         raise
     except (
@@ -435,4 +434,5 @@ def load_model(
         validation_predictions_sha256=sidecar.validation_csv_sha256,
         calibration_temperature=artifact.calibration.temperature,
         confidence_threshold=artifact.calibration.operational_threshold,
+        development=development,
     )

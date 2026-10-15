@@ -1,5 +1,12 @@
 # Scripts
 
+Phase 22 adds [check-model-health.py](check-model-health.py) and its Node helper
+[check-model-health.mjs](check-model-health.mjs). Run the Python script with the
+AI virtual environment from root for a real pinned-model/Node/Flutter contract.
+Registry access is enforced read-only; auth is ephemeral, images synthetic, and
+RAG/generation disabled. No model promotion or final-test rerun. See
+[model health](../docs/38-model-health-dashboard.md).
+
 Phase 18 adds [check-yield.mjs](check-yield.mjs). After building the backend, run
 `node --env-file=backend/.env scripts/check-yield.mjs` from root. It checks real
 Node/Prisma/PostgreSQL reviewed-config publication/immutability/version/audit and

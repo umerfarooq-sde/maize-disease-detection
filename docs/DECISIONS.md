@@ -246,3 +246,17 @@ completed-scan retention/delivery/deletion, production least-privilege roles,
 production hosting/promotion and operational confidence policy, larger retrieval evaluation/relevance policy,
 source freshness/local agronomic review and future vector-index scaling. Address these
 only in a phase explicitly authorized by the user.
+
+## Phase 22 model-health decisions (2026-10-15)
+
+- Project saved evaluation from the already verified metadata into the startup-owned
+  model. Do not rerun tests, populate metrics from user scans or expose private artifact
+  references. Training timestamp is explicitly absent; registration is distinct.
+- Use bounded lock-protected lifespan counters for local operational visibility,
+  with null empty denominators, explicit handler scope and reset/worker limitations.
+  No schema, durable telemetry journal or formal drift claim without ground truth.
+- Read registry versions/status through Node and probe the protected fixed-origin
+  FastAPI dashboard. Keep promotion, configured identity, live readiness and offline
+  versus runtime measures separate in the Admin MVVM screen. No promotion API added.
+
+See [model health](38-model-health-dashboard.md). Stop after Phase 22.

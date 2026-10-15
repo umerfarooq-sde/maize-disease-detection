@@ -203,6 +203,20 @@ $requiredAssistantFiles = @('docs/32-farmer-ai-assistant.md', 'mobile/lib/data/m
 foreach ($file in $requiredAssistantFiles) {
     if (-not (Test-Path -LiteralPath (Join-Path $repositoryRoot $file) -PathType Leaf)) { throw "Missing farmer assistant file: $file" }
 }
+$requiredModelHealthFiles = @(
+    'docs/38-model-health-dashboard.md', 'scripts/check-model-health.py', 'scripts/check-model-health.mjs',
+    'backend/src/modules/admin/model-health.types.ts', 'backend/src/modules/admin/model-health.repository.ts',
+    'backend/src/modules/admin/model-health.service.ts', 'backend/src/modules/admin/model-health.controller.ts',
+    'backend/src/modules/admin/model-health.routes.ts', 'backend/tests/admin/model-health.test.ts',
+    'ai-service/app/model_management/dashboard.py', 'ai-service/tests/test_model_dashboard.py',
+    'mobile/lib/data/models/model_health.dart', 'mobile/lib/data/repositories/model_health_repository.dart',
+    'mobile/lib/features/admin/view_models/model_health_view_model.dart',
+    'mobile/lib/features/admin/views/model_health_view.dart', 'mobile/lib/features/admin/widgets/offline_model_metrics.dart',
+    'mobile/test/admin/model_health_test.dart', 'mobile/test/integration/model_health_test.dart'
+)
+foreach ($file in $requiredModelHealthFiles) {
+    if (-not (Test-Path -LiteralPath (Join-Path $repositoryRoot $file) -PathType Leaf)) { throw "Missing model health file: $file" }
+}
 $requiredManagementFiles = @(
     'docs/37-admin-management.md', 'scripts/check-admin-management.py', 'scripts/check-admin-management.mjs',
     'backend/src/modules/admin/management.types.ts', 'backend/src/modules/admin/management.client.ts',

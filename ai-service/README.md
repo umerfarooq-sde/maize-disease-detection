@@ -1,5 +1,10 @@
 # AI service
 
+Phase 22 adds protected `GET /api/v1/model-dashboard`, a sanitized startup-owned
+pinned evaluation snapshot and fixed-size thread-safe lifespan inference counters.
+No test rerun, dataset read, model reload/promotion or shared-preprocessing change.
+See [model health](../docs/38-model-health-dashboard.md).
+
 Phase 21 adds internal protected knowledge prepare/index/check endpoints, reusing
 the existing canonical text/chunker/Google embedding pipeline. New Admin versions
 remain drafts until Node publishes them. Generation can admit current explicitly

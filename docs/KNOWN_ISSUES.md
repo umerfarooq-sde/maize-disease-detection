@@ -1,6 +1,6 @@
 # Known issues
 
-Updated: 2026-10-15 (Asia/Karachi), Phase 21 Admin management.
+Updated: 2026-10-15 (Asia/Karachi), Phase 22 model health.
 
 Admin knowledge/configuration management is implemented. An authorized source
 review remains a human trust boundary, not automatic agricultural/legal validation.
@@ -13,9 +13,13 @@ indexing; refresh before retrying. Read [Admin management](37-admin-management.m
 
 The Admin dashboard exposes real account/scan aggregates and registry/configuration
 state. AI request statistics remain unavailable because the current assistant does
-not persist request telemetry; no zero-usage claim is made. Live model readiness is
-explicitly NOT_CHECKED and a configured research classifier is not automatically
-a promoted production model. Native Admin credentials, like Farmer credentials,
+not persist request telemetry; no zero-usage claim is made. The overview retains NOT_CHECKED; the dedicated Phase 22 model-health screen probes
+actual readiness. A configured research classifier is not automatically a promoted
+production model. Runtime inference statistics cover one process since restart, not
+durable/cluster history; no formal drift exists without verified feedback. Training
+time is absent from the pinned artifact, and offline evidence is unavailable on
+this screen while the compatible model service is unavailable. See
+[model health](38-model-health-dashboard.md). Native Admin credentials, like Farmer credentials,
 remain in memory and require sign-in after restart. Larger global workloads,
 multi-instance rate limiting and durable/browser session policy need separate
 deployment work. Read [Admin dashboard](36-admin-dashboard.md).

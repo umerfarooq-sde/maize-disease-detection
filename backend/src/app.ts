@@ -9,6 +9,12 @@ import { errorHandler, notFound } from './middleware/error-handler.js';
 import { requestRateLimit } from './middleware/rate-limit.js';
 import { requestContext } from './middleware/request-context.js';
 import { createDashboardRepository } from './modules/admin/dashboard.repository.js';
+import { createModelHealthRepository } from './modules/admin/model-health.repository.js';
+import {
+  createModelHealthClient,
+  createModelHealthService,
+  type ModelHealthService,
+} from './modules/admin/model-health.service.js';
 import { createManagementIndexer } from './modules/admin/management.client.js';
 import { createManagementRepository } from './modules/admin/management.repository.js';
 import {
@@ -89,6 +95,11 @@ export function createApp(
     createManagementRepository(getDatabaseClient(environment.DATABASE_URL)),
     createManagementIndexer(environment),
   ),
+  modelHealthService: ModelHealthService = createModelHealthService(
+    createModelHealthRepository(getDatabaseClient(environment.DATABASE_URL)),
+    environment,
+    createModelHealthClient(environment),
+  ),
 ): Express {
   const app = express();
   app.locals.recoverScans = () => scanService.recoverStale();
@@ -123,6 +134,7 @@ export function createApp(
       analyticsService,
       dashboardService,
       managementService,
+      modelHealthService,
     ),
   );
   app.use(notFound);

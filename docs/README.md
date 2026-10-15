@@ -8,6 +8,7 @@ The remaining feature documents describe intended behavior.
 |---|---|
 | [Project state](PROJECT_STATE.md) | Verified repository status, checks, issues, and next step |
 | [Engineering decisions](DECISIONS.md) | Existing database decisions, audit corrections, and later-phase choices |
+| [Model health dashboard](38-model-health-dashboard.md) | Phase 22 registry/readiness, pinned offline metrics and process-local operational signals |
 | [Known issues](KNOWN_ISSUES.md) | Prioritized unresolved findings, external inputs and deployment requirements |
 | [Pre-Phase-10 audit](23-pre-phase-10-audit.md) | Phase 0–9 compatibility, APIs, environments, security, tests and specific user prerequisites |
 | [Dataset intake and real-image review](24-dataset-intake-preprocessing-review.md) | Phase 9.5 configured inventory, exact labels, recovered provenance/rights, duplicate conflicts, shared-policy comparison, real parity and training readiness |

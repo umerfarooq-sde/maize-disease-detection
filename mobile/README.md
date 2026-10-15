@@ -1,5 +1,10 @@
 # Mobile
 
+Phase 22 adds `/admin/model-health` via the Admin overview health icon. Scoped MVVM
+shows offline evaluation separately from live request/latency/uncertainty/output
+signals, with retry and explicit research/drift limits. See
+[model health](../docs/38-model-health-dashboard.md).
+
 Phase 21 adds `/admin/manage` through the Admin overview settings icon. Named
 forms manage sourced document revisions, fixed-context display metadata and
 reviewed fertilizer/yield drafts, with validation, indexing, confirmed publication/

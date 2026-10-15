@@ -5,6 +5,11 @@ with administrative tools for maintaining knowledge and monitoring the system.
 
 ## Current status
 
+Phase 22 adds the Admin model-health dashboard with pinned offline test/per-class/
+confusion-matrix evidence, explicit registry versus live readiness, and bounded
+process-local inference counters. No runtime statistic is called model accuracy or
+formal drift. See [model health](docs/38-model-health-dashboard.md).
+
 Phase 21 adds reviewed Admin knowledge/configuration forms, immutable sourced
 document versions, explicit embedding rebuild/publication/archive and audited
 disease display edits. Calculator management reuses existing validated versioned

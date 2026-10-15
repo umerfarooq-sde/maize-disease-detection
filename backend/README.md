@@ -1,5 +1,10 @@
 # Backend
 
+Phase 22 adds ADMIN-only `GET /api/v1/admin/model-health`: safe model registry
+projection plus authenticated internal readiness, pinned evaluation and process
+telemetry. No model promotion or metric recalculation. See
+[model health](../docs/38-model-health-dashboard.md).
+
 Phase 21 adds ADMIN-only knowledge/disease management, source-backed immutable
 drafts, explicit FastAPI index/recheck orchestration and audited activation/archive.
 Calculator draft projections support typed Admin forms and replacement audit
