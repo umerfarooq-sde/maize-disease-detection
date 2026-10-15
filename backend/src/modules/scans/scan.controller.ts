@@ -1,7 +1,26 @@
 import type { RequestHandler } from 'express';
 import { AppError } from '../../errors/app-error.js';
 import { sendSuccess } from '../../utils/respond.js';
+import type { PrivateImageReader } from './private-image.js';
 import type { ScanService } from './scan.service.js';
+
+export function scanImageController(
+  service: ScanService,
+  readImage: PrivateImageReader,
+): RequestHandler {
+  return async (_request, response) => {
+    const input = response.locals.validated as { params: { scanId: string }; key?: string };
+    const location = await service.imageLocation(
+      input.params.scanId,
+      response.locals.principal?.userId ?? null,
+      input.key,
+    );
+    const image = await readImage(location);
+    response.setHeader('Cache-Control', 'private, no-store');
+    response.setHeader('Referrer-Policy', 'no-referrer');
+    response.type(image.mimeType).send(image.bytes);
+  };
+}
 
 export function createScanController(service: ScanService): RequestHandler {
   return async (request, response) => {

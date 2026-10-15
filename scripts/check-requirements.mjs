@@ -5,6 +5,7 @@ import { randomUUID } from 'node:crypto';
 import { writeFile } from 'node:fs/promises';
 import { createServer } from 'node:http';
 import { join } from 'node:path';
+import { createRequire } from 'node:module';
 import { createApp } from '../backend/src/app.ts';
 import { loadEnvironment } from '../backend/src/config/environment.ts';
 import { getDatabaseClient } from '../backend/src/database/client.ts';
@@ -18,6 +19,8 @@ import { createProfileMediaRepository } from '../backend/src/modules/profile/pro
 import { createProfileMediaService } from '../backend/src/modules/profile/profile-media.service.ts';
 import { createImageStorage } from '../backend/src/modules/scans/scan.storage.ts';
 import { silentLogger } from '../backend/tests/foundation/helpers.ts';
+
+const sharp = createRequire(new URL('../backend/package.json', import.meta.url))('sharp');
 
 const schema = process.env.PHASE23_SCHEMA;
 assert.match(schema ?? '', /^phase23_[a-f0-9]{32}$/);
@@ -143,6 +146,63 @@ try {
     (await request('/profile', otherGrant.accessToken)).profile.revision,
     otherProfile.profile.revision,
   );
+  stage = 'protected private-photo delivery and metadata removal';
+  const createdProfile = await request('/profile', farmerGrant.accessToken, 'PATCH', {
+    expectedRevision: null,
+    displayName: 'Security fixture farmer',
+  });
+  const cameraImage = await sharp({
+    create: { width: 24, height: 24, channels: 3, background: '#689746' },
+  })
+    .png()
+    .withExif({
+      IFD0: { Artist: 'PRIVATE_CAMERA_FIXTURE', ImageDescription: 'PRIVATE_LOCATION_FIXTURE' },
+    })
+    .toBuffer();
+  const imageForm = new FormData();
+  imageForm.append(
+    'image',
+    new Blob([cameraImage], { type: 'image/png' }),
+    'owned-security-fixture.png',
+  );
+  imageForm.append('expectedRevision', createdProfile.profile.revision);
+  const photoUpload = await fetch(`${base}/profile/avatar`, {
+    method: 'POST',
+    body: imageForm,
+    headers: { Authorization: `Bearer ${farmerGrant.accessToken}`, 'X-Auth-Request': '1' },
+  });
+  assert.equal(photoUpload.status, 200);
+  const photoProfile = (await photoUpload.json()).data.profile;
+  assert.match(photoProfile.avatarUrl, /^profile\/avatar\?v=[a-f0-9]{64}$/);
+  assert.equal(JSON.stringify(photoProfile).includes('res.cloudinary.com'), false);
+  for (const [token, expected] of [
+    [undefined, 401],
+    [otherGrant.accessToken, 404],
+    [adminGrant.accessToken, 403],
+    [farmerGrant.accessToken, 200],
+  ]) {
+    const response = await fetch(`${base}/${photoProfile.avatarUrl}`, {
+      headers: { 'X-Auth-Request': '1', ...(token ? { Authorization: `Bearer ${token}` } : {}) },
+    });
+    assert.equal(response.status, expected);
+    if (expected === 200) {
+      assert.equal(response.headers.get('cache-control'), 'private, no-store');
+      const decoded = await sharp(Buffer.from(await response.arrayBuffer())).metadata();
+      assert.equal(decoded.exif, undefined);
+      assert.equal(decoded.xmp, undefined);
+      assert.equal(decoded.iptc, undefined);
+    }
+  }
+  await request('/profile/avatar', farmerGrant.accessToken, 'DELETE', {
+    expectedRevision: photoProfile.revision,
+  });
+  // Restore this generated account's empty-profile precondition for the existing
+  // Flutter creation journey; never touch a pre-existing account/profile.
+  const securityProfile = await database.farmerProfile.findUniqueOrThrow({ where: { userId: ownerId } });
+  assert.equal(securityProfile.avatarPublicId, null);
+  assert.equal(securityProfile.avatarPendingPublicId, null);
+  assert.deepEqual(securityProfile.avatarCleanupPublicIds, []);
+  await database.farmerProfile.delete({ where: { userId: ownerId } });
   stage = 'Admin pagination, denial and non-secret audit projection';
   const seen = new Set();
   let cursor;
@@ -349,6 +409,9 @@ try {
     'audit-ui-filters',
     'pending-real-calculator-content',
     'no-curated-media',
+    'protected-image-delivery',
+    'metadata-free-real-cloudinary',
+    'no-cloudinary-url-disclosure',
   ];
 } catch {
   console.error(`FAIL: ${stage}; private details omitted.`);

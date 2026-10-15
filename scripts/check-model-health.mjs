@@ -2,6 +2,7 @@ import assert from 'node:assert/strict';
 import {randomBytes,randomUUID} from 'node:crypto';
 import {createServer} from 'node:http';
 import {spawn} from 'node:child_process';
+import {flutterTestEnvironment} from './flutter-test-environment.mjs';
 import {mkdir,writeFile} from 'node:fs/promises';
 import {pino} from '../backend/node_modules/pino/pino.js';
 import {createApp} from '../backend/src/app.ts';
@@ -64,7 +65,7 @@ try {
     const child=spawn(process.env.MODEL_HEALTH_DART,[
       process.env.MODEL_HEALTH_FLUTTER_TOOLS,'test','test/integration/model_health_test.dart',
       '--dart-define=RUN_LIVE_MODEL_HEALTH_CHECK=true',`--dart-define=API_BASE_URL=${base}`,
-      '--reporter=expanded'],{cwd:new URL('../mobile/',import.meta.url),env:{...process.env,
+      '--reporter=expanded'],{cwd:new URL('../mobile/',import.meta.url),env:{...flutterTestEnvironment(),
         MODEL_HEALTH_ADMIN_EMAIL:credentials.email,MODEL_HEALTH_ADMIN_PASSWORD:credentials.password},stdio:'inherit'});
     child.once('error',reject);child.once('exit',code=>code===0?resolve():reject(new Error('Flutter contract failed')));
   });

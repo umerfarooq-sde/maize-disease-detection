@@ -70,6 +70,12 @@ export function createScanService(
   }
   return {
     enabled: storage.enabled,
+    async imageLocation(id: string, userId: string | null, key?: string) {
+      if (userId === null && !key) throw new AppError('AUTHENTICATION_ERROR');
+      const scan = await repository.read(id, userId, key ? digest(`anonymous:${key}`) : undefined);
+      if (!scan) throw new AppError('NOT_FOUND');
+      return { url: scan.imageUrl, publicId: scan.cloudinaryPublicId, purpose: 'scans' as const };
+    },
     async create(file: Express.Multer.File | undefined, key: string, userId: string | null) {
       if (!storage.enabled) throw new AppError('UPLOAD_UNAVAILABLE');
       const image = await validateImage(file);

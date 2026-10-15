@@ -98,7 +98,7 @@ void main() {
         expect(history.items.single.id, scan.id);
         final detail = await records.read(scan.id);
         expect(detail.prediction!.confidence, scan.prediction!.confidence);
-        expect(detail.imageUrl.scheme, 'https');
+        expect(detail.imageUrl.toString(), 'scans/${detail.id}/image');
         mark('saved owned history and result detail');
         final assistant = ApiAssistantRepository(
           AssistantDatasource(farmerApi),

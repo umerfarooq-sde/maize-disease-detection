@@ -179,6 +179,8 @@ void main() {
       records.error = null;
       final other = scanJson(status: ScanStatus.completed)
         ..['id'] = 'ba29ad82-93ec-433d-8948-2e8ca17c7428';
+      (other['image'] as Map<String, Object?>)['url'] =
+          'scans/${other['id']}/image';
       records.result = ScanRecord.fromJson(other);
       await model.refresh();
       expect(model.error?.kind, AppErrorKind.invalidResponse);

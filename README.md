@@ -5,18 +5,18 @@ with administrative tools for maintaining knowledge and monitoring the system.
 
 ## Current status
 
-Phase 23.7 completes private farmer profile editing/photos, scoped Admin farmer
-account listing/status management and read-only audit history. Actual Flutter
-host-widget → Node → PostgreSQL/Cloudinary verification passes, including profile
-persistence, session revocation and audit rollback. See the
-[requirements report and complete original matrix](docs/phase-23-7-requirements-completion.md)
-and [API/MVVM contracts](docs/41-profile-accounts-audit.md).
+Phase 24 security hardening is complete: **PASS WITH DOCUMENTED LIMITATIONS**. Protected Node image
+reads replace exposed Cloudinary capabilities; display metadata removal preserves
+original ML inputs. Authentication/RBAC, subprocess isolation, dependency/runtime
+patching and production DB privilege/TLS admission pass component and live verification; public hosting still has explicit release gates.
+See the [security report, actual results and release prerequisites](docs/phase-24-security-hardening.md).
+No Phase 25/26 or deployment has started. Retention remains unchanged by approval.
 
-**READY WITH DOCUMENTED LIMITATIONS for separately authorized Phase 24.** Disease
-reference media/integration needs approved licensed images; real fertilizer/yield
-recommendations need [reviewed domain inputs](docs/calculator-domain-input-checklist.md).
-Physical-device acceptance and named Admin enrollment remain pre-demo work. This
-does not certify the entire original product. Phase 24 and deployment have not started.
+Licensed disease-library images and authoritative fertilizer/yield inputs remain
+pending; the dataset/model remain non-commercial research assets. Physical-device
+acceptance and production credentials/networking/retention approval are still
+required before public release. Do not equate implementation checks with full
+original-product acceptance.
 
 Phase 23.6 previously completed farmer registration and the real sourced Knowledge
 catalogue/search/details through existing Node/PostgreSQL and Google/pgvector.
@@ -201,7 +201,7 @@ This does not change the machine's persistent execution policy.
 
 ## Next step
 
-Stop after Phase 23.6. Phase 24 requires the next explicit instruction.
+Stop after Phase 24. Phase 25 requires a separate explicit instruction.
 Preserve the frozen v2 candidate and its documented limitations. See the
 [remediation report](docs/phase-23-6-remediation-report.md),
 [farmer assistant](docs/32-farmer-ai-assistant.md),

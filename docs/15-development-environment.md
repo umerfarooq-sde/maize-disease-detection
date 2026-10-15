@@ -1,5 +1,15 @@
 # Development environment
 
+**Phase 24:** use Node 24.22.0 (24.x) and CPython 3.11.17+ in the approved 3.11
+series. `. ./scripts/use-project-node.ps1` selects the ignored project-local
+Windows Node installation when present; otherwise install the pin on PATH.
+It never edits machine/user PATH. Service/training distribution pins stay unchanged.
+Bootstrap tools pin pip 26.2.1, setuptools 84.0.0 and uv 0.12.23.
+`run-flutter.mjs` starts the SDK with an OS/SDK allowlist, without server credentials.
+Production requires verified remote database TLS and non-owning runtime roles;
+development owner credentials intentionally fail production admission. See
+[security evidence and prerequisites](phase-24-security-hardening.md).
+
 Phase 1 configures independent toolchains and infrastructure probes. Phase 2 adds
 [Prisma schema/migrations and database checks](16-database-operations.md). No
 model training, inference, disease knowledge API or RAG exists. Later completed phases

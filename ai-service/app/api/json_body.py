@@ -15,9 +15,12 @@ Payload = TypeVar("Payload", bound=BaseModel)
 async def read_json_body(
     request: Request, model: type[Payload], *, max_bytes: int = 8192
 ) -> Payload:
+    types = request.headers.getlist("content-type")
+    encodings = request.headers.getlist("content-encoding")
     if (
-        request.headers.get("content-type", "").split(";")[0].lower() != "application/json"
-        or request.headers.get("content-encoding", "identity") != "identity"
+        len(types) != 1
+        or types[0].split(";")[0].strip().lower() != "application/json"
+        or (encodings and (len(encodings) != 1 or encodings[0].strip().lower() != "identity"))
     ):
         raise AppError(ErrorCode.VALIDATION_ERROR)
     body = bytearray()

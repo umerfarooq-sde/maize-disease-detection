@@ -1,8 +1,47 @@
 # Project state
 
-Updated: 2026-10-15 (Asia/Karachi).
+Updated: 2026-10-16 (Asia/Karachi).
 
 ## Current phase
+
+**Phase 24 is complete: PASS WITH DOCUMENTED LIMITATIONS. READY WITH DOCUMENTED
+LIMITATIONS for separately authorized Phase 25 preparation.** No Phase 25/26 or
+deployment has started; public release still requires the explicit security gates.
+See the [full threat model, findings, fixes, test ledger and file inventory](phase-24-security-hardening.md).
+
+Approved private image delivery uses Node account/capability authorization and
+relative paths rather than exposed Cloudinary URLs. Metadata-free display/storage
+copies preserve original inference bytes. Profile cleanup fences committed/pending
+assets; Flutter queues private thumbnails and discards stale identity results.
+Test subprocesses allowlist OS/SDK inputs; Argon2 concurrency is bounded. Production
+refuses unsafe DB privilege/TLS/ambiguous-endpoint configuration and old runtime
+patch levels. Existing research credentials are unchanged and fail production
+admission; separate migration/Node/AI identities are required before hosting.
+
+Final checks: backend 322 tests plus two environment-isolation tests; Flutter 374
+pass/13 explicit default opt-in skips, analyzer and 219-file Dart format check;
+AI 356 pass/three opt-in SQL skips, Ruff/mypy and one existing TestClient warning;
+training 219 fixture/tooling tests; shared 78 tests in each environment plus 12 exact
+synthetic parity cases. Patched Gradle 8.14.6 ARM64 debug APK passes. Prisma validation,
+client generation, 13 rollback checks, nine-migration status and no drift pass.
+All 19 integration categories achieve final PASS across isolated runs, zero selected
+live skips (including three SQL tests and enabled Flutter live gates). Earlier
+failed records remain visible. All six owned root schemas and independent temporary
+schemas are removed, provider fixtures reconciled, and all 21 production table
+counts unchanged. No physical device or unrestricted release acceptance is claimed.
+
+Node 24.22.0, CPython 3.11.17, scoped Prisma transitive fixes, isolated packaging-tool
+patches and five Gradle HIGH advisory fixes are verified. CPU Torch JIT/PT2 notices
+remain explicitly restricted unused paths; approved ML package pins/artifacts are
+unchanged. All 171 frozen files/checkpoint, nine migrations, class mapping, shared
+full-frame preprocessing and source corpus are preserved. No raw dataset access,
+fitting, test reevaluation, promotion or real-user mutation.
+
+Retention is unchanged by user approval. Proposed defaults/erasure/provider use
+require later approval; deactivation is not erasure. Licensed disease photos and
+real calculator content remain pending; non-commercial research restrictions persist.
+
+## Historical Phase 23.7 completion record
 
 **Phase 23.7 is complete for the authorized implementation and conditional content
 review. READY WITH DOCUMENTED LIMITATIONS for separately authorized Phase 24.**
@@ -1348,7 +1387,7 @@ installed/required dependency matrix, coverage matrix and concrete user prerequi
 | Backend count | 77 checked-in cases; supplemental audit probes counted separately |
 | Database integrity | Neon PostgreSQL 18.6/vector0.8.6, 21 application tables, 21 checks/37 triggers/four partial indexes; before/after snapshots identical, all counts zero, no temporary schema |
 | Flutter | Locked offline dependencies, format54 files/no change, analyzer no issues; 52 isolated and two separately executed live tests pass; debug APK builds |
-| Python and shared | AI50/training5/shared78 in each venv/eight parity cases pass; Ruff/strict mypy/locked sync+checks+pip check/package build/compileall pass |
+| Python and shared | AI50/training5/shared 78 in each venv/eight parity cases pass; Ruff/strict mypy/locked sync+checks+pip check/package build/compileall pass |
 | FastAPI live/synthetic stress | Safe actual test/production startup/health/errors/shutdown; six deterministic synthetic scene/gate probes pass |
 | Docker | Compose validation passes; Engine absent, no container runtime claim |
 | Security | No configured private values/pattern matches across source candidates or 501 unique historical text blobs; no committed non-template .env; fresh npm audits still report four high aggregate findings |

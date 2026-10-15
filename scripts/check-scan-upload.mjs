@@ -3,6 +3,7 @@ import { randomUUID } from 'node:crypto';
 import { createServer } from 'node:http';
 import { spawn } from 'node:child_process';
 import { once } from 'node:events';
+import { flutterTestEnvironment } from './flutter-test-environment.mjs';
 import { fileURLToPath } from 'node:url';
 import { createApp } from '../backend/dist/app.js';
 import { loadEnvironment } from '../backend/dist/config/environment.js';
@@ -69,7 +70,7 @@ try {
   // Every shell argument is a constant or our validated numeric port; no credentials.
   const child = spawn(windows ? 'cmd.exe' : 'flutter', windows ? ['/d', '/s', '/c', `flutter.bat ${args.join(' ')}`] : args, {
     cwd: fileURLToPath(new URL('../mobile', import.meta.url)), windowsHide: true,
-    env: { ...process.env, ...fixtureEnvironment },
+    env: { ...flutterTestEnvironment(), ...fixtureEnvironment },
     stdio: ['ignore', 'pipe', 'pipe'],
   });
   child.stdout.on('data', (data) => process.stdout.write(data));

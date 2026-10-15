@@ -79,7 +79,7 @@ export function scanResponse(scan: ScanRecord) {
       : null,
     analysisError: scan.status === 'FAILED' ? { code, message: new AppError(code).message } : null,
     image: {
-      url: scan.imageUrl,
+      url: `scans/${scan.id}/image`,
       mimeType: scan.imageMimeType,
       bytes: scan.imageBytes,
       uploadedAt: scan.uploadedAt.toISOString(),

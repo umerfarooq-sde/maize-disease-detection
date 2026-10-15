@@ -125,9 +125,11 @@ TASKS = {
         ROOT,
         300,
     ),
-    "journey": (NODE + ["scripts/check-e2e.mjs"], ROOT, 600),
+    # Check the baseline catalogue before the Admin journey publishes an extra
+    # immutable document version in this same owned schema.
     "farmer-remediation": (NODE + ["scripts/check-farmer-remediation.mjs"], ROOT, 420),
     "original-requirements": (NODE + ["scripts/check-requirements.mjs"], ROOT, 600),
+    "journey": (NODE + ["scripts/check-e2e.mjs"], ROOT, 600),
 }
 TABLES = (
     "users",

@@ -2,6 +2,7 @@
 
 import ipaddress
 import re
+import sys
 from pathlib import Path
 from typing import Literal, Self
 
@@ -139,6 +140,18 @@ class Settings(BaseSettings):
                 or not parsed.path.strip("/")
             ):
                 raise ValueError("Retrieval requires a PostgreSQL connection")
+            if self.environment == "production":
+                from urllib.parse import parse_qs
+
+                parameters = parse_qs(parsed.query)
+                if {"host", "hostaddr", "port"}.intersection(parameters):
+                    raise ValueError("Database endpoint must be specified in the URL authority")
+                if parsed.hostname not in {"localhost", "127.0.0.1", "::1"} and (
+                    parameters.get("sslmode")
+                    not in [["require"], ["prefer"], ["verify-ca"], ["verify-full"]]
+                    or "ssl" in parameters
+                ):
+                    raise ValueError("Production remote PostgreSQL requires verified TLS")
             if not self.gemini_api_key or not self.ai_service_token:
                 raise ValueError("Retrieval requires server credentials")
             if not re.fullmatch(r"[a-z0-9][a-z0-9._-]{1,99}", self.embedding_model):
@@ -184,6 +197,10 @@ class Settings(BaseSettings):
 
     @model_validator(mode="after")
     def require_network_token(self) -> Self:
+        if self.environment == "production" and (
+            sys.version_info[:2] != (3, 11) or sys.version_info[:3] < (3, 11, 17)
+        ):
+            raise ValueError("Production requires a maintained Python 3.11.17+ security patch")
         loopback = self.host == "localhost" or ipaddress.ip_address(self.host).is_loopback
         if (self.environment == "production" or not loopback) and not self.ai_service_token:
             raise ValueError("Production and non-loopback binding require a service token")

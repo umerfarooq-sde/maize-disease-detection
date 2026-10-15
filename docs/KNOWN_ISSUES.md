@@ -1,6 +1,42 @@
 # Known issues
 
-Updated: 2026-10-15 (Asia/Karachi), Phase 23.7.
+Updated: 2026-10-16 (Asia/Karachi), Phase 24.
+
+Current evidence and exact remaining gates are in the
+[Phase 24 security report](phase-24-security-hardening.md). **PASS WITH DOCUMENTED LIMITATIONS; READY WITH DOCUMENTED LIMITATIONS** for
+separately authorized Phase 25 preparation. No deployment started. Component and
+all 19 final integration categories pass across isolated runs; earlier failures
+remain recorded, including remote timeouts and a recovered disk-full compile.
+All owned fixtures are cleaned and 21 production table counts are unchanged.
+
+- **P0:** none discovered in reviewed scope; this does not prove absence.
+- **P1 release prerequisites:** current research DB owner credentials must not be
+  hosted. Production guards reject them; provision separate migration/Node/AI
+  identities with narrow grants. Configure private AI networking, HTTPS, exact
+  proxy trust/shared quotas, scoped secrets and provider budgets before exposure.
+  Review legacy disclosed cloud capabilities; protected delivery does not revoke
+  existing copied links. Zero stored public scans/photos does not inventory every
+  provider-only asset.
+- **P2:** retention/erasure/provider-processing remains unapproved and unchanged;
+  proposed defaults need approval before real public personal-data collection.
+  Torch CPU JIT/PT2 advisories remain restricted to unused local loading paths;
+  never enable untrusted models. Cleanup scheduling/backups/incident/log policy
+  remain deployment work. No physical-device acceptance. Registration409 still
+  permits bounded account-existence enumeration; local limits/counters are not
+  distributed. Images can exist transiently in memory; secure erasure is not claimed.
+- **Original content/product gaps:** licensed reference photos and approved real
+  fertilizer/yield configuration remain pending. Research-only data/model use
+  remains; no commercial license clearance is implied. Existing P3 OpenAPI,
+  historical audit-role snapshot and broader agronomic-output gaps are unchanged.
+
+Resolved in Phase 24: new private image DTOs no longer disclose Cloudinary URLs;
+new storage and legacy Node delivery remove private metadata; profile cleanup
+fences current assets; legacy broad Flutter child environments are replaced;
+Node high advisories, five Gradle HIGH notices (wrapper 8.14.6), and vulnerable
+isolated packaging tools are patched. See
+the report for tests and CPU/SDK scan limitations.
+
+## Historical Phase 23.7 issue record (superseded above where resolved)
 
 **READY WITH DOCUMENTED LIMITATIONS** for separately authorized Phase 24. Farmer
 profile customization (including approved private photos), scoped Admin farmer

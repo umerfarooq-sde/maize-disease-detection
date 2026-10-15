@@ -1,5 +1,11 @@
 # Authentication and authorization
 
+**Phase 24:** hashing/verification admits at most four simultaneous expensive
+Argon2 operations per process; excess requests receive 429 without queuing.
+Native login remains volatile. Private photo reads require the current account
+or anonymous scan capability through Node; no raw provider URL is returned.
+See [security verification and residual risks](phase-24-security-hardening.md).
+
 **Phase 23.7:** controlled Admin FARMER status changes atomically revoke all live
 sessions and append an immutable audit. Reactivation never restores revoked tokens;
 fresh login is required. The existing authentication repository still checks live

@@ -1,5 +1,13 @@
 # Farmer profiles, Admin accounts and audit history
 
+**Phase 24:** `avatarUrl` is `profile/avatar?v=<opaque-64-hex-version>`, relative
+to Node `/api/v1/`, or null. FARMER-only GET requires Authorization and
+`X-Auth-Request: 1`; it returns private/no-store bytes without a provider redirect.
+New storage copies and legacy delivery strip metadata. Cleanup fences exact
+pending attempts and preserves committed photos after lost acknowledgement.
+Deactivation still retains data; no retention/erasure policy was enacted.
+See [security verification](phase-24-security-hardening.md).
+
 Phase 23.7 completes the original profile-customization, Admin farmer-management
 and audit-viewer requirements. See [verification and requirement matrix](phase-23-7-requirements-completion.md).
 Existing authentication, immutable knowledge/calculator workflows, ML and RAG remain intact.

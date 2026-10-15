@@ -18,9 +18,7 @@ final leafImage = SelectedLeafImage(
 );
 final savedScan = ScanRecord(
   id: 'aa29ad82-93ec-433d-8948-2e8ca17c7428',
-  imageUrl: Uri.parse(
-    'https://res.cloudinary.com/test/image/authenticated/leaf.png',
-  ),
+  imageUrl: Uri.parse('scans/aa29ad82-93ec-433d-8948-2e8ca17c7428/image'),
   mimeType: 'image/png',
   bytes: leafImage.bytes.length,
   uploadedAt: DateTime.utc(2026, 10, 6),

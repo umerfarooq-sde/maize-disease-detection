@@ -1,4 +1,4 @@
-import { Router, type RequestHandler } from 'express';
+import { type RequestHandler, Router } from 'express';
 import multer from 'multer';
 import { z } from 'zod';
 import { AppError } from '../../errors/app-error.js';
@@ -7,23 +7,49 @@ import { authorize } from '../../middleware/authorization.js';
 import { requestRateLimit } from '../../middleware/rate-limit.js';
 import { validateRequest } from '../../validators/request.js';
 import type { AuthService } from '../auth/auth.service.js';
+import type { PrivateImageReader } from '../scans/private-image.js';
 import { scanLimits } from '../scans/scan.types.js';
-import { profileMediaController } from './profile-media.controller.js';
+import { profileImageController, profileMediaController } from './profile-media.controller.js';
 import type { ProfileMediaService } from './profile-media.service.js';
 
-export function profileMediaRoutes(auth: AuthService, service: ProfileMediaService): Router {
+export function profileMediaRoutes(
+  auth: AuthService,
+  service: ProfileMediaService,
+  readImage: PrivateImageReader = async () => {
+    throw new AppError('UPLOAD_UNAVAILABLE');
+  },
+): Router {
   const router = Router();
+  const mutationLimit = requestRateLimit(10, 15 * 60000);
   router.use(
     '/profile/avatar',
     authenticate(auth),
     authorize('FARMER'),
-    requestRateLimit(10, 15 * 60000),
+    (req, res, next) => (req.method === 'GET' ? next() : mutationLimit(req, res, next)),
     (req, response, next) => {
       response.setHeader('Cache-Control', 'no-store');
       if (req.get('x-auth-request') !== '1') throw new AppError('AUTHORIZATION_ERROR');
-      if (Object.keys(req.query).length) throw new AppError('VALIDATION_ERROR');
+      if (req.method !== 'GET' && Object.keys(req.query).length)
+        throw new AppError('VALIDATION_ERROR');
       next();
     },
+  );
+  router.get(
+    '/profile/avatar',
+    requestRateLimit(60),
+    validateRequest(
+      z.strictObject({
+        body: z.undefined(),
+        params: z.strictObject({}),
+        query: z.strictObject({
+          v: z
+            .string()
+            .regex(/^[a-f0-9]{64}$/)
+            .optional(),
+        }),
+      }),
+    ),
+    profileImageController(service, readImage),
   );
   const schema = z.strictObject({ expectedRevision: z.string().regex(/^[a-f0-9]{64}$/) });
   const request = validateRequest(

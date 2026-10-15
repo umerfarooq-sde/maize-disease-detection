@@ -1,5 +1,12 @@
 # AI service
 
+Phase 24 rejects ambiguous JSON media/encoding headers and unsafe production
+database identities. Production requires CPython 3.11.17+ in the approved 3.11
+series and verified remote PostgreSQL TLS; retrieval refuses inherited privileged,
+object-owning or DDL-capable roles. Current development owner credentials must
+not be reused for hosting. Model/preprocessing/artifacts/dependency pins remain
+unchanged. See [security controls and audit limits](../docs/phase-24-security-hardening.md).
+
 Phase 22 adds protected `GET /api/v1/model-dashboard`, a sanitized startup-owned
 pinned evaluation snapshot and fixed-size thread-safe lifespan inference counters.
 No test rerun, dataset read, model reload/promotion or shared-preprocessing change.

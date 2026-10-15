@@ -43,9 +43,9 @@ class FarmerProfile {
         DateTime.tryParse(updated) == null ||
         (photo != null &&
             (uri == null ||
-                uri.scheme != 'https' ||
-                uri.host != 'res.cloudinary.com' ||
-                uri.userInfo.isNotEmpty))) {
+                !RegExp(
+                  r'^profile/avatar\?v=[a-f0-9]{64}$',
+                ).hasMatch(photo)))) {
       throw _invalid();
     }
     return FarmerProfile(

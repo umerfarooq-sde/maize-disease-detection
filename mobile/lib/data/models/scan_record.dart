@@ -83,9 +83,7 @@ class ScanRecord {
                   errorCode is String &&
                   _analysisErrorCodes.contains(errorCode))) &&
           uri != null &&
-          uri.scheme == 'https' &&
-          uri.host.isNotEmpty &&
-          uri.userInfo.isEmpty &&
+          uri.toString() == 'scans/$id/image' &&
           const ['image/jpeg', 'image/png', 'image/webp'].contains(mime) &&
           bytes is int &&
           bytes > 0 &&

@@ -1,6 +1,15 @@
 # Security
 
-> **Status:** Security requirements baseline; implementation controls must be verified before release.
+> **Phase 24 (2026-10-16):** see the [security hardening report](phase-24-security-hardening.md)
+> for implemented controls, actual tests/audits, protected image delivery,
+> unchanged retention and mandatory pre-hosting restrictions. No deployment is authorized.
+
+Private scans/profile photos use authorized Node byte endpoints, not provider URLs
+in Flutter. Metadata-free display copies preserve original ML input. Native
+credentials stay volatile. Production rejects elevated database roles/unverified
+remote TLS; current owner credentials remain development-only. Local rate limits
+do not establish distributed quotas. The report defines separate DB identities,
+legacy asset review, privacy and Phase 25 release gates.
 
 Phase 4 implements password hashing, independent JWT keys, bounded token lifetimes,
 rotating/revocable database sessions, role middleware, auth limits and cookie/CSRF
@@ -8,7 +17,7 @@ controls. See [implementation and remaining boundaries](18-authentication.md).
 Phase 7 implements upload validation, authenticated Cloudinary assets and recovery;
 Phase 8 implements safe internal-service configuration/logging/errors, and Phase 9
 implements bounded shared decoding/preprocessing. Remaining inference, deployment
-and release controls below are future requirements.
+and release controls below must be assessed against the current report.
 
 ## Identity and access
 

@@ -4,6 +4,7 @@ param(
 )
 
 $ErrorActionPreference = 'Stop'
+. (Join-Path $PSScriptRoot 'use-project-node.ps1')
 $repositoryRoot = Split-Path -Parent $PSScriptRoot
 $components = if ($Component -eq 'All') { @('Backend', 'AI', 'Training', 'Preprocessing', 'Flutter', 'Database', 'Prisma', 'Docker') } else { @($Component) }
 $failed = @()
@@ -15,6 +16,8 @@ foreach ($target in $components) {
                 try {
                     & npm.cmd run check
                     if ($LASTEXITCODE -ne 0) { throw 'Backend formatting/lint/type/build/test/dependency checks failed.' }
+                    & node --test (Join-Path $PSScriptRoot 'flutter-test-environment.test.mjs')
+                    if ($LASTEXITCODE -ne 0) { throw 'Flutter test subprocess environment isolation failed.' }
                 } finally { Pop-Location }
             }
             { $_ -in @('AI', 'Training') } {
@@ -67,9 +70,9 @@ foreach ($target in $components) {
             'Flutter' {
                 Push-Location (Join-Path $repositoryRoot 'mobile')
                 try {
-                    & flutter analyze
+                    & node (Join-Path $PSScriptRoot 'run-flutter.mjs') analyze
                     if ($LASTEXITCODE -ne 0) { throw 'Flutter analyzer failed.' }
-                    & flutter test
+                    & node (Join-Path $PSScriptRoot 'run-flutter.mjs') test
                     if ($LASTEXITCODE -ne 0) { throw 'Flutter environment test failed.' }
                 } finally { Pop-Location }
             }

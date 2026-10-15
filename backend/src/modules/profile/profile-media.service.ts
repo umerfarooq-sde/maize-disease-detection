@@ -1,8 +1,8 @@
 import { randomUUID } from 'node:crypto';
 import { AppError } from '../../errors/app-error.js';
 import type { ImageStorage, ValidatedImage } from '../scans/scan.types.js';
-import type { ProfileMediaRepository } from './profile-media.repository.js';
 import { profileResponse } from './profile.types.js';
+import type { ProfileMediaRepository } from './profile-media.repository.js';
 
 export function createProfileMediaService(
   repository: ProfileMediaRepository,
@@ -17,6 +17,10 @@ export function createProfileMediaService(
       const current = await repository.candidates(row.userId);
       for (const id of current[0]?.avatarCleanupPublicIds ?? []) {
         if (removed + failed >= 20) return { removed, failed };
+        if (id === current[0]?.avatarPublicId || id === current[0]?.avatarPendingPublicId) {
+          failed++;
+          continue;
+        }
         try {
           await storage.destroy(id);
           await repository.cleared(row.userId, id);
@@ -30,24 +34,45 @@ export function createProfileMediaService(
   }
   return {
     enabled: storage.enabled,
+    async imageLocation(userId: string) {
+      const row = await repository.read(userId);
+      if (!row?.avatarUrl || !row.avatarPublicId) throw new AppError('NOT_FOUND');
+      return { url: row.avatarUrl, publicId: row.avatarPublicId, purpose: 'profiles' as const };
+    },
     cleanup,
     async upload(userId: string, revision: string, image: ValidatedImage) {
       if (!storage.enabled) throw new AppError('UPLOAD_UNAVAILABLE');
       const publicId = `maizedoctor/profiles/${randomUUID()}`;
       await repository.reserve(userId, revision, publicId);
+      let uploaded = false;
       try {
         const stored = await storage.upload(image, publicId);
         if (stored.publicId !== publicId) throw new AppError('UPLOAD_FAILED');
+        uploaded = true;
         await repository.finish(userId, publicId, stored);
       } catch (error) {
-        // Intent was committed before upload; a failed compensation remains recoverable.
+        // Provider timeouts are ambiguous: retain intent until stale recovery so a
+        // delayed upload cannot complete after immediate deletion compensation.
+        if (!uploaded) throw error;
+        let committed: boolean;
         try {
-          await storage.destroy(publicId);
-          await repository.cleared(userId, publicId);
+          // Serialize with finish before retiring this exact attempt. A committed
+          // photo survives a lost acknowledgement; uncertain DB outcomes never
+          // authorize cloud deletion. Retired attempts cannot finalize later.
+          await repository.retirePending(userId, new Date(), publicId);
+          const current = await repository.read(userId);
+          committed = current?.avatarPublicId === publicId;
         } catch {
-          /* durable intent retained */
+          throw error;
         }
-        throw error;
+        if (!committed) {
+          try {
+            await cleanup(userId);
+          } catch {
+            /* durable queued intent retained */
+          }
+          throw error;
+        }
       }
       try {
         await cleanup(userId);

@@ -53,6 +53,28 @@ class KnowledgeRepository:
                 connect_timeout=5,
                 row_factory=dict_row,
             ) as connection:
+                if self.settings.environment == "production":
+                    permissions = connection.execute(
+                        "SELECT EXISTS (SELECT 1 FROM pg_catalog.pg_roles r "
+                        "WHERE pg_catalog.pg_has_role(current_user,r.oid,'MEMBER') AND "
+                        "(r.rolsuper OR r.rolcreatedb OR r.rolcreaterole OR r.rolbypassrls)) "
+                        "AS privileged, EXISTS (SELECT 1 FROM pg_catalog.pg_class c "
+                        "JOIN pg_catalog.pg_namespace n ON n.oid=c.relnamespace "
+                        "WHERE n.nspname NOT IN ('pg_catalog','information_schema') "
+                        "AND pg_catalog.pg_has_role(current_user,c.relowner,'MEMBER')) "
+                        "AS owns_objects, (pg_catalog.has_database_privilege("
+                        "current_user,current_database(),'CREATE') OR "
+                        "EXISTS (SELECT 1 FROM pg_catalog.pg_namespace n WHERE n.nspname NOT IN "
+                        "('pg_catalog','information_schema') AND "
+                        "pg_catalog.has_schema_privilege(current_user,n.oid,'CREATE'))) "
+                        "AS can_create"
+                    ).fetchone()
+                    if permissions != {
+                        "privileged": False,
+                        "owns_objects": False,
+                        "can_create": False,
+                    }:
+                        raise AppError(ErrorCode.RETRIEVAL_UNAVAILABLE)
                 # Neon transaction pooling rejects startup `options`. Configure
                 # each transaction explicitly so no pool-session setting leaks.
                 connection.execute(

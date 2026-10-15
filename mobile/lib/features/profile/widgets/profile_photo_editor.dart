@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../../../core/theme/design_tokens.dart';
+import '../../../core/widgets/private_image.dart';
 import '../view_models/profile_view_model.dart';
 
 class ProfilePhotoEditor extends StatelessWidget {
@@ -37,7 +38,7 @@ class ProfilePhotoEditor extends StatelessWidget {
         Text('Profile photo', style: Theme.of(context).textTheme.titleLarge),
         const SizedBox(height: AppSpacing.sm),
         const Text(
-          'Use a photo you own or have permission to upload. JPEG, PNG or WebP, up to 5 MB / 16 megapixels, at least 16 × 16 pixels. Original images may retain metadata.',
+          'Use a photo you own or have permission to upload. JPEG, PNG or WebP, up to 5 MB / 16 megapixels, at least 16 × 16 pixels. Camera and location metadata are removed from the stored copy.',
         ),
         const SizedBox(height: AppSpacing.lg),
         if (model.photo case final photo?)
@@ -51,14 +52,11 @@ class ProfilePhotoEditor extends StatelessWidget {
                 const Text('Photo preview unavailable. Choose another image.'),
           )
         else if (model.data?.avatarUrl case final url?)
-          Image.network(
-            url.toString(),
+          PrivateImage(
+            path: url.toString(),
             height: AppSizing.emblem * 3,
             fit: BoxFit.contain,
             semanticLabel: 'Your saved profile photo',
-            errorBuilder: (_, _, _) => const Text(
-              'Saved photo could not be displayed. Your other profile details are available.',
-            ),
           )
         else
           const Icon(

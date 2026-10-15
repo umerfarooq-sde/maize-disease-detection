@@ -14,7 +14,7 @@ import 'package:maizedoctor/features/ai_assistant/views/assistant_view.dart';
 import 'package:maizedoctor/features/auth/view_models/farmer_session_view_model.dart';
 import 'package:maizedoctor/features/disease_detection/views/result_view.dart';
 import '../auth/session_test.dart' show cookie, grant, response;
-import '../scans/helpers.dart' show scanJson;
+import '../scans/helpers.dart' show scanJson, leafImage;
 import '../scans/widget_test.dart' show tapVisible;
 import 'helpers.dart';
 
@@ -93,6 +93,14 @@ void main() {
               expect(request.body, '{}');
               return response(answerJson(classifier: classifierJson()));
             }
+            if (request.url.path.endsWith('/image')) {
+              expect(request.headers['Authorization'], isNotNull);
+              return http.Response.bytes(
+                leafImage.bytes,
+                200,
+                headers: {'content-type': 'image/png'},
+              );
+            }
             return response(null, status: 401);
           }),
         ),
@@ -156,16 +164,31 @@ void main() {
               return response({
                 'items': cursor == null
                     ? [
-                        {...scanJson(), 'id': pendingId},
+                        {
+                          ...scanJson(),
+                          'id': pendingId,
+                          'image': {
+                            ...(scanJson()['image'] as Map<String, Object?>),
+                            'url': 'scans/$pendingId/image',
+                          },
+                        },
                         {
                           ...scanJson(status: ScanStatus.completed),
                           'id': firstId,
+                          'image': {
+                            ...(scanJson()['image'] as Map<String, Object?>),
+                            'url': 'scans/$firstId/image',
+                          },
                         },
                       ]
                     : [
                         {
                           ...scanJson(status: ScanStatus.completed),
                           'id': nextId,
+                          'image': {
+                            ...(scanJson()['image'] as Map<String, Object?>),
+                            'url': 'scans/$nextId/image',
+                          },
                         },
                       ],
                 'nextCursor': cursor == null ? firstId : null,
@@ -174,6 +197,14 @@ void main() {
             if (request.url.path.endsWith('/explanation')) {
               expect(request.url.path, endsWith('/scans/$nextId/explanation'));
               return response(answerJson(classifier: classifierJson()));
+            }
+            if (request.url.path.endsWith('/image')) {
+              expect(request.headers['Authorization'], isNotNull);
+              return http.Response.bytes(
+                leafImage.bytes,
+                200,
+                headers: {'content-type': 'image/png'},
+              );
             }
             return response(null, status: 401);
           }),

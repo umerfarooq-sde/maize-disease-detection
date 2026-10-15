@@ -1,5 +1,13 @@
 # Backend
 
+Phase 24 uses Node 24.22.0+, retains Prisma 7.10.0 and scoped audited
+deepmerge-ts/mysql2 overrides. Production startup rejects unsafe runtime DB roles
+and unverified remote TLS. Private images use authorized Node byte reads:
+`GET /api/v1/scans/:scanId/image` (owner or anonymous capability) and
+`GET /api/v1/profile/avatar?v=<version>` (current FARMER). DTOs contain Node-relative
+paths, not Cloudinary links. Storage metadata removal preserves original inference
+bytes. See [security report](../docs/phase-24-security-hardening.md).
+
 Phase 23.7 adds FARMER-only `GET/PATCH /api/v1/profile`,
 `POST/DELETE /api/v1/profile/avatar`, ADMIN-only `GET /api/v1/admin/farmers`,
 `PATCH /api/v1/admin/farmers/:id/status` and `GET /api/v1/admin/audit-logs`.

@@ -10,7 +10,14 @@ String historyId(int index) =>
 Map<String, Object?> historyScanJson(
   int index, {
   ScanStatus status = ScanStatus.completed,
-}) => {...scanJson(status: status), 'id': historyId(index)};
+}) => {
+  ...scanJson(status: status),
+  'id': historyId(index),
+  'image': {
+    ...(scanJson()['image'] as Map<String, Object?>),
+    'url': 'scans/${historyId(index)}/image',
+  },
+};
 
 ScanRecord historyScan(int index, {ScanStatus status = ScanStatus.completed}) =>
     ScanRecord.fromJson(historyScanJson(index, status: status));

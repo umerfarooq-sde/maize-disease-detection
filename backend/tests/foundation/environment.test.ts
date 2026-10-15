@@ -10,6 +10,55 @@ const signingKeys = {
 };
 const database = { DATABASE_URL: 'postgresql://localhost/maizedoctor', ...signingKeys };
 
+test('production refuses unverified remote database TLS and insecure browser origins', () => {
+  assert.throws(
+    () =>
+      parseEnvironment({
+        ...database,
+        NODE_ENV: 'production',
+        DATABASE_URL: 'postgresql://localhost/fixture?host=remote.example.invalid&sslmode=disable',
+      }),
+    /DATABASE_URL/,
+  );
+  for (const suffix of [
+    '',
+    '?sslmode=disable',
+    '?sslmode=allow',
+    '?sslmode=verify-full&ssl=false',
+    '?sslmode=verify-full&sslmode=disable',
+    '?sslmode=verify-full&sslmode=require&uselibpqcompat=true',
+  ]) {
+    assert.throws(
+      () =>
+        parseEnvironment({
+          ...database,
+          NODE_ENV: 'production',
+          DATABASE_URL: `postgresql://db.example.invalid/fixture${suffix}`,
+        }),
+      /DATABASE_URL/,
+    );
+  }
+  assert.throws(
+    () =>
+      parseEnvironment({
+        ...database,
+        NODE_ENV: 'production',
+        CORS_ORIGINS: 'http://example.invalid',
+      }),
+    /CORS_ORIGINS/,
+  );
+  const secured = parseEnvironment({
+    ...database,
+    NODE_ENV: 'production',
+    DATABASE_URL: 'postgresql://db.example.invalid/fixture?sslmode=require&uselibpqcompat=true',
+    CORS_ORIGINS: 'https://example.invalid',
+  });
+  assert.equal(
+    databaseConnectionUrl(secured.DATABASE_URL).searchParams.get('sslmode'),
+    'verify-full',
+  );
+});
+
 test('startup settings require a database and validate supplied operational settings', () => {
   assert.throws(() => parseEnvironment({}), /DATABASE_URL/);
   assert.equal(parseEnvironment(database).PORT, 3000);
@@ -95,7 +144,7 @@ test('PostgreSQL URL normalization preserves verified TLS and explicit compatibi
     databaseConnectionUrl(
       `${database.DATABASE_URL}?sslmode=require&uselibpqcompat=true`,
     ).searchParams.get('sslmode'),
-    'require',
+    'verify-full',
   );
 });
 

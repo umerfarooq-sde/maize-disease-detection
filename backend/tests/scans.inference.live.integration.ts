@@ -119,6 +119,11 @@ test('real Node -> FastAPI model + Cloudinary + PostgreSQL public scan contract'
         assert.deepEqual(((await read.json()) as typeof result).data, result.data);
         const anonymousWithoutKey = await fetch(`${base}/api/v1/scans/${saved.id}`);
         assert.equal(anonymousWithoutKey.status, 401);
+        const protectedImage = await fetch(`${base}/api/v1/scans/${saved.id}/image`, { headers });
+        assert.equal(protectedImage.status, 200);
+        assert.equal(protectedImage.headers.get('cache-control'), 'private, no-store');
+        assert.ok((await protectedImage.arrayBuffer()).byteLength > 0);
+        assert.equal((await fetch(`${base}/api/v1/scans/${saved.id}/image`)).status, 401);
       }
       assert.equal(uploads.size, 4);
     });

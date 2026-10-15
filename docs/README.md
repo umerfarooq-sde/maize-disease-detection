@@ -1,9 +1,10 @@
 # Documentation
 
-Current handoff: [Phase 23.7 original requirements matrix and verification](phase-23-7-requirements-completion.md),
+Current handoff: [Phase 24 security hardening and verification](phase-24-security-hardening.md),
+[Phase 23.7 original requirements matrix](phase-23-7-requirements-completion.md),
 [profile/Admin accounts/audit contracts](41-profile-accounts-audit.md) and the
 [calculator source/approval checklist](calculator-domain-input-checklist.md).
-Phase 24/deployment are not started; unavailable licensed disease media and real
+Phase 24 is complete with documented limitations; Phase 25/deployment are not started. Licensed disease media and real
 calculator content remain explicit limitations.
 
 The original numbered files are architecture drafts preserved during Phase 0.
@@ -14,6 +15,7 @@ Use the current completeness audit to distinguish working code from target desig
 | Document | Scope |
 |---|---|
 | [Project state](PROJECT_STATE.md) | Verified repository status, checks, issues, and next step |
+| [Phase 24 security report](phase-24-security-hardening.md) | Threat model, genuine fixes, image privacy, dependency advisories, test results, unchanged retention and release gates |
 | [Phase 23.6 remediation](phase-23-6-remediation-report.md) | Registration and real farmer knowledge UI, live verification, original-requirement corrections and readiness |
 | [Farmer registration and knowledge](40-farmer-registration-knowledge.md) | Current Flutter MVVM routes, auth/catalogue/search contracts, source display and test commands |
 | [Phase 23.5 completeness audit](phase-23-5-completeness-audit.md) | Phase 0–23 verdict/matrix, actual feature wiring, real/mock evidence, user inputs/manual actions and deferred work |

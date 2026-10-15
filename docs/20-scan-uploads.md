@@ -1,5 +1,12 @@
 # Phase 7: leaf image upload and pending scans
 
+**Phase 24 supersedes original storage/delivery wording below:** only a
+metadata-free oriented display copy is uploaded to Cloudinary; original validated
+bytes still feed FastAPI and retry hashing. Scan `image.url` is
+`scans/<scanId>/image` relative to Node `/api/v1/`. GET requires the owning FARMER
+bearer or original anonymous capability header and returns private/no-store
+image bytes, never a provider URL. See [protected delivery and legacy-link limits](phase-24-security-hardening.md).
+
 This document records the original Phase 7 contract. Phase 12 preserves the upload
 journal/storage foundation and adds compatible admission, inference, prediction
 persistence, owned reads and failed-analysis retry. Current response/lifecycle

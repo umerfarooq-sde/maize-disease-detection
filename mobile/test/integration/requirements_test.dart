@@ -138,6 +138,31 @@ void main() {
           expect(profile.error, isNull);
           expect(profile.data!.avatarUrl, isNotNull);
           expect(profile.progress, 1);
+          await until(
+            () => find
+                .byWidgetPredicate(
+                  (widget) =>
+                      widget is Image &&
+                      widget.semanticLabel == 'Your saved profile photo',
+                )
+                .evaluate()
+                .isNotEmpty,
+          );
+          final rendered = tester.widget<Image>(
+            find.byWidgetPredicate(
+              (widget) =>
+                  widget is Image &&
+                  widget.semanticLabel == 'Your saved profile photo',
+            ),
+          );
+          expect(
+            rendered.image,
+            isA<ResizeImage>().having(
+              (value) => value.imageProvider,
+              'byte provider',
+              isA<MemoryImage>(),
+            ),
+          );
         }
         debugPrint(
           'LIVE verified: real profile form, Cloudinary replacement and durable PostgreSQL metadata.',

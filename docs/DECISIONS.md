@@ -1,5 +1,30 @@
 # Engineering decisions
 
+## Phase 24 security decisions (2026-10-16)
+
+- The user approved account/capability authorization for private image delivery.
+  Node returns protected relative paths and bytes, with no provider redirect.
+  Flutter uses its API/repository/scoped ViewModel boundary. Existing disclosed
+  signed URLs are not automatically revoked; legacy review is a release prerequisite.
+- The user approved leaving retention unchanged. Proposed defaults are documented
+  for later approval; no account/scan erasure or automatic retention job is added.
+- Strip metadata from a separate Cloudinary display/storage representation and
+  legacy delivery, preserving original inference bytes/retry hashes. This does
+  not change shared preprocessing, the approved model or training artifacts.
+- Keep Prisma 7.10.0; apply exact scoped deepmerge-ts 8.0.2/mysql2 3.24.6 overrides
+  after advisory/path review and real SQL/CLI regression checks. No audit-driven
+  ORM downgrade. Preserve approved CPU Torch pins with no untrusted/JIT/PT2 loading.
+- Upgrade the existing Gradle8.14 wrapper to the patched8.14.6 distribution with
+  its official SHA256 after five upstream HIGH advisory findings. Keep the same
+  Gradle line; no paid subscription, application feature or machine SDK change.
+- Production runtime admission requires verified remote DB TLS and non-owning,
+  non-privileged/non-DDL identities. Current research owner credentials stay
+  unchanged and intentionally cannot pass production admission. Provisioning and
+  deployment topology require separate Phase 25 authorization.
+
+See [security evidence, policies and limitations](phase-24-security-hardening.md).
+No Phase 25/deployment is started by these decisions.
+
 Recorded: 2026-10-05 (Asia/Karachi), during the Phase 2 audit. This file was missing
 at audit start. Entries below consolidate the existing implemented database design
 and the audit corrections; they do not authorize later feature implementation.

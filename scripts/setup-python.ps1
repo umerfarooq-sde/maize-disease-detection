@@ -13,8 +13,8 @@ $uv = if ($uvCommand) { $uvCommand.Source } else { Join-Path $repositoryRoot '.c
 if (-not (Test-Path -LiteralPath $uv)) {
     throw 'Install uv 0.12.23 first; see docs/15-development-environment.md.'
 }
-$pythonExecutable = & $Python -c 'import sys; assert sys.version_info[:2] == (3, 11); print(sys.executable)'
-if ($LASTEXITCODE -ne 0) { throw 'Select a Python 3.11 executable using -Python.' }
+$pythonExecutable = & $Python -c 'import sys; assert sys.version_info[:2] == (3, 11) and sys.version_info[:3] >= (3, 11, 17); print(sys.executable)'
+if ($LASTEXITCODE -ne 0) { throw 'Select Python 3.11.17 or a later 3.11 security patch using -Python.' }
 $components = if ($Component -eq 'All') { @('ai-service', 'ml-training') } else { @($Component) }
 foreach ($target in $components) {
     & $uv sync --locked --project (Join-Path $repositoryRoot $target) --python $pythonExecutable

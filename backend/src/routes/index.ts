@@ -1,11 +1,13 @@
 import { Router } from 'express';
-import { modelHealthRoutes } from '../modules/admin/model-health.routes.js';
-import type { ModelHealthService } from '../modules/admin/model-health.service.js';
 import type { Environment } from '../config/environment.js';
+import { accountsRoutes } from '../modules/admin/accounts.routes.js';
+import type { AccountsService } from '../modules/admin/accounts.service.js';
 import { dashboardRoutes } from '../modules/admin/dashboard.routes.js';
 import type { DashboardService } from '../modules/admin/dashboard.service.js';
 import { managementRoutes } from '../modules/admin/management.routes.js';
 import type { ManagementService } from '../modules/admin/management.service.js';
+import { modelHealthRoutes } from '../modules/admin/model-health.routes.js';
+import type { ModelHealthService } from '../modules/admin/model-health.service.js';
 import { analyticsRoutes } from '../modules/analytics/analytics.routes.js';
 import type { AnalyticsService } from '../modules/analytics/analytics.service.js';
 import { authRoutes } from '../modules/auth/auth.routes.js';
@@ -19,15 +21,14 @@ import { healthRoutes } from '../modules/health/health.routes.js';
 import { createHealthService } from '../modules/health/health.service.js';
 import { knowledgeRoutes } from '../modules/knowledge/knowledge.routes.js';
 import type { KnowledgeService } from '../modules/knowledge/knowledge.service.js';
+import { profileRoutes } from '../modules/profile/profile.routes.js';
+import type { ProfileService } from '../modules/profile/profile.service.js';
+import { profileMediaRoutes } from '../modules/profile/profile-media.routes.js';
+import type { ProfileMediaService } from '../modules/profile/profile-media.service.js';
+import { createPrivateImageReader } from '../modules/scans/private-image.js';
 import { scanRoutes } from '../modules/scans/scan.routes.js';
 import type { ScanService } from '../modules/scans/scan.service.js';
 import { yieldRoutes } from '../modules/yield/yield.routes.js';
-import { profileRoutes } from '../modules/profile/profile.routes.js';
-import type { ProfileService } from '../modules/profile/profile.service.js';
-import { accountsRoutes } from '../modules/admin/accounts.routes.js';
-import type { AccountsService } from '../modules/admin/accounts.service.js';
-import { profileMediaRoutes } from '../modules/profile/profile-media.routes.js';
-import type { ProfileMediaService } from '../modules/profile/profile-media.service.js';
 import type { YieldService } from '../modules/yield/yield.service.js';
 
 export function apiRoutes(
@@ -48,9 +49,10 @@ export function apiRoutes(
   profileMediaService: ProfileMediaService,
 ): Router {
   const router = Router();
+  const readImage = createPrivateImageReader(environment);
   router.use(healthRoutes(createHealthService(repository)));
   router.use('/auth', authRoutes(environment, authService));
-  router.use('/scans', scanRoutes(environment, authService, scanService));
+  router.use('/scans', scanRoutes(environment, authService, scanService, readImage));
   router.use(knowledgeRoutes(environment, knowledgeService));
   router.use(generationRoutes(environment, authService, generationService));
   router.use(fertilizerRoutes(environment, authService, fertilizerService));
@@ -61,6 +63,6 @@ export function apiRoutes(
   router.use(modelHealthRoutes(environment, authService, modelHealthService));
   router.use(profileRoutes(authService, profileService));
   router.use(accountsRoutes(authService, accountsService));
-  router.use(profileMediaRoutes(authService, profileMediaService));
+  router.use(profileMediaRoutes(authService, profileMediaService, readImage));
   return router;
 }

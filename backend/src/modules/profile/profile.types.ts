@@ -47,7 +47,9 @@ export function profileResponse(row: FarmerProfile | null) {
     region: row.region,
     countryCode: row.countryCode,
     fieldAreaHectares: row.fieldAreaHectares?.toString() ?? null,
-    avatarUrl: row.avatarUrl,
+    avatarUrl: row.avatarUrl
+      ? `profile/avatar?v=${createHash('sha256').update(row.avatarUrl).digest('hex')}`
+      : null,
     updatedAt: row.updatedAt.toISOString(),
   };
   return {

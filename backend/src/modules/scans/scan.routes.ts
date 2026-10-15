@@ -7,10 +7,12 @@ import { authenticate, optionallyAuthenticate } from '../../middleware/authentic
 import { authorize, optionallyAuthorize } from '../../middleware/authorization.js';
 import { requestRateLimit } from '../../middleware/rate-limit.js';
 import type { AuthService } from '../auth/auth.service.js';
+import { createPrivateImageReader, type PrivateImageReader } from './private-image.js';
 import {
   createScanController,
   readScanController,
   scanHistoryController,
+  scanImageController,
 } from './scan.controller.js';
 import type { ScanService } from './scan.service.js';
 import { scanLimits } from './scan.types.js';
@@ -20,6 +22,7 @@ export function scanRoutes(
   environment: Environment,
   auth: AuthService,
   service: ScanService,
+  readImage: PrivateImageReader = createPrivateImageReader(environment),
 ): Router {
   const router = Router();
   const historyQuery = z.strictObject({
@@ -65,6 +68,24 @@ export function scanRoutes(
       next();
     },
     readScanController(service),
+  );
+  router.get(
+    '/:scanId/image',
+    requestRateLimit(60),
+    optionallyAuthenticate(auth),
+    optionallyAuthorize('FARMER'),
+    (request, response, next) => {
+      const parsed = readRequest.safeParse({
+        params: request.params,
+        query: request.query,
+        key: request.get('idempotency-key'),
+      });
+      if (!parsed.success) throw new AppError('VALIDATION_ERROR');
+      response.locals.validated = parsed.data;
+      response.setHeader('Cache-Control', 'no-store');
+      next();
+    },
+    scanImageController(service, readImage),
   );
   const parser = multer({
     storage: multer.memoryStorage(),

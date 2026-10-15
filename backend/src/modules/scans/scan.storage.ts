@@ -2,6 +2,7 @@ import { v2 as cloudinary } from 'cloudinary';
 import { z } from 'zod';
 import type { Environment } from '../../config/environment.js';
 import { AppError } from '../../errors/app-error.js';
+import { privateStorageImage } from './image-privacy.js';
 import type { ImageStorage } from './scan.types.js';
 
 const uploadResult = z.object({
@@ -39,6 +40,8 @@ export function createImageStorage(
     async upload(image, publicId) {
       guard(publicId);
       try {
+        // The caller retains the original validated object for ML and retry hashes.
+        image = await privateStorageImage(image);
         const raw = await new Promise<unknown>((resolve, reject) => {
           const stream = cloudinary.uploader.upload_stream(
             {
@@ -57,8 +60,7 @@ export function createImageStorage(
         });
         const result = uploadResult.parse(raw);
         const formats = { 'image/jpeg': 'jpg', 'image/png': 'png', 'image/webp': 'webp' } as const;
-        // JPEG provider dimensions can reflect EXIF orientation even though the
-        // stored original bytes are unchanged. Other formats may report raw size.
+        // This is the metadata-free storage representation, not the ML input.
         const dimensionsMatch =
           (result.width === image.width && result.height === image.height) ||
           ([5, 6, 7, 8].includes(image.orientation) &&
@@ -80,6 +82,7 @@ export function createImageStorage(
           version: result.version,
           format: result.format,
           sign_url: true,
+          analytics: false,
         });
         const parsed = new URL(url);
         if (

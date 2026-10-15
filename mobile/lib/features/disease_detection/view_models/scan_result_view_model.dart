@@ -38,6 +38,8 @@ class ScanResultViewModel extends ChangeNotifier {
   int _generation = 0;
   bool get busy => loading || uploading;
   SelectedLeafImage? get selectedImage => _initial?.selectedImage;
+  String? get imageCapability =>
+      _records.hasAuthenticatedSession ? null : _initial?.requestKey;
   bool get canRetryAnalysis =>
       scan?.status == ScanStatus.failed &&
       _uploads != null &&

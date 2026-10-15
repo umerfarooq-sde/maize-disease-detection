@@ -11,6 +11,7 @@ class ScanResultCard extends StatelessWidget {
   const ScanResultCard({
     required this.scan,
     this.selectedImage,
+    this.anonymousKey,
     this.onRetry,
     this.onRefresh,
     this.busy = false,
@@ -19,6 +20,7 @@ class ScanResultCard extends StatelessWidget {
   });
   final ScanRecord scan;
   final SelectedLeafImage? selectedImage;
+  final String? anonymousKey;
   final VoidCallback? onRetry;
   final VoidCallback? onRefresh;
   final bool busy;
@@ -29,7 +31,11 @@ class ScanResultCard extends StatelessWidget {
     crossAxisAlignment: CrossAxisAlignment.stretch,
     children: [
       if (showImage) ...[
-        ScanResultImage(scan: scan, selectedImage: selectedImage),
+        ScanResultImage(
+          scan: scan,
+          selectedImage: selectedImage,
+          anonymousKey: anonymousKey,
+        ),
         const SizedBox(height: AppSpacing.lg),
       ],
       Card(

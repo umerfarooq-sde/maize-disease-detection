@@ -1,5 +1,13 @@
 # Scripts
 
+Phase 24 adds `flutter-test-environment.mjs` (OS/SDK allowlist),
+`flutter-test-environment.test.mjs` (actual child-process isolation),
+`run-flutter.mjs` (shellless SDK runner), `use-project-node.ps1` (process-local
+Windows Node selection), and `audit-flutter-dependencies.py` (lockfile Pub/OSV
+audit; SDK packages excluded). Development checks use these boundaries;
+disposable test-only credentials are explicit where needed. See
+[security evidence and audit commands](../docs/phase-24-security-hardening.md).
+
 Phase 23.7 adds [check-requirements.mjs](check-requirements.mjs), invoked only
 through the existing schema-isolating harness:
 

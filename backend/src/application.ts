@@ -26,7 +26,7 @@ export async function startApplication(
   logger: Logger,
   database: ApplicationDatabase = getDatabaseClient(environment.DATABASE_URL),
 ): Promise<RunningApplication> {
-  const repository = createHealthRepository(database);
+  const repository = createHealthRepository(database, environment.NODE_ENV === 'production');
   const app = createApp(environment, logger, repository);
   const server = createServer(
     { requestTimeout: 60000, headersTimeout: 10000, keepAliveTimeout: 5000 },

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import '../../../core/theme/design_tokens.dart';
+import '../../../core/widgets/private_image.dart';
 import '../../../data/models/scan_prediction.dart';
 import '../../../data/models/scan_record.dart';
 import '../../disease_detection/utils/scan_presentation.dart';
@@ -26,21 +27,12 @@ class HistoryScanTile extends StatelessWidget {
             children: [
               ClipRRect(
                 borderRadius: BorderRadius.circular(AppRadii.small),
-                child: Image.network(
-                  scan.imageUrl.toString(),
+                child: PrivateImage(
+                  path: scan.imageUrl.toString(),
                   width: AppSizing.emblem,
                   height: AppSizing.emblem,
                   fit: BoxFit.cover,
-                  excludeFromSemantics: true,
-                  errorBuilder: (_, _, _) => Container(
-                    width: AppSizing.emblem,
-                    height: AppSizing.emblem,
-                    color: AppColors.sage,
-                    child: const Icon(
-                      Icons.eco_outlined,
-                      color: AppColors.forest,
-                    ),
-                  ),
+                  semanticLabel: 'Saved scan thumbnail',
                 ),
               ),
               const SizedBox(width: AppSpacing.lg),

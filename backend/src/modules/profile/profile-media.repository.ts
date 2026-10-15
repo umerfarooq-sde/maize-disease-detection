@@ -1,7 +1,7 @@
-import type { FarmerProfile, Prisma, PrismaClient } from '../../generated/prisma/client.js';
 import { AppError } from '../../errors/app-error.js';
-import { profileResponse } from './profile.types.js';
+import type { FarmerProfile, Prisma, PrismaClient } from '../../generated/prisma/client.js';
 import type { StoredImage } from '../scans/scan.types.js';
+import { profileResponse } from './profile.types.js';
 
 export interface ProfileMediaRepository {
   read(userId: string): Promise<FarmerProfile | null>;
@@ -9,7 +9,7 @@ export interface ProfileMediaRepository {
   finish(userId: string, publicId: string, stored: StoredImage): Promise<void>;
   remove(userId: string, revision: string): Promise<void>;
   candidates(userId?: string): Promise<FarmerProfile[]>;
-  retirePending(userId: string, cutoff: Date): Promise<void>;
+  retirePending(userId: string, cutoff: Date, publicId?: string): Promise<void>;
   cleared(userId: string, publicId: string): Promise<void>;
 }
 export function createProfileMediaRepository(database: PrismaClient): ProfileMediaRepository {
@@ -102,12 +102,14 @@ export function createProfileMediaRepository(database: PrismaClient): ProfileMed
         take: 10,
       });
     },
-    retirePending(userId, cutoff) {
+    retirePending(userId, cutoff, publicId) {
       return locked(userId, false, async (tx, row) => {
         if (
           !row.avatarPendingPublicId ||
           !row.avatarUploadStartedAt ||
-          row.avatarUploadStartedAt > cutoff ||
+          (publicId
+            ? row.avatarPendingPublicId !== publicId
+            : row.avatarUploadStartedAt > cutoff) ||
           row.avatarCleanupPublicIds.length >= 8
         )
           return;

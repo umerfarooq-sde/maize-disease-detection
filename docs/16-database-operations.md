@@ -1,5 +1,13 @@
 # Database operations
 
+**Phase 24:** schema/nine migration bytes are unchanged. Runtime SSL aliases now
+always normalize to verify-full. Production startup/retrieval rejects inherited
+admin/BYPASSRLS, ownership and database/schema CREATE permissions. Provision
+separate migration owner and narrowly granted Node/AI roles before hosting; no
+existing credential/grant was changed. Read-only client probes verified TLS and
+certificate validation for both configured Node connections and rejection of the
+current research owner identity. See [security findings](phase-24-security-hardening.md).
+
 **Phase 23.7:** additive migration nine `20261015000000_profile_media_journal`
 adds pending-photo/cleanup columns to existing farmer profiles and the audit
 timestamp/UUID ordering index. Original eight migration bytes are preserved; there

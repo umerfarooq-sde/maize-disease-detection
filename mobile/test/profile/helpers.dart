@@ -64,10 +64,7 @@ class FakeProfileRepository implements ProfileRepository {
     progress(0.5);
     progress(1);
     return saved = FarmerProfile.fromResponse(
-      profileJson(
-        photo:
-            'https://res.cloudinary.com/fixture/image/authenticated/avatar.png',
-      ),
+      profileJson(photo: 'profile/avatar?v=${'b' * 64}'),
     )!;
   }
 

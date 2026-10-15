@@ -115,6 +115,26 @@ const environmentSchema = z
     JWT_REFRESH_TTL_SECONDS: z.coerce.number().int().min(3600).max(2592000).default(604800),
   })
   .refine(
+    (value) =>
+      value.NODE_ENV !== 'production' ||
+      value.CORS_ORIGINS.every((origin) => origin.startsWith('https://')),
+    { path: ['CORS_ORIGINS'], message: 'Production browser origins require HTTPS.' },
+  )
+  .refine(
+    (value) => {
+      if (value.NODE_ENV !== 'production') return true;
+      const url = databaseConnectionUrl(value.DATABASE_URL);
+      return (
+        ['localhost', '127.0.0.1', '[::1]'].includes(url.hostname) ||
+        (url.searchParams.get('sslmode') === 'verify-full' && !url.searchParams.has('ssl'))
+      );
+    },
+    {
+      path: ['DATABASE_URL'],
+      message: 'Production remote PostgreSQL requires verified TLS (sslmode=verify-full).',
+    },
+  )
+  .refine(
     (value) => {
       const credentials = [
         value.CLOUDINARY_CLOUD_NAME,
@@ -167,5 +187,10 @@ export function parseEnvironment(input: Record<string, string | undefined>): Env
 
 export function loadEnvironment(): Environment {
   config({ quiet: true });
-  return parseEnvironment(process.env);
+  const environment = parseEnvironment(process.env);
+  const [major, minor] = process.versions.node.split('.').map(Number);
+  if (environment.NODE_ENV === 'production' && (major !== 24 || (minor ?? 0) < 22)) {
+    throw new Error('Production requires Node.js 24.22.0 or a later maintained 24.x release.');
+  }
+  return environment;
 }

@@ -3,30 +3,30 @@ import { randomUUID } from 'node:crypto';
 import test from 'node:test';
 import express from 'express';
 import { AppError } from '../../src/errors/app-error.js';
+import type { FarmerProfile } from '../../src/generated/prisma/client.js';
 import { errorHandler } from '../../src/middleware/error-handler.js';
 import { requestContext } from '../../src/middleware/request-context.js';
-import { createAuthService } from '../../src/modules/auth/auth.service.js';
 import { accountsRoutes } from '../../src/modules/admin/accounts.routes.js';
 import { createAccountsService } from '../../src/modules/admin/accounts.service.js';
 import {
   accountRevision,
   auditQuery,
+  type FarmerRow,
   farmerQuery,
   safeAuditMetadata,
   statusPatch,
-  type FarmerRow,
 } from '../../src/modules/admin/accounts.types.js';
+import { createAuthService } from '../../src/modules/auth/auth.service.js';
 import { profileRoutes } from '../../src/modules/profile/profile.routes.js';
 import { createProfileService } from '../../src/modules/profile/profile.service.js';
 import { profilePatch, profileResponse } from '../../src/modules/profile/profile.types.js';
-import type { FarmerProfile } from '../../src/generated/prisma/client.js';
-import { memoryRepository } from '../auth/helpers.js';
-import { silentLogger, testEnvironment, withServer } from '../foundation/helpers.js';
-import { createProfileMediaService } from '../../src/modules/profile/profile-media.service.js';
 import type { ProfileMediaRepository } from '../../src/modules/profile/profile-media.repository.js';
 import { profileMediaRoutes } from '../../src/modules/profile/profile-media.routes.js';
-import { imageFile } from '../scans/helpers.js';
+import { createProfileMediaService } from '../../src/modules/profile/profile-media.service.js';
 import type { ValidatedImage } from '../../src/modules/scans/scan.types.js';
+import { memoryRepository } from '../auth/helpers.js';
+import { silentLogger, testEnvironment, withServer } from '../foundation/helpers.js';
+import { imageFile } from '../scans/helpers.js';
 
 export function profileRow(userId: string = randomUUID()): FarmerProfile {
   return {
@@ -346,6 +346,7 @@ function mediaFixture() {
     assets = new Set<string>();
   const state = {
     finishFails: false,
+    finishAcknowledgementFails: false,
     uploadFails: false,
     destroyFails: false,
     reservedBeforeUpload: false,
@@ -368,6 +369,7 @@ function mediaFixture() {
       row.avatarUrl = stored.url;
       row.avatarPendingPublicId = null;
       row.avatarUploadStartedAt = null;
+      if (state.finishAcknowledgementFails) throw new Error('commit acknowledgement lost');
     },
     async remove() {
       if (row.avatarPublicId) row.avatarCleanupPublicIds.push(row.avatarPublicId);
@@ -377,11 +379,11 @@ function mediaFixture() {
     async candidates() {
       return row.avatarPendingPublicId || row.avatarCleanupPublicIds.length ? [row] : [];
     },
-    async retirePending(_user, cutoff) {
+    async retirePending(_user, cutoff, publicId) {
       if (
         row.avatarPendingPublicId &&
         row.avatarUploadStartedAt &&
-        row.avatarUploadStartedAt < cutoff
+        (publicId ? row.avatarPendingPublicId === publicId : row.avatarUploadStartedAt < cutoff)
       ) {
         row.avatarCleanupPublicIds.push(row.avatarPendingPublicId);
         row.avatarPendingPublicId = null;
@@ -456,6 +458,28 @@ test('failed photo commit compensates cloud upload without replacing the old pho
   assert.equal(f.assets.size, 1);
   assert.equal(f.row.avatarPendingPublicId, null);
 });
+
+test('lost photo commit acknowledgement preserves the committed asset instead of compensating it', async () => {
+  const f = mediaFixture();
+  f.state.finishAcknowledgementFails = true;
+  const result = await f.service.upload(f.row.userId, f.revision(), f.image);
+  assert.ok(result.profile?.avatarUrl);
+  assert.ok(f.row.avatarPublicId);
+  assert.ok(f.assets.has(f.row.avatarPublicId));
+  assert.equal(f.assets.size, 1);
+  assert.equal(f.row.avatarPendingPublicId, null);
+});
+
+test('uncertain photo DB outcome retains the asset and recovery intent without unsafe deletion', async () => {
+  const f = mediaFixture();
+  f.state.finishFails = true;
+  f.repository.retirePending = async () => {
+    throw new Error('database unavailable');
+  };
+  await assert.rejects(f.service.upload(f.row.userId, f.revision(), f.image));
+  assert.ok(f.row.avatarPendingPublicId);
+  assert.equal(f.assets.size, 1);
+});
 test('failed upload/compensation retains a recoverable intent; stale cleanup never deletes current photo', async () => {
   const f = mediaFixture();
   f.state.uploadFails = true;
@@ -496,6 +520,7 @@ test('photo API admits decoded JPEG/PNG/WebP and rejects malformed media, extra 
     '/api/v1',
     profileMediaRoutes(f.auth, {
       enabled: true,
+      imageLocation: media.service.imageLocation,
       cleanup: media.service.cleanup,
       async upload() {
         calls++;

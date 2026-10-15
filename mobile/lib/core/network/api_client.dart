@@ -41,6 +41,86 @@ class ApiClient {
   int? get sessionRevision => _revision;
   int? get _revision => _tokens is SessionTokenSource ? _tokens.revision : null;
   void clearSessionCredentials() => _refreshCookie = null;
+  Future<Uint8List> readPrivateImage(
+    String path, {
+    String? anonymousKey,
+  }) async {
+    final scan = RegExp(r'^scans/[a-f0-9-]{36}/image$').hasMatch(path);
+    final profile = RegExp(r'^profile/avatar\?v=[a-f0-9]{64}$').hasMatch(path);
+    if ((!scan && !profile) ||
+        (anonymousKey != null &&
+            (!scan || !RegExp(r'^[a-f0-9-]{36}$').hasMatch(anonymousKey)))) {
+      throw const AppException(AppErrorKind.validation);
+    }
+    if (_closed) throw const AppException(AppErrorKind.network);
+    final base = _config.baseUrl;
+    if (base == null) throw const AppException(AppErrorKind.configuration);
+    final abort = Completer<void>();
+    final revision = _revision;
+    final authenticated = anonymousKey == null;
+    Future<Uint8List> execute() async {
+      final request =
+          http.AbortableRequest(
+              'GET',
+              base.resolve(path),
+              abortTrigger: abort.future,
+            )
+            ..followRedirects = false
+            ..headers['X-Auth-Request'] = '1'
+            ..headers['Accept'] = 'image/jpeg, image/png, image/webp';
+      if (anonymousKey != null) {
+        request.headers['Idempotency-Key'] = anonymousKey;
+      }
+      if (authenticated) await _authenticate(request);
+      _checkRevision(revision);
+      if (abort.isCompleted) throw const AppException(AppErrorKind.timeout);
+      final response = await _client.send(request);
+      if (response.statusCode != 200) {
+        await _readResponse(
+          response,
+          {},
+          abort,
+          authenticated: authenticated,
+          revision: revision,
+        );
+        throw const AppException(AppErrorKind.invalidResponse);
+      }
+      final mime = response.headers['content-type']?.split(';').first.trim();
+      const maximum = 16 * 1024 * 1024;
+      if (!const ['image/jpeg', 'image/png', 'image/webp'].contains(mime) ||
+          (response.contentLength ?? 0) > maximum) {
+        if (!abort.isCompleted) abort.complete();
+        throw const AppException(AppErrorKind.invalidResponse);
+      }
+      final bytes = BytesBuilder(copy: false);
+      await for (final chunk in response.stream) {
+        _checkRevision(revision);
+        if (bytes.length + chunk.length > maximum) {
+          if (!abort.isCompleted) abort.complete();
+          throw const AppException(AppErrorKind.invalidResponse);
+        }
+        bytes.add(chunk);
+      }
+      _checkRevision(revision);
+      if (bytes.isEmpty) throw const AppException(AppErrorKind.invalidResponse);
+      return bytes.takeBytes();
+    }
+
+    try {
+      return await execute().timeout(
+        timeout,
+        onTimeout: () {
+          if (!abort.isCompleted) abort.complete();
+          throw const AppException(AppErrorKind.timeout);
+        },
+      );
+    } on AppException {
+      rethrow;
+    } catch (_) {
+      throw const AppException(AppErrorKind.network);
+    }
+  }
+
   void _checkRevision(int? revision) {
     if (_closed) throw const AppException(AppErrorKind.network);
     if (revision != _revision) {

@@ -37,6 +37,7 @@ class ScanResultView extends StatelessWidget {
             ScanResultCard(
               scan: scan,
               selectedImage: model.selectedImage,
+              anonymousKey: model.imageCapability,
               busy: model.busy,
               onRetry: model.canRetryAnalysis ? model.retryAnalysis : null,
               onRefresh: model.refresh,
