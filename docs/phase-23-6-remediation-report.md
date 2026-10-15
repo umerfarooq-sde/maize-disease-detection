@@ -103,6 +103,12 @@ The parent verifies **schemaRemoved=true**, **productionCountsUnchanged=true** a
 is required by this new UI proof. Starting the existing private AI service loads its
 pinned classifier; no training, final-test scoring or model promotion occurs.
 
+Final rerun `.cache/phase23/20261015T160816Z-e5cb65ba/` also passes: one real widget
+test, zero skips, schema removed and all production counts unchanged. The helper
+now checks one additional user relative to its starting count, so other E2E fixture
+accounts may already exist in the same owned schema. This preserves composition
+with the existing all-checks runner; the selected remediation command was rerun.
+
 Initial run `.cache/phase23/20261015T155046Z-e61177ef/` failed after registration,
 login and detail verification because the test's search-button tap missed after
 scroll/focus repositioning. The corrected helper unfocuses, centers and verifies a
@@ -112,7 +118,7 @@ findings and three long-card widget failures were fixed: explicit braces, bounde
 description previews and keyboard-space handling. No failed run is counted as PASS.
 
 Local logs/results: `.cache/phase236/` (`backend`, `ai`, `flutter`, `mobile-final`,
-`prisma`, `live`, `live-attempt-2`); the first live result intentionally remains failed.
+`prisma`, `live`, `live-attempt-2`, `live-final`); the first live result intentionally remains failed.
 Default opt-in skips are not hidden or relabeled as live coverage. Historical Phase
 23 real Cloudinary/model/assistant/Admin evidence is preserved in the
 [existing matrix](39-testing-e2e-verification.md), rather than claimed freshly replayed.

@@ -26,6 +26,8 @@ const credentials = {
   email: `phase236-${randomUUID()}@example.invalid`,
   password: `synthetic-${randomUUID()}`,
 };
+// Other checks can already have fixtures in the same owned E2E schema.
+const usersBefore = await database.user.count();
 const server = createServer(
   createApp(environment, silentLogger, {
     async checkDatabase() {
@@ -102,7 +104,7 @@ try {
   assert.equal(user.role, 'FARMER');
   assert.notEqual(user.passwordHash, credentials.password);
   assert.match(user.passwordHash, /^\$argon2id\$/);
-  assert.equal(await database.user.count(), 1);
+  assert.equal(await database.user.count(), usersBefore + 1);
   const sessions = await database.authSession.findMany({
     where: { userId: user.id },
   });

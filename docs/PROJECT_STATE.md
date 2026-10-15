@@ -20,7 +20,8 @@ validation passes. Android ARM64 debug packaging and 18 final Home/navigation te
 pass; repository/link/privacy checks and 171 frozen-file hashes pass. Evidence is in
 the [Phase 23.6 report](phase-23-6-remediation-report.md).
 
-Real widget proof `20261015T155340Z-ae2d48e8` drives registration/login, all four
+Real widget proofs `20261015T155340Z-ae2d48e8` and final `20261015T160816Z-e5cb65ba`
+drive registration/login, all four
 details/25 source-backed documents, actual Google/pgvector semantic search, guest
 access, refresh/logout, duplicate and ADMIN-injection rejection. The owned schema
 was removed and all 21 production table counts are unchanged. An initial harness
