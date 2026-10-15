@@ -8,6 +8,11 @@ The skipped Phase 6 database/backend foundation was inspected: disease, source,
 document and chunk tables existed but were empty, with no knowledge APIs or ingestion.
 This phase completes the foundations needed for retrieval using those same tables.
 
+Phase 23.6 subsequently connects the farmer Knowledge tab to the preserved catalogue,
+detail and semantic-search contracts. See [Flutter library](40-farmer-registration-knowledge.md)
+and [remediation evidence](phase-23-6-remediation-report.md). Search returns passages,
+not generated answers; no corpus or embedding policy change accompanies that UI.
+
 ## Flow and endpoints
 
 `Flutter -> Node route/controller/service -> knowledge repository/Prisma -> PostgreSQL`

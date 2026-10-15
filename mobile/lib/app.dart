@@ -10,6 +10,8 @@ import 'core/routes/app_routes.dart';
 import 'core/theme/app_theme.dart';
 import 'core/storage/memory_session_tokens.dart';
 import 'data/repositories/farmer_session_repository.dart';
+import 'data/repositories/registration_repository.dart';
+import 'data/repositories/knowledge_repository.dart';
 import 'data/repositories/scan_records_repository.dart';
 import 'data/repositories/assistant_repository.dart';
 import 'data/datasources/assistant_datasource.dart';
@@ -101,6 +103,12 @@ class _MainAppState extends State<MainApp> {
     providers: [
       Provider<AppConfig>.value(value: _config),
       Provider<ApiClient>.value(value: _api),
+      Provider<RegistrationRepository>(
+        create: (_) => ApiRegistrationRepository(_api),
+      ),
+      Provider<KnowledgeRepository>(
+        create: (_) => ApiKnowledgeRepository(_api),
+      ),
       ChangeNotifierProvider<FarmerSessionViewModel>.value(value: _session),
       Provider<ScanRecordsRepository>(
         create: (_) => ApiScanRecordsRepository(ScanDatasource(_api)),

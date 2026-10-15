@@ -6,9 +6,10 @@
 > [farmer workflow](29-farmer-detection-history.md), [foundation](19-flutter-foundation.md)
 > [farmer assistant](32-farmer-ai-assistant.md) and [uploads](20-scan-uploads.md).
 > Fertilizer/yield frameworks, farmer analytics and Admin dashboard/management/model
-> health are now wired to Node repositories. Full farmer knowledge browsing and
-> registration UI remain missing; approved calculator content remains pending. Read
-> the [Phase 23.5 audit](phase-23-5-completeness-audit.md) for the current inventory.
+> health are wired to Node repositories. Phase 23.6 adds farmer registration and
+> the real knowledge catalogue/search/detail UI. Approved calculator content remains
+> pending. Read the [farmer handoff guide](40-farmer-registration-knowledge.md) and
+> [remediation report](phase-23-6-remediation-report.md) for current verification.
 
 ## Pattern
 
@@ -31,7 +32,7 @@ features/
   home/             views and scoped ChangeNotifier ViewModel
   shell/            farmer navigation shell
   tools/            tool navigation hub
-  auth/             farmer sign-in and app identity ChangeNotifier
+  auth/             registration, farmer sign-in and app identity ChangeNotifier
   disease_detection/
   disease_knowledge/
   ai_assistant/
@@ -48,7 +49,8 @@ datasources. Home calls the Node health API on intent; Scan uploads to the real
 inference API. Result and History read only the public owned/private-key Node
 contracts. Farmer identity is app-scoped; route state is keyed by identity revision
 and late previous-session responses are discarded. Calculators, analytics and Admin
-features have concrete scoped state/repositories; Knowledge retains its foundation view. Add
+features have concrete scoped state/repositories. Knowledge has separate route-scoped
+catalogue/search and detail ViewModels; registration has its own route-scoped ViewModel. Add
 ViewModels/models/repositories when their workflows exist; do not create empty layers.
 
 ## Scan experience

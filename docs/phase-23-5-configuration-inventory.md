@@ -1,5 +1,10 @@
 # Phase 23.5 configuration inventory
 
+Phase 23.6 adds test-only `RUN_LIVE_FARMER_REMEDIATION` (explicit opt-in Dart define)
+and `REMEDIATION_FARMER` (generated fixture credentials, supplied only by the isolated
+test harness). Neither is production configuration or a new user secret requirement.
+No runtime template or provider setting changes for these two UI features.
+
 Audited 2026-10-15. Values are deliberately omitted. This is configuration presence,
 not proof of availability; fresh service results are in the [main audit](phase-23-5-completeness-audit.md).
 OS settings override local dotenv values. Node and AI validators were read and startup

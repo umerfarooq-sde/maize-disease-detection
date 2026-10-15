@@ -5,16 +5,21 @@ with administrative tools for maintaining knowledge and monitoring the system.
 
 ## Current status
 
-Phase 23.5 finds the project **not ready for Phase 24** until farmer registration
-and knowledge-library UI are connected to the existing APIs. Current service,
-model and database checks pass; real calculator content and physical-device
-acceptance remain pending. Read the [completeness audit](docs/phase-23-5-completeness-audit.md)
-for the phase matrix, real/mock distinction, user actions and later-phase boundaries.
+Phase 23.6 completes farmer registration and the sourced Knowledge library using
+the existing APIs. Real host-widget registration/login and catalogue/search/detail
+verification passes through Node/PostgreSQL and Google/pgvector. The earlier mobile
+handoff blockers are resolved. See the [remediation report](docs/phase-23-6-remediation-report.md)
+and [Flutter contracts](docs/40-farmer-registration-knowledge.md).
+
+**Ready with non-blocking limitations for a separately authorized Phase 24.** This
+does not mean the entire original product brief is complete: profile customization,
+Admin user management/audit viewing/disease media, approved calculator content and
+physical-device acceptance remain open before the final demo. Phase 24 is not started.
 
 Phase 23 verifies component and real cross-service contracts, including a connected
 Flutter/API/MVVM farmer/Admin journey. The [test matrix](docs/39-testing-e2e-verification.md)
-explicitly records skipped tests, failed attempts and remaining registration/knowledge
-UI, approved calculator-content and physical-device gaps. No new business feature.
+explicitly records skipped tests, failed attempts and the then-missing registration/knowledge
+UI. Phase 23.6 resolves those UIs; approved calculator-content and physical-device gaps remain.
 Verification also fixes an existing Admin model-health transaction acquisition
 failure on cold database connections; component and live rechecks pass afterward.
 
@@ -91,7 +96,7 @@ raw probabilities are retained and no confidence threshold is locked. See
 [model fitness](docs/26-model-fitness-validation.md). Use remains non-commercial
 academic/FYP research without raw redistribution or commercial clearance. Shared
 preprocessing, existing FastAPI/Flutter/backend/database features are preserved;
-Persistent mobile sign-in, approved calculator content, full admin tools and other business workflows remain future work.
+Persistent mobile sign-in, approved calculator content, profile editing and remaining Admin user/media/audit tools remain future work.
 With no approved operational cutoff, every current prediction is `LOW_CONFIDENCE`
 with `THRESHOLD_UNCONFIGURED`; numerical scores do not establish field correctness.
 See [project state](docs/PROJECT_STATE.md) for verified progress and outstanding decisions.
@@ -190,8 +195,9 @@ This does not change the machine's persistent execution policy.
 
 ## Next step
 
-Stop after Phase 16. Later workflows require the next explicit instruction.
-Preserve the frozen v2 candidate and its documented limitations. See
+Stop after Phase 23.6. Phase 24 requires the next explicit instruction.
+Preserve the frozen v2 candidate and its documented limitations. See the
+[remediation report](docs/phase-23-6-remediation-report.md),
 [farmer assistant](docs/32-farmer-ai-assistant.md),
 [grounded generation](docs/31-grounded-generation.md), [fitness audit](docs/26-model-fitness-validation.md) and
 [roadmap](docs/14-roadmap.md).

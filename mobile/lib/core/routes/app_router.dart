@@ -2,6 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 import '../../data/repositories/backend_repository.dart';
+import '../../data/repositories/registration_repository.dart';
+import '../../data/repositories/knowledge_repository.dart';
+import '../../features/auth/view_models/registration_view_model.dart';
+import '../../features/auth/views/registration_view.dart';
+import '../../features/disease_knowledge/view_models/knowledge_view_model.dart';
+import '../../features/disease_knowledge/view_models/knowledge_detail_view_model.dart';
+import '../../features/disease_knowledge/views/knowledge_detail_view.dart';
 import '../../data/repositories/scan_repository.dart';
 import '../../data/repositories/scan_records_repository.dart';
 import '../../data/models/scan_record.dart';
@@ -86,7 +93,28 @@ GoRouter createAppRouter({String initialLocation = AppRoutes.home}) => GoRouter(
           routes: [
             GoRoute(
               path: AppRoutes.knowledge,
-              builder: (_, _) => const KnowledgeView(),
+              builder: (context, _) => ChangeNotifierProvider(
+                create: (_) =>
+                    KnowledgeViewModel(context.read<KnowledgeRepository>())
+                      ..load(),
+                child: const KnowledgeView(),
+              ),
+              routes: [
+                GoRoute(
+                  path: ':slug',
+                  builder: (context, state) => _DetailPage(
+                    title: 'Reviewed knowledge',
+                    child: ChangeNotifierProvider(
+                      key: ValueKey(state.pathParameters['slug']),
+                      create: (_) => KnowledgeDetailViewModel(
+                        context.read<KnowledgeRepository>(),
+                        state.pathParameters['slug'] ?? '',
+                      )..load(),
+                      child: const KnowledgeDetailView(),
+                    ),
+                  ),
+                ),
+              ],
             ),
           ],
         ),
@@ -136,6 +164,18 @@ GoRouter createAppRouter({String initialLocation = AppRoutes.home}) => GoRouter(
                   builder: (_, _) => const _DetailPage(
                     title: 'Sign-in',
                     child: AuthIntroView(),
+                  ),
+                ),
+                GoRoute(
+                  path: 'register',
+                  builder: (context, _) => _DetailPage(
+                    title: 'Create farmer account',
+                    child: ChangeNotifierProvider(
+                      create: (_) => RegistrationViewModel(
+                        context.read<RegistrationRepository>(),
+                      ),
+                      child: const RegistrationView(),
+                    ),
                   ),
                 ),
                 GoRoute(

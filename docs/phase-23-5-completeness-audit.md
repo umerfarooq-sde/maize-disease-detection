@@ -1,5 +1,12 @@
 # 1. OVERALL COMPLETENESS VERDICT
 
+**Historical checkpoint, superseded for the two UI gaps by Phase 23.6.** Read the
+[remediation report](phase-23-6-remediation-report.md). That review also corrects this
+audit's profile/user-management scope finding: the original master brief explicitly
+requires a customizable farmer profile (§2 item 13), Admin farmer/user management
+(§2/§4), disease image management and audit-log viewing (§4). Their absence remains
+reported separately; they were not silently implemented in the two-feature remediation.
+
 **NOT READY FOR PHASE 24**
 
 Audit date: 2026-10-15. Reviewed repository baseline: `f646150` (Phase 23).

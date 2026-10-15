@@ -4,6 +4,11 @@ Phase 4 implements FARMER and ADMIN backend authentication through
 routes -> controllers -> service -> repository -> Prisma. No Flutter auth screens,
 disease/provider APIs or AI/ML/RAG implementation belongs to this phase.
 
+Phase 13 later adds native volatile sign-in/logout; Phase 23.6 completes farmer
+registration UI against this same public endpoint, followed by explicit sign-in.
+See [mobile registration contract](40-farmer-registration-knowledge.md). Enrollment
+does not change token/cookie storage, role admission, refresh or revocation semantics.
+
 ## Setup and configuration
 
 After initializing backend/.env with the existing development setup, run from root:

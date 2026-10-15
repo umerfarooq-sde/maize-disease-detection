@@ -1,5 +1,12 @@
 # Mobile
 
+Phase 23.6 completes farmer registration from Profile → Sign in and replaces the
+Knowledge placeholder with the real sourced catalogue, semantic search and detail
+pages. Both use route-scoped MVVM and existing Node contracts; registration leads
+to explicit sign-in. See [current contracts](../docs/40-farmer-registration-knowledge.md)
+and [verification report](../docs/phase-23-6-remediation-report.md). No model, corpus,
+session-persistence or provider-secret changes are included.
+
 Phase 22 adds `/admin/model-health` via the Admin overview health icon. Scoped MVVM
 shows offline evaluation separately from live request/latency/uncertainty/output
 signals, with retry and explicit research/drift limits. See
@@ -76,8 +83,9 @@ The environment example contains public build configuration only; it is not bund
 or loaded automatically. Omit API_BASE_URL to explore the offline shell. The existing
 health API demonstrates the full MVVM data flow through an explicit connection check.
 Farmer sign-in/results/history, the grounded assistant and fertilizer/yield calculator
-foundations are implemented. Approved agronomic calculator content, registration,
-full disease-knowledge browsing and admin dashboard remain future work.
+foundations, farmer registration, disease-knowledge browsing/search/details and Admin
+dashboard/management/model health are implemented. Approved agronomic calculator
+content and profile customization remain pending.
 The assistant calls Node only; Gemini/provider secrets stay server-side. Camera uses
 the configured platform picker; unsupported
 platforms hide that action. Only Android platform scaffolding currently exists.

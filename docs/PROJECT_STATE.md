@@ -4,6 +4,50 @@ Updated: 2026-10-15 (Asia/Karachi).
 
 ## Current phase
 
+Phase 23.6 targeted remediation is complete for the two authorized farmer UI gaps.
+Registration now follows form → route-scoped ViewModel → repository → existing Node
+API → PostgreSQL, with FARMER-only enrollment, matching input checks, visibility,
+safe retry and explicit sign-in after success. Existing session/refresh/logout
+semantics are unchanged. Knowledge now browses the real four-entry catalogue,
+performs explicit semantic passage search, and opens current versioned, sourced
+details. Healthy renders only its four supported sections; other entries have seven.
+
+Verification: 42 new targeted Flutter tests and the full 338-test Flutter suite pass;
+12 default live checks are explicitly skipped, with the new live widget check enabled
+and passing separately. All 299 backend tests and formatting/lint/strict types/build
+pass; AI format/Ruff/mypy and 346 tests pass (three opt-in SQL skips). Prisma schema
+validation passes. Android ARM64 debug packaging and 18 final Home/navigation tests
+pass; repository/link/privacy checks and 171 frozen-file hashes pass. Evidence is in
+the [Phase 23.6 report](phase-23-6-remediation-report.md).
+
+Real widget proof `20261015T155340Z-ae2d48e8` drives registration/login, all four
+details/25 source-backed documents, actual Google/pgvector semantic search, guest
+access, refresh/logout, duplicate and ADMIN-injection rejection. The owned schema
+was removed and all 21 production table counts are unchanged. An initial harness
+tap/scroll failure is retained, followed by the passing corrected run. No physical
+Android/emulator acceptance is claimed. Shared source presentation is reused by
+assistant/library; shell keyboard space and bounded card previews pass layout tests.
+The stale Home claim that disease analysis was unavailable is corrected.
+
+**READY WITH NON-BLOCKING LIMITATIONS for separately authorized Phase 24.** The Phase
+4 mobile registration handoff and missing Phase 6 farmer library are resolved, not
+rebuilds of their working services. Phase 23.5 incorrectly left profile scope
+unestablished: the original master brief explicitly asks for a customizable farmer
+profile, Admin user management, audit viewing and disease-image management. Those
+remain separately scheduled product gaps; do not mark all original requirements
+complete or silently implement them here. Recommend profile customization and the
+agreed Admin gaps before final FYP acceptance. Real calculator content, named Admin
+enrollment and device QA also remain pre-demo work. See the report for source
+evidence, extra implementation needed, priorities and Phase 24/25/26 boundaries.
+
+No dataset, split, class mapping, preprocessing implementation/policy, checkpoint,
+model registry, corpus, dependency, schema or migration is changed. No raw dataset
+is opened, training/test scoring repeated, model promoted or user data reset.
+Pre-existing user workspace edits are preserved and excluded from the commit.
+Stop after Phase 23.6; Phase 24 has not started.
+
+## Historical Phase 23.5 checkpoint (superseded above)
+
 Phase 23.5 completeness audit is complete. **NOT READY FOR PHASE 24.** Actual code
 still lacks farmer registration UI and the farmer disease-knowledge library; the
 corresponding APIs and real knowledge already exist. Complete these earlier-phase

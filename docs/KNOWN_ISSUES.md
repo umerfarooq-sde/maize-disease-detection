@@ -1,13 +1,24 @@
 # Known issues
 
-Updated: 2026-10-15 (Asia/Karachi), Phase 23.5 implementation audit.
+Updated: 2026-10-15 (Asia/Karachi), Phase 23.6 targeted remediation.
 
-**NOT READY FOR PHASE 24:** farmer registration has no production Flutter UI, and
-the farmer Knowledge tab remains a static foundation view. Their existing backend
-APIs and real sourced corpus work; these are Codex remediation tasks, not missing
-user credentials. Read the [full audit](phase-23-5-completeness-audit.md),
+**READY WITH NON-BLOCKING LIMITATIONS for a separately authorized Phase 24.** Farmer
+registration and Knowledge browse/search/details are now production Flutter MVVM
+flows against the existing real APIs. Live host-widget → Node → PostgreSQL and
+Google/pgvector verification passes with isolated fixtures and unchanged production
+counts. No physical-device acceptance is claimed. Read the
+[remediation report](phase-23-6-remediation-report.md) and
+[Flutter contracts](40-farmer-registration-knowledge.md).
+
+The original master brief explicitly requires customizable farmer profiles, Admin
+farmer/user management, disease-image management and audit-log viewing. These remain
+missing product work, separately from the two resolved UI tasks. This corrects the
+Phase 23.5 scope finding; do not silently add them to this remediation or describe
+the entire original product as complete. Schedule them before final FYP acceptance.
+
+The [historical audit](phase-23-5-completeness-audit.md),
 [endpoint inventory](phase-23-5-endpoint-inventory.md) and
-[configuration inventory](phase-23-5-configuration-inventory.md).
+[configuration inventory](phase-23-5-configuration-inventory.md) remain available.
 
 Real calculator domain content remains absent: current database rules/configs are
 empty and public catalogues correctly report PENDING. The user explicitly allowed
@@ -27,11 +38,10 @@ test-only boundary is a Phase 24 security task. Native sessions are intentionall
 volatile; no secure-storage persistence is implemented. The inference recovery timer
 exists, while orphan-upload cleanup still requires scheduling the existing CLI at
 deployment. No physical Android/emulator interaction is verified. These are distinct
-from the two P1 farmer UI gaps.
+from the two now-resolved farmer UI gaps.
 
-Phase 23 explicitly identifies incomplete farmer journeys: registration is available
-through the backend API but has no farmer registration screen, and the Knowledge
-tab remains a placeholder despite working sourced disease APIs. Fertilizer/yield
+Phase 23 originally identified incomplete registration and Knowledge journeys;
+Phase 23.6 now implements and verifies both against the real backend. Fertilizer/yield
 engines pass synthetic versioned arithmetic contracts; real recommendation content
 is still pending approved sources. Only Windows/Chrome/Edge targets are available locally, so
 no physical Android camera/permissions or device acceptance is claimed. Android
@@ -147,15 +157,26 @@ is locked. Read [the fitness report](26-model-fitness-validation.md) and
 None found in the reviewed implementation and executed checks. This finding does
 not certify production security or prove field-image/model accuracy.
 
-## P1 — complete earlier farmer feature handoffs before Phase 24
+## Resolved Phase 23.6 farmer handoffs
 
-| Gap | Actual evidence | Remediation |
+| Earlier blocker | Current evidence |
+|---|---|
+| Registration | Real form/ViewModel/repository, backend FARMER-only persistence and subsequent login; safe failure/retry/duplicate behavior |
+| Farmer knowledge | Real four-entry catalogue, 25 sourced sections, explicit semantic search, detail/back/guest/farmer flows; no FeatureIntro placeholder |
+
+## P1 — original product gaps before final FYP acceptance
+
+| Gap | Evidence / next work | Boundary |
 |---|---|---|
-| Farmer self-registration | Real FARMER-only backend endpoint, but AuthIntroView only signs in; no registration repository/form/navigation | Implement MVVM registration against existing auth API; no new secret/data input |
-| Farmer knowledge library | KnowledgeView only renders FeatureIntro despite four diseases/25 sourced indexed documents and public read/search APIs | Complete missing Phase 6 browse/search/detail/source UI and tests; do not invent paragraphs |
+| Profile customization | Original brief §2 item 13/§4 explicitly requires it. Current screen is email/session/history/analytics summary; FarmerProfile has no writer/editor. Add owner-only validated API/service/repository, MVVM form and ownership tests; avatar lifecycle only if included. | Separate authorization; recommended before final demo, not implemented in Phase 23.6 |
+| Admin farmer/user management and audit viewer | Explicit original §2/§4 requirements. Existing Admin manages knowledge/configuration and writes audits; no user-management or paginated audit-read UI/API exists. | Separate controlled RBAC/privacy/version review, before claiming full original scope |
+| Curated disease media management | Original §4/§12 includes images; current catalogue uses honest icons and no fabricated/licensed photos. | Separate Admin media lifecycle and source/rights-approved content |
 
-Larger remediation is reported, not implemented in the audit. Profile editing,
-user-management/audit-browser ideas are not silently added as approved requirements.
+These do not require rebuilding the completed registration/library or prevent a
+separately authorized security review. Full original-product completion remains
+partial. Calculator content and device acceptance are separate pre-demo limits.
+Generated Swagger/OpenAPI is also absent despite original §40; existing runtime
+schemas and manual endpoint inventories remain available (P3 documentation work).
 
 ## Resolved Phase 9.5 decisions and Phase 10 implementation requirements
 

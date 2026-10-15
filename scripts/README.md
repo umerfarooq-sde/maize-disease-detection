@@ -1,5 +1,19 @@
 # Scripts
 
+Phase 23.6 adds [check-farmer-remediation.mjs](check-farmer-remediation.mjs), invoked
+only by the existing disposable-schema harness:
+
+```powershell
+ai-service/.venv/Scripts/python.exe scripts/check-e2e.py --only farmer-remediation
+```
+
+It drives real Flutter registration/login/knowledge widgets through the existing
+Node/PostgreSQL and semantic-retrieval stack. Fixture account/hash/role/revocation
+checks run only after schema isolation is verified. Flutter child environment is
+allowlisted; no server credentials are forwarded. The parent drops the owned schema
+and verifies unchanged production counts. This is host-widget verification, not
+physical-device interaction. See [remediation evidence](../docs/phase-23-6-remediation-report.md).
+
 Phase 23 adds [check-e2e.py](check-e2e.py), its connected Flutter
 [journey helper](check-e2e.mjs), and a [test-only schema preloader](e2e-database-context.mjs).
 Run the Python script with the AI environment from root, after backend build. It

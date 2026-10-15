@@ -31,25 +31,31 @@ class FarmerShell extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final wide = Responsive.useRail(context);
+    final keyboardOpen = MediaQuery.viewInsetsOf(context).bottom > 0;
     return Scaffold(
-      appBar: AppBar(
-        toolbarHeight:
-            kToolbarHeight * MediaQuery.textScalerOf(context).scale(1),
-        title: Row(
-          children: [
-            Container(
-              padding: const EdgeInsets.all(AppSpacing.sm),
-              decoration: BoxDecoration(
-                color: AppColors.sage,
-                borderRadius: BorderRadius.circular(AppRadii.small),
+      appBar: keyboardOpen
+          ? null
+          : AppBar(
+              toolbarHeight:
+                  kToolbarHeight * MediaQuery.textScalerOf(context).scale(1),
+              title: Row(
+                children: [
+                  Container(
+                    padding: const EdgeInsets.all(AppSpacing.sm),
+                    decoration: BoxDecoration(
+                      color: AppColors.sage,
+                      borderRadius: BorderRadius.circular(AppRadii.small),
+                    ),
+                    child: const Icon(
+                      Icons.eco_outlined,
+                      color: AppColors.forest,
+                    ),
+                  ),
+                  const SizedBox(width: AppSpacing.md),
+                  const Expanded(child: Text(AppConstants.name)),
+                ],
               ),
-              child: const Icon(Icons.eco_outlined, color: AppColors.forest),
             ),
-            const SizedBox(width: AppSpacing.md),
-            const Expanded(child: Text(AppConstants.name)),
-          ],
-        ),
-      ),
       body: wide
           ? Row(
               children: [
@@ -82,7 +88,7 @@ class FarmerShell extends StatelessWidget {
               ],
             )
           : navigation,
-      bottomNavigationBar: wide
+      bottomNavigationBar: wide || keyboardOpen
           ? null
           : NavigationBar(
               height: AppSizing.navigationHeight,

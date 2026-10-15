@@ -8,6 +8,8 @@ Use the current completeness audit to distinguish working code from target desig
 | Document | Scope |
 |---|---|
 | [Project state](PROJECT_STATE.md) | Verified repository status, checks, issues, and next step |
+| [Phase 23.6 remediation](phase-23-6-remediation-report.md) | Registration and real farmer knowledge UI, live verification, original-requirement corrections and readiness |
+| [Farmer registration and knowledge](40-farmer-registration-knowledge.md) | Current Flutter MVVM routes, auth/catalogue/search contracts, source display and test commands |
 | [Phase 23.5 completeness audit](phase-23-5-completeness-audit.md) | Phase 0–23 verdict/matrix, actual feature wiring, real/mock evidence, user inputs/manual actions and deferred work |
 | [Endpoint inventory](phase-23-5-endpoint-inventory.md) | All 35 Node routes: validation, roles, controller/service/repository, consumers and real evidence |
 | [Configuration inventory](phase-23-5-configuration-inventory.md) | All 70 runtime template entries and test/tooling inputs, presence only, no secret values |

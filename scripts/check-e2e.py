@@ -126,6 +126,7 @@ TASKS = {
         300,
     ),
     "journey": (NODE + ["scripts/check-e2e.mjs"], ROOT, 600),
+    "farmer-remediation": (NODE + ["scripts/check-farmer-remediation.mjs"], ROOT, 420),
 }
 TABLES = (
     "users",

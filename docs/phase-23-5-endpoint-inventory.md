@@ -1,5 +1,11 @@
 # Phase 23.5 explicit Node endpoint inventory
 
+**Historical consumers:** Phase 23.6 now connects registration and disease list/detail/
+semantic search to production Flutter views. No endpoint was added or changed. See
+[current handoff](40-farmer-registration-knowledge.md). The original master brief also
+explicitly includes profile customization, Admin user management and audit viewing;
+the scope-dependent wording below is corrected by the [remediation report](phase-23-6-remediation-report.md).
+
 All 35 explicitly registered routes use `/api/v1`. Express may additionally answer
 HEAD/OPTIONS through framework middleware; those are not extra business APIs.
 

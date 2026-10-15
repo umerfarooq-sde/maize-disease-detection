@@ -1,5 +1,10 @@
 # Phase 23 — application testing and E2E verification
 
+**Later remediation:** registration and farmer knowledge UI gaps recorded below are
+addressed in Phase 23.6. Its [report](phase-23-6-remediation-report.md) records current
+component checks and the real host-widget → Node → PostgreSQL/Google/pgvector proof.
+This matrix retains Phase 23's original attempts, failures, skips and device limits.
+
 Verification date: 2026-10-15. Scope ends at Phase 23. This phase adds test tooling,
 fault checks and verification records, and fixes a verified existing model-health
 transaction acquisition failure. It adds no business/UI feature, classifier change

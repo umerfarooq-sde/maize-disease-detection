@@ -1,5 +1,10 @@
 # Flutter foundation
 
+**Current handoff:** Phase 23.6 completes farmer registration and the sourced knowledge
+library. See [current routes/contracts](40-farmer-registration-knowledge.md) and
+[verification](phase-23-6-remediation-report.md). The Phase 5 availability table below
+is historical; later scan/auth/assistant/calculator/analytics/Admin guides supersede it.
+
 Phase 5 implements the farmer application shell and reusable UX/engineering foundation.
 Flutter 3.41.9 / Dart 3.11.5 and Provider 6.1.5+1 are preserved. The resolver added
 compatible go_router 17.5.0 and http 1.6.0; the lockfile records exact versions.

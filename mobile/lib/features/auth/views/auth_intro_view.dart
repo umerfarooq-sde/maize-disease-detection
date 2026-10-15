@@ -110,6 +110,14 @@ class _AuthIntroViewState extends State<AuthIntroView> {
             ),
             const SizedBox(height: AppSpacing.lg),
             TextButton(
+              key: const Key('open-registration'),
+              onPressed: model.busy
+                  ? null
+                  : () => context.push(AppRoutes.register),
+              child: const Text('New here? Create a farmer account'),
+            ),
+            const SizedBox(height: AppSpacing.sm),
+            TextButton(
               onPressed: model.busy ? null : () => context.go(AppRoutes.scan),
               child: const Text('Continue scanning as a guest'),
             ),

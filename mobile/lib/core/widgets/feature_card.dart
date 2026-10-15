@@ -9,6 +9,7 @@ class FeatureCard extends StatelessWidget {
     required this.onTap,
     this.tone = AppColors.blue,
     this.tint = AppColors.mist,
+    this.descriptionMaxLines,
     super.key,
   });
   final String title;
@@ -17,6 +18,7 @@ class FeatureCard extends StatelessWidget {
   final VoidCallback onTap;
   final Color tone;
   final Color tint;
+  final int? descriptionMaxLines;
   @override
   Widget build(BuildContext context) => Card(
     child: InkWell(
@@ -45,6 +47,10 @@ class FeatureCard extends StatelessWidget {
                   const SizedBox(height: AppSpacing.xs),
                   Text(
                     description,
+                    maxLines: descriptionMaxLines,
+                    overflow: descriptionMaxLines == null
+                        ? null
+                        : TextOverflow.ellipsis,
                     style: Theme.of(
                       context,
                     ).textTheme.bodyMedium?.copyWith(color: AppColors.muted),

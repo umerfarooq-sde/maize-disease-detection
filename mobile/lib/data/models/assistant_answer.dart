@@ -222,7 +222,7 @@ class AssistantCitation {
       ),
       documentVersion: version,
       chunkIds: chunks,
-      reference: AssistantSourceReference._fromJson(data['source']),
+      reference: AssistantSourceReference.fromJson(data['source']),
     );
   }
 }
@@ -245,7 +245,7 @@ class AssistantSourceReference {
   final DateTime retrievedAt;
   final String rights;
 
-  factory AssistantSourceReference._fromJson(Object? value) {
+  factory AssistantSourceReference.fromJson(Object? value) {
     final data = _object(value, const {
       'url',
       'title',
