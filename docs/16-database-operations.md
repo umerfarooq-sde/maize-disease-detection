@@ -1,5 +1,13 @@
 # Database operations
 
+**Phase 23.7:** additive migration nine `20261015000000_profile_media_journal`
+adds pending-photo/cleanup columns to existing farmer profiles and the audit
+timestamp/UUID ordering index. Original eight migration bytes are preserved; there
+is no new table or reset. Replay, 42 isolated SQL tests, configured development
+migration apply, Prisma/client/13 rollback checks and no-drift comparison pass.
+Read [photo recovery/account transaction contracts](41-profile-accounts-audit.md).
+Existing historical counts/results below describe their original checkpoint.
+
 Phase 2 uses stable Prisma **7.10.0**, matching client/pg-adapter versions, and tsx
 for TypeScript seed/test commands. `prisma.config.ts` reads server-only
 `DIRECT_DATABASE_URL` (falling back to `DATABASE_URL` for unpooled servers).
@@ -14,7 +22,7 @@ Phase 12 adds a sixth atomic migration for inference attempt fencing and validat
 prediction outcome metadata. Phase 14 adds a seventh atomic migration for knowledge
 topic/provenance metadata and immutable READY embedding versions, then an eighth
 correction for the READY guard under restricted schema search paths. The complete schema
-has 21 tables, 26 checks and 38 custom triggers. Upload
+now has 21 tables, 27 checks and 38 custom triggers after Phase 23.7. Upload
 repositories also reuse the shared client. Run `scans:cleanup` periodically as
 described in [upload operations](20-scan-uploads.md); completed scans are preserved.
 Generated client source is ignored and must be regenerated after install/schema changes.

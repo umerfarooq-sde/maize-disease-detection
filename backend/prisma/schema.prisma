@@ -180,19 +180,22 @@ model AuthSession {
 }
 
 model FarmerProfile {
-  id                String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
-  userId            String   @unique @map("user_id") @db.Uuid
-  displayName       String   @map("display_name") @db.VarChar(120)
-  phone             String?  @db.VarChar(32)
-  region            String?  @db.VarChar(120)
-  countryCode       String?  @map("country_code") @db.Char(2)
-  fieldAreaHectares Decimal? @map("field_area_hectares") @db.Decimal(12, 4)
-  avatarUrl         String?  @map("avatar_url") @db.Text
-  avatarPublicId    String?  @unique @map("avatar_public_id") @db.VarChar(255)
-  preferredLanguage String   @default("en") @map("preferred_language") @db.VarChar(16)
-  createdAt         DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
-  updatedAt         DateTime @default(now()) @updatedAt @map("updated_at") @db.Timestamptz(6)
-  user              User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  id                     String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  userId                 String    @unique @map("user_id") @db.Uuid
+  displayName            String    @map("display_name") @db.VarChar(120)
+  phone                  String?   @db.VarChar(32)
+  region                 String?   @db.VarChar(120)
+  countryCode            String?   @map("country_code") @db.Char(2)
+  fieldAreaHectares      Decimal?  @map("field_area_hectares") @db.Decimal(12, 4)
+  avatarUrl              String?   @map("avatar_url") @db.Text
+  avatarPublicId         String?   @unique @map("avatar_public_id") @db.VarChar(255)
+  avatarPendingPublicId  String?   @map("avatar_pending_public_id") @db.VarChar(255)
+  avatarUploadStartedAt  DateTime? @map("avatar_upload_started_at") @db.Timestamptz(6)
+  avatarCleanupPublicIds String[]  @default([]) @map("avatar_cleanup_public_ids")
+  preferredLanguage      String    @default("en") @map("preferred_language") @db.VarChar(16)
+  createdAt              DateTime  @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt              DateTime  @default(now()) @updatedAt @map("updated_at") @db.Timestamptz(6)
+  user                   User      @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@map("farmer_profiles")
 }
@@ -539,6 +542,7 @@ model AuditLog {
 
   // Polymorphic entity reference is a retained identity, not a foreign key.
   @@index([actorId, createdAt(sort: Desc)])
+  @@index([createdAt(sort: Desc), id(sort: Desc)])
   @@index([entityType, entityId, createdAt])
   @@map("audit_logs")
 }

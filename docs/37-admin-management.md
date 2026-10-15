@@ -1,5 +1,12 @@
 # Admin management — Phase 21
 
+**Later Phase 23.7 extension:** the original-required farmer account list/status
+management and read-only audit viewer are now implemented outside the knowledge
+editor, using the same ADMIN session/RBAC. No arbitrary privilege changes or audit
+mutations are exposed. Licensed disease-reference media is still pending. See
+[accounts/audit/media boundaries](41-profile-accounts-audit.md) and the
+[current original-requirement matrix](phase-23-7-requirements-completion.md).
+
 The Admin workspace manages display metadata, reviewed knowledge versions and
 source snapshots, plus immutable fertilizer/yield calculator drafts. Model class
 mappings, trained artifacts and numerical calculator algorithms are not editable.

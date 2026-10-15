@@ -5,16 +5,22 @@ with administrative tools for maintaining knowledge and monitoring the system.
 
 ## Current status
 
-Phase 23.6 completes farmer registration and the sourced Knowledge library using
-the existing APIs. Real host-widget registration/login and catalogue/search/detail
-verification passes through Node/PostgreSQL and Google/pgvector. The earlier mobile
-handoff blockers are resolved. See the [remediation report](docs/phase-23-6-remediation-report.md)
-and [Flutter contracts](docs/40-farmer-registration-knowledge.md).
+Phase 23.7 completes private farmer profile editing/photos, scoped Admin farmer
+account listing/status management and read-only audit history. Actual Flutter
+host-widget → Node → PostgreSQL/Cloudinary verification passes, including profile
+persistence, session revocation and audit rollback. See the
+[requirements report and complete original matrix](docs/phase-23-7-requirements-completion.md)
+and [API/MVVM contracts](docs/41-profile-accounts-audit.md).
 
-**Ready with non-blocking limitations for a separately authorized Phase 24.** This
-does not mean the entire original product brief is complete: profile customization,
-Admin user management/audit viewing/disease media, approved calculator content and
-physical-device acceptance remain open before the final demo. Phase 24 is not started.
+**READY WITH DOCUMENTED LIMITATIONS for separately authorized Phase 24.** Disease
+reference media/integration needs approved licensed images; real fertilizer/yield
+recommendations need [reviewed domain inputs](docs/calculator-domain-input-checklist.md).
+Physical-device acceptance and named Admin enrollment remain pre-demo work. This
+does not certify the entire original product. Phase 24 and deployment have not started.
+
+Phase 23.6 previously completed farmer registration and the real sourced Knowledge
+catalogue/search/details through existing Node/PostgreSQL and Google/pgvector.
+Read the [remediation report](docs/phase-23-6-remediation-report.md).
 
 Phase 23 verifies component and real cross-service contracts, including a connected
 Flutter/API/MVVM farmer/Admin journey. The [test matrix](docs/39-testing-e2e-verification.md)
@@ -96,7 +102,7 @@ raw probabilities are retained and no confidence threshold is locked. See
 [model fitness](docs/26-model-fitness-validation.md). Use remains non-commercial
 academic/FYP research without raw redistribution or commercial clearance. Shared
 preprocessing, existing FastAPI/Flutter/backend/database features are preserved;
-Persistent mobile sign-in, approved calculator content, profile editing and remaining Admin user/media/audit tools remain future work.
+Persistent mobile sign-in, approved calculator content and disease-reference media remain future work; profile editing and Admin farmer/audit tools are implemented in Phase 23.7.
 With no approved operational cutoff, every current prediction is `LOW_CONFIDENCE`
 with `THRESHOLD_UNCONFIGURED`; numerical scores do not establish field correctness.
 See [project state](docs/PROJECT_STATE.md) for verified progress and outstanding decisions.

@@ -1,5 +1,12 @@
 # Authentication and authorization
 
+**Phase 23.7:** controlled Admin FARMER status changes atomically revoke all live
+sessions and append an immutable audit. Reactivation never restores revoked tokens;
+fresh login is required. The existing authentication repository still checks live
+user/session status. No role/password editor or public Admin enrollment is added.
+Private profile APIs derive ownership from this principal; volatile native session
+storage remains unchanged. See [accounts/profile contracts](41-profile-accounts-audit.md).
+
 Phase 4 implements FARMER and ADMIN backend authentication through
 routes -> controllers -> service -> repository -> Prisma. No Flutter auth screens,
 disease/provider APIs or AI/ML/RAG implementation belongs to this phase.

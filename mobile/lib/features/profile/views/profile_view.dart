@@ -97,6 +97,15 @@ class ProfileView extends StatelessWidget {
           ),
           const SizedBox(height: AppSpacing.xl),
           FeatureCard(
+            key: const Key('edit-farmer-profile'),
+            title: 'Personalize your profile',
+            description:
+                'Update your display name, optional field details and profile photo.',
+            icon: Icons.manage_accounts_outlined,
+            onTap: () => context.push(AppRoutes.editProfile),
+          ),
+          const SizedBox(height: AppSpacing.lg),
+          FeatureCard(
             title: 'Scan history',
             description: 'Review your saved leaf images and model predictions.',
             icon: Icons.history,

@@ -1,5 +1,14 @@
 # Phase 23 — application testing and E2E verification
 
+**Current Phase 23.7 evidence:** [requirements completion report](phase-23-7-requirements-completion.md)
+records 309 backend, 369 Flutter (13 default opt-in skips), 346 AI (three opt-in SQL
+skips), 42 isolated SQL tests, nine-migration replay and the enabled real host-widget
+profile/Cloudinary/Admin journey. Run `scripts/check-e2e.py --only migrations database
+original-requirements` with the AI environment. Production counts remain unchanged;
+the owned schema/two cloud assets are cleaned. These are real service/form checks,
+not physical-device or actual external-outage acceptance. Earlier dated evidence
+and failed attempts below remain historical.
+
 **Later remediation:** registration and farmer knowledge UI gaps recorded below are
 addressed in Phase 23.6. Its [report](phase-23-6-remediation-report.md) records current
 component checks and the real host-widget → Node → PostgreSQL/Google/pgvector proof.

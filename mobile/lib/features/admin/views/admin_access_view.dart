@@ -13,34 +13,48 @@ import 'admin_management_view.dart';
 import '../../../data/repositories/model_health_repository.dart';
 import '../view_models/model_health_view_model.dart';
 import 'model_health_view.dart';
+import '../../../data/repositories/admin_accounts_repository.dart';
+import '../view_models/farmer_management_view_model.dart';
+import '../view_models/audit_log_view_model.dart';
+import 'farmer_management_view.dart';
+import 'audit_log_view.dart';
 
 /// Outside the farmer navigation shell, with an independent volatile session.
 class AdminAccessView extends StatelessWidget {
   const AdminAccessView({
     this.management = false,
     this.modelHealth = false,
+    this.farmers = false,
+    this.audit = false,
     super.key,
   });
   final bool management;
   final bool modelHealth;
+  final bool farmers, audit;
   @override
   Widget build(BuildContext context) {
     final session = context.watch<AdminSessionViewModel>();
     return Scaffold(
       appBar: AppBar(
         title: Text(
-          modelHealth
+          farmers
+              ? 'Farmer accounts'
+              : audit
+              ? 'Audit history'
+              : modelHealth
               ? 'Admin model health'
               : management
               ? 'Admin management'
               : 'Admin overview',
         ),
         leading: IconButton(
-          tooltip: management || modelHealth
+          tooltip: management || modelHealth || farmers || audit
               ? 'Return to Admin overview'
               : 'Return to farmer app',
           onPressed: () => context.go(
-            management || modelHealth ? AppRoutes.admin : AppRoutes.home,
+            management || modelHealth || farmers || audit
+                ? AppRoutes.admin
+                : AppRoutes.home,
           ),
           icon: const Icon(Icons.arrow_back),
         ),
@@ -64,7 +78,23 @@ class AdminAccessView extends StatelessWidget {
             ),
         ],
       ),
-      body: session.signedIn && modelHealth
+      body: session.signedIn && farmers
+          ? ChangeNotifierProvider(
+              key: ValueKey('farmers-${session.revision}'),
+              create: (_) => FarmerManagementViewModel(
+                context.read<AdminAccountsRepository>(),
+              )..load(),
+              child: const FarmerManagementView(),
+            )
+          : session.signedIn && audit
+          ? ChangeNotifierProvider(
+              key: ValueKey('audits-${session.revision}'),
+              create: (_) =>
+                  AuditLogViewModel(context.read<AdminAccountsRepository>())
+                    ..load(),
+              child: const AuditLogView(),
+            )
+          : session.signedIn && modelHealth
           ? ChangeNotifierProvider(
               key: ValueKey('model-health-${session.revision}'),
               create: (_) =>

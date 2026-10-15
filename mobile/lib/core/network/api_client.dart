@@ -54,7 +54,16 @@ class ApiClient {
     required String mimeType,
     required String idempotencyKey,
     void Function(double)? onProgress,
+    String path = 'scans',
+    String? profileRevision,
   }) async {
+    final profilePhoto = path == 'profile/avatar';
+    if ((path != 'scans' && !profilePhoto) ||
+        (profilePhoto &&
+            (profileRevision == null ||
+                !RegExp(r'^[a-f0-9]{64}$').hasMatch(profileRevision)))) {
+      throw const AppException(AppErrorKind.validation);
+    }
     if (_closed) throw const AppException(AppErrorKind.network);
     final base = _config.baseUrl;
     if (base == null) throw const AppException(AppErrorKind.configuration);
@@ -69,12 +78,12 @@ class ApiClient {
     }
     final abort = Completer<void>();
     final revision = _revision;
-    final authenticated = hasAuthenticatedSession;
+    final authenticated = profilePhoto || hasAuthenticatedSession;
     try {
       final request =
           UploadRequest(
               'POST',
-              base.resolve('scans'),
+              base.resolve(path),
               abortTrigger: abort.future,
               onProgress: (value) {
                 if (!abort.isCompleted) onProgress?.call(value);
@@ -94,6 +103,7 @@ class ApiClient {
                 contentType: MediaType.parse(mimeType),
               ),
             );
+      if (profilePhoto) request.fields['expectedRevision'] = profileRevision!;
       Future<ApiResponse> send() async {
         // A supplied secure token source means authenticated mode. Missing/invalid
         // credentials fail closed; they never silently become an anonymous scan.

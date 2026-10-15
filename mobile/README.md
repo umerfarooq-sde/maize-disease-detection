@@ -1,5 +1,14 @@
 # Mobile
 
+Phase 23.7 adds `/profile/edit`, `/admin/farmers` and `/admin/audit` through
+scoped Provider/ChangeNotifier ViewModels and typed repositories. Private farmer
+metadata/photos persist server-side after a new login; native session credentials
+remain volatile. Admin account changes require confirmation and revoke old sessions;
+audit history is read-only. The existing design system and safe upload transport
+are reused. See [contracts](../docs/41-profile-accounts-audit.md) and
+[verification](../docs/phase-23-7-requirements-completion.md). Live host-widget tests
+and ARM64 debug packaging pass; no physical-phone acceptance is claimed.
+
 Phase 23.6 completes farmer registration from Profile → Sign in and replaces the
 Knowledge placeholder with the real sourced catalogue, semantic search and detail
 pages. Both use route-scoped MVVM and existing Node contracts; registration leads

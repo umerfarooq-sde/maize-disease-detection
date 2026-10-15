@@ -1,5 +1,16 @@
 # Backend
 
+Phase 23.7 adds FARMER-only `GET/PATCH /api/v1/profile`,
+`POST/DELETE /api/v1/profile/avatar`, ADMIN-only `GET /api/v1/admin/farmers`,
+`PATCH /api/v1/admin/farmers/:id/status` and `GET /api/v1/admin/audit-logs`.
+Existing layers, authentication, safe image validation and Cloudinary are reused;
+status/session/audit changes are atomic. Apply the additive ninth migration with
+the existing `db:migrate` workflow; run `npm.cmd run profiles:cleanup` to recover
+interrupted/queued private photo deletion. See [contracts](../docs/41-profile-accounts-audit.md)
+and [verification](../docs/phase-23-7-requirements-completion.md). No new environment
+secret or dependency is needed. Licensed disease-reference images and real
+calculator content remain pending.
+
 Phase 22 adds ADMIN-only `GET /api/v1/admin/model-health`: safe model registry
 projection plus authenticated internal readiness, pinned evaluation and process
 telemetry. No model promotion or metric recalculation. See

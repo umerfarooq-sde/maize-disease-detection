@@ -22,6 +22,12 @@ import type { KnowledgeService } from '../modules/knowledge/knowledge.service.js
 import { scanRoutes } from '../modules/scans/scan.routes.js';
 import type { ScanService } from '../modules/scans/scan.service.js';
 import { yieldRoutes } from '../modules/yield/yield.routes.js';
+import { profileRoutes } from '../modules/profile/profile.routes.js';
+import type { ProfileService } from '../modules/profile/profile.service.js';
+import { accountsRoutes } from '../modules/admin/accounts.routes.js';
+import type { AccountsService } from '../modules/admin/accounts.service.js';
+import { profileMediaRoutes } from '../modules/profile/profile-media.routes.js';
+import type { ProfileMediaService } from '../modules/profile/profile-media.service.js';
 import type { YieldService } from '../modules/yield/yield.service.js';
 
 export function apiRoutes(
@@ -37,6 +43,9 @@ export function apiRoutes(
   dashboardService: DashboardService,
   managementService: ManagementService,
   modelHealthService: ModelHealthService,
+  profileService: ProfileService,
+  accountsService: AccountsService,
+  profileMediaService: ProfileMediaService,
 ): Router {
   const router = Router();
   router.use(healthRoutes(createHealthService(repository)));
@@ -50,5 +59,8 @@ export function apiRoutes(
   router.use(dashboardRoutes(environment, authService, dashboardService));
   router.use(managementRoutes(environment, authService, managementService));
   router.use(modelHealthRoutes(environment, authService, modelHealthService));
+  router.use(profileRoutes(authService, profileService));
+  router.use(accountsRoutes(authService, accountsService));
+  router.use(profileMediaRoutes(authService, profileMediaService));
   return router;
 }

@@ -260,3 +260,18 @@ only in a phase explicitly authorized by the user.
   versus runtime measures separate in the Admin MVVM screen. No promotion API added.
 
 See [model health](38-model-health-dashboard.md). Stop after Phase 22.
+
+## Phase 23.7 profile, account and audit decisions (2026-10-15)
+
+| Decision | Rationale and boundary |
+|---|---|
+| Reuse one private profile with minimal editable metadata | Existing FarmerProfile stores name, optional region/country/hectares; do not collect unnecessary phone or expose security fields. Principal-derived ownership, locked row writes and SHA-256 revisions prevent cross-user edits/lost updates. Native credentials remain volatile while profile data persists in PostgreSQL. |
+| Reuse typed-purpose private Cloudinary storage and durable profile intents | The original Storage brief approves profile images. Extend the existing adapter with a strict profiles namespace; reuse image admission and transport. Three additive journal columns and bounded recovery retain failed upload/deletion intent; no new profile/media architecture or AI call. |
+| Scoped farmer access-state management, no destructive account/privilege editor | Original Admin user management is required. ADMIN-only paginated FARMER listing and confirmed revision-pinned status changes suffice; lock/update/revoke/audit in one transaction. Reactivation requires new login; profile/scans remain intact. |
+| Read-only paginated audit projection with metadata allowlist | Original audit viewing is required. Preserve SQL immutability; expose timestamp/action/entity/retained actor and only recognized status/count/version/field names. Current actor role is not claimed as a historical snapshot. No arbitrary audit JSON or private text is returned. |
+
+Licensed disease-library media and real agronomic configuration remain unavailable;
+document the explicit resource/approval fallback instead of scraping, fabricating,
+redistributing training images or claiming the full original product is complete.
+See [contracts](41-profile-accounts-audit.md) and [requirements evidence](phase-23-7-requirements-completion.md).
+Stop after Phase 23.7; no Phase 24 or deployment is authorized by these decisions.

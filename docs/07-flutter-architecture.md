@@ -1,5 +1,11 @@
 # Flutter Architecture
 
+**Phase 23.7 update:** profile metadata/private-photo editing and Admin farmer/audit
+routes use scoped ChangeNotifier ViewModels → typed repositories → the appropriate
+Farmer/Admin API client. They share image transport/request-key utilities without
+moving HTTP or business rules into widgets. Identity revisions fence private state.
+See [current contracts](41-profile-accounts-audit.md) and [verification](phase-23-7-requirements-completion.md).
+
 > **Status:** Phase 16 adds the scoped farmer assistant with cited reviewed answers,
 > bounded local conversation and private scan explanations. Phase 13 completes selection/preview/upload, real model results,
 > minimal farmer sign-in/logout and private paginated history. See

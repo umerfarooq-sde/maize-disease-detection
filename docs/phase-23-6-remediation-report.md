@@ -1,5 +1,10 @@
 # Phase 23.6 — targeted implementation remediation
 
+**Later Phase 23.7:** profile customization, Admin farmer management and audit
+viewing gaps identified here are now implemented and verified. Disease-reference
+media and real calculator content remain pending. Read the [current report](phase-23-7-requirements-completion.md).
+This report retains the original two-feature scope, attempts and results.
+
 Verified 2026-10-15. Baseline `57902b79a9009f3d39875d621b0ea9baa25e1d01`.
 Scope: the missing farmer registration and disease-knowledge Flutter handoffs only,
 their integration/regressions, documentation and original-requirement review.

@@ -1,5 +1,10 @@
 # Flutter foundation
 
+**Current Phase 23.7:** profile metadata/photos and separate Admin farmer/audit
+forms complete the approved missing handoffs, using existing design primitives,
+scoped MVVM and typed transport. See [feature contracts](41-profile-accounts-audit.md)
+and [test evidence](phase-23-7-requirements-completion.md).
+
 **Current handoff:** Phase 23.6 completes farmer registration and the sourced knowledge
 library. See [current routes/contracts](40-farmer-registration-knowledge.md) and
 [verification](phase-23-6-remediation-report.md). The Phase 5 availability table below

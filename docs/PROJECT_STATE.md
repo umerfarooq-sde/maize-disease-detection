@@ -4,6 +4,59 @@ Updated: 2026-10-15 (Asia/Karachi).
 
 ## Current phase
 
+**Phase 23.7 is complete for the authorized implementation and conditional content
+review. READY WITH DOCUMENTED LIMITATIONS for separately authorized Phase 24.**
+Do not equate this with full original-product acceptance. Phase 24/deployment have
+not started. See the [complete requirements matrix/report](phase-23-7-requirements-completion.md)
+and [profile/accounts/audit contracts](41-profile-accounts-audit.md).
+
+Farmers can retrieve/edit their private name, region, country code and exact hectare
+metadata and preview/upload/replace/remove approved profile photos. Existing MVVM,
+Node layers, shared Prisma client and Cloudinary validation are reused. Durable
+photo intents/cleanup queue use three additive fields in the existing profile;
+no second profile architecture or new dependency is introduced. Login/session
+semantics remain volatile; real PostgreSQL profile persistence across logout/login
+and a reconstructed app tree is verified. No physical-device acceptance is claimed.
+
+Original-required Admin farmer management now provides server-paginated minimal
+listing, exact email/status filters and confirmed ACTIVE/SUSPENDED/DEACTIVATED
+changes. A locked transaction revokes sessions and writes an immutable audit event;
+failure rolls back both. Admin audit history is read-only, filtered/paginated and
+allowlists safe metadata. All new Admin APIs reject FARMER access. No role/password
+editor, account erasure or public Admin enrollment is added.
+
+Verification: backend formatting/lint/strict types/build and **309 tests** pass;
+Flutter analyzer and **369 tests** pass (**13 default opt-in live skips**); AI
+format/Ruff/mypy and **346 tests** pass (**three opt-in SQL skips**). Android ARM64
+debug APK packaging and Dart formatting pass. Real isolated migration replay,
+**42 database tests** and **one enabled real Flutter host-widget E2E** pass with no
+selected live skips. Live run `20261015T181137Z-dae1d43f` verifies profile/photo
+persistence, authorization, pagination, audit redaction/immutability, real rollback,
+status/session revocation and pending content. Owned schema and both generated
+Cloudinary assets are cleaned; all 21 production table counts remain unchanged.
+
+The additive ninth migration `20261015000000_profile_media_journal` is applied to
+the configured development DB after isolated replay: **21 tables, 27 checks,
+38 custom triggers**. Prisma validation/client generation, 13 rollback checks,
+nine-migration status and no-drift comparison pass. Original eight migrations are
+preserved. Existing ML/shared preprocessing, class mapping, model checkpoint,
+approved full-frame policy, source corpus and raw dataset are unchanged/unopened.
+No fitting, final-test evaluation, promotion or database reset occurs.
+
+Disease-image management is an approved original requirement but has no licensed
+approved library media; its provenance/delivery/Admin/Farmer integration is explicitly
+pending. Real fertilizer/yield content remains PENDING_RULES/PENDING_CONFIGURATION;
+the [separate source/approval checklist](calculator-domain-input-checklist.md)
+lists required inputs. Full original recommendations/forecast ranges, physical
+Android QA and named Admin enrollment remain pre-demo actions. No new credential,
+dataset metadata or manual JSON is needed for the completed features. Existing
+OpenAPI, provider/session/retention/telemetry risks remain documented.
+
+Pre-existing user workspace edits are preserved and excluded from the commit.
+Stop after Phase 23.7.
+
+## Historical Phase 23.6 checkpoint (superseded above)
+
 Phase 23.6 targeted remediation is complete for the two authorized farmer UI gaps.
 Registration now follows form → route-scoped ViewModel → repository → existing Node
 API → PostgreSQL, with FARMER-only enrollment, matching input checks, visibility,

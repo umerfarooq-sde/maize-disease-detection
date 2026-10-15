@@ -44,6 +44,9 @@ import '../../features/yield_calculator/views/yield_view.dart';
 import '../widgets/app_page.dart';
 import '../widgets/app_states.dart';
 import 'app_routes.dart';
+import '../../data/repositories/profile_repository.dart';
+import '../../features/profile/view_models/profile_view_model.dart';
+import '../../features/profile/views/profile_editor_view.dart';
 
 GoRouter createAppRouter({String initialLocation = AppRoutes.home}) => GoRouter(
   initialLocation: initialLocation,
@@ -179,6 +182,21 @@ GoRouter createAppRouter({String initialLocation = AppRoutes.home}) => GoRouter(
                   ),
                 ),
                 GoRoute(
+                  path: 'edit',
+                  builder: (context, _) => _DetailPage(
+                    title: 'Edit farmer profile',
+                    child: ChangeNotifierProvider(
+                      key: ValueKey(
+                        'profile-${context.watch<FarmerSessionViewModel>().revision}',
+                      ),
+                      create: (_) =>
+                          ProfileViewModel(context.read<ProfileRepository>())
+                            ..load(),
+                      child: const ProfileEditorView(),
+                    ),
+                  ),
+                ),
+                GoRoute(
                   path: 'history',
                   builder: (context, _) => _DetailPage(
                     title: 'Scan history',
@@ -236,6 +254,14 @@ GoRouter createAppRouter({String initialLocation = AppRoutes.home}) => GoRouter(
         GoRoute(
           path: 'model-health',
           builder: (_, _) => const AdminAccessView(modelHealth: true),
+        ),
+        GoRoute(
+          path: 'farmers',
+          builder: (_, _) => const AdminAccessView(farmers: true),
+        ),
+        GoRoute(
+          path: 'audit',
+          builder: (_, _) => const AdminAccessView(audit: true),
         ),
       ],
     ),

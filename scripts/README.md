@@ -1,5 +1,20 @@
 # Scripts
 
+Phase 23.7 adds [check-requirements.mjs](check-requirements.mjs), invoked only
+through the existing schema-isolating harness:
+
+```powershell
+ai-service/.venv/Scripts/python.exe scripts/check-e2e.py --only migrations database original-requirements
+```
+
+It drives real Flutter profile/photo/Admin forms against Node, PostgreSQL and
+Cloudinary, tests ownership/redaction/rollback/revocation and pending catalogues,
+and records cleanup proof under `.cache/phase23/<run>`. Photos are generated synthetic
+fixtures, not dataset assets. Only allowlisted SDK/ephemeral client configuration
+reaches Flutter. The parent removes the owned schema, verifies unchanged production
+counts and checks Cloudinary cleanup. `RUN_LIVE_REQUIREMENTS` is test opt-in, not
+production configuration. See [evidence](../docs/phase-23-7-requirements-completion.md).
+
 Phase 23.6 adds [check-farmer-remediation.mjs](check-farmer-remediation.mjs), invoked
 only by the existing disposable-schema harness:
 

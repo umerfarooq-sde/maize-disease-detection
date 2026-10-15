@@ -1,5 +1,10 @@
 # Deterministic fertilizer calculator
 
+**Content handoff:** Phase 23.7 re-verifies the real catalogue's pending state.
+Use the separate [source/data/approval checklist](calculator-domain-input-checklist.md)
+before preparing and explicitly publishing a real configuration. Synthetic tests
+do not supply approved agronomic recommendations.
+
 Phase 17 adds a Node-owned exact area-rate engine, source-reviewed versioned rule
 publication and a Flutter calculator using the existing MVVM/design system.
 **Real maize fertilizer recommendations are pending.** The configured database has

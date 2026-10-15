@@ -56,6 +56,15 @@ import { createImageStorage } from './modules/scans/scan.storage.js';
 import { createYieldRepository } from './modules/yield/yield.repository.js';
 import { createYieldService, type YieldService } from './modules/yield/yield.service.js';
 import { apiRoutes } from './routes/index.js';
+import { createProfileMediaRepository } from './modules/profile/profile-media.repository.js';
+import {
+  createProfileMediaService,
+  type ProfileMediaService,
+} from './modules/profile/profile-media.service.js';
+import { createProfileRepository } from './modules/profile/profile.repository.js';
+import { createProfileService, type ProfileService } from './modules/profile/profile.service.js';
+import { createAccountsRepository } from './modules/admin/accounts.repository.js';
+import { createAccountsService, type AccountsService } from './modules/admin/accounts.service.js';
 
 export function createApp(
   environment: Environment,
@@ -100,6 +109,16 @@ export function createApp(
     environment,
     createModelHealthClient(environment),
   ),
+  profileService: ProfileService = createProfileService(
+    createProfileRepository(getDatabaseClient(environment.DATABASE_URL)),
+  ),
+  accountsService: AccountsService = createAccountsService(
+    createAccountsRepository(getDatabaseClient(environment.DATABASE_URL)),
+  ),
+  profileMediaService: ProfileMediaService = createProfileMediaService(
+    createProfileMediaRepository(getDatabaseClient(environment.DATABASE_URL)),
+    createImageStorage(environment, 'profiles'),
+  ),
 ): Express {
   const app = express();
   app.locals.recoverScans = () => scanService.recoverStale();
@@ -135,6 +154,9 @@ export function createApp(
       dashboardService,
       managementService,
       modelHealthService,
+      profileService,
+      accountsService,
+      profileMediaService,
     ),
   );
   app.use(notFound);

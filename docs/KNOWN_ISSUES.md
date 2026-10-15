@@ -1,5 +1,44 @@
 # Known issues
 
+Updated: 2026-10-15 (Asia/Karachi), Phase 23.7.
+
+**READY WITH DOCUMENTED LIMITATIONS** for separately authorized Phase 24. Farmer
+profile customization (including approved private photos), scoped Admin farmer
+management and filtered read-only audit history are implemented and verified.
+The prior registration/Knowledge gaps remain resolved. See the
+[current report and full original matrix](phase-23-7-requirements-completion.md)
+and [feature contracts](41-profile-accounts-audit.md). No Phase 24/deployment started.
+
+- **P0:** no issue found in this phase's implemented scope.
+- **P1, full original-product acceptance:** approved licensed disease-library media
+  is unavailable; image-specific provenance/publication, Admin workflow and Farmer
+  image rendering remain pending. Authoritative fertilizer/yield rules/models and
+  broader original recommendations/forecast outputs remain pending. Follow the
+  [separate data checklist](calculator-domain-input-checklist.md); no invented rates,
+  scraped photos or raw dataset redistribution. The completed profile is not blocked.
+- **P2, acceptance/operations:** no physical Android picker/permission/process-restart
+  acceptance; app-tree restart persistence and debug packaging are verified. Native
+  credentials remain volatile. Profile photos can retain original metadata and signed
+  URLs are bearer capabilities. Failed deletion leaves durable intents; run
+  `npm.cmd run profiles:cleanup` and schedule it only in authorized deployment work.
+  Existing provider/retention/least-privilege/shared-rate-limit/source-review and
+  research-model limitations remain. Full AI request telemetry is unrecorded;
+  runtime model counters are process-local. Older test helpers' broad child env
+  forwarding remains separate Phase 24 work; the new requirements runner allowlists.
+- **P3:** Swagger/OpenAPI is still absent. Audit actor role is current metadata,
+  not a historic snapshot; original broader structured severity/growth-stage coverage
+  and suggested duplicate Home personalization are not silently claimed complete.
+
+The additive ninth migration is applied: 21 tables, 27 checks, 38 custom triggers;
+Prisma/client/13 rollback checks and no-drift comparison pass. Full backend (309),
+Flutter (369; 13 default opt-in skips), AI (346; three opt-in SQL skips), 42 isolated
+DB checks and the enabled real profile/Admin Flutter host-widget journey pass.
+Two generated cloud assets and the owned schema are cleaned, production row counts
+are unchanged. No existing model, class mapping, preprocessing, corpus or dataset
+is changed. No lasting test/Admin account is provisioned.
+
+## Historical Phase 23.6 issue record (superseded above where resolved)
+
 Updated: 2026-10-15 (Asia/Karachi), Phase 23.6 targeted remediation.
 
 **READY WITH NON-BLOCKING LIMITATIONS for a separately authorized Phase 24.** Farmer

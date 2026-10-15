@@ -31,6 +31,8 @@ import 'data/datasources/scan_datasource.dart';
 import 'data/repositories/scan_repository.dart';
 import 'data/datasources/backend_datasource.dart';
 import 'data/repositories/backend_repository.dart';
+import 'data/repositories/profile_repository.dart';
+import 'data/repositories/admin_accounts_repository.dart';
 
 class MainApp extends StatefulWidget {
   const MainApp({
@@ -38,6 +40,7 @@ class MainApp extends StatefulWidget {
     this.httpClient,
     this.repository,
     this.scanRepository,
+    this.profileImages,
     this.initialLocation = AppRoutes.home,
     super.key,
   });
@@ -45,6 +48,7 @@ class MainApp extends StatefulWidget {
   final http.Client? httpClient;
   final BackendRepository? repository;
   final ScanRepository? scanRepository;
+  final LeafImageDatasource? profileImages;
   final String initialLocation;
   @override
   State<MainApp> createState() => _MainAppState();
@@ -103,6 +107,15 @@ class _MainAppState extends State<MainApp> {
     providers: [
       Provider<AppConfig>.value(value: _config),
       Provider<ApiClient>.value(value: _api),
+      Provider<ProfileRepository>(
+        create: (_) => ApiProfileRepository(
+          _api,
+          widget.profileImages ?? PickerLeafImageDatasource(),
+        ),
+      ),
+      Provider<AdminAccountsRepository>(
+        create: (_) => ApiAdminAccountsRepository(_adminApi),
+      ),
       Provider<RegistrationRepository>(
         create: (_) => ApiRegistrationRepository(_api),
       ),

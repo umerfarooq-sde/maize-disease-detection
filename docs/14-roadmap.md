@@ -1,5 +1,12 @@
 # Development roadmap
 
+**Current user-defined phase numbering:** Phase 23.7 original-requirement
+remediation is complete for its implementation/conditional review scope; Phase 24
+security hardening requires separate authorization. The initial planning table below
+predates the user's later Phase 23 testing / Phase 24 security instructions; follow
+those explicit scopes, not the old labels. Read [current report](phase-23-7-requirements-completion.md).
+No deployment or subsequent phase is started.
+
 Work incrementally under [AGENTS.md](../AGENTS.md). Before each phase, inspect existing
 files, explain the scope and dependencies, implement only that phase, run relevant
 checks, fix failures, and update [project state](PROJECT_STATE.md).

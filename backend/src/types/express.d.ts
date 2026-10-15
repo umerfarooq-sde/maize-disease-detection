@@ -7,5 +7,6 @@ declare module 'express-serve-static-core' {
     validated?: unknown;
     principal?: Principal;
     releaseUpload?: () => void;
+    releaseProfileUpload?: () => void;
   }
 }

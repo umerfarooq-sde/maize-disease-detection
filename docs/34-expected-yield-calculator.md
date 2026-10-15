@@ -1,5 +1,10 @@
 # Expected-yield calculator framework
 
+**Content handoff:** Phase 23.7 re-verifies the real catalogue's pending state.
+Use the separate [source/data/approval checklist](calculator-domain-input-checklist.md)
+before preparing and explicitly publishing a real configuration. Synthetic tests
+do not supply approved agronomic recommendations.
+
 Phase 18 adds a deterministic, versioned framework and Flutter UX. **Authoritative
 agronomic configuration remains pending.** Inspection found no approved yield formula
 or applicable rate data in project sources, seeds or PostgreSQL (`YIELD` count zero).

@@ -13,6 +13,7 @@
       "tests/yield/**",
       "tests/analytics/**",
       "tests/admin/**",
+      "tests/profile/**",
       "tests/fertilizer.database.integration.ts",
       "tests/knowledge.live.integration.ts",
       "tests/generation.live.integration.ts",

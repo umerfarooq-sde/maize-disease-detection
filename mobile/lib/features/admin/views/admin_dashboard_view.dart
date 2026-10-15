@@ -9,6 +9,8 @@ import '../../analytics/widgets/analytics_charts.dart';
 import '../../disease_detection/utils/scan_presentation.dart';
 import '../view_models/admin_dashboard_view_model.dart';
 import '../widgets/admin_system_summary.dart';
+import 'package:go_router/go_router.dart';
+import '../../../core/routes/app_routes.dart';
 
 class AdminDashboardView extends StatelessWidget {
   const AdminDashboardView({super.key});
@@ -38,6 +40,25 @@ class AdminDashboardView extends StatelessWidget {
           const SizedBox(height: AppSpacing.md),
           const Text(
             'System-wide saved activity and model predictions. These statistics do not measure prediction correctness or field disease prevalence.',
+          ),
+          const SizedBox(height: AppSpacing.lg),
+          Wrap(
+            spacing: AppSpacing.sm,
+            runSpacing: AppSpacing.sm,
+            children: [
+              OutlinedButton.icon(
+                key: const Key('admin-farmers-link'),
+                onPressed: () => context.push(AppRoutes.adminFarmers),
+                icon: const Icon(Icons.people_outline),
+                label: const Text('Manage farmer accounts'),
+              ),
+              OutlinedButton.icon(
+                key: const Key('admin-audit-link'),
+                onPressed: () => context.push(AppRoutes.adminAudit),
+                icon: const Icon(Icons.receipt_long_outlined),
+                label: const Text('View audit history'),
+              ),
+            ],
           ),
           const SizedBox(height: AppSpacing.lg),
           Wrap(

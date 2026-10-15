@@ -1,5 +1,10 @@
 # 1. OVERALL COMPLETENESS VERDICT
 
+**Later checkpoint:** the [Phase 23.7 report](phase-23-7-requirements-completion.md)
+supersedes the profile/account/audit gaps, following Phase 23.6's registration/library
+fixes. Licensed disease media, real agronomic content and physical-device acceptance
+remain open. The original audit findings/verdict below are historical.
+
 **Historical checkpoint, superseded for the two UI gaps by Phase 23.6.** Read the
 [remediation report](phase-23-6-remediation-report.md). That review also corrects this
 audit's profile/user-management scope finding: the original master brief explicitly

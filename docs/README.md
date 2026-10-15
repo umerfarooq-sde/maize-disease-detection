@@ -1,5 +1,11 @@
 # Documentation
 
+Current handoff: [Phase 23.7 original requirements matrix and verification](phase-23-7-requirements-completion.md),
+[profile/Admin accounts/audit contracts](41-profile-accounts-audit.md) and the
+[calculator source/approval checklist](calculator-domain-input-checklist.md).
+Phase 24/deployment are not started; unavailable licensed disease media and real
+calculator content remain explicit limitations.
+
 The original numbered files are architecture drafts preserved during Phase 0.
 Database design and environment/operations guides now describe verified infrastructure.
 Feature guides contain dated implementation contracts and explicit future boundaries.

@@ -127,6 +127,7 @@ TASKS = {
     ),
     "journey": (NODE + ["scripts/check-e2e.mjs"], ROOT, 600),
     "farmer-remediation": (NODE + ["scripts/check-farmer-remediation.mjs"], ROOT, 420),
+    "original-requirements": (NODE + ["scripts/check-requirements.mjs"], ROOT, 600),
 }
 TABLES = (
     "users",
@@ -394,6 +395,18 @@ def main() -> int:
                 listener.close()
             cloud_clean = True
             journey = output / "journey-proof.json"
+            requirements = output / "requirements-proof.json"
+            if any(row["check"] == "original-requirements" for row in results):
+                if not requirements.exists():
+                    cloud_clean = False
+                else:
+                    try:
+                        cloud_clean = bool(
+                            json.loads(requirements.read_text()).get("cloudCleanupComplete", False)
+                        )
+                    except (OSError, ValueError):
+                        cloud_clean = False
+                        proof["requirementsCleanupProofInvalid"] = True
             if any(row["check"] == "journey" for row in results) and not journey.exists():
                 cloud_clean = False
             if any(row["status"] == "TIMEOUT" for row in results):
@@ -404,6 +417,7 @@ def main() -> int:
                 "guest-inference",
                 "farmer-scan",
                 "journey",
+                "original-requirements",
             }
             if any(row["check"] in asset_checks and row["status"] != "PASS" for row in results):
                 cloud_clean = False
