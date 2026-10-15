@@ -1,6 +1,33 @@
 # Known issues
 
-Updated: 2026-10-15 (Asia/Karachi), Phase 23 comprehensive verification.
+Updated: 2026-10-15 (Asia/Karachi), Phase 23.5 implementation audit.
+
+**NOT READY FOR PHASE 24:** farmer registration has no production Flutter UI, and
+the farmer Knowledge tab remains a static foundation view. Their existing backend
+APIs and real sourced corpus work; these are Codex remediation tasks, not missing
+user credentials. Read the [full audit](phase-23-5-completeness-audit.md),
+[endpoint inventory](phase-23-5-endpoint-inventory.md) and
+[configuration inventory](phase-23-5-configuration-inventory.md).
+
+Real calculator domain content remains absent: current database rules/configs are
+empty and public catalogues correctly report PENDING. The user explicitly allowed
+that framework fallback, but real sourced rates/applicability review are required
+before claiming complete calculator recommendations at the final demo. Existing
+Google, Cloudinary, PostgreSQL, JWT and internal-service credentials are configured
+and verified; no new provider key or dataset metadata is needed for UI remediation.
+
+The audit fixed a cwd-sensitive Ruff import-grouping failure in the Phase 23 harness,
+stale Tools copy and stale architecture status descriptions. Full AI checks pass
+afterward; affected Flutter analysis and 18 widget/flow checks pass. No new feature,
+model/schema/dependency change or Phase 24–26 work was performed.
+
+The model-health and scan-upload live test helpers forward their server environment
+to local Flutter test children. Application binaries do not bundle those settings, but restricting that
+test-only boundary is a Phase 24 security task. Native sessions are intentionally
+volatile; no secure-storage persistence is implemented. The inference recovery timer
+exists, while orphan-upload cleanup still requires scheduling the existing CLI at
+deployment. No physical Android/emulator interaction is verified. These are distinct
+from the two P1 farmer UI gaps.
 
 Phase 23 explicitly identifies incomplete farmer journeys: registration is available
 through the backend API but has no farmer registration screen, and the Knowledge
@@ -119,6 +146,16 @@ is locked. Read [the fitness report](26-model-fitness-validation.md) and
 
 None found in the reviewed implementation and executed checks. This finding does
 not certify production security or prove field-image/model accuracy.
+
+## P1 — complete earlier farmer feature handoffs before Phase 24
+
+| Gap | Actual evidence | Remediation |
+|---|---|---|
+| Farmer self-registration | Real FARMER-only backend endpoint, but AuthIntroView only signs in; no registration repository/form/navigation | Implement MVVM registration against existing auth API; no new secret/data input |
+| Farmer knowledge library | KnowledgeView only renders FeatureIntro despite four diseases/25 sourced indexed documents and public read/search APIs | Complete missing Phase 6 browse/search/detail/source UI and tests; do not invent paragraphs |
+
+Larger remediation is reported, not implemented in the audit. Profile editing,
+user-management/audit-browser ideas are not silently added as approved requirements.
 
 ## Resolved Phase 9.5 decisions and Phase 10 implementation requirements
 

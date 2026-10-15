@@ -5,6 +5,12 @@ with administrative tools for maintaining knowledge and monitoring the system.
 
 ## Current status
 
+Phase 23.5 finds the project **not ready for Phase 24** until farmer registration
+and knowledge-library UI are connected to the existing APIs. Current service,
+model and database checks pass; real calculator content and physical-device
+acceptance remain pending. Read the [completeness audit](docs/phase-23-5-completeness-audit.md)
+for the phase matrix, real/mock distinction, user actions and later-phase boundaries.
+
 Phase 23 verifies component and real cross-service contracts, including a connected
 Flutter/API/MVVM farmer/Admin journey. The [test matrix](docs/39-testing-e2e-verification.md)
 explicitly records skipped tests, failed attempts and remaining registration/knowledge

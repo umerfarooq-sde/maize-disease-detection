@@ -27,13 +27,16 @@ os.chdir(ROOT / "ai-service")
 
 import psycopg  # noqa: E402
 import uvicorn  # noqa: E402
+from dotenv import dotenv_values  # noqa: E402
+from psycopg import sql  # noqa: E402
+from pydantic import SecretStr  # noqa: E402
+
+# isort: split
+# These imports depend on the explicit service path above, regardless of cwd.
 from app.config.settings import load_settings  # noqa: E402
 from app.main import create_app  # noqa: E402
 from app.rag.repository import KnowledgeRepository  # noqa: E402
 from app.rag.service import retrieval_identity  # noqa: E402
-from dotenv import dotenv_values  # noqa: E402
-from psycopg import sql  # noqa: E402
-from pydantic import SecretStr  # noqa: E402
 
 NODE = [
     "node",

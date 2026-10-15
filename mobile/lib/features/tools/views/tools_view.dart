@@ -20,7 +20,7 @@ class ToolsView extends StatelessWidget {
         ),
         const SizedBox(height: AppSpacing.sm),
         Text(
-          'Ask your field assistant or explore the planning tools being prepared.',
+          'Ask your field assistant or explore fertilizer and yield planning.',
           style: Theme.of(
             context,
           ).textTheme.bodyLarge?.copyWith(color: AppColors.muted),

@@ -2,11 +2,15 @@
 
 The original numbered files are architecture drafts preserved during Phase 0.
 Database design and environment/operations guides now describe verified infrastructure.
-The remaining feature documents describe intended behavior.
+Feature guides contain dated implementation contracts and explicit future boundaries.
+Use the current completeness audit to distinguish working code from target designs.
 
 | Document | Scope |
 |---|---|
 | [Project state](PROJECT_STATE.md) | Verified repository status, checks, issues, and next step |
+| [Phase 23.5 completeness audit](phase-23-5-completeness-audit.md) | Phase 0–23 verdict/matrix, actual feature wiring, real/mock evidence, user inputs/manual actions and deferred work |
+| [Endpoint inventory](phase-23-5-endpoint-inventory.md) | All 35 Node routes: validation, roles, controller/service/repository, consumers and real evidence |
+| [Configuration inventory](phase-23-5-configuration-inventory.md) | All 70 runtime template entries and test/tooling inputs, presence only, no secret values |
 | [Engineering decisions](DECISIONS.md) | Existing database decisions, audit corrections, and later-phase choices |
 | [Model health dashboard](38-model-health-dashboard.md) | Phase 22 registry/readiness, pinned offline metrics and process-local operational signals |
 | [Testing and E2E verification](39-testing-e2e-verification.md) | Phase 23 component/live/failure/E2E matrix, isolation, skipped tests and product/device gaps |

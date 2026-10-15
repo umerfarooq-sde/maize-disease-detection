@@ -4,6 +4,39 @@ Updated: 2026-10-15 (Asia/Karachi).
 
 ## Current phase
 
+Phase 23.5 completeness audit is complete. **NOT READY FOR PHASE 24.** Actual code
+still lacks farmer registration UI and the farmer disease-knowledge library; the
+corresponding APIs and real knowledge already exist. Complete these earlier-phase
+Flutter handoffs in a separately requested remediation scope before security hardening.
+Do not treat green test suites as complete user-facing features.
+
+Fresh verification passes 299 backend, 346 AI (three opt-in SQL skips), 296 Flutter
+(11 default live skips), 219 ML fixture and 78 shared tests in each Python environment,
+plus 12 synthetic parity cases, Prisma/client/13 DB checks/eight applied migrations
+and no schema diff. Android ARM64 debug APK builds. Readonly live probes confirm
+PostgreSQL/pgvector, all four sourced class retrievals, actual grounded Gemini,
+Cloudinary credentials, the pinned model and actual Node/FastAPI/Gemini plus native
+Flutter health. No Android emulator/phone acceptance is claimed.
+
+All 8,040 source files freshly match original byte hashes/sizes/mtimes; v2 content/
+group split intersections are zero. The selected research model is unchanged and
+unpromoted. No real classifier fitting or final-test evaluation was repeated.
+The audit fixes only cwd-dependent harness import sorting, stale Tools copy and
+stale current architecture language. AI checks and affected Flutter checks pass.
+
+Fertilizer/yield frameworks are connected but contain no real approved rates/model
+configuration. This authorized pending-content fallback does not itself block
+security work after coding remediation; it does block complete recommendation
+claims at the FYP demo. No additional user resource is needed to implement the two
+missing UIs. Real domain approval, named Admin provisioning and physical-device
+acceptance are separate pre-demo actions; security/deployment/QA work remains in
+Phases 24/25/26. No Phase 24 begins automatically. Read the
+[complete audit](phase-23-5-completeness-audit.md),
+[35-endpoint inventory](phase-23-5-endpoint-inventory.md) and
+[70-entry configuration inventory](phase-23-5-configuration-inventory.md).
+
+The preceding Phase 23 record follows.
+
 Phase 23 verification is complete, with the acceptance limits below. Component checks pass:
 299 backend tests, 346 AI tests (three default opt-in SQL skips), 296 Flutter tests
 (eleven default opt-in skips), 219 ML-tooling fixture tests and 78 shared preprocessing
@@ -2164,9 +2197,47 @@ Final cleanup inspection found no generated Phase 21/23 schema remaining and all
 21 production counts match the final run's baseline.
 Read the [full test matrix](39-testing-e2e-verification.md). Stop after Phase 23.
 
+## Phase 23.5 audit record
+
+- Read/indexed the complete history/design set and crosschecked source routes,
+  configuration, schema/migrations, corpus/vector rows, test collection/proofs,
+  training/manifests/artifact metadata and Flutter consumers. Documentation was not
+  accepted as implementation proof. No CI pipeline or production Docker builds exist;
+  these are deployment work rather than reasons to rebuild earlier foundations.
+- Created the detailed 28-section completeness report plus per-endpoint and per-variable
+  inventories. Every phase has one explicit status; user tasks, Codex coding work,
+  manual acceptance and intentionally deferred work are separated.
+- Fresh live database contains four diseases/four sources/25 documents/25 READY chunks,
+  one VALIDATED research model, zero calculator rules/configs and zero named users.
+  No active PRODUCTION registry row exists. Historical test users/assets were cleaned
+  by their owned Phase 23 harnesses; fresh audit probes use read-only access.
+- Found/fixed cwd-dependent Ruff first-party import grouping in check-e2e.py using
+  an explicit bootstrap import boundary; the full AI suite now passes from its actual
+  component working directory. Corrected stale Tools copy and architecture headers.
+  The affected Flutter analyzer and 18 widget/flow tests pass after the copy fix.
+- Full current component results: backend 299/0 skipped, AI 346/3 opt-in skips,
+  Flutter 296/11 opt-in skips, training tooling 219, shared 78 in both environments,
+  12 shared parity cases, Prisma 13/eight migrations current/no structural diff,
+  Compose configuration and Android ARM64 debug packaging. No lock/dependency change.
+- Fresh real requests verify loaded immutable model/startup/shutdown/auth rejection,
+  three synthetic predictions, four source-retaining retrievals, a grounded actual
+  Gemini answer and unsupported-question refusal. Separate actual TCP Node → FastAPI
+  → Google/pgvector/Gemini and one enabled native Flutter MVVM health test pass.
+  Cloudinary authenticated readonly ping passes. Prior real guest/FARMER upload/
+  history/assistant/calculator/Admin proofs were inspected, not relabeled as new
+  physical-device tests. Provider outage branches remain mocked/previously observed.
+- Verified all 8,040 raw files by SHA256/size/mtime without modifying them; the v2
+  index still has 4,162 contents/4,121 groups split 2,911/627/624, with zero confirmed
+  content/group leakage. No training, calibration/threshold change, test-set scoring,
+  production promotion, dataset redistribution, DB reset or new migration occurred.
+- Preserved unrelated ignore/ML/state edits. DECISIONS.md is unchanged because no
+  architectural choice was finalized. Stop after Phase 23.5.
+
 ## Next step
 
-Stop after Phase 23. Subsequent phases require the
+Stop after Phase 23.5. Request targeted farmer registration and Phase 6 knowledge UI
+remediation; do not recommend starting Phase 24 yet. Larger missing features were
+reported rather than implemented in this audit. Subsequent phases require the
 next explicit instruction. Independent
 field validation and commercial
 licensing/source replacement remain requirements before real farmer/commercial use.

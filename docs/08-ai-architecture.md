@@ -1,6 +1,6 @@
 # AI Service Architecture
 
-> **Status:** Phase 15 adds bounded Gemini evidence selection and cited reviewed-corpus excerpts to Phase 14 retrieval, Phase 12 Node orchestration and the Phase 11 classifier. Read [grounded generation](31-grounded-generation.md) and [knowledge/retrieval](30-knowledge-retrieval.md) for implemented contracts. Flutter assistant UI and deployment remain later work.
+> **Status:** Phase 15 adds bounded Gemini evidence selection and cited reviewed-corpus excerpts to Phase 14 retrieval, Phase 12 Node orchestration and the Phase 11 classifier. Read [grounded generation](31-grounded-generation.md) and [knowledge/retrieval](30-knowledge-retrieval.md) for implemented contracts. The Phase 16 Flutter assistant and Phase 22 model-health UI are integrated; deployment remains later work.
 
 Both Python environments now install the same [shared preprocessing package](22-shared-preprocessing.md).
 Serving and training re-export identical functions and must pin the same configuration
