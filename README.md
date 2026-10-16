@@ -5,6 +5,15 @@ with administrative tools for maintaining knowledge and monitoring the system.
 
 ## Current status
 
+Phase 24.5 master audit finds **NOT READY FOR PHASE 25** and **PARTIALLY COMPLETE**
+against the original product requirements. Current default AI startup has inconsistent
+optional confidence-policy configuration; original Admin monitoring/metadata and
+generated Node API documentation also need targeted remediation. Read the
+[master audit and supporting evidence](docs/phase-24-5-master-system-audit.md).
+No feature remediation, deployment or Phase 25/26 was started by the audit.
+
+The preceding completed implementation phase follows.
+
 Phase 24 security hardening is complete: **PASS WITH DOCUMENTED LIMITATIONS**. Protected Node image
 reads replace exposed Cloudinary capabilities; display metadata removal preserves
 original ML inputs. Authentication/RBAC, subprocess isolation, dependency/runtime

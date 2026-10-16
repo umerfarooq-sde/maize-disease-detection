@@ -1,6 +1,49 @@
 # Known issues
 
-Updated: 2026-10-16 (Asia/Karachi), Phase 24.
+Updated: 2026-10-16 (Asia/Karachi), Phase 24.5.
+
+**Current master-audit verdict: NOT READY FOR PHASE 25; original product PARTIALLY
+COMPLETE.** Read the [independent master audit](phase-24-5-master-system-audit.md),
+[prioritized findings](phase-24-5-findings.md) and
+[fresh failure/conditional integration ledger](phase-24-5-verification-matrix.md).
+No feature/deployment implementation or Phase 25/26 has started.
+
+- **New P1 configuration finding AUD-01:** the current ignored AI environment has a
+  nonempty confidence-policy digest but no policy path. Full default startup fails
+  CONFIDENCE_POLICY_INVALID. Do not remove the guard or invent a threshold. Reconcile
+  optional settings with the already approved null policy, then verify actual default
+  startup. Audit-only process settings are not a fix; saved private config is unchanged.
+- **Re-established original gaps AUD-02/AUD-04/AUD-07:** Admin AI request monitoring has no
+  application producer/API/UI; richer disease stage/severity/catalogue management is
+  incomplete; generated Node OpenAPI is missing. Treat these as scoped remediation,
+  not completed features inferred from reserved tables or prose API inventories.
+- **Approved content deferrals AUD-03/AUD-05/AUD-06:** no licensed disease-library photos or
+  real calculator rules/model. Media provenance/Admin/publication/gallery code also
+  does not exist. Product-rate scaling is not N/P/K needs; area-rate projection is
+  not min/expected/potential yield forecasting. No synthetic recommendation is promoted.
+- **Evidence quality AUD-13:** legacy journey labels still claim registration/Knowledge
+  are missing; actual newer UI gates prove they work. Correct proof labels separately;
+  do not resurrect the old implementation bugs or call mocked providers real.
+- **New P2 recovery finding AUD-16:** avatar removal commits, then awaits storage
+  cleanup. A controlled 16.5-second delete keeps the response pending beyond the
+  Flutter 15-second default; the UI may time out after a successful change. Bound
+  opportunistic cleanup/reconcile the committed outcome while preserving the journal
+  and current-asset fences. This behavior already exists in Phase 23.7, not a proven
+  Phase 24 regression. No real provider outage or application fix was performed.
+- **Separate release/acceptance gates:** production role/network/shared limits,
+  cleanup/backups/CI/signing, legacy asset review, unchanged unapproved retention/
+  erasure/provider policies, native device and independent field/commercial validation.
+  Existing security protections and research-model restrictions remain in force.
+
+Fresh component/analyzer/build/Prisma/admission/frozen checks pass. The unmodified
+live harness startup failure and explicit-policy integration evidence are distinct.
+All 19 categories plus preflight pass in one uninterrupted explicit-policy run,
+with zero selected skips and confirmed owned-fixture/public-count cleanup. The
+unchanged default configuration still fails before those categories can start.
+No current Git change proves when the ignored configuration mismatch originated;
+do not attribute it to a later security code change without evidence.
+
+## Historical Phase 24 issue record (readiness superseded above)
 
 Current evidence and exact remaining gates are in the
 [Phase 24 security report](phase-24-security-hardening.md). **PASS WITH DOCUMENTED LIMITATIONS; READY WITH DOCUMENTED LIMITATIONS** for

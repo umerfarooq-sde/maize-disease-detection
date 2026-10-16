@@ -4,6 +4,53 @@ Updated: 2026-10-16 (Asia/Karachi).
 
 ## Current phase
 
+**Phase 24.5 master audit is complete. Prior-phase verdict: INCOMPLETE — REMEDIATION
+REQUIRED; NOT READY FOR PHASE 25.**
+This corrects readiness against the original full requirements; it does not reverse
+Phase 24's verified security fixes. See the [master audit](phase-24-5-master-system-audit.md),
+[findings](phase-24-5-findings.md) and [fresh execution ledger](phase-24-5-verification-matrix.md).
+Full original FYP product status is **PARTIALLY COMPLETE**. No Phase 25/26 begins.
+
+Fresh default configured E2E startup fails closed with CONFIDENCE_POLICY_INVALID:
+the ignored AI dotenv supplies a policy digest without its optional policy file.
+The approved policy remains null-threshold, not an invented cutoff. Private config
+is unchanged; an explicitly reported process-only null-policy configuration permits
+separate real-provider/model integration checks and does not close the baseline defect.
+One uninterrupted explicit-policy run passes all 19 categories plus preflight with
+zero selected skips; its owned fixtures are cleaned and all 21 public counts are
+unchanged. Both earlier failed startup attempts remain recorded.
+An additional local delay fixture reproduces avatar removal responding after the
+Flutter deadline despite a committed change; bound cleanup/reconcile outcome in
+targeted remediation. The current mandatory application gaps also include Admin AI operational monitoring,
+broader disease metadata management/display and generated Node OpenAPI. The media
+publication/gallery chain is not implemented; its licensed-content deferral was
+explicitly allowed. Calculator engines are verified frameworks, not real N/P/K
+recommendations or minimum/expected/potential yield forecasting.
+
+Fresh component checks pass: backend 322+2, AI 356/three default opt-in SQL skips,
+Flutter 374/13 default live skips, training 219 fixture tests, shared 78 in each
+environment plus 12 exact synthetic parity cases; 56 Node/shared admission cases
+agree. Formatting/lint/types/build/analyze, ARM64 debug APK, Prisma/client/13 rollback
+checks/nine applied migrations/no drift, actual DB, Compose and repository checks
+pass. Live catalog: 21 application tables, 27 checks, 27 FKs, 38 triggers, 84 indexes,
+four active diseases/four sources/25 documents/25 READY chunks; no real calculator
+configurations or reference photos. Current Node/AI DB privileges are unsafe for
+production and correctly rejected by guards; provisioning remains Phase 25 scope.
+
+All 171 frozen source/artifact files and the selected checkpoint remain unchanged,
+as do class mapping, full-frame 1.0.0 preprocessing and the v2 manifests: 4,162 unique
+samples / 4,121 groups, 2,911/627/624 split with zero known-group overlap. No raw-image
+read, training, final-test scoring, model promotion, real-user edit, retention change,
+credential rotation or feature implementation occurred. Existing user workspace edits
+are preserved. Temporary test evidence/cache relocation is ignored; no model/dataset
+or APK was removed. Physical-device/field/commercial/release claims remain unverified.
+
+Request targeted remediation of the documented prior-phase/configuration gaps and
+repeat affected checks before Phase 25. External content/policy/device gates are
+separate from legitimate future deployment engineering.
+
+## Historical Phase 24 completion record (readiness superseded by Phase 24.5)
+
 **Phase 24 is complete: PASS WITH DOCUMENTED LIMITATIONS. READY WITH DOCUMENTED
 LIMITATIONS for separately authorized Phase 25 preparation.** No Phase 25/26 or
 deployment has started; public release still requires the explicit security gates.

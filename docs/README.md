@@ -1,10 +1,17 @@
 # Documentation
 
-Current handoff: [Phase 24 security hardening and verification](phase-24-security-hardening.md),
+Current handoff: [Phase 24.5 master system audit](phase-24-5-master-system-audit.md)
+and its [findings/remediation register](phase-24-5-findings.md). **NOT READY FOR PHASE 25**:
+default AI startup configuration and original application/contract gaps require
+targeted remediation. Full FYP status is partially complete; conditional external
+content, policy and device gates remain. No deployment has started.
+
+Previous handoff: [Phase 24 security hardening and verification](phase-24-security-hardening.md),
 [Phase 23.7 original requirements matrix](phase-23-7-requirements-completion.md),
 [profile/Admin accounts/audit contracts](41-profile-accounts-audit.md) and the
 [calculator source/approval checklist](calculator-domain-input-checklist.md).
-Phase 24 is complete with documented limitations; Phase 25/deployment are not started. Licensed disease media and real
+Phase 24 security work is complete with documented limitations; its readiness
+statement is superseded by the broader Phase 24.5 audit. Licensed disease media and real
 calculator content remain explicit limitations.
 
 The original numbered files are architecture drafts preserved during Phase 0.
@@ -15,6 +22,16 @@ Use the current completeness audit to distinguish working code from target desig
 | Document | Scope |
 |---|---|
 | [Project state](PROJECT_STATE.md) | Verified repository status, checks, issues, and next step |
+| [Master system audit](phase-24-5-master-system-audit.md) | Current Phase 24.5 verdict, actual architecture, original completeness and exact next action |
+| [All phase statuses](phase-24-5-phase-matrix.md) | Every requested phase, including decimal audits/remediations, current source/test evidence and limitations |
+| [Original requirements](phase-24-5-requirements-matrix.md) | Farmer/Admin/ML/RAG/nonfunctional traceability and mandatory versus approved-limited/optional scope |
+| [Component connections](phase-24-5-components.md) | As-built diagram, producers/consumers, failures/configuration and reserved versus incomplete structures |
+| [Current API contracts](phase-24-5-api-contracts.md) | All 44 Node and 10 AI operations, schemas/auth/DTOs/Flutter/downstream/tests; not a generated OpenAPI replacement |
+| [Vertical slices](phase-24-5-vertical-slices.md) | Nineteen UI-to-provider-to-returned-state journeys and cross-layer identity bindings |
+| [Database ownership](phase-24-5-database-ownership.md) | Actual 21 tables/nine migrations, writers/readers, ownership and SQL invariants |
+| [Fresh verification](phase-24-5-verification-matrix.md) | Commands, counts/skips, failed default startup, explicit test configuration, live versus mock and cleanup evidence |
+| [Findings](phase-24-5-findings.md) | P0–P3 priority, exact locations, remediation and Phase 25/FYP gates |
+| [User/manual gates](phase-24-5-manual-gates.md) | Required content/approval/device inputs and legitimate future infrastructure scope |
 | [Phase 24 security report](phase-24-security-hardening.md) | Threat model, genuine fixes, image privacy, dependency advisories, test results, unchanged retention and release gates |
 | [Phase 23.6 remediation](phase-23-6-remediation-report.md) | Registration and real farmer knowledge UI, live verification, original-requirement corrections and readiness |
 | [Farmer registration and knowledge](40-farmer-registration-knowledge.md) | Current Flutter MVVM routes, auth/catalogue/search contracts, source display and test commands |
