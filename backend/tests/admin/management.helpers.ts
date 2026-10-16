@@ -57,6 +57,9 @@ export function memoryManagement() {
   const writes: unknown[] = [];
   let fail = false;
   const repository: ManagementRepository = {
+    async createDisease() {
+      return disease;
+    },
     async diseases() {
       return [disease];
     },

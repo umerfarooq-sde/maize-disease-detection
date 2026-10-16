@@ -2,6 +2,7 @@ import { Prisma, type PrismaClient } from '../../generated/prisma/client.js';
 import { AppError } from '../../errors/app-error.js';
 import {
   type DiseaseEdit,
+  type DiseaseCreate,
   type DraftDocument,
   type PreparedDocument,
   type IndexReceipt,
@@ -16,9 +17,13 @@ const diseaseInclude = {
 export type ManagedDocument = Prisma.KnowledgeDocumentGetPayload<{
   include: typeof diseaseInclude;
 }>;
-export type ManagedDisease = Prisma.DiseaseGetPayload<Record<string, never>>;
+export type ManagedDisease = Omit<
+  Prisma.DiseaseGetPayload<Record<string, never>>,
+  'catalogueMetadata'
+> & { catalogueMetadata?: Prisma.JsonValue };
 export interface ManagementRepository {
   diseases(): Promise<ManagedDisease[]>;
+  createDisease(input: DiseaseCreate, actorId: string, requestId: string): Promise<ManagedDisease>;
   editDisease(
     slug: string,
     input: DiseaseEdit,
@@ -97,18 +102,59 @@ export function createManagementRepository(database: PrismaClient): ManagementRe
   return {
     diseases() {
       return database.disease.findMany({
-        where: { slug: { in: supportedDiseases.map((item) => item.slug) } },
         orderBy: { slug: 'asc' },
+        take: 100,
+      });
+    },
+    createDisease(input, actorId, requestId) {
+      return locked(async (tx) => {
+        const { source, reviewNote, approved: _, ...fields } = input;
+        const row = await tx.disease.create({
+          data: {
+            ...fields,
+            catalogueMetadata: {
+              growthStages: [],
+              severityDescriptors: [],
+              ...fields.catalogueMetadata,
+              source,
+              reviewNote,
+              approved: true,
+              reviewedAt: new Date().toISOString(),
+              classifierSupported: false,
+            },
+          },
+        });
+        await tx.auditLog.create({
+          data: {
+            actorId,
+            requestId,
+            action: 'CREATE',
+            entityType: 'disease',
+            entityId: row.id,
+            changes: { slug: row.slug, classifierSupported: false, source },
+          },
+        });
+        return row;
       });
     },
     editDisease(slug, input, actorId, requestId) {
       return locked(async (tx) => {
         const row = await tx.disease.findUnique({ where: { slug } });
-        if (!row || !supportedDiseases.some((item) => item.slug === row.slug))
-          throw new AppError('NOT_FOUND');
+        if (!row) throw new AppError('NOT_FOUND');
         if (diseaseRevision(row) !== input.expectedRevision) throw new AppError('CONFLICT');
-        const { expectedRevision: _, ...changes } = input;
-        const updated = await tx.disease.update({ where: { id: row.id }, data: changes });
+        const { expectedRevision: _, catalogueMetadata, ...changes } = input;
+        const updated = await tx.disease.update({
+          where: { id: row.id },
+          data: {
+            ...changes,
+            ...(catalogueMetadata
+              ? {
+                  affectedGrowthStages: catalogueMetadata.growthStages,
+                  catalogueMetadata: { ...catalogueMetadata, reviewedAt: new Date().toISOString() },
+                }
+              : {}),
+          },
+        });
         await tx.auditLog.create({
           data: {
             actorId,
@@ -119,7 +165,8 @@ export function createManagementRepository(database: PrismaClient): ManagementRe
             changes: {
               previousRevision: input.expectedRevision,
               revision: diseaseRevision(updated),
-              fields: changes,
+              fields: { ...changes, ...(catalogueMetadata ? { catalogueMetadata } : {}) },
+              previousMetadata: row.catalogueMetadata,
             },
           },
         });

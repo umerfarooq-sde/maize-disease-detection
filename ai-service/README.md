@@ -1,5 +1,24 @@
 # AI service
 
+## Phase 24.6 configured startup and operational events
+
+Keep CONFIDENCE_POLICY_PATH and CONFIDENCE_POLICY_SHA256 both empty for the approved
+null threshold, or configure both only for a separately approved compatible policy.
+One-sided settings fail before model loading with safe actionable guidance. OS
+environment overrides the service-local dotenv, including on Windows; removing an
+override reveals the file value. The local inconsistency has been repaired without
+changing model/calibration/threshold. Private files are never committed.
+
+Run `../scripts/check-ai-startup.py` with the service venv to test the actual configured
+lifespan, pinned hashes/class mapping and inference. `python -m app.server` remains
+the normal executable. No confidence-policy process override is needed.
+
+Service/provider operations now emit bounded metadata-only ai_operations events through
+the lifespan-owned worker. No prompt/image/user/credential is recorded. Queue-full,
+DB failure, abrupt loss or shutdown deadline can drop pending events; this is best-effort
+operational monitoring, not a lossless audit ledger. Existing logging/security guards
+remain. See [current contracts/evidence](../docs/phase-24-6-pre-deployment-remediation.md).
+
 Phase 24 rejects ambiguous JSON media/encoding headers and unsafe production
 database identities. Production requires CPython 3.11.17+ in the approved 3.11
 series and verified remote PostgreSQL TLS; retrieval refuses inherited privileged,

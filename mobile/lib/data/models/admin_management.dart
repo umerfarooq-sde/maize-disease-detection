@@ -1,11 +1,14 @@
 import '../../core/exceptions/app_exception.dart';
+import 'dart:convert';
 import 'calculator_input.dart';
 
 enum ManagementArea {
   knowledge('Knowledge'),
   diseases('Diseases'),
   fertilizer('Fertilizer rules'),
-  yieldRules('Yield rules');
+  yieldRules('Yield rules'),
+  modelSpecifications('Agronomic model review'),
+  fertilizers('Fertilizer catalogue');
 
   const ManagementArea(this.label);
   final String label;
@@ -57,7 +60,8 @@ class ManagementEntry {
     if (area == ManagementArea.diseases &&
         (data['revision'] is! String ||
             data['slug'] is! String ||
-            data['literalLabel'] is! String)) {
+            (data['literalLabel'] != null &&
+                data['literalLabel'] is! String))) {
       throw const AppException(AppErrorKind.invalidResponse);
     }
     return ManagementEntry._(
@@ -141,6 +145,17 @@ Map<String, String> managementEditorValues(
   }
 
   if (area == ManagementArea.diseases) {
+    final metadata = data['catalogueMetadata'];
+    if (metadata is Map<String, dynamic>) {
+      result['growthStages'] = (metadata['growthStages'] as List? ?? [])
+          .whereType<String>()
+          .join('\n');
+      result['severityDescriptors'] =
+          (metadata['severityDescriptors'] as List? ?? [])
+              .whereType<String>()
+              .join('\n');
+      source(metadata['source'], true);
+    }
     for (final key in ['name', 'scientificName', 'description', 'status']) {
       text(key, data[key]);
     }
@@ -160,6 +175,59 @@ Map<String, String> managementEditorValues(
     text('region', curation['region']);
     text('sourceSection', curation['sourceSection']);
     source(data['source'], true);
+  } else if (area == ManagementArea.fertilizers) {
+    final draft = data['draftInput'] is Map<String, dynamic>
+        ? data['draftInput'] as Map<String, dynamic>
+        : const <String, dynamic>{};
+    final product = draft['product'] is Map<String, dynamic>
+        ? draft['product'] as Map<String, dynamic>
+        : const <String, dynamic>{};
+    final info = draft['information'] is Map<String, dynamic>
+        ? draft['information'] as Map<String, dynamic>
+        : const <String, dynamic>{};
+    for (final key in [
+      'slug',
+      'name',
+      'description',
+      'nitrogenPercent',
+      'phosphorusPercent',
+      'potassiumPercent',
+      'applicationMethod',
+      'sourceReference',
+    ]) {
+      text('product.$key', product[key]);
+    }
+    result['product.precautions'] = (product['precautions'] as List? ?? [])
+        .whereType<String>()
+        .join('\n');
+    for (final key in ['type', 'applicationRateText']) {
+      text(key, info[key]);
+    }
+    for (final key in ['growthStages', 'suitableConditions']) {
+      result[key] = (info[key] as List? ?? []).whereType<String>().join('\n');
+    }
+    source(info['source'], false);
+    text('status', data['status']);
+  } else if (area == ManagementArea.modelSpecifications) {
+    final draft = data['draftInput'] is Map<String, dynamic>
+        ? data['draftInput'] as Map<String, dynamic>
+        : const <String, dynamic>{};
+    for (final key in [
+      'modelKey',
+      'kind',
+      'title',
+      'mathematicalDefinition',
+      'applicability',
+    ]) {
+      text(key, draft[key]);
+    }
+    for (final key in ['inputs', 'outputs', 'coefficients']) {
+      result[key] = jsonEncode(draft[key] ?? <Object>[]);
+    }
+    result['assumptions'] = (draft['assumptions'] as List? ?? [])
+        .whereType<String>()
+        .join('\n');
+    source(draft['source'], false);
   } else {
     final draft = data['draftInput'] is Map<String, dynamic>
         ? data['draftInput'] as Map<String, dynamic>
@@ -303,7 +371,95 @@ Map<String, Object?> managementWrite(
       .where((line) => line.isNotEmpty)
       .toList();
   int integer(String key) => int.tryParse(value(key)) ?? -1;
+  if (editor.area == ManagementArea.fertilizers) {
+    if (value('approved') != 'true') {
+      throw const AppException(AppErrorKind.validation);
+    }
+    return {
+      'product': {
+        for (final key in [
+          'slug',
+          'name',
+          'description',
+          'nitrogenPercent',
+          'phosphorusPercent',
+          'potassiumPercent',
+        ])
+          key: value('product.$key'),
+        'sourceReference': value('source.url'),
+        'applicationMethod': value('product.applicationMethod').isEmpty
+            ? null
+            : value('product.applicationMethod'),
+        'precautions': lines('product.precautions'),
+      },
+      'information': {
+        'type': value('type').isEmpty ? null : value('type'),
+        'growthStages': lines('growthStages'),
+        'suitableConditions': lines('suitableConditions'),
+        'applicationRateText': value('applicationRateText').isEmpty
+            ? null
+            : value('applicationRateText'),
+        'source': {
+          for (final key in ['title', 'publisher', 'url', 'citation'])
+            key: value('source.$key'),
+        },
+        'reviewNote': value('reviewNote'),
+        'approved': true,
+      },
+      'status': value('status'),
+      if (editor.entry != null)
+        'expectedRevision': editor.entry!.values['revision'],
+    };
+  }
+  if (editor.area == ManagementArea.modelSpecifications) {
+    if (value('approved') != 'true') {
+      throw const AppException(AppErrorKind.validation);
+    }
+    List<dynamic> array(String key) {
+      try {
+        final raw = jsonDecode(value(key));
+        if (raw is List<dynamic>) return raw;
+      } catch (_) {}
+      throw const AppException(AppErrorKind.validation);
+    }
+
+    return {
+      'modelKey': value('modelKey'),
+      'kind': value('kind'),
+      'expectedVersion': editor.entry?.version ?? 0,
+      'title': value('title'),
+      'mathematicalDefinition': value('mathematicalDefinition'),
+      'applicability': value('applicability'),
+      'assumptions': lines('assumptions'),
+      'inputs': array('inputs'),
+      'outputs': array('outputs'),
+      'coefficients': array('coefficients'),
+      'source': {
+        for (final key in ['title', 'publisher', 'url', 'citation'])
+          key: value('source.$key'),
+      },
+      'reviewNote': value('reviewNote'),
+      'approved': true,
+    };
+  }
   if (editor.area == ManagementArea.diseases) {
+    final stages = lines('growthStages'),
+        severity = lines('severityDescriptors');
+    final hasMetadata =
+        stages.isNotEmpty ||
+        severity.isNotEmpty ||
+        value('reviewNote').isNotEmpty;
+    Map<String, Object?> source() => {
+      for (final key in ['title', 'publisher', 'url', 'rights', 'retrievedAt'])
+        key: value('source.$key'),
+      'authors': lines('source.authors'),
+      'publishedAt': value('source.publishedAt').isEmpty
+          ? null
+          : value('source.publishedAt'),
+    };
+    if ((hasMetadata || editor.entry == null) && value('approved') != 'true') {
+      throw const AppException(AppErrorKind.validation);
+    }
     return {
       'name': value('name'),
       'scientificName': value('scientificName').isEmpty
@@ -311,7 +467,22 @@ Map<String, Object?> managementWrite(
           : value('scientificName'),
       'description': value('description'),
       'status': value('status'),
-      'expectedRevision': editor.entry!.values['revision'],
+      if (editor.entry != null)
+        'expectedRevision': editor.entry!.values['revision']
+      else ...{
+        'slug': value('slug'),
+        'source': source(),
+        'reviewNote': value('reviewNote'),
+        'approved': true,
+      },
+      if (hasMetadata)
+        'catalogueMetadata': {
+          'growthStages': stages,
+          'severityDescriptors': severity,
+          'source': value('source.url').isEmpty ? null : source(),
+          'reviewNote': value('reviewNote'),
+          'approved': true,
+        },
     };
   }
   if (value('approved') != 'true') {

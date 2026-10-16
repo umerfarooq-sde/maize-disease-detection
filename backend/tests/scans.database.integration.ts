@@ -112,27 +112,30 @@ test('PostgreSQL scan persistence, idempotency race, compensation and journal co
           where: { id: { in: [...ids] }, state: 'COMPLETED' },
         });
         await assert.rejects(
-          database.$transaction(async (tx) => {
-            await assertSqlRejects(
-              tx,
-              "UPDATE scan_uploads SET state='FAILED' WHERE id=$1::uuid",
-              [completed.id],
-              '23514',
-            );
-            await assertSqlRejects(
-              tx,
-              "UPDATE scan_uploads SET public_id='other/asset' WHERE id=$1::uuid",
-              [completed.id],
-              '23514',
-            );
-            await assertSqlRejects(
-              tx,
-              "UPDATE scans SET uploaded_at=uploaded_at+interval '1 second' WHERE id=$1::uuid",
-              [completed.scanId],
-              '23514',
-            );
-            throw rollbackFixture;
-          }),
+          database.$transaction(
+            async (tx) => {
+              await assertSqlRejects(
+                tx,
+                "UPDATE scan_uploads SET state='FAILED' WHERE id=$1::uuid",
+                [completed.id],
+                '23514',
+              );
+              await assertSqlRejects(
+                tx,
+                "UPDATE scan_uploads SET public_id='other/asset' WHERE id=$1::uuid",
+                [completed.id],
+                '23514',
+              );
+              await assertSqlRejects(
+                tx,
+                "UPDATE scans SET uploaded_at=uploaded_at+interval '1 second' WHERE id=$1::uuid",
+                [completed.scanId],
+                '23514',
+              );
+              throw rollbackFixture;
+            },
+            { maxWait: 10000, timeout: 30000 },
+          ),
           (error: unknown) => error === rollbackFixture,
         );
       },

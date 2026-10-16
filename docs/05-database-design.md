@@ -1,5 +1,9 @@
 # Database design
 
+**Phase24.6 current addendum (2026-10-17):** Five additive migrations extend the original nine to14;22 application tables. ai_operations has privacy-minimal operational attempts; Disease has optional reviewed catalogueMetadata; DiseaseImage has source/rights/review/state/cleanup/replacement lineage. Product information reuses immutable non-indexed KnowledgeDocuments and richer-model intake reuses disabled CalculatorConfigs.
+
+See [remediation and current evidence](phase-24-6-pre-deployment-remediation.md). Historical phase details follow.
+
 Phase 2 implements PostgreSQL persistence with Prisma 7.10.0 and the PostgreSQL driver
 adapter. The [Prisma schema](../backend/prisma/schema.prisma) defines the relational
 structure; [versioned SQL migrations](../backend/prisma/migrations/) additionally define

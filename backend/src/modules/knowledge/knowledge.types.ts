@@ -147,6 +147,7 @@ export interface DiseaseSummary {
   description: string;
 }
 export interface DiseaseDetail extends DiseaseSummary {
+  catalogue?: { classifierSupported: boolean; literalLabel: string | null; applicability: unknown };
   sections: {
     documentId: string;
     documentKey: string;

@@ -41,6 +41,7 @@ test('Prisma disease reads bind active status and explicit projections, includin
       where: { slug: 'common-rust', status: 'ACTIVE' },
       select: {
         ...summarySelect,
+        catalogueMetadata: true,
         knowledgeDocuments: {
           where: {
             status: 'ACTIVE',

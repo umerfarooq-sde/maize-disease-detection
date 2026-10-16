@@ -6,6 +6,26 @@ import 'package:maizedoctor/features/profile/view_models/profile_view_model.dart
 import 'helpers.dart';
 
 void main() {
+  for (final kind in [AppErrorKind.timeout, AppErrorKind.server]) {
+    test(
+      'uncertain upload acknowledgement $kind reloads committed state without resubmission or a false success claim',
+      () async {
+        final repo = FakeProfileRepository();
+        final model = ProfileViewModel(repo);
+        addTearDown(model.dispose);
+        await model.load();
+        await model.choosePhoto();
+        repo.uploadAcknowledgementFailure = AppException(kind);
+        await model.uploadPhoto();
+        expect(repo.uploads, 1);
+        expect(repo.reads, 2);
+        expect(model.photo, isNull);
+        expect(model.data!.avatarUrl, isNotNull);
+        expect(model.message, isNull);
+        expect(model.error!.kind, AppErrorKind.conflict);
+      },
+    );
+  }
   const draft = ProfileDraft('Saved farmer', 'Region', 'PK', '2.5');
   test(
     'profile loading/save suppression, persistent result and photo actions',

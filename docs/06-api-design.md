@@ -1,5 +1,9 @@
 # API Design
 
+**Phase24.6 current addendum (2026-10-17):** The generated backend/openapi.json now covers59 runtime operations with actual Zod request schemas and shared checked response contracts. New ADMIN telemetry/catalogue/media/product/model-intake and public reference endpoints are listed in the remediation report. Private image contracts and existing versioning remain.
+
+See [remediation and current evidence](phase-24-6-pre-deployment-remediation.md). Historical phase details follow.
+
 > **Status:** Phase 14 adds active disease catalogue/detail and semantic knowledge search to the existing health/auth/scan/history routes. Read [knowledge contracts](30-knowledge-retrieval.md); other candidate business routes remain design guidance.
 
 ## Conventions

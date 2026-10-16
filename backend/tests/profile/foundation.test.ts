@@ -350,6 +350,7 @@ function mediaFixture() {
     uploadFails: false,
     destroyFails: false,
     reservedBeforeUpload: false,
+    destroyDelayMs: 0,
   };
   const repository: ProfileMediaRepository = {
     async read() {
@@ -411,6 +412,8 @@ function mediaFixture() {
       };
     },
     async destroy(id) {
+      if (state.destroyDelayMs)
+        await new Promise((resolve) => setTimeout(resolve, state.destroyDelayMs));
       if (state.destroyFails) throw new AppError('UPLOAD_FAILED');
       assets.delete(id);
     },
@@ -441,11 +444,16 @@ test('profile photo journal reserves before upload, replaces privately and clean
   const first = f.row.avatarPublicId;
   await f.service.upload(f.row.userId, f.revision(), f.image);
   assert.notEqual(f.row.avatarPublicId, first);
+  assert.equal(f.assets.size, 2);
+  assert.deepEqual(f.row.avatarCleanupPublicIds, [first]);
+  await f.service.cleanup();
   assert.equal(f.assets.size, 1);
   assert.equal(f.row.avatarPendingPublicId, null);
   assert.deepEqual(f.row.avatarCleanupPublicIds, []);
   await f.service.remove(f.row.userId, f.revision());
   assert.equal(f.row.avatarUrl, null);
+  assert.equal(f.assets.size, 1);
+  await f.service.cleanup();
   assert.equal(f.assets.size, 0);
 });
 test('failed photo commit compensates cloud upload without replacing the old photo', async () => {
@@ -455,6 +463,8 @@ test('failed photo commit compensates cloud upload without replacing the old pho
   f.state.finishFails = true;
   await assert.rejects(f.service.upload(f.row.userId, f.revision(), f.image));
   assert.equal(f.row.avatarPublicId, old);
+  assert.equal(f.assets.size, 2);
+  await f.service.cleanup();
   assert.equal(f.assets.size, 1);
   assert.equal(f.row.avatarPendingPublicId, null);
 });
@@ -511,6 +521,45 @@ test('old-photo deletion failure remains queued after successful replacement', a
   assert.deepEqual(f.row.avatarCleanupPublicIds, []);
   assert.equal(f.assets.size, 1);
   assert.ok(current && f.assets.has(current));
+});
+
+test('committed removal never waits for provider deletion; interrupted cleanup is durable', async () => {
+  const f = mediaFixture();
+  await f.service.upload(f.row.userId, f.revision(), f.image);
+  f.state.destroyFails = true;
+  const result = await f.service.remove(f.row.userId, f.revision());
+  assert.equal(result.profile?.avatarUrl, null);
+  assert.equal(f.row.avatarCleanupPublicIds.length, 1);
+  assert.equal(f.assets.size, 1);
+  assert.deepEqual(await f.service.cleanup(), { removed: 0, failed: 1 });
+  await f.service.remove(f.row.userId, f.revision());
+  f.state.destroyFails = false;
+  assert.deepEqual(await f.service.cleanup(), { removed: 1, failed: 0 });
+  assert.equal(f.assets.size, 0);
+});
+
+test('removal reconciles a lost database commit acknowledgement', async () => {
+  const f = mediaFixture();
+  await f.service.upload(f.row.userId, f.revision(), f.image);
+  const remove = f.repository.remove;
+  f.repository.remove = async (...args) => {
+    await remove(...args);
+    throw new Error('lost acknowledgement');
+  };
+  assert.equal((await f.service.remove(f.row.userId, f.revision())).profile?.avatarUrl, null);
+  assert.equal(f.assets.size, 1);
+});
+
+test('16.5 second provider cleanup cannot delay a committed removal response', async () => {
+  const f = mediaFixture();
+  await f.service.upload(f.row.userId, f.revision(), f.image);
+  f.state.destroyDelayMs = 16500;
+  const started = performance.now();
+  assert.equal((await f.service.remove(f.row.userId, f.revision())).profile?.avatarUrl, null);
+  assert.ok(performance.now() - started < 1000);
+  assert.equal(f.assets.size, 1);
+  await f.service.cleanup();
+  assert.equal(f.assets.size, 0);
 });
 test('photo API admits decoded JPEG/PNG/WebP and rejects malformed media, extra fields and non-farmers', async () => {
   const f = await authFixture(),

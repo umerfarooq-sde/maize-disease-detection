@@ -19,6 +19,8 @@ SAFE_FIELDS = (
     "evidence_count",
     "provider_used",
     "generation_status",
+    # Only the executable's safe ConfigurationError supplies this diagnostic.
+    "configuration_hint",
 )
 
 

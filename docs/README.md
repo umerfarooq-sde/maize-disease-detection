@@ -1,5 +1,9 @@
 # Documentation
 
+**Phase24.6 current addendum (2026-10-17):** Current remediation, original requirements, component/vertical-slice changes and actual test evidence are in the Phase24.6 report and linked matrices. Phase24.5 remains a historical audit; no Phase25/26 starts.
+
+See [remediation and current evidence](phase-24-6-pre-deployment-remediation.md). Historical phase details follow.
+
 Current handoff: [Phase 24.5 master system audit](phase-24-5-master-system-audit.md)
 and its [findings/remediation register](phase-24-5-findings.md). **NOT READY FOR PHASE 25**:
 default AI startup configuration and original application/contract gaps require

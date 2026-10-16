@@ -8,7 +8,7 @@ import { type ImageMime, scanLimits } from './scan.types.js';
 export interface ImageLocation {
   url: string;
   publicId: string;
-  purpose: 'scans' | 'profiles';
+  purpose: 'scans' | 'profiles' | 'references';
 }
 export interface PrivateImage {
   bytes: Buffer;

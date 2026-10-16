@@ -1,3 +1,54 @@
+# Project state — Phase 24.6 current handoff
+
+Updated: 2026-10-17 (Asia/Karachi). Baseline: `18bd55e`.
+
+## Current phase
+
+**Phase 24.6 final verdict: PARTIALLY COMPLETE.**
+Normal-config full run `20261016T204723Z-98b47879`: **18 PASS / 3 FAIL / 0 selected skips**; failed **rag-database, knowledge, predeployment-remediation**. Full integration acceptance remains failed. Phase 25 readiness: **NOT READY**. Phase 25 and 26 have
+not started. The original FYP is not fully accepted: licensed disease photographs,
+reviewed applicability, real calculator rates and nutrient/forecast mathematical
+models, confidence/field/commercial/privacy/device/release approvals remain gates.
+
+Implemented in this phase: saved optional confidence-policy pair repaired without
+model/calibration change; safe actionable startup preflight; committed avatar
+responses separated from existing durable cleanup with client reconciliation;
+privacy-minimal operational producers/DB/Admin API/Flutter; informational disease
+creation and sourced optional growth-stage/severity; full controlled reference-media
+lifecycle/protected gallery; independent sourced product metadata; disabled versioned
+richer-model review intake; 59-operation generated/validated Node OpenAPI; stale journey
+labels corrected. A remote rollback fixture now has an explicit test-only transaction
+budget without changing application deadlines or SQL assertions.
+
+Default configured model startup/inference succeeds without a temporary policy
+override. Model `mobilenet-v3-small-v2-20261009`, shared full-frame preprocessing
+v1.0.0, 224RGB/NCHW, four fixed labels, null confidence threshold and temperature 1
+remain. Checkpoint SHA256:
+`e95a2e83262637fc1a08b919e6003bddb2fe70664b9c51418f059b7c8287dc66`.
+Metadata SHA256:
+`a831116fe1ff8b915543991412f4ab6b334736e8eaca376fab8db3b57e5b263d`.
+171 frozen files and original nine migration bytes match; no dataset access,
+training, split change, final test rescore or model promotion. The research registry
+remains VALIDATED, not silently promoted to PRODUCTION.
+
+Component checks: backend 349+2, AI 363/3 default SQL skips, Flutter 385/14 default live
+skips, training 219, shared 78 per environment+12 exact parity, admission 56 cases,
+Android ARM64 debug, strict types/build/analyze, Prisma validation/client/14 SQL tests,
+14 applied migrations/no drift and disposable replay, actual PostgreSQL/Compose/repo
+checks pass. Full normal-config verification remains failed despite passing focused remediation; 18 PASS / 3 FAIL / 0 selected skips. Owned assets/schema cleaned and all 22 public counts unchanged. Exact failures are recorded separately.
+Targeted real telemetry/Admin/Cloudinary/gallery/catalogue/versioning/source-intake
+flows pass with generated fixtures; all approvals remain explicit. Metadata-only
+telemetry is bounded best effort, not a lossless ledger; retention remains unchanged.
+
+Read the [remediation report](phase-24-6-pre-deployment-remediation.md),
+[current 65-requirement matrix](phase-24-6-requirements-matrix.md),
+[phase/component/vertical trace](phase-24-6-traceability.md) and
+[exact verification ledger](phase-24-6-verification.md).
+Historical Phase 24.5 findings/evidence below remain snapshots, not current startup
+or implementation status. Pre-existing user documentation/workspace edits are preserved.
+
+## Historical handoff snapshots (superseded above)
+
 # Project state
 
 Updated: 2026-10-16 (Asia/Karachi).

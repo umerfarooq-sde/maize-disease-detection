@@ -1,5 +1,9 @@
 # Admin management — Phase 21
 
+**Phase24.6 current addendum (2026-10-17):** Informational disease creation/optional sourced stage/severity, complete reference-media review/publication/gallery lifecycle, independent fertilizer product metadata and disabled richer-model review intake are connected. The four classifier mappings are immutable. Rights/content approval remains mandatory.
+
+See [remediation and current evidence](phase-24-6-pre-deployment-remediation.md). Historical phase details follow.
+
 **Later Phase 23.7 extension:** the original-required farmer account list/status
 management and read-only audit viewer are now implemented outside the knowledge
 editor, using the same ADMIN session/RBAC. No arbitrary privilege changes or audit

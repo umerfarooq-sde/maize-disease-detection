@@ -20,6 +20,7 @@ export const auditEntities = [
   'calculator_config',
   'fertilizer',
   'model_version',
+  'disease_image',
 ] as const;
 const page = {
   limit: z.coerce.number().int().min(1).max(50).default(20),
@@ -99,7 +100,16 @@ export function safeAuditMetadata(value: unknown) {
   }
   if (data.fields && typeof data.fields === 'object' && !Array.isArray(data.fields)) {
     result.fieldsChanged = Object.keys(data.fields).filter((key) =>
-      ['name', 'description', 'scientificName', 'status'].includes(key),
+      [
+        'name',
+        'description',
+        'scientificName',
+        'status',
+        'catalogueMetadata',
+        'altText',
+        'sortOrder',
+        'provenance',
+      ].includes(key),
     );
   }
   return result;

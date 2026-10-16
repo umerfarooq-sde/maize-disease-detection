@@ -2,11 +2,12 @@ import type { RequestHandler } from 'express';
 import { AppError } from '../../errors/app-error.js';
 import { sendSuccess } from '../../utils/respond.js';
 import type { ManagementService } from './management.service.js';
-import type { DiseaseEdit, DraftDocument } from './management.types.js';
+import type { DiseaseEdit, DiseaseCreate, DraftDocument } from './management.types.js';
 
 type Action =
   | 'diseases'
   | 'editDisease'
+  | 'createDisease'
   | 'documents'
   | 'document'
   | 'createDraft'
@@ -36,6 +37,9 @@ export function managementController(service: ManagementService, action: Action)
           requestId,
         );
         break;
+      case 'createDisease':
+        result = await service.createDisease(input.body as DiseaseCreate, actor, requestId);
+        break;
       case 'documents':
         result = await service.documents(input.query.cursor);
         break;
@@ -63,6 +67,6 @@ export function managementController(service: ManagementService, action: Action)
         break;
       }
     }
-    sendSuccess(response, result, action === 'createDraft' ? 201 : 200);
+    sendSuccess(response, result, ['createDraft', 'createDisease'].includes(action) ? 201 : 200);
   };
 }

@@ -7,6 +7,7 @@ import httpx
 
 from app.config.settings import Settings
 from app.utils.errors import AppError, ErrorCode
+from app.utils.operations import provider_operation
 
 EMBEDDING_API_VERSION = "embed-content-task-fields-v1"
 MAX_EMBEDDING_INPUT_BYTES = 1800
@@ -50,6 +51,15 @@ class GoogleEmbedder:
         self.client.close()
 
     def embed(self, text: str, *, title: str | None = None) -> list[float]:
+        if (
+            len(text.encode("utf-8")) + len((title or "").encode("utf-8"))
+            > MAX_EMBEDDING_INPUT_BYTES
+        ):
+            raise AppError(ErrorCode.VALIDATION_ERROR)
+        with provider_operation("EMBEDDING"):
+            return self._embed(text, title=title)
+
+    def _embed(self, text: str, *, title: str | None = None) -> list[float]:
         # Use the documented task fields supported by the selected text-only
         # endpoint. The live API ignored nested embedContentConfig and returned
         # 3072 values; this explicit protocol is verified with real 768 responses.

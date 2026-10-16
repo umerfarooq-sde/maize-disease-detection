@@ -6,6 +6,8 @@ import '../../../core/widgets/app_page.dart';
 import '../../../core/widgets/app_states.dart';
 import '../view_models/knowledge_detail_view_model.dart';
 import '../widgets/knowledge_section_card.dart';
+import '../widgets/reference_gallery.dart';
+import '../../../core/widgets/source_reference_card.dart';
 
 class KnowledgeDetailView extends StatelessWidget {
   const KnowledgeDetailView({super.key});
@@ -32,6 +34,24 @@ class KnowledgeDetailView extends StatelessWidget {
               detail.disease.name,
               style: Theme.of(context).textTheme.headlineMedium,
             ),
+            if (detail.classifierSupported != null)
+              Text(
+                detail.classifierSupported!
+                    ? 'Classifier-supported context'
+                    : 'Informational knowledge entry · not a trained classifier output',
+              ),
+            if (detail.growthStages.isNotEmpty) ...[
+              const SizedBox(height: AppSpacing.md),
+              const Text('Reviewed growth-stage applicability'),
+              for (final stage in detail.growthStages) Text(stage),
+            ],
+            if (detail.severityDescriptors.isNotEmpty) ...[
+              const SizedBox(height: AppSpacing.md),
+              const Text('Reviewed severity descriptions'),
+              for (final severity in detail.severityDescriptors) Text(severity),
+            ],
+            if (detail.metadataSource case final source?)
+              SourceReferenceCard(reference: source),
             if (detail.disease.scientificName case final name?) ...[
               const SizedBox(height: AppSpacing.sm),
               Text(name),
@@ -59,6 +79,7 @@ class KnowledgeDetailView extends StatelessWidget {
                 message:
                     'Source-backed information will appear when available.',
               ),
+            ReferenceGallery(slug: detail.disease.slug),
             for (final section in detail.sections) ...[
               KnowledgeSectionCard(section: section),
               const SizedBox(height: AppSpacing.lg),

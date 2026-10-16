@@ -106,6 +106,27 @@ class KnowledgeRepository:
             if row is None:
                 raise AppError(ErrorCode.RETRIEVAL_UNAVAILABLE)
 
+    def record_operation(self, event: dict[str, object]) -> None:
+        with self.connection() as connection:
+            connection.execute("SET LOCAL statement_timeout = '750ms'")
+            connection.execute(
+                "INSERT INTO ai_operations "
+                "(id,scope,operation,outcome,duration_ms,category,occurred_at) "
+                "VALUES (%s::uuid,%s,%s,%s,%s,%s,%s) ON CONFLICT (id) DO NOTHING",
+                tuple(
+                    event[key]
+                    for key in (
+                        "id",
+                        "scope",
+                        "operation",
+                        "outcome",
+                        "durationMs",
+                        "category",
+                        "occurredAt",
+                    )
+                ),
+            )
+
     def metadata(self, document: DocumentInput, corpus_version: str) -> dict[str, object]:
         return {
             "source": document.source.model_dump(mode="json", by_alias=True),

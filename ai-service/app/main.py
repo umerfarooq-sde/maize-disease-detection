@@ -24,6 +24,7 @@ from app.model_management.dashboard import RuntimeStatistics
 from app.schemas.errors import ErrorResponse
 from app.utils.errors import install_exception_handlers
 from app.utils.logging import LOGGER_NAME
+from app.utils.operations import OperationsRecorder
 
 if TYPE_CHECKING:
     from app.generation.service import GenerationService
@@ -120,6 +121,13 @@ def create_app(
                         if retrieval_service is not None
                         else create_retrieval_service(configuration)
                     )
+                    from app.rag.repository import KnowledgeRepository
+
+                    repository = getattr(application.state.retrieval_service, "repository", None)
+                    if isinstance(repository, KnowledgeRepository):
+                        application.state.operational_recorder = OperationsRecorder(
+                            repository.record_operation
+                        )
                 except Exception:
                     logger.error(
                         "retrieval_startup_failed",
@@ -155,6 +163,10 @@ def create_app(
             yield
         finally:
             application.state.running = False
+            recorder = application.state.operational_recorder
+            if recorder is not None:
+                recorder.close()
+                application.state.operational_recorder = None
             application.state.inference_service = None
             for name in ("generation_service", "retrieval_service"):
                 service = getattr(application.state, name)
@@ -191,6 +203,7 @@ def create_app(
     app.state.inference_statistics = RuntimeStatistics()
     app.state.retrieval_service = None
     app.state.generation_service = None
+    app.state.operational_recorder = None
     app.state.prediction_slots = BoundedSemaphore(configuration.inference_max_concurrency)
     install_exception_handlers(app)
     app.add_middleware(RequestContextMiddleware)

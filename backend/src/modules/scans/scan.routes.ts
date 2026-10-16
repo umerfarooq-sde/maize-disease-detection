@@ -1,6 +1,7 @@
 import { type RequestHandler, Router } from 'express';
 import multer from 'multer';
 import { z } from 'zod';
+import { withRequestSchema } from '../../validators/request.js';
 import type { Environment } from '../../config/environment.js';
 import { AppError } from '../../errors/app-error.js';
 import { authenticate, optionallyAuthenticate } from '../../middleware/authentication.js';
@@ -38,12 +39,12 @@ export function scanRoutes(
     requestRateLimit(60),
     authenticate(auth),
     authorize('FARMER'),
-    (request, response, next) => {
+    withRequestSchema(z.object({ query: historyQuery }), (request, response, next) => {
       const parsed = historyQuery.safeParse(request.query);
       if (!parsed.success) throw new AppError('VALIDATION_ERROR');
       response.locals.validated = parsed.data;
       next();
-    },
+    }),
     scanHistoryController(service),
   );
   const readRequest = z.strictObject({
@@ -56,7 +57,7 @@ export function scanRoutes(
     requestRateLimit(60),
     optionallyAuthenticate(auth),
     optionallyAuthorize('FARMER'),
-    (request, response, next) => {
+    withRequestSchema(readRequest, (request, response, next) => {
       response.setHeader('Cache-Control', 'no-store');
       const parsed = readRequest.safeParse({
         params: request.params,
@@ -66,7 +67,7 @@ export function scanRoutes(
       if (!parsed.success) throw new AppError('VALIDATION_ERROR');
       response.locals.validated = parsed.data;
       next();
-    },
+    }),
     readScanController(service),
   );
   router.get(
@@ -74,7 +75,7 @@ export function scanRoutes(
     requestRateLimit(60),
     optionallyAuthenticate(auth),
     optionallyAuthorize('FARMER'),
-    (request, response, next) => {
+    withRequestSchema(readRequest, (request, response, next) => {
       const parsed = readRequest.safeParse({
         params: request.params,
         query: request.query,
@@ -84,7 +85,7 @@ export function scanRoutes(
       response.locals.validated = parsed.data;
       response.setHeader('Cache-Control', 'no-store');
       next();
-    },
+    }),
     scanImageController(service, readImage),
   );
   const parser = multer({
@@ -99,7 +100,7 @@ export function scanRoutes(
     },
   }).single('image');
   let active = 0;
-  const guard: RequestHandler = (request, response, next) => {
+  const guard: RequestHandler = withRequestSchema(scanRequest, (request, response, next) => {
     response.setHeader('Cache-Control', 'no-store');
     if (request.get('x-auth-request') !== '1') throw new AppError('AUTHORIZATION_ERROR');
     if (
@@ -130,7 +131,7 @@ export function scanRoutes(
       if (!request.complete) release();
     });
     next();
-  };
+  });
   const multipart: RequestHandler = (request, response, next) => {
     parser(request, response, (error: unknown) => {
       if (error) {

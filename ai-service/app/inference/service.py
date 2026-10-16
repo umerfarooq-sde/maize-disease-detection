@@ -17,6 +17,7 @@ from app.schemas.prediction import (
     UncertaintyReason,
 )
 from app.utils.errors import AppError, ErrorCode
+from app.utils.operations import service_operation
 
 _IMAGE_ERROR_CODES = {
     PreprocessingErrorCode.INVALID_INPUT,
@@ -56,6 +57,7 @@ class InferenceService:
     def loaded_model(self) -> LoadedModel:
         return self._loaded
 
+    @service_operation("INFERENCE")
     def predict(
         self,
         data: bytes,

@@ -1,11 +1,16 @@
 import type { RequestHandler } from 'express';
 import type { z } from 'zod';
 import { AppError } from '../errors/app-error.js';
+export const requestContracts = new WeakMap<RequestHandler, z.ZodType>();
+export function withRequestSchema(schema: z.ZodType, handler: RequestHandler): RequestHandler {
+  requestContracts.set(handler, schema);
+  return handler;
+}
 
 // Schemas describe { body, params, query }. Parsed/coerced values live in locals:
 // Express 5's request.query is a getter and must not be reassigned.
 export function validateRequest(schema: z.ZodType): RequestHandler {
-  return async (request, response, next) => {
+  return withRequestSchema(schema, async (request, response, next) => {
     const body: unknown = request.body;
     const result = await schema.safeParseAsync({
       body,
@@ -23,5 +28,5 @@ export function validateRequest(schema: z.ZodType): RequestHandler {
     }
     response.locals.validated = result.data;
     next();
-  };
+  });
 }

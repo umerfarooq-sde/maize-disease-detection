@@ -1,4 +1,13 @@
 import { Router } from 'express';
+import { mounts } from '../contracts/openapi.js';
+import { specificationRoutes } from '../modules/calculators/model-specification.routes.js';
+import { productRoutes } from '../modules/fertilizer/catalogue.routes.js';
+import type { ProductService } from '../modules/fertilizer/catalogue.service.js';
+import type { SpecificationService } from '../modules/calculators/model-specification.service.js';
+import { operationsRoutes } from '../modules/admin/operations.routes.js';
+import { referenceRoutes } from '../modules/knowledge/media.routes.js';
+import type { ReferenceService } from '../modules/knowledge/media.service.js';
+import type { OperationsService } from '../modules/admin/operations.service.js';
 import type { Environment } from '../config/environment.js';
 import { accountsRoutes } from '../modules/admin/accounts.routes.js';
 import type { AccountsService } from '../modules/admin/accounts.service.js';
@@ -47,12 +56,20 @@ export function apiRoutes(
   profileService: ProfileService,
   accountsService: AccountsService,
   profileMediaService: ProfileMediaService,
+  operationsService: OperationsService,
+  referenceService: ReferenceService,
+  specificationService: SpecificationService,
+  productService: ProductService,
 ): Router {
   const router = Router();
+  const mount = (path: string, child: Router) => {
+    mounts.set(child, path);
+    router.use(path, child);
+  };
   const readImage = createPrivateImageReader(environment);
   router.use(healthRoutes(createHealthService(repository)));
-  router.use('/auth', authRoutes(environment, authService));
-  router.use('/scans', scanRoutes(environment, authService, scanService, readImage));
+  mount('/auth', authRoutes(environment, authService));
+  mount('/scans', scanRoutes(environment, authService, scanService, readImage));
   router.use(knowledgeRoutes(environment, knowledgeService));
   router.use(generationRoutes(environment, authService, generationService));
   router.use(fertilizerRoutes(environment, authService, fertilizerService));
@@ -64,5 +81,9 @@ export function apiRoutes(
   router.use(profileRoutes(authService, profileService));
   router.use(accountsRoutes(authService, accountsService));
   router.use(profileMediaRoutes(authService, profileMediaService, readImage));
+  router.use(operationsRoutes(authService, operationsService));
+  router.use(referenceRoutes(authService, referenceService, readImage));
+  router.use(specificationRoutes(authService, specificationService));
+  router.use(productRoutes(authService, productService));
   return router;
 }

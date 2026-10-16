@@ -77,6 +77,10 @@ class _ManagementEditorFormState extends State<ManagementEditorForm> {
             'No dose is suggested. Use only project-approved product kg/ha sources. Product snapshots cannot change under an existing slug; use a new slug for revised product information.',
           ManagementArea.yieldRules =>
             'No yield formula or default rate is invented. This framework requires a reviewed, applicable kg/ha scenario.',
+          ManagementArea.modelSpecifications =>
+            'Source-intake only. These immutable specifications remain PENDING_DOMAIN_APPROVAL and DISABLED. No farmer calculation can execute a formula or coefficient entered here. Inputs/outputs use {key, unit, description}; coefficients use {key, value, unit, sourceSection}. Define minimum/expected/potential yield outputs or nitrogen/phosphorus/potassium requirement outputs. Supply only the parameters justified by the cited model.',
+          ManagementArea.fertilizers =>
+            'Manage sourced product information independently of dosage rules. N/P/K fields represent N/P₂O₅/K₂O percent by mass. Optional stage, conditions and rate text require source review and never enable a numerical recommendation. Products used by calculator rules are frozen; copy them to a new slug to revise content.',
         }),
         for (final field in _fields) ...[
           const SizedBox(height: AppSpacing.lg),
@@ -123,11 +127,22 @@ class _ManagementEditorFormState extends State<ManagementEditorForm> {
               ),
             ),
         ],
-        if (widget.editor.area != ManagementArea.diseases) ...[
+        ...[
           const SizedBox(height: AppSpacing.lg),
           FormField<bool>(
             initialValue: false,
-            validator: (value) => value == true
+            validator: (value) =>
+                (widget.editor.area == ManagementArea.diseases &&
+                        widget.editor.entry != null &&
+                        [
+                          'growthStages',
+                          'severityDescriptors',
+                          'reviewNote',
+                        ].every(
+                          (key) =>
+                              (_controllers[key]?.text.trim() ?? '').isEmpty,
+                        )) ||
+                    value == true
                 ? null
                 : 'Review and approve the source before saving.',
             builder: (state) => Column(

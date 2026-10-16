@@ -57,7 +57,7 @@ class AdminSystemSummary extends StatelessWidget {
               ),
               const SizedBox(height: AppSpacing.md),
               const Text(
-                'AI request statistics unavailable: the current assistant flow does not persist request records.',
+                'AI operational statistics are shown separately below. Offline model evaluation remains separate from runtime requests.',
               ),
             ],
           ),

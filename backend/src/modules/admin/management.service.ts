@@ -4,6 +4,7 @@ import type { ManagedDocument, ManagementRepository } from './management.reposit
 import {
   type DraftDocument,
   type DiseaseEdit,
+  type DiseaseCreate,
   type ManagementIndexer,
   diseaseRevision,
   hashContent,
@@ -36,7 +37,9 @@ export function createManagementService(
         items: (await repository.diseases()).map((row) => ({
           id: row.id,
           slug: row.slug,
-          literalLabel: supportedDiseases.find((item) => item.slug === row.slug)?.label,
+          literalLabel: supportedDiseases.find((item) => item.slug === row.slug)?.label ?? null,
+          classifierSupported: supportedDiseases.some((item) => item.slug === row.slug),
+          catalogueMetadata: row.catalogueMetadata ?? null,
           name: row.name,
           description: row.description,
           scientificName: row.scientificName,
@@ -50,6 +53,10 @@ export function createManagementService(
     },
     async editDisease(slug: string, input: DiseaseEdit, actor: string, requestId: string) {
       await repository.editDisease(slug, input, actor, requestId);
+      return this.diseases();
+    },
+    async createDisease(input: DiseaseCreate, actor: string, requestId: string) {
+      await repository.createDisease(input, actor, requestId);
       return this.diseases();
     },
     async documents(cursor?: string) {

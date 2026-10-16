@@ -119,6 +119,20 @@ class AdminManagementViewModel extends ChangeNotifier {
     _notify();
   }
 
+  void copyProduct(ManagementEntry item) {
+    if (busy ||
+        _disposed ||
+        area != ManagementArea.fertilizers ||
+        !_repository.hasSession) {
+      return;
+    }
+    _revision = _repository.revision;
+    final fields = managementEditorValues(area, item)..['product.slug'] = '';
+    _editor = ManagementEditor(area, null, fields);
+    error = null;
+    _notify();
+  }
+
   Future<void> save(Map<String, String> fields) async {
     final editing = editor;
     if (editing == null || busy) return;

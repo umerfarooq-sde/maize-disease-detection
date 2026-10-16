@@ -1,5 +1,9 @@
 # Farmer profiles, Admin accounts and audit history
 
+**Phase24.6 current addendum (2026-10-17):** Committed avatar mutations now return before obsolete Cloudinary cleanup; existing durable journal/cleanup CLI owns retry. Lost acknowledgement/client timeout/server errors reconcile with a state reread, preserving current/uncertain assets and idempotency. The default Flutter deadline is unchanged.
+
+See [remediation and current evidence](phase-24-6-pre-deployment-remediation.md). Historical phase details follow.
+
 **Phase 24:** `avatarUrl` is `profile/avatar?v=<opaque-64-hex-version>`, relative
 to Node `/api/v1/`, or null. FARMER-only GET requires Authorization and
 `X-Auth-Request: 1`; it returns private/no-store bytes without a provider redirect.

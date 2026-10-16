@@ -200,6 +200,19 @@ model FarmerProfile {
   @@map("farmer_profiles")
 }
 
+model AiOperation {
+  id         String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  scope      String   @db.VarChar(20)
+  operation  String   @db.VarChar(24)
+  outcome    String   @db.VarChar(20)
+  durationMs Int      @map("duration_ms")
+  category   String?  @db.VarChar(24)
+  occurredAt DateTime @default(now()) @map("occurred_at") @db.Timestamptz(6)
+
+  @@index([occurredAt, scope, operation])
+  @@map("ai_operations")
+}
+
 model Disease {
   id                   String              @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
   slug                 String              @unique @db.VarChar(120)
@@ -213,6 +226,7 @@ model Disease {
   favorableConditions  String[]            @default([]) @map("favorable_conditions")
   affectedGrowthStages String[]            @default([]) @map("affected_growth_stages")
   severity             DiseaseSeverity?
+  catalogueMetadata    Json?               @map("catalogue_metadata")
   status               RecordStatus        @default(DRAFT)
   createdAt            DateTime            @default(now()) @map("created_at") @db.Timestamptz(6)
   updatedAt            DateTime            @default(now()) @updatedAt @map("updated_at") @db.Timestamptz(6)
@@ -227,17 +241,25 @@ model Disease {
 }
 
 model DiseaseImage {
-  id                 String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
-  diseaseId          String   @map("disease_id") @db.Uuid
-  imageUrl           String   @map("image_url") @db.Text
-  cloudinaryPublicId String   @unique @map("cloudinary_public_id") @db.VarChar(255)
-  altText            String   @map("alt_text") @db.VarChar(255)
-  sortOrder          Int      @default(0) @map("sort_order")
-  createdAt          DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
-  updatedAt          DateTime @default(now()) @updatedAt @map("updated_at") @db.Timestamptz(6)
-  disease            Disease  @relation(fields: [diseaseId], references: [id], onDelete: Cascade)
+  id                 String         @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  diseaseId          String         @map("disease_id") @db.Uuid
+  imageUrl           String?        @map("image_url") @db.Text
+  cloudinaryPublicId String         @unique @map("cloudinary_public_id") @db.VarChar(255)
+  altText            String         @map("alt_text") @db.VarChar(255)
+  sortOrder          Int            @default(0) @map("sort_order")
+  status             RecordStatus   @default(DRAFT)
+  provenance         Json?
+  cleanupPending     Boolean        @default(false) @map("cleanup_pending")
+  uploadState        String         @default("READY") @map("upload_state") @db.VarChar(20)
+  replacementFor     String?        @map("replacement_for") @db.Uuid
+  replacement        DiseaseImage?  @relation("ReferenceReplacement", fields: [replacementFor], references: [id], onDelete: Restrict)
+  replacements       DiseaseImage[] @relation("ReferenceReplacement")
+  createdAt          DateTime       @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt          DateTime       @default(now()) @updatedAt @map("updated_at") @db.Timestamptz(6)
+  disease            Disease        @relation(fields: [diseaseId], references: [id], onDelete: Cascade)
 
   @@index([diseaseId, sortOrder])
+  @@index([cleanupPending, uploadState, createdAt], map: "disease_images_cleanup_idx")
   @@map("disease_images")
 }
 

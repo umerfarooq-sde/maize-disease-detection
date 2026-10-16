@@ -9,7 +9,8 @@ export const supportedDiseases = diseaseLabels.map((label) => ({
 }));
 export const managedSlug = z
   .string()
-  .refine((value) => supportedDiseases.some((item) => item.slug === value));
+  .max(120)
+  .regex(/^[a-z0-9]+(?:-[a-z0-9]+)*$/);
 export const managementText = (maximum: number) =>
   z
     .string()
@@ -50,7 +51,7 @@ export const draftDocumentSchema = z.strictObject({
     .max(100)
     .regex(/^[a-z0-9][a-z0-9._-]*$/),
   expectedVersion: z.number().int().min(0).max(2147483646),
-  diseaseSlug: managedSlug,
+  diseaseSlug: managedSlug.refine((value) => supportedDiseases.some((item) => item.slug === value)),
   knowledgeType: z.enum(knowledgeTypes),
   title: managementText(255),
   content: managementText(4000),
@@ -61,14 +62,35 @@ export const draftDocumentSchema = z.strictObject({
   approved: z.literal(true),
 });
 export type DraftDocument = z.infer<typeof draftDocumentSchema>;
+export const catalogueMetadataSchema = z
+  .strictObject({
+    growthStages: z.array(managementText(160)).max(12),
+    severityDescriptors: z.array(managementText(600)).max(8),
+    source: sourceSchema.nullable(),
+    reviewNote: managementText(2000).min(20),
+    approved: z.literal(true),
+  })
+  .refine(
+    (value) =>
+      value.source !== null ||
+      (value.growthStages.length === 0 && value.severityDescriptors.length === 0),
+  );
 export const diseaseEditSchema = z.strictObject({
   name: managementText(160),
   scientificName: managementText(200).nullable(),
   description: managementText(2000),
   status: z.enum(['ACTIVE', 'INACTIVE']),
   expectedRevision: z.string().regex(/^[a-f0-9]{64}$/),
+  catalogueMetadata: catalogueMetadataSchema.optional(),
 });
 export type DiseaseEdit = z.infer<typeof diseaseEditSchema>;
+export const diseaseCreateSchema = diseaseEditSchema.omit({ expectedRevision: true }).extend({
+  slug: managedSlug.refine((value) => !supportedDiseases.some((item) => item.slug === value)),
+  source: sourceSchema,
+  reviewNote: managementText(2000).min(20),
+  approved: z.literal(true),
+});
+export type DiseaseCreate = z.infer<typeof diseaseCreateSchema>;
 export const preparedDocumentSchema = z.strictObject({
   content: managementText(4000),
   contentHash: z.string().regex(/^[a-f0-9]{64}$/),
@@ -114,6 +136,7 @@ export const diseaseRevision = (row: {
   description: string;
   status: string;
   updatedAt: Date;
+  catalogueMetadata?: unknown;
 }) =>
   hashContent(
     JSON.stringify([
@@ -122,5 +145,6 @@ export const diseaseRevision = (row: {
       row.description,
       row.status,
       row.updatedAt.toISOString(),
+      row.catalogueMetadata ?? null,
     ]),
   );

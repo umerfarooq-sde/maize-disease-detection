@@ -82,12 +82,11 @@ class AdminManagementView extends StatelessWidget {
                   icon: const Icon(Icons.refresh),
                   label: const Text('Refresh management'),
                 ),
-                if (model.area != ManagementArea.diseases)
-                  FilledButton.icon(
-                    onPressed: model.busy ? null : () => model.edit(),
-                    icon: const Icon(Icons.add),
-                    label: const Text('New reviewed draft'),
-                  ),
+                FilledButton.icon(
+                  onPressed: model.busy ? null : () => model.edit(),
+                  icon: const Icon(Icons.add),
+                  label: const Text('New reviewed draft'),
+                ),
               ],
             ),
             const SizedBox(height: AppSpacing.lg),
@@ -116,6 +115,8 @@ class AdminManagementView extends StatelessWidget {
                       Text(
                         model.area == ManagementArea.diseases
                             ? '${item.values['literalLabel']} · ${item.values['slug']} · ${item.status}'
+                            : model.area == ManagementArea.fertilizers
+                            ? 'Product metadata version ${item.version} · ${item.status}'
                             : '${item.values['documentKey'] ?? item.values['ruleKey'] ?? item.values['configKey']} · version ${item.version} · ${item.status}',
                       ),
                       if (model.area == ManagementArea.knowledge)
@@ -128,7 +129,10 @@ class AdminManagementView extends StatelessWidget {
                         spacing: AppSpacing.sm,
                         children: [
                           TextButton(
-                            onPressed: model.busy
+                            onPressed:
+                                model.busy ||
+                                    (model.area == ManagementArea.fertilizers &&
+                                        item.values['contentEditable'] == false)
                                 ? null
                                 : () => model.edit(item),
                             child: Text(
@@ -145,7 +149,16 @@ class AdminManagementView extends StatelessWidget {
                                   : () => model.index(item),
                               child: const Text('Build embeddings'),
                             ),
+                          if (model.area == ManagementArea.fertilizers)
+                            OutlinedButton(
+                              onPressed: model.busy
+                                  ? null
+                                  : () => model.copyProduct(item),
+                              child: const Text('Copy product to a new slug'),
+                            ),
                           if (model.area != ManagementArea.diseases &&
+                              model.area !=
+                                  ManagementArea.modelSpecifications &&
                               item.status != 'ACTIVE' &&
                               (model.area != ManagementArea.knowledge ||
                                   item.status == 'DRAFT'))
@@ -157,6 +170,8 @@ class AdminManagementView extends StatelessWidget {
                               child: const Text('Activate'),
                             ),
                           if (model.area != ManagementArea.diseases &&
+                              model.area !=
+                                  ManagementArea.modelSpecifications &&
                               (item.status == 'ACTIVE' ||
                                   (model.area == ManagementArea.knowledge &&
                                       item.status == 'DRAFT')))

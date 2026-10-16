@@ -1,5 +1,9 @@
 # Expected-yield calculator framework
 
+**Phase24.6 current addendum (2026-10-17):** Versioned source intake now captures explicit input/output units and minimum/expected/potential model definitions, remaining DISABLED/PENDING_DOMAIN_APPROVAL. Executable area×reviewed-rate projection is unchanged. Three-output forecasting and model-specific engine/UI await an approved mathematical model/data/worked cases.
+
+See [remediation and current evidence](phase-24-6-pre-deployment-remediation.md). Historical phase details follow.
+
 **Content handoff:** Phase 23.7 re-verifies the real catalogue's pending state.
 Use the separate [source/data/approval checklist](calculator-domain-input-checklist.md)
 before preparing and explicitly publishing a real configuration. Synthetic tests

@@ -248,6 +248,10 @@ GoRouter createAppRouter({String initialLocation = AppRoutes.home}) => GoRouter(
       builder: (_, _) => const AdminAccessView(),
       routes: [
         GoRoute(
+          path: 'reference-images',
+          builder: (_, _) => const AdminAccessView(media: true),
+        ),
+        GoRoute(
           path: 'manage',
           builder: (_, _) => const AdminAccessView(management: true),
         ),

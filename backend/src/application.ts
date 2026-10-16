@@ -93,6 +93,7 @@ export async function startApplication(
           try {
             await closeServer(server);
             await recovery;
+            await (app.locals.flushOperationalEvents as () => Promise<void>)();
           } finally {
             await database.$disconnect();
           }

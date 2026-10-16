@@ -31,6 +31,7 @@ from app.rag.schemas import (
 )
 from app.utils.errors import AppError, ErrorCode
 from app.utils.logging import LOGGER_NAME
+from app.utils.operations import service_operation
 
 HEADINGS: dict[KnowledgeType, str] = {
     "OVERVIEW": "Overview",
@@ -70,6 +71,7 @@ class GenerationService:
     def close(self) -> None:
         self.generator.close()
 
+    @service_operation("GENERATION")
     def ask(self, request: QuestionRequest) -> GenerationData:
         started = perf_counter()
         scope = resolve_scope(request)
@@ -84,6 +86,7 @@ class GenerationService:
             raise AppError(ErrorCode.GENERATION_INVALID_RESPONSE)
         return self._generate(request.question, scope.label, scope.topic, None, started)
 
+    @service_operation("EXPLANATION")
     def explain(self, prediction: ClassifierContext) -> GenerationData:
         return self._generate(
             EXPLANATION_QUESTION, prediction.predicted_class, None, prediction, perf_counter()

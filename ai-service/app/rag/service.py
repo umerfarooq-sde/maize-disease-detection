@@ -9,6 +9,7 @@ from app.rag.chunking import CHUNKING_VERSION, Chunk, chunk_document, content_ha
 from app.rag.embeddings import EMBEDDING_API_VERSION, Embedder, GoogleEmbedder, validated_vector
 from app.rag.repository import KnowledgeRepository
 from app.rag.schemas import Corpus, DocumentInput, RetrievalData, RetrievalRequest, RetrievedChunk
+from app.utils.operations import service_operation
 
 
 def retrieval_identity(settings: Settings) -> str:
@@ -72,6 +73,7 @@ class RetrievalService:
             ]
         return self.repository.persist(corpus, prepared)
 
+    @service_operation("RETRIEVAL")
     def retrieve(self, request: RetrievalRequest) -> RetrievalData:
         vector = validated_vector(
             self.embedder.embed(request.query), self.settings.embedding_dimensions

@@ -5,12 +5,13 @@ with administrative tools for maintaining knowledge and monitoring the system.
 
 ## Current status
 
-Phase 24.5 master audit finds **NOT READY FOR PHASE 25** and **PARTIALLY COMPLETE**
-against the original product requirements. Current default AI startup has inconsistent
-optional confidence-policy configuration; original Admin monitoring/metadata and
-generated Node API documentation also need targeted remediation. Read the
-[master audit and supporting evidence](docs/phase-24-5-master-system-audit.md).
-No feature remediation, deployment or Phase 25/26 was started by the audit.
+Phase 24.6 implements the pre-deployment startup, avatar cleanup, operational
+monitoring, catalogue/media, independent product/source intake and generated
+OpenAPI remediations. Verdict: **PARTIALLY COMPLETE**; normal-config full integration: 18 PASS / 3 FAIL / 0 selected skips. Phase 25 **NOT READY**. Read the
+[remediation report and current evidence](docs/phase-24-6-pre-deployment-remediation.md).
+The [Phase 24.5 audit](docs/phase-24-5-master-system-audit.md) remains historical.
+No Phase 25/26 or deployment has started. Real reference-image licenses, agricultural
+rules/forecast models, calibration/field/privacy/release approvals remain explicit gates.
 
 The preceding completed implementation phase follows.
 

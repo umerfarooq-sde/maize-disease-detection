@@ -34,6 +34,7 @@ import 'data/repositories/backend_repository.dart';
 import 'data/repositories/profile_repository.dart';
 import 'data/repositories/admin_accounts_repository.dart';
 import 'data/repositories/private_image_repository.dart';
+import 'data/repositories/reference_media_repository.dart';
 
 class MainApp extends StatefulWidget {
   const MainApp({
@@ -116,6 +117,15 @@ class _MainAppState extends State<MainApp> {
       ),
       Provider<PrivateImageRepository>(
         create: (_) => PrivateImageRepository(_api),
+      ),
+      Provider<ReferenceMediaRepository>(
+        create: (_) => ReferenceMediaRepository(_api),
+      ),
+      Provider<AdminReferenceMediaRepository>(
+        create: (_) => AdminReferenceMediaRepository(
+          _adminApi,
+          picker: widget.profileImages ?? PickerLeafImageDatasource(),
+        ),
       ),
       Provider<AdminAccountsRepository>(
         create: (_) => ApiAdminAccountsRepository(_adminApi),

@@ -71,7 +71,7 @@ void main() {
           body: credentials,
         );
         mark(
-          'farmer registration via public API (registration UI is not implemented)',
+          'farmer registration via public API; actual registration UI verified by farmer-remediation gate',
         );
         await farmer.signIn(
           credentials['email'] as String,
@@ -133,7 +133,7 @@ void main() {
                 as Map<String, dynamic>;
         expect(rust['sections'], isNotEmpty);
         mark(
-          'sourced knowledge API (farmer Knowledge screen remains a placeholder)',
+          'sourced knowledge API; actual Knowledge UI verified by farmer-remediation gate',
         );
         final fertilizer = ApiFertilizerRepository(
           FertilizerDatasource(farmerApi),

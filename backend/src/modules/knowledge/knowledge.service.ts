@@ -1,4 +1,5 @@
 import { AppError } from '../../errors/app-error.js';
+import { catalogueMetadataSchema, supportedDiseases } from '../admin/management.types.js';
 import type { KnowledgeRepository } from './knowledge.repository.js';
 import {
   type DiseaseDetail,
@@ -56,7 +57,36 @@ export function createKnowledgeService(
           source: source.data,
         });
       }
-      return { ...summary(disease), sections };
+      const metadata = catalogueMetadataSchema.safeParse(
+        disease.catalogueMetadata &&
+          typeof disease.catalogueMetadata === 'object' &&
+          !Array.isArray(disease.catalogueMetadata)
+          ? (() => {
+              const {
+                reviewedAt: _,
+                classifierSupported: __,
+                ...value
+              } = disease.catalogueMetadata;
+              return value;
+            })()
+          : null,
+      );
+      const label = supportedDiseases.find((item) => item.slug === slug)?.label ?? null;
+      return {
+        ...summary(disease),
+        sections,
+        catalogue: {
+          classifierSupported: label !== null,
+          literalLabel: label,
+          applicability: metadata.success
+            ? {
+                growthStages: metadata.data.growthStages,
+                severityDescriptors: metadata.data.severityDescriptors,
+                source: metadata.data.source,
+              }
+            : null,
+        },
+      };
     },
     search(input) {
       return client.search(input);

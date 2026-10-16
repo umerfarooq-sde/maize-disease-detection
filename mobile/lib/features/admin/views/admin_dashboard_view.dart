@@ -9,6 +9,7 @@ import '../../analytics/widgets/analytics_charts.dart';
 import '../../disease_detection/utils/scan_presentation.dart';
 import '../view_models/admin_dashboard_view_model.dart';
 import '../widgets/admin_system_summary.dart';
+import '../widgets/ai_operations_panel.dart';
 import 'package:go_router/go_router.dart';
 import '../../../core/routes/app_routes.dart';
 
@@ -86,6 +87,7 @@ class AdminDashboardView extends StatelessWidget {
             AppErrorState(error: error, onRetry: () => model.load())
           else if (data != null) ...[
             AdminSystemSummary(data: data),
+            AiOperationsPanel(data: data.operations),
             const SizedBox(height: AppSpacing.xl),
             if (data.scans.totals['totalScans'] == 0)
               const AppEmptyState(

@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:async';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:http/testing.dart';
 import 'package:maizedoctor/core/exceptions/app_exception.dart';
@@ -18,6 +19,32 @@ class ProfileTokens implements AccessTokenSource {
 }
 
 void main() {
+  test(
+    'photo removal reconciles a successful commit after transport timeout without repeating DELETE',
+    () async {
+      final methods = <String>[];
+      final api = ApiClient(
+        config: AppConfig(apiBaseUrl: 'https://api.example.test/api/v1'),
+        tokenSource: ProfileTokens(),
+        client: MockClient((request) async {
+          methods.add(request.method);
+          if (request.method == 'DELETE') {
+            throw TimeoutException('simulated lost response');
+          }
+          return response(profileJson());
+        }),
+      );
+      addTearDown(api.close);
+      expect(
+        (await ApiProfileRepository(
+          api,
+          FixtureImageSource(),
+        ).removePhoto('a' * 64)).avatarUrl,
+        isNull,
+      );
+      expect(methods, ['DELETE', 'GET']);
+    },
+  );
   test(
     'profile metadata validates Unicode, nullable optional fields and exact hectares',
     () {

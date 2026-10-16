@@ -18,6 +18,7 @@ import '../view_models/farmer_management_view_model.dart';
 import '../view_models/audit_log_view_model.dart';
 import 'farmer_management_view.dart';
 import 'audit_log_view.dart';
+import 'reference_management_view.dart';
 
 /// Outside the farmer navigation shell, with an independent volatile session.
 class AdminAccessView extends StatelessWidget {
@@ -26,18 +27,22 @@ class AdminAccessView extends StatelessWidget {
     this.modelHealth = false,
     this.farmers = false,
     this.audit = false,
+    this.media = false,
     super.key,
   });
   final bool management;
   final bool modelHealth;
   final bool farmers, audit;
+  final bool media;
   @override
   Widget build(BuildContext context) {
     final session = context.watch<AdminSessionViewModel>();
     return Scaffold(
       appBar: AppBar(
         title: Text(
-          farmers
+          media
+              ? 'Reference images'
+              : farmers
               ? 'Farmer accounts'
               : audit
               ? 'Audit history'
@@ -48,17 +53,24 @@ class AdminAccessView extends StatelessWidget {
               : 'Admin overview',
         ),
         leading: IconButton(
-          tooltip: management || modelHealth || farmers || audit
+          tooltip: management || modelHealth || farmers || audit || media
               ? 'Return to Admin overview'
               : 'Return to farmer app',
           onPressed: () => context.go(
-            management || modelHealth || farmers || audit
+            management || modelHealth || farmers || audit || media
                 ? AppRoutes.admin
                 : AppRoutes.home,
           ),
           icon: const Icon(Icons.arrow_back),
         ),
         actions: [
+          if (session.signedIn && !media)
+            IconButton(
+              onPressed: () =>
+                  context.push('${AppRoutes.admin}/reference-images'),
+              tooltip: 'Manage reference images',
+              icon: const Icon(Icons.photo_library_outlined),
+            ),
           if (session.signedIn && !modelHealth)
             IconButton(
               onPressed: () => context.push('${AppRoutes.admin}/model-health'),
@@ -78,7 +90,11 @@ class AdminAccessView extends StatelessWidget {
             ),
         ],
       ),
-      body: session.signedIn && farmers
+      body: session.signedIn && media
+          ? ReferenceManagementView(
+              key: ValueKey('reference-${session.revision}'),
+            )
+          : session.signedIn && farmers
           ? ChangeNotifierProvider(
               key: ValueKey('farmers-${session.revision}'),
               create: (_) => FarmerManagementViewModel(

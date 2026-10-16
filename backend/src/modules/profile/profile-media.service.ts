@@ -66,27 +66,24 @@ export function createProfileMediaService(
           throw error;
         }
         if (!committed) {
-          try {
-            await cleanup(userId);
-          } catch {
-            /* durable queued intent retained */
-          }
+          // Recovery is durable. Provider deletion must never hold the mutation
+          // response open or delete an asset whose commit outcome is uncertain.
           throw error;
         }
       }
-      try {
-        await cleanup(userId);
-      } catch {
-        /* safe retry through the cleanup CLI */
-      }
+      // finish atomically queued the previous asset. The bounded cleanup CLI
+      // owns provider work; no untracked background promise is started here.
       return profileResponse(await repository.read(userId));
     },
     async remove(userId: string, revision: string) {
-      await repository.remove(userId, revision);
       try {
-        await cleanup(userId);
-      } catch {
-        /* durable old-asset intent retained */
+        await repository.remove(userId, revision);
+      } catch (error) {
+        // A lost commit acknowledgement is not proof of failure. A reread
+        // observes the serialized state; never retry deletion automatically.
+        const current = await repository.read(userId);
+        if (!current || current.avatarPublicId || current.avatarPendingPublicId) throw error;
+        return profileResponse(current);
       }
       return profileResponse(await repository.read(userId));
     },

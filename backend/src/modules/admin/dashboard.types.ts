@@ -46,5 +46,5 @@ export interface DashboardSummary
     inferenceConfigured: boolean;
     readiness: 'NOT_CHECKED';
   };
-  aiRequestStatistics: 'NOT_RECORDED';
+  aiRequestStatistics: 'AVAILABLE_SEPARATELY';
 }

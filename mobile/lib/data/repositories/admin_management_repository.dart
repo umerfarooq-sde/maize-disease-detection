@@ -27,6 +27,9 @@ class ApiAdminManagementRepository implements AdminManagementRepository {
     ManagementArea.knowledge => 'admin/knowledge/documents',
     ManagementArea.fertilizer => 'admin/calculators/fertilizer/rules',
     ManagementArea.yieldRules => 'admin/calculators/yield/configurations',
+    ManagementArea.modelSpecifications =>
+      'admin/calculators/model-specifications',
+    ManagementArea.fertilizers => 'admin/fertilizers',
   };
   @override
   Future<ManagementPage> list(ManagementArea area, {String? cursor}) async =>
@@ -46,10 +49,20 @@ class ApiAdminManagementRepository implements AdminManagementRepository {
   @override
   Future<void> save(ManagementEditor editor, Map<String, Object?> body) async {
     await _api.request(
-      editor.area == ManagementArea.diseases ? ApiMethod.patch : ApiMethod.post,
+      [
+                ManagementArea.diseases,
+                ManagementArea.fertilizers,
+              ].contains(editor.area) &&
+              editor.entry != null
+          ? ApiMethod.patch
+          : ApiMethod.post,
       _path(editor.area) +
-          (editor.area == ManagementArea.diseases
-              ? '/${editor.entry!.values['slug']}'
+          ([
+                    ManagementArea.diseases,
+                    ManagementArea.fertilizers,
+                  ].contains(editor.area) &&
+                  editor.entry != null
+              ? '/${editor.area == ManagementArea.diseases ? editor.entry!.values['slug'] : editor.entry!.id}'
               : ''),
       body: body,
       authenticated: true,
@@ -80,6 +93,8 @@ class ApiAdminManagementRepository implements AdminManagementRepository {
       body: {
         'status': status,
         if (area == ManagementArea.knowledge) 'expectedStatus': entry.status,
+        if (area == ManagementArea.fertilizers)
+          'expectedRevision': entry.values['revision'],
       },
       requestTimeout: const Duration(seconds: 150),
     );

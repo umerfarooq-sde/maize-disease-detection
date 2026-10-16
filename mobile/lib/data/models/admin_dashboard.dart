@@ -1,6 +1,7 @@
 import '../../core/exceptions/app_exception.dart';
 import 'farmer_analytics.dart';
 import 'scan_record.dart';
+import 'ai_operations.dart';
 
 class AdminActivity {
   const AdminActivity(this.createdAt, this.status, this.anonymous, this.label);
@@ -21,6 +22,7 @@ class AdminDashboard {
     this.configuredVersion,
     this.inferenceConfigured,
     this.recent,
+    this.operations,
   );
   final FarmerAnalytics scans;
   final Map<String, int> farmers;
@@ -31,7 +33,8 @@ class AdminDashboard {
   final String? configuredVersion;
   final bool inferenceConfigured;
   final List<AdminActivity> recent;
-  factory AdminDashboard.fromJson(Object? value) {
+  final AiOperations? operations;
+  factory AdminDashboard.fromJson(Object? value, {Object? operations}) {
     final data = _object(value, {
       'range',
       'asOf',
@@ -84,7 +87,10 @@ class AdminDashboard {
         ].contains(registry) ||
         (registry == 'SINGLE_PRODUCTION') != (production != null) ||
         model['inferenceConfigured'] is! bool ||
-        data['aiRequestStatistics'] != 'NOT_RECORDED') {
+        ![
+          'AVAILABLE_SEPARATELY',
+          'NOT_RECORDED',
+        ].contains(data['aiRequestStatistics'])) {
       throw _invalid();
     }
     final raw = data['recent'];
@@ -134,6 +140,7 @@ class AdminDashboard {
       configured,
       model['inferenceConfigured'] as bool,
       List.unmodifiable(recent),
+      operations == null ? null : AiOperations.fromJson(operations),
     );
   }
 }

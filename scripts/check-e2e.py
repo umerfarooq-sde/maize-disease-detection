@@ -130,6 +130,11 @@ TASKS = {
     "farmer-remediation": (NODE + ["scripts/check-farmer-remediation.mjs"], ROOT, 420),
     "original-requirements": (NODE + ["scripts/check-requirements.mjs"], ROOT, 600),
     "journey": (NODE + ["scripts/check-e2e.mjs"], ROOT, 600),
+    "predeployment-remediation": (
+        NODE + ["scripts/check-predeployment-remediation.mjs"],
+        ROOT,
+        600,
+    ),
 }
 TABLES = (
     "users",
@@ -153,6 +158,7 @@ TABLES = (
     "history",
     "auth_sessions",
     "scan_uploads",
+    "ai_operations",
 )
 
 
@@ -398,12 +404,19 @@ def main() -> int:
             cloud_clean = True
             journey = output / "journey-proof.json"
             requirements = output / "requirements-proof.json"
+            if any(row["check"] == "predeployment-remediation" for row in results):
+                try:
+                    media_proof = json.loads((output / "phase246-proof.json").read_text())
+                    cloud_clean = bool(media_proof.get("cloudCleanupComplete", False))
+                except (OSError, ValueError):
+                    cloud_clean = False
+                    proof["remediationCleanupProofInvalid"] = True
             if any(row["check"] == "original-requirements" for row in results):
                 if not requirements.exists():
                     cloud_clean = False
                 else:
                     try:
-                        cloud_clean = bool(
+                        cloud_clean = cloud_clean and bool(
                             json.loads(requirements.read_text()).get("cloudCleanupComplete", False)
                         )
                     except (OSError, ValueError):

@@ -47,7 +47,13 @@ class ApiClient {
   }) async {
     final scan = RegExp(r'^scans/[a-f0-9-]{36}/image$').hasMatch(path);
     final profile = RegExp(r'^profile/avatar\?v=[a-f0-9]{64}$').hasMatch(path);
-    if ((!scan && !profile) ||
+    final reference = RegExp(
+      r'^disease-images/[a-f0-9-]{36}/image$',
+    ).hasMatch(path);
+    final adminReference = RegExp(
+      r'^admin/disease-images/[a-f0-9-]{36}/image$',
+    ).hasMatch(path);
+    if ((!scan && !profile && !reference && !adminReference) ||
         (anonymousKey != null &&
             (!scan || !RegExp(r'^[a-f0-9-]{36}$').hasMatch(anonymousKey)))) {
       throw const AppException(AppErrorKind.validation);
@@ -57,7 +63,7 @@ class ApiClient {
     if (base == null) throw const AppException(AppErrorKind.configuration);
     final abort = Completer<void>();
     final revision = _revision;
-    final authenticated = anonymousKey == null;
+    final authenticated = anonymousKey == null && !reference;
     Future<Uint8List> execute() async {
       final request =
           http.AbortableRequest(
@@ -136,9 +142,14 @@ class ApiClient {
     void Function(double)? onProgress,
     String path = 'scans',
     String? profileRevision,
+    String? referenceMetadata,
   }) async {
     final profilePhoto = path == 'profile/avatar';
-    if ((path != 'scans' && !profilePhoto) ||
+    final referencePhoto = path == 'admin/disease-images';
+    if ((path != 'scans' && !profilePhoto && !referencePhoto) ||
+        (referencePhoto &&
+            (referenceMetadata == null ||
+                utf8.encode(referenceMetadata).length > 16384)) ||
         (profilePhoto &&
             (profileRevision == null ||
                 !RegExp(r'^[a-f0-9]{64}$').hasMatch(profileRevision)))) {
@@ -158,7 +169,8 @@ class ApiClient {
     }
     final abort = Completer<void>();
     final revision = _revision;
-    final authenticated = profilePhoto || hasAuthenticatedSession;
+    final authenticated =
+        profilePhoto || referencePhoto || hasAuthenticatedSession;
     try {
       final request =
           UploadRequest(
@@ -184,6 +196,7 @@ class ApiClient {
               ),
             );
       if (profilePhoto) request.fields['expectedRevision'] = profileRevision!;
+      if (referencePhoto) request.fields['metadata'] = referenceMetadata!;
       Future<ApiResponse> send() async {
         // A supplied secure token source means authenticated mode. Missing/invalid
         // credentials fail closed; they never silently become an anonymous scan.

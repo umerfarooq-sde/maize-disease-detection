@@ -1,5 +1,6 @@
 import { type RequestHandler, Router } from 'express';
-import type { z } from 'zod';
+import { z } from 'zod';
+import { withRequestSchema } from '../../validators/request.js';
 import type { Environment } from '../../config/environment.js';
 import { AppError } from '../../errors/app-error.js';
 import { authenticate } from '../../middleware/authentication.js';
@@ -17,14 +18,13 @@ export function analyticsRoutes(
 ): Router {
   const router = Router();
   const controller = createAnalyticsController(service);
-  const validate =
-    (schema: z.ZodType): RequestHandler =>
-    (request, response, next) => {
+  const validate = (schema: z.ZodType): RequestHandler =>
+    withRequestSchema(z.object({ query: schema }), (request, response, next) => {
       const result = schema.safeParse(request.query);
       if (!result.success) throw new AppError('VALIDATION_ERROR');
       response.locals.validated = result.data;
       next();
-    };
+    });
   router.use(
     '/analytics',
     (_request, response, next) => {

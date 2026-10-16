@@ -4,7 +4,7 @@ import { AppError } from '../../errors/app-error.js';
 import { optionallyAuthenticate } from '../../middleware/authentication.js';
 import { optionallyAuthorize } from '../../middleware/authorization.js';
 import { requestRateLimit } from '../../middleware/rate-limit.js';
-import { validateRequest } from '../../validators/request.js';
+import { validateRequest, withRequestSchema } from '../../validators/request.js';
 import type { AuthService } from '../auth/auth.service.js';
 import { createGenerationController } from './generation.controller.js';
 import type { GenerationService } from './generation.service.js';
@@ -41,7 +41,7 @@ export function generationRoutes(
     optionallyAuthenticate(auth),
     optionallyAuthorize('FARMER'),
     jsonOnly,
-    (request, response, next) => {
+    withRequestSchema(explanationRequest, (request, response, next) => {
       const parsed = explanationRequest.safeParse({
         body: request.body as unknown,
         params: request.params,
@@ -51,7 +51,7 @@ export function generationRoutes(
       if (!parsed.success) throw new AppError('VALIDATION_ERROR');
       response.locals.validated = parsed.data;
       next();
-    },
+    }),
     controller.explain,
   );
   return router;

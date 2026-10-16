@@ -23,7 +23,7 @@ test('database catalog matches the committed relational and SQL invariants', asy
       SELECT count(*) FROM pg_constraint c JOIN pg_namespace n ON n.oid=c.connamespace
       WHERE n.nspname=${schema} AND c.contype='c'
     `;
-    assert.equal(checks[0]?.count, 27n);
+    assert.equal(checks[0]?.count, 34n);
     const triggers = await prisma.$queryRaw<{ count: bigint }[]>`
       SELECT count(*) FROM pg_trigger t JOIN pg_class c ON c.oid=t.tgrelid
       JOIN pg_namespace n ON n.oid=c.relnamespace WHERE n.nspname=${schema} AND NOT t.tgisinternal
@@ -159,6 +159,20 @@ test('Prisma round trips all 19 tables and PostgreSQL rejects invalid data; fixt
           assert.equal(loaded.history[0]?.userId, user.id);
         });
         const rejects = (sql: string, values: unknown[], code: string | string[] = '23514'): Promise<void> => assertSqlRejects(tx, sql, values, code);
+        await t.test('operational events and reference publication reject invalid metadata, including SQL NULL bypasses',async()=>{
+          const operation=await tx.aiOperation.create({data:{scope:'NODE',operation:'INFERENCE',outcome:'SUCCESS',durationMs:12}});
+          assert.equal(operation.durationMs,12);
+          await rejects('UPDATE ai_operations SET duration_ms=-1 WHERE id=$1::uuid',[operation.id]);
+          await rejects("UPDATE ai_operations SET scope='PRIVATE_PROMPT' WHERE id=$1::uuid",[operation.id]);
+          await rejects("UPDATE diseases SET catalogue_metadata='[]'::jsonb WHERE id=$1::uuid",[disease.id]);
+          const image=disease.images[0];assert.ok(image);
+          await rejects("UPDATE disease_images SET status='ACTIVE',provenance='{}'::jsonb WHERE id=$1::uuid",[image.id]);
+          await rejects("UPDATE disease_images SET status='ACTIVE',provenance=NULL WHERE id=$1::uuid",[image.id]);
+          const pending=await tx.diseaseImage.create({data:{diseaseId:disease.id,cloudinaryPublicId:`fixture/${fixture}/pending`,altText:'Unpublished synthetic fixture',uploadState:'UPLOADING'}});
+          assert.equal(pending.imageUrl,null);
+          await rejects('UPDATE disease_images SET replacement_for=$1::uuid WHERE id=$2::uuid',[randomUUID(),pending.id],'23503');
+          await rejects("UPDATE disease_images SET status='ACTIVE' WHERE id=$1::uuid",[pending.id]);
+        });
         await t.test('normalized unique account identity and farmer role constraints', async () => {
           await rejects('INSERT INTO users (email,password_hash) VALUES ($1,$2)', [user.email, 'fixture'], '23505');
           await rejects('INSERT INTO users (email,password_hash) VALUES ($1,$2)', [user.email.toUpperCase(), 'fixture']);

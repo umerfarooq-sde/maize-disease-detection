@@ -18,7 +18,7 @@ const uploadResult = z.object({
 });
 export function createImageStorage(
   environment: Environment,
-  purpose: 'scans' | 'profiles' = 'scans',
+  purpose: 'scans' | 'profiles' | 'references' = 'scans',
 ): ImageStorage {
   const projectAsset = new RegExp(
     `^maizedoctor/${purpose}/[a-f0-9]{8}-[a-f0-9]{4}-4[a-f0-9]{3}-[89ab][a-f0-9]{3}-[a-f0-9]{12}$`,

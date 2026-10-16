@@ -11,6 +11,7 @@ const summarySelect = {
 
 const detailSelect = {
   ...summarySelect,
+  catalogueMetadata: true,
   knowledgeDocuments: {
     where: { status: 'ACTIVE', topic: 'DISEASE', language: 'en', knowledgeType: { not: null } },
     orderBy: [{ knowledgeType: 'asc' }, { documentKey: 'asc' }, { version: 'desc' }],
@@ -26,7 +27,10 @@ const detailSelect = {
   },
 } as const satisfies Prisma.DiseaseSelect;
 
-export type DiseaseDetailRecord = Prisma.DiseaseGetPayload<{ select: typeof detailSelect }>;
+export type DiseaseDetailRecord = Omit<
+  Prisma.DiseaseGetPayload<{ select: typeof detailSelect }>,
+  'catalogueMetadata'
+> & { catalogueMetadata?: Prisma.JsonValue };
 export interface KnowledgeRepository {
   listDiseases(): Promise<DiseaseSummary[]>;
   findDisease(slug: string): Promise<DiseaseDetailRecord | null>;

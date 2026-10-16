@@ -9,7 +9,12 @@ import { validateRequest } from '../../validators/request.js';
 import type { AuthService } from '../auth/auth.service.js';
 import { managementController } from './management.controller.js';
 import type { ManagementService } from './management.service.js';
-import { draftDocumentSchema, diseaseEditSchema, managedSlug } from './management.types.js';
+import {
+  draftDocumentSchema,
+  diseaseEditSchema,
+  diseaseCreateSchema,
+  managedSlug,
+} from './management.types.js';
 
 export function managementRoutes(
   environment: Environment,
@@ -55,6 +60,11 @@ export function managementRoutes(
     '/admin/knowledge/diseases/:slug',
     request(diseaseEditSchema, z.strictObject({ slug: managedSlug })),
     managementController(service, 'editDisease'),
+  );
+  router.post(
+    '/admin/knowledge/diseases',
+    request(diseaseCreateSchema),
+    managementController(service, 'createDisease'),
   );
   router.post(
     '/admin/knowledge/documents',

@@ -13,10 +13,11 @@ from app.utils.logging import LOGGER_NAME, configure_logging
 def main() -> None:
     try:
         settings = load_settings()
-    except ConfigurationError:
+    except ConfigurationError as error:
         configure_logging("ERROR")
         logging.getLogger(LOGGER_NAME).error(
-            "configuration_invalid", extra={"event": "configuration_invalid"}
+            "configuration_invalid",
+            extra={"event": "configuration_invalid", "configuration_hint": str(error)},
         )
         sys.exit(1)
 

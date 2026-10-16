@@ -147,7 +147,7 @@ try {
       assert.equal(dashboardData.scans.totals.failedScans, baseline.scans.totals.failedScans + 1);
       assert.equal(dashboardData.recent.length, 10);
       assert.equal(dashboardData.model.readiness, 'NOT_CHECKED');
-      assert.equal(dashboardData.aiRequestStatistics, 'NOT_RECORDED');
+      assert.equal(dashboardData.aiRequestStatistics, 'AVAILABLE_SEPARATELY');
       for (const forbidden of ['userId','email','imageUrl','artifactUri','accuracy','sessionId'])
         assert.ok(!JSON.stringify(dashboardData).includes(forbidden));
     }

@@ -12,6 +12,7 @@ from app.config.settings import Settings
 from app.generation.prompts import SYSTEM_PROMPT
 from app.generation.schemas import EvidenceSelection
 from app.utils.errors import AppError, ErrorCode
+from app.utils.operations import provider_operation
 
 
 class Generator(Protocol):
@@ -111,6 +112,10 @@ class GeminiGenerator:
             self.http_client.close()
 
     def generate(self, prompt: str) -> EvidenceSelection:
+        with provider_operation("GEMINI"):
+            return self._generate(prompt)
+
+    def _generate(self, prompt: str) -> EvidenceSelection:
         try:
             response = self.client.models.generate_content(
                 model=self.settings.gemini_model,

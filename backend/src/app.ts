@@ -4,11 +4,27 @@ import helmet from 'helmet';
 import type { Logger } from 'pino';
 import type { Environment } from './config/environment.js';
 import { getDatabaseClient } from './database/client.js';
+import { createSpecificationRepository } from './modules/calculators/model-specification.repository.js';
+import {
+  createSpecificationService,
+  type SpecificationService,
+} from './modules/calculators/model-specification.service.js';
 import { AppError } from './errors/app-error.js';
 import { errorHandler, notFound } from './middleware/error-handler.js';
 import { requestRateLimit } from './middleware/rate-limit.js';
 import { requestContext } from './middleware/request-context.js';
 import { createDashboardRepository } from './modules/admin/dashboard.repository.js';
+import { operationsFor } from './modules/admin/operations.service.js';
+import { createReferenceRepository } from './modules/knowledge/media.repository.js';
+import {
+  createReferenceService,
+  type ReferenceService,
+} from './modules/knowledge/media.service.js';
+import {
+  observeInference,
+  observeKnowledge,
+  observeGeneration,
+} from './modules/admin/operations.observers.js';
 import { createModelHealthRepository } from './modules/admin/model-health.repository.js';
 import {
   createModelHealthClient,
@@ -33,6 +49,11 @@ import {
 import { type AuthRepository, createAuthRepository } from './modules/auth/auth.repository.js';
 import { createAuthService } from './modules/auth/auth.service.js';
 import { createFertilizerRepository } from './modules/fertilizer/fertilizer.repository.js';
+import { createProductRepository } from './modules/fertilizer/catalogue.repository.js';
+import {
+  createProductService,
+  type ProductService,
+} from './modules/fertilizer/catalogue.service.js';
 import {
   createFertilizerService,
   type FertilizerService,
@@ -77,15 +98,24 @@ export function createApp(
     createScanRepository(getDatabaseClient(environment.DATABASE_URL)),
     createImageStorage(environment),
     logger,
-    createAiInferenceClient(environment),
+    observeInference(
+      createAiInferenceClient(environment),
+      operationsFor(getDatabaseClient(environment.DATABASE_URL), logger),
+    ),
   ),
   knowledgeService: KnowledgeService = createKnowledgeService(
     createKnowledgeRepository(getDatabaseClient(environment.DATABASE_URL)),
-    createKnowledgeClient(environment),
+    observeKnowledge(
+      createKnowledgeClient(environment),
+      operationsFor(getDatabaseClient(environment.DATABASE_URL), logger),
+    ),
   ),
   generationService: GenerationService = createGenerationService(
     scanService,
-    createGenerationClient(environment),
+    observeGeneration(
+      createGenerationClient(environment),
+      operationsFor(getDatabaseClient(environment.DATABASE_URL), logger),
+    ),
   ),
   fertilizerService: FertilizerService = createFertilizerService(
     createFertilizerRepository(getDatabaseClient(environment.DATABASE_URL)),
@@ -119,9 +149,21 @@ export function createApp(
     createProfileMediaRepository(getDatabaseClient(environment.DATABASE_URL)),
     createImageStorage(environment, 'profiles'),
   ),
+  referenceService: ReferenceService = createReferenceService(
+    createReferenceRepository(getDatabaseClient(environment.DATABASE_URL), logger),
+    createImageStorage(environment, 'references'),
+  ),
+  specificationService: SpecificationService = createSpecificationService(
+    createSpecificationRepository(getDatabaseClient(environment.DATABASE_URL)),
+  ),
+  productService: ProductService = createProductService(
+    createProductRepository(getDatabaseClient(environment.DATABASE_URL)),
+  ),
 ): Express {
   const app = express();
   app.locals.recoverScans = () => scanService.recoverStale();
+  app.locals.flushOperationalEvents = () =>
+    operationsFor(getDatabaseClient(environment.DATABASE_URL), logger).close();
   app.disable('x-powered-by');
   app.set('query parser', 'simple');
   app.use(requestContext(logger));
@@ -139,26 +181,29 @@ export function createApp(
   );
   app.use(requestRateLimit(environment.RATE_LIMIT_MAX));
   app.use(express.json({ limit: '100kb', strict: true, inflate: false }));
-  app.use(
-    '/api/v1',
-    apiRoutes(
-      repository,
-      environment,
-      createAuthService(environment, authRepository),
-      scanService,
-      knowledgeService,
-      generationService,
-      fertilizerService,
-      yieldService,
-      analyticsService,
-      dashboardService,
-      managementService,
-      modelHealthService,
-      profileService,
-      accountsService,
-      profileMediaService,
-    ),
+  const v1Router = apiRoutes(
+    repository,
+    environment,
+    createAuthService(environment, authRepository),
+    scanService,
+    knowledgeService,
+    generationService,
+    fertilizerService,
+    yieldService,
+    analyticsService,
+    dashboardService,
+    managementService,
+    modelHealthService,
+    profileService,
+    accountsService,
+    profileMediaService,
+    operationsFor(getDatabaseClient(environment.DATABASE_URL), logger),
+    referenceService,
+    specificationService,
+    productService,
   );
+  app.locals.contractRouter = v1Router;
+  app.use('/api/v1', v1Router);
   app.use(notFound);
   app.use(errorHandler(logger));
   return app;

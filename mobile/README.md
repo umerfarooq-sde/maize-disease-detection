@@ -1,5 +1,20 @@
 # Mobile
 
+## Phase 24.6 integration
+
+The separate Admin workspace now displays real scoped AI operational counts/latencies,
+supports informational disease/applicability editing, reference-media source/rights
+review, independent fertilizer product metadata and disabled richer-model source intake.
+Farmer Knowledge detail displays optional reviewed applicability and a reference gallery
+through protected Node byte reads, with source/credit/alt text and honest empty states.
+Private scans/profile images retain account/capability authorization and no-store delivery.
+Avatar timeout/server acknowledgements reconcile by rereading state, not repeating DELETE.
+The15-second default request timeout is unchanged.
+
+All flows use scoped ViewModels/repositories/API client. No provider secret or direct
+FastAPI/Google call is added. Real reference photographs and agronomic calculations need
+approval; generated fixtures are never real content. See [Phase 24.6](../docs/phase-24-6-pre-deployment-remediation.md).
+
 Phase 23.7 adds `/profile/edit`, `/admin/farmers` and `/admin/audit` through
 scoped Provider/ChangeNotifier ViewModels and typed repositories. Private farmer
 metadata/photos persist server-side after a new login; native session credentials

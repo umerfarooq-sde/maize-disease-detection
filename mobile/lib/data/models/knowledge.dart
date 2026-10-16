@@ -34,10 +34,19 @@ bool validDiseaseSlug(String slug) =>
     slug.length <= 120 && RegExp(r'^[a-z0-9]+(?:-[a-z0-9]+)*$').hasMatch(slug);
 
 class DiseaseDetail {
-  DiseaseDetail._(this.disease, List<KnowledgeSection> sections)
-    : sections = List.unmodifiable(sections);
+  DiseaseDetail._(
+    this.disease,
+    List<KnowledgeSection> sections,
+    this.classifierSupported,
+    this.growthStages,
+    this.severityDescriptors,
+    this.metadataSource,
+  ) : sections = List.unmodifiable(sections);
   final DiseaseSummary disease;
   final List<KnowledgeSection> sections;
+  final bool? classifierSupported;
+  final List<String> growthStages, severityDescriptors;
+  final AssistantSourceReference? metadataSource;
   factory DiseaseDetail.fromJson(Object? value) {
     final data = _object(value);
     final sections = _list(
@@ -47,7 +56,34 @@ class DiseaseDetail {
     if (sections.map((s) => s.documentId).toSet().length != sections.length) {
       throw _invalid();
     }
-    return DiseaseDetail._(DiseaseSummary.fromJson(data), sections);
+    final catalogue = data['catalogue'];
+    final metadata = catalogue is Map<String, dynamic>
+        ? catalogue['applicability']
+        : null;
+    List<String> strings(String key, int maximum) =>
+        metadata is Map<String, dynamic>
+        ? _list(
+            metadata[key],
+            maximum,
+          ).map((v) => _text(v, 600)).toList(growable: false)
+        : const [];
+    if (catalogue != null &&
+        (catalogue is! Map<String, dynamic> ||
+            catalogue['classifierSupported'] is! bool)) {
+      throw _invalid();
+    }
+    return DiseaseDetail._(
+      DiseaseSummary.fromJson(data),
+      sections,
+      catalogue is Map<String, dynamic>
+          ? catalogue['classifierSupported'] as bool
+          : null,
+      strings('growthStages', 12),
+      strings('severityDescriptors', 8),
+      metadata is Map<String, dynamic> && metadata['source'] != null
+          ? AssistantSourceReference.fromJson(metadata['source'])
+          : null,
+    );
   }
 }
 

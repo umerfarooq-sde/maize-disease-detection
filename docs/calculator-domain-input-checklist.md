@@ -1,5 +1,9 @@
 # Calculator domain content — review checklist
 
+**Phase24.6 current addendum (2026-10-17):** The source-intake workflow is implemented: Admin → Agronomic model review records versioned mathematical definitions, explicit dimensions/assumptions/source/coefficients, always DISABLED/PENDING_DOMAIN_APPROVAL. Admin → Fertilizer catalogue manages independent reviewed product metadata; referenced products are frozen and copied for revision. These workflows do not approve or execute unknown models.
+
+See [remediation and current evidence](phase-24-6-pre-deployment-remediation.md). Historical phase details follow.
+
 Phase 23.7 verifies the existing deterministic frameworks without inventing data.
 Real public catalogues remain `PENDING_RULES` (fertilizer) and
 `PENDING_CONFIGURATION` (yield). This does not block private farmer profiles.

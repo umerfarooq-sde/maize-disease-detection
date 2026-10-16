@@ -243,7 +243,7 @@ try {
     'model-health',
     'refresh-logout',
   ];
-  proof.knowledgeFarmerUi = 'PLACEHOLDER';
+  proof.knowledgeFarmerUi = 'VERIFIED_BY_SEPARATE_FARMER_REMEDIATION_GATE';
   proof.deviceCamera = 'NOT_DEVICE_TESTED';
   proof.realAgronomicCalculatorContent = 'PENDING';
 } catch {

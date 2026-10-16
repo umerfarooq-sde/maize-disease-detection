@@ -196,6 +196,9 @@ try {
   await request('/profile/avatar', farmerGrant.accessToken, 'DELETE', {
     expectedRevision: photoProfile.revision,
   });
+  // Mutations queue obsolete assets durably and return before provider cleanup.
+  assert.ok((await database.farmerProfile.findUniqueOrThrow({where:{userId:ownerId}})).avatarCleanupPublicIds.length > 0);
+  await media.cleanup();
   // Restore this generated account's empty-profile precondition for the existing
   // Flutter creation journey; never touch a pre-existing account/profile.
   const securityProfile = await database.farmerProfile.findUniqueOrThrow({ where: { userId: ownerId } });
@@ -349,7 +352,8 @@ try {
   assert.equal(saved.fieldAreaHectares.toString(), '1.2345');
   assert.equal(saved.avatarUrl, null);
   assert.equal(saved.avatarPendingPublicId, null);
-  assert.deepEqual(saved.avatarCleanupPublicIds, []);
+  await media.cleanup();
+  assert.deepEqual((await database.farmerProfile.findUniqueOrThrow({where:{userId:ownerId}})).avatarCleanupPublicIds, []);
   const history = await database.auditLog.findMany({
     where: { entityType: 'farmer_account', entityId: ownerId },
   });

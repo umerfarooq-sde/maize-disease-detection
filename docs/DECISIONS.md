@@ -1,5 +1,30 @@
 # Engineering decisions
 
+## Phase 24.6 implementation decisions (2026-10-17)
+
+- Preserve the approved null confidence policy; repairing an optional dotenv pair
+  is configuration reconciliation, not calibration approval.
+- A committed avatar association determines the response. Existing durable journal
+  cleanup runs separately; ambiguous outcomes reread state instead of deleting an
+  uncertain/current asset or repeating a destructive request.
+- Store privacy-minimal operational attempt metadata separately from reserved
+  ai_queries/responses. Bounded lifespan/application-owned best-effort writers keep
+  telemetry off farmer response deadlines. Same-identity storage retries deduplicate;
+  scopes/loss conditions are visible. Retention remains unchanged by user approval.
+- Separate informational catalogue metadata from the four immutable classifier
+  mappings. Reference media requires source/license/rights and explicit publication
+  review; synthetic publication is rejected by normal application composition.
+- Reuse immutable KnowledgeDocuments for standalone product source snapshots, never
+  index them into disease RAG, and freeze products referenced by immutable rules.
+  Share the rule-creation lock to prevent content/edit races.
+- Store richer agronomic mathematical specifications as immutable, non-executable
+  review records using existing CalculatorConfig. Source intake does not authorize
+  arbitrary formula evaluation or invent a domain model.
+- Generate Node OpenAPI from runtime Zod requests and shared validated responses,
+  reconcile against mounted routes, and keep the viewer local-only.
+
+See [contracts, evidence and approval gates](phase-24-6-pre-deployment-remediation.md).
+
 ## Phase 24 security decisions (2026-10-16)
 
 - The user approved account/capability authorization for private image delivery.

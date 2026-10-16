@@ -1,5 +1,21 @@
 # Backend
 
+## Phase 24.6 current additions
+
+ADMIN operational monitoring, independent sourced fertilizer products, richer-model
+review intake, informational disease metadata and reference-media lifecycle now
+use the existing layers. Apply all pending additive migrations with `db:migrate`;
+there are 14 total, extending the original nine without reset. Reference cleanup is
+`npm run references:cleanup`; profile cleanup is `npm run profiles:cleanup`.
+Successful avatar mutations return their committed projection before cleanup.
+These CLIs need future deployment scheduling; they do not run as detached requests.
+
+`npm run openapi:generate` writes [OpenAPI 3.1](openapi.json); `npm run openapi:check`
+validates59 registered operations and schema/route drift, and is part of `npm run check`.
+`npm run openapi:serve` exposes only a local 127.0.0.1:9090 JSON viewer, not a public
+documentation route. See the [contracts and evidence](../docs/phase-24-6-pre-deployment-remediation.md).
+Real licensed media/agronomic rules remain pending. Historical phase descriptions follow.
+
 Phase 24 uses Node 24.22.0+, retains Prisma 7.10.0 and scoped audited
 deepmerge-ts/mysql2 overrides. Production startup rejects unsafe runtime DB roles
 and unverified remote TLS. Private images use authorized Node byte reads:

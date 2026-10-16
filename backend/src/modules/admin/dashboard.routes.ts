@@ -1,4 +1,6 @@
 import { Router } from 'express';
+import { z } from 'zod';
+import { withRequestSchema } from '../../validators/request.js';
 import type { Environment } from '../../config/environment.js';
 import { AppError } from '../../errors/app-error.js';
 import { authenticate } from '../../middleware/authentication.js';
@@ -24,12 +26,12 @@ export function dashboardRoutes(
     requestRateLimit(environment.ANALYTICS_RATE_LIMIT_MAX),
     authenticate(auth),
     authorize('ADMIN'),
-    (request, response, next) => {
+    withRequestSchema(z.object({ query: analyticsQuery }), (request, response, next) => {
       const parsed = analyticsQuery.safeParse(request.query);
       if (!parsed.success) throw new AppError('VALIDATION_ERROR');
       response.locals.validated = parsed.data;
       next();
-    },
+    }),
     createDashboardController(service),
   );
   return router;

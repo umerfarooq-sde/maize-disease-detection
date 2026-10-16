@@ -15,10 +15,13 @@ SERVICE_ROOT = Path(__file__).resolve().parents[2]
 class ConfigurationError(Exception):
     """Safe startup failure: never include rejected settings or their values."""
 
-    def __init__(self) -> None:
+    def __init__(self, message: str | None = None) -> None:
         super().__init__(
-            "Invalid AI service configuration; check ENVIRONMENT, HOST, PORT, "
-            "LOG_LEVEL, AI_SERVICE_TOKEN and model/inference/retrieval settings."
+            message
+            or (
+                "Invalid AI service configuration; check ENVIRONMENT, HOST, PORT, "
+                "LOG_LEVEL, AI_SERVICE_TOKEN and model/inference/retrieval settings."
+            )
         )
 
 
@@ -210,6 +213,15 @@ class Settings(BaseSettings):
 def load_settings(env_file: Path | None = SERVICE_ROOT / ".env") -> Settings:
     """OS environment overrides the service-local dotenv file; load once per app."""
     try:
-        return Settings(_env_file=env_file)
+        settings = Settings(_env_file=env_file)
     except (ValidationError, OSError, UnicodeError):
         raise ConfigurationError() from None
+    if bool(settings.confidence_policy_path) != bool(settings.confidence_policy_sha256):
+        raise ConfigurationError(
+            "CONFIDENCE_POLICY_INVALID: configure both CONFIDENCE_POLICY_PATH and "
+            "CONFIDENCE_POLICY_SHA256 for an approved policy, or leave both empty "
+            "for the approved unconfigured threshold. In Windows PowerShell, remove "
+            "both environment overrides and correct both service-local dotenv entries; "
+            "an absent override does not clear a dotenv value."
+        )
+    return settings

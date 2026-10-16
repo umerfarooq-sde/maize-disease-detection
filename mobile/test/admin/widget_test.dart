@@ -45,6 +45,9 @@ void main() {
               return response(grant(role: 'ADMIN'), setCookie: cookie);
             }
             if (request.url.path.endsWith('/logout')) return response(null);
+            if (request.url.path.endsWith('/ai-operations')) {
+              return response({'status': 'UNAVAILABLE'});
+            }
             final query = request.url.queryParameters;
             return response(
               dashboardJson(
@@ -70,7 +73,10 @@ void main() {
         find.textContaining('readiness has not been checked'),
         findsOneWidget,
       );
-      expect(find.textContaining('statistics unavailable'), findsOneWidget);
+      expect(
+        find.textContaining('Operational statistics are unavailable'),
+        findsOneWidget,
+      );
       final dashboard = requests.singleWhere(
         (request) => request.url.path.endsWith('/admin/dashboard'),
       );

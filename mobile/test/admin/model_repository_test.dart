@@ -72,6 +72,14 @@ void main() {
         tokenSource: tokens,
         client: MockClient((request) async {
           requests.add(request);
+          if (request.url.path.endsWith('/ai-operations')) {
+            return response({
+              'status': 'COLLECTED',
+              'totals': <Object>[],
+              'daily': <Object>[],
+              'collection': {'localDropped': 0},
+            });
+          }
           return response(
             dashboardJson(
               range: altered
@@ -85,12 +93,15 @@ void main() {
       addTearDown(tokens.dispose);
       final repository = ApiAdminDashboardRepository(api);
       expect((await repository.load(testRange)).authenticatedScans, 5);
-      expect(requests.single.url.path, '/api/v1/admin/dashboard');
+      expect(requests.map((r) => r.url.path), [
+        '/api/v1/admin/ai-operations',
+        '/api/v1/admin/dashboard',
+      ]);
       expect(
-        requests.single.headers['authorization'],
+        requests.last.headers['authorization'],
         'Bearer admin.access.token',
       );
-      expect(requests.single.url.queryParameters, testRange.toQuery());
+      expect(requests.last.url.queryParameters, testRange.toQuery());
       altered = true;
       await expectLater(
         repository.load(testRange),

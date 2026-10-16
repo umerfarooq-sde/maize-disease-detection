@@ -11,6 +11,58 @@ from app.config.settings import SERVICE_ROOT, ConfigurationError, Settings, load
 TEST_TOKEN = "test_only_" + "T" * 55
 
 
+def test_executable_reports_actionable_safe_policy_error(monkeypatch: pytest.MonkeyPatch) -> None:
+    import json
+    import logging
+    from types import SimpleNamespace
+
+    from app import server
+    from app.utils.logging import JsonFormatter
+
+    class Capture:
+        def error(self, message: str, *, extra: dict[str, object]) -> None:
+            record = logging.LogRecord("test", logging.ERROR, "", 0, message, (), None)
+            for key, value in extra.items():
+                setattr(record, key, value)
+            payload = json.loads(JsonFormatter().format(record))
+            assert "configure both" in payload["configuration_hint"]
+            assert "CONFIDENCE_POLICY_SHA256" in payload["configuration_hint"]
+
+    def invalid() -> Settings:
+        raise ConfigurationError(
+            "CONFIDENCE_POLICY_INVALID: configure both CONFIDENCE_POLICY_PATH and "
+            "CONFIDENCE_POLICY_SHA256, or leave both empty."
+        )
+
+    monkeypatch.setattr(server, "load_settings", invalid)
+    monkeypatch.setattr(server, "configure_logging", lambda _level: None)
+    monkeypatch.setattr(server, "logging", SimpleNamespace(getLogger=lambda _name: Capture()))
+    with pytest.raises(SystemExit) as result:
+        server.main()
+    assert result.value.code == 1
+
+
+@pytest.mark.parametrize("path,digest", [("", "a" * 64), ("policy.json", "")])
+def test_policy_preflight_explains_one_sided_dotenv_without_values(
+    tmp_path: Path, path: str, digest: str
+) -> None:
+    env = tmp_path / "service.env"
+    env.write_text(f"CONFIDENCE_POLICY_PATH={path}\nCONFIDENCE_POLICY_SHA256={digest}\n")
+    with pytest.raises(ConfigurationError, match="configure both") as failure:
+        load_settings(env)
+    assert "Windows PowerShell" in str(failure.value)
+    assert "a" * 64 not in str(failure.value)
+
+
+@pytest.mark.parametrize("path,digest", [("", ""), ("policy.json", "a" * 64)])
+def test_policy_preflight_accepts_paired_optional_states(
+    tmp_path: Path, path: str, digest: str
+) -> None:
+    env = tmp_path / "service.env"
+    env.write_text(f"CONFIDENCE_POLICY_PATH={path}\nCONFIDENCE_POLICY_SHA256={digest}\n")
+    assert bool(load_settings(env).confidence_policy_path) == bool(path)
+
+
 def test_local_defaults_need_no_database_model_or_generation_credentials() -> None:
     settings = load_settings(env_file=None)
     assert settings.environment == "development"

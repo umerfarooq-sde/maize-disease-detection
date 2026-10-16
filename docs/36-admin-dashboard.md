@@ -1,5 +1,9 @@
 # Admin dashboard — Phase 20
 
+**Phase24.6 current addendum (2026-10-17):** AI statistics are no longer NOT_RECORDED: default composition records real metadata-only operation attempts, with ADMIN UTC SQL aggregates and scoped Flutter cards/bars. Best-effort pending/loss/historical unknown states are visible; offline test metrics remain distinct.
+
+See [remediation and current evidence](phase-24-6-pre-deployment-remediation.md). Historical phase details follow.
+
 The dashboard displays stored system activity through Flutter → Node → Prisma →
 PostgreSQL. Counts describe account usage and model labels, not ground-truth
 accuracy, agricultural prevalence or field health. No synthetic dashboard data is

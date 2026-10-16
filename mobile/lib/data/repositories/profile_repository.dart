@@ -68,14 +68,30 @@ class ApiProfileRepository implements ProfileRepository {
   }
 
   @override
-  Future<FarmerProfile> removePhoto(String revision) async => _required(
-    (await _api.request(
-      ApiMethod.delete,
-      'profile/avatar',
-      authenticated: true,
-      body: {'expectedRevision': revision},
-    )).data,
-  );
+  Future<FarmerProfile> removePhoto(String revision) async {
+    try {
+      return _required(
+        (await _api.request(
+          ApiMethod.delete,
+          'profile/avatar',
+          authenticated: true,
+          body: {'expectedRevision': revision},
+        )).data,
+      );
+    } on AppException catch (failure) {
+      if (failure.kind != AppErrorKind.timeout &&
+          failure.kind != AppErrorKind.network &&
+          failure.kind != AppErrorKind.server) {
+        rethrow;
+      }
+      // A transport failure cannot establish whether DELETE committed. Read the
+      // owner-bound state once; never automatically repeat a destructive call.
+      final current = await read();
+      if (current != null && current.avatarUrl == null) return current;
+      throw const AppException(AppErrorKind.conflict);
+    }
+  }
+
   FarmerProfile _required(Object? value) =>
       FarmerProfile.fromResponse(value) ??
       (throw const AppException(AppErrorKind.invalidResponse));

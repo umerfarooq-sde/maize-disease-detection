@@ -28,6 +28,7 @@ class FakeProfileRepository implements ProfileRepository {
   Completer<FarmerProfile?>? pendingRead;
   Completer<FarmerProfile>? pendingSave;
   Object? failure;
+  Object? uploadAcknowledgementFailure;
   int reads = 0, writes = 0, uploads = 0, removals = 0;
   @override
   Future<FarmerProfile?> read() async {
@@ -63,9 +64,11 @@ class FakeProfileRepository implements ProfileRepository {
     if (failure case final error?) throw error;
     progress(0.5);
     progress(1);
-    return saved = FarmerProfile.fromResponse(
+    saved = FarmerProfile.fromResponse(
       profileJson(photo: 'profile/avatar?v=${'b' * 64}'),
     )!;
+    if (uploadAcknowledgementFailure case final error?) throw error;
+    return saved!;
   }
 
   @override

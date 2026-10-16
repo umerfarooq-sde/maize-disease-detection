@@ -39,7 +39,7 @@ export function createDashboardService(
           inferenceConfigured: environment.AI_SERVICE_URL !== '',
           readiness: 'NOT_CHECKED',
         },
-        aiRequestStatistics: 'NOT_RECORDED',
+        aiRequestStatistics: 'AVAILABLE_SEPARATELY',
       };
     },
   };

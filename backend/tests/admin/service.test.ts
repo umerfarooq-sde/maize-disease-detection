@@ -39,7 +39,7 @@ test('dashboard preserves system counts, UTC zero days and explicitly unavailabl
     inferenceConfigured: false,
     readiness: 'NOT_CHECKED',
   });
-  assert.equal(result.aiRequestStatistics, 'NOT_RECORDED');
+  assert.equal(result.aiRequestStatistics, 'AVAILABLE_SEPARATELY');
   assert.ok(!JSON.stringify(result).includes('accuracy'));
 });
 test('single versus ambiguous production registry never guesses current model or live readiness', async () => {

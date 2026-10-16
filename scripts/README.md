@@ -1,5 +1,22 @@
 # Scripts
 
+## Phase 24.6 checks and cleanup
+
+`check-ai-startup.py` loads the actual project settings and selected model, checks hashes,
+class mapping/preprocessing/null confidence policy, and performs synthetic inference.
+It does not inject a temporary confidence override. The existing `check-e2e.py` includes
+all 19 historical integration categories plus `predeployment-remediation` and preflight.
+The new category verifies real telemetry, Admin rendering, optional catalogue metadata,
+Cloudinary-generated media/protected gallery, versioning/retirement cleanup, independent
+fertilizer products and disabled mathematical-model review intake in an owned schema.
+Fixtures have no agricultural validity; no raw dataset is read. Failed attempts remain
+recorded and retained schemas/assets require proof-based recovery.
+
+Backend `check` now includes59-operation OpenAPI generation reconciliation. Cleanup CLIs
+remain explicit tracked work (`profiles:cleanup`, `scans:cleanup`, `references:cleanup`);
+no detached provider delete is launched after a committed avatar response.
+See [current verification](../docs/phase-24-6-verification.md).
+
 Phase 24 adds `flutter-test-environment.mjs` (OS/SDK allowlist),
 `flutter-test-environment.test.mjs` (actual child-process isolation),
 `run-flutter.mjs` (shellless SDK runner), `use-project-node.ps1` (process-local

@@ -1,5 +1,9 @@
 # Deterministic fertilizer calculator
 
+**Phase24.6 current addendum (2026-10-17):** Independent source-reviewed product CRUD and immutable disabled nutrient-model intake are implemented. AREA_RATE_V1 still scales product mass only. No N/P/K demand/selection/schedule formula or dosage is invented; the mathematical model and real source data remain required.
+
+See [remediation and current evidence](phase-24-6-pre-deployment-remediation.md). Historical phase details follow.
+
 **Content handoff:** Phase 23.7 re-verifies the real catalogue's pending state.
 Use the separate [source/data/approval checklist](calculator-domain-input-checklist.md)
 before preparing and explicitly publishing a real configuration. Synthetic tests
