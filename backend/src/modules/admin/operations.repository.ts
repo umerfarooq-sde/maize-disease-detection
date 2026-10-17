@@ -36,9 +36,20 @@ export function createOperationsRepository(database: PrismaClient) {
       );
     },
     async aggregate(from: string, to: string) {
-      return database.$transaction(
-        async (tx) => {
-          const totals = await tx.$queryRaw<OperationAggregate[]>`
+      // One statement gives both projections the same snapshot and avoids an
+      // unnecessary interactive transaction's shorter acquisition deadline.
+      // Shared pool acquisition/query limits still apply; no retries or warming.
+      const rows = await database.$queryRaw<
+        {
+          totals: OperationAggregate[];
+          daily: { date: string; scope: string; requests: number; failures: number }[];
+        }[]
+      >`
+          WITH filtered AS (
+            SELECT scope,operation,outcome,duration_ms,occurred_at FROM ai_operations
+            WHERE occurred_at >= (${from}::date::timestamp AT TIME ZONE 'UTC')
+              AND occurred_at < ((${to}::date+1)::timestamp AT TIME ZONE 'UTC')
+          ), totals AS (
           SELECT scope, operation, count(*)::int AS requests,
           count(*) FILTER (WHERE outcome='SUCCESS')::int AS successes,
           count(*) FILTER (WHERE outcome='FAILED')::int AS failures,
@@ -46,19 +57,17 @@ export function createOperationsRepository(database: PrismaClient) {
           avg(duration_ms)::float8 AS "averageMs",
           percentile_cont(0.5) WITHIN GROUP (ORDER BY duration_ms)::float8 AS "p50Ms",
           percentile_cont(0.95) WITHIN GROUP (ORDER BY duration_ms)::float8 AS "p95Ms"
-          FROM ai_operations WHERE occurred_at >= (${from}::date::timestamp AT TIME ZONE 'UTC')
-          AND occurred_at < ((${to}::date+1)::timestamp AT TIME ZONE 'UTC') GROUP BY scope, operation ORDER BY scope,operation`;
-          const daily = await tx.$queryRaw<
-            { date: string; scope: string; requests: number; failures: number }[]
-          >`
+          FROM filtered GROUP BY scope, operation
+          ), daily AS (
           SELECT to_char(occurred_at AT TIME ZONE 'UTC','YYYY-MM-DD') AS date, scope,
           count(*)::int AS requests, count(*) FILTER (WHERE outcome='FAILED')::int AS failures
-          FROM ai_operations WHERE occurred_at >= (${from}::date::timestamp AT TIME ZONE 'UTC') AND occurred_at < ((${to}::date+1)::timestamp AT TIME ZONE 'UTC')
-          GROUP BY 1,scope ORDER BY 1,scope`;
-          return { totals, daily };
-        },
-        { maxWait: 1000, timeout: 5000 },
-      );
+          FROM filtered GROUP BY 1,scope
+          )
+          SELECT COALESCE((SELECT jsonb_agg(t ORDER BY t.scope,t.operation) FROM totals t),'[]'::jsonb) AS totals,
+                 COALESCE((SELECT jsonb_agg(d ORDER BY d.date,d.scope) FROM daily d),'[]'::jsonb) AS daily`;
+      const result = rows[0];
+      if (!result) throw new Error('Operational aggregate row missing.');
+      return result;
     },
   };
 }

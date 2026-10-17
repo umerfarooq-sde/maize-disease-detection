@@ -13,6 +13,7 @@ import { memoryRepository } from '../auth/helpers.js';
 import { silentLogger, testEnvironment, withServer } from '../foundation/helpers.js';
 import { requestContext } from '../../src/middleware/request-context.js';
 import { errorHandler } from '../../src/middleware/error-handler.js';
+import { Prisma } from '../../src/generated/prisma/client.js';
 function fixture() {
   const rows: OperationEvent[] = [];
   const repository: OperationsRepository = {
@@ -25,6 +26,35 @@ function fixture() {
   };
   return { rows, repository, service: createOperationsService(repository, silentLogger) };
 }
+
+test('close drains the owned writer before database teardown and rejects later recording', async () => {
+  const f = fixture();
+  let release: (() => void) | undefined;
+  let disconnected = false;
+  const gate = new Promise<void>((resolve) => {
+    release = resolve;
+  });
+  f.repository.record = async (event) => {
+    await gate;
+    assert.equal(disconnected, false, 'A telemetry write must not outlive its database owner.');
+    f.rows.push(event);
+  };
+  await f.service.measure('RETRIEVAL', async () => true);
+  await f.service.measure('GENERATION', async () => true);
+  let closed = false;
+  const closing = f.service.close().then(() => {
+    closed = true;
+  });
+  await new Promise((resolve) => setImmediate(resolve));
+  assert.equal(closed, false);
+  release?.();
+  await closing;
+  disconnected = true;
+  assert.equal(f.rows.length, 2);
+  assert.equal(await f.service.measure('RETRIEVAL', async () => 7), 7);
+  assert.equal(f.rows.length, 2);
+  assert.equal((await f.service.summary('2026-10-01', '2026-10-02')).collection.localDropped, 1);
+});
 test('operational producer records one metadata-only event per attempt and preserves abstention', async () => {
   const f = fixture();
   assert.equal(await f.service.measure('INFERENCE', async () => 42), 42);
@@ -95,6 +125,32 @@ test('aggregation failure is unavailable, never a fabricated zero', async () => 
   const result = await f.service.summary('2026-10-01', '2026-10-02');
   assert.equal(result.status, 'UNAVAILABLE');
   assert.equal(result.totals, null);
+});
+
+test('aggregate degradation logs safe acquisition category without leaking dependency text', async () => {
+  const f = fixture();
+  const warnings: unknown[] = [];
+  const logger = silentLogger.child({});
+  logger.warn = ((entry: unknown) => warnings.push(entry)) as typeof logger.warn;
+  f.repository.aggregate = async () => {
+    throw new Prisma.PrismaClientKnownRequestError(
+      'Unable to start a transaction in the given time. postgresql://private-marker',
+      { code: 'P2028', clientVersion: 'fixture' },
+    );
+  };
+  const service = createOperationsService(f.repository, logger);
+  const result = await service.summary('2026-10-01', '2026-10-02');
+  assert.equal(result.status, 'UNAVAILABLE');
+  assert.equal(result.totals, null);
+  assert.deepEqual(warnings, [
+    {
+      event: 'ai_telemetry_aggregate_unavailable',
+      stage: 'AGGREGATE',
+      dependencyCode: 'P2028',
+      databaseFailureKind: 'TRANSACTION_ACQUISITION_TIMEOUT',
+    },
+  ]);
+  assert.ok(!JSON.stringify({ result, warnings }).includes('private-marker'));
 });
 test('AI operational endpoint requires ADMIN and validates date filters before aggregate work', async () => {
   const f = fixture(),

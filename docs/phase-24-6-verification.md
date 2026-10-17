@@ -1,5 +1,9 @@
 # Phase 24.6 — verification ledger
 
+> Current Phase 24.7 evidence: see [integration stabilization](phase-24-7-integration-stability.md).
+> The following Phase 24.6 results are preserved; they are not a claim of
+> uninterrupted Phase 24.7 acceptance.
+
 Updated 2026-10-17 (Asia/Karachi). Baseline `18bd55e`. Executions use the real
 configured development services and disposable generated fixtures where marked
 live. No raw dataset access, model fit, immutable split modification, production
@@ -158,3 +162,18 @@ Command: `ai-service/.venv/Scripts/python.exe scripts/check-e2e.py` with the pro
 The final RAG SQL category reports **1 passed / 2 failed / 0 skipped**; the Knowledge live contract reports **0 passed / 1 failed / 0 skipped**, with an actual HTTP 503 and safe `retrieval_database_failed:UNAVAILABLE` diagnostics. These errors establish unavailability at that boundary, not its precise transport or application cause. The later generation/assistant and other successful categories do not erase them.
 
 The final remediation Flutter test reports **0 passed / 1 failed / 0 skipped**. It passed avatar removal in **1,984 ms**, Admin sign-in and the operational dashboard assertions, then timed out waiting for the Knowledge detail and reviewed growth-stage heading (test line 135). Its precise cause is unproven; this is not described as a provider outage or waived. The later delayed-cleanup, replacement and product/model checks in that category were not reached. Separate focused run `20261016T204205Z-3588d3c1` passed those checks with a 1,909 ms avatar response and tracked 16,500 ms cleanup; that does not change this failed full-run result.
+
+## Phase 24.7 final execution override — 2026-10-18
+
+Repaired-code normal run `20261017T213205Z-173ed748`: **21 PASS/0 FAIL/0 selected skips**,
+uninterrupted/no confidence override; independent `--only rag-database knowledge
+predeployment-remediation` run `20261017T215921Z-b412d414`: **4/0/0** including preflight.
+Both clean owned assets/schema and preserve all22 public counts. Backend356+2,
+AI371/0/3 default skips, Flutter391/0/14 default skips, OpenAPI59, ARM64 debug,
+78 preprocessing cases per environment+12 parity, Prisma14 SQL/applied migrations
+and captured drift exit0 pass. Existing warnings remain visible. One best-effort
+metadata CONNECT failure occurred in the full run; later authenticated controls
+passed, without proving cause. Historical original-three cause closure is still
+open: Phase24.7 PARTIALLY COMPLETE; Phase25 NOT READY. All prior failed reports
+above are historical and unchanged. Full scope/limits and controls:
+[Phase24.7 report](phase-24-7-integration-stability.md).

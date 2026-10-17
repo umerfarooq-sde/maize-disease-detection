@@ -1,5 +1,14 @@
 # Phase 23 — application testing and E2E verification
 
+**Current stabilization:** [Phase 24.7](phase-24-7-integration-stability.md) records
+the latest root-cause investigation and acceptance runs. Counts and incomplete
+feature descriptions below are historical Phase 23 evidence. The affected
+Knowledge, Farmer library, Admin management and journey harnesses now stop HTTP
+work and drain/close operational writers before fixture database teardown. Do not
+disconnect Prisma while an owned writer can reconnect it. Current live checks
+retain all required assertions and preserve each run's separate cleanup/result
+proof; a union of successful categories is not an uninterrupted full-suite pass.
+
 **Current Phase 23.7 evidence:** [requirements completion report](phase-23-7-requirements-completion.md)
 records 309 backend, 369 Flutter (13 default opt-in skips), 346 AI (three opt-in SQL
 skips), 42 isolated SQL tests, nine-migration replay and the enabled real host-widget
@@ -207,3 +216,18 @@ recorded in [project state](PROJECT_STATE.md). Do not interpret this verificatio
 completion of the missing registration/knowledge UI, real agronomic calculator
 content, physical camera/permissions, browser/durable sessions, deployment/load,
 independent field testing or commercial licensing. Stop after Phase 23.
+
+## Phase 24.7 final execution override — 2026-10-18
+
+Repaired-code normal run `20261017T213205Z-173ed748`: **21 PASS/0 FAIL/0 selected skips**,
+uninterrupted/no confidence override; independent `--only rag-database knowledge
+predeployment-remediation` run `20261017T215921Z-b412d414`: **4/0/0** including preflight.
+Both clean owned assets/schema and preserve all22 public counts. Backend356+2,
+AI371/0/3 default skips, Flutter391/0/14 default skips, OpenAPI59, ARM64 debug,
+78 preprocessing cases per environment+12 parity, Prisma14 SQL/applied migrations
+and captured drift exit0 pass. Existing warnings remain visible. One best-effort
+metadata CONNECT failure occurred in the full run; later authenticated controls
+passed, without proving cause. Historical original-three cause closure is still
+open: Phase24.7 PARTIALLY COMPLETE; Phase25 NOT READY. All prior failed reports
+above are historical and unchanged. Full scope/limits and controls:
+[Phase24.7 report](phase-24-7-integration-stability.md).

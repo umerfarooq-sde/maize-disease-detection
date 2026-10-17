@@ -8,7 +8,7 @@ import { fileURLToPath } from 'node:url';
 import { createApp } from '../backend/dist/app.js';
 import { loadEnvironment } from '../backend/dist/config/environment.js';
 import { createLogger } from '../backend/dist/config/logger.js';
-import { createDatabaseClient } from '../backend/dist/database/client.js';
+import { createDatabaseClient, getDatabaseClient } from '../backend/dist/database/client.js';
 import { createAuthRepository } from '../backend/dist/modules/auth/auth.repository.js';
 import { createAuthService } from '../backend/dist/modules/auth/auth.service.js';
 import { createHealthRepository } from '../backend/dist/modules/health/health.repository.js';
@@ -90,6 +90,7 @@ try {
     : 'PASS: complete Flutter upload chain against real Cloudinary/PostgreSQL.');
 } finally {
   await new Promise((resolve) => server.close(resolve));
+  await app.locals.flushOperationalEvents();
   try {
     const records = await database.scanUpload.findMany({ where: { id: { in: [...ids] } } });
     for (const record of records) await real.destroy(record.publicId);
@@ -99,6 +100,7 @@ try {
     await database.scan.deleteMany({ where: { id: { in: scanIds } } });
     await database.user.deleteMany({ where: { id: { in: users } } });
   } finally {
+    await getDatabaseClient(environment.DATABASE_URL).$disconnect();
     await database.$disconnect();
   }
   console.log('Removed only this run\'s synthetic asset and database records.');

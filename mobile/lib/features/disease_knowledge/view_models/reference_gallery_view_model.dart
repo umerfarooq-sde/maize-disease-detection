@@ -8,7 +8,7 @@ class ReferenceGalleryViewModel extends ChangeNotifier {
   ReferenceGalleryViewModel(this.repository, this.slug)
     : _revision = repository.revision;
   final ReferenceMediaRepository repository;
-  final int? _revision;
+  int? _revision;
   String slug;
   List<ReferenceMedia> items = const [];
   SelectedLeafImage? selected;
@@ -17,8 +17,20 @@ class ReferenceGalleryViewModel extends ChangeNotifier {
   bool busy = false, _disposed = false;
   bool get valid =>
       !_disposed && repository.enabled && repository.revision == _revision;
+  void _clearSessionState() {
+    items = const [];
+    selected = null;
+    editing = null;
+  }
+
   Future<void> _run(Future<void> Function() action) async {
-    if (!valid || busy) return;
+    if (_disposed || busy) return;
+    if (!valid) {
+      _clearSessionState();
+      error = const AppException(AppErrorKind.authentication);
+      notifyListeners();
+      return;
+    }
     busy = true;
     error = null;
     notifyListeners();
@@ -29,18 +41,29 @@ class ReferenceGalleryViewModel extends ChangeNotifier {
     } catch (_) {
       if (valid) error = const AppException(AppErrorKind.server);
     } finally {
-      if (valid) {
+      if (!_disposed) {
         busy = false;
+        if (!valid) {
+          _clearSessionState();
+          error = const AppException(AppErrorKind.authentication);
+        }
         notifyListeners();
       }
     }
   }
 
-  Future<void> load() => _run(() async {
-    items = const [];
-    final rows = await repository.list(slug);
-    if (valid) items = rows;
-  });
+  Future<void> load() {
+    if (!_disposed && !busy && repository.revision != _revision) {
+      _revision = repository.revision;
+      _clearSessionState();
+    }
+    return _run(() async {
+      items = const [];
+      final rows = await repository.list(slug);
+      if (valid) items = rows;
+    });
+  }
+
   Future<void> choose() => _run(() async {
     final image = await repository.choose();
     if (valid) selected = image;
@@ -82,8 +105,7 @@ class ReferenceGalleryViewModel extends ChangeNotifier {
   @override
   void dispose() {
     _disposed = true;
-    items = const [];
-    selected = null;
+    _clearSessionState();
     super.dispose();
   }
 }

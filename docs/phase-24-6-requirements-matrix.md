@@ -1,5 +1,9 @@
 # Phase 24.6 — original requirements recheck
 
+> Current Phase 24.7 evidence: see [integration stabilization](phase-24-7-integration-stability.md).
+> The following Phase 24.6 results are preserved; they are not a claim of
+> uninterrupted Phase 24.7 acceptance.
+
 Updated 2026-10-17 (Asia/Karachi). Authority and original requirement text remain
 in the [historical Phase 24.5 matrix](phase-24-5-requirements-matrix.md), grounded
 in the original master user prompt, later phase instructions and approvals.
@@ -80,3 +84,23 @@ No Phase 25 or 26 begins.
 | N14 | M/L: production TLS/least privilege/privacy/release safety | BLOCKED BY ACTUAL EXTERNAL INPUT | TLS/role/privacy guards pass. Production identity/network provisioning, retention/processing and release approval remain external/deployment gates. |
 | N15 | M/L: preserve historical model/experiment outputs | COMPLETE AND VERIFIED | 171 frozen files/checkpoint and original nine migration bytes checked; only five additive migrations, no dataset access/fit/final rescore. |
 | N16 | O: exact greeting/educational tip/recent-stat layout examples | OPTIONAL — EXISTING DESIGN RETAINED | Required actions remain reachable. An exact suggested Home greeting/tip placement is not a missing mandatory feature. |
+
+## Phase24.7 current overrides — 2026-10-18
+
+The original65 Phase24.6 rows above are historical. Current repaired-code full
+execution passes21/0/0, independent original-boundary repeat4/0/0; all owned
+fixtures clean/public counts unchanged. Other scientific/device/release limits
+remain unchanged. Whole-phase cause closure is still partial.
+
+| IDs | Current disposition | Exact boundary |
+|---|---|---|
+| F15/A07 | COMPLETE WITH APPROVED EXTERNAL CONTENT PENDING at workflow level | Real Admin/Node/DB/Farmer reviewed synthetic applicability passes full/repeat. No real stage/severity facts invented. Original heading-timeout cause remains an overall acceptance gap. |
+| F16/A12 | COMPLETE WITH APPROVED EXTERNAL CONTENT PENDING at workflow level | Generated reference upload/review/protected gallery/replacement/retirement/cleanup pass. No approved real licensed photos. |
+| RAG01 | PARTIALLY IMPLEMENTED for stability acceptance | SQL/vector/version/source and real Google retrieval work; original/later connection attribution remains open. No durable availability claim. |
+| N06 | COMPLETE AND VERIFIED for configured automated execution coverage | One current full21/0/0 and independent4/0/0, default skips disclosed. Mandatory original-cause closure/device acceptance are separate unfulfilled gates. |
+
+Overall Phase24.7 PARTIALLY COMPLETE; Phase25 NOT READY. Do not turn feature-level
+workflow evidence into whole-FYP/release completion. Richer N/P/K/schedule and
+min/expected/potential outputs remain absent; approved mathematical models/data
+must precede their exact engine/UI implementation. Current evidence and all
+limits: [Phase24.7 report](phase-24-7-integration-stability.md).

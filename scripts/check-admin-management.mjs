@@ -8,7 +8,7 @@ import { fileURLToPath } from 'node:url';
 import { createApp } from '../backend/dist/app.js';
 import { loadEnvironment } from '../backend/dist/config/environment.js';
 import { createLogger } from '../backend/dist/config/logger.js';
-import { createDatabaseClient } from '../backend/dist/database/client.js';
+import { createDatabaseClient, getDatabaseClient } from '../backend/dist/database/client.js';
 import { createHealthRepository } from '../backend/dist/modules/health/health.repository.js';
 import { createAuthRepository } from '../backend/dist/modules/auth/auth.repository.js';
 import { createAuthService } from '../backend/dist/modules/auth/auth.service.js';
@@ -20,7 +20,7 @@ assert.equal(new URL(environment.DATABASE_URL).searchParams.get('schema'),schema
 const database=createDatabaseClient(environment.DATABASE_URL,30000);
 const sourceCorpus=JSON.parse(readFileSync(new URL('../backend/knowledge/maize-extension-20261012-v1.json',import.meta.url),'utf8'));
 const sourceDocument=sourceCorpus.documents.find(item=>item.diseaseLabel==='Common_Rust' && item.knowledgeType==='OVERVIEW');
-const credentials={};let server;let stage='accounts';
+const credentials={};let server;let app;let stage='accounts';
 function mark(value){stage=value;console.log('Phase 21 live: '+stage);}
 try {
   const auth=createAuthService(environment,createAuthRepository(database));
@@ -28,7 +28,7 @@ try {
     const account={email:`phase21-${randomUUID()}@example.invalid`,password:`synthetic-${randomUUID()}`};
     if(role==='ADMIN')await auth.createAdmin(account);else await auth.register(account);credentials[role]=account;
   }
-  const app=createApp(environment,createLogger({LOG_LEVEL:'silent'}),createHealthRepository(database));
+  app=createApp(environment,createLogger({LOG_LEVEL:'error'}),createHealthRepository(database));
   server=createServer(app);await new Promise(resolve=>server.listen(0,'127.0.0.1',resolve));
   const base=`http://127.0.0.1:${server.address().port}/api/v1`;
   async function request(path,{method='GET',body,token,status=200}={}){
@@ -121,4 +121,11 @@ try {
   writeFileSync(new URL('../.cache/phase21/integration-proof.json',import.meta.url),JSON.stringify({passed:true,isolatedSchema:true,realGoogleEmbedding:true,realGemini:true,flutterContract:true,knowledgeVersions:2,knowledgeAuditRecords:audit.length,productionMutations:false})+'\n');
   console.log('PASS: ADMIN RBAC, reviewed versions, Google re-indexing, activation/archive, dynamic Gemini grounding, metadata CAS, audit lineage and Flutter management contract.');
 } catch(error){console.error(`Phase 21 contract failed at ${stage}; private configuration is not logged.`);if(error instanceof assert.AssertionError)console.error(error.message);process.exitCode=1;}
-finally{if(server)await new Promise(resolve=>{server.closeAllConnections();server.close(resolve);});await database.$disconnect();}
+finally{
+  if(server)await new Promise(resolve=>{server.closeAllConnections();server.close(resolve);});
+  try{await app?.locals.flushOperationalEvents();}
+  finally{
+    await getDatabaseClient(environment.DATABASE_URL).$disconnect();
+    await database.$disconnect();
+  }
+}

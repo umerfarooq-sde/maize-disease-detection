@@ -1,3 +1,58 @@
+# Project state — Phase 24.7 current handoff
+
+Updated: 2026-10-18 (Asia/Karachi). Baseline `7c0332a`, branch `main`.
+
+**Phase 24.7 PARTIALLY COMPLETE. Phase 25 NOT READY. No Phase 25/26 started.**
+
+Repaired-code normal full run `20261017T213205Z-173ed748`: 21 PASS/0 FAIL/0 selected skips.
+Independent original-boundary repeat `20261017T215921Z-b412d414`: 4/0/0 including preflight.
+Both clean owned assets/schema and preserve all 22 public counts. These are
+individual runs; no combined partial-success claim. Normal saved FastAPI startup
+also loads approved artifacts with health/model-health 200, no confidence override.
+
+Confirmed repairs: one-second interactive aggregate acquisition reproduced cold
+P2028 (~1.08 s), warm passed; replaced two-query transaction with one parameterized
+SQL snapshot (cold now 1.85 s) without global timeout/pool/retry changes. Gallery
+account-change completion clears busy/stale state; affected Node owners drain/
+close operational writers before teardown. SQL isolation requires actual QUERY/
+42P01. Safe stage/category/correlation and terminal ViewModel diagnostics log no
+credentials/prompts/SQL/private images. No assertion or deadline was weakened.
+
+Final component checks: backend 356 + 2 subprocess tests; AI 371 pass/3 default
+SQL skips; Flutter 391 pass/14 default live skips. Format/lint/strict types/build/
+Ruff/mypy/OpenAPI59 pass. Android ARM64 debug passes. Shared preprocessing 78
+tests in each locked environment +12 exact parity cases pass. Prisma 14 SQL
+checks/validate/generate/14 applied migrations and captured drift exit0 pass.
+All required live categories have zero selected skips. Host tests are not native
+device/browser release acceptance.
+
+Original full run remains 18/3/0. Its lossy database/503 and heading-timeout logs
+cannot prove the precise causes. Later 2/5/0 run captured CONNECT/COMMIT failures;
+its retained synthetic schema was separately recovered. Another pre-repair repeat
+was 3/1/0 (Admin UNAVAILABLE); the independent cold-control defect is fixed.
+Historical failed results are unchanged. Repaired full run still recorded a
+best-effort telemetry CONNECT timeout; six later TLS/auth controls passed, not
+proof of what failed earlier. Strict cause/stability closure remains open, hence
+partial verdict despite green functional full/repeat runs. No provider is blamed.
+
+171 frozen files, checkpoint/metadata, all migrations, class mapping, shared
+full-frame preprocessing1.0.0, temperature1/null threshold and VALIDATED registry
+remain unchanged. No dataset access/training/final rescore, production-role
+changes, real-user asset deletion, fabricated agronomic facts or new credentials.
+Final public counts/catalog remain unchanged with zero temporary schemas.
+
+Reviewed metadata/media/product/intake workflows pass with clearly synthetic
+isolated fixtures. Real licensed content/agronomic values, richer approved math
+and exact model-dependent engine/UI extensions, calibration, commercial clearance,
+device/privacy/provider-processing/retention/release approval remain gates. No
+manual dataset labels requested; retention unchanged. Next: establish the
+responsible component from new safe recurrence diagnostics/external evidence,
+add its matching regression, and do not start deployment. Full evidence:
+[Phase 24.7 report](phase-24-7-integration-stability.md). Original unrelated user
+changes remain outside the phase commit.
+
+## Historical Phase 24.6 handoff (superseded above)
+
 # Project state — Phase 24.6 current handoff
 
 Updated: 2026-10-17 (Asia/Karachi). Baseline: `18bd55e`.

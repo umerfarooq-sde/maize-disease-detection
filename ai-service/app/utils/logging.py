@@ -2,10 +2,12 @@
 
 import json
 import logging
+from contextvars import ContextVar
 from datetime import UTC, datetime
 from logging.config import dictConfig
 
 LOGGER_NAME = "maizedoctor.ai"
+REQUEST_ID: ContextVar[str | None] = ContextVar("request_id", default=None)
 SAFE_FIELDS = (
     "request_id",
     "method",
@@ -13,6 +15,8 @@ SAFE_FIELDS = (
     "status_code",
     "duration_ms",
     "error_code",
+    "database_stage",
+    "database_failure_kind",
     "generation_model",
     "prompt_version",
     "context_version",

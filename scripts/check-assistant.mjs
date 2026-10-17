@@ -8,7 +8,7 @@ import { fileURLToPath } from 'node:url';
 import { createApp } from '../backend/dist/app.js';
 import { loadEnvironment } from '../backend/dist/config/environment.js';
 import { createLogger } from '../backend/dist/config/logger.js';
-import { createDatabaseClient } from '../backend/dist/database/client.js';
+import { createDatabaseClient, getDatabaseClient } from '../backend/dist/database/client.js';
 import { createAuthRepository } from '../backend/dist/modules/auth/auth.repository.js';
 import { createAuthService } from '../backend/dist/modules/auth/auth.service.js';
 import { createGenerationClient } from '../backend/dist/modules/generation/generation.client.js';
@@ -146,6 +146,7 @@ try {
   console.log('PASS: Flutter -> Node -> authenticated FastAPI/RAG/Google; grounded sources, scoped abstention, persisted farmer ownership and unchanged uncertainty.');
 } finally {
   await new Promise((resolve) => server.close(resolve));
+  await app.locals.flushOperationalEvents();
   try {
     const journals = await database.scanUpload.findMany({ where: { id: { in: [...uploadIds] } } });
     for (const journal of journals) if (journal.scanId) scanIds.add(journal.scanId);
@@ -156,6 +157,7 @@ try {
       await transaction.user.deleteMany({ where: { email: { in: [...emails] } } });
     }, { maxWait: 10000, timeout: 30000 });
   } finally {
+    await getDatabaseClient(environment.DATABASE_URL).$disconnect();
     await database.$disconnect();
   }
   console.log('Removed only this run\'s two fixture accounts and synthetic scan/prediction/journal; no cloud assets, model, knowledge or source dataset changes.');

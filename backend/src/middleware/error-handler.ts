@@ -2,6 +2,7 @@ import type { ErrorRequestHandler, RequestHandler } from 'express';
 import type { Logger } from 'pino';
 import { AppError } from '../errors/app-error.js';
 import type { ErrorResponse } from '../types/api.js';
+import { databaseDiagnostics } from '../utils/database-diagnostics.js';
 
 export const notFound: RequestHandler = (_request, _response, next) =>
   next(new AppError('NOT_FOUND'));
@@ -30,7 +31,11 @@ export function errorHandler(logger: Logger): ErrorRequestHandler {
     if (applicationError.status >= 500) {
       // Raw dependency errors can contain connection URLs, queries or submitted values.
       logger.error(
-        { requestId: response.locals.requestId, code: applicationError.code },
+        {
+          requestId: response.locals.requestId,
+          code: applicationError.code,
+          ...databaseDiagnostics(error),
+        },
         'Request failed',
       );
     }

@@ -13,6 +13,7 @@ import 'package:maizedoctor/features/profile/view_models/profile_view_model.dart
 import 'package:maizedoctor/features/admin/view_models/admin_dashboard_view_model.dart';
 import 'package:maizedoctor/features/admin/views/admin_dashboard_view.dart';
 import 'package:maizedoctor/features/disease_knowledge/views/knowledge_detail_view.dart';
+import 'package:maizedoctor/features/disease_knowledge/view_models/knowledge_detail_view_model.dart';
 
 const enabled = bool.fromEnvironment('RUN_LIVE_PREDEPLOYMENT');
 
@@ -63,7 +64,10 @@ void main() {
         final admin =
             jsonDecode(Platform.environment['PHASE246_ADMIN']!)
                 as Map<String, dynamic>;
-        Future<void> until(bool Function() condition) async {
+        Future<void> until(
+          bool Function() condition, {
+          String Function()? diagnostic,
+        }) async {
           final deadline = DateTime.now().add(const Duration(seconds: 90));
           while (!condition() && DateTime.now().isBefore(deadline)) {
             await Future<void>.delayed(const Duration(milliseconds: 100));
@@ -72,7 +76,8 @@ void main() {
           expect(
             condition(),
             true,
-            reason: 'Actual remediation UI/API operation did not finish.',
+            reason:
+                'Actual remediation UI/API operation did not finish. ${diagnostic?.call() ?? 'No stage diagnostic.'}',
           );
         }
 
@@ -139,6 +144,12 @@ void main() {
                   .text('Reviewed growth-stage applicability')
                   .evaluate()
                   .isNotEmpty,
+          diagnostic: () {
+            final view = find.byType(KnowledgeDetailView);
+            if (view.evaluate().isEmpty) return 'knowledge-detail: view absent';
+            final model = tester.element(view).read<KnowledgeDetailViewModel>();
+            return 'knowledge-detail: loading=${model.loading}, error=${model.error?.kind.name}, data=${model.detail != null}, growthStages=${model.detail?.growthStages.length}';
+          },
         );
         await until(
           () => find

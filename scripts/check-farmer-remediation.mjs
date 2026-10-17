@@ -28,13 +28,12 @@ const credentials = {
 };
 // Other checks can already have fixtures in the same owned E2E schema.
 const usersBefore = await database.user.count();
-const server = createServer(
-  createApp(environment, silentLogger, {
+const app = createApp(environment, silentLogger, {
     async checkDatabase() {
       await database.$queryRaw`SELECT 1`;
     },
-  }),
-);
+  });
+const server = createServer(app);
 const proof = { passed: false, physicalDevice: false, rawDatasetAccess: false };
 try {
   await new Promise((resolve) => server.listen(0, '127.0.0.1', resolve));
@@ -135,6 +134,7 @@ try {
   process.exitCode = 1;
 } finally {
   await new Promise((resolve) => server.close(resolve));
+  await app.locals.flushOperationalEvents();
   await writeFile(
     join(process.env.PHASE23_OUTPUT, 'farmer-remediation-proof.json'),
     JSON.stringify(proof, null, 2),

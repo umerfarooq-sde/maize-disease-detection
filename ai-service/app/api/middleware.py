@@ -9,7 +9,7 @@ from starlette.requests import Request
 from starlette.types import ASGIApp, Message, Receive, Scope, Send
 
 from app.utils.errors import unexpected_error_handler
-from app.utils.logging import LOGGER_NAME
+from app.utils.logging import LOGGER_NAME, REQUEST_ID
 from app.utils.operations import CURRENT
 
 
@@ -28,6 +28,7 @@ class RequestContextMiddleware:
         status_code = 500
         response_started = False
         recorder_token = CURRENT.set(getattr(scope["app"].state, "operational_recorder", None))
+        request_token = REQUEST_ID.set(correlation_id)
 
         async def send_response(message: Message) -> None:
             nonlocal status_code, response_started
@@ -50,6 +51,7 @@ class RequestContextMiddleware:
             await response(scope, receive, send_response)
         finally:
             CURRENT.reset(recorder_token)
+            REQUEST_ID.reset(request_token)
             route = getattr(scope.get("route"), "path", "unmatched")
             method = scope["method"]
             if method not in {"GET", "HEAD", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"}:

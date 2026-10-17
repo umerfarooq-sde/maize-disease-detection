@@ -422,6 +422,7 @@ try {
   process.exitCode = 1;
 } finally {
   if (server.listening) await new Promise((resolve) => server.close(resolve));
+  await app.locals.flushOperationalEvents();
   const cleanup = await Promise.allSettled([...assets].map((id) => realStorage.destroy(id)));
   proof.cloudCleanupComplete = cleanup.every((result) => result.status === 'fulfilled');
   proof.ownedCloudAssets = [...assets];

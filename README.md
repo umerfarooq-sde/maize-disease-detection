@@ -5,6 +5,12 @@ with administrative tools for maintaining knowledge and monitoring the system.
 
 ## Current status
 
+Phase 24.7 is **PARTIALLY COMPLETE**. Repaired-code normal full verification
+passes 21/0/0 and an independent boundary repeat passes 4/0/0. Historical cause
+closure and intermittent connection attribution remain open; **Phase 25 NOT
+READY**. Read the [current report](docs/phase-24-7-integration-stability.md).
+Phase 25/26 have not started. The preceding handoff follows.
+
 Phase 24.6 implements the pre-deployment startup, avatar cleanup, operational
 monitoring, catalogue/media, independent product/source intake and generated
 OpenAPI remediations. Verdict: **PARTIALLY COMPLETE**; normal-config full integration: 18 PASS / 3 FAIL / 0 selected skips. Phase 25 **NOT READY**. Read the

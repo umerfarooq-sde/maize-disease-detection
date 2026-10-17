@@ -175,3 +175,21 @@ Remaining work: local agronomic/source-freshness review, larger independent/out-
 retrieval evaluation, calibrated relevance/insufficient-evidence policy before generation,
 least-privilege production credentials and operational hosting/shared rate-limit storage.
 Gemini answer generation, Flutter knowledge UI and full admin editing remain future phases.
+
+## Phase 24.7 diagnostic and gallery lifecycle addendum
+
+Current stabilization evidence is in [Phase 24.7](phase-24-7-integration-stability.md).
+Repository errors now retain a safe connection/setup/query/commit stage, SQLSTATE,
+bounded elapsed time and request correlation without dependency messages or SQL
+parameters. An unavailable result alone is not evidence of a provider outage.
+Connection budgets, parameterized retrieval, TLS and source/version filters are
+unchanged. The missing-schema live test requires actual PostgreSQL `42P01` rather
+than accepting an unrelated transport failure as a successful isolation check.
+
+Reference-gallery state now leaves loading after an account revision changes,
+discards stale content/selections and permits an explicit fresh read. Stale Admin
+mutations are rejected locally and remain subject to server RBAC/review/revisions.
+No write is automatically retried. Disposal suppresses late results/notifications.
+Controlled tests distinguish API and DTO failures and verify optional reviewed
+metadata, attribution, long text and retry. Actual acceptance outcomes remain in
+the linked phase report; no new agricultural facts or media are published here.

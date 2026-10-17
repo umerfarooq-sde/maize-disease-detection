@@ -1,5 +1,9 @@
 # Phase 24.6 — current connections and phase status
 
+Current stabilization is [Phase 24.7](phase-24-7-integration-stability.md). The
+Phase 24.6 execution verdict below remains historical; it is not replaced by
+combining later focused passes. API/architecture boundaries are unchanged.
+
 Updated 2026-10-17 (Asia/Karachi). The [Phase 24.5 component inventory](phase-24-5-components.md)
 and [vertical slices](phase-24-5-vertical-slices.md) are preserved historical
 baselines. This addendum records changed producers/consumers and their verification.
@@ -53,4 +57,17 @@ claimed as new implemented functionality.
 | 24 | Security controls retained and regression-tested | Production roles, infrastructure and policy acceptance pending |
 | 24.5 | Historical audit COMPLETE, original verdict preserved | Current remediation is a separate phase |
 | 24.6 | PARTIALLY COMPLETE | Engineering implemented; normal configured full run 18 PASS / 3 FAIL / 0 selected skips; failed rag-database, knowledge, predeployment-remediation. Phase 25 NOT READY. Exact evidence/gates in report/ledger |
+| 24.7 | PARTIALLY COMPLETE | Repaired full `20261017T213205Z-173ed748`21/0/0 + independent `20261017T215921Z-b412d414`4/0/0; cold aggregate/gallery/teardown repaired. Mandatory original cause/connection stability attribution remains open. Phase25 NOT READY. |
 | 25–26 | NOT STARTED | No deployment or release engineering authorization exercised |
+
+## Phase24.7 current connection override
+
+All connected slices above are exercised by the final full/repeat runs in the
+[current report](phase-24-7-integration-stability.md). Operational aggregation
+now returns both projections from one SQL snapshot, eliminating the reproduced
+short cold-acquisition defect. Gallery revision state/affected writer ownership
+are repaired. No API/schema/dependency/model/global timeout change. These
+execution outcomes supersede current verification claims, not historical
+failures. Original causes and observed intermittent connection attribution remain
+open; metadata/media domain approval and richer mathematical models/engine/UI,
+device/privacy/commercial/release gates remain. No Phase25/26 has started.

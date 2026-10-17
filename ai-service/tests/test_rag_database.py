@@ -1,5 +1,6 @@
 """Opt-in real PostgreSQL/pgvector checks in a fresh, owned, disposable schema."""
 
+import logging
 import os
 import re
 from collections.abc import Iterator
@@ -18,6 +19,7 @@ from app.rag.repository import KnowledgeRepository
 from app.rag.schemas import Corpus, RetrievalRequest
 from app.rag.service import RetrievalService, retrieval_identity
 from app.utils.errors import AppError, ErrorCode
+from app.utils.logging import LOGGER_NAME
 
 pytestmark = pytest.mark.skipif(
     os.getenv("RUN_RAG_DATABASE_TESTS") != "1",
@@ -226,7 +228,9 @@ def test_real_version_archiving_conflict_filters_immutable_lineage_and_provider_
                 connection.execute(statement, parameters)
 
 
-def test_missing_configured_schema_never_falls_back_to_public(service: RetrievalService) -> None:
+def test_missing_configured_schema_never_falls_back_to_public(
+    service: RetrievalService, caplog: pytest.LogCaptureFixture
+) -> None:
     parsed = urlsplit(service.settings.database_url.get_secret_value())
     parameters = dict(parse_qsl(parsed.query))
     parameters["schema"] = "phase14_missing_" + uuid4().hex
@@ -234,6 +238,15 @@ def test_missing_configured_schema_never_falls_back_to_public(service: Retrieval
         update={"database_url": SecretStr(urlunsplit(parsed._replace(query=urlencode(parameters))))}
     )
     repository = KnowledgeRepository(settings, retrieval_identity(settings))
-    with pytest.raises(AppError) as failure:
+    with (
+        caplog.at_level(logging.ERROR, logger=LOGGER_NAME),
+        pytest.raises(AppError) as failure,
+    ):
         repository.ping()
     assert failure.value.code == ErrorCode.RETRIEVAL_UNAVAILABLE
+    # A transport outage must not be mistaken for successful schema isolation.
+    records = [
+        r for r in caplog.records if getattr(r, "event", None) == "retrieval_database_failed"
+    ]
+    assert records and records[-1].error_code == "DATABASE_42P01"
+    assert records[-1].database_stage == "QUERY"

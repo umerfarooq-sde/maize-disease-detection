@@ -251,6 +251,7 @@ try {
   process.exitCode = 1;
 } finally {
   await new Promise((resolve) => server.close(resolve));
+  await app.locals.flushOperationalEvents();
   const cleanup = await Promise.allSettled([...assets].map((id) => realStorage.destroy(id)));
   proof.ownedCloudAssets = [...assets];
   proof.cloudCleanupComplete = cleanup.every((result) => result.status === 'fulfilled');

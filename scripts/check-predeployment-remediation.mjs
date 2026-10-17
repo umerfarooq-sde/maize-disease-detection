@@ -40,8 +40,14 @@ const photos=createProfileMediaService(createProfileMediaRepository(database),{
   async destroy(id){profileDeletes++;await new Promise(resolve=>setTimeout(resolve,16500));return profileStorage.destroy(id);},
 });
 const telemetryWarnings=[];
+const requestErrors=[];
+const aggregateWarnings=[];
 const phaseLogger=silentLogger.child({});
+phaseLogger.error=event=>{
+ if(requestErrors.length<20&&/^[A-Z_]{1,64}$/.test(event?.code??''))requestErrors.push({stage,code:event.code,...(/^P\d{4}$/.test(event?.dependencyCode??'')?{dependencyCode:event.dependencyCode}:{})});
+};
 phaseLogger.warn=event=>{
+ if(event?.event==='ai_telemetry_aggregate_unavailable'&&aggregateWarnings.length<20)aggregateWarnings.push({stage,...(/^P\d{4}$/.test(event?.dependencyCode??'')?{dependencyCode:event.dependencyCode}:{}),...(/^[A-Z_]{1,64}$/.test(event?.databaseFailureKind??'')?{databaseFailureKind:event.databaseFailureKind}:{})});
  if(event?.event==='ai_telemetry_dropped')telemetryWarnings.push({reason:event.reason,storageCode:event.storageCode??null});
  if(event?.event==='reference_database_failed')referenceWarnings.push({stage,code:event.code});
 };
@@ -86,6 +92,8 @@ try {
   await request('/admin/ai-operations',undefined,'GET',undefined,401);
   const metrics=await request('/admin/ai-operations',adminToken);
   assert.equal(metrics.status,'COLLECTED');assert.ok(metrics.totals.some(row=>row.scope==='NODE'&&row.operation==='GENERATION'));
+  assert.equal(metrics.totals.reduce((sum,row)=>sum+row.requests,0),metrics.daily.reduce((sum,row)=>sum+row.requests,0),'Operational projections must share one database snapshot.');
+  assert.equal(metrics.totals.reduce((sum,row)=>sum+row.failures,0),metrics.daily.reduce((sum,row)=>sum+row.failures,0));
   const fields=Object.keys(await database.aiOperation.findFirstOrThrow()).sort();
   assert.deepEqual(fields,['id','scope','operation','outcome','durationMs','category','occurredAt'].sort());
   stage='source-backed optional catalogue metadata and unchanged classifier';
@@ -210,7 +218,7 @@ try {
     'replacement-revision-conflict','durable-retirement-cleanup','versioned-non-executable-model-intake','independent-product-catalogue-versioning','flutter-avatar-commit-before-delayed-cleanup'];
   proof.passed=true;
 } catch(error) {
-  proof.failure={stage,telemetryWarnings,referenceWarnings,type:error?.name??'Unknown',code:/^[A-Z0-9_]+$/.test(error?.code??'')?error.code:null,
+  proof.failure={stage,telemetryWarnings,referenceWarnings,requestErrors,aggregateWarnings,type:error?.name??'Unknown',code:/^[A-Z0-9_]+$/.test(error?.code??'')?error.code:null,
     actual:typeof error?.actual==='number'||['GROUNDED','INSUFFICIENT_INFORMATION','OUT_OF_SCOPE','UNAVAILABLE','COLLECTED'].includes(error?.actual)?error.actual:null};
   console.error(`FAIL: Phase 24.6 ${stage}; private details omitted.`);process.exitCode=1;
 } finally {

@@ -1,5 +1,29 @@
 # Known issues
 
+## Phase 24.7 current handoff — 2026-10-18
+
+**PARTIALLY COMPLETE; Phase 25 NOT READY.** Final repaired-code full run
+`20261017T213205Z-173ed748` passes21/0/0; independent repeat `20261017T215921Z-b412d414` passes4/0/0,
+no selected skips. Both clean owned assets/schema and preserve public counts.
+See the [current report](phase-24-7-integration-stability.md).
+
+- Fixed/proved: cold aggregate P2028 at former1s acquisition window; one SQL
+  snapshot now succeeds cold without global budget changes. Gallery revision
+  busy/stale state and affected writer teardown repaired; strict SQL42P01 oracle.
+- Still unproven: original database/503 subtype and original heading-timeout
+  state. Later CONNECT/COMMIT failures and one repaired-run metadata CONNECT
+  timeout remain unattributed. Later TLS/auth/resource probes are not cause proof.
+- Failed historical results stay unchanged; retained synthetic schema recovered
+  independently. No failed assertion, timeout relaxation or provider mock bypass.
+- Default AI SQL skips3 and Flutter live skips14 are separate from zero-skip
+  live evidence. Host-widget/API checks/debug APK are not device/browser acceptance.
+- Licensed photos/sourced stage/severity facts, richer fertilizer/yield equations/
+  data and exact model-dependent engine/UI extensions, confidence approval,
+  commercial/privacy/provider-processing/retention/device/release gates remain.
+  No invented values/raw dataset redistribution; retention unchanged.
+
+## Previous Phase 24.6 handoff (historical)
+
 Updated: 2026-10-17 (Asia/Karachi), Phase 24.6. Verdict: **PARTIALLY COMPLETE**; Phase 25 **NOT READY**.
 Read [current remediation](phase-24-6-pre-deployment-remediation.md),
 [65 original requirements](phase-24-6-requirements-matrix.md) and

@@ -5,6 +5,7 @@ import logging
 import re
 from collections.abc import Iterator
 from contextlib import contextmanager
+from time import perf_counter
 from typing import cast
 from urllib.parse import parse_qsl, urlencode, urlsplit, urlunsplit
 from uuid import UUID
@@ -20,7 +21,23 @@ from app.rag.chunking import CHUNKING_VERSION, Chunk, canonical_content, content
 from app.rag.embeddings import EMBEDDING_API_VERSION
 from app.rag.schemas import Corpus, DocumentInput, RetrievalRequest, RetrievedChunk
 from app.utils.errors import AppError, ErrorCode
-from app.utils.logging import LOGGER_NAME
+from app.utils.logging import LOGGER_NAME, REQUEST_ID
+
+
+def database_failure_kind(error: psycopg.Error) -> str:
+    """Classify locally; never serialize exception text containing credentials."""
+    if error.sqlstate:
+        return "SERVER_ERROR"
+    if isinstance(error, psycopg.OperationalError):
+        message = str(error).lower()
+        if "timeout" in message or "timed out" in message:
+            return "CONNECTION_TIMEOUT"
+        if "certificate" in message or "ssl" in message or "tls" in message:
+            return "TLS_FAILURE"
+        if "resolve" in message or "translate host" in message:
+            return "DNS_FAILURE"
+        return "CONNECTION_FAILURE"
+    return "DRIVER_ERROR"
 
 
 class KnowledgeRepository:
@@ -47,12 +64,15 @@ class KnowledgeRepository:
     def connection(self) -> Iterator[Connection[dict[str, object]]]:
         # Per-operation bounded connections avoid an idle pool in this small local
         # corpus. API capacity is bounded separately; no credentials are logged.
+        stage = "CONNECT"
+        started = perf_counter()
         try:
             with psycopg.connect(
                 self.connection_url,
                 connect_timeout=5,
                 row_factory=dict_row,
             ) as connection:
+                stage = "TRANSACTION_SETUP"
                 if self.settings.environment == "production":
                     permissions = connection.execute(
                         "SELECT EXISTS (SELECT 1 FROM pg_catalog.pg_roles r "
@@ -83,7 +103,9 @@ class KnowledgeRepository:
                     "set_config('idle_in_transaction_session_timeout','15000',true)",
                     (self.schema,),
                 )
+                stage = "QUERY"
                 yield cast(Connection[dict[str, object]], connection)
+                stage = "COMMIT"
         except psycopg.Error as error:
             state = (
                 error.sqlstate
@@ -91,9 +113,19 @@ class KnowledgeRepository:
                 else "UNAVAILABLE"
             )
             logging.getLogger(LOGGER_NAME).error(
-                "retrieval_database_failed:%s",
+                "retrieval_database_failed:%s:%s:%s:%dms",
                 state,
-                extra={"event": "retrieval_database_failed", "error_code": "DATABASE_" + state},
+                stage,
+                database_failure_kind(error),
+                round((perf_counter() - started) * 1000),
+                extra={
+                    "event": "retrieval_database_failed",
+                    "error_code": "DATABASE_" + state,
+                    "database_stage": stage,
+                    "database_failure_kind": database_failure_kind(error),
+                    "duration_ms": round((perf_counter() - started) * 1000),
+                    "request_id": REQUEST_ID.get(),
+                },
             )
             raise AppError(ErrorCode.RETRIEVAL_UNAVAILABLE) from None
 

@@ -6,6 +6,8 @@ import { createApp } from '../src/app.js';
 import { loadEnvironment } from '../src/config/environment.js';
 import { createLogger } from '../src/config/logger.js';
 import { getDatabaseClient } from '../src/database/client.js';
+import { operationsFor } from '../src/modules/admin/operations.service.js';
+import { silentLogger } from './foundation/helpers.js';
 import { retrievalResultSchema } from '../src/modules/knowledge/knowledge.types.js';
 
 test('real public Node -> authenticated FastAPI -> Google embeddings -> pgvector contracts', {
@@ -17,11 +19,15 @@ test('real public Node -> authenticated FastAPI -> Google embeddings -> pgvector
     KNOWLEDGE_RATE_LIMIT_MAX: 40,
   };
   const database = getDatabaseClient(environment.DATABASE_URL);
-  const server = createApp(environment, createLogger({ ...environment, LOG_LEVEL: 'silent' }), {
+  const recordedBefore = await database.aiOperation.count({
+    where: { scope: 'NODE', operation: 'RETRIEVAL' },
+  });
+  const app = createApp(environment, createLogger({ ...environment, LOG_LEVEL: 'error' }), {
     async checkDatabase() {
       await database.$queryRaw`SELECT 1`;
     },
-  }).listen(0, '127.0.0.1');
+  });
+  const server = app.listen(0, '127.0.0.1');
   try {
     await once(server, 'listening');
     const base = `http://127.0.0.1:${(server.address() as AddressInfo).port}/api/v1`;
@@ -77,10 +83,17 @@ test('real public Node -> authenticated FastAPI -> Google embeddings -> pgvector
     });
     assert.equal(absent.status, 200);
     assert.equal(((await absent.json()) as { data: { status: string } }).data.status, 'NO_MATCHES');
+    await operationsFor(database, silentLogger).flush();
+    assert.equal(
+      await database.aiOperation.count({ where: { scope: 'NODE', operation: 'RETRIEVAL' } }),
+      recordedBefore + 5,
+      'Every observed successful retrieval must be drained before disconnecting this fixture database.',
+    );
   } finally {
     await new Promise<void>((resolve, reject) =>
       server.close((error) => (error ? reject(error) : resolve())),
     );
+    await (app.locals.flushOperationalEvents as () => Promise<void>)();
     await database.$disconnect();
   }
 });

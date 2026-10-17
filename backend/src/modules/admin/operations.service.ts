@@ -3,6 +3,7 @@ import { performance } from 'node:perf_hooks';
 import type { Logger } from 'pino';
 import { AppError } from '../../errors/app-error.js';
 import type { PrismaClient } from '../../generated/prisma/client.js';
+import { databaseDiagnostics } from '../../utils/database-diagnostics.js';
 import { resolveAnalyticsRange } from '../analytics/analytics.types.js';
 import {
   createOperationsRepository,
@@ -128,7 +129,12 @@ export function createOperationsService(
             retention: 'unchanged; approval pending',
           },
         };
-      } catch {
+      } catch (error) {
+        logger.warn({
+          event: 'ai_telemetry_aggregate_unavailable',
+          stage: 'AGGREGATE',
+          ...databaseDiagnostics(error),
+        });
         return {
           status: 'UNAVAILABLE' as const,
           from,
