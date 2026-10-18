@@ -13,7 +13,7 @@ import tempfile
 from pathlib import Path
 from urllib.parse import quote, urlsplit, urlunsplit
 
-from database import connect, pg_environment, secret
+from database import connect, pg_environment, secret, snapshot
 from roles import ROLES, audit, provision
 
 
@@ -48,6 +48,13 @@ def verify(root: Path, admin_url: str, approved: bool):
                 + parsed.netloc.split("@")[-1]
             )
         )
+
+    # The pre-release backup must also work before migration1. This authenticates
+    # the separate read-only backup identity against a real freshly provisioned
+    # vector database, not a mocked snapshot or an existing app schema.
+    empty = snapshot(url("md_backup"))
+    assert empty["counts"] == {} and empty["migrations"] == [] and empty["models"] == []
+    assert empty["pgvector"] == ("0.8.7",)
 
     with tempfile.TemporaryDirectory(prefix="maizedoctor-privilege-") as temporary:
         work = Path(temporary)
@@ -164,6 +171,7 @@ def verify(root: Path, admin_url: str, approved: bool):
         "migrations": 15,
         "nodePrivacy": "PASS",
         "privacySQL": "PASS",
+        "emptyPreMigrationBackupSnapshot": "PASS",
         "cluster": "dedicated empty CI cluster only",
         "resetPerformed": False,
     }

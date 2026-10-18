@@ -110,6 +110,9 @@ def static_checks(docker_tools=False):
                     "docker.sock" in str(volume) for volume in service.get("volumes", [])
                 )
             assert services["cleanup"]["environment"]["OPERATIONS_PORT"] == "9010"
+            assert services["alloy"]["user"] == "473:473"
+            assert {"1000", "10001"} <= set(services["alloy"]["group_add"])
+            assert "ALL" in services["alloy"]["cap_drop"]
             if files[-1].name == "compose.production.yaml":
                 assert services["api"]["deploy"]["replicas"] == 2
             if files[-1].name == "compose.ci-monitoring.yaml":

@@ -269,7 +269,8 @@ services:
     <<: *runtime
     image: grafana/alloy:v1.20.1
     # Read-only application log volumes; no Docker socket or host root mount.
-    user: "0:0"
+    user: "473:473"
+    group_add: ["1000", "10001"]
     command: [run, --storage.path=/var/lib/alloy, /etc/alloy/config.alloy]
     volumes:
       - ./monitoring/config.alloy:/etc/alloy/config.alloy:ro

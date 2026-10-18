@@ -134,6 +134,7 @@ def test_rollout_jobs_are_explicit_and_rollback_never_runs_migrations(tmp_path, 
 
     monkeypatch.setattr(release, "run", command)
     monkeypatch.setattr(release, "source_bundle", lambda *_a, **_k: tmp_path / "bundle")
+    (tmp_path / "bundle").mkdir()
     monkeypatch.setattr(release, "smoke", lambda _origin: None)
     monkeypatch.setattr(release, "create_backup", lambda *_a, **_k: None)
     monkeypatch.setattr(release, "secret", lambda _path: {"DATABASE_URL": "synthetic-not-used"})
@@ -148,6 +149,7 @@ def test_rollout_jobs_are_explicit_and_rollback_never_runs_migrations(tmp_path, 
     assert result["status"] == "PASS"
     jobs = [c[-1] for c in calls if "run" in c]
     assert jobs == ["migrate", "grants", "register-model", "curate"]
+    environment.write_text("STACK_NAME=changed-after-deploy\n")
     calls.clear()
     result = release.rollout(
         tmp_path, environment, values, current, tmp_path, "staging", rollback=True
@@ -156,3 +158,4 @@ def test_rollout_jobs_are_explicit_and_rollback_never_runs_migrations(tmp_path, 
     assert not any("run" in c for c in calls)
     up = next(c for c in calls if "up" in c)
     assert "--no-deps" in up and up[-3:] == ["ai", "api", "edge"]
+    assert (tmp_path / "selected-release.env").read_text().startswith("STACK_NAME=fixture\n")

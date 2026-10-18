@@ -183,15 +183,26 @@ def snapshot_in(connection) -> dict:
         ).fetchone()[0]
         for table in tables
     }
-    migrations = connection.execute(
-        "SELECT migration_name FROM public._prisma_migrations WHERE f"
-        "inished_at IS NOT NULL AND rolled_back_at IS NULL ORDER BY m"
-        "igration_name"
-    ).fetchall()
-    models = connection.execute(
-        "SELECT version,status::text,preprocessing_version FROM publi"
-        "c.model_versions ORDER BY version"
-    ).fetchall()
+    # Initial rollout backs up a newly provisioned vector database BEFORE the
+    # first migration. Only a genuinely empty schema may omit app metadata;
+    # partially initialized schemas still fail on missing required tables.
+    migrations = (
+        connection.execute(
+            "SELECT migration_name FROM public._prisma_migrations WHERE f"
+            "inished_at IS NOT NULL AND rolled_back_at IS NULL ORDER BY m"
+            "igration_name"
+        ).fetchall()
+        if tables
+        else []
+    )
+    models = (
+        connection.execute(
+            "SELECT version,status::text,preprocessing_version FROM publi"
+            "c.model_versions ORDER BY version"
+        ).fetchall()
+        if tables
+        else []
+    )
     foreign_keys = connection.execute(
         "SELECT conname FROM pg_constraint WHERE connamespace='public"
         "'::regnamespace AND contype='f' AND convalidated ORDER BY co"

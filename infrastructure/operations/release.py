@@ -159,6 +159,11 @@ def deploy(
 ):
     from dotenv import dotenv_values
 
+    if rollback:
+        if not state.is_absolute():
+            raise ValueError("Rollback requires absolute retained deployment state")
+        prior = validate_manifest(json.loads((state / "previous-release.json").read_text()))
+        environment_file = state / "bundles" / prior["commit"] / "environment.env"
     values = dotenv_values(environment_file)
     preflight(environment_file)
     release = validate_manifest(json.loads(manifest.read_text()))
@@ -210,9 +215,24 @@ def rollout(
     ):
         raise ValueError("Checkout and approved image/source provenance do not match")
     bundle = source_bundle(root, state, release, rollback=rollback)
+    retained_environment = bundle / "environment.env"
+    if rollback:
+        if not retained_environment.is_file():
+            raise ValueError("Rollback requires the original retained environment configuration")
+    else:
+        content = environment_file.read_bytes()
+        if retained_environment.exists():
+            if retained_environment.read_bytes() != content:
+                raise ValueError("A retained release configuration cannot be overwritten")
+        else:
+            with retained_environment.open("xb") as output:
+                output.write(content)
+                output.flush()
+                os.fsync(output.fileno())
+            retained_environment.chmod(0o600)
     public = state / "selected-release.env"
     public.write_text(
-        environment_file.read_text()
+        retained_environment.read_text()
         + "\n"
         + "".join(key + "=" + value + "\n" for key, value in release["images"].items())
     )

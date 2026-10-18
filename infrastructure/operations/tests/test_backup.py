@@ -3,7 +3,7 @@ import os
 import backup
 import pytest
 from cryptography.exceptions import InvalidTag
-from database import owned_database, pg_environment
+from database import owned_database, pg_environment, snapshot_in
 
 
 def test_authenticated_backup_roundtrip_and_tampering_rejection(tmp_path):
@@ -68,3 +68,32 @@ def test_model_recovery_rejects_unapproved_content(tmp_path):
     (tmp_path / "epoch-008.pt").write_bytes(b"synthetic not a model")
     with pytest.raises(ValueError, match="integrity"):
         backup.verify_artifacts(tmp_path)
+
+
+def test_pre_release_snapshot_supports_a_fresh_vector_database():
+    class EmptyConnection:
+        def execute(self, query):
+            if "_prisma_migrations" in query or "model_versions" in query:
+                raise AssertionError("Fresh database has no application tables yet")
+            self.vector = "pg_extension" in query
+            return self
+
+        def fetchall(self):
+            return []
+
+        def __iter__(self):
+            return iter([])
+
+        def fetchone(self):
+            assert self.vector
+            return ("0.8.7",)
+
+    result = snapshot_in(EmptyConnection())
+    assert result == {
+        "counts": {},
+        "migrations": [],
+        "models": [],
+        "foreignKeys": [],
+        "constraints": [],
+        "pgvector": ("0.8.7",),
+    }

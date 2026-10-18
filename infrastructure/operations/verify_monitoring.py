@@ -284,6 +284,7 @@ def host() -> None:
                 timeout=420,
             )
             print(result, end="", flush=True)
+            assert run("exec", "-T", "alloy", "/usr/bin/id", "-u").strip() == "473"
         finally:
             # Newly generated owned project only, never source/production volumes.
             run("down", "--volumes", "--timeout", "25", timeout=90)
