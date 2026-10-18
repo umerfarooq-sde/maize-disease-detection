@@ -8,8 +8,9 @@ with administrative tools for maintaining knowledge and monitoring the system.
 Phase 25 deployment and release engineering is in verification. The implementation
 includes private container topology, shared quotas, scheduled cleanup, encrypted
 restore-tested backups, least-privilege roles, operational monitoring, protected
-release workflows and Android release configuration. Container execution and
-hosted deployment have **not** been verified on this Windows host. Current full
+release workflows and Android release configuration. CI builds all four images
+and verifies shared quotas across two Node processes. The complete connected stack
+and hosted deployment have **not** been verified. Current full
 E2E evidence includes a database timeout failure; it is not a passing deployment.
 See [Phase 25 implementation, evidence and operator commands](docs/phase-25-deployment-release-engineering.md).
 Phase 26 and public release have not started. The following entries are historical

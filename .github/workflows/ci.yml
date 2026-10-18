@@ -106,15 +106,32 @@ jobs:
           test "$(git -C .cache/flutter rev-parse '3.41.9^{commit}')" = 00b0c91f06209d9e4a41f71b7a512d6eb3b9c694
           git -C .cache/flutter checkout --detach 3.41.9
           echo "$GITHUB_WORKSPACE/.cache/flutter/bin" >> "$GITHUB_PATH"
-      - run: flutter --version && flutter config --no-analytics
+      - run: flutter --version && flutter config --no-analytics && flutter precache --android --linux
+      - name: Verify required SDK font inventory
+        run: find .cache/flutter/bin/cache/artifacts/material_fonts -maxdepth 1 -type f -printf '%f\n'
       - run: flutter pub get --enforce-lockfile && dart format --output=none --set-exit-if-changed lib test integration_test && node ../scripts/run-flutter.mjs analyze && node ../scripts/run-flutter.mjs test
         working-directory: mobile
       - name: Unsigned verification AAB (never distributable)
-        run: node ../scripts/run-flutter.mjs --release-signing build appbundle --release --flavor staging --dart-define=API_BASE_URL=https://verification.example.invalid/api/v1
+        run: node ../scripts/run-flutter.mjs --release-signing build appbundle --release --flavor staging --build-number="$GITHUB_RUN_NUMBER" --dart-define=API_BASE_URL=https://verification.example.invalid/api/v1
         working-directory: mobile
         env: {MAIZEDOCTOR_UNSIGNED_VERIFICATION: 'true'}
+      - name: Record unsigned artifact provenance
+        run: |
+          python - <<'PY'
+          import hashlib, json, os, pathlib, re, subprocess
+          folder=pathlib.Path('mobile/build/app/outputs/bundle/stagingRelease')
+          artifact=folder/'app-staging-release.aab'
+          version=re.search(r'^version:\s*([^\s+]+)',pathlib.Path('mobile/pubspec.yaml').read_text(),re.M)[1]
+          dirty=bool(subprocess.check_output(['git','status','--porcelain=v1','--untracked-files=all']))
+          (folder/'provenance.json').write_text(json.dumps({'commit':os.environ['GITHUB_SHA'],'version':version,'buildNumber':int(os.environ['GITHUB_RUN_NUMBER']),'workspaceDirty':dirty,'unsignedVerification':True,'distributionApproved':False,'apiBaseUrl':'https://verification.example.invalid/api/v1','sha256':hashlib.sha256(artifact.read_bytes()).hexdigest()},indent=2)+'\n')
+          PY
       - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
-        with: {name: unsigned-verification-aab, path: mobile/build/app/outputs/bundle/stagingRelease/*.aab, retention-days: 7}
+        with:
+          name: unsigned-verification-aab
+          path: |
+            mobile/build/app/outputs/bundle/stagingRelease/*.aab
+            mobile/build/app/outputs/bundle/stagingRelease/provenance.json
+          retention-days: 7
   containers:
     runs-on: ubuntu-24.04
     timeout-minutes: 35

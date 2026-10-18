@@ -1,20 +1,33 @@
 # Known issues
 
-## Phase 25 engineering in progress ? 2026-10-18
+## Phase 25 verification - 2026-10-18
 
-Public release remains unauthorized/unverified. This is a work-in-progress entry.
-Docker Engine/WSL Linux is unavailable: container/runtime/shared-Redis/monitoring
-claims must remain unverified until the actual stack runs. Native least-privilege
-and AI/model/telemetry checks are separate evidence, not container deployment.
-New operator grants required SELECT(id) for Python idempotent telemetry and
-UPDATE(id) for privacy row fencing; reproduced in disposable SQL tests and repaired.
-The workspace disk filled during generated Android artifact export and native
-backup encryption. Both failures are retained; only generated caches were moved,
-with contents and original paths preserved. The backup source was not modified.
-Final post-change regressions, integration, signed release/hosted TLS verification
-and policy/content/device approvals are pending. Erasure remains disabled by
-unapproved policy. Historical connectivity attribution remains unchanged.
+Phase25 engineering is implemented and under final verification; public release
+remains unauthorized. Normal E2E20261018T164512Z-b78fe039 currently includes failed
+database, Knowledge and generation categories; the run/cleanup are not yet final.
+A read-only configured-path probe will investigate without claiming provider cause.
 
+Hosted CI builds all four images and verifies actual Redis multiprocess quotas,
+Prisma/migrations, Node and Python checks. First CI failures were missing scoped
+codegen configuration and an untagged shallow SDK checkout; fixed. A subsequent
+Linux SDK-font filename issue is fixed locally, pending repeated CI. No connected
+model/provider/monitoring stack on an authorized deployment host is claimed.
+The user confirms no Docker host/self-hosted staging runner is available.
+
+Reproduced/fixed SQL grants: telemetry SELECT(id), privacy row fences UPDATE(id),
+Admin draft-index document row fence UPDATE(id), with content writes still denied.
+Explicit Prisma ON UPDATE NO ACTION removes draft15 drift without rewriting SQL.
+Debug manifest merge is repaired without enabling HTTP in release. Safe central
+logs retain bounded raw/wrapped driver stages; deployment secrets are redacted.
+
+Disk-full backup/export attempts remain retained. Generated caches only were
+relocated with contents/original paths preserved. Successful native15 restore,
+unsigned APK/AAB export and ARM64 debug build now pass. Real assets/source DBs/
+weights remain untouched. Working-tree formatting still flags an unrelated user
+edit; clean indexed sources pass. Signing, real hosted TLS, device acceptance,
+policy/content/model-claim approvals and off-host backup/monitoring acceptance
+remain release gates. Erasure/expiration remain disabled; no real data was deleted.
+Historical connectivity attribution and historical reports below remain unchanged.
 
 ## Final Phase24.7 reliability closeout — 2026-10-18
 

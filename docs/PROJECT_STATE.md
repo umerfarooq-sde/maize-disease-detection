@@ -1,3 +1,49 @@
+# Project state - Phase 25 verification in progress
+
+Updated 2026-10-18 (Asia/Karachi). Baseline 5cdc775; related engineering commits
+5328b93 and 9be2135 are pushed on main. Phase 26/public release have not started.
+
+Implemented: private Caddy/Node/FastAPI/Redis Compose topology, purpose-specific
+mounted secrets and DB roles, shared quotas, scheduled cleanup, bounded production
+connection setup, private logs/metrics/dashboards/alerts, encrypted restore-tested
+backups, protected release automation, Android release/signing/provenance and
+policy-disabled account/retention tooling plus Farmer review-request UX.
+
+Native SQL verifies 15 migrations, four separate least-privilege identities over
+verified TLS, Node privacy persistence/approval denial and two real SQL privacy/
+retention recovery cases. The native encrypted restore validates 24 tables including
+history, 15 migrations, 30 foreign keys and pinned artifacts; target removed and
+cluster stopped. Configured development migration15/status/drift pass with old
+public-table counts unchanged. No managed role or approved model was changed.
+
+GitHub CI39147855418 builds all four images and validates Prometheus16 rules,
+Alertmanager/Alloy/Compose. Backend368/0/0 includes actual Redis quotas across two
+OS processes. Its Python/bootstrap and Flutter SDK-identification failures were
+repaired. CI39148294152 passes backend/Python/containers; mobile found an SDK font
+filename portability defect, now repaired with local15-test verification; repeat
+CI is pending. This is not a connected hosted deployment. User confirms no Linux
+Docker deployment host or self-hosted staging runner exists.
+
+Local components: backend369 pass/0 fail/1 Redis opt-in skip before the latest
+redaction regression; AI381/0/4 SQL skips; Flutter399/0/14 live skips; shared78 in
+each consumer environment plus12 parity cases. OpenAPI61 and analyzer/strict types
+pass. Related committed formatting passes; unrelated user environment-check.ts
+formatting remains preserved. Android ARM64 debug and unsigned APK/AAB pass;
+unsigned provenance explicitly records dirty workspace, never distribution approval.
+
+Current normal-config full E2E20261018T164512Z-b78fe039 is still running and has
+recorded database query/acquisition, Knowledge and generation failures. Do not call
+it a full pass or replace it with historical21/21. Final cleanup/evidence and a
+bounded reliability investigation remain pending. Historical cause is unproved.
+Retain all failures. No threshold, dataset, numerical agricultural rule, licensing,
+retention policy, signing identity or production approval is invented.
+
+See docs/phase-25-deployment-release-engineering.md for implementation, executed
+proofs, local/staging/production commands, rollback and explicit external gates.
+Historical project handoffs and the user's original changes follow unchanged.
+
+---
+
 # Project state — Phase 24.7 final closeout
 
 Updated 2026-10-18 (Asia/Karachi), continued from `6f7bb3c` on `main`.

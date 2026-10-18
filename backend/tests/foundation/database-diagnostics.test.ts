@@ -10,6 +10,7 @@ import { mkdtemp, readFile, rm } from 'node:fs/promises';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 import { safeLogFile } from '../../src/infrastructure/safe-log.js';
+import { createLogger } from '../../src/config/logger.js';
 
 test('transaction diagnostics distinguish acquisition from expiry without dependency text', () => {
   for (const [message, expected] of [
@@ -105,4 +106,29 @@ test('central log projection retains safe database stages and excludes private p
   } finally {
     await rm(directory, { recursive: true, force: true });
   }
+});
+
+test('console redaction includes deployment-only database, Redis and operations credentials', () => {
+  let output = '';
+  const logger = createLogger(
+    { LOG_LEVEL: 'info' },
+    {
+      write(line: string) {
+        output += line;
+      },
+    },
+  );
+  logger.info(
+    Object.fromEntries(
+      [
+        'DATABASE_URL',
+        'DIRECT_DATABASE_URL',
+        'REDIS_URL',
+        'OPERATIONS_TOKEN',
+        'GEMINI_API_KEY',
+      ].map((key) => [key, 'private-marker']),
+    ),
+  );
+  assert.ok(!output.includes('private-marker'));
+  assert.ok(output.includes('[REDACTED]'));
 });

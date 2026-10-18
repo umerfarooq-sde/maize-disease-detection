@@ -13,9 +13,10 @@ evidence or individual component passes for this current full run.
 The user confirmed no Linux Docker host/self-hosted runner exists. This Windows
 host has no Docker Engine or installed WSL distribution. Standalone Compose
 validation, native PostgreSQL/production-mode model serving, encrypted isolated
-restore drills and loopback Caddy TLS are separate executed evidence. Images,
-container networking, real Redis multiprocess quotas, connected monitoring,
-schedulers and hosted rollout remain unverified.
+restore drills and loopback Caddy TLS are separate executed evidence. Hosted CI
+now builds all four images, verifies real Redis quotas across two Node OS processes
+and validates operational tools. The complete private model/provider stack,
+connected monitoring/schedulers and hosted rollout remain unverified.
 
 Historical Phase24.7 acceptance remains unchanged: `20261017T213205Z-173ed748`
 21/0/0, `20261017T215921Z-b412d414`4/0/0 and
@@ -69,12 +70,13 @@ Do not add overlapping runs together or relabel opt-in skips.
 | Backend full | 366 pass/0 fail/1 Redis opt-in skip, `node-tests-final.log`; later disconnect regression passes separately |
 | TypeScript/build | Pass, `node-types-final-second.log`, `node-build-final.log` |
 | OpenAPI | 61 operations validated against runtime schemas, `openapi-final-second.log` |
-| Formatting | Related files formatted; full working-tree check fails preserved unrelated `backend/src/environment-check.ts`; clean commit check pending |
+| Formatting | Clean Git-index sources pass; full working-tree check fails only preserved unrelated `backend/src/environment-check.ts` |
 | AI | 381 pass/0 fail/4 default SQL skips; one upstream Starlette/httpx warning; Ruff/format/mypy52 pass |
 | Flutter | 399 pass/0 fail/14 default live skips; analyzer pass |
 | Shared package | 78 pass in each consumer environment;12 synthetic parity cases pass; no source dataset access |
-| Operations | Backup authentication, disabled privacy, retention, real HTTP inbox, release locks, real Git bundle tests; final totals recorded at closeout |
-| Static infrastructure | All four Compose variants/private topology and Actionlint pass; actual containers unverified |
+| Operations | 21 pass/0 fail/2 native SQL opt-in skips; the two SQL tests also pass separately against dedicated-role disposable DBs |
+| Infrastructure CI | All four images build; Prometheus config/16 rules, Alertmanager/Alloy and four Compose variants validate; unconfigured AI startup rejects correctly |
+| Shared Redis CI | 368/0/0 backend run includes actual two-OS-process atomic limits; later backend changes have a separate run |
 | Caddy | Native validation and real loopback TLS/redirect/spoof/private-path test pass against controlled upstream fixture; no hosted application claim |
 | Native PostgreSQL | PG18.4/vector0.8.7,15 migrations, schema-owner grants, Node/AI/backup/privacy role audits over verified TLS; no owner/privileged/CREATE |
 | Real privacy | Node request/idempotency/ownership/approval-denial pass; two disposable SQL erasure/recovery and scan-expiration/journal tests pass |
@@ -110,6 +112,11 @@ release stays false. External retained Git configuration bundles prevent checkou
 cleaning or rollback from mixing configurations. Real archive testing caught and
 fixed parent-directory handling without admitting private/untracked files.
 Replica observation cannot hide a failed replica behind a later healthy one.
+CI bootstrap fixes scope a non-connecting Prisma codegen URL and fetch the actual
+Flutter3.41.9 tag, asserting the approved commit. Linux test font lookup handles
+SDK filename case while still failing missing/ambiguous fonts. Release output now
+records dirty-source verification, and distributable builds require a clean checkout.
+New deployment credentials are redacted from console as well as central logs.
 
 Disk exhaustion interrupted an earlier backup encryption/AAB provenance export.
 Only generated caches moved with contents and original paths preserved by local

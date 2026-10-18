@@ -17,10 +17,19 @@ if ($taskApi.IsLoopback -or $taskApi.Host.EndsWith('.localhost') -or $taskApi.Ho
 if (-not $UnsignedVerification -and ($taskApi.Host.EndsWith('.invalid') -or $taskApi.Host.EndsWith('.test'))) {
     throw 'Distributable releases require an operator-owned verified API endpoint.'
 }
+$taskSourceStatus = @(& git -C $taskRoot status --porcelain=v1 --untracked-files=all)
+if ($LASTEXITCODE -ne 0) { throw 'Cannot verify release source identity.' }
+$taskWorkspaceDirty = $taskSourceStatus.Count -gt 0
+if (-not $UnsignedVerification -and $taskWorkspaceDirty) {
+    throw 'Distributable releases require a clean committed checkout. Preserve local edits and build in a separate clean checkout.'
+}
 $taskSigning=@('MAIZEDOCTOR_KEYSTORE_FILE','MAIZEDOCTOR_KEYSTORE_PASSWORD','MAIZEDOCTOR_KEY_ALIAS','MAIZEDOCTOR_KEY_PASSWORD')
 if (-not $UnsignedVerification) {
     foreach ($taskName in $taskSigning) { if (-not [Environment]::GetEnvironmentVariable($taskName)) { throw "Missing external signing setting: $taskName" } }
     if (-not (Test-Path -LiteralPath $env:MAIZEDOCTOR_KEYSTORE_FILE -PathType Leaf)) { throw 'External signing keystore does not exist.' }
+    if (-not $env:MAIZEDOCTOR_EXPECTED_SIGNER_SHA256 -or $env:MAIZEDOCTOR_EXPECTED_SIGNER_SHA256.Replace(':','') -notmatch '^[A-Fa-f0-9]{64}$') {
+        throw 'Expected public signing-certificate SHA256 is required for distribution verification.'
+    }
 }
 . (Join-Path $PSScriptRoot 'use-project-node.ps1')
 $taskPrevious=[Environment]::GetEnvironmentVariable('MAIZEDOCTOR_UNSIGNED_VERIFICATION')
@@ -48,7 +57,6 @@ try {
             if (@($taskZip.Entries | Where-Object { $_.FullName -match '^META-INF/[^/]+\.(RSA|DSA|EC|SF)$' }).Count -gt 0) { throw 'Verification output unexpectedly includes a signing identity.' }
         } finally { $taskZip.Dispose() }
     } else {
-        if (-not $env:MAIZEDOCTOR_EXPECTED_SIGNER_SHA256 -or $env:MAIZEDOCTOR_EXPECTED_SIGNER_SHA256 -notmatch '^[A-Fa-f0-9:]{64,95}$') { throw 'Expected public signing-certificate SHA256 is required for distribution verification.' }
         if ($Format -eq 'apk') {
             $taskSdk = if ($env:ANDROID_HOME) { $env:ANDROID_HOME } elseif ($env:ANDROID_SDK_ROOT) { $env:ANDROID_SDK_ROOT } else { Join-Path $env:LOCALAPPDATA 'Android/sdk' }
             $taskSigner = Get-ChildItem -Path (Join-Path $taskSdk 'build-tools/*/apksigner.bat') | Sort-Object FullName -Descending | Select-Object -First 1
@@ -72,7 +80,7 @@ try {
     New-Item -ItemType Directory -Path $taskRelease | Out-Null
     $taskName = "maizedoctor-$Environment-$taskVersion-$BuildNumber-$($taskRevision.Substring(0,12))." + $(if ($Format -eq 'apk') { 'apk' } else { 'aab' })
     Copy-Item -LiteralPath $taskArtifact -Destination (Join-Path $taskRelease $taskName)
-    @{environment=$Environment;version=$taskVersion;buildNumber=$BuildNumber;commit=$taskRevision;apiBaseUrl=$ApiBaseUrl;unsignedVerification=[bool]$UnsignedVerification;signerSha256=$taskFingerprint;sha256=(Get-FileHash -LiteralPath $taskArtifact -Algorithm SHA256).Hash.ToLowerInvariant();distributionApproved=$false;artifact=$taskName} | ConvertTo-Json | Set-Content -LiteralPath (Join-Path $taskRelease 'manifest.json')
+    @{environment=$Environment;version=$taskVersion;buildNumber=$BuildNumber;commit=$taskRevision;workspaceDirty=$taskWorkspaceDirty;sourceVerification=$(if ($taskWorkspaceDirty) {'DIRTY_WORKSPACE_VERIFICATION_ONLY'} else {'COMMITTED_CHECKOUT'});apiBaseUrl=$ApiBaseUrl;unsignedVerification=[bool]$UnsignedVerification;signerSha256=$taskFingerprint;sha256=(Get-FileHash -LiteralPath $taskArtifact -Algorithm SHA256).Hash.ToLowerInvariant();distributionApproved=$false;artifact=$taskName} | ConvertTo-Json | Set-Content -LiteralPath (Join-Path $taskRelease 'manifest.json')
     Write-Output 'Release artifact and public provenance manifest saved under ignored .cache/releases; distribution approval remains separate.'
 } finally {
     [Environment]::SetEnvironmentVariable('MAIZEDOCTOR_UNSIGNED_VERIFICATION',$taskPrevious,'Process')

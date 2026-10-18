@@ -61,9 +61,17 @@ void main() {
       'Roboto': 'roboto-regular.ttf',
       'MaterialIcons': 'materialicons-regular.otf',
     }.entries) {
-      final bytes = await File(
-        '$sdkRoot/bin/cache/artifacts/material_fonts/${font.value}',
-      ).readAsBytes();
+      // SDK archives differ in filename case across host platforms. Resolve the
+      // required font without relying on Windows' case-insensitive filesystem;
+      // absent/ambiguous fonts still fail these accessibility/visual tests.
+      final file = Directory('$sdkRoot/bin/cache/artifacts/material_fonts')
+          .listSync()
+          .whereType<File>()
+          .where(
+            (entry) => entry.uri.pathSegments.last.toLowerCase() == font.value,
+          )
+          .single;
+      final bytes = await file.readAsBytes();
       final loader = FontLoader(font.key)
         ..addFont(Future.value(ByteData.sublistView(bytes)));
       await loader.load();
