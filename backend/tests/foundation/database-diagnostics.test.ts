@@ -6,6 +6,10 @@ import { errorHandler } from '../../src/middleware/error-handler.js';
 import { requestContext } from '../../src/middleware/request-context.js';
 import { silentLogger, withServer } from './helpers.js';
 import { databaseDiagnostics } from '../../src/utils/database-diagnostics.js';
+import { mkdtemp, readFile, rm } from 'node:fs/promises';
+import { tmpdir } from 'node:os';
+import { join } from 'node:path';
+import { safeLogFile } from '../../src/infrastructure/safe-log.js';
 
 test('transaction diagnostics distinguish acquisition from expiry without dependency text', () => {
   for (const [message, expected] of [
@@ -63,4 +67,42 @@ test('database failure logs only a bounded code; public responses omit driver de
   assert.equal(entries.length, 1);
   assert.equal((entries[0] as { dependencyCode: string }).dependencyCode, 'P2028');
   assert.ok(!JSON.stringify(entries).includes('private-marker'));
+});
+
+test('raw and wrapped adapter timeouts retain bounded stages without private messages', () => {
+  assert.deepEqual(databaseDiagnostics(new Error('Query read timeout')), {
+    dependencyCode: 'PG_DRIVER',
+    databaseFailureKind: 'QUERY_READ_TIMEOUT',
+  });
+  const wrapped = new Prisma.PrismaClientUnknownRequestError(
+    'private-marker SQL=private-marker Query read timeout',
+    { clientVersion: 'fixture' },
+  );
+  assert.deepEqual(databaseDiagnostics(wrapped), {
+    dependencyCode: 'PRISMA_DRIVER',
+    databaseFailureKind: 'QUERY_READ_TIMEOUT',
+  });
+  assert.deepEqual(databaseDiagnostics(new Error('private-marker Query read timeout')), {});
+});
+
+test('central log projection retains safe database stages and excludes private payloads', async () => {
+  const directory = await mkdtemp(join(tmpdir(), 'maizedoctor-safe-log-'));
+  try {
+    const sink = safeLogFile(directory);
+    sink.write(
+      JSON.stringify({
+        level: 50,
+        event: 'database_fixture',
+        ...databaseDiagnostics(new Error('Query read timeout')),
+        password: 'private-marker',
+        message: 'private-marker',
+        query: 'private-marker',
+      }),
+    );
+    const value = await readFile(join(directory, 'node.jsonl'), 'utf8');
+    assert.ok(value.includes('QUERY_READ_TIMEOUT'));
+    assert.ok(!value.includes('private-marker'));
+  } finally {
+    await rm(directory, { recursive: true, force: true });
+  }
 });

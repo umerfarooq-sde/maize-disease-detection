@@ -15,6 +15,8 @@ const fields = new Set([
   'durationMs',
   'count',
   'reason',
+  'dependencyCode',
+  'databaseFailureKind',
 ]);
 
 // Separate allowlisted central log projection. Console logging keeps its existing
