@@ -46,6 +46,11 @@ jobs:
         working-directory: backend
       - run: npm run check && npm run db:check:migrations && npm run db:check
         working-directory: backend
+      - name: Execute coordinated cleanup scheduler and real existing CLIs
+        working-directory: backend
+        env:
+          RUN_CLEANUP_WORKER_TESTS: '1'
+        run: TEST_CLEANUP_DATABASE_URL="$DATABASE_URL" node --import tsx --test tests/cleanup.worker.integration.ts
       - run: node --test scripts/flutter-test-environment.test.mjs scripts/flutter-release-environment.test.mjs
       - run: npm audit --omit=dev --audit-level=high
         working-directory: backend
