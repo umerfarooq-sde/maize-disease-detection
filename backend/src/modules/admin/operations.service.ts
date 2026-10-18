@@ -56,6 +56,9 @@ export function createOperationsService(
     while (worker) await worker;
   }
   return {
+    operationalState() {
+      return { dropped: lost, pending: pending.length + (worker ? 1 : 0), closed };
+    },
     flush,
     async close() {
       closed = true;
@@ -126,7 +129,7 @@ export function createOperationsService(
             localDropped: lost,
             localPending: pending.length + (worker ? 1 : 0),
             historicalCoverage: 'not collected before Phase 24.6',
-            retention: 'unchanged; approval pending',
+            retention: 'deployment-controlled; erasure requires an approved policy',
           },
         };
       } catch (error) {
@@ -147,7 +150,7 @@ export function createOperationsService(
             localDropped: lost,
             localPending: pending.length + (worker ? 1 : 0),
             historicalCoverage: 'not collected before Phase 24.6',
-            retention: 'unchanged; approval pending',
+            retention: 'deployment-controlled; erasure requires an approved policy',
           },
         };
       }

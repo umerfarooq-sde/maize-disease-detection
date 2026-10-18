@@ -12,7 +12,7 @@ test('OpenAPI validates and covers each runtime method/path exactly once', async
     registered = registeredOperations(router),
     spec = generateOpenApi(router);
   await SwaggerParser.validate(JSON.parse(JSON.stringify(spec)), { resolve: { external: false } });
-  assert.equal(registered.length, 59);
+  assert.equal(registered.length, 61);
   assert.equal(
     Object.values(spec.paths).reduce((n, operations) => n + Object.keys(operations).length, 0),
     registered.length,

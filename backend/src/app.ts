@@ -1,4 +1,6 @@
 import cors from 'cors';
+import { createPrivacyRepository } from './modules/privacy/privacy.repository.js';
+import { createPrivacyService, type PrivacyService } from './modules/privacy/privacy.service.js';
 import express, { type Express } from 'express';
 import helmet from 'helmet';
 import type { Logger } from 'pino';
@@ -12,6 +14,8 @@ import {
 import { AppError } from './errors/app-error.js';
 import { errorHandler, notFound } from './middleware/error-handler.js';
 import { requestRateLimit } from './middleware/rate-limit.js';
+import { createDistributedQuota, redisQuotaStore } from './infrastructure/quotas.js';
+import { installOperations } from './infrastructure/metrics.js';
 import { requestContext } from './middleware/request-context.js';
 import { createDashboardRepository } from './modules/admin/dashboard.repository.js';
 import { operationsFor } from './modules/admin/operations.service.js';
@@ -159,11 +163,32 @@ export function createApp(
   productService: ProductService = createProductService(
     createProductRepository(getDatabaseClient(environment.DATABASE_URL)),
   ),
+  privacyService: PrivacyService = createPrivacyService(
+    createPrivacyRepository(getDatabaseClient(environment.DATABASE_URL)),
+  ),
 ): Express {
   const app = express();
+  if (environment.TRUST_PROXY)
+    app.set(
+      'trust proxy',
+      environment.TRUST_PROXY.split(',').map((value) => value.trim()),
+    );
+  const quota = environment.REDIS_URL
+    ? createDistributedQuota(environment, redisQuotaStore(environment.REDIS_URL, logger), logger)
+    : undefined;
+  app.locals.distributedQuota = quota;
+  app.locals.startInfrastructure = async () => {
+    await quota?.start();
+  };
+  app.locals.stopInfrastructure = async () => {
+    await quota?.close();
+  };
+  installOperations(app, environment, repository, quota);
   app.locals.recoverScans = () => scanService.recoverStale();
   app.locals.flushOperationalEvents = () =>
     operationsFor(getDatabaseClient(environment.DATABASE_URL), logger).close();
+  app.locals.telemetryOperationalState = () =>
+    operationsFor(getDatabaseClient(environment.DATABASE_URL), logger).operationalState();
   app.disable('x-powered-by');
   app.set('query parser', 'simple');
   app.use(requestContext(logger));
@@ -201,6 +226,7 @@ export function createApp(
     referenceService,
     specificationService,
     productService,
+    privacyService,
   );
   app.locals.contractRouter = v1Router;
   app.use('/api/v1', v1Router);

@@ -1,0 +1,6 @@
+{
+  "DATABASE_URL": "",
+  "AI_SERVICE_TOKEN": "",
+  "OPERATIONS_TOKEN": "",
+  "GEMINI_API_KEY": ""
+}

@@ -1,0 +1,4 @@
+# Caddy automatic public certificates; operator supplies an owned API_HOST.
+tls {
+    protocols tls1.2 tls1.3
+}

@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
+import '../../data/repositories/privacy_repository.dart';
+import '../../features/profile/view_models/privacy_view_model.dart';
+import '../../features/profile/views/privacy_view.dart';
 import '../../data/repositories/backend_repository.dart';
 import '../../data/repositories/registration_repository.dart';
 import '../../data/repositories/knowledge_repository.dart';
@@ -193,6 +196,21 @@ GoRouter createAppRouter({String initialLocation = AppRoutes.home}) => GoRouter(
                           ProfileViewModel(context.read<ProfileRepository>())
                             ..load(),
                       child: const ProfileEditorView(),
+                    ),
+                  ),
+                ),
+                GoRoute(
+                  path: 'data-deletion',
+                  builder: (context, _) => _DetailPage(
+                    title: 'Your account data',
+                    child: ChangeNotifierProvider(
+                      key: ValueKey(
+                        'privacy-${context.watch<FarmerSessionViewModel>().revision}',
+                      ),
+                      create: (_) =>
+                          PrivacyViewModel(context.read<PrivacyRepository>())
+                            ..load(),
+                      child: const PrivacyView(),
                     ),
                   ),
                 ),

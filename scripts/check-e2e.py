@@ -159,6 +159,7 @@ TABLES = (
     "auth_sessions",
     "scan_uploads",
     "ai_operations",
+    "privacy_requests",
 )
 
 

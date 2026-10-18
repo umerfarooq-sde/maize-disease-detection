@@ -88,6 +88,8 @@ class RetrievalService:
         )
 
     def close(self) -> None:
+        if isinstance(self.repository, KnowledgeRepository):
+            self.repository.close()
         if isinstance(self.embedder, GoogleEmbedder):
             self.embedder.close()
 

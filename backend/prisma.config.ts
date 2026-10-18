@@ -1,9 +1,11 @@
 import { config } from 'dotenv';
 import { defineConfig, env } from 'prisma/config';
+import { withSecretFile } from './src/config/secrets.js';
 
-config({ quiet: true });
+if (!process.env['MAIZEDOCTOR_SECRETS_FILE']) config({ quiet: true });
+const secretEnvironment = withSecretFile(process.env);
 
-const databaseUrl = new URL(process.env['DIRECT_DATABASE_URL'] || env('DATABASE_URL'));
+const databaseUrl = new URL(secretEnvironment['DIRECT_DATABASE_URL'] || secretEnvironment['DATABASE_URL'] || env('DATABASE_URL'));
 // Remote startup/connect latency exceeded the CLI's default 5-second timeout.
 // Respect an explicit URL timeout; this does not change the runtime pg adapter.
 if (!databaseUrl.searchParams.has('connect_timeout')) {

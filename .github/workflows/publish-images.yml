@@ -1,0 +1,67 @@
+name: Build approved immutable release images
+on:
+  workflow_dispatch:
+    inputs:
+      revision:
+        description: Reviewed full source commit SHA
+        required: true
+      expand_only_compatible:
+        description: Reviewed additive-schema compatibility (required for release manifest)
+        type: boolean
+        default: false
+permissions:
+  contents: read
+  packages: write
+concurrency:
+  group: release-images
+  cancel-in-progress: false
+jobs:
+  publish:
+    # Configure required reviewers for this environment before enabling publishing.
+    environment: release-images
+    runs-on: ubuntu-24.04
+    timeout-minutes: 60
+    steps:
+      - name: Validate explicit review
+        env:
+          REVISION: ${{ inputs.revision }}
+          COMPATIBLE: ${{ inputs.expand_only_compatible }}
+        run: test "$COMPATIBLE" = true && [[ "$REVISION" =~ ^[a-f0-9]{40}$ ]]
+      - uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09
+        with: {ref: '${{ inputs.revision }}', persist-credentials: false}
+      - uses: docker/setup-buildx-action@8d2750c68a42422c14e847fe6c8ac0403b4cbd6f
+      - uses: docker/login-action@c94ce9fb468520275223c153574b00df6fe4bcc9
+        with: {registry: ghcr.io, username: '${{ github.actor }}', password: '${{ secrets.GITHUB_TOKEN }}'}
+      - name: Build and publish digest-bound images with SBOM and provenance
+        env:
+          REVISION: ${{ inputs.revision }}
+          REPOSITORY: ${{ github.repository }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          test "$(git rev-parse HEAD)" = "$REVISION"
+          mkdir -p .cache/release
+          prefix="ghcr.io/${REPOSITORY,,}"
+          build() {
+            name="$1"; file="$2"; target="$3"
+            args=()
+            if [ -n "$target" ]; then args+=(--target "$target"); fi
+            docker buildx build --platform linux/amd64 --file "$file" "${args[@]}" --push --provenance=mode=max --sbom=true --tag "$prefix-$name:$REVISION" --metadata-file ".cache/release/$name.json" .
+          }
+          build node backend/Dockerfile runtime
+          build migration backend/Dockerfile migration
+          build ai ai-service/Dockerfile ''
+          build operations infrastructure/operations/Dockerfile ''
+          export IMAGE_PREFIX="$prefix"
+          python - <<'PY'
+          import json, os, pathlib, re
+          directory = pathlib.Path('.cache/release')
+          images = {}
+          for key, name in [('NODE_IMAGE','node'),('MIGRATION_IMAGE','migration'),('AI_IMAGE','ai'),('OPERATIONS_IMAGE','operations')]:
+              digest = json.loads((directory/(name+'.json')).read_text())['containerimage.digest']
+              assert re.fullmatch(r'sha256:[a-f0-9]{64}', digest)
+              images[key] = os.environ['IMAGE_PREFIX']+'-'+name+'@'+digest
+          (directory/'release.json').write_text(json.dumps({'commit':os.environ['REVISION'],'images':images,'expandOnlyCompatible':True},indent=2)+'\n')
+          PY
+      - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with: {name: reviewed-release-manifest, path: .cache/release/*.json, retention-days: 30}

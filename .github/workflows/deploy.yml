@@ -1,0 +1,48 @@
+name: Protected deployment engineering
+on:
+  workflow_dispatch:
+    inputs:
+      environment:
+        type: choice
+        options: [staging, production]
+        required: true
+      revision:
+        description: Approved full source commit SHA, matching private release manifest
+        required: true
+      allow_migrations:
+        description: Explicitly approve reviewed additive migrations and pre-rollout backup
+        type: boolean
+        default: false
+      rollback:
+        type: boolean
+        default: false
+permissions:
+  contents: read
+concurrency:
+  group: deploy-${{ inputs.environment }}
+  cancel-in-progress: false
+jobs:
+  rollout:
+    # Dedicated operator-controlled runner: never used by pull_request CI.
+    runs-on: [self-hosted, linux, '${{ format(''maizedoctor-{0}'', inputs.environment) }}']
+    environment: ${{ inputs.environment }}
+    timeout-minutes: 120
+    steps:
+      - uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09
+        with: {ref: '${{ inputs.revision }}', persist-credentials: false}
+      - name: Verify and roll out approved immutable release
+        env:
+          DEPLOY_ENV_FILE: ${{ vars.DEPLOY_ENV_FILE }}
+          RELEASE_MANIFEST: ${{ vars.RELEASE_MANIFEST }}
+          DEPLOY_STATE_DIRECTORY: ${{ vars.DEPLOY_STATE_DIRECTORY }}
+          DEPLOYMENT_ENVIRONMENT: ${{ inputs.environment }}
+          APPROVE_MIGRATIONS: ${{ inputs.allow_migrations }}
+          ROLLBACK: ${{ inputs.rollback }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          test -n "$DEPLOY_ENV_FILE" && test -n "$RELEASE_MANIFEST" && test -n "$DEPLOY_STATE_DIRECTORY"
+          args=()
+          if [ "$APPROVE_MIGRATIONS" = true ]; then args+=(--allow-migrations); fi
+          if [ "$ROLLBACK" = true ]; then args+=(--rollback); fi
+          /opt/maizedoctor-operations/bin/python infrastructure/operations/release.py --root "$GITHUB_WORKSPACE" --environment-file "$DEPLOY_ENV_FILE" --manifest "$RELEASE_MANIFEST" --state "$DEPLOY_STATE_DIRECTORY" --deployment-environment "$DEPLOYMENT_ENVIRONMENT" "${args[@]}"

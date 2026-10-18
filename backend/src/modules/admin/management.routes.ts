@@ -73,6 +73,7 @@ export function managementRoutes(
   );
   router.post(
     '/admin/knowledge/documents/:id/index',
+    requestRateLimit(environment.KNOWLEDGE_RATE_LIMIT_MAX),
     request(empty, id),
     managementController(service, 'index'),
   );

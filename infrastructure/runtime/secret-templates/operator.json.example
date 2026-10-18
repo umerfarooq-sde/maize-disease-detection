@@ -1,0 +1,11 @@
+{
+  "DATABASE_URL": "",
+  "roles": {
+    "md_migrator": "",
+    "md_node": "",
+    "md_ai": "",
+    "md_curator": "",
+    "md_backup": "",
+    "md_privacy": ""
+  }
+}

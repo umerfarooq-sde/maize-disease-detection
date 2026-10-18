@@ -1,5 +1,10 @@
 # Documentation
 
+Current Phase 25 work and executable operator commands:
+[deployment and release engineering](phase-25-deployment-release-engineering.md).
+Verification is ongoing; Docker execution/hosted release are not claimed. Entries
+below retain historical phase handoffs.
+
 **Phase24.6 current addendum (2026-10-17):** Current remediation, original requirements, component/vertical-slice changes and actual test evidence are in the Phase24.6 report and linked matrices. Phase24.5 remains a historical audit; no Phase25/26 starts.
 
 See [remediation and current evidence](phase-24-6-pre-deployment-remediation.md). Historical phase details follow.

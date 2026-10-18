@@ -1,5 +1,21 @@
 # Known issues
 
+## Phase 25 engineering in progress ? 2026-10-18
+
+Public release remains unauthorized/unverified. This is a work-in-progress entry.
+Docker Engine/WSL Linux is unavailable: container/runtime/shared-Redis/monitoring
+claims must remain unverified until the actual stack runs. Native least-privilege
+and AI/model/telemetry checks are separate evidence, not container deployment.
+New operator grants required SELECT(id) for Python idempotent telemetry and
+UPDATE(id) for privacy row fencing; reproduced in disposable SQL tests and repaired.
+The workspace disk filled during generated Android artifact export and native
+backup encryption. Both failures are retained; only generated caches were moved,
+with contents and original paths preserved. The backup source was not modified.
+Final post-change regressions, integration, signed release/hosted TLS verification
+and policy/content/device approvals are pending. Erasure remains disabled by
+unapproved policy. Historical connectivity attribution remains unchanged.
+
+
 ## Final Phase24.7 reliability closeout — 2026-10-18
 
 **COMPLETE WITH DOCUMENTED RELIABILITY RISK; READY FOR PHASE25 ENGINEERING.**

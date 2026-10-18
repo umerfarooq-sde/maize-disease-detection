@@ -1,0 +1,133 @@
+name: Application and infrastructure verification
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: ci-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+jobs:
+  backend:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    services:
+      postgres:
+        image: pgvector/pgvector:0.8.7-pg18-bookworm
+        env:
+          POSTGRES_DB: maizedoctor_ci
+          POSTGRES_USER: postgres
+          # Disposable CI service credential, never a production secret.
+          POSTGRES_PASSWORD: isolated-ci-fixture-only
+        ports: [5432/tcp]
+        options: --health-cmd "pg_isready -U postgres -d maizedoctor_ci" --health-interval 5s --health-timeout 3s --health-retries 20
+      redis:
+        image: redis:8.10.2-alpine
+        ports: [6379/tcp]
+        options: --health-cmd "redis-cli ping" --health-interval 5s --health-timeout 3s --health-retries 20
+    env:
+      NODE_ENV: test
+      RUN_REDIS_TESTS: '1'
+    steps:
+      - uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09 # v5
+      - uses: actions/setup-node@249970729cb0ef3589644e2896645e5dc5ba9c38 # v6
+        with: {node-version: 24.22.0, cache: npm, cache-dependency-path: backend/package-lock.json}
+      - name: Ephemeral signing keys
+        env:
+          CI_POSTGRES_PORT: ${{ job.services.postgres.ports['5432'] }}
+          CI_REDIS_PORT: ${{ job.services.redis.ports['6379'] }}
+        run: |
+          node -e 'const fs=require("node:fs"),c=require("node:crypto"); for(const k of ["JWT_SECRET","JWT_REFRESH_SECRET"])fs.appendFileSync(process.env.GITHUB_ENV,k+"="+c.randomBytes(32).toString("base64url")+"\n"); fs.appendFileSync(process.env.GITHUB_ENV,"DATABASE_URL=postgresql://postgres:isolated-ci-fixture-only@127.0.0.1:"+process.env.CI_POSTGRES_PORT+"/maizedoctor_ci\nTEST_REDIS_URL=redis://127.0.0.1:"+process.env.CI_REDIS_PORT+"\n")'
+      - run: npm ci
+        working-directory: backend
+      - run: npm run db:generate && npm run db:migrate && npm run db:validate && npm run db:status && npm run db:diff
+        working-directory: backend
+      - run: npm run check && npm run db:check:migrations && npm run db:check
+        working-directory: backend
+      - run: node --test scripts/flutter-test-environment.test.mjs scripts/flutter-release-environment.test.mjs
+      - run: npm audit --omit=dev --audit-level=high
+        working-directory: backend
+  python:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 30
+    services:
+      postgres:
+        image: pgvector/pgvector:0.8.7-pg18-bookworm
+        env:
+          POSTGRES_DB: phase25_ci
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: isolated-ci-fixture-only
+        ports: [5432/tcp]
+        options: --health-cmd "pg_isready -U postgres -d phase25_ci" --health-interval 5s --health-timeout 3s --health-retries 20
+    steps:
+      - uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09
+      - uses: actions/setup-python@ece7cb06caefa5fff74198d8649806c4678c61a1 # v6
+        with: {python-version: 3.11.17}
+      - run: python -m pip install uv==0.12.23
+      - uses: actions/setup-node@249970729cb0ef3589644e2896645e5dc5ba9c38
+        with: {node-version: 24.22.0}
+      - run: npm ci && npm run db:generate
+        working-directory: backend
+      - run: uv sync --locked
+        working-directory: ai-service
+      - run: uv sync --locked
+        working-directory: ml-training
+      - run: uv run --locked ruff format --check app tests && uv run --locked ruff check app tests && uv run --locked mypy && uv run --locked pytest
+        working-directory: ai-service
+      - run: ai-service/.venv/bin/python -m pytest shared/preprocessing/tests
+      - run: ml-training/.venv/bin/python -m pytest shared/preprocessing/tests
+      - run: ai-service/.venv/bin/python scripts/check-preprocessing-parity.py --config ml-training/configs/full-frame-baseline.json
+      - run: uv pip install --python ai-service/.venv/bin/python --require-hashes -r infrastructure/operations/requirements.lock
+      - run: ai-service/.venv/bin/python -m pytest infrastructure/operations/tests
+      - name: Disposable migration and least-privilege integration
+        env:
+          CI_POSTGRES_PORT: ${{ job.services.postgres.ports['5432'] }}
+        run: |
+          python -c 'import json,os,pathlib; p=pathlib.Path(os.environ["RUNNER_TEMP"])/"database-fixture.json"; p.write_text(json.dumps({"DATABASE_URL":"postgresql://postgres:isolated-ci-fixture-only@127.0.0.1:"+os.environ["CI_POSTGRES_PORT"]+"/phase25_ci"})); p.chmod(0o600)'
+          ai-service/.venv/bin/python infrastructure/operations/verify_disposable.py --secrets "$RUNNER_TEMP/database-fixture.json" --disposable-cluster-approved
+      - run: python scripts/verify-release-metadata.py
+  mobile:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09
+      - uses: actions/setup-node@249970729cb0ef3589644e2896645e5dc5ba9c38
+        with: {node-version: 24.22.0}
+      - name: Pinned official Flutter SDK
+        run: |
+          git init .cache/flutter
+          git -C .cache/flutter remote add origin https://github.com/flutter/flutter.git
+          git -C .cache/flutter fetch --depth=1 origin 00b0c91f06209d9e4a41f71b7a512d6eb3b9c694
+          git -C .cache/flutter checkout --detach FETCH_HEAD
+          echo "$GITHUB_WORKSPACE/.cache/flutter/bin" >> "$GITHUB_PATH"
+      - run: flutter --version && flutter config --no-analytics
+      - run: flutter pub get --enforce-lockfile && dart format --output=none --set-exit-if-changed lib test integration_test && node ../scripts/run-flutter.mjs analyze && node ../scripts/run-flutter.mjs test
+        working-directory: mobile
+      - name: Unsigned verification AAB (never distributable)
+        run: node ../scripts/run-flutter.mjs --release-signing build appbundle --release --flavor staging --dart-define=API_BASE_URL=https://verification.example.invalid/api/v1
+        working-directory: mobile
+        env: {MAIZEDOCTOR_UNSIGNED_VERIFICATION: 'true'}
+      - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
+        with: {name: unsigned-verification-aab, path: mobile/build/app/outputs/bundle/stagingRelease/*.aab, retention-days: 7}
+  containers:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 35
+    steps:
+      - uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09
+      - run: docker build --target runtime -f backend/Dockerfile -t maizedoctor-node:ci .
+      - run: docker build --target migration -f backend/Dockerfile -t maizedoctor-migration:ci .
+      - run: docker build -f ai-service/Dockerfile -t maizedoctor-ai:ci .
+      - run: docker build -f infrastructure/operations/Dockerfile -t maizedoctor-operations:ci .
+      - name: Configuration and operational-tool validation
+        run: python scripts/check-deployment.py --static --docker-tools
+      - name: Verify inference is not silently enabled without artifacts
+        run: |
+          set +e
+          docker run --name invalid-ai --network none --read-only --tmpfs /tmp maizedoctor-ai:ci
+          code=$?
+          docker rm invalid-ai
+          test "$code" -ne 0
+      - name: Runtime stack verification requirement
+        run: echo 'Full production-like stack requires the protected infrastructure-smoke workflow with approved private artifacts and server provider configuration. This CI job does not claim that verification.'

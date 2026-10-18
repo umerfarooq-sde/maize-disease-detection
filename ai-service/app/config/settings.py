@@ -4,10 +4,12 @@ import ipaddress
 import re
 import sys
 from pathlib import Path
-from typing import Literal, Self
+from typing import Literal, Self, TypedDict
 
 from pydantic import Field, SecretStr, ValidationError, field_validator, model_validator
 from pydantic_settings import BaseSettings, SettingsConfigDict
+
+from app.config.secrets import runtime_secrets
 
 SERVICE_ROOT = Path(__file__).resolve().parents[2]
 
@@ -47,6 +49,9 @@ class Settings(BaseSettings):
     ai_service_token: SecretStr = Field(
         default=SecretStr(""), validation_alias="AI_SERVICE_TOKEN", repr=False
     )
+    operations_token: SecretStr = Field(
+        default=SecretStr(""), validation_alias="OPERATIONS_TOKEN", repr=False
+    )
     inference_enabled: bool = Field(default=True, validation_alias="INFERENCE_ENABLED")
     model_path: Path | None = Field(default=None, validation_alias="MODEL_PATH", repr=False)
     model_metadata_path: Path | None = Field(
@@ -75,6 +80,13 @@ class Settings(BaseSettings):
     rag_enabled: bool = Field(default=False, validation_alias="RAG_ENABLED")
     database_url: SecretStr = Field(
         default=SecretStr(""), validation_alias="DATABASE_URL", repr=False
+    )
+    database_connect_deadline_seconds: float = Field(
+        default=8,
+        ge=2,
+        le=10,
+        allow_inf_nan=False,
+        validation_alias="DATABASE_CONNECT_DEADLINE_SECONDS",
     )
     gemini_api_key: SecretStr = Field(
         default=SecretStr(""), validation_alias="GEMINI_API_KEY", repr=False
@@ -190,7 +202,7 @@ class Settings(BaseSettings):
         except ValueError:
             raise ValueError("HOST must be an IP address or localhost") from None
 
-    @field_validator("ai_service_token")
+    @field_validator("ai_service_token", "operations_token")
     @classmethod
     def validate_token(cls, value: SecretStr) -> SecretStr:
         token = value.get_secret_value()
@@ -210,12 +222,33 @@ class Settings(BaseSettings):
         return self
 
 
+class _RuntimeSecrets(TypedDict, total=False):
+    database_url: SecretStr
+    ai_service_token: SecretStr
+    gemini_api_key: SecretStr
+    operations_token: SecretStr
+
+
 def load_settings(env_file: Path | None = SERVICE_ROOT / ".env") -> Settings:
     """OS environment overrides the service-local dotenv file; load once per app."""
     try:
-        settings = Settings(_env_file=env_file)
-    except (ValidationError, OSError, UnicodeError):
+        secrets = runtime_secrets()
+        values: _RuntimeSecrets = {}
+        if "DATABASE_URL" in secrets:
+            values["database_url"] = SecretStr(secrets["DATABASE_URL"])
+        if "AI_SERVICE_TOKEN" in secrets:
+            values["ai_service_token"] = SecretStr(secrets["AI_SERVICE_TOKEN"])
+        if "GEMINI_API_KEY" in secrets:
+            values["gemini_api_key"] = SecretStr(secrets["GEMINI_API_KEY"])
+        if "OPERATIONS_TOKEN" in secrets:
+            values["operations_token"] = SecretStr(secrets["OPERATIONS_TOKEN"])
+        settings = Settings(_env_file=env_file, **values)
+    except (ValidationError, OSError, UnicodeError, ValueError):
         raise ConfigurationError() from None
+    if settings.environment == "production" and (
+        not settings.operations_token or settings.operations_token == settings.ai_service_token
+    ):
+        raise ConfigurationError("Production requires an independent OPERATIONS_TOKEN.")
     if bool(settings.confidence_policy_path) != bool(settings.confidence_policy_sha256):
         raise ConfigurationError(
             "CONFIDENCE_POLICY_INVALID: configure both CONFIDENCE_POLICY_PATH and "

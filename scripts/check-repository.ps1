@@ -197,6 +197,8 @@ $templateKeys = @{
     'ml-training' = @('DATASET_PATH')
 }
 $templateKeys['backend'] += @('KNOWLEDGE_RATE_LIMIT_MAX', 'GENERATION_RATE_LIMIT_MAX', 'GENERATION_TIMEOUT_MS', 'CALCULATOR_RATE_LIMIT_MAX', 'ANALYTICS_RATE_LIMIT_MAX', 'KNOWLEDGE_INDEX_TIMEOUT_MS')
+$templateKeys['backend'] += @('REDIS_URL', 'REDIS_NAMESPACE', 'TRUST_PROXY', 'OPERATIONS_TOKEN', 'MAIZEDOCTOR_SECRETS_FILE', 'LOG_DIRECTORY')
+$templateKeys['ai-service'] += @('OPERATIONS_TOKEN', 'MAIZEDOCTOR_SECRETS_FILE', 'DATABASE_CONNECT_DEADLINE_SECONDS', 'LOG_DIRECTORY')
 $guardMigration = 'backend/prisma/migrations/20261012010000_knowledge_embedding_guard_scope/migration.sql'
 if (-not (Test-Path -LiteralPath (Join-Path $repositoryRoot $guardMigration) -PathType Leaf)) { throw 'Missing knowledge embedding guard migration.' }
 $templateKeys['ai-service'] += @('RAG_ENABLED', 'EMBEDDING_MODEL', 'EMBEDDING_VERSION', 'EMBEDDING_DIMENSIONS', 'EMBEDDING_TIMEOUT_SECONDS', 'RAG_CHUNK_CHARS', 'RAG_CHUNK_OVERLAP', 'RAG_MAX_CONCURRENCY')

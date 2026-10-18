@@ -1,0 +1,6 @@
+services:
+  api:
+    # One shared Redis admission namespace across both application replicas.
+    deploy: {replicas: 2}
+  ai:
+    environment: {DATABASE_CONNECT_DEADLINE_SECONDS: "8"}

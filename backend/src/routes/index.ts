@@ -1,4 +1,6 @@
 import { Router } from 'express';
+import { privacyRoutes } from '../modules/privacy/privacy.routes.js';
+import type { PrivacyService } from '../modules/privacy/privacy.service.js';
 import { mounts } from '../contracts/openapi.js';
 import { specificationRoutes } from '../modules/calculators/model-specification.routes.js';
 import { productRoutes } from '../modules/fertilizer/catalogue.routes.js';
@@ -60,6 +62,7 @@ export function apiRoutes(
   referenceService: ReferenceService,
   specificationService: SpecificationService,
   productService: ProductService,
+  privacyService: PrivacyService,
 ): Router {
   const router = Router();
   const mount = (path: string, child: Router) => {
@@ -85,5 +88,6 @@ export function apiRoutes(
   router.use(referenceRoutes(authService, referenceService, readImage));
   router.use(specificationRoutes(authService, specificationService));
   router.use(productRoutes(authService, productService));
+  router.use(privacyRoutes(authService, privacyService));
   return router;
 }

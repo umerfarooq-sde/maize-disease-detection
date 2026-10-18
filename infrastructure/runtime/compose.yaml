@@ -1,0 +1,350 @@
+name: ${STACK_NAME:-maizedoctor}
+
+x-runtime: &runtime
+  restart: unless-stopped
+  init: true
+  read_only: true
+  cap_drop: [ALL]
+  security_opt: [no-new-privileges:true]
+  tmpfs: [/tmp:size=64m,mode=1777]
+  stop_grace_period: 20s
+  logging:
+    driver: local
+    options: {max-size: 10m, max-file: "3"}
+
+x-node-env: &node-env
+  NODE_ENV: production
+  HOST: 0.0.0.0
+  PORT: "3000"
+  CORS_ORIGINS: ${CORS_ORIGINS:?Set reviewed HTTPS browser origins}
+  CLOUDINARY_CLOUD_NAME: ${CLOUDINARY_CLOUD_NAME:?Set server-side Cloudinary cloud name}
+  AI_SERVICE_URL: http://ai:8000
+  AI_MODEL_VERSION: mobilenet-v3-small-v2-20261009
+  AI_PREPROCESSING_VERSION: 1.0.0
+  TRUST_PROXY: 172.29.250.0/28
+  REDIS_NAMESPACE: ${STACK_NAME:-maizedoctor}
+  MAIZEDOCTOR_SECRETS_FILE: /run/secrets/node_config
+  LOG_DIRECTORY: /logs
+
+services:
+  migrate:
+    build: {context: ../.., dockerfile: backend/Dockerfile, target: migration}
+    image: ${MIGRATION_IMAGE:-maizedoctor-migration:local}
+    environment: {MAIZEDOCTOR_SECRETS_FILE: /run/secrets/migration_config}
+    secrets: [migration_config]
+    volumes: [certificates:/certificates:ro]
+    networks: [data, operations_egress]
+    restart: "no"
+
+  api:
+    <<: *runtime
+    build: {context: ../.., dockerfile: backend/Dockerfile}
+    image: ${NODE_IMAGE:-maizedoctor-node:local}
+    environment: *node-env
+    secrets: [node_config]
+    volumes: [certificates:/certificates:ro, node_logs:/logs]
+    networks: [edge, service, data, monitoring, api_egress]
+    depends_on:
+      migrate: {condition: service_completed_successfully}
+      grants: {condition: service_completed_successfully}
+      register-model: {condition: service_completed_successfully}
+      ai: {condition: service_healthy}
+      redis: {condition: service_healthy}
+    mem_limit: 768m
+    cpus: 1.0
+    pids_limit: 128
+
+  grants:
+    image: ${OPERATIONS_IMAGE:-maizedoctor-operations:local}
+    command: [grant-runtime, --execute, --secrets, /run/secrets/migration_config]
+    secrets: [migration_config]
+    volumes: [certificates:/certificates:ro]
+    networks: [data, operations_egress]
+    depends_on: {migrate: {condition: service_completed_successfully}}
+    restart: "no"
+
+  register-model:
+    image: ${NODE_IMAGE:-maizedoctor-node:local}
+    command: [node, dist/cli/register-model.js, --metadata, /artifacts/model-artifact.json, --sha256, a831116fe1ff8b915543991412f4ab6b334736e8eaca376fab8db3b57e5b263d]
+    environment:
+      NODE_ENV: production
+      MAIZEDOCTOR_SECRETS_FILE: /run/secrets/migration_config
+      AI_MODEL_VERSION: mobilenet-v3-small-v2-20261009
+      AI_PREPROCESSING_VERSION: 1.0.0
+    secrets: [migration_config]
+    volumes:
+      - ${MODEL_DIRECTORY}:/artifacts:ro
+      - certificates:/certificates:ro
+    networks: [data, operations_egress]
+    depends_on: {grants: {condition: service_completed_successfully}}
+    restart: "no"
+
+  curate:
+    image: ${AI_IMAGE:-maizedoctor-ai:local}
+    entrypoint: [python, -m, app.rag.cli]
+    command: [ingest, --corpus, /knowledge/maize-extension-20261012-v1.json, --review, /knowledge/maize-extension-20261012-v1.review.json]
+    environment:
+      ENVIRONMENT: production
+      INFERENCE_ENABLED: "false"
+      RAG_ENABLED: "true"
+      GENERATION_ENABLED: "false"
+      MAIZEDOCTOR_SECRETS_FILE: /run/secrets/curator_config
+      EMBEDDING_MODEL: ${EMBEDDING_MODEL}
+      EMBEDDING_VERSION: ${EMBEDDING_VERSION}
+      EMBEDDING_DIMENSIONS: ${EMBEDDING_DIMENSIONS:-768}
+    secrets: [curator_config]
+    volumes: ["../../backend/knowledge:/knowledge:ro", certificates:/certificates:ro]
+    networks: [data, ai_egress]
+    depends_on: {grants: {condition: service_completed_successfully}}
+    restart: "no"
+
+  ai:
+    <<: *runtime
+    build: {context: ../.., dockerfile: ai-service/Dockerfile}
+    image: ${AI_IMAGE:-maizedoctor-ai:local}
+    environment:
+      ENVIRONMENT: production
+      HOST: 0.0.0.0
+      PORT: "8000"
+      MAIZEDOCTOR_SECRETS_FILE: /run/secrets/ai_config
+      MODEL_PATH: /artifacts/epoch-008.pt
+      MODEL_METADATA_PATH: /artifacts/model-artifact.json
+      MODEL_METADATA_SHA256: a831116fe1ff8b915543991412f4ab6b334736e8eaca376fab8db3b57e5b263d
+      MODEL_VERSION: mobilenet-v3-small-v2-20261009
+      PREPROCESSING_VERSION: 1.0.0
+      CONFIDENCE_POLICY_PATH: ""
+      CONFIDENCE_POLICY_SHA256: ""
+      INFERENCE_THREADS: "2"
+      INFERENCE_MAX_CONCURRENCY: "1"
+      RAG_ENABLED: ${RAG_ENABLED:-true}
+      GENERATION_ENABLED: ${GENERATION_ENABLED:-true}
+      EMBEDDING_MODEL: ${EMBEDDING_MODEL:-}
+      EMBEDDING_VERSION: ${EMBEDDING_VERSION:-}
+      EMBEDDING_DIMENSIONS: ${EMBEDDING_DIMENSIONS:-768}
+      GEMINI_MODEL: ${GEMINI_MODEL:-}
+      GENERATION_CORPUS_PATH: /knowledge/maize-extension-20261012-v1.json
+      GENERATION_REVIEW_PATH: /knowledge/maize-extension-20261012-v1.review.json
+      LOG_DIRECTORY: /logs
+    secrets: [ai_config]
+    volumes:
+      - ${MODEL_DIRECTORY:?Set verified model directory}:/artifacts:ro
+      - ../../backend/knowledge:/knowledge:ro
+      - certificates:/certificates:ro
+      - ai_logs:/logs
+    networks: [service, data, monitoring, ai_egress]
+    depends_on: {curate: {condition: service_completed_successfully}}
+    mem_limit: 2g
+    cpus: 2.0
+    pids_limit: 128
+
+  redis:
+    <<: *runtime
+    image: redis:8.10.2-alpine
+    user: redis
+    command: [redis-server, /run/secrets/redis_config]
+    secrets: [redis_config]
+    volumes: [redis_data:/data]
+    networks: [service]
+    mem_limit: 192m
+    cpus: 0.5
+    healthcheck:
+      # NOAUTH proves socket readiness without placing credentials in argv.
+      test: [CMD-SHELL, "redis-cli ping 2>&1 | grep -Eq 'NOAUTH|PONG'"]
+      interval: 10s
+      timeout: 3s
+      retries: 3
+
+  cleanup:
+    <<: *runtime
+    image: ${NODE_IMAGE:-maizedoctor-node:local}
+    command: [node, dist/cli/cleanup-worker.js]
+    environment:
+      <<: *node-env
+      CLEANUP_INTERVAL_SECONDS: ${CLEANUP_INTERVAL_SECONDS:-300}
+      OPERATIONS_PORT: "9010"
+    secrets: [node_config]
+    volumes: [certificates:/certificates:ro, worker_logs:/logs]
+    networks: [service, data, monitoring, operations_egress]
+    depends_on:
+      api: {condition: service_healthy}
+    mem_limit: 512m
+    cpus: 0.5
+    healthcheck:
+      test: [CMD, node, dist/cli/readiness.js]
+      interval: 30s
+      timeout: 17s
+      retries: 3
+
+  backups:
+    <<: *runtime
+    build: {context: ../.., dockerfile: infrastructure/operations/Dockerfile}
+    image: ${OPERATIONS_IMAGE:-maizedoctor-operations:local}
+    entrypoint: [/opt/operations/bin/python, /operations/daemon.py]
+    command: [backup, --secrets, /run/secrets/backup_config, --token, /run/secrets/operations_token, --interval, "${BACKUP_INTERVAL_SECONDS:-86400}"]
+    secrets: [backup_config, backup_key, operations_token]
+    volumes:
+      - ${MODEL_DIRECTORY}:/artifacts:ro
+      - backup_data:/backups
+      - certificates:/certificates:ro
+      - ${PRIVACY_POLICY_FILE:-./privacy-policy.example.json}:/policy.json:ro
+    networks: [data, monitoring, operations_egress]
+    depends_on: {api: {condition: service_healthy}}
+    stop_grace_period: 660s
+    tmpfs: [/tmp:size=768m,mode=1777]
+    mem_limit: 1g
+    cpus: 0.5
+
+  alerts:
+    <<: *runtime
+    image: ${OPERATIONS_IMAGE:-maizedoctor-operations:local}
+    entrypoint: [/opt/operations/bin/python, /operations/daemon.py]
+    command: [alerts, --token, /run/secrets/operations_token, --output, /inbox]
+    secrets: [operations_token]
+    volumes: [alert_inbox:/inbox]
+    networks: [monitoring]
+    mem_limit: 128m
+    cpus: 0.25
+
+  privacy:
+    <<: *runtime
+    image: ${OPERATIONS_IMAGE:-maizedoctor-operations:local}
+    entrypoint: [/opt/operations/bin/python, /operations/privacy_worker.py]
+    command: [--policy, /policy.json, --secrets, /run/secrets/privacy_config, --interval, "${PRIVACY_INTERVAL_SECONDS:-300}"]
+    secrets: [privacy_config]
+    volumes:
+      - ${PRIVACY_POLICY_FILE:-./privacy-policy.example.json}:/policy.json:ro
+      - certificates:/certificates:ro
+    networks: [data, operations_egress]
+    depends_on: {api: {condition: service_healthy}}
+    stop_grace_period: 1800s
+    mem_limit: 192m
+    cpus: 0.5
+
+  edge:
+    <<: *runtime
+    image: caddy:2.11.7-alpine
+    cap_add: [NET_BIND_SERVICE]
+    environment:
+      API_HOST: ${API_HOST:?Set an owned domain or reserved local test hostname}
+      PUBLIC_HTTPS_ORIGIN: ${PUBLIC_HTTPS_ORIGIN:?Set the externally reachable HTTPS origin}
+    ports: ["${HTTP_BIND:-0.0.0.0}:80:80", "${HTTPS_BIND:-0.0.0.0}:443:443"]
+    volumes:
+      - ./Caddyfile:/etc/caddy/Caddyfile:ro
+      - ${TLS_CONFIGURATION:-./tls-production.caddy}:/etc/caddy/tls.caddy:ro
+      - caddy_data:/data
+      - caddy_config:/config
+    networks: [edge, edge_egress]
+    depends_on: {api: {condition: service_healthy}}
+    mem_limit: 256m
+    cpus: 0.5
+    healthcheck:
+      test: [CMD, wget, -q, --spider, http://127.0.0.1:9080/healthz]
+      interval: 30s
+      timeout: 3s
+      retries: 3
+
+  prometheus:
+    <<: *runtime
+    image: prom/prometheus:v3.15.0
+    command: [--config.file=/etc/prometheus/prometheus.yml, --storage.tsdb.retention.time=7d, --storage.tsdb.path=/prometheus]
+    volumes:
+      - ./monitoring/prometheus.yml:/etc/prometheus/prometheus.yml:ro
+      - ./monitoring/alerts.yml:/etc/prometheus/alerts.yml:ro
+      - prometheus_data:/prometheus
+    secrets: [operations_token]
+    networks: [monitoring]
+    mem_limit: 512m
+    cpus: 0.5
+
+  loki:
+    <<: *runtime
+    image: grafana/loki:3.7.8
+    command: [-config.file=/etc/loki/config.yml]
+    volumes: [./monitoring/loki.yml:/etc/loki/config.yml:ro, loki_data:/loki]
+    networks: [monitoring]
+    mem_limit: 384m
+    cpus: 0.5
+
+  alloy:
+    <<: *runtime
+    image: grafana/alloy:v1.20.1
+    # Read-only application log volumes; no Docker socket or host root mount.
+    user: "0:0"
+    command: [run, --storage.path=/var/lib/alloy, /etc/alloy/config.alloy]
+    volumes:
+      - ./monitoring/config.alloy:/etc/alloy/config.alloy:ro
+      - node_logs:/logs/node:ro
+      - ai_logs:/logs/ai:ro
+      - worker_logs:/logs/worker:ro
+      - alloy_data:/var/lib/alloy
+    networks: [monitoring]
+    mem_limit: 192m
+    cpus: 0.5
+
+  grafana:
+    <<: *runtime
+    image: grafana/grafana:13.2.4
+    environment:
+      GF_SECURITY_ADMIN_PASSWORD__FILE: /run/secrets/grafana_password
+      GF_USERS_ALLOW_SIGN_UP: "false"
+      GF_AUTH_ANONYMOUS_ENABLED: "false"
+      GF_ANALYTICS_REPORTING_ENABLED: "false"
+      GF_ANALYTICS_CHECK_FOR_UPDATES: "false"
+    secrets: [grafana_password]
+    volumes:
+      - ./monitoring/grafana:/etc/grafana/provisioning:ro
+      - grafana_data:/var/lib/grafana
+    networks: [monitoring]
+    mem_limit: 256m
+    cpus: 0.5
+
+  alertmanager:
+    <<: *runtime
+    image: prom/alertmanager:v0.34.1
+    volumes:
+      - ./monitoring/alertmanager.yml:/etc/alertmanager/alertmanager.yml:ro
+      - alertmanager_data:/alertmanager
+    secrets: [operations_token]
+    networks: [monitoring]
+    mem_limit: 128m
+    cpus: 0.25
+
+networks:
+  edge:
+    internal: true
+    ipam: {config: [{subnet: 172.29.250.0/28}]}
+  service: {internal: true}
+  data: {internal: true}
+  monitoring: {internal: true}
+  edge_egress: {}
+  api_egress: {}
+  ai_egress: {}
+  operations_egress: {}
+
+volumes:
+  redis_data: {}
+  certificates: {}
+  caddy_data: {}
+  caddy_config: {}
+  prometheus_data: {}
+  alertmanager_data: {}
+  backup_data: {}
+  alert_inbox: {}
+  node_logs: {}
+  ai_logs: {}
+  worker_logs: {}
+  loki_data: {}
+  alloy_data: {}
+  grafana_data: {}
+
+secrets:
+  node_config: {file: "${SECRETS_DIRECTORY:?Set secret directory}/node.json"}
+  ai_config: {file: "${SECRETS_DIRECTORY}/ai.json"}
+  migration_config: {file: "${SECRETS_DIRECTORY}/migration.json"}
+  redis_config: {file: "${SECRETS_DIRECTORY}/redis.conf"}
+  operations_token: {file: "${SECRETS_DIRECTORY}/operations-token"}
+  backup_config: {file: "${SECRETS_DIRECTORY}/backup.json"}
+  backup_key: {file: "${SECRETS_DIRECTORY}/backup-key"}
+  grafana_password: {file: "${SECRETS_DIRECTORY}/grafana-password"}
+  privacy_config: {file: "${SECRETS_DIRECTORY}/privacy.json"}
+  curator_config: {file: "${SECRETS_DIRECTORY}/curator.json"}

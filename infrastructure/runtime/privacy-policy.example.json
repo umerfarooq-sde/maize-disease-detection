@@ -1,0 +1,13 @@
+{
+  "version": "unapproved-v1",
+  "approvalReference": "",
+  "erasureEnabled": false,
+  "retention": {
+    "expiredSessionsDays": null,
+    "operationalEventsDays": null,
+    "farmerScansDays": null,
+    "anonymousScansDays": null,
+    "backupDays": null,
+    "minimumBackupsToKeep": null
+  }
+}

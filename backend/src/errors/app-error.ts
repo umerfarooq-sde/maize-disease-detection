@@ -9,6 +9,10 @@ const errorDefinitions = {
   ACCOUNT_EXISTS: { status: 409, message: 'An account with this email already exists.' },
   INVALID_CREDENTIALS: { status: 401, message: 'Email or password is incorrect.' },
   RATE_LIMITED: { status: 429, message: 'Too many requests. Please try again later.' },
+  SERVICE_UNAVAILABLE: {
+    status: 503,
+    message: 'The service is temporarily unavailable. Please try again later.',
+  },
   PAYLOAD_TOO_LARGE: { status: 413, message: 'Request body is too large.' },
   UNSUPPORTED_MEDIA_TYPE: {
     status: 415,

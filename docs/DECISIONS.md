@@ -1,5 +1,31 @@
 # Engineering decisions
 
+## Phase 25 deployment engineering (2026-10-18)
+
+- Use a portable Compose reference: Caddy exposes HTTPS; Node, FastAPI, Redis,
+  database and operational services retain private service networks. Production
+  uses two Node replicas with shared Redis quotas and bounded concurrency leases.
+  No hosting provider or public release is selected or approved by these files.
+- Keep migration/schema ownership separate from Node, inference/RAG, controlled
+  curation, backup and privacy operators. Reviewed column-level grants permit
+  idempotent telemetry and document/account row fencing without granting arbitrary
+  knowledge edits or runtime database ownership. Existing managed roles are unchanged.
+- Mount allowlisted purpose-specific secret JSON; keep weights external and pinned
+  to the approved hashes, full-frame preprocessing and unconfigured threshold.
+- Bound production Python DNS and multi-address connection setup by one total
+  deadline. Preserve verified TLS, existing application query budgets and explicit
+  operational failure categories; do not infer a provider incident from timeouts.
+- Encrypt immutable logical backups and approved model files with AES-256-GCM.
+  Authenticate before restoring into a new owned database; never restore over the
+  source. Retention requires approved scope/age/count and successful restore evidence.
+- Keep deployment state and immutable configuration bundles outside CI checkout.
+  Protected manual publication/rollout uses digest manifests, explicit migration
+  review, a pre-rollout backup and a host lock. Rollback does not reverse DDL or
+  re-ingest an older knowledge corpus.
+- Implement owner-bound account erasure requests and operator recovery tooling,
+  but leave erasure and every retention scope disabled until human policy approval.
+  An API request is a request for review, not permission for immediate deletion.
+
 ## Phase 24.6 implementation decisions (2026-10-17)
 
 - Preserve the approved null confidence policy; repairing an optional dotenv pair

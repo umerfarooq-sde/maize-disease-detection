@@ -10,6 +10,23 @@ const signingKeys = {
 };
 const database = { DATABASE_URL: 'postgresql://localhost/maizedoctor', ...signingKeys };
 
+test('proxy trust refuses public or excessively broad networks and accepts explicit private edges', () => {
+  for (const value of [
+    '*',
+    '1',
+    '0.0.0.0/0',
+    '8.8.8.8/32',
+    '10.0.0.0/8',
+    '999.1.1.1/32',
+    '172.16.0.0/12',
+  ])
+    assert.throws(() => parseEnvironment({ ...database, TRUST_PROXY: value }), /TRUST_PROXY/);
+  assert.equal(
+    parseEnvironment({ ...database, TRUST_PROXY: '172.29.250.0/28' }).TRUST_PROXY,
+    '172.29.250.0/28',
+  );
+});
+
 test('production refuses unverified remote database TLS and insecure browser origins', () => {
   assert.throws(
     () =>

@@ -1,0 +1,6 @@
+runtime/secrets/
+runtime/config/
+runtime/artifacts/
+runtime/backups/
+runtime/certificates/
+runtime/evidence/

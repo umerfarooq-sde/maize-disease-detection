@@ -18,10 +18,12 @@ from psycopg.types.json import Jsonb
 
 from app.config.settings import Settings
 from app.rag.chunking import CHUNKING_VERSION, Chunk, canonical_content, content_hash
+from app.rag.connectivity import DatabaseConnector
 from app.rag.embeddings import EMBEDDING_API_VERSION
 from app.rag.schemas import Corpus, DocumentInput, RetrievalRequest, RetrievedChunk
 from app.utils.errors import AppError, ErrorCode
 from app.utils.logging import LOGGER_NAME, REQUEST_ID
+from app.utils.metrics import observe
 
 
 def database_failure_kind(error: psycopg.Error) -> str:
@@ -30,12 +32,14 @@ def database_failure_kind(error: psycopg.Error) -> str:
         return "SERVER_ERROR"
     if isinstance(error, psycopg.OperationalError):
         message = str(error).lower()
-        if "timeout" in message or "timed out" in message:
+        if "timeout" in message or "timed out" in message or "deadline" in message:
             return "CONNECTION_TIMEOUT"
         if "certificate" in message or "ssl" in message or "tls" in message:
             return "TLS_FAILURE"
         if "resolve" in message or "translate host" in message:
             return "DNS_FAILURE"
+        if "authentication" in message:
+            return "AUTHENTICATION_FAILURE"
         return "CONNECTION_FAILURE"
     return "DRIVER_ERROR"
 
@@ -59,6 +63,15 @@ class KnowledgeRepository:
             # insecure SSL alias or a machine-specific source path.
             parameters["sslrootcert"] = certifi.where()
         self.connection_url = urlunsplit(parsed._replace(query=urlencode(parameters)))
+        self.connector = (
+            DatabaseConnector(settings.database_connect_deadline_seconds)
+            if settings.environment == "production"
+            else None
+        )
+
+    def close(self) -> None:
+        if self.connector:
+            self.connector.close()
 
     @contextmanager
     def connection(self) -> Iterator[Connection[dict[str, object]]]:
@@ -67,10 +80,14 @@ class KnowledgeRepository:
         stage = "CONNECT"
         started = perf_counter()
         try:
-            with psycopg.connect(
-                self.connection_url,
-                connect_timeout=5,
-                row_factory=dict_row,
+            with (
+                self.connector.connect(self.connection_url)
+                if self.connector
+                else psycopg.connect(
+                    self.connection_url,
+                    connect_timeout=5,
+                    row_factory=dict_row,
+                )
             ) as connection:
                 stage = "TRANSACTION_SETUP"
                 if self.settings.environment == "production":
@@ -106,7 +123,13 @@ class KnowledgeRepository:
                 stage = "QUERY"
                 yield cast(Connection[dict[str, object]], connection)
                 stage = "COMMIT"
+            observe("commit", "success", perf_counter() - started)
         except psycopg.Error as error:
+            observe(
+                "connect" if stage == "CONNECT" else "commit" if stage == "COMMIT" else "query",
+                "failure",
+                perf_counter() - started,
+            )
             state = (
                 error.sqlstate
                 if error.sqlstate and re.fullmatch(r"[A-Z0-9]{5}", error.sqlstate)

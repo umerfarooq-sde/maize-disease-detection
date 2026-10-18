@@ -1,6 +1,8 @@
 import { config } from 'dotenv';
+import { isIP } from 'node:net';
 import { z } from 'zod';
-import { databaseConnectionUrl } from '../database/connection-url.js';
+import { databaseConnectionUrl, hasVerifiedDatabaseTransport } from '../database/connection-url.js';
+import { withSecretFile } from './secrets.js';
 
 const signingSecret = z
   .string()
@@ -36,6 +38,21 @@ const artifactVersion = z
   .string()
   .max(120)
   .regex(/^(?:[A-Za-z0-9][A-Za-z0-9._-]*)?$/);
+
+function trustedProxyRange(value: string): boolean {
+  const [address, prefix] = value.trim().split('/');
+  if (!address || isIP(address) !== 4 || !prefix || !/^\d{1,2}$/.test(prefix)) return false;
+  const bits = Number(prefix);
+  const octets = address.split('.').map(Number);
+  return (
+    bits >= 16 &&
+    bits <= 32 &&
+    (octets[0] === 10 ||
+      (octets[0] === 172 && (octets[1] ?? 0) >= 16 && (octets[1] ?? 0) <= 31) ||
+      (octets[0] === 192 && octets[1] === 168) ||
+      (octets[0] === 127 && bits === 32))
+  );
+}
 
 const environmentSchema = z
   .object({
@@ -84,6 +101,36 @@ const environmentSchema = z
       .default('info'),
     SHUTDOWN_TIMEOUT_MS: z.coerce.number().int().min(1000).max(60000).default(10000),
     RATE_LIMIT_MAX: z.coerce.number().int().min(1).max(10000).default(120),
+    REDIS_URL: z
+      .string()
+      .default('')
+      .refine((value) => {
+        if (!value) return true;
+        try {
+          const url = new URL(value);
+          return (
+            ['redis:', 'rediss:'].includes(url.protocol) &&
+            !!url.hostname &&
+            !url.hash &&
+            !url.search
+          );
+        } catch {
+          return false;
+        }
+      }, 'Must be a Redis connection URL.'),
+    REDIS_NAMESPACE: z
+      .string()
+      .regex(/^[a-z][a-z0-9_-]{0,39}$/)
+      .default('maizedoctor'),
+    TRUST_PROXY: z
+      .string()
+      .max(500)
+      .default('')
+      .refine(
+        (value) => value === '' || value.split(',').every(trustedProxyRange),
+        'Use explicit trusted IPv4 CIDRs, never a hop count or wildcard.',
+      ),
+    OPERATIONS_TOKEN: z.union([z.literal(''), signingSecret.max(256)]).default(''),
     AUTH_RATE_LIMIT_MAX: z.coerce.number().int().min(1).max(1000).default(10),
     SCAN_RATE_LIMIT_MAX: z.coerce.number().int().min(1).max(100).default(10),
     KNOWLEDGE_RATE_LIMIT_MAX: z.coerce.number().int().min(1).max(1000).default(20),
@@ -124,10 +171,7 @@ const environmentSchema = z
     (value) => {
       if (value.NODE_ENV !== 'production') return true;
       const url = databaseConnectionUrl(value.DATABASE_URL);
-      return (
-        ['localhost', '127.0.0.1', '[::1]'].includes(url.hostname) ||
-        (url.searchParams.get('sslmode') === 'verify-full' && !url.searchParams.has('ssl'))
-      );
+      return hasVerifiedDatabaseTransport(url);
     },
     {
       path: ['DATABASE_URL'],
@@ -186,8 +230,33 @@ export function parseEnvironment(input: Record<string, string | undefined>): Env
 }
 
 export function loadEnvironment(): Environment {
-  config({ quiet: true });
-  const environment = parseEnvironment(process.env);
+  if (!process.env['MAIZEDOCTOR_SECRETS_FILE']) config({ quiet: true });
+  const environment = parseEnvironment(withSecretFile(process.env));
+  if (
+    environment.NODE_ENV === 'production' &&
+    (!environment.REDIS_URL || !environment.OPERATIONS_TOKEN)
+  ) {
+    throw new Error('Production requires REDIS_URL and an independent OPERATIONS_TOKEN.');
+  }
+  if (
+    environment.OPERATIONS_TOKEN &&
+    [environment.JWT_SECRET, environment.JWT_REFRESH_SECRET, environment.AI_SERVICE_TOKEN].includes(
+      environment.OPERATIONS_TOKEN,
+    )
+  ) {
+    throw new Error('OPERATIONS_TOKEN must be independent from signing and AI credentials.');
+  }
+  if (environment.NODE_ENV === 'production') {
+    const redis = new URL(environment.REDIS_URL);
+    if (
+      !redis.password ||
+      (redis.protocol !== 'rediss:' && !(redis.protocol === 'redis:' && redis.hostname === 'redis'))
+    ) {
+      throw new Error(
+        'Production Redis requires authentication and private reference networking or verified TLS.',
+      );
+    }
+  }
   const [major, minor] = process.versions.node.split('.').map(Number);
   if (environment.NODE_ENV === 'production' && (major !== 24 || (minor ?? 0) < 22)) {
     throw new Error('Production requires Node.js 24.22.0 or a later maintained 24.x release.');

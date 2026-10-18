@@ -21,6 +21,9 @@ export const auditEntities = [
   'fertilizer',
   'model_version',
   'disease_image',
+  'privacy_request',
+  'privacy_scan_retention',
+  'privacy_retention_run',
 ] as const;
 const page = {
   limit: z.coerce.number().int().min(1).max(50).default(20),

@@ -1,0 +1,14 @@
+local.file_match "safe_logs" {
+  path_targets = [
+    { "__path__" = "/logs/node/node.jsonl", "service" = "node" },
+    { "__path__" = "/logs/ai/ai.jsonl", "service" = "ai" },
+    { "__path__" = "/logs/worker/node.jsonl", "service" = "cleanup" },
+  ]
+}
+loki.source.file "safe_logs" {
+  targets    = local.file_match.safe_logs.targets
+  forward_to = [loki.write.private.receiver]
+}
+loki.write "private" {
+  endpoint { url = "http://loki:3100/loki/api/v1/push" }
+}

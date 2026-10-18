@@ -1,0 +1,45 @@
+{
+    admin off
+    auto_https disable_redirects
+    skip_install_trust
+    servers {
+        timeouts {
+            read_header 10s
+            read_body 30s
+            idle 60s
+        }
+    }
+}
+
+http://{$API_HOST} {
+    redir {$PUBLIC_HTTPS_ORIGIN}{uri} 308
+}
+
+http://127.0.0.1:9080 {
+    bind 127.0.0.1
+    respond /healthz 200
+}
+
+{$API_HOST} {
+    # local override uses Caddy's internal CA; hosted config uses public ACME.
+    import /etc/caddy/tls.caddy
+    request_body {
+        max_size 6MB
+    }
+    header {
+        Strict-Transport-Security "max-age=31536000"
+        -Server
+    }
+    @private path /internal/* /docs* /openapi* /redoc*
+    respond @private 404
+    reverse_proxy api:3000 {
+        header_up -Forwarded
+        header_up X-Forwarded-For {remote_host}
+        header_up X-Forwarded-Proto {scheme}
+        transport http {
+            dial_timeout 3s
+            response_header_timeout 125s
+        }
+    }
+    # No URI/query/headers in access logs; application emits route-template JSON.
+}

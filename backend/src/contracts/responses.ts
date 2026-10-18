@@ -1,4 +1,5 @@
 import { z } from 'zod';
+import { privacyResponse } from '../modules/privacy/privacy.types.js';
 import { modelSpecification } from '../modules/calculators/model-specification.types.js';
 import { productInformation } from '../modules/fertilizer/catalogue.types.js';
 import { fertilizerProductInputSchema } from '../modules/fertilizer/fertilizer.validators.js';
@@ -408,5 +409,6 @@ export function responseContract(method: string, path: string): z.ZodType | null
       }),
       drift: z.literal('NOT_AVAILABLE_NO_GROUND_TRUTH'),
     });
+  if (path === '/profile/data-deletion') return privacyResponse;
   throw new Error(`Missing response contract: ${method} ${path}`);
 }

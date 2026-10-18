@@ -1,0 +1,27 @@
+name: Protected connected infrastructure verification
+on:
+  workflow_dispatch:
+    inputs:
+      revision:
+        description: Reviewed deployed source commit SHA
+        required: true
+permissions:
+  contents: read
+concurrency:
+  group: infrastructure-smoke-staging
+  cancel-in-progress: false
+jobs:
+  verify:
+    runs-on: [self-hosted, linux, maizedoctor-staging]
+    environment: staging
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09
+        with: {ref: '${{ inputs.revision }}', persist-credentials: false}
+      - name: Verify actual connected stack without creating or deleting domain fixtures
+        env:
+          DEPLOY_ENV_FILE: ${{ vars.DEPLOY_ENV_FILE }}
+          DEPLOY_STATE_DIRECTORY: ${{ vars.DEPLOY_STATE_DIRECTORY }}
+        run: |
+          set -euo pipefail
+          /opt/maizedoctor-operations/bin/python infrastructure/operations/verify_stack.py --environment-file "$DEPLOY_ENV_FILE" --state "$DEPLOY_STATE_DIRECTORY" --environment staging

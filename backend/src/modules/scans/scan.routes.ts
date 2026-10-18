@@ -148,9 +148,9 @@ export function scanRoutes(
   };
   router.post(
     '/',
-    requestRateLimit(environment.SCAN_RATE_LIMIT_MAX, 15 * 60_000),
     optionallyAuthenticate(auth),
     optionallyAuthorize('FARMER'),
+    requestRateLimit(environment.SCAN_RATE_LIMIT_MAX, 15 * 60_000),
     guard,
     multipart,
     createScanController(service),

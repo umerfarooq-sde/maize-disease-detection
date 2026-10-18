@@ -1,5 +1,6 @@
 import { type DestinationStream, type Logger, pino } from 'pino';
 import type { Environment } from './environment.js';
+import { safeLogFile } from '../infrastructure/safe-log.js';
 
 export function createLogger(
   environment: Pick<Environment, 'LOG_LEVEL'>,
@@ -34,6 +35,12 @@ export function createLogger(
         censor: '[REDACTED]',
       },
     },
-    destination,
+    destination ??
+      (process.env['LOG_DIRECTORY']
+        ? pino.multistream([
+            { stream: process.stdout },
+            { stream: safeLogFile(process.env['LOG_DIRECTORY']) },
+          ])
+        : undefined),
   );
 }

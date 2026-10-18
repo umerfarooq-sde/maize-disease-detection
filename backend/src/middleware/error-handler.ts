@@ -28,6 +28,10 @@ function normalizeError(error: unknown): AppError {
 export function errorHandler(logger: Logger): ErrorRequestHandler {
   return (error: unknown, _request, response, next) => {
     const applicationError = normalizeError(error);
+    const record = _request.app.locals.recordOperationalError as
+      | ((code: string) => void)
+      | undefined;
+    record?.(applicationError.code);
     if (applicationError.status >= 500) {
       // Raw dependency errors can contain connection URLs, queries or submitted values.
       logger.error(

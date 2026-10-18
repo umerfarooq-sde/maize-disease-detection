@@ -17,6 +17,7 @@ from typing import ParamSpec, TypeVar
 from uuid import uuid4
 
 from app.utils.errors import AppError
+from app.utils.metrics import observe
 
 CURRENT: ContextVar["OperationsRecorder | None"] = ContextVar("operational_recorder", default=None)
 
@@ -42,6 +43,7 @@ class OperationsRecorder:
                 self.sink(event)
             except Exception:
                 self.dropped += 1
+                observe("telemetry", "dropped")
                 logging.getLogger("maizedoctor.ai").warning("ai_telemetry_storage_failed")
             finally:
                 self.events.task_done()
@@ -84,9 +86,11 @@ class OperationsRecorder:
             "occurredAt": datetime.now(UTC),
         }
         try:
+            observe(operation.lower(), "failure" if error else "success", perf_counter() - started)
             self.events.put_nowait(event)
         except queue.Full:
             self.dropped += 1
+            observe("telemetry", "dropped")
             logging.getLogger("maizedoctor.ai").warning("ai_telemetry_capacity_exceeded")
 
 

@@ -159,6 +159,8 @@ model User {
   knowledgeDocuments KnowledgeDocument[]
   calculatorConfigs  CalculatorConfig[]
   authSessions       AuthSession[]
+  erasureRequest     PrivacyRequest?     @relation("ErasureSubject")
+  reviewedErasures   PrivacyRequest[]    @relation("ErasureReviewer")
 
   @@index([role, status, createdAt])
   @@map("users")
@@ -211,6 +213,25 @@ model AiOperation {
 
   @@index([occurredAt, scope, operation])
   @@map("ai_operations")
+}
+
+model PrivacyRequest {
+  id          String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  userId      String?   @unique @map("user_id") @db.Uuid
+  reviewerId  String?   @map("reviewer_id") @db.Uuid
+  status      String    @default("REQUESTED") @db.VarChar(24)
+  policyHash  String?   @map("policy_hash") @db.Char(64)
+  assets      Json      @default("[]") @db.JsonB
+  frozenAt    DateTime? @map("frozen_at") @db.Timestamptz(6)
+  completedAt DateTime? @map("completed_at") @db.Timestamptz(6)
+  createdAt   DateTime  @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt   DateTime  @default(now()) @updatedAt @map("updated_at") @db.Timestamptz(6)
+  user        User?     @relation("ErasureSubject", fields: [userId], references: [id], onDelete: SetNull, onUpdate: NoAction)
+  reviewer    User?     @relation("ErasureReviewer", fields: [reviewerId], references: [id], onDelete: SetNull, onUpdate: NoAction)
+
+  @@index([status, updatedAt])
+  @@index([reviewerId])
+  @@map("privacy_requests")
 }
 
 model Disease {

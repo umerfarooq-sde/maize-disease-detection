@@ -32,6 +32,7 @@ import 'data/repositories/scan_repository.dart';
 import 'data/datasources/backend_datasource.dart';
 import 'data/repositories/backend_repository.dart';
 import 'data/repositories/profile_repository.dart';
+import 'data/repositories/privacy_repository.dart';
 import 'data/repositories/admin_accounts_repository.dart';
 import 'data/repositories/private_image_repository.dart';
 import 'data/repositories/reference_media_repository.dart';
@@ -109,6 +110,7 @@ class _MainAppState extends State<MainApp> {
     providers: [
       Provider<AppConfig>.value(value: _config),
       Provider<ApiClient>.value(value: _api),
+      Provider<PrivacyRepository>(create: (_) => ApiPrivacyRepository(_api)),
       Provider<ProfileRepository>(
         create: (_) => ApiProfileRepository(
           _api,

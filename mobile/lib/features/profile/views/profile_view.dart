@@ -123,6 +123,12 @@ class ProfileView extends StatelessWidget {
           ),
           const SizedBox(height: AppSpacing.lg),
           TextButton.icon(
+            onPressed: () => context.push(AppRoutes.dataDeletion),
+            icon: const Icon(Icons.privacy_tip_outlined),
+            label: const Text('Your account data'),
+          ),
+          const SizedBox(height: AppSpacing.lg),
+          TextButton.icon(
             onPressed: () => context.push(AppRoutes.admin),
             icon: const Icon(Icons.admin_panel_settings_outlined),
             label: const Text('Administrator workspace'),

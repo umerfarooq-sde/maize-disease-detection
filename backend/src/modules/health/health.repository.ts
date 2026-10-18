@@ -1,11 +1,12 @@
 import { z } from 'zod';
 
 export interface HealthDatabase {
-  $queryRaw(query: TemplateStringsArray): Promise<unknown>;
+  $queryRaw(query: TemplateStringsArray, ...values: unknown[]): Promise<unknown>;
 }
 
 export interface HealthRepository {
   checkDatabase(): Promise<void>;
+  checkModelVersion?(version: string, preprocessing: string): Promise<void>;
 }
 
 export function createHealthRepository(
@@ -13,6 +14,17 @@ export function createHealthRepository(
   requireLeastPrivilege = false,
 ): HealthRepository {
   return {
+    async checkModelVersion(version, preprocessing) {
+      const rows =
+        await database.$queryRaw`SELECT version FROM model_versions WHERE version=${version} AND preprocessing_version=${preprocessing} AND status IN ('VALIDATED','PRODUCTION')`;
+      if (
+        !z
+          .array(z.object({ version: z.literal(version) }))
+          .length(1)
+          .safeParse(rows).success
+      )
+        throw new Error('Configured model registration is unavailable.');
+    },
     async checkDatabase() {
       await database.$queryRaw`SELECT 1`;
       if (requireLeastPrivilege) {

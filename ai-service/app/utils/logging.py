@@ -2,9 +2,11 @@
 
 import json
 import logging
+import os
 from contextvars import ContextVar
 from datetime import UTC, datetime
 from logging.config import dictConfig
+from pathlib import Path
 
 LOGGER_NAME = "maizedoctor.ai"
 REQUEST_ID: ContextVar[str | None] = ContextVar("request_id", default=None)
@@ -66,3 +68,16 @@ def configure_logging(level: str) -> None:
             },
         }
     )
+    directory = os.environ.get("LOG_DIRECTORY")
+    if directory:
+        from logging.handlers import RotatingFileHandler
+
+        Path(directory).mkdir(parents=True, exist_ok=True, mode=0o750)
+        handler = RotatingFileHandler(
+            Path(directory) / "ai.jsonl", maxBytes=10485760, backupCount=1
+        )
+        handler.setFormatter(JsonFormatter())
+        # Named loggers do not propagate; attach the same safe handler once.
+        logging.getLogger().addHandler(handler)
+        for name in (LOGGER_NAME, "uvicorn", "uvicorn.error"):
+            logging.getLogger(name).addHandler(handler)

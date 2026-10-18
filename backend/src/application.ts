@@ -36,6 +36,7 @@ export async function startApplication(
     await database.$connect();
     // Prisma adapter connections can be lazy; require a real round trip before listening.
     await repository.checkDatabase();
+    await (app.locals.startInfrastructure as () => Promise<void>)();
     await new Promise<void>((resolve, reject) => {
       server.once('error', reject);
       server.listen(environment.PORT, environment.HOST, () => {
@@ -44,6 +45,7 @@ export async function startApplication(
       });
     });
   } catch (error) {
+    await (app.locals.stopInfrastructure as () => Promise<void>)();
     try {
       await database.$disconnect();
     } catch {
@@ -95,6 +97,7 @@ export async function startApplication(
             await recovery;
             await (app.locals.flushOperationalEvents as () => Promise<void>)();
           } finally {
+            await (app.locals.stopInfrastructure as () => Promise<void>)();
             await database.$disconnect();
           }
         })();

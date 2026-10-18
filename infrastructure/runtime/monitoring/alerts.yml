@@ -1,0 +1,76 @@
+groups:
+  - name: maizedoctor
+    rules:
+      - alert: ServiceMetricsUnavailable
+        expr: up == 0
+        for: 2m
+        labels: {severity: critical}
+        annotations: {summary: "A private operational target cannot be scraped; check process/network/token before assuming zero traffic."}
+      - alert: DatabaseFailures
+        expr: increase(maizedoctor_database_failures_total[5m]) > 0
+        labels: {severity: warning}
+        annotations: {summary: "Node database acquisition or driver interruption; inspect safe lifecycle categories."}
+      - alert: AIDatabaseFailures
+        expr: increase(maizedoctor_ai_operations_total{stage=~"dns|connect|query|commit",outcome=~"failure|timeout"}[5m]) > 0
+        labels: {severity: warning}
+        annotations: {summary: "AI database lifecycle failure. Do not infer provider root cause from later success."}
+      - alert: TelemetryLoss
+        expr: increase(maizedoctor_ai_telemetry_dropped[5m]) > 0
+        labels: {severity: warning}
+        annotations: {summary: "Best-effort event loss; persisted observations do not represent all operations."}
+      - alert: CleanupFailure
+        expr: increase(maizedoctor_cleanup_runs_total{outcome="failure"}[10m]) > 0
+        labels: {severity: warning}
+        annotations: {summary: "Cleanup failed; retain journals and check shared lease, storage and DB. Never delete uncertain/current assets manually."}
+      - alert: APIErrorRate
+        expr: sum(rate(maizedoctor_http_requests_total{status=~"5.."}[5m])) / clamp_min(sum(rate(maizedoctor_http_requests_total[5m])), 0.01) > 0.1
+        for: 5m
+        labels: {severity: critical}
+        annotations: {summary: "Sustained server-error fraction above configured operational trigger; not an agricultural accuracy metric."}
+      - alert: ModelNotReady
+        expr: maizedoctor_ai_model_ready == 0
+        for: 1m
+        labels: {severity: critical}
+        annotations: {summary: "Approved classifier unavailable; verify pinned artifacts/configuration, never substitute or retrain automatically."}
+      - alert: BackupFailed
+        expr: increase(maizedoctor_backup_runs_total{outcome="failure"}[24h]) > 0
+        labels: {severity: critical}
+        annotations: {summary: "Encrypted backup failed; check privileges/key/disk and restore evidence. Never remove old backups to suppress this alert."}
+      - alert: BackupNotObserved
+        expr: absent(maizedoctor_backup_last_success_seconds)
+        for: 20m
+        labels: {severity: warning}
+        annotations: {summary: "No successful backup observation since worker startup. Existing archives are not proof of current backup health."}
+      - alert: RedisUnavailable
+        expr: maizedoctor_dependency_ready{dependency="redis"} == 0
+        for: 1m
+        labels: {severity: critical}
+        annotations: {summary: "Shared admission unavailable; expensive requests fail closed. Check private Redis and credential configuration."}
+      - alert: DatabasePoolSaturation
+        expr: maizedoctor_database_pool_connections{state="waiting"} > 0
+        for: 1m
+        labels: {severity: warning}
+        annotations: {summary: "Sustained Node checkout queue; inspect query/acquisition latency and provider limits before changing pool bounds."}
+      - alert: ContainerStopped
+        expr: maizedoctor_container_running == 0
+        for: 1m
+        labels: {severity: critical}
+        annotations: {summary: "Host observer reports a stopped application/operational container. Inspect private process logs."}
+      - alert: ContainerRestarting
+        expr: changes(maizedoctor_container_restarts[10m]) > 1
+        labels: {severity: warning}
+        annotations: {summary: "Observed repeated container restarts; distinguish OOM, configuration and dependency failure before attribution."}
+      - alert: HostObservationMissing
+        expr: absent(maizedoctor_container_running)
+        for: 5m
+        labels: {severity: warning}
+        annotations: {summary: "Private host observer not connected; container lifecycle is unknown, not healthy or zero."}
+      - alert: NodeTelemetryLoss
+        expr: increase(maizedoctor_node_telemetry_dropped[5m]) > 0
+        labels: {severity: warning}
+        annotations: {summary: "Node best-effort event loss observed; inspect bounded writer and database stages."}
+      - alert: OperationalDiskPressure
+        expr: maizedoctor_operational_storage_bytes{state="available"} / ignoring(state) maizedoctor_operational_storage_bytes{state="total"} < 0.1
+        for: 2m
+        labels: {severity: critical}
+        annotations: {summary: "Operational storage has less than ten percent free. Stop nonessential builds and inspect capacity; do not remove live assets or unreviewed backups."}

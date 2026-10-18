@@ -1,0 +1,10 @@
+{
+  "DATABASE_URL": "",
+  "JWT_SECRET": "",
+  "JWT_REFRESH_SECRET": "",
+  "AI_SERVICE_TOKEN": "",
+  "OPERATIONS_TOKEN": "",
+  "CLOUDINARY_API_KEY": "",
+  "CLOUDINARY_API_SECRET": "",
+  "REDIS_URL": ""
+}

@@ -17,6 +17,7 @@ from app import SERVICE_NAME, SERVICE_VERSION
 from app.api.middleware import RequestContextMiddleware
 from app.api.routes.generation import router as generation_router
 from app.api.routes.health import router as health_router
+from app.api.routes.operations import router as operations_router
 from app.api.routes.prediction import router as prediction_router
 from app.api.routes.retrieval import router as retrieval_router
 from app.config.settings import Settings, load_settings
@@ -208,6 +209,7 @@ def create_app(
     install_exception_handlers(app)
     app.add_middleware(RequestContextMiddleware)
     app.include_router(health_router)
+    app.include_router(operations_router)
     app.include_router(prediction_router)
     app.include_router(retrieval_router)
     from app.api.routes.knowledge_management import router as knowledge_management_router

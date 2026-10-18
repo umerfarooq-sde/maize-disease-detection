@@ -23,3 +23,10 @@ export function databaseConnectionUrl(connectionString = process.env['DATABASE_U
   }
   return url;
 }
+
+export function hasVerifiedDatabaseTransport(url: URL): boolean {
+  return (
+    ['localhost', '127.0.0.1', '[::1]'].includes(url.hostname) ||
+    (url.searchParams.get('sslmode') === 'verify-full' && !url.searchParams.has('ssl'))
+  );
+}

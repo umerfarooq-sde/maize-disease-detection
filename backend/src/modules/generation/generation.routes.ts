@@ -37,9 +37,9 @@ export function generationRoutes(
   router.post(
     '/scans/:scanId/explanation',
     noStore,
-    limit,
     optionallyAuthenticate(auth),
     optionallyAuthorize('FARMER'),
+    limit,
     jsonOnly,
     withRequestSchema(explanationRequest, (request, response, next) => {
       const parsed = explanationRequest.safeParse({

@@ -7,6 +7,7 @@ abstract final class AppRoutes {
   static const auth = '/profile/sign-in';
   static const register = '/profile/register';
   static const editProfile = '/profile/edit';
+  static const dataDeletion = '/profile/data-deletion';
   static const adminFarmers = '/admin/farmers';
   static const adminAudit = '/admin/audit';
   static const history = '/profile/history';

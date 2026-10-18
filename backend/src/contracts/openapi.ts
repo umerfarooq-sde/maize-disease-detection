@@ -140,6 +140,7 @@ export function generateOpenApi(router: Router) {
       (method !== 'get' &&
         (path === '/profile' ||
           path === '/scans' ||
+          path === '/profile/data-deletion' ||
           path.startsWith('/auth/') ||
           path.startsWith('/admin/disease-images')));
     if (intent)

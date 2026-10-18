@@ -1,0 +1,13 @@
+route:
+  receiver: operator-webhook
+  group_by: [alertname, job]
+  group_wait: 30s
+  group_interval: 5m
+  repeat_interval: 4h
+receivers:
+  - name: operator-webhook
+    webhook_configs:
+      - url: http://alerts:9030/events
+        send_resolved: true
+        http_config:
+          authorization: {credentials_file: /run/secrets/operations_token}

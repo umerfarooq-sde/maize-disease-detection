@@ -1,0 +1,5 @@
+services:
+  api:
+    deploy: {replicas: 1}
+  ai:
+    environment: {DATABASE_CONNECT_DEADLINE_SECONDS: "8"}

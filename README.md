@@ -5,6 +5,16 @@ with administrative tools for maintaining knowledge and monitoring the system.
 
 ## Current status
 
+Phase 25 deployment and release engineering is in verification. The implementation
+includes private container topology, shared quotas, scheduled cleanup, encrypted
+restore-tested backups, least-privilege roles, operational monitoring, protected
+release workflows and Android release configuration. Container execution and
+hosted deployment have **not** been verified on this Windows host. Current full
+E2E evidence includes a database timeout failure; it is not a passing deployment.
+See [Phase 25 implementation, evidence and operator commands](docs/phase-25-deployment-release-engineering.md).
+Phase 26 and public release have not started. The following entries are historical
+handoffs and do not supersede this current status.
+
 Phase 24.7 final closeout is **COMPLETE WITH DOCUMENTED RELIABILITY RISK —
 READY FOR PHASE 25 ENGINEERING**. Preserved full normal verification21/0/0,
 independent4/0/0 and final focused reliability4/0/0 pass. No current reproducible
