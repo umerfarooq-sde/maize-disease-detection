@@ -8,12 +8,29 @@ import subprocess
 from pathlib import Path
 from urllib.parse import quote, urlencode
 
-from backup import verify_artifacts
-from dotenv import dotenv_values
-from roles import ROLES
+
+def redis_configuration(namespace: str, password: str) -> str:
+    import re
+
+    if not re.fullmatch(r"[a-z][a-z0-9_-]{0,39}", namespace) or not re.fullmatch(
+        r"[A-Za-z0-9_-]{43,}", password
+    ):
+        raise ValueError("Invalid Redis namespace or generated password")
+    return (
+        "bind 0.0.0.0\nprotected-mode yes\nport 6379\ndir /data\n"
+        "appendonly yes\nappendfsync everysec\nmaxmemory 128mb\n"
+        "maxmemory-policy noeviction\nuser default off\n"
+        f"user quota on >{password} ~{{{namespace}}}:* "
+        "+ping +hello +auth +client|setinfo +client|setname +eval +get +set "
+        "+incr +pexpire +pttl +time +zremrangebyscore +zcard +zadd +zrem +del\n"
+    )
 
 
 def prepare_local(root: Path) -> dict:
+    from backup import verify_artifacts
+    from dotenv import dotenv_values
+    from roles import ROLES
+
     runtime = root / "infrastructure/runtime"
     directory = runtime / "secrets"
     if directory.exists():
@@ -131,12 +148,7 @@ def prepare_local(root: Path) -> dict:
     write("grafana-password", secrets.token_urlsafe(32))
     write(
         "redis.conf",
-        "bind 0.0.0.0\nprotected-mode yes\nport 6379\ndir /data\n"
-        "appendonly yes\nappendfsync everysec\nmaxmemory 128mb\n"
-        "maxmemory-policy noeviction\nuser default off\n"
-        f"user quota on >{redis_password} ~{{{namespace}}}:* "
-        "+ping +hello +auth +client|setinfo +client|setname +eval +get +set "
-        "+incr +pexpire +pttl +time +zremrangebyscore +zcard +zadd +zrem +del\n",
+        redis_configuration(namespace, redis_password),
     )
     (directory / "backup-key").write_bytes(os.urandom(32))
     os.chmod(directory / "backup-key", 0o444)

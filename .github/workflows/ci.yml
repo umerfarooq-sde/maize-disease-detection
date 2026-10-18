@@ -159,3 +159,5 @@ jobs:
           test "$code" -ne 0
       - name: Runtime stack verification requirement
         run: echo 'Full production-like stack requires the protected infrastructure-smoke workflow with approved private artifacts and server provider configuration. This CI job does not claim that verification.'
+      - name: Real monitoring component integration (no model or external providers)
+        run: python infrastructure/operations/verify_monitoring.py

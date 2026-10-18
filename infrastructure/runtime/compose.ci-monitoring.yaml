@@ -1,0 +1,26 @@
+# Disposable hosted-CI component test only. Never a production override.
+# No model/provider credentials: verify actual Node logs/metrics and monitoring.
+services:
+  component-db:
+    image: pgvector/pgvector:0.8.7-pg18-bookworm
+    environment:
+      POSTGRES_DB: monitoring_ci
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD_FILE: /run/secrets/component_password
+    secrets: [component_password]
+    networks: [data]
+    healthcheck:
+      test: [CMD, pg_isready, -U, postgres, -d, monitoring_ci]
+      interval: 2s
+      timeout: 3s
+      retries: 30
+  api:
+    environment:
+      NODE_ENV: test
+      CLOUDINARY_CLOUD_NAME: ""
+      AI_SERVICE_URL: ""
+      AI_MODEL_VERSION: ""
+      AI_PREPROCESSING_VERSION: ""
+      LOG_LEVEL: info
+secrets:
+  component_password: {file: "${SECRETS_DIRECTORY}/component-password"}
