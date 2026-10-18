@@ -42,6 +42,7 @@ def probe() -> None:
             except (URLError, TimeoutError, OSError, ValueError, KeyError):
                 pass
             if time.monotonic() >= until:
+                print(json.dumps({"check": name, "status": "FAIL"}), flush=True)
                 raise RuntimeError("Monitoring component deadline: " + name)
             time.sleep(2)
 
@@ -147,8 +148,13 @@ def host() -> None:
         os.chmod(directory, 0o700)
         namespace = "mdmonitor-" + secrets.token_hex(6)
         token, password, redis_password = (secrets.token_urlsafe(32) for _ in range(3))
+        sensitive = {token, password, redis_password, str(directory)}
 
         def write(name, value):
+            if isinstance(value, dict):
+                sensitive.update(item for item in value.values() if isinstance(item, str) and item)
+            elif value:
+                sensitive.add(value)
             target = directory / name
             target.write_text(json.dumps(value) if isinstance(value, dict) else value)
             target.chmod(0o444)
@@ -220,6 +226,32 @@ def host() -> None:
                         continue
                     if set(event) == {"check", "status"}:
                         print(json.dumps(event), flush=True)
+                # This project contains exclusively fresh CI fixture secrets.
+                # Redact every generated value before retaining bounded startup
+                # diagnostics; no source/provider environments are ever loaded.
+                logs = subprocess.run(
+                    [
+                        *compose,
+                        "logs",
+                        "--no-color",
+                        "--tail",
+                        "5",
+                        "component-db",
+                        "redis",
+                        "api",
+                        "alloy",
+                        "loki",
+                    ],
+                    env=env,
+                    cwd=root,
+                    capture_output=True,
+                    text=True,
+                    timeout=20,
+                )
+                diagnostic = result.stderr[-4000:] + logs.stdout[-6000:]
+                for value in sorted(sensitive, key=len, reverse=True):
+                    diagnostic = diagnostic.replace(value, "[REDACTED_FIXTURE]")
+                print(json.dumps({"stage": args[0], "sanitizedDiagnostic": diagnostic}), flush=True)
                 # Docker/config errors can contain environment values. Keep only
                 # the command stage; private fixture secrets never enter CI logs.
                 raise RuntimeError("Monitoring Docker stage failed: " + args[0])
