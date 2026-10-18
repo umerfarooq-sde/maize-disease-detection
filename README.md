@@ -14,7 +14,7 @@ and hosted deployment have **not** been verified. Latest normal full
 E2E `20261018T173013Z-6deb0e3f` is19 PASS/2 FAIL/0 selected skips, with clean
 fixture removal and preserved source counts. Management connection setup and
 Farmer Knowledge network failures remain acceptance failures; cause is not assumed.
-Hosted CI39169239488 at e4c42f5 passes all four jobs, including a real private
+Hosted CI39169960027 at bc42fb1 passes all four jobs, including a real private
 monitoring pipeline and fresh least-privilege SQL bootstrap, separately from this
 live evidence. No authorized Linux deployment host is available yet.
 See [Phase 25 implementation, evidence and operator commands](docs/phase-25-deployment-release-engineering.md).

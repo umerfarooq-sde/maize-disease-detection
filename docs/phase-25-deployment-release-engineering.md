@@ -1,8 +1,8 @@
 # Phase 25: deployment and release engineering
 
 Updated 2026-10-19 (Asia/Karachi). Baseline `5cdc775ca7f2b4b232b4141b17c7699efe593676`.
-Phase 25 closeout; Phase 26/public release have not started. Final full CI39169239488
-at e4c42f5 passes all four jobs. The final Windows database action uses the same
+Phase 25 closeout; Phase 26/public release have not started. Full CI39169960027
+at bc42fb1 passes all four jobs. The final Windows database action uses the same
 mounted-secret readiness CLI exercised by the image, not the legacy env-only probe;
 its15 offline plans and real model/preflight checks are verified separately.
 
@@ -107,11 +107,16 @@ shared78/0/0 in each environment, operators21/0/2 plus separate real SQL/role
 verification; all four images/tools and mobile399/0/14 plus unsigned build/provenance pass.
 CI39169239488 at e4c42f5 independently passes all four jobs with operators26/0/2,
 real empty-bootstrap SQL, monitoring8 checks, and15 PowerShell command plans.
+Final implementation CI39169960027 at bc42fb1 independently passes all four jobs,
+including the corrected Windows database action and automated Flutter OSV audit47/0.
 The normal mobile job now also runs the existing hosted-Pub OSV audit (47/0 locally).
 Protected image publication requires the latest completed successful ci.yml push
 run for the exact approved revision before registry login/build. Missing, running,
 failed or mismatched evidence rejects publication; human environment review is
 still required. Publication/deployment workflows are not executed by these checks.
+Read-only actual API checks accept green e4c42f5 and reject bc42fb1 while it was
+still running; four negative contracts reject missing/running/failed/mismatched
+evidence. bc42fb1 subsequently completed successfully. Eligibility is not approval.
 Ordinary CI was invoked by authorized pushes; publication, deployment and protected
 connected-infrastructure workflows have not been invoked.
 
@@ -290,8 +295,12 @@ hosted UI test. Linux uses the equivalent Python/Compose commands above.
    with USAGE WITH GRANT OPTION on provider-owned vector; app identities cannot
    own schema/create roles/databases. Runtime rollout only grants reviewed objects
    and never rotates credentials. Managed role/production changes need authorization.
-4. Configure protected GitHub environments `release-images`, `staging`, `production`
-   with reviewers/branch restrictions; dedicated trusted deploy runners must never
+4. GitHub environments `release-images`, `staging`, `production` are now created
+   and read-back verified: repository-owner reviewer required, only the `main`
+   branch allowed. Owner self-review is allowed; this is manual approval, not a
+   two-person review policy. No workflow/release approval or dispatch occurred,
+   and no environment secret changed. Choose an additional reviewer if independent
+   review becomes required. Dedicated trusted deploy runners must never
    run PR CI. Install the hash-locked operations venv at `/opt/maizedoctor-operations`.
    Set `DEPLOY_ENV_FILE`, `RELEASE_MANIFEST`, `DEPLOY_STATE_DIRECTORY` to private
    absolute host paths. State must be outside checkout/models/secrets.

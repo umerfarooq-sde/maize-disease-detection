@@ -12,7 +12,7 @@ production connection setup, private logs/metrics/dashboards/alerts, encrypted
 restore-tested backups, protected release automation, Android release/provenance,
 and policy-disabled privacy/retention operations with Farmer review-request UX.
 
-CI39169239488 at e4c42f5 passes all four jobs: backend371/0/0, SQL14/0/0,
+CI39169960027 at bc42fb1 passes all four jobs: backend371/0/0, SQL14/0/0,
 real cleanup worker1/0/0, isolation3/0/0; AI381/0/4 default SQL skips; shared78
 in each environment, operators26/0/2 plus separate real SQL/role verification;
 Flutter399/0/14 default live skips and unsigned AAB/provenance; all four images
@@ -21,6 +21,11 @@ pass, including actual file ingestion/Grafana/Alertmanager/private journal and
 owned-stack cleanup. No selected-model/provider container deployment is claimed.
 No protected publication/deploy invoked. Windows15 offline operation plans,
 actual model/offline preflight and missing-Docker behavior pass locally.
+Remote release-images/staging/production environments are created and read-back
+verified with owner review/main-only deployment. Owner self-review is allowed;
+no independent two-person review is claimed. No release approval/secrets change
+or privileged workflow dispatch occurred. Exact-revision successful CI is required
+before publication; the read-only gate rejects running/failed/mismatched evidence.
 
 Additional confirmed fixes: quoted tmpfs options prevent invalid mount paths;
 non-root Alloy with read groups can write state/read private logs; a genuinely

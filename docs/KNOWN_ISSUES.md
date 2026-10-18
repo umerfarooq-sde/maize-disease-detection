@@ -3,11 +3,13 @@
 ## Phase25 closeout - 2026-10-19
 
 **PARTIALLY COMPLETE. Phase26/public release NOT READY.** Four-job hosted CI at
-e4c42f5 (39169239488) passes real image builds, Redis across two OS processes,
+bc42fb1 (39169960027) passes real image builds, Redis across two OS processes,
 SQL/security, actual cleanup scheduler, Python and Flutter. Eight real monitoring
 component checks pass (logs/Grafana/Alertmanager included), then remove the owned
 project. No complete private selected-model/provider
 deployment or protected rollout is claimed. User has no authorized Docker host.
+Remote environment owner-review/main-branch gates are verified; self-review is
+allowed, and no release approval, secret change or privileged dispatch occurred.
 
 Current normal full20261018T173013Z-6deb0e3f is19 PASS/2 FAIL/0 selected skips:
 Management connection-setup timeout and Farmer Knowledge network error. Prior
