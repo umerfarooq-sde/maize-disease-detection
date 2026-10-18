@@ -5,13 +5,18 @@ with administrative tools for maintaining knowledge and monitoring the system.
 
 ## Current status
 
-Phase 25 deployment and release engineering is in verification. The implementation
+Phase 25 deployment and release engineering is **PARTIALLY COMPLETE**. The implementation
 includes private container topology, shared quotas, scheduled cleanup, encrypted
 restore-tested backups, least-privilege roles, operational monitoring, protected
 release workflows and Android release configuration. CI builds all four images
 and verifies shared quotas across two Node processes. The complete connected stack
-and hosted deployment have **not** been verified. Current full
-E2E evidence includes a database timeout failure; it is not a passing deployment.
+and hosted deployment have **not** been verified. Latest normal full
+E2E `20261018T173013Z-6deb0e3f` is19 PASS/2 FAIL/0 selected skips, with clean
+fixture removal and preserved source counts. Management connection setup and
+Farmer Knowledge network failures remain acceptance failures; cause is not assumed.
+Hosted CI39169239488 at e4c42f5 passes all four jobs, including a real private
+monitoring pipeline and fresh least-privilege SQL bootstrap, separately from this
+live evidence. No authorized Linux deployment host is available yet.
 See [Phase 25 implementation, evidence and operator commands](docs/phase-25-deployment-release-engineering.md).
 Phase 26 and public release have not started. The following entries are historical
 handoffs and do not supersede this current status.

@@ -1,46 +1,62 @@
-# Project state - Phase 25 verification in progress
+# Project state - Phase 25 closeout
 
-Updated 2026-10-18 (Asia/Karachi). Baseline 5cdc775; related engineering commits
-5328b93 and 9be2135 are pushed on main. Phase 26/public release have not started.
+Updated 2026-10-19 (Asia/Karachi). Baseline5cdc775; engineering commits5328b93,
+9be2135,03b9b03,50b604d,af11cac plus monitoring verification commits are on main.
+**PARTIALLY COMPLETE: connected deployment acceptance is not verified.** Phase26
+and public release have not started. No authorized Linux deployment host exists;
+Windows has no Docker Engine/installed WSL. Hosted CI is separate disposable proof.
 
-Implemented: private Caddy/Node/FastAPI/Redis Compose topology, purpose-specific
-mounted secrets and DB roles, shared quotas, scheduled cleanup, bounded production
-connection setup, private logs/metrics/dashboards/alerts, encrypted restore-tested
-backups, protected release automation, Android release/signing/provenance and
-policy-disabled account/retention tooling plus Farmer review-request UX.
+Implemented: private Caddy/Node/FastAPI/Redis topology, purpose-specific mounted
+secrets/six DB identities, atomic shared quotas, scheduled cleanup, bounded Python
+production connection setup, private logs/metrics/dashboards/alerts, encrypted
+restore-tested backups, protected release automation, Android release/provenance,
+and policy-disabled privacy/retention operations with Farmer review-request UX.
 
-Native SQL verifies 15 migrations, four separate least-privilege identities over
-verified TLS, Node privacy persistence/approval denial and two real SQL privacy/
-retention recovery cases. The native encrypted restore validates 24 tables including
-history, 15 migrations, 30 foreign keys and pinned artifacts; target removed and
-cluster stopped. Configured development migration15/status/drift pass with old
-public-table counts unchanged. No managed role or approved model was changed.
+CI39169239488 at e4c42f5 passes all four jobs: backend371/0/0, SQL14/0/0,
+real cleanup worker1/0/0, isolation3/0/0; AI381/0/4 default SQL skips; shared78
+in each environment, operators26/0/2 plus separate real SQL/role verification;
+Flutter399/0/14 default live skips and unsigned AAB/provenance; all four images
+build,16 alert rules and tools validate. Eight real monitoring component checks
+pass, including actual file ingestion/Grafana/Alertmanager/private journal and
+owned-stack cleanup. No selected-model/provider container deployment is claimed.
+No protected publication/deploy invoked. Windows15 offline operation plans,
+actual model/offline preflight and missing-Docker behavior pass locally.
 
-GitHub CI39147855418 builds all four images and validates Prometheus16 rules,
-Alertmanager/Alloy/Compose. Backend368/0/0 includes actual Redis quotas across two
-OS processes. Its Python/bootstrap and Flutter SDK-identification failures were
-repaired. CI39148294152 passes backend/Python/containers; mobile found an SDK font
-filename portability defect, now repaired with local15-test verification; repeat
-CI is pending. This is not a connected hosted deployment. User confirms no Linux
-Docker deployment host or self-hosted staging runner exists.
+Additional confirmed fixes: quoted tmpfs options prevent invalid mount paths;
+non-root Alloy with read groups can write state/read private logs; a genuinely
+empty pre-migration snapshot is verified by the separate backup identity; rollback
+uses retained environment configuration rather than an edited current file.
 
-Local components: backend369 pass/0 fail/1 Redis opt-in skip before the latest
-redaction regression; AI381/0/4 SQL skips; Flutter399/0/14 live skips; shared78 in
-each consumer environment plus12 parity cases. OpenAPI61 and analyzer/strict types
-pass. Related committed formatting passes; unrelated user environment-check.ts
-formatting remains preserved. Android ARM64 debug and unsigned APK/AAB pass;
-unsigned provenance explicitly records dirty workspace, never distribution approval.
+Normal E2E20261018T164512Z-b78fe039:18/3/0 (database/Knowledge/generation failures),
+clean fixture removal and source counts preserved. Focused20261018T172334Z-f507f073:
+four functional passes but teardown writer race, NOT clean lifecycle acceptance.
+Fixed only the fixture ownership boundary, preserving the service3s best-effort
+shutdown. Fresh full20261018T173013Z-6deb0e3f:19/2/0; Management records connection
+setup timeout, Farmer Knowledge network error remains without proven subtype.
+Server/writer stopped, telemetry pending0/dropped0, schema/cloud cleanup complete,
+source counts unchanged. Current full pass is NOT claimed. Historical21/21 stays
+historical. Fourteen read-only authenticated pg/Prisma lifecycle queries pass;
+verified client TLS is preserved. No exact provider/network cause is established.
 
-Current normal-config full E2E20261018T164512Z-b78fe039 is still running and has
-recorded database query/acquisition, Knowledge and generation failures. Do not call
-it a full pass or replace it with historical21/21. Final cleanup/evidence and a
-bounded reliability investigation remain pending. Historical cause is unproved.
-Retain all failures. No threshold, dataset, numerical agricultural rule, licensing,
-retention policy, signing identity or production approval is invented.
+Native real SQL verifies15 migrations/four least-privilege runtime identities,
+Node privacy ownership and two SQL erasure/expiry tests. Final encrypted isolated
+restore validates24 tables/15 migrations/30 FKs/artifacts, then removes owned target.
+Development migration15/drift pass; original table counts unchanged. Managed roles,
+approved checkpoint/metadata/class map/preprocessing, frozen splits/private envs
+and unrelated user edits remain intact. No training/final test-set scoring occurs.
 
-See docs/phase-25-deployment-release-engineering.md for implementation, executed
-proofs, local/staging/production commands, rollback and explicit external gates.
-Historical project handoffs and the user's original changes follow unchanged.
+OpenAPI61, strict types/analyzer/parity and committed formatting pass; unrelated
+user environment-check.ts formatting remains preserved. ARM64 debug and unsigned
+APK/AAB pass; no real signing/device/public API acceptance. npm/Pub audit0 known
+findings in covered dependencies; two existing restricted-use Torch advisories
+remain explicit, not patched/ignored. Retention/erasure stay disabled pending policy.
+
+Phase26 NOT READY. Public release remains gated by current integration acceptance,
+connected private host/DB/TLS/monitoring/recovery/rollout verification, signing and
+device acceptance, privacy/retention, licensed media, approved agronomic models/data,
+research/commercial licensing and confidence/field claims. No approval is invented.
+See docs/phase-25-deployment-release-engineering.md for exact evidence/runbooks.
+Historical handoffs and original user changes follow unchanged.
 
 ---
 

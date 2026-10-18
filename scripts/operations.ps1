@@ -42,7 +42,7 @@ switch ($Action) {
     'Status' { Add-Step 'docker' ($compose + @('ps')) }
     'Database' {
         Add-Step 'docker' ($compose + @('run', '--rm', '--no-deps', 'migrate', 'migrate', 'status'))
-        Add-Step 'docker' ($compose + @('exec', '-T', 'api', 'node', 'dist/database-check.js'))
+        Add-Step 'docker' ($compose + @('exec', '-T', 'api', 'node', 'dist/cli/readiness.js'))
     }
     'Migrate' { Add-Step 'docker' ($compose + @('run', '--rm', '--no-deps', 'migrate', 'migrate', 'deploy')) }
     'Model' { Add-Step $PythonExecutable @($operator, 'verify-model', '--artifacts', $ArtifactsDirectory) }

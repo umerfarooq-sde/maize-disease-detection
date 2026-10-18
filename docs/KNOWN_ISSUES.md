@@ -1,33 +1,42 @@
 # Known issues
 
-## Phase 25 verification - 2026-10-18
+## Phase25 closeout - 2026-10-19
 
-Phase25 engineering is implemented and under final verification; public release
-remains unauthorized. Normal E2E20261018T164512Z-b78fe039 currently includes failed
-database, Knowledge and generation categories; the run/cleanup are not yet final.
-A read-only configured-path probe will investigate without claiming provider cause.
+**PARTIALLY COMPLETE. Phase26/public release NOT READY.** Four-job hosted CI at
+e4c42f5 (39169239488) passes real image builds, Redis across two OS processes,
+SQL/security, actual cleanup scheduler, Python and Flutter. Eight real monitoring
+component checks pass (logs/Grafana/Alertmanager included), then remove the owned
+project. No complete private selected-model/provider
+deployment or protected rollout is claimed. User has no authorized Docker host.
 
-Hosted CI builds all four images and verifies actual Redis multiprocess quotas,
-Prisma/migrations, Node and Python checks. First CI failures were missing scoped
-codegen configuration and an untagged shallow SDK checkout; fixed. A subsequent
-Linux SDK-font filename issue is fixed locally, pending repeated CI. No connected
-model/provider/monitoring stack on an authorized deployment host is claimed.
-The user confirms no Docker host/self-hosted staging runner is available.
+Current normal full20261018T173013Z-6deb0e3f is19 PASS/2 FAIL/0 selected skips:
+Management connection-setup timeout and Farmer Knowledge network error. Prior
+20261018T164512Z-b78fe039 is18/3/0. Both preserve source counts and clean fixtures.
+Read-only configured comparison14/14 succeeds with verified client TLS; this does
+not establish why intermittent failures occurred or erase failed acceptance.
+Historical cause cannot be established from retained evidence.
 
-Reproduced/fixed SQL grants: telemetry SELECT(id), privacy row fences UPDATE(id),
-Admin draft-index document row fence UPDATE(id), with content writes still denied.
-Explicit Prisma ON UPDATE NO ACTION removes draft15 drift without rewriting SQL.
-Debug manifest merge is repaired without enabling HTTP in release. Safe central
-logs retain bounded raw/wrapped driver stages; deployment secrets are redacted.
+Focused four-check recovery exposed an owned Python-writer teardown race despite
+functional passes. The fixture now captures/joins its server and writer before
+DROP, retains the schema/fails if they cannot stop, and records pending/drops.
+Fresh full confirms both stopped, pending0/dropped0, no abandoned writer. Service
+best-effort3s boundary remains; telemetry is not lossless or a Farmer dependency.
 
-Disk-full backup/export attempts remain retained. Generated caches only were
-relocated with contents/original paths preserved. Successful native15 restore,
-unsigned APK/AAB export and ARM64 debug build now pass. Real assets/source DBs/
-weights remain untouched. Working-tree formatting still flags an unrelated user
-edit; clean indexed sources pass. Signing, real hosted TLS, device acceptance,
-policy/content/model-claim approvals and off-host backup/monitoring acceptance
-remain release gates. Erasure/expiration remain disabled; no real data was deleted.
-Historical connectivity attribution and historical reports below remain unchanged.
+Real42501 grant defects, migration15 drift, debug-manifest merge, SDK/tag/font
+portability, cleanup-test fixture configuration and release-provenance issues are
+repaired with retained failures. No validation was weakened. Two restricted-use
+Torch CPU advisories remain as documented in Phase24. Existing approved model/
+shared preprocessing/splits/private environments and unrelated edits are preserved.
+
+Required external verification: authorized private host/production DB identities,
+owned HTTPS, full selected-model/provider stack, monitoring/recovery/rollback and
+off-host backup acceptance, signed/device acceptance. Policy/licensed reference
+media/agronomic mathematical data and model-confidence/commercial-use approvals
+remain release gates. Erasure/expiration default disabled; no actual users/assets
+deleted. Source DB not reset, model not retrained/replaced. Working-tree formatting
+flags the preserved unrelated environment-check edit; committed sources pass CI.
+
+Historical reports follow unchanged; their old phase status is dated evidence.
 
 ## Final Phase24.7 reliability closeout — 2026-10-18
 

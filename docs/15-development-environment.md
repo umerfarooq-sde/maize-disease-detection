@@ -1,5 +1,13 @@
 # Development environment
 
+**Phase25 addendum:** [deployment tooling and commands](phase-25-deployment-release-engineering.md)
+describe native/CI verification separately from the not-yet-hosted stack. Mounted
+secret files disable dotenv fallback; public deployment templates and empty
+purpose-specific secret contracts live under `infrastructure/runtime`. Production
+requires independent operations/internal-service/JWT credentials, authenticated
+private Redis or verified external Redis TLS, and least-privilege database roles.
+Local ignored service/training environments and the dataset path are unchanged.
+
 **Phase 24:** use Node 24.22.0 (24.x) and CPython 3.11.17+ in the approved 3.11
 series. `. ./scripts/use-project-node.ps1` selects the ignored project-local
 Windows Node installation when present; otherwise install the pin on PATH.

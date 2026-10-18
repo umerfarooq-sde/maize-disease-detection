@@ -116,6 +116,8 @@ jobs:
         run: find .cache/flutter/bin/cache/artifacts/material_fonts -maxdepth 1 -type f -printf '%f\n'
       - run: flutter pub get --enforce-lockfile && dart format --output=none --set-exit-if-changed lib test integration_test && node ../scripts/run-flutter.mjs analyze && node ../scripts/run-flutter.mjs test
         working-directory: mobile
+      - name: Audit committed hosted Flutter dependency versions
+        run: python scripts/audit-flutter-dependencies.py --output .cache/flutter-dependency-audit.json
       - name: Unsigned verification AAB (never distributable)
         run: node ../scripts/run-flutter.mjs --release-signing build appbundle --release --flavor staging --build-number="$GITHUB_RUN_NUMBER" --dart-define=API_BASE_URL=https://verification.example.invalid/api/v1
         working-directory: mobile

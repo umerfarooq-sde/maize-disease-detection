@@ -1,5 +1,15 @@
 # Database operations
 
+**Phase 25 current addendum:** development now has15 applied migrations with no
+Prisma drift. Additive `20261018000000_privacy_requests` creates owner-bound
+review/journal state; it does not erase accounts or enable retention. Existing
+table counts and the previous14 migration bytes are preserved. Six deployment
+identities/grants, verified TLS, isolated restore procedures and operator SQL export
+are implemented and tested on disposable PG18/vector clusters; existing managed
+provider roles/credentials remain unchanged. See the
+[Phase25 runbook and actual evidence](phase-25-deployment-release-engineering.md).
+Earlier dated entries below are historical.
+
 **Phase 24:** schema/nine migration bytes are unchanged. Runtime SSL aliases now
 always normalize to verify-full. Production startup/retrieval rejects inherited
 admin/BYPASSRLS, ownership and database/schema CREATE permissions. Provision

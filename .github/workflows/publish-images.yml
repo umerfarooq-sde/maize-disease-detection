@@ -11,6 +11,7 @@ on:
         default: false
 permissions:
   contents: read
+  actions: read
   packages: write
 concurrency:
   group: release-images
@@ -29,6 +30,16 @@ jobs:
         run: test "$COMPATIBLE" = true && [[ "$REVISION" =~ ^[a-f0-9]{40}$ ]]
       - uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09
         with: {ref: '${{ inputs.revision }}', persist-credentials: false}
+      - name: Require completed successful CI for the exact approved revision
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          REVISION: ${{ inputs.revision }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          result=$(gh api --method GET "repos/$GITHUB_REPOSITORY/actions/workflows/ci.yml/runs" -f head_sha="$REVISION" -f event=push -f per_page=20 --jq '.workflow_runs[0] | [.head_sha,.status,.conclusion] | @tsv')
+          IFS=$'\t' read -r checked_sha status conclusion <<< "$result"
+          test "$checked_sha" = "$REVISION" && test "$status" = completed && test "$conclusion" = success
       - uses: docker/setup-buildx-action@8d2750c68a42422c14e847fe6c8ac0403b4cbd6f
       - uses: docker/login-action@c94ce9fb468520275223c153574b00df6fe4bcc9
         with: {registry: ghcr.io, username: '${{ github.actor }}', password: '${{ secrets.GITHUB_TOKEN }}'}

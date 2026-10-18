@@ -14,6 +14,7 @@ foreach ($action in $actions) {
     if ($action -eq 'Stop' -and $arguments -notcontains 'stop') { throw 'Stop must preserve volumes and configured grace periods.' }
     if ($action -eq 'Restore' -and $arguments -notcontains 'restore-drill') { throw 'Restore must retain the isolated-target guard.' }
     if ($action -eq 'Migrate' -and $arguments -notcontains 'deploy') { throw 'Migration must remain additive deploy.' }
+    if ($action -eq 'Database' -and ($arguments -contains 'dist/database-check.js' -or $arguments -notcontains 'dist/cli/readiness.js')) { throw 'Use the deployed mounted-secret readiness client, not the legacy environment-only probe.' }
     if ($action -eq 'Monitoring' -and ($arguments -contains '-e' -or -not $plan.steps[-1].inputText)) { throw 'Send probe source through stdin for Windows argument safety.' }
 }
 Write-Output 'PASS: PowerShell syntax and 15 offline operation plans; no live Docker/provider execution claimed.'
