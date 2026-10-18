@@ -1,5 +1,34 @@
 # Known issues
 
+## Final Phase24.7 reliability closeout — 2026-10-18
+
+**COMPLETE WITH DOCUMENTED RELIABILITY RISK; READY FOR PHASE25 ENGINEERING.**
+Public release NOT READY; Phase25/26 not started. This supersedes the earlier
+strict historical-cause blocking verdict below, not the historical failures.
+
+- Current full21/21 and repeat4/4 remain valid; final independent focused
+  `20261018T014159Z-55b5db42`4/0/0 passes SQL4/Knowledge1/remediation1, zero skips.
+  Configured Python16/16 and Node8/8 read-only lifecycle/recovery controls pass.
+- No new reproducible P0/P1 blocking application defect; three prior confirmed
+  aggregate/gallery/writer-ownership defects remain repaired. Runtime unchanged;
+  eight added regression tests verify bounded loss/recovery and stale-response fences.
+- Historical cause cannot be established from retained evidence. Original503/
+  heading timeout and intermittent CONNECT/COMMIT subtype/provider responsibility
+  remain uncertainties. Local driver control proves5s per-address can total15s
+  for3 attempts, not that this was the historical cause. COMMIT53023ms was a
+  cumulative context timer, not isolated server commit execution time.
+- Best-effort telemetry may lose events on storage/overflow/abrupt exit/3s Python
+  join deadline. Logs/counters warn; lost events are not persisted successes or
+  proof of zero operations. Not a required-operation blocker/lossless ledger.
+- Phase25 must validate production networking/database topology, least-privilege
+  roles, end-to-end deadlines, monitoring/alerts, shared quotas, cleanup, backups,
+  CI/CD/TLS and recovery. Existing privacy/device/licensing/agronomic/math/
+  model-dependent calculator implementation/confidence/research-commercial gates
+  remain before public release/full-product acceptance. No historical logs or
+  credentials requested. See [final evidence](phase-24-7-integration-stability.md).
+
+## Earlier handoffs (historical; superseded above)
+
 ## Phase 24.7 current handoff — 2026-10-18
 
 **PARTIALLY COMPLETE; Phase 25 NOT READY.** Final repaired-code full run

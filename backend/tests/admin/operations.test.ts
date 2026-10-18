@@ -127,6 +127,42 @@ test('aggregation failure is unavailable, never a fabricated zero', async () => 
   assert.equal(result.totals, null);
 });
 
+test('aggregate recovery distinguishes unavailable from a collected empty snapshot', async () => {
+  const f = fixture();
+  let unavailable = true;
+  f.repository.aggregate = async () => {
+    if (unavailable) throw new Error('private storage marker');
+    return { totals: [], daily: [] };
+  };
+  const failed = await f.service.summary('2026-10-01', '2026-10-02');
+  assert.equal(failed.status, 'UNAVAILABLE');
+  assert.equal(failed.totals, null);
+  assert.equal(failed.daily, null);
+  unavailable = false;
+  const recovered = await f.service.summary('2026-10-01', '2026-10-02');
+  assert.equal(recovered.status, 'COLLECTED');
+  assert.deepEqual(recovered.totals, []);
+  assert.deepEqual(recovered.daily, []);
+  await f.service.close();
+});
+
+test('ambiguous telemetry acknowledgement retries one identity and cannot double count', async () => {
+  const f = fixture();
+  const stored = new Set<string>();
+  const ids: string[] = [];
+  f.repository.record = async (event) => {
+    ids.push(event.id);
+    stored.add(event.id);
+    if (ids.length === 1) throw new Error('commit acknowledgement lost');
+  };
+  assert.equal(await f.service.measure('INFERENCE', async () => 42), 42);
+  await f.service.close();
+  assert.equal(ids.length, 2);
+  assert.equal(ids[0], ids[1]);
+  assert.equal(stored.size, 1);
+  assert.equal((await f.service.summary('2026-10-01', '2026-10-02')).collection.localDropped, 0);
+});
+
 test('aggregate degradation logs safe acquisition category without leaking dependency text', async () => {
   const f = fixture();
   const warnings: unknown[] = [];

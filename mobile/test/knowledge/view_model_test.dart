@@ -8,6 +8,46 @@ import 'helpers.dart';
 
 void main() {
   test(
+    'a failed catalogue is not an empty success and explicit retry recovers',
+    () async {
+      final repo = FakeKnowledgeRepository();
+      final model = KnowledgeViewModel(repo);
+      addTearDown(model.dispose);
+      await model.load();
+      expect(model.items.length, 4);
+      repo.failure = const AppException(AppErrorKind.server);
+      await model.load();
+      expect(model.loading, false);
+      expect(model.items, isEmpty);
+      expect(model.catalogueError?.kind, AppErrorKind.server);
+      repo.failure = null;
+      await model.load();
+      expect(model.loading, false);
+      expect(model.catalogueError, isNull);
+      expect(model.items.length, 4);
+    },
+  );
+
+  test('an old search cannot overwrite a newer completed search', () async {
+    final repo = FakeKnowledgeRepository()..pendingSearch = Completer();
+    final model = KnowledgeViewModel(repo);
+    addTearDown(model.dispose);
+    final oldResponse = repo.pendingSearch!;
+    final oldRequest = model.search('older maize question');
+    model.clearSearch();
+    repo.pendingSearch = null;
+    repo.emptySearch = true;
+    await model.search('newer maize question');
+    expect(model.result!.matches, isEmpty);
+    oldResponse.complete(KnowledgeSearchResult.fromJson(searchJson()));
+    await oldRequest;
+    expect(model.query, 'newer maize question');
+    expect(model.result!.matches, isEmpty);
+    expect(model.searching, false);
+    expect(model.searchError, isNull);
+  });
+
+  test(
     'catalogue loading suppresses duplicate fetch, supports refresh/empty and disposal',
     () async {
       final repo = FakeKnowledgeRepository()..pendingCatalogue = Completer();

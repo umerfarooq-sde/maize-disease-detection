@@ -104,3 +104,29 @@ workflow evidence into whole-FYP/release completion. Richer N/P/K/schedule and
 min/expected/potential outputs remain absent; approved mathematical models/data
 must precede their exact engine/UI implementation. Current evidence and all
 limits: [Phase24.7 report](phase-24-7-integration-stability.md).
+
+
+## Phase24.7 final closeout override — 2026-10-18
+
+Current application engineering is **COMPLETE WITH DOCUMENTED RELIABILITY RISK;
+READY FOR PHASE25 ENGINEERING**, under the user's final acceptance distinction.
+Public release NOT READY; no Phase25/26 started. Earlier dated results/verdicts
+are historical and unchanged. Full `20261017T213205Z-173ed748`21/0/0 and
+repeat `20261017T215921Z-b412d414`4/0/0 remain applicable; final focused
+`20261018T014159Z-55b5db42`4/0/0 verifies SQL4/Knowledge1/reviewed Farmer/Admin1,
+safe failure/recovery and cleanup. No application source changed; no reproducible
+blocking defect remains. Historical cause cannot be established from retained
+evidence; that uncertainty is an operational validation risk, not an infinite
+pre-infrastructure coding blocker. Telemetry remains explicitly bounded best
+effort. Domain mathematical models/data and their exact richer engine/UI, content,
+device/privacy/confidence/commercial release gates remain. Detailed counts,
+deadline semantics and limitations: [final assessment](phase-24-7-integration-stability.md).
+
+| Current requirement override | Final engineering classification | Release boundary |
+|---|---|---|
+| RAG01 | COMPLETE AND VERIFIED in existing curated scope | Runtime outage/topology/SLO monitoring remains Phase25 work; no uptime guarantee |
+| F15/A07, F16/A12 | COMPLETE WITH APPROVED EXTERNAL CONTENT PENDING at workflow level | No invented susceptibility/severity facts or unlicensed media |
+| N06 | COMPLETE AND VERIFIED for configured automated coverage | Physical-device/browser release acceptance is separate |
+
+These supersede current classifications, not historical run results. Full FYP
+agronomic forecast/recommendation and public-release completion are not claimed.

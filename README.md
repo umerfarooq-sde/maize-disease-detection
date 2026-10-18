@@ -5,11 +5,13 @@ with administrative tools for maintaining knowledge and monitoring the system.
 
 ## Current status
 
-Phase 24.7 is **PARTIALLY COMPLETE**. Repaired-code normal full verification
-passes 21/0/0 and an independent boundary repeat passes 4/0/0. Historical cause
-closure and intermittent connection attribution remain open; **Phase 25 NOT
-READY**. Read the [current report](docs/phase-24-7-integration-stability.md).
-Phase 25/26 have not started. The preceding handoff follows.
+Phase 24.7 final closeout is **COMPLETE WITH DOCUMENTED RELIABILITY RISK —
+READY FOR PHASE 25 ENGINEERING**. Preserved full normal verification21/0/0,
+independent4/0/0 and final focused reliability4/0/0 pass. No current reproducible
+blocking application defect remains in the checked scope; historical connection
+interruptions remain documented risks. **Public release is NOT READY.** Read the
+[final assessment](docs/phase-24-7-integration-stability.md). Phase25/26 have not
+started and need separate authorization. Earlier handoffs follow.
 
 Phase 24.6 implements the pre-deployment startup, avatar cleanup, operational
 monitoring, catalogue/media, independent product/source intake and generated

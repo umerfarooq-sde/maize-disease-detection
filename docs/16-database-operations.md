@@ -148,3 +148,26 @@ deployment policies, backup/retention automation, and production secrets are lat
 References: [Prisma connection configuration](https://docs.prisma.io/docs/orm/prisma-client/setup-and-configuration/databases-connections),
 [PostgreSQL CLI connection arguments](https://docs.prisma.io/docs/orm/v7/core-concepts/supported-databases/postgresql),
 [Neon pooled and direct connection guidance](https://github.com/neondatabase/website/blob/main/content/docs/guides/prisma.md).
+
+
+## Phase24.7 verified deadline and interruption contract
+
+Psycopg3.3.6 sync resolves addresses before sequential connection attempts;
+`connect_timeout=5` is per attempt, not a whole-request deadline. A local synthetic
+SSL wait proves1/3 attempts take5065/15044ms. Both configured endpoints currently
+resolve3 addresses; this is a possible mechanism, not historical outage attribution.
+DNS and server statement deadlines do not bound every client network wait.
+Node pg8.23.1 separately uses10s creation/checkout, max2/idle10s/query5s.
+No deadlines/pools/TLS settings changed for closeout. Production topology and
+end-to-end budgets must be verified during Phase25, without disabling certificate
+or privilege checks. Sanitized logs distinguish CONNECT/TRANSACTION_SETUP/QUERY/
+COMMIT; elapsed is cumulative from context entry, not isolated stage time.
+
+Read-only controls authenticate TLS, run SQL/commit, cancel with SQLSTATE57014,
+rollback/recover, idle/reconnect and close. A transport-only success cannot count
+as query success. A failed read may be explicitly repeated; an ambiguous mutation
+commit needs its existing idempotency/journal reconciliation. Node operational
+events retry one identity once; Python events may be dropped with safe logging.
+Operational monitoring is bounded best effort, not lossless accounting. Unknown/
+unavailable statistics must not be interpreted as zero. See the
+[final reliability assessment](phase-24-7-integration-stability.md).

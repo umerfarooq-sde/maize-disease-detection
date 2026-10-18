@@ -1,3 +1,40 @@
+# Project state — Phase 24.7 final closeout
+
+Updated 2026-10-18 (Asia/Karachi), continued from `6f7bb3c` on `main`.
+**COMPLETE WITH DOCUMENTED RELIABILITY RISK — READY FOR PHASE 25 ENGINEERING.**
+Public release is NOT READY. Phase25/26 have not started; separate authorization required.
+
+Preserved full normal run `20261017T213205Z-173ed748`21/0/0 and independent
+`20261017T215921Z-b412d414`4/0/0. Final closeout focused run
+`20261018T014159Z-55b5db42`4/0/0 (SQL4, Knowledge1, remediation1), owned
+assets/schema cleaned and22 public counts unchanged. No runtime source change;
+only eight regression cases in four test files and current evidence documentation.
+Focused checks Node15, AI61, FlutterKnowledge30/Admin8 all pass with zero skips;
+format/lint/strict types/mypy/analyze/OpenAPI59 pass. Earlier full component/build/
+Prisma/parity evidence remains dated, applicable evidence, not rerun counts.
+
+Configured Python read-only lifecycle16/16 and actual Node adapter8/8 pass,
+including TLS-authenticated SQL/commit, concurrency2, idle/reconnect, server
+cancellation/rollback/recovery and disconnect. Local synthetic5s-per-address
+control yields5.07s/15.04s for1/3 attempts. Current DNS gives3 addresses; this
+explains a possible duration mechanism, not historical cause attribution.
+Historical cause cannot be established from retained evidence.
+
+No current reproducible blocking application defect remains in checked scope.
+Telemetry failures are bounded/observable best-effort losses, isolated from farmer
+results; unavailable Admin aggregates remain null, not fake zeros. Old database/
+503/heading failures stay historical uncertainties and monitoring/topology risks.
+171 frozen files/model/configs/migrations and private/user changes are preserved.
+
+Phase25 must verify production topology/identities/monitoring/deadlines/backups/
+cleanup/CI/HTTPS/shared limits before release. Privacy/retention/provider policy,
+device/browser, licensed content, approved agronomic data/math and its exact richer
+calculator engine/UI, confidence/field/commercial restrictions remain release/
+full-product gates. No new credentials or historical provider logs required.
+Read the [final Phase24.7 assessment](phase-24-7-integration-stability.md).
+
+## Earlier handoffs (historical; superseded above)
+
 # Project state — Phase 24.7 current handoff
 
 Updated: 2026-10-18 (Asia/Karachi). Baseline `7c0332a`, branch `main`.

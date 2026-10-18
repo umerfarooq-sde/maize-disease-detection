@@ -1,3 +1,192 @@
+# Phase 24.7 final reliability closeout
+
+Updated 2026-10-18 (Asia/Karachi). Continued from `6f7bb3cff64996cc157f14b6dfe7b39ae81efb22`.
+
+**COMPLETE WITH DOCUMENTED RELIABILITY RISK — READY FOR PHASE 25 ENGINEERING.**
+This verdict applies to current application engineering under the user's final
+closeout criteria. Public release remains **NOT READY**. Phase 25/26 have not started.
+The previous stricter historical-cause acceptance verdict is retained below as
+historical evidence; missing old diagnostics no longer independently block
+infrastructure engineering. No historical failed result is relabeled a pass.
+
+## Accepted execution evidence
+
+- Full normal configured run `20261017T213205Z-173ed748`: **21 PASS/0 FAIL/0 selected skips**.
+- Independent repeat `20261017T215921Z-b412d414`: **4/0/0**, including preflight.
+- Final independent reliability run `20261018T014159Z-55b5db42`: **4/0/0**, including preflight;
+  real RAG SQL **4/0/0**, real Knowledge HTTP **1/0/0**, real Farmer/Admin
+  remediation **1/0/0**. Actual exit0; assets/schema removed;22 public counts unchanged.
+  It is a focused run, not a newly executed full21-category run.
+
+Command: select project Node using `scripts/use-project-node.ps1`, then
+`ai-service/.venv/Scripts/python.exe scripts/check-e2e.py --only rag-database knowledge predeployment-remediation`.
+No confidence override, provider bypass or assertion/deadline relaxation.
+The four supported labels and absent Healthy-topic abstention, source integrity,
+reviewed synthetic metadata, gallery, real operational records/Admin UI and
+owned cleanup are exercised. SQL RAG uses a synthetic embedder/real pgvector;
+Knowledge uses actual configured Google embeddings. Host widgets are not phones.
+
+No application source, dependencies, environment, database schema or model changed
+in this closeout. Four test files gained eight cases: three Python operational,
+one opt-in SQL recovery, two Node operational and two Flutter Knowledge cases.
+Therefore the already passing complete suite remains applicable to the identical
+runtime; a paid full-provider replay would add no change-specific coverage.
+
+## Lifecycle investigation: observations versus hypotheses
+
+| Stage | Retained failure evidence | Current bounded evidence / limit |
+|---|---|---|
+| DNS | No attributable historical DNS error | Both configured endpoints resolve3 IPv4 attempts. Resolver elapsed525–527ms. No endpoint/IP printed. |
+| TCP | Node terminated/timeouts and Python generic CONNECT failures lack lower-stage proof | Authenticated query success necessarily traverses TCP; no claim of isolated historical TCP cause. |
+| TLS | No retained certificate/handshake-specific failure | Actual Python client TLS true; Node existing verify-full configuration retained. Local synthetic SSL wait deliberately stalls. |
+| PostgreSQL authentication | No proven historical credential/role rejection | Ten configured Python connections authenticate and perform real read-only SQL; Node actual Prisma adapter also queries. |
+| Connection setup | Original generic context-entry error cannot distinguish connect/setup | Current real repository setup and scoped search_path pass; controlled setup failure remains safely mapped by existing unit tests. |
+| Transaction initialization | Reproduced cold Node P2028 short-acquisition defect repaired previously | Aggregate is one parameterized statement/snapshot, no1s interactive acquisition. No new reproduction. |
+| Query | Missing-schema42P01 and cancellation57014 are intentional controls | Real retrieval filters/versions, SELECT1, server cancellation, rollback and subsequent reads pass. These are expected faults, not outages. |
+| Commit | Historical log classified COMMIT/CONNECTION_FAILURE at cumulative53023ms | Current read-only transactions commit; cumulative diagnostic duration is not an isolated53s COMMIT execution measurement. Ambiguous mutation commit must not be blindly replayed. |
+| Shutdown | Historical best-effort worker deadline/storage warning during interruption | Owned Node writer drains before disconnect; Python3s join warns if incomplete. Controlled blocked worker is released/joined; all current fixtures cleaned. |
+
+Installed Psycopg3.3.6/binary libpq18.4 (`180004`) resolves hostname addresses before
+its sequential attempt loop. Each `waiting.wait_conn` receives `connect_timeout=5`.
+The synchronous DNS step is outside those per-attempt waits. Existing source:
+`psycopg/connection.py`, `_conninfo_attempts.py`, `conninfo.py` in the locked environment.
+A loopback-only SSL-request stall with synthetic credentials independently
+observes **one attempt5065ms**, **three attempts15044ms**, with five seconds per
+attempt. All sockets/worker closed. No actual DB authentication occurs in this
+synthetic timeout control; it is not presented as a real SQL check.
+This establishes a mechanism for roughly15s with three addresses. It does **not**
+establish that historical attempts all stalled at TLS or prove their address count.
+
+Node is separate: pg8.23.1/PrismaPg7.10.0 has a10s client-creation/checkout deadline,
+pool max2/idle10s, query5s; pg-pool bounds pending checkout and new-client creation.
+Its timer covers the client connection lifecycle rather than Psycopg's address loop.
+No evidence proves that Python and Node interruptions share one underlying cause.
+Server statement deadlines bound server execution, not every network wait or total
+end-to-end wall clock. Production topology/deadline validation remains necessary.
+
+**Historical cause cannot be established from retained evidence.** No provider
+incident/authentication/maintenance record is available in this workspace/account
+tooling, and the user does not have it. Later successful TLS/auth/SQL controls do
+not reconstruct earlier failures. Neither provider outage, local resource pressure,
+DNS failure nor exhaustion is asserted. Original Knowledge503 and Flutter heading
+timeout remain historically unattributed; their current workflows pass.
+
+## Current bounded reliability and recovery controls
+
+Python actual configured AI and direct endpoints: **16/16 checks PASS**, including
+two DNS observations,10 TLS-authenticated connections, read-only SQL/commit/close,
+max2 concurrent readers, warm reads,12s idle reuse, fresh reconnect and actual
+server cancellation57014 followed by rollback/recovery. Fresh authentication
+1320–1982ms; normal successful connect/query/commit/close2427–3183ms; warm reads
+952–971ms; idle reads918–973ms. These are development samples, not uptime/SLO proof.
+
+Node actual reusable Prisma client: **8/8 controls PASS**. Cold SELECT1 1833ms,
+warm228ms, concurrent2 readers1545ms, one-snapshot aggregate283ms, intentional
+server cancellation/rollback1295ms, recovered read220ms, idle12s reconnect1528ms,
+disconnect4ms. No global budget/pool changes, host overrides or automatic retry.
+
+Retry classification: a failed read may be explicitly requested again; RAG does
+not fabricate a fallback or indiscriminately reconnect. Commit acknowledgement
+loss for a mutation is uncertain and needs its existing journal/idempotency
+reconciliation. Node telemetry alone retries the same UUID once; SQL ON CONFLICT
+prevents double counting. Python storage failure drops/logs its event without retry.
+
+RAG fault injection raises at CONNECT against an otherwise real owned pgvector
+fixture. It returns RETRIEVAL_UNAVAILABLE, no chunks; restoring connectivity
+recovers the same current-version/source chunks, never archived version1.
+Existing four-stage diagnostic tests redact dependency text. Actual server
+cancellation checks rollback and connection reuse; cold/reconnect contexts close.
+
+Flutter: failed catalogue clears loading with an error, rather than a false empty
+success; explicit retry restores four entries. A delayed old search cannot
+overwrite a newer completed search. Existing API503/DTO error, retry, reviewed
+fields only when returned, long-text/disposal/session regressions pass.
+
+## Operational telemetry and Admin recovery
+
+The approved design is best effort, not a lossless billing/audit requirement.
+Original Admin monitoring A04 requires observed operations; it does not require
+every inference to wait for telemetry durability. Operational rows contain only
+attempt identity/scope/type/outcome/duration/category/time. No prompts/accounts,
+JWTs/images/provider credentials are recorded. Required audit trails are separate.
+
+Python tests prove one failed sink cannot alter a controlled model inference:
+two successful predictions, one genuinely stored event and one diagnosed loss.
+This is not reported as two persisted rows. Queue saturation retains128 pending
+plus1 active, drops4 of133 attempts visibly, and then drains129. A blocked sink
+exceeds the existing3s join, logs shutdown_incomplete and is released/joined by the
+fixture. At actual process exit unpersisted work can be lost; no lossless guarantee.
+The loss counter is process-local, Python loss diagnostics are logs, not an Admin
+global delivery counter. Production alert collection is a Phase25 responsibility.
+
+Node retains128 queued+1 active and at most one same-identity storage retry.
+Controlled lost commit acknowledgement yields two writes with one ID/one logical
+record; close drains the owned writer before disconnect. Storage/overflow losses
+are observable. Admin unavailable has null totals/daily; recovery to COLLECTED
+with empty arrays means no **recorded** events, not proof that zero operations
+occurred. UI explicitly warns about best-effort omissions and historical coverage.
+Actual recorded operations/aggregates and Admin/Farmer/guest permissions pass live.
+
+## Closeout checks and preservation
+
+| Current check | PASS / FAIL / SKIP |
+|---|---|
+| Focused normal E2E `20261018T014159Z-55b5db42` |4/0/0 categories; SQL4/0/0 + Knowledge1/0/0 + remediation1/0/0 |
+| Node operations/repository/safe diagnostics |15/0/0 |
+| AI operations/database diagnostics/inference |61/0/0; existing Starlette warning retained |
+| Flutter Knowledge repositories/VM/widgets |30/0/0 |
+| Flutter Admin predeployment DTO/VM/widgets |8/0/0 |
+| Node format/lint/strict types/OpenAPI |PASS,59 operations |
+| AI Ruff lint/format/mypy |PASS,73 formatted files checked/47 typed source files |
+| Flutter format/analyze |PASS, no analyzer issues |
+| Local stalled-driver timing |2 expected-timeout controls PASS,0 unexpected failures |
+| Configured Python read-only lifecycle |16/0/0 checks |
+| Configured Node adapter lifecycle |8/0/0 checks |
+
+Counts overlap; they are not summed. Historical full component counts356+2 Node,
+371 AI/3 default SQL skips,391 Flutter/14 default live skips remain dated evidence
+at6f7bb3c, not newly rerun totals. The added SQL recovery test is opt-in like the
+other3; this focused live invocation enables all4 with zero skips. Android build,
+Prisma14/no drift and shared78-per-environment/12 parity evidence remain applicable
+because their source/locks/schema/artifacts are unchanged. No new build or final
+test-set evaluation is claimed. Raw safe diagnostics are in ignored
+`.cache/phase247closeout/`; original run results/logs are retained unchanged.
+
+Final read-only catalog and frozen/hash checks verify all22 public counts unchanged,
+zero owned temporary schemas,14 finished migrations,34 checks/28 foreign keys/
+38 custom triggers/87 indexes, registry VALIDATED,171 frozen files unchanged.
+Model `mobilenet-v3-small-v2-20261009`, full-frame1.0.0/224 RGB/NCHW, class mapping
+Common_Rust0/Gray_Leaf_Spot1/Healthy2/Northern_Corn_Leaf_Blight3, T1/null threshold
+are untouched. Checkpoint and metadata hashes remain as recorded below.
+No real user/assets deleted, DB reset, raw dataset read, retraining, split change,
+final rescoring, privilege weakening, TLS relaxation or secret/config mutation.
+
+## Final readiness distinction
+
+No unresolved reproducible P0/P1 application blocker remains in the checked scope.
+No new P2 functionality defect was reproduced. Intermittent connectivity is a
+documented operational reliability risk; old unobservable causes are uncertainties,
+not automatically new application defects. Existing dependency restricted-path
+risk and P3 deprecation notices remain. This is not a guarantee of defect absence.
+
+**Phase25 engineering: READY WITH DOCUMENTED RISKS. Public release: NOT READY.**
+Production least-privilege identities, private FastAPI/database topology, verified
+TLS/HTTPS, shared limits, cleanup scheduling, backups/recovery, monitoring and
+alerts, CI/CD/signing must be implemented/verified in separately authorized Phase25.
+Retention/privacy/provider-processing approval, physical devices/browser, real
+licensed media/sourced metadata, agronomic inputs/mathematical models and exact
+model-dependent richer calculator engine/UI, confidence/field claims and research/
+commercial dataset limits still constrain release/full-product acceptance.
+No confidence threshold, agronomic value or content approval is fabricated.
+
+No credentials/provider logs/manual dataset labels are required to close this
+assessment. User action: authorize Phase25 separately if desired, and arrange
+documented content/policy/device/release approvals before public use.
+
+MAIZEDOCTOR's current application engineering is sufficiently verified to begin Phase 25 — Deployment, Production Infrastructure and Release Engineering. Historical connection interruptions remain documented for operational validation; this is not public-release approval.
+
+## Earlier stabilization handoff (historical; superseded above)
+
 # Phase 24.7 — integration stability and acceptance
 
 Updated 2026-10-18 (Asia/Karachi). Baseline `7c0332a`, branch `main`.

@@ -250,3 +250,36 @@ def test_missing_configured_schema_never_falls_back_to_public(
     ]
     assert records and records[-1].error_code == "DATABASE_42P01"
     assert records[-1].database_stage == "QUERY"
+
+
+def test_connection_failure_has_no_fallback_and_later_real_retrieval_recovers(
+    service: RetrievalService, monkeypatch: pytest.MonkeyPatch, caplog: pytest.LogCaptureFixture
+) -> None:
+    service.ingest(corpus(2))
+    request = RetrievalRequest(query="Synthetic symptoms", disease_label="Common_Rust")
+    expected = service.retrieve(request)
+    assert expected.chunks and all(chunk.document_version == 2 for chunk in expected.chunks)
+    real_connect = psycopg.connect
+
+    def disconnected(*args, **kwargs):
+        raise psycopg.OperationalError("controlled connect failure private-marker")
+
+    with monkeypatch.context() as fault:
+        fault.setattr("app.rag.repository.psycopg.connect", disconnected)
+        with caplog.at_level(logging.ERROR, logger=LOGGER_NAME), pytest.raises(AppError) as error:
+            service.retrieve(request)
+        assert error.value.code == ErrorCode.RETRIEVAL_UNAVAILABLE
+        assert psycopg.connect is not real_connect
+    assert psycopg.connect is real_connect
+    recovered = service.retrieve(request)
+    assert recovered.chunks == expected.chunks
+    assert all(chunk.source.publisher == "Test only" for chunk in recovered.chunks)
+    assert (
+        service.retrieve(request.model_copy(update={"document_version": 1})).status == "NO_MATCHES"
+    )
+    records = [
+        r for r in caplog.records if getattr(r, "event", None) == "retrieval_database_failed"
+    ]
+    assert records[-1].database_stage == "CONNECT"
+    assert records[-1].database_failure_kind == "CONNECTION_FAILURE"
+    assert "private-marker" not in caplog.text
