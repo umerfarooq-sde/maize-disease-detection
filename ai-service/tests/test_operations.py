@@ -88,10 +88,11 @@ def test_shutdown_deadline_is_reported_and_released_worker_can_finish(caplog) ->
         recorder.close()
         assert 2.8 <= perf_counter() - started < 5
         assert recorder.worker.is_alive()
+        assert not recorder.wait_stopped(0.01)
         assert "ai_telemetry_shutdown_incomplete" in caplog.text
     finally:
         release.set()
-        recorder.worker.join(2)
+        assert recorder.wait_stopped(2)
     assert not recorder.worker.is_alive()
     assert len(rows) == 1 and recorder.events.unfinished_tasks == 0
 

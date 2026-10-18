@@ -5,6 +5,7 @@ import { randomBytes, randomUUID } from 'node:crypto';
 import { once } from 'node:events';
 import test from 'node:test';
 import { createClient } from 'redis';
+import { parseEnvironment } from '../src/config/environment.js';
 import { createDatabaseClient, databaseConnectionUrl } from '../src/database/client.js';
 
 test('real cleanup worker invokes all three existing CLIs and releases its shared lease on shutdown', {
@@ -34,32 +35,35 @@ test('real cleanup worker invokes all three existing CLIs and releases its share
     await db.$disconnect();
   }
   const token = randomBytes(32).toString('base64url');
-  const namespace = `cleanup-test-${randomUUID()}`;
+  const namespace = `cleanup-${randomUUID().replaceAll('-', '').slice(0, 24)}`;
+  const environment = {
+    PATH: process.env['PATH'],
+    SystemRoot: process.env['SystemRoot'],
+    NODE_ENV: 'test',
+    DATABASE_URL: url,
+    REDIS_URL: redisUrl,
+    REDIS_NAMESPACE: namespace,
+    LOG_LEVEL: 'silent',
+    JWT_SECRET: randomBytes(32).toString('base64url'),
+    JWT_REFRESH_SECRET: randomBytes(32).toString('base64url'),
+    OPERATIONS_TOKEN: token,
+    CLEANUP_INTERVAL_SECONDS: '86400',
+    CLOUDINARY_CLOUD_NAME: 'synthetic-ci-never-contact',
+    CLOUDINARY_API_KEY: '000000000000000',
+    CLOUDINARY_API_SECRET: 'synthetic-ci-never-contact',
+  };
+  // Use the runtime validator, never weaken its contract for a test fixture.
+  parseEnvironment(environment);
   const worker = spawn(process.execPath, ['dist/cli/cleanup-worker.js'], {
     cwd: process.cwd(),
     stdio: 'ignore',
     windowsHide: true,
-    env: {
-      PATH: process.env['PATH'],
-      SystemRoot: process.env['SystemRoot'],
-      NODE_ENV: 'test',
-      DATABASE_URL: url,
-      REDIS_URL: redisUrl,
-      REDIS_NAMESPACE: namespace,
-      LOG_LEVEL: 'silent',
-      JWT_SECRET: randomBytes(32).toString('base64url'),
-      JWT_REFRESH_SECRET: randomBytes(32).toString('base64url'),
-      OPERATIONS_TOKEN: token,
-      CLEANUP_INTERVAL_SECONDS: '86400',
-      // Intentionally synthetic configuration; empty DB guarantees no provider
-      // operation is requested. This does NOT claim real Cloudinary verification.
-      CLOUDINARY_CLOUD_NAME: 'synthetic-ci-never-contact',
-      CLOUDINARY_API_KEY: 'synthetic',
-      CLOUDINARY_API_SECRET: 'synthetic-ci-never-contact',
-    },
+    // Synthetic configuration plus an empty DB; no real provider claim.
+    env: environment,
   });
   try {
     let complete = false;
+    let lastMetrics = '';
     const deadline = Date.now() + 45000;
     while (Date.now() < deadline && worker.exitCode === null) {
       try {
@@ -68,6 +72,7 @@ test('real cleanup worker invokes all three existing CLIs and releases its share
           signal: AbortSignal.timeout(1000),
         });
         const metrics = await result.text();
+        lastMetrics = metrics;
         complete =
           result.ok &&
           ['scan-uploads', 'profile-images', 'reference-images'].every((purpose) =>
@@ -81,7 +86,10 @@ test('real cleanup worker invokes all three existing CLIs and releases its share
       }
       await new Promise((resolve) => setTimeout(resolve, 100));
     }
-    assert.ok(complete, 'Real cleanup CLIs did not complete within the integration deadline');
+    assert.ok(
+      complete,
+      `Real cleanup CLIs did not complete; exit=${worker.exitCode}; ${lastMetrics}`,
+    );
     assert.equal((await fetch('http://127.0.0.1:9010/internal/metrics')).status, 404);
   } finally {
     const exited = once(worker, 'exit');

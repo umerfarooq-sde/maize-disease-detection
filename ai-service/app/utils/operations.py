@@ -50,9 +50,13 @@ class OperationsRecorder:
 
     def close(self) -> None:
         self.stopping.set()
-        self.worker.join(timeout=3)
-        if self.worker.is_alive():
+        if not self.wait_stopped(3):
             logging.getLogger("maizedoctor.ai").warning("ai_telemetry_shutdown_incomplete")
+
+    def wait_stopped(self, timeout: float) -> bool:
+        """Owned fixture/operator wait; service close keeps its three-second boundary."""
+        self.worker.join(timeout=timeout)
+        return not self.worker.is_alive()
 
     def record(
         self,

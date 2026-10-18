@@ -197,7 +197,7 @@ def main() -> int:
         "rawDatasetAccess": False,
         "realModelTrainingOrFinalTestRerun": False,
     }
-    server = thread = listener = None
+    server = thread = listener = application = owned_recorder = None
     created = False
 
     def save_proof():
@@ -299,9 +299,10 @@ def main() -> int:
             listener = socket.socket()
             listener.bind(("127.0.0.1", 0))
             listener.listen()
+            application = create_app(isolated)
             server = uvicorn.Server(
                 uvicorn.Config(
-                    create_app(isolated),
+                    application,
                     log_config=None,
                     log_level="error",
                     access_log=False,
@@ -314,6 +315,7 @@ def main() -> int:
                 time.sleep(0.1)
             if not server.started:
                 raise RuntimeError("Private complete AI service did not start")
+            owned_recorder = getattr(application.state, "operational_recorder", None)
             flutter = shutil.which("flutter")
             if flutter is None:
                 raise RuntimeError("Flutter is required")
@@ -396,10 +398,27 @@ def main() -> int:
             proof["setupOrCleanupErrorType"] = type(error).__name__
             print("FAIL: live harness setup/cleanup; private details omitted.", flush=True)
         finally:
+            # Capture before lifespan clears the reference. A best-effort service
+            # close is not proof that a writer can no longer touch this fixture.
+            recorder = (
+                owned_recorder
+                if owned_recorder is not None
+                else getattr(application.state, "operational_recorder", None)
+                if application is not None
+                else None
+            )
             if server is not None:
                 server.should_exit = True
             if thread is not None:
                 thread.join(timeout=10)
+            proof["aiServerStopped"] = thread is None or not thread.is_alive()
+            proof["aiTelemetryStopped"] = recorder is None or recorder.wait_stopped(30)
+            if recorder is not None:
+                proof["aiTelemetryDropped"] = recorder.dropped
+                proof["aiTelemetryPending"] = recorder.events.unfinished_tasks
+            resources_stopped = proof["aiServerStopped"] and proof["aiTelemetryStopped"]
+            if not resources_stopped:
+                print("FAIL: owned AI resources still active; fixture schema retained.", flush=True)
             if listener is not None:
                 listener.close()
             cloud_clean = True
@@ -450,7 +469,7 @@ def main() -> int:
                 with psycopg.connect(
                     repository.connection_url, connect_timeout=10, autocommit=True
                 ) as cleanup_connection:
-                    if created and cloud_clean:
+                    if created and cloud_clean and resources_stopped:
                         assert re.fullmatch(r"phase23_[a-f0-9]{32}", schema)
                         cleanup_connection.execute(
                             sql.SQL("DROP SCHEMA IF EXISTS {} CASCADE").format(
@@ -470,6 +489,7 @@ def main() -> int:
                 and all(r["status"] == "PASS" for r in results)
                 and proof["schemaRemoved"]
                 and proof["productionCountsUnchanged"]
+                and resources_stopped
                 and "setupOrCleanupErrorType" not in proof
                 and "cleanupErrorType" not in proof
             )
