@@ -22,5 +22,8 @@ services:
       AI_MODEL_VERSION: ""
       AI_PREPROCESSING_VERSION: ""
       LOG_LEVEL: info
+  alerts:
+    # Probe-only dashboard authentication; never mounted here in production.
+    secrets: [grafana_password]
 secrets:
   component_password: {file: "${SECRETS_DIRECTORY}/component-password"}

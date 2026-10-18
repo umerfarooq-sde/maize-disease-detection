@@ -40,6 +40,7 @@ def static_checks(docker_tools=False):
             "backup-key",
             "postgres-password",
             "redis.conf",
+            "component-password",
         ):
             (directory / file).write_text("synthetic-configuration-contract-only")
         environment = os.environ.copy()
@@ -64,6 +65,7 @@ def static_checks(docker_tools=False):
             [runtime / "compose.yaml", runtime / "compose.local.yaml"],
             [runtime / "compose.yaml", runtime / "compose.staging.yaml"],
             [runtime / "compose.yaml", runtime / "compose.production.yaml"],
+            [runtime / "compose.yaml", runtime / "compose.ci-monitoring.yaml"],
         ):
             result = subprocess.run(
                 command
@@ -105,6 +107,11 @@ def static_checks(docker_tools=False):
             assert services["cleanup"]["environment"]["OPERATIONS_PORT"] == "9010"
             if files[-1].name == "compose.production.yaml":
                 assert services["api"]["deploy"]["replicas"] == 2
+            if files[-1].name == "compose.ci-monitoring.yaml":
+                assert services["api"]["environment"]["NODE_ENV"] == "test"
+                assert "grafana_password" in {
+                    entry["source"] for entry in services["alerts"]["secrets"]
+                }
             assert services["ai"]["environment"]["CONFIDENCE_POLICY_PATH"] == ""
             assert services["ai"]["environment"]["CONFIDENCE_POLICY_SHA256"] == ""
             assert config["networks"]["service"]["internal"]
