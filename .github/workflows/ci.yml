@@ -144,6 +144,9 @@ jobs:
       - uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09
       - name: Validate workflow contracts
         run: docker run --rm --network none -v "$PWD:/repo:ro" -w /repo rhysd/actionlint:1.7.12 -oneline
+      - name: Verify PowerShell operation plans without contacting services
+        shell: pwsh
+        run: ./scripts/test-operations-entrypoint.ps1
       - run: docker build --target runtime -f backend/Dockerfile -t maizedoctor-node:ci .
       - run: docker build --target migration -f backend/Dockerfile -t maizedoctor-migration:ci .
       - run: docker build -f ai-service/Dockerfile -t maizedoctor-ai:ci .

@@ -99,6 +99,11 @@ def static_checks(docker_tools=False):
                 "loki",
             } <= services.keys()
             for name, service in services.items():
+                for mount in service.get("tmpfs", []):
+                    assert mount.startswith("/"), (
+                        "tmpfs options must not become separate YAML mounts"
+                    )
+                    assert ":size=" in mount and ",mode=1777" in mount
                 if name != "edge":
                     assert not service.get("ports"), f"{name} must not publish a host port"
                 assert not any(

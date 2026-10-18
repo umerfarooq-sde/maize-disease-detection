@@ -6,7 +6,7 @@ x-runtime: &runtime
   read_only: true
   cap_drop: [ALL]
   security_opt: [no-new-privileges:true]
-  tmpfs: [/tmp:size=64m,mode=1777]
+  tmpfs: ["/tmp:size=64m,mode=1777"]
   stop_grace_period: 20s
   logging:
     driver: local
@@ -190,7 +190,7 @@ services:
     networks: [data, monitoring, operations_egress]
     depends_on: {api: {condition: service_healthy}}
     stop_grace_period: 660s
-    tmpfs: [/tmp:size=768m,mode=1777]
+    tmpfs: ["/tmp:size=768m,mode=1777"]
     mem_limit: 1g
     cpus: 0.5
 
