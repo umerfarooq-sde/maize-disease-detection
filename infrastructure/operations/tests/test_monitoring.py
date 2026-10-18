@@ -1,5 +1,4 @@
 import pytest
-
 from preparation import redis_configuration
 from verify_monitoring import host
 
