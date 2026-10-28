@@ -212,6 +212,22 @@ takes precedence. Future inventory, preprocessing validation and training must c
 `load_dataset_path()` from the training configuration module rather than hardcode a
 machine path. See [ML configuration and commands](ml-training/README.md).
 
+## Run on physical Android phone
+
+Connect an unlocked USB-debugging-authorized Android phone with a data cable, then:
+
+```powershell
+.\run-on-phone.ps1 -Action Check
+.\run-on-phone.ps1 -DeviceId YOUR_ADB_SERIAL
+.\run-on-phone.ps1 -Action Status
+.\run-on-phone.ps1 -Action Stop
+```
+
+The root launcher uses existing native Node/FastAPI configuration, the approved model,
+ADB reverse and the staging Flutter debug app with hot reload. **Docker is not required.**
+Quit Flutter with `q` or Ctrl+C to stop owned services/rules; existing services are retained.
+See [setup, ownership/recovery and the manual acceptance checklist](docs/physical-android-acceptance.md).
+
 ## Repository checks
 
 From the repository root, using PowerShell and Git:

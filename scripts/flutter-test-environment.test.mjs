@@ -29,10 +29,16 @@ test('frontend subprocess sees only SDK essentials and explicit disposable fixtu
     Path: process.env.PATH,
     SYSTEMROOT: process.env.SYSTEMROOT,
     HOME: 'sdk-home',
+    ProgramFiles: 'sdk-program-files',
+    'ProgramFiles(x86)': 'sdk-program-files-x86',
+    ProgramW6432: 'sdk-program-files-64',
   });
   const environment = flutterTestEnvironment(source);
   assert.equal(environment.Path, process.env.PATH);
   assert.equal(environment.HOME, 'sdk-home');
+  assert.equal(environment.ProgramFiles, 'sdk-program-files');
+  assert.equal(environment['ProgramFiles(x86)'], 'sdk-program-files-x86');
+  assert.equal(environment.ProgramW6432, 'sdk-program-files-64');
   for (const name of secretNames) assert.equal(environment[name], undefined);
   const child = spawnSync(
     process.execPath,
