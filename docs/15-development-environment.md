@@ -59,6 +59,26 @@ real-image validation; no model or training run is introduced.
 Commands below run from the repository root. A process-only execution-policy override
 is used for scripts on systems that disable direct `.ps1` execution.
 
+### Start the local app
+
+With the backend and AI service environments installed, and the configured PostgreSQL
+database reachable, run this from the repository root:
+
+```powershell
+.\run-on-phone.ps1 -Action Check
+.\run-on-phone.ps1
+```
+
+The existing launcher targets an authorized physical USB Android phone. Use
+`-DeviceId <adb-serial>` when more than one phone is connected. It starts the AI
+service and backend when needed, then runs Flutter with `adb reverse` so the API
+can remain bound to loopback. PostgreSQL must already be reachable.
+Quitting or Ctrl+C cleans up only launcher-owned services and reverse rules;
+preexisting services are preserved. Diagnostic logs are retained under `.cache/phone/`.
+Run `-Action Status` to inspect state or `-Action Stop` to reconcile owned resources.
+See [physical Android acceptance](physical-android-acceptance.md) for prerequisites,
+limitations and device verification. There is no root `run.py` launcher.
+
 ### Backend
 
 ```powershell
