@@ -3,6 +3,15 @@
 AI-powered maize disease detection and agricultural decision support for farmers,
 with administrative tools for maintaining knowledge and monitoring the system.
 
+## Authorized Admin setup
+
+Run `npm run admin:seed` from `backend/` in an interactive terminal to provision
+your own Admin through the existing authentication service. Password entry is
+hidden and confirmed; existing accounts are never promoted, reset or reactivated.
+The command does not run during startup or migrations. See the
+[secure Admin setup guide](backend/scripts/README-admin-seed.md) for PowerShell
+commands, target confirmation, read-only verification and Flutter login.
+
 ## Current status
 
 Phase 25 deployment and release engineering is **PARTIALLY COMPLETE**. The implementation

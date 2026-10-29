@@ -30,6 +30,8 @@
     "profiles:cleanup": "tsx src/cli/cleanup-profile-images.ts",
     "test:auth:database": "tsx --test tests/auth.database.integration.ts",
     "admin:create": "tsx src/cli/create-admin.ts",
+    "admin:seed": "tsx scripts/seed-admin.ts",
+    "test:admin-seed:database": "tsx --test tests/admin-seed.database.integration.ts",
     "check": "npm run format:check && npm run lint && npm run typecheck && npm run build && npm test && npm run openapi:check && node dist/environment-check.js",
     "check:database": "npm run build && node dist/database-check.js",
     "db:format": "prisma format",
