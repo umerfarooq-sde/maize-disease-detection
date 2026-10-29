@@ -58,14 +58,68 @@ void main() {
           reason: email,
         );
       }
-      for (final password in ['a' * 15, '🌽' * 15, ' ' * 15, 'a' * 128]) {
+      for (final password in [
+        'a' * 6,
+        'a' * 8,
+        'a' * 15,
+        '🌽' * 6,
+        ' ' * 6,
+        'a' * 128,
+        '🌽' * 128,
+      ]) {
         expect(RegistrationCredentials.passwordError(password), isNull);
       }
-      for (final password in ['', '🌽' * 14, 'a' * 129]) {
+      for (final password in ['', 'a' * 5, '🌽' * 5, 'a' * 129, '🌽' * 129]) {
         expect(RegistrationCredentials.passwordError(password), isNotNull);
       }
     },
   );
+  for (final (password, accepted) in [
+    ('', false),
+    ('a' * 5, false),
+    ('a' * 6, true),
+    ('a' * 8, true),
+    ('a' * 15, true),
+    ('a' * 128, true),
+    ('a' * 129, false),
+    ('🌽' * 5, false),
+    ('🌽' * 6, true),
+  ]) {
+    test(
+      'repository enforces ${password.runes.length} code points (${password.length} code units)',
+      () async {
+        var calls = 0;
+        final api = ApiClient(
+          config: AppConfig(apiBaseUrl: 'https://api.example.test/api/v1'),
+          client: MockClient((request) async {
+            calls++;
+            expect(jsonDecode(request.body)['password'], password);
+            return response(registeredUser(), status: 201);
+          }),
+        );
+        addTearDown(api.close);
+        final operation = ApiRegistrationRepository(
+          api,
+        ).register('farmer@example.test', password);
+        if (accepted) {
+          expect((await operation).role, AccountRole.farmer);
+          expect(calls, 1);
+        } else {
+          await expectLater(
+            operation,
+            throwsA(
+              isA<AppException>().having(
+                (e) => e.kind,
+                'kind',
+                AppErrorKind.validation,
+              ),
+            ),
+          );
+          expect(calls, 0);
+        }
+      },
+    );
+  }
   test(
     'repository sends only normalized email/unmodified password and creates no session',
     () async {

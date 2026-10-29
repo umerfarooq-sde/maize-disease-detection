@@ -108,7 +108,7 @@ class _RegistrationViewState extends State<RegistrationView> {
                           decoration: InputDecoration(
                             labelText: 'Password',
                             helperText:
-                                '15–128 characters. Use a long, unique passphrase.',
+                                'Password must be at least 6 characters.',
                             helperMaxLines: 3,
                             errorMaxLines: 3,
                             suffixIcon: IconButton(

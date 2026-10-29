@@ -30,6 +30,51 @@ function cookie(response: Response): string {
 }
 const healthy = { async checkDatabase() {} };
 
+test('public HTTP signup independently enforces 6-128 code points and newly enrolled Farmers can log in', async () => {
+  const { repository, accounts } = memoryRepository();
+  const environment = { ...testEnvironment, AUTH_RATE_LIMIT_MAX: 1000 };
+  await withServer(createApp(environment, silentLogger, healthy, repository), async (url) => {
+    for (const [index, password] of [
+      '',
+      'a'.repeat(5),
+      '🌽'.repeat(5),
+      'a'.repeat(129),
+      '🌽'.repeat(129),
+    ].entries()) {
+      const response = await post(url, 'register', {
+        email: `rejected-${index}@example.invalid`,
+        password,
+      });
+      assert.equal(response.status, 400);
+      await response.text();
+    }
+    assert.equal(accounts.size, 0);
+    for (const [index, password] of [
+      'a'.repeat(6),
+      'a'.repeat(8),
+      'a'.repeat(15),
+      'a'.repeat(128),
+      '🌽'.repeat(6),
+      '🌽'.repeat(128),
+    ].entries()) {
+      const input = { email: `accepted-${index}@example.invalid`, password };
+      const registered = await post(url, 'register', input);
+      assert.equal(registered.status, 201);
+      const created = (await registered.json()) as SuccessResponse<{ user: PublicAccount }>;
+      assert.equal(created.data.user.role, 'FARMER');
+      const stored = accounts.get(input.email);
+      assert.ok(stored);
+      assert.match(stored.passwordHash, /^\$argon2id\$/);
+      const login = await post(url, 'login', input);
+      assert.equal(login.status, 200);
+      const grant = (await login.json()) as SuccessResponse<Grant>;
+      assert.equal(grant.data.user.role, 'FARMER');
+      assert.ok(cookie(login));
+    }
+    assert.equal(accounts.size, 6);
+  });
+});
+
 test('HTTP registration normalizes email, rejects duplicates/admin assignment and validates input', async () => {
   const { repository, accounts } = memoryRepository();
   await withServer(createApp(testEnvironment, silentLogger, healthy, repository), async (url) => {

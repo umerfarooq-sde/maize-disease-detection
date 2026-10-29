@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:http/testing.dart';
@@ -23,9 +24,11 @@ void main() {
           httpClient: MockClient((request) async {
             if (request.url.path.endsWith('/register')) {
               registrations++;
+              expect(jsonDecode(request.body)['password'], 'maize6');
               return response(registeredUser(), status: 201);
             }
             if (request.url.path.endsWith('/login')) {
+              expect(jsonDecode(request.body)['password'], 'maize6');
               return response(grant(), setCookie: cookie);
             }
             return response(null);
@@ -35,11 +38,19 @@ void main() {
       await tester.pumpAndSettle();
       await tapVisible(tester, find.byKey(const Key('open-registration')));
       expect(find.byType(RegistrationView), findsOneWidget);
+      expect(
+        find.text('Password must be at least 6 characters.'),
+        findsOneWidget,
+      );
       await tapVisible(tester, find.byKey(const Key('register-submit')));
       expect(registrations, 0);
       expect(
-        find.text('Use 15–128 characters. Spaces are allowed.'),
-        findsOneWidget,
+        tester
+            .state<FormFieldState<String>>(
+              find.byKey(const Key('registration-password')),
+            )
+            .errorText,
+        'Password must be at least 6 characters.',
       );
       await tester.enterText(
         find.byKey(const Key('registration-email')),
@@ -47,7 +58,31 @@ void main() {
       );
       await tester.enterText(
         find.byKey(const Key('registration-password')),
-        registrationPassword,
+        'short',
+      );
+      await tapVisible(tester, find.byKey(const Key('register-submit')));
+      expect(registrations, 0);
+      expect(
+        tester
+            .state<FormFieldState<String>>(
+              find.byKey(const Key('registration-password')),
+            )
+            .errorText,
+        'Password must be at least 6 characters.',
+      );
+      await tester.enterText(
+        find.byKey(const Key('registration-password')),
+        'a' * 129,
+      );
+      await tapVisible(tester, find.byKey(const Key('register-submit')));
+      expect(registrations, 0);
+      expect(
+        find.text('Password must be at most 128 characters.'),
+        findsOneWidget,
+      );
+      await tester.enterText(
+        find.byKey(const Key('registration-password')),
+        'maize6',
       );
       await tapVisible(tester, find.byTooltip('Show password'));
       expect(
@@ -69,10 +104,7 @@ void main() {
         find.byType(TextFormField).first,
         'farmer@example.test',
       );
-      await tester.enterText(
-        find.byType(TextFormField).last,
-        registrationPassword,
-      );
+      await tester.enterText(find.byType(TextFormField).last, 'maize6');
       await tapVisible(tester, find.widgetWithText(FilledButton, 'Sign in'));
       expect(find.textContaining('Signed in as'), findsOneWidget);
       await tapVisible(tester, find.text('Sign out'));

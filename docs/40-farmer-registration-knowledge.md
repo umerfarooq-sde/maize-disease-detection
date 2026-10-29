@@ -19,8 +19,10 @@ RegistrationView → RegistrationViewModel → RegistrationRepository
 ```
 
 Client admission mirrors the installed Zod registration contract: trim/lowercase
-email, practical Zod email syntax, maximum 254 characters; password 15–128 Unicode
+email, practical Zod email syntax, maximum 254 characters; Farmer password 6–128 Unicode
 code points, unchanged including spaces, with no invented composition requirement.
+Operator Admin provisioning retains its separate 15–128-character policy; login,
+Argon2id hashing and existing sessions are unchanged.
 The backend remains authoritative. Password visibility is ephemeral widget state;
 submission, errors and success are ViewModel state. Busy and success guards prevent
 accidental repeated submissions. Input remains available for explicit failure retry.

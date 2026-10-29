@@ -15,7 +15,7 @@ class RegistrationViewModel extends ChangeNotifier {
     AppErrorKind.conflict =>
       'An account already uses this email. Sign in, or use a different email.',
     AppErrorKind.validation =>
-      'Check your email and use a password with 15–128 characters.',
+      'Check your email and use a password with 6–128 characters.',
     _ => error!.message,
   };
 

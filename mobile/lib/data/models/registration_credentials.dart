@@ -14,8 +14,8 @@ abstract final class RegistrationCredentials {
 
   static String? passwordError(String? value) {
     final length = (value ?? '').runes.length;
-    return length >= 15 && length <= 128
-        ? null
-        : 'Use 15–128 characters. Spaces are allowed.';
+    if (length < 6) return 'Password must be at least 6 characters.';
+    if (length > 128) return 'Password must be at most 128 characters.';
+    return null;
   }
 }
