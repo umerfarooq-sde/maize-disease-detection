@@ -31,6 +31,23 @@ threshold is locked. See [fitness report](../docs/26-model-fitness-validation.md
 [safe numerical/artifact export](reports/mobilenet-v3-small-20261009-v2-01-fitness/README.md).
 The original experiment/recovery remains immutable. No inference endpoint is added.
 
+## Workspace layout
+
+```text
+dataset/
+├── preprocessing/  preprocessing ownership and parity guidance
+├── training/       training pipeline guidance
+├── evaluation/     evaluation requirements
+├── experiments/    reproducibility and experiment records
+└── models/         model versioning and artifact guidance
+```
+
+These are optional local workspace areas; empty directories are not tracked by Git.
+Only `dataset/README.md` documents them. They contain no executable ML pipeline code,
+user datasets, experiment runs, or model artifacts. The existing implementation
+remains in `train.py`, `training_data.py`, `evaluation.py` and the shared preprocessing
+package. Local datasets/model binaries remain ignored; commit only source and safe metadata.
+
 Import the same preprocessing implementation as production inference. Split before
 augmentation, augment only training data, and keep the test set out of training and
 model selection. Record dataset/preprocessing versions, class mapping, hyperparameters,

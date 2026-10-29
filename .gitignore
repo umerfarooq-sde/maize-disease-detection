@@ -57,6 +57,9 @@ ai-service/.cache/
 ml-training/datasets/raw/
 ml-training/datasets/processed/
 ml-training/datasets/splits/
+ml-training/dataset/raw/
+ml-training/dataset/processed/
+ml-training/dataset/splits/
 *.pt
 *.pth
 *.ckpt

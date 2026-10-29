@@ -763,6 +763,15 @@ exposes internal prediction/model health, retrieval and grounded generation
 alongside process health. The overview retains its inexpensive NOT_CHECKED summary;
 the dedicated Admin model-health route now probes live readiness and process statistics.
 
+## ML training workspace structure
+
+The `ml-training/dataset/README.md` describes optional local workspace areas:
+`preprocessing/`, `training/`, `evaluation/`, `experiments/`, and `models/`.
+Empty directories are not tracked. No dataset, experiment output, model artifact or
+second executable pipeline is added there. Existing training/evaluation and shared
+preprocessing implementations remain in their established locations; this documentation
+does not change the current phase status.
+
 ## Phase 0 verification history
 
 | Check | Result |
