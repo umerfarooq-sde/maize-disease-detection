@@ -28,6 +28,10 @@ http://127.0.0.1:9080 {
     }
     header {
         Strict-Transport-Security "max-age=31536000"
+        X-Content-Type-Options "nosniff"
+        Referrer-Policy "no-referrer"
+        X-Frame-Options "DENY"
+        Permissions-Policy "camera=(), microphone=(), geolocation=()"
         -Server
     }
     @private path /internal/* /docs* /openapi* /redoc*

@@ -11,6 +11,7 @@ import os
 import re
 import subprocess
 import sys
+import urllib.error
 import urllib.request
 import zipfile
 from contextlib import contextmanager
@@ -19,6 +20,7 @@ from pathlib import Path
 from backup import create_backup
 from database import secret
 from preflight import preflight
+from production_gate import validate_production_gate
 
 
 def run(command, *, timeout=600):
@@ -35,9 +37,22 @@ def smoke(origin):
         raise ValueError("A verified HTTPS public origin is required")
     # No insecure CA override. Local TLS uses an explicitly installed local root.
     with urllib.request.urlopen(origin.rstrip("/") + "/api/v1/health", timeout=20) as response:
+        if response.status != 200:
+            raise RuntimeError("Public API health returned an unexpected status")
         payload = json.loads(response.read(16384))
-        if response.status != 200 or payload.get("success") is not True:
+        if not isinstance(payload, dict) or payload.get("success") is not True:
             raise RuntimeError("Public API health failed")
+        hsts = response.headers.get("Strict-Transport-Security", "")
+        if "max-age=" not in hsts or response.headers.get("X-Content-Type-Options", "").lower() != "nosniff":
+            raise RuntimeError("Public edge security headers missing")
+    # Check that the edge does not accidentally publish private internal endpoints.
+    for private in ("/internal/metrics", "/openapi.json", "/docs"):
+        try:
+            with urllib.request.urlopen(origin.rstrip("/") + private, timeout=10):
+                raise RuntimeError("Private internal endpoint exposed by public edge")
+        except urllib.error.HTTPError as error:
+            if error.code != 404:
+                raise RuntimeError("Private internal endpoint is not hidden") from None
 
 
 def validate_manifest(release):
@@ -156,6 +171,8 @@ def deploy(
     deployment_environment: str,
     allow_migrations=False,
     rollback=False,
+    approval_file=None,
+    approval_key_file=None,
 ):
     from dotenv import dotenv_values
 
@@ -167,6 +184,15 @@ def deploy(
     values = dotenv_values(environment_file)
     preflight(environment_file)
     release = validate_manifest(json.loads(manifest.read_text()))
+    if rollback:
+        # The rollback authorization must refer to the actual retained image,
+        # not an arbitrarily supplied prospective release manifest.
+        release = validate_manifest(json.loads((state / "previous-release.json").read_text()))
+    production_gate = None
+    if deployment_environment == "production":
+        production_gate = validate_production_gate(
+            root, values, release, approval_file, approval_key_file
+        )
     if deployment_environment not in {"staging", "production"} or not state.is_absolute():
         raise ValueError("Explicit environment and absolute external deployment state are required")
     state, root = state.resolve(), root.resolve()
@@ -188,6 +214,7 @@ def deploy(
             deployment_environment,
             allow_migrations=allow_migrations,
             rollback=rollback,
+            production_authorized=production_gate is not None,
         )
 
 
@@ -201,7 +228,10 @@ def rollout(
     *,
     allow_migrations=False,
     rollback=False,
+    production_authorized=False,
 ):
+    if deployment_environment == "production" and not production_authorized:
+        raise ValueError("Production rollout requires validated signed authorization")
     active, previous = state / "active-release.json", state / "previous-release.json"
     if rollback:
         if not previous.is_file():
@@ -291,6 +321,7 @@ def rollout(
         "commit": release["commit"],
         "rollback": rollback,
         "publicReleaseApproval": False,
+        "signedProductionGate": production_authorized,
     }
 
 
@@ -305,6 +336,8 @@ if __name__ == "__main__":
     )
     parser.add_argument("--allow-migrations", action="store_true")
     parser.add_argument("--rollback", action="store_true")
+    parser.add_argument("--approval-file", type=Path)
+    parser.add_argument("--approval-key-file", type=Path)
     args = parser.parse_args()
     try:
         print(
@@ -317,6 +350,8 @@ if __name__ == "__main__":
                     deployment_environment=args.deployment_environment,
                     allow_migrations=args.allow_migrations,
                     rollback=args.rollback,
+                    approval_file=args.approval_file,
+                    approval_key_file=args.approval_key_file,
                 )
             )
         )

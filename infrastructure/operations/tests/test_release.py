@@ -159,3 +159,50 @@ def test_rollout_jobs_are_explicit_and_rollback_never_runs_migrations(tmp_path, 
     up = next(c for c in calls if "up" in c)
     assert "--no-deps" in up and up[-3:] == ["ai", "api", "edge"]
     assert (tmp_path / "selected-release.env").read_text().startswith("STACK_NAME=fixture\n")
+
+
+def test_public_production_rollout_requires_gate_before_side_effects(tmp_path):
+    with pytest.raises(ValueError, match="signed authorization"):
+        release.rollout(tmp_path, tmp_path / "env", {}, approved(), tmp_path, "production")
+    assert not (tmp_path / "selected-release.env").exists()
+
+
+def test_smoke_requires_https_security_headers_and_private_route_denial(monkeypatch):
+    import urllib.error
+    import urllib.request
+
+    class Response:
+        status = 200
+        headers = {"Strict-Transport-Security": "max-age=31536000",
+                   "X-Content-Type-Options": "nosniff"}
+
+        def __enter__(self):
+            return self
+
+        def __exit__(self, *_args):
+            return False
+
+        def read(self, _limit):
+            return b'{"success":true}'
+
+    def urlopen(url, timeout):
+        if url.endswith("/api/v1/health"):
+            return Response()
+        raise urllib.error.HTTPError(url, 404, "Not Found", {}, None)
+
+    monkeypatch.setattr(urllib.request, "urlopen", urlopen)
+    release.smoke("https://api.example.com")
+
+    class MissingHeaders(Response):
+        headers = {}
+
+    monkeypatch.setattr(urllib.request, "urlopen", lambda *_a, **_k: MissingHeaders())
+    with pytest.raises(RuntimeError, match="security headers"):
+        release.smoke("https://api.example.com")
+
+    def exposed(url, timeout):
+        return Response()
+
+    monkeypatch.setattr(urllib.request, "urlopen", exposed)
+    with pytest.raises(RuntimeError, match="exposed"):
+        release.smoke("https://api.example.com")
