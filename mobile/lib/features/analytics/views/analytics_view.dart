@@ -82,7 +82,10 @@ class AnalyticsView extends StatelessWidget {
             '${analyticsDateText(model.range.from)} through ${analyticsDateText(model.range.to)} · UTC',
           ),
           if (model.filterError case final message?)
-            Text(message, style: const TextStyle(color: AppColors.error)),
+            Text(
+              message,
+              style: TextStyle(color: Theme.of(context).colorScheme.error),
+            ),
           const SizedBox(height: AppSpacing.xl),
           if (model.loading)
             const AppLoadingState(message: 'Loading your field insights…')

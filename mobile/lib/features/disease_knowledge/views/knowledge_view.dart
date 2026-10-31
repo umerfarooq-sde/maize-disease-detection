@@ -6,8 +6,8 @@ import '../../../core/routes/app_routes.dart';
 import '../../../core/theme/design_tokens.dart';
 import '../../../core/widgets/app_page.dart';
 import '../../../core/widgets/app_states.dart';
-import '../../../core/widgets/feature_card.dart';
 import '../view_models/knowledge_view_model.dart';
+import '../../../core/widgets/feature_card.dart';
 import '../widgets/knowledge_match_card.dart';
 
 class KnowledgeView extends StatefulWidget {
@@ -18,6 +18,14 @@ class KnowledgeView extends StatefulWidget {
 
 class _KnowledgeViewState extends State<KnowledgeView> {
   final _query = TextEditingController();
+  bool get _hasDraft => _query.text.isNotEmpty;
+
+  void _clearSearch(KnowledgeViewModel model) {
+    _query.clear();
+    model.clearSearch();
+    setState(() {});
+  }
+
   @override
   void dispose() {
     _query.dispose();
@@ -45,14 +53,27 @@ class _KnowledgeViewState extends State<KnowledgeView> {
             key: const Key('knowledge-query'),
             controller: _query,
             enabled: !model.searching,
-            decoration: const InputDecoration(
+            decoration: InputDecoration(
               labelText: 'Search reviewed knowledge',
               hintText: 'For example: common rust symptoms',
               helperText: '3–1000 characters, up to 1800 UTF-8 bytes.',
               helperMaxLines: 3,
+              prefixIcon: const Icon(Icons.search),
+              suffixIcon: _hasDraft
+                  ? IconButton(
+                      key: const Key('knowledge-clear-input'),
+                      tooltip: 'Clear search',
+                      onPressed: () => _clearSearch(model),
+                      icon: const Icon(Icons.clear),
+                    )
+                  : null,
             ),
             textInputAction: TextInputAction.search,
             onSubmitted: (value) => model.search(value),
+            onChanged: (_) {
+              model.editSearch();
+              setState(() {});
+            },
           ),
           const SizedBox(height: AppSpacing.md),
           Wrap(
@@ -71,10 +92,7 @@ class _KnowledgeViewState extends State<KnowledgeView> {
                   model.searchError != null ||
                   model.searching)
                 TextButton(
-                  onPressed: () {
-                    _query.clear();
-                    model.clearSearch();
-                  },
+                  onPressed: () => _clearSearch(model),
                   child: const Text('Clear search'),
                 ),
             ],
@@ -84,9 +102,11 @@ class _KnowledgeViewState extends State<KnowledgeView> {
             const AppLoadingState(message: 'Searching reviewed passages…'),
           if (model.searchError case final error?)
             error.kind == AppErrorKind.validation
-                ? const Text(
+                ? Text(
                     'Enter 3–1000 readable characters within 1800 UTF-8 bytes.',
-                    style: TextStyle(color: AppColors.error),
+                    style: TextStyle(
+                      color: Theme.of(context).colorScheme.error,
+                    ),
                   )
                 : AppErrorState(
                     error: error,
@@ -98,8 +118,10 @@ class _KnowledgeViewState extends State<KnowledgeView> {
               style: Theme.of(context).textTheme.titleLarge,
             ),
             const SizedBox(height: AppSpacing.sm),
-            const Text(
-              'These are source passages ranked for relevance, not a generated answer or diagnosis.',
+            Text(
+              result.matches.isEmpty
+                  ? 'No reviewed passages matched “${model.query}”.'
+                  : '${result.matches.length} reviewed ${result.matches.length == 1 ? 'passage' : 'passages'} for “${model.query}”. Ranked for relevance; not a generated answer or diagnosis.',
             ),
             const SizedBox(height: AppSpacing.lg),
             if (result.matches.isEmpty)

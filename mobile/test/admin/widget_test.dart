@@ -115,6 +115,51 @@ void main() {
     expect(paths, ['/api/v1/auth/login', '/api/v1/auth/logout']);
     await tester.pumpWidget(const SizedBox());
   });
+  testWidgets('compact admin header keeps every action in an accessible menu', (
+    tester,
+  ) async {
+    tester.view.physicalSize = const Size(320, 640);
+    tester.view.devicePixelRatio = 1;
+    addTearDown(tester.view.resetPhysicalSize);
+    addTearDown(tester.view.resetDevicePixelRatio);
+    await tester.pumpWidget(
+      MainApp(
+        initialLocation: '/admin',
+        config: AppConfig(apiBaseUrl: 'https://api.example.test/api/v1'),
+        httpClient: MockClient((request) async {
+          if (request.url.path.endsWith('/login')) {
+            return response(grant(role: 'ADMIN'), setCookie: cookie);
+          }
+          if (request.url.path.endsWith('/logout')) return response(null);
+          if (request.url.path.endsWith('/ai-operations')) {
+            return response({'status': 'UNAVAILABLE'});
+          }
+          final query = request.url.queryParameters;
+          return response(
+            dashboardJson(
+              range: AnalyticsDateRange(
+                DateTime.parse('${query['from']}T00:00:00Z'),
+                DateTime.parse('${query['to']}T00:00:00Z'),
+              ),
+            ),
+          );
+        }),
+      ),
+    );
+    await tester.pumpAndSettle();
+    await submit(tester);
+    expect(find.byTooltip('Admin actions'), findsOneWidget);
+    expect(find.widgetWithText(TextButton, 'Sign out'), findsNothing);
+    await tester.tap(find.byTooltip('Admin actions'));
+    await tester.pumpAndSettle();
+    expect(find.text('Reference images'), findsOneWidget);
+    expect(find.text('Model health'), findsOneWidget);
+    expect(find.text('Management'), findsOneWidget);
+    await tester.tap(find.text('Sign out'));
+    await tester.pumpAndSettle();
+    expect(find.text('Administrator sign-in'), findsOneWidget);
+    expect(tester.takeException(), isNull);
+  });
   testWidgets(
     'empty scan range retains real account/system summary without fabricated charts',
     (tester) async {

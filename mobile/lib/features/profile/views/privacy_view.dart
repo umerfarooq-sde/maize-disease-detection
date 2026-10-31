@@ -3,6 +3,7 @@ import 'package:provider/provider.dart';
 import '../../../core/theme/design_tokens.dart';
 import '../../../core/widgets/app_page.dart';
 import '../../../core/widgets/app_states.dart';
+import '../../../core/widgets/app_confirmation_dialog.dart';
 import '../view_models/privacy_view_model.dart';
 
 class PrivacyView extends StatelessWidget {
@@ -43,24 +44,13 @@ class PrivacyView extends StatelessWidget {
             ] else if (model.loaded)
               FilledButton.tonal(
                 onPressed: () async {
-                  final confirmed = await showDialog<bool>(
-                    context: context,
-                    builder: (dialog) => AlertDialog(
-                      title: const Text('Request account-data deletion?'),
-                      content: const Text(
+                  final confirmed = await showAppConfirmation(
+                    context,
+                    title: 'Request account-data deletion?',
+                    message:
                         'This sends a review request for your account. No data is automatically erased now. After approval, account access will be suspended before erasure begins.',
-                      ),
-                      actions: [
-                        TextButton(
-                          onPressed: () => Navigator.pop(dialog, false),
-                          child: const Text('Cancel'),
-                        ),
-                        FilledButton(
-                          onPressed: () => Navigator.pop(dialog, true),
-                          child: const Text('Send request'),
-                        ),
-                      ],
-                    ),
+                    confirmLabel: 'Send request',
+                    destructive: true,
                   );
                   if (confirmed == true && context.mounted) {
                     await model.submit();

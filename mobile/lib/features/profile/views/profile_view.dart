@@ -7,6 +7,7 @@ import '../../../core/exceptions/app_exception.dart';
 import '../../../core/theme/design_tokens.dart';
 import '../../../core/widgets/app_page.dart';
 import '../../../core/widgets/feature_card.dart';
+import '../../../core/widgets/theme_mode_selector.dart';
 
 class ProfileView extends StatelessWidget {
   const ProfileView({super.key});
@@ -27,10 +28,12 @@ class ProfileView extends StatelessWidget {
             session.signedIn
                 ? 'Signed in as ${session.account!.email}'
                 : 'You are exploring as a guest.',
-            style: Theme.of(
-              context,
-            ).textTheme.bodyLarge?.copyWith(color: AppColors.muted),
+            style: Theme.of(context).textTheme.bodyLarge?.copyWith(
+              color: Theme.of(context).colorScheme.onSurfaceVariant,
+            ),
           ),
+          const SizedBox(height: AppSpacing.xl),
+          const ThemeModeSelector(),
           const SizedBox(height: AppSpacing.xl),
           if (session.error != null && !session.signedIn) ...[
             Semantics(
@@ -41,7 +44,7 @@ class ProfileView extends StatelessWidget {
                         session.error!.kind == AppErrorKind.server
                     ? 'Signed out on this device. We could not contact the server to revoke the session. Please reconnect and sign in again.'
                     : 'Your session ended. Please sign in again.',
-                style: const TextStyle(color: AppColors.error),
+                style: TextStyle(color: Theme.of(context).colorScheme.error),
               ),
             ),
             const SizedBox(height: AppSpacing.lg),
@@ -52,10 +55,10 @@ class ProfileView extends StatelessWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
-                  const Icon(
+                  Icon(
                     Icons.person_outline,
                     size: AppSizing.emblem,
-                    color: AppColors.blue,
+                    color: context.semanticColors.info,
                   ),
                   const SizedBox(height: AppSpacing.lg),
                   Text(
@@ -117,8 +120,8 @@ class ProfileView extends StatelessWidget {
             description:
                 'See your saved scan activity and model label patterns.',
             icon: Icons.insights_outlined,
-            tone: AppColors.amber,
-            tint: AppColors.wheat,
+            tone: context.semanticColors.warning,
+            tint: context.semanticColors.warningContainer,
             onTap: () => context.push(AppRoutes.analytics),
           ),
           const SizedBox(height: AppSpacing.lg),

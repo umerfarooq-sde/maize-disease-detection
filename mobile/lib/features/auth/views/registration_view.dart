@@ -46,10 +46,10 @@ class _RegistrationViewState extends State<RegistrationView> {
               ? Column(
                   crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: [
-                    const Icon(
+                    Icon(
                       Icons.check_circle_outline,
                       size: AppSizing.emblem,
-                      color: AppColors.forest,
+                      color: Theme.of(context).colorScheme.primary,
                     ),
                     const SizedBox(height: AppSpacing.xl),
                     Text(
@@ -133,7 +133,9 @@ class _RegistrationViewState extends State<RegistrationView> {
                             liveRegion: true,
                             child: Text(
                               model.errorMessage!,
-                              style: const TextStyle(color: AppColors.error),
+                              style: TextStyle(
+                                color: Theme.of(context).colorScheme.error,
+                              ),
                             ),
                           ),
                           const SizedBox(height: AppSpacing.lg),

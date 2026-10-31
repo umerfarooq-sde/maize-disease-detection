@@ -36,7 +36,7 @@ void main() {
       await tapVisible(tester, find.byKey(const Key('upload-leaf-action')));
       expect(find.byType(ScanResultView), findsOneWidget);
       expect(find.text('Model prediction'), findsWidgets);
-      expect(find.text('Healthy'), findsOneWidget);
+      expect(find.byKey(const Key('prediction-leading-label')), findsOneWidget);
       expect(find.text('Uncertain result'), findsOneWidget);
       expect(
         GoRouter.of(tester.element(find.byType(ScanResultView))).canPop(),
@@ -105,7 +105,7 @@ void main() {
       expect(historyCalls, 1);
       await tapVisible(tester, find.byKey(ValueKey(savedScan.id)));
       expect(find.byType(ScanResultView), findsOneWidget);
-      expect(find.text('Healthy'), findsOneWidget);
+      expect(find.byKey(const Key('prediction-leading-label')), findsOneWidget);
       final context = tester.element(find.byType(ScanResultView));
       final router = GoRouter.of(context);
       final session = context.read<FarmerSessionViewModel>();
@@ -115,7 +115,7 @@ void main() {
       await tapVisible(tester, find.byKey(ValueKey(savedScan.id)));
       await tester.runAsync(session.signOut);
       await tester.pumpAndSettle();
-      expect(find.text('Healthy'), findsNothing);
+      expect(find.byKey(const Key('prediction-leading-label')), findsNothing);
       expect(
         detailCalls,
         0,

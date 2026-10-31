@@ -3,6 +3,7 @@ import 'package:provider/provider.dart';
 import '../../../core/theme/design_tokens.dart';
 import '../../../core/widgets/app_page.dart';
 import '../../../core/widgets/app_states.dart';
+import '../../../core/widgets/app_confirmation_dialog.dart';
 import '../../../data/models/admin_accounts.dart';
 import '../view_models/farmer_management_view_model.dart';
 
@@ -25,24 +26,13 @@ class _FarmerManagementViewState extends State<FarmerManagementView> {
     ManagedFarmer farmer,
     String status,
   ) async {
-    final confirmed = await showDialog<bool>(
-      context: context,
-      builder: (context) => AlertDialog(
-        title: Text('Change farmer status to $status?'),
-        content: Text(
+    final confirmed = await showAppConfirmation(
+      context,
+      title: 'Change farmer status to $status?',
+      message:
           'Account: ${farmer.email}\nAll existing sessions will be revoked. ${status == 'ACTIVE' ? 'The farmer must sign in again.' : 'Sign-in and authenticated access will be blocked.'} Records and scan ownership will be preserved.',
-        ),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.pop(context, false),
-            child: const Text('Cancel'),
-          ),
-          FilledButton(
-            onPressed: () => Navigator.pop(context, true),
-            child: const Text('Confirm status change'),
-          ),
-        ],
-      ),
+      confirmLabel: 'Confirm status change',
+      destructive: status != 'ACTIVE',
     );
     if (mounted && confirmed == true) await model.changeStatus(farmer, status);
   }

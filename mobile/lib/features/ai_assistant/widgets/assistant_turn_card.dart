@@ -21,7 +21,7 @@ class AssistantTurnCard extends StatelessWidget {
     crossAxisAlignment: CrossAxisAlignment.stretch,
     children: [
       Card(
-        color: AppColors.mist,
+        color: context.semanticColors.infoContainer,
         child: Padding(
           padding: const EdgeInsets.all(AppSpacing.lg),
           child: Column(
@@ -47,7 +47,7 @@ class AssistantTurnCard extends StatelessWidget {
       if (turn.answer case final answer?) AssistantAnswerCard(answer: answer),
       if (turn.error case final error?)
         Card(
-          color: AppColors.errorSurface,
+          color: Theme.of(context).colorScheme.errorContainer,
           child: Padding(
             padding: const EdgeInsets.all(AppSpacing.lg),
             child: Column(

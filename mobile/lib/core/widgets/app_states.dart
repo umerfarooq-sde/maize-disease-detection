@@ -8,17 +8,17 @@ class AppLoadingState extends StatelessWidget {
   @override
   Widget build(BuildContext context) => Semantics(
     liveRegion: true,
-    child: Column(
-      mainAxisSize: MainAxisSize.min,
-      children: [
-        const SizedBox(
-          width: AppSizing.stateIcon,
-          height: AppSizing.stateIcon,
-          child: CircularProgressIndicator(),
-        ),
-        const SizedBox(height: AppSpacing.lg),
-        Text(message, textAlign: TextAlign.center),
-      ],
+    label: message,
+    child: _StateLayout(
+      icon: const SizedBox.square(
+        dimension: AppSizing.stateIcon,
+        child: CircularProgressIndicator(strokeWidth: 3),
+      ),
+      child: Text(
+        message,
+        textAlign: TextAlign.center,
+        style: Theme.of(context).textTheme.titleSmall,
+      ),
     ),
   );
 }
@@ -36,28 +36,39 @@ class AppEmptyState extends StatelessWidget {
   final IconData icon;
   final Widget? action;
   @override
-  Widget build(BuildContext context) => Column(
-    mainAxisSize: MainAxisSize.min,
-    crossAxisAlignment: CrossAxisAlignment.stretch,
-    children: [
-      Icon(icon, size: AppSizing.stateIcon, color: AppColors.muted),
-      const SizedBox(height: AppSpacing.lg),
-      Text(
-        title,
-        style: Theme.of(context).textTheme.titleLarge,
-        textAlign: TextAlign.center,
+  Widget build(BuildContext context) {
+    final colors = Theme.of(context).colorScheme;
+    return _StateLayout(
+      icon: Icon(
+        icon,
+        size: AppSizing.stateIcon,
+        color: colors.onSurfaceVariant,
       ),
-      const SizedBox(height: AppSpacing.sm),
-      Text(
-        message,
-        textAlign: TextAlign.center,
-        style: Theme.of(
-          context,
-        ).textTheme.bodyLarge?.copyWith(color: AppColors.muted),
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          Text(
+            title,
+            style: Theme.of(context).textTheme.titleLarge,
+            textAlign: TextAlign.center,
+          ),
+          const SizedBox(height: AppSpacing.sm),
+          Text(
+            message,
+            textAlign: TextAlign.center,
+            style: Theme.of(
+              context,
+            ).textTheme.bodyLarge?.copyWith(color: colors.onSurfaceVariant),
+          ),
+          if (action != null) ...[
+            const SizedBox(height: AppSpacing.xl),
+            Center(child: action!),
+          ],
+        ],
       ),
-      if (action != null) ...[const SizedBox(height: AppSpacing.xl), action!],
-    ],
-  );
+    );
+  }
 }
 
 class AppErrorState extends StatelessWidget {
@@ -78,4 +89,79 @@ class AppErrorState extends StatelessWidget {
       ),
     ),
   );
+}
+
+class AppSuccessState extends StatelessWidget {
+  const AppSuccessState({
+    required this.title,
+    required this.message,
+    this.action,
+    super.key,
+  });
+
+  final String title;
+  final String message;
+  final Widget? action;
+
+  @override
+  Widget build(BuildContext context) {
+    final semantic = context.semanticColors;
+    return Semantics(
+      liveRegion: true,
+      child: _StateLayout(
+        icon: Icon(
+          Icons.check_circle_outline,
+          size: AppSizing.stateIcon,
+          color: semantic.success,
+        ),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Text(
+              title,
+              style: Theme.of(context).textTheme.titleLarge,
+              textAlign: TextAlign.center,
+            ),
+            const SizedBox(height: AppSpacing.sm),
+            Text(message, textAlign: TextAlign.center),
+            if (action != null) ...[
+              const SizedBox(height: AppSpacing.xl),
+              action!,
+            ],
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class _StateLayout extends StatelessWidget {
+  const _StateLayout({required this.icon, required this.child});
+
+  final Widget icon;
+  final Widget child;
+
+  @override
+  Widget build(BuildContext context) {
+    final colors = Theme.of(context).colorScheme;
+    return Center(
+      child: Container(
+        width: double.infinity,
+        padding: const EdgeInsets.all(AppSpacing.xl),
+        decoration: BoxDecoration(
+          color: colors.surfaceContainerLow,
+          border: Border.all(color: colors.outlineVariant),
+          borderRadius: BorderRadius.circular(AppRadii.card),
+        ),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            icon,
+            const SizedBox(height: AppSpacing.lg),
+            child,
+          ],
+        ),
+      ),
+    );
+  }
 }

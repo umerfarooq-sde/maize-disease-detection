@@ -60,7 +60,7 @@ class _YieldViewState extends State<YieldView> {
           else if (catalogue?.status ==
               YieldCatalogueStatus.pendingConfiguration)
             Card(
-              color: AppColors.wheat,
+              color: context.semanticColors.warningContainer,
               child: Padding(
                 padding: const EdgeInsets.all(AppSpacing.xl),
                 child: Column(

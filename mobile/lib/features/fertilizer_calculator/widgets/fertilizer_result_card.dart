@@ -12,7 +12,7 @@ class FertilizerResultCard extends StatelessWidget {
   Widget build(BuildContext context) => Semantics(
     liveRegion: true,
     child: Card(
-      color: AppColors.sage,
+      color: Theme.of(context).colorScheme.primaryContainer,
       child: Padding(
         padding: const EdgeInsets.all(AppSpacing.xl),
         child: Column(

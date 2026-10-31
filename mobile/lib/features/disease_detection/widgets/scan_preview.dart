@@ -30,12 +30,42 @@ class ScanPreview extends StatelessWidget {
         ),
         Padding(
           padding: const EdgeInsets.all(AppSpacing.lg),
-          child: Text(
-            'Review your leaf photo',
-            style: Theme.of(context).textTheme.titleMedium,
+          child: Row(
+            children: [
+              Icon(
+                Icons.check_circle_outline,
+                color: context.semanticColors.success,
+              ),
+              const SizedBox(width: AppSpacing.sm),
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      'Photo ready to review',
+                      style: Theme.of(context).textTheme.titleMedium,
+                    ),
+                    const SizedBox(height: AppSpacing.xs),
+                    Text(
+                      '${image.width} × ${image.height} · ${_formatName(image.mimeType)}',
+                      style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                        color: Theme.of(context).colorScheme.onSurfaceVariant,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ],
           ),
         ),
       ],
     ),
   );
+
+  static String _formatName(String mimeType) => switch (mimeType) {
+    'image/jpeg' => 'JPEG',
+    'image/png' => 'PNG',
+    'image/webp' => 'WebP',
+    _ => 'Image',
+  };
 }

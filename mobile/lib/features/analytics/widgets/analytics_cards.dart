@@ -70,7 +70,7 @@ class PredictionUncertaintyCard extends StatelessWidget {
   final FarmerAnalytics summary;
   @override
   Widget build(BuildContext context) => Card(
-    color: AppColors.wheat,
+    color: context.semanticColors.warningContainer,
     child: Padding(
       padding: const EdgeInsets.all(AppSpacing.xl),
       child: Column(

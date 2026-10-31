@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import '../../../core/theme/design_tokens.dart';
+import '../../../core/widgets/app_confirmation_dialog.dart';
 import '../../../data/models/admin_management.dart';
 import 'management_fields.dart';
 
@@ -164,7 +165,9 @@ class _ManagementEditorFormState extends State<ManagementEditorForm> {
                 if (state.errorText != null)
                   Text(
                     state.errorText!,
-                    style: const TextStyle(color: AppColors.error),
+                    style: TextStyle(
+                      color: Theme.of(context).colorScheme.error,
+                    ),
                   ),
               ],
             ),
@@ -195,22 +198,9 @@ Future<bool> confirmManagement(
   BuildContext context,
   String title,
   String message,
-) async =>
-    await showDialog<bool>(
-      context: context,
-      builder: (context) => AlertDialog(
-        title: Text(title),
-        content: SingleChildScrollView(child: Text(message)),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.pop(context, false),
-            child: const Text('Cancel'),
-          ),
-          FilledButton(
-            onPressed: () => Navigator.pop(context, true),
-            child: const Text('Confirm'),
-          ),
-        ],
-      ),
-    ) ??
-    false;
+) => showAppConfirmation(
+  context,
+  title: title,
+  message: message,
+  destructive: true,
+);

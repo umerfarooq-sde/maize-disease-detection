@@ -49,10 +49,13 @@ class ReferenceGallery extends StatelessWidget {
                             'SYNTHETIC TEST FIXTURE · not disease evidence',
                           ),
                         if (media.path != null)
-                          PrivateImage(
-                            path: media.path!,
-                            semanticLabel: media.altText,
-                            height: 240,
+                          LayoutBuilder(
+                            builder: (context, constraints) => PrivateImage(
+                              path: media.path!,
+                              semanticLabel: media.altText,
+                              width: constraints.maxWidth,
+                              height: constraints.maxWidth < 340 ? 180 : 240,
+                            ),
                           ),
                         Text(media.altText),
                         SelectableText(

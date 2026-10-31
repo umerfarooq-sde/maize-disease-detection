@@ -2,29 +2,18 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../../../core/theme/design_tokens.dart';
 import '../../../core/widgets/private_image.dart';
+import '../../../core/widgets/app_confirmation_dialog.dart';
 import '../view_models/profile_view_model.dart';
 
 class ProfilePhotoEditor extends StatelessWidget {
   const ProfilePhotoEditor({super.key});
   Future<void> _remove(BuildContext context, ProfileViewModel model) async {
-    final confirmed = await showDialog<bool>(
-      context: context,
-      builder: (context) => AlertDialog(
-        title: const Text('Remove profile photo?'),
-        content: const Text(
-          'Your display name and field details will stay saved.',
-        ),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.pop(context, false),
-            child: const Text('Cancel'),
-          ),
-          FilledButton(
-            onPressed: () => Navigator.pop(context, true),
-            child: const Text('Remove photo'),
-          ),
-        ],
-      ),
+    final confirmed = await showAppConfirmation(
+      context,
+      title: 'Remove profile photo?',
+      message: 'Your display name and field details will stay saved.',
+      confirmLabel: 'Remove photo',
+      destructive: true,
     );
     if (confirmed == true && context.mounted) await model.removePhoto();
   }
@@ -59,10 +48,10 @@ class ProfilePhotoEditor extends StatelessWidget {
             semanticLabel: 'Your saved profile photo',
           )
         else
-          const Icon(
+          Icon(
             Icons.person_outline,
             size: AppSizing.emblem,
-            color: AppColors.blue,
+            color: context.semanticColors.info,
           ),
         const SizedBox(height: AppSpacing.lg),
         Wrap(

@@ -13,47 +13,52 @@ class SourceReferenceCard extends StatelessWidget {
   final String? citationLabel;
   String _date(DateTime value) => value.toIso8601String().split('T').first;
   @override
-  Widget build(BuildContext context) => Container(
-    decoration: BoxDecoration(
-      color: AppColors.canvas,
-      border: Border.all(color: AppColors.outline),
-      borderRadius: BorderRadius.circular(AppRadii.small),
-    ),
-    padding: const EdgeInsets.all(AppSpacing.md),
-    child: Column(
-      crossAxisAlignment: CrossAxisAlignment.stretch,
-      children: [
-        Text(
-          citationLabel == null
-              ? reference.title
-              : '$citationLabel · ${reference.title}',
-          style: Theme.of(context).textTheme.titleSmall,
-        ),
-        const SizedBox(height: AppSpacing.sm),
-        Text(reference.publisher),
-        if (reference.authors.isNotEmpty) ...[
+  Widget build(BuildContext context) {
+    final colors = Theme.of(context).colorScheme;
+    return Container(
+      decoration: BoxDecoration(
+        color: colors.surfaceContainerLow,
+        border: Border.all(color: colors.outlineVariant),
+        borderRadius: BorderRadius.circular(AppRadii.small),
+      ),
+      padding: const EdgeInsets.all(AppSpacing.md),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          Text(
+            citationLabel == null
+                ? reference.title
+                : '$citationLabel · ${reference.title}',
+            style: Theme.of(context).textTheme.titleSmall,
+          ),
+          const SizedBox(height: AppSpacing.sm),
+          Text(reference.publisher),
+          if (reference.authors.isNotEmpty) ...[
+            const SizedBox(height: AppSpacing.xs),
+            Text(reference.authors.join(', ')),
+          ],
+          if (reference.publishedAt case final published?) ...[
+            const SizedBox(height: AppSpacing.xs),
+            Text('Published ${_date(published)}'),
+          ],
+          const SizedBox(height: AppSpacing.sm),
+          SelectableText(
+            reference.url.toString(),
+            style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+              color: colors.primary,
+              decoration: TextDecoration.underline,
+              decorationColor: colors.primary,
+            ),
+          ),
+          const SizedBox(height: AppSpacing.sm),
+          Text(
+            'Source checked ${_date(reference.retrievedAt)}',
+            style: Theme.of(context).textTheme.bodySmall,
+          ),
           const SizedBox(height: AppSpacing.xs),
-          Text(reference.authors.join(', ')),
+          Text(reference.rights, style: Theme.of(context).textTheme.bodySmall),
         ],
-        if (reference.publishedAt case final published?) ...[
-          const SizedBox(height: AppSpacing.xs),
-          Text('Published ${_date(published)}'),
-        ],
-        const SizedBox(height: AppSpacing.sm),
-        SelectableText(
-          reference.url.toString(),
-          style: Theme.of(
-            context,
-          ).textTheme.bodyMedium?.copyWith(color: AppColors.blue),
-        ),
-        const SizedBox(height: AppSpacing.sm),
-        Text(
-          'Source checked ${_date(reference.retrievedAt)}',
-          style: Theme.of(context).textTheme.bodySmall,
-        ),
-        const SizedBox(height: AppSpacing.xs),
-        Text(reference.rights, style: Theme.of(context).textTheme.bodySmall),
-      ],
-    ),
-  );
+      ),
+    );
+  }
 }

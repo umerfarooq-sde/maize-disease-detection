@@ -13,6 +13,7 @@ class AdminSignInView extends StatefulWidget {
 class _AdminSignInViewState extends State<AdminSignInView> {
   final _email = TextEditingController();
   final _password = TextEditingController();
+  bool _obscurePassword = true;
   Future<void> _submit() async {
     final session = context.read<AdminSessionViewModel>();
     await session.signIn(_email.text, _password.text);
@@ -56,7 +57,7 @@ class _AdminSignInViewState extends State<AdminSignInView> {
             key: const Key('admin-password'),
             controller: _password,
             enabled: !session.busy,
-            obscureText: true,
+            obscureText: _obscurePassword,
             autocorrect: false,
             enableSuggestions: false,
             autofillHints: const [AutofillHints.password],
@@ -64,7 +65,21 @@ class _AdminSignInViewState extends State<AdminSignInView> {
             onSubmitted: (_) {
               if (!session.busy) _submit();
             },
-            decoration: const InputDecoration(labelText: 'Password'),
+            decoration: InputDecoration(
+              labelText: 'Password',
+              suffixIcon: IconButton(
+                tooltip: _obscurePassword ? 'Show password' : 'Hide password',
+                onPressed: session.busy
+                    ? null
+                    : () =>
+                          setState(() => _obscurePassword = !_obscurePassword),
+                icon: Icon(
+                  _obscurePassword
+                      ? Icons.visibility_outlined
+                      : Icons.visibility_off_outlined,
+                ),
+              ),
+            ),
           ),
           const SizedBox(height: AppSpacing.lg),
           if (session.error != null)
@@ -72,7 +87,7 @@ class _AdminSignInViewState extends State<AdminSignInView> {
               liveRegion: true,
               child: Text(
                 session.error!.message,
-                style: const TextStyle(color: AppColors.error),
+                style: TextStyle(color: Theme.of(context).colorScheme.error),
               ),
             ),
           const SizedBox(height: AppSpacing.lg),

@@ -14,6 +14,7 @@ class HomeView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final text = Theme.of(context).textTheme;
+    final colors = Theme.of(context).colorScheme;
     return AppPage(
       storageKey: 'home',
       child: Column(
@@ -22,7 +23,7 @@ class HomeView extends StatelessWidget {
           Text(
             'YOUR FIELD COMPANION',
             style: text.labelMedium?.copyWith(
-              color: AppColors.muted,
+              color: colors.onSurfaceVariant,
               letterSpacing: 1.4,
             ),
           ),
@@ -37,7 +38,7 @@ class HomeView extends StatelessWidget {
           const SizedBox(height: AppSpacing.md),
           Text(
             'A clearer path to understanding your maize.',
-            style: text.bodyLarge?.copyWith(color: AppColors.muted),
+            style: text.bodyLarge?.copyWith(color: colors.onSurfaceVariant),
           ),
           const SizedBox(height: AppSpacing.xl),
           const _ScanHero(),
@@ -55,8 +56,8 @@ class HomeView extends StatelessWidget {
               title: 'Field tools',
               description: 'Fertilizer and yield planning, in one place.',
               icon: Icons.grid_view_outlined,
-              tone: AppColors.amber,
-              tint: AppColors.wheat,
+              tone: context.semanticColors.warning,
+              tint: context.semanticColors.warningContainer,
               onTap: () => context.go(AppRoutes.tools),
             ),
           ),
@@ -76,10 +77,11 @@ class _ScanHero extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final text = Theme.of(context).textTheme;
+    final semantic = context.semanticColors;
     return Container(
       padding: const EdgeInsets.all(AppSpacing.xl),
       decoration: BoxDecoration(
-        color: AppColors.forestDark,
+        color: semantic.hero,
         borderRadius: BorderRadius.circular(AppRadii.hero),
       ),
       child: Column(
@@ -87,12 +89,12 @@ class _ScanHero extends StatelessWidget {
         children: [
           Row(
             children: [
-              const Icon(Icons.eco_outlined, color: AppColors.wheat),
+              Icon(Icons.eco_outlined, color: semantic.warningContainer),
               const SizedBox(width: AppSpacing.md),
               Expanded(
                 child: Text(
                   'Scan your maize',
-                  style: text.titleMedium?.copyWith(color: Colors.white),
+                  style: text.titleMedium?.copyWith(color: semantic.onHero),
                 ),
               ),
             ],
@@ -100,14 +102,14 @@ class _ScanHero extends StatelessWidget {
           const SizedBox(height: AppSpacing.sm),
           Text(
             'Choose a maize leaf photo for a model prediction. Results can be uncertain.',
-            style: text.bodyMedium?.copyWith(color: Colors.white),
+            style: text.bodyMedium?.copyWith(color: semantic.onHero),
           ),
           const SizedBox(height: AppSpacing.lg),
           FilledButton.icon(
             key: const Key('scan-leaf-action'),
             style: FilledButton.styleFrom(
-              backgroundColor: AppColors.wheat,
-              foregroundColor: AppColors.forestDark,
+              backgroundColor: semantic.warningContainer,
+              foregroundColor: semantic.onWarningContainer,
             ),
             onPressed: () => context.go(AppRoutes.scan),
             icon: const Icon(Icons.document_scanner_outlined),

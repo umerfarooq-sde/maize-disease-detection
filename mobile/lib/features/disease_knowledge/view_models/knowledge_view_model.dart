@@ -69,6 +69,19 @@ class KnowledgeViewModel extends ChangeNotifier {
     }
   }
 
+  /// Editing after a search/error immediately removes results for the old text
+  /// and fences any request that is still completing.
+  void editSearch() {
+    if (_disposed ||
+        (!searching &&
+            query == null &&
+            result == null &&
+            searchError == null)) {
+      return;
+    }
+    clearSearch();
+  }
+
   void clearSearch() {
     if (_disposed) return;
     _searchRevision++;

@@ -167,6 +167,31 @@ void main() {
     expect(model.canRetryAnalysis, false);
   });
   test(
+    'AI-rejected image cannot be retried with the same bytes and key',
+    () async {
+      final rejected = scanJson(status: ScanStatus.failed);
+      (rejected['analysisError'] as Map<String, Object?>)['code'] =
+          'INVALID_IMAGE';
+      final scan = ScanRecord.fromJson(rejected);
+      final uploads = FakeScanRepository();
+      final model = ScanResultViewModel(
+        FakeScanRecordsRepository(),
+        scanId: scan.id,
+        uploads: uploads,
+        initial: ScanResultArguments(
+          scan: scan,
+          selectedImage: leafImage,
+          requestKey: guestKey,
+        ),
+      );
+      addTearDown(model.dispose);
+      expect(model.canRetryAnalysis, false);
+      await model.retryAnalysis();
+      expect(uploads.keys, isEmpty);
+      expect(model.scan?.analysisErrorCode, 'INVALID_IMAGE');
+    },
+  );
+  test(
     'direct guest access fails safely and foreign response IDs are rejected',
     () async {
       final records = FakeScanRecordsRepository()

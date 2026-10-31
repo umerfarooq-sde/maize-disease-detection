@@ -45,7 +45,7 @@ class ProfileEditorView extends StatelessWidget {
                 liveRegion: true,
                 child: Text(
                   message,
-                  style: const TextStyle(color: AppColors.error),
+                  style: TextStyle(color: Theme.of(context).colorScheme.error),
                 ),
               ),
               const SizedBox(height: AppSpacing.md),
@@ -60,7 +60,9 @@ class ProfileEditorView extends StatelessWidget {
                 liveRegion: true,
                 child: Text(
                   message,
-                  style: const TextStyle(color: AppColors.forest),
+                  style: TextStyle(
+                    color: Theme.of(context).colorScheme.primary,
+                  ),
                 ),
               ),
               const SizedBox(height: AppSpacing.lg),

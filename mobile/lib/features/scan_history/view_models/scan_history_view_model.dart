@@ -42,6 +42,8 @@ class ScanHistoryViewModel extends ChangeNotifier {
     _loadingMore = false;
     _error = null;
     _loadMoreError = null;
+    _items.clear();
+    _nextCursor = null;
     notifyListeners();
     try {
       final page = await _repository.history();

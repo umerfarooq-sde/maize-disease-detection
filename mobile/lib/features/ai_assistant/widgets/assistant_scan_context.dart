@@ -20,7 +20,7 @@ class AssistantScanContext extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) => Card(
-    color: AppColors.sage,
+    color: Theme.of(context).colorScheme.primaryContainer,
     child: Padding(
       padding: const EdgeInsets.all(AppSpacing.lg),
       child: Column(
@@ -31,7 +31,7 @@ class AssistantScanContext extends StatelessWidget {
           Text('Scanned ${scanDate(scan.createdAt)}'),
           const SizedBox(height: AppSpacing.md),
           if (scan.prediction case final prediction?)
-            PredictionSummary(prediction: prediction)
+            PredictionSummary(prediction: prediction, compact: true)
           else
             Text(scanStatusLabel(scan.status)),
           const SizedBox(height: AppSpacing.lg),

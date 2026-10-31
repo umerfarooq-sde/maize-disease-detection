@@ -34,13 +34,16 @@ class ScanResultView extends StatelessWidget {
             const SizedBox(height: AppSpacing.lg),
           ],
           if (model.scan case final scan?)
-            ScanResultCard(
-              scan: scan,
-              selectedImage: model.selectedImage,
-              anonymousKey: model.imageCapability,
-              busy: model.busy,
-              onRetry: model.canRetryAnalysis ? model.retryAnalysis : null,
-              onRefresh: model.refresh,
+            _ResultAppearance(
+              status: scan.status,
+              child: ScanResultCard(
+                scan: scan,
+                selectedImage: model.selectedImage,
+                anonymousKey: model.imageCapability,
+                busy: model.busy,
+                onRetry: model.canRetryAnalysis ? model.retryAnalysis : null,
+                onRefresh: model.refresh,
+              ),
             ),
           if (model.error case final error?) ...[
             const SizedBox(height: AppSpacing.lg),
@@ -53,13 +56,15 @@ class ScanResultView extends StatelessWidget {
           ],
           if (onExplainScan != null &&
               model.scan?.status == ScanStatus.completed &&
-              model.scan?.prediction != null)
+              model.scan?.prediction != null) ...[
+            const SizedBox(height: AppSpacing.lg),
             OutlinedButton.icon(
               key: const Key('explain-scan-action'),
               onPressed: model.busy ? null : () => onExplainScan!(model.scan!),
-              icon: const Icon(Icons.chat_bubble_outline),
-              label: const Text('Ask about this scan'),
+              icon: const Icon(Icons.auto_stories_outlined),
+              label: const Text('Ask reviewed knowledge about this scan'),
             ),
+          ],
           const SizedBox(height: AppSpacing.xl),
           FilledButton.icon(
             key: const Key('new-scan-action'),
@@ -68,6 +73,34 @@ class ScanResultView extends StatelessWidget {
             label: const Text('Scan another leaf'),
           ),
         ],
+      ),
+    );
+  }
+}
+
+class _ResultAppearance extends StatelessWidget {
+  const _ResultAppearance({required this.status, required this.child});
+
+  final ScanStatus status;
+  final Widget child;
+
+  @override
+  Widget build(BuildContext context) {
+    final reduceMotion = MediaQuery.disableAnimationsOf(context);
+    return TweenAnimationBuilder<double>(
+      key: ValueKey(status),
+      tween: Tween(begin: reduceMotion ? 1 : 0, end: 1),
+      duration: reduceMotion
+          ? Duration.zero
+          : const Duration(milliseconds: 220),
+      curve: Curves.easeOutCubic,
+      child: child,
+      builder: (context, value, child) => Opacity(
+        opacity: 0.9 + (0.1 * value),
+        child: Transform.translate(
+          offset: Offset(0, AppSpacing.sm * (1 - value)),
+          child: child,
+        ),
       ),
     );
   }

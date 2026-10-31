@@ -72,6 +72,7 @@ class FakeScanRepository implements ScanRepository {
   SelectedLeafImage? recovered;
   AppException? selectError;
   AppException? uploadError;
+  Completer<SelectedLeafImage?>? pendingSelection;
   Completer<ScanRecord>? pending;
   ScanRecord result = savedScan;
   final keys = <String>[];
@@ -81,6 +82,7 @@ class FakeScanRepository implements ScanRepository {
   Future<SelectedLeafImage?> select(LeafImageSource source) async {
     sources.add(source);
     if (selectError case final error?) throw error;
+    if (pendingSelection case final pending?) return pending.future;
     return selection;
   }
 

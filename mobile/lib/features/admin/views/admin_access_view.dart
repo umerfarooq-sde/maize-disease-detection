@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import '../../../core/routes/app_routes.dart';
+import '../../../core/theme/design_tokens.dart';
 import 'package:provider/provider.dart';
 import '../../../data/repositories/admin_dashboard_repository.dart';
 import '../view_models/admin_session_view_model.dart';
@@ -37,6 +38,9 @@ class AdminAccessView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final session = context.watch<AdminSessionViewModel>();
+    final compactActions =
+        MediaQuery.sizeOf(context).width < AppSizing.twoColumnBreakpoint ||
+        MediaQuery.textScalerOf(context).scale(1) > 1.3;
     return Scaffold(
       appBar: AppBar(
         title: Text(
@@ -63,32 +67,90 @@ class AdminAccessView extends StatelessWidget {
           ),
           icon: const Icon(Icons.arrow_back),
         ),
-        actions: [
-          if (session.signedIn && !media)
-            IconButton(
-              onPressed: () =>
-                  context.push('${AppRoutes.admin}/reference-images'),
-              tooltip: 'Manage reference images',
-              icon: const Icon(Icons.photo_library_outlined),
-            ),
-          if (session.signedIn && !modelHealth)
-            IconButton(
-              onPressed: () => context.push('${AppRoutes.admin}/model-health'),
-              tooltip: 'Model health',
-              icon: const Icon(Icons.monitor_heart_outlined),
-            ),
-          if (session.signedIn && !management)
-            IconButton(
-              onPressed: () => context.push('${AppRoutes.admin}/manage'),
-              tooltip: 'Manage knowledge and configuration',
-              icon: const Icon(Icons.settings_outlined),
-            ),
-          if (session.signedIn)
-            TextButton(
-              onPressed: session.busy ? null : session.signOut,
-              child: const Text('Sign out'),
-            ),
-        ],
+        actions: session.signedIn && compactActions
+            ? [
+                PopupMenuButton<_AdminAction>(
+                  tooltip: 'Admin actions',
+                  icon: const Icon(Icons.more_vert),
+                  onSelected: (action) async {
+                    switch (action) {
+                      case _AdminAction.references:
+                        context.push('${AppRoutes.admin}/reference-images');
+                      case _AdminAction.health:
+                        context.push('${AppRoutes.admin}/model-health');
+                      case _AdminAction.management:
+                        context.push('${AppRoutes.admin}/manage');
+                      case _AdminAction.signOut:
+                        await session.signOut();
+                    }
+                  },
+                  itemBuilder: (context) => [
+                    if (!media)
+                      const PopupMenuItem(
+                        value: _AdminAction.references,
+                        child: ListTile(
+                          leading: Icon(Icons.photo_library_outlined),
+                          title: Text('Reference images'),
+                          contentPadding: EdgeInsets.zero,
+                        ),
+                      ),
+                    if (!modelHealth)
+                      const PopupMenuItem(
+                        value: _AdminAction.health,
+                        child: ListTile(
+                          leading: Icon(Icons.monitor_heart_outlined),
+                          title: Text('Model health'),
+                          contentPadding: EdgeInsets.zero,
+                        ),
+                      ),
+                    if (!management)
+                      const PopupMenuItem(
+                        value: _AdminAction.management,
+                        child: ListTile(
+                          leading: Icon(Icons.settings_outlined),
+                          title: Text('Management'),
+                          contentPadding: EdgeInsets.zero,
+                        ),
+                      ),
+                    PopupMenuItem(
+                      value: _AdminAction.signOut,
+                      enabled: !session.busy,
+                      child: const ListTile(
+                        leading: Icon(Icons.logout),
+                        title: Text('Sign out'),
+                        contentPadding: EdgeInsets.zero,
+                      ),
+                    ),
+                  ],
+                ),
+              ]
+            : [
+                if (session.signedIn && !media)
+                  IconButton(
+                    onPressed: () =>
+                        context.push('${AppRoutes.admin}/reference-images'),
+                    tooltip: 'Manage reference images',
+                    icon: const Icon(Icons.photo_library_outlined),
+                  ),
+                if (session.signedIn && !modelHealth)
+                  IconButton(
+                    onPressed: () =>
+                        context.push('${AppRoutes.admin}/model-health'),
+                    tooltip: 'Model health',
+                    icon: const Icon(Icons.monitor_heart_outlined),
+                  ),
+                if (session.signedIn && !management)
+                  IconButton(
+                    onPressed: () => context.push('${AppRoutes.admin}/manage'),
+                    tooltip: 'Manage knowledge and configuration',
+                    icon: const Icon(Icons.settings_outlined),
+                  ),
+                if (session.signedIn)
+                  TextButton(
+                    onPressed: session.busy ? null : session.signOut,
+                    child: const Text('Sign out'),
+                  ),
+              ],
       ),
       body: session.signedIn && media
           ? ReferenceManagementView(
@@ -138,3 +200,5 @@ class AdminAccessView extends StatelessWidget {
     );
   }
 }
+
+enum _AdminAction { references, health, management, signOut }

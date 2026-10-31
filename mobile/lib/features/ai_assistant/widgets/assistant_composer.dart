@@ -91,9 +91,9 @@ class AssistantComposer extends StatelessWidget {
           child: Text(
             message,
             key: const Key('assistant-input-error'),
-            style: Theme.of(
-              context,
-            ).textTheme.bodyMedium?.copyWith(color: AppColors.error),
+            style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+              color: Theme.of(context).colorScheme.error,
+            ),
           ),
         ),
       ],

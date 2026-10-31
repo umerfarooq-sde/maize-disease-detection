@@ -13,7 +13,7 @@ Future<ScanRecord> pollScanAnalysis(
   required void Function(ScanRecord) onUpdate,
   String? anonymousKey,
   Duration interval = const Duration(seconds: 2),
-  int maxAttempts = 6,
+  int maxAttempts = 15,
 }) async {
   var current = initial;
   final elapsed = Stopwatch()..start();

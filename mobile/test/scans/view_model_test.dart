@@ -40,9 +40,12 @@ void main() {
       final repo = FakeScanRepository()..pending = Completer<ScanRecord>();
       final model = ScanViewModel(repo);
       addTearDown(model.dispose);
+      expect(model.stage, ScanFlowStage.idle);
       await model.select(LeafImageSource.gallery);
+      expect(model.stage, ScanFlowStage.selected);
       final pending = model.upload();
       expect(model.uploading, true);
+      expect(model.stage, ScanFlowStage.uploading);
       repo.reportProgress!(0.5);
       expect(model.progress, 0.5);
       await model.upload();
@@ -53,12 +56,14 @@ void main() {
       repo.pending!.completeError(const AppException(AppErrorKind.timeout));
       await pending;
       expect(model.error?.kind, AppErrorKind.timeout);
+      expect(model.stage, ScanFlowStage.error);
       expect(model.uploading, false);
       expect(model.image, leafImage);
       repo.pending = null;
       await model.retry();
       expect(repo.keys[0], repo.keys[1]);
       expect(model.scan, savedScan);
+      expect(model.stage, ScanFlowStage.processing);
       await model.upload();
       expect(repo.keys.length, 2);
       await model.select(LeafImageSource.gallery);
@@ -137,4 +142,24 @@ void main() {
       expect(repo.keys, hasLength(1));
     }
   });
+  test(
+    'invalid image analysis requires a new selection instead of same-key retry',
+    () async {
+      final rejected = scanJson(status: ScanStatus.failed);
+      (rejected['analysisError'] as Map<String, Object?>)['code'] =
+          'INVALID_IMAGE';
+      final repo = FakeScanRepository()..result = ScanRecord.fromJson(rejected);
+      final model = ScanViewModel(repo);
+      addTearDown(model.dispose);
+      await model.select(LeafImageSource.gallery);
+      await model.upload();
+      expect(model.analysisFailed, true);
+      expect(model.canRetryAnalysis, false);
+      await model.upload();
+      expect(repo.keys, hasLength(1));
+      await model.retry();
+      expect(repo.keys, hasLength(1));
+      expect(repo.sources, [LeafImageSource.gallery, LeafImageSource.gallery]);
+    },
+  );
 }

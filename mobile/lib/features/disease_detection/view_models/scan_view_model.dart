@@ -9,12 +9,23 @@ import '../../../data/repositories/scan_records_repository.dart';
 import '../utils/scan_polling.dart';
 import 'scan_result_arguments.dart';
 
+enum ScanFlowStage {
+  idle,
+  selecting,
+  selected,
+  uploading,
+  processing,
+  completed,
+  failed,
+  error,
+}
+
 class ScanViewModel extends ChangeNotifier {
   ScanViewModel(
     this._repository, {
     ScanRecordsRepository? records,
     this.pollInterval = const Duration(seconds: 2),
-    this.maxPollAttempts = 6,
+    this.maxPollAttempts = 15,
   }) : _records = records;
   final ScanRepository _repository;
   final ScanRecordsRepository? _records;
@@ -34,7 +45,23 @@ class ScanViewModel extends ChangeNotifier {
   int _generation = 0;
   bool get busy => selecting || uploading || polling;
   bool get cameraSupported => _repository.cameraSupported;
+  LeafImageSource? get lastSource => _lastSource;
   bool get analysisFailed => scan?.status == ScanStatus.failed;
+  bool get canRetryAnalysis =>
+      analysisFailed && scan?.analysisErrorCode != 'INVALID_IMAGE';
+  ScanFlowStage get stage {
+    if (selecting) return ScanFlowStage.selecting;
+    if (uploading) return ScanFlowStage.uploading;
+    if (polling) return ScanFlowStage.processing;
+    if (error != null) return ScanFlowStage.error;
+    return switch (scan?.status) {
+      ScanStatus.pending || ScanStatus.processing => ScanFlowStage.processing,
+      ScanStatus.completed => ScanFlowStage.completed,
+      ScanStatus.failed => ScanFlowStage.failed,
+      null => image == null ? ScanFlowStage.idle : ScanFlowStage.selected,
+    };
+  }
+
   ScanResultArguments? get resultArguments => scan == null
       ? null
       : ScanResultArguments(
@@ -83,7 +110,7 @@ class ScanViewModel extends ChangeNotifier {
         _disposed ||
         selected == null ||
         key == null ||
-        (scan != null && !analysisFailed)) {
+        (scan != null && !canRetryAnalysis)) {
       return;
     }
     uploading = true;
@@ -164,7 +191,7 @@ class ScanViewModel extends ChangeNotifier {
   Future<void> retry() =>
       scan != null && analysisPending(scan!) && _records != null
       ? refreshAnalysis()
-      : _uploadFailed
+      : _uploadFailed && (scan == null || canRetryAnalysis)
       ? upload()
       : _select(_lastSource);
   void clear() {

@@ -32,23 +32,27 @@ class FarmerShell extends StatelessWidget {
   Widget build(BuildContext context) {
     final wide = Responsive.useRail(context);
     final keyboardOpen = MediaQuery.viewInsetsOf(context).bottom > 0;
+    final textScale = MediaQuery.textScalerOf(context).scale(1);
+    final content = _BranchTransition(
+      branch: navigation.currentIndex,
+      child: navigation,
+    );
     return Scaffold(
       appBar: keyboardOpen
           ? null
           : AppBar(
-              toolbarHeight:
-                  kToolbarHeight * MediaQuery.textScalerOf(context).scale(1),
+              toolbarHeight: kToolbarHeight * textScale.clamp(1, 1.5),
               title: Row(
                 children: [
                   Container(
                     padding: const EdgeInsets.all(AppSpacing.sm),
                     decoration: BoxDecoration(
-                      color: AppColors.sage,
+                      color: Theme.of(context).colorScheme.primaryContainer,
                       borderRadius: BorderRadius.circular(AppRadii.small),
                     ),
-                    child: const Icon(
+                    child: Icon(
                       Icons.eco_outlined,
-                      color: AppColors.forest,
+                      color: Theme.of(context).colorScheme.onPrimaryContainer,
                     ),
                   ),
                   const SizedBox(width: AppSpacing.md),
@@ -84,16 +88,23 @@ class FarmerShell extends StatelessWidget {
                   ),
                 ),
                 const VerticalDivider(width: AppSizing.divider),
-                Expanded(child: navigation),
+                Expanded(child: content),
               ],
             )
-          : navigation,
+          : content,
       bottomNavigationBar: wide || keyboardOpen
           ? null
           : NavigationBar(
-              height: AppSizing.navigationHeight,
+              // Five actions remain reachable at 320dp and at large text size.
+              // Hiding unselected captions avoids forcing their text into 64dp.
+              height: Responsive.compactNavigation(context)
+                  ? AppSizing.navigationHeight
+                  : AppSizing.navigationHeight + AppSpacing.sm,
               selectedIndex: navigation.currentIndex,
               onDestinationSelected: _select,
+              labelBehavior: Responsive.compactNavigation(context)
+                  ? NavigationDestinationLabelBehavior.alwaysHide
+                  : NavigationDestinationLabelBehavior.alwaysShow,
               destinations: [
                 for (final area in _areas)
                   NavigationDestination(
@@ -104,6 +115,34 @@ class FarmerShell extends StatelessWidget {
                   ),
               ],
             ),
+    );
+  }
+}
+
+class _BranchTransition extends StatelessWidget {
+  const _BranchTransition({required this.branch, required this.child});
+
+  final int branch;
+  final Widget child;
+
+  @override
+  Widget build(BuildContext context) {
+    final reduceMotion = MediaQuery.disableAnimationsOf(context);
+    return TweenAnimationBuilder<double>(
+      key: ValueKey(branch),
+      tween: Tween(begin: reduceMotion ? 1 : 0, end: 1),
+      duration: reduceMotion
+          ? Duration.zero
+          : const Duration(milliseconds: 180),
+      curve: Curves.easeOutCubic,
+      child: child,
+      builder: (context, value, child) => Opacity(
+        opacity: 0.92 + (0.08 * value),
+        child: Transform.translate(
+          offset: Offset(8 * (1 - value), 0),
+          child: child,
+        ),
+      ),
     );
   }
 }

@@ -2,6 +2,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:provider/provider.dart';
+import 'package:maizedoctor/core/exceptions/app_exception.dart';
 import 'package:maizedoctor/core/theme/app_theme.dart';
 import 'package:maizedoctor/data/datasources/leaf_image_datasource.dart';
 import 'package:maizedoctor/data/models/scan_record.dart';
@@ -13,7 +14,11 @@ import 'package:maizedoctor/features/disease_detection/views/scan_view.dart';
 import 'package:maizedoctor/features/disease_detection/utils/scan_presentation.dart';
 import 'helpers.dart';
 
-Future<void> showResult(WidgetTester tester, ScanResultViewModel model) async {
+Future<void> showResult(
+  WidgetTester tester,
+  ScanResultViewModel model, {
+  ThemeData? theme,
+}) async {
   tester.view.physicalSize = const Size(320, 568);
   tester.view.devicePixelRatio = 1;
   tester.platformDispatcher.textScaleFactorTestValue = 2;
@@ -24,7 +29,7 @@ Future<void> showResult(WidgetTester tester, ScanResultViewModel model) async {
   });
   await tester.pumpWidget(
     MaterialApp(
-      theme: AppTheme.light,
+      theme: theme ?? AppTheme.light,
       home: Scaffold(
         body: ChangeNotifierProvider.value(
           value: model,
@@ -68,20 +73,55 @@ void main() {
       );
       addTearDown(model.dispose);
       await showResult(tester, model);
-      expect(find.text('Healthy'), findsOneWidget);
-      expect(find.text('Model score: 99.0%'), findsOneWidget);
+      expect(
+        tester
+            .widget<Text>(find.byKey(const Key('prediction-leading-label')))
+            .data,
+        'Healthy',
+      );
+      expect(
+        tester.widget<Text>(find.byKey(const Key('classifier-score'))).data,
+        '99.0%',
+      );
       expect(find.text('Uncertain result'), findsOneWidget);
       expect(
-        find.textContaining('even when the model score is high'),
+        find.textContaining('even when its score is high'),
         findsOneWidget,
       );
-      expect(find.textContaining('not the probability'), findsOneWidget);
+      expect(find.textContaining('not diagnostic accuracy'), findsOneWidget);
       expect(find.textContaining('does not rule out'), findsOneWidget);
       expect(
         find.textContaining('mobilenet-v3-small-v2-20261009'),
         findsOneWidget,
       );
       expect(find.byKey(const Key('leaf-image-preview')), findsOneWidget);
+      expect(find.text('Four-class breakdown'), findsOneWidget);
+      for (final label in [
+        'Healthy',
+        'Northern_Corn_Leaf_Blight',
+        'Common_Rust',
+        'Gray_Leaf_Spot',
+      ]) {
+        expect(find.byKey(ValueKey('probability-$label')), findsOneWidget);
+      }
+      final ordered =
+          [
+            'Healthy',
+            'Northern_Corn_Leaf_Blight',
+            'Common_Rust',
+            'Gray_Leaf_Spot',
+          ].map(
+            (label) => tester
+                .getTopLeft(find.byKey(ValueKey('probability-$label')))
+                .dy,
+          );
+      expect(ordered, ordered.toList()..sort());
+      expect(
+        find.bySemanticsLabel(
+          'Healthy, classifier output 99.0%, highest output',
+        ),
+        findsOneWidget,
+      );
       expect(tester.takeException(), isNull);
     },
   );
@@ -108,13 +148,55 @@ void main() {
       );
       addTearDown(model.dispose);
       await showResult(tester, model);
-      expect(find.text('Northern Corn Leaf Blight'), findsOneWidget);
+      expect(
+        tester
+            .widget<Text>(find.byKey(const Key('prediction-leading-label')))
+            .data,
+        'Northern Corn Leaf Blight',
+      );
       expect(find.text('Threshold met'), findsOneWidget);
       expect(find.textContaining('not a confirmed diagnosis'), findsOneWidget);
       expect(find.text('Uncertain result'), findsNothing);
       expect(tester.takeException(), isNull);
     },
   );
+  testWidgets(
+    'below-threshold result stays explicit and readable in dark theme',
+    (tester) async {
+      final data = scanJson(status: ScanStatus.completed);
+      final prediction = data['prediction'] as Map<String, Object?>;
+      prediction['confidenceThreshold'] = 0.8;
+      prediction['predictionStatus'] = 'LOW_CONFIDENCE';
+      prediction['uncertaintyReason'] = 'BELOW_VALIDATION_THRESHOLD';
+      final scan = ScanRecord.fromJson(data);
+      final model = ScanResultViewModel(
+        FakeScanRecordsRepository(),
+        scanId: scan.id,
+        initial: ScanResultArguments(scan: scan),
+      );
+      addTearDown(model.dispose);
+      await showResult(tester, model, theme: AppTheme.dark);
+      expect(find.text('Below confidence threshold'), findsOneWidget);
+      expect(find.text('Policy threshold: 80.0%'), findsOneWidget);
+      expect(find.byKey(const Key('saved-leaf-image')), findsOneWidget);
+      expect(find.byType(LinearProgressIndicator), findsNWidgets(4));
+      expect(tester.takeException(), isNull);
+    },
+  );
+  testWidgets('invalid response renders a safe retryable state', (
+    tester,
+  ) async {
+    final records = FakeScanRecordsRepository()
+      ..error = const AppException(AppErrorKind.invalidResponse);
+    final model = ScanResultViewModel(records, scanId: savedScan.id);
+    addTearDown(model.dispose);
+    unawaited(model.load());
+    await showResult(tester, model);
+    expect(find.textContaining('could not read the response'), findsOneWidget);
+    expect(find.text('Try again'), findsOneWidget);
+    expect(find.byKey(const Key('prediction-leading-label')), findsNothing);
+    expect(tester.takeException(), isNull);
+  });
   testWidgets(
     'failed result retry shows upload progress and analysis wait before success',
     (tester) async {
@@ -146,7 +228,12 @@ void main() {
         ScanRecord.fromJson(scanJson(status: ScanStatus.completed)),
       );
       await tester.pumpAndSettle();
-      expect(find.text('Healthy'), findsOneWidget);
+      expect(
+        tester
+            .widget<Text>(find.byKey(const Key('prediction-leading-label')))
+            .data,
+        'Healthy',
+      );
       expect(find.text('Retry analysis'), findsNothing);
       expect(uploads.keys, hasLength(1));
       expect(tester.takeException(), isNull);

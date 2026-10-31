@@ -17,6 +17,7 @@ class _AuthIntroViewState extends State<AuthIntroView> {
   final _form = GlobalKey<FormState>();
   final _email = TextEditingController();
   final _password = TextEditingController();
+  bool _obscurePassword = true;
   @override
   void dispose() {
     _email.dispose();
@@ -78,10 +79,25 @@ class _AuthIntroViewState extends State<AuthIntroView> {
             TextFormField(
               controller: _password,
               enabled: !model.busy,
-              obscureText: true,
+              obscureText: _obscurePassword,
               enableSuggestions: false,
               autocorrect: false,
-              decoration: const InputDecoration(labelText: 'Password'),
+              decoration: InputDecoration(
+                labelText: 'Password',
+                suffixIcon: IconButton(
+                  tooltip: _obscurePassword ? 'Show password' : 'Hide password',
+                  onPressed: model.busy
+                      ? null
+                      : () => setState(
+                          () => _obscurePassword = !_obscurePassword,
+                        ),
+                  icon: Icon(
+                    _obscurePassword
+                        ? Icons.visibility_outlined
+                        : Icons.visibility_off_outlined,
+                  ),
+                ),
+              ),
               autofillHints: const [AutofillHints.password],
               textInputAction: TextInputAction.done,
               onFieldSubmitted: (_) {
@@ -99,7 +115,7 @@ class _AuthIntroViewState extends State<AuthIntroView> {
                   model.error!.kind == AppErrorKind.authentication
                       ? 'We could not sign you in. Check your email and password.'
                       : model.error!.message,
-                  style: const TextStyle(color: AppColors.error),
+                  style: TextStyle(color: Theme.of(context).colorScheme.error),
                 ),
               ),
               const SizedBox(height: AppSpacing.lg),

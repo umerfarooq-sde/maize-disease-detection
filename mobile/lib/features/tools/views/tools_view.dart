@@ -21,9 +21,9 @@ class ToolsView extends StatelessWidget {
         const SizedBox(height: AppSpacing.sm),
         Text(
           'Ask your field assistant or explore fertilizer and yield planning.',
-          style: Theme.of(
-            context,
-          ).textTheme.bodyLarge?.copyWith(color: AppColors.muted),
+          style: Theme.of(context).textTheme.bodyLarge?.copyWith(
+            color: Theme.of(context).colorScheme.onSurfaceVariant,
+          ),
         ),
         const SizedBox(height: AppSpacing.xxl),
         ResponsivePair(
@@ -31,8 +31,8 @@ class ToolsView extends StatelessWidget {
             title: 'Fertilizer planning',
             description: 'A place for reliable nutrient calculations.',
             icon: Icons.grass_outlined,
-            tone: AppColors.amber,
-            tint: AppColors.wheat,
+            tone: context.semanticColors.warning,
+            tint: context.semanticColors.warningContainer,
             onTap: () => context.push(AppRoutes.fertilizer),
           ),
           second: FeatureCard(

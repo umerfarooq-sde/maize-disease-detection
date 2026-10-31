@@ -43,9 +43,9 @@ class AssistantAnswerCard extends StatelessWidget {
                   const SizedBox(height: AppSpacing.sm),
                   Text(
                     'Low-confidence model result',
-                    style: Theme.of(
-                      context,
-                    ).textTheme.labelLarge?.copyWith(color: AppColors.amber),
+                    style: Theme.of(context).textTheme.labelLarge?.copyWith(
+                      color: context.semanticColors.warning,
+                    ),
                   ),
                 ],
               ],
@@ -96,13 +96,13 @@ class _Warning extends StatelessWidget {
   Widget build(BuildContext context) => Container(
     padding: const EdgeInsets.all(AppSpacing.md),
     decoration: BoxDecoration(
-      color: AppColors.wheat,
+      color: context.semanticColors.warningContainer,
       borderRadius: BorderRadius.circular(AppRadii.small),
     ),
     child: Row(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        const Icon(Icons.info_outline, color: AppColors.amber),
+        Icon(Icons.info_outline, color: context.semanticColors.warning),
         const SizedBox(width: AppSpacing.sm),
         Expanded(child: Text(message)),
       ],

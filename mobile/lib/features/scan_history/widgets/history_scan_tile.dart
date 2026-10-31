@@ -13,6 +13,7 @@ class HistoryScanTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final text = Theme.of(context).textTheme;
+    final colors = Theme.of(context).colorScheme;
     final prediction = scan.prediction;
     final uncertain =
         prediction?.predictionStatus == ScanPredictionStatus.lowConfidence;
@@ -58,9 +59,7 @@ class HistoryScanTile extends StatelessWidget {
                       if (uncertain)
                         Text(
                           'Uncertain result',
-                          style: text.labelLarge?.copyWith(
-                            color: AppColors.amber,
-                          ),
+                          style: text.labelLarge?.copyWith(color: colors.error),
                         ),
                     ],
                     if (scan.status == ScanStatus.failed)
@@ -71,9 +70,7 @@ class HistoryScanTile extends StatelessWidget {
                       const SizedBox(height: AppSpacing.sm),
                       Text(
                         'View scan',
-                        style: text.labelLarge?.copyWith(
-                          color: AppColors.forest,
-                        ),
+                        style: text.labelLarge?.copyWith(color: colors.primary),
                       ),
                     ],
                   ],

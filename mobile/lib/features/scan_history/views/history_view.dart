@@ -106,12 +106,15 @@ class HistoryView extends StatelessWidget {
                   SliverList.builder(
                     itemCount: items.length,
                     itemBuilder: (context, index) => _content(
-                      HistoryScanTile(
-                        key: ValueKey(items[index].id),
-                        scan: items[index],
-                        onOpen: onOpenScan == null
-                            ? null
-                            : () => onOpenScan!(items[index]),
+                      Padding(
+                        padding: const EdgeInsets.only(bottom: AppSpacing.lg),
+                        child: HistoryScanTile(
+                          key: ValueKey(items[index].id),
+                          scan: items[index],
+                          onOpen: onOpenScan == null
+                              ? null
+                              : () => onOpenScan!(items[index]),
+                        ),
                       ),
                     ),
                   ),

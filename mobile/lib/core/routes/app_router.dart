@@ -382,6 +382,7 @@ Future<void> _chooseAssistantScan(BuildContext context) async {
   final revision = session.revision;
   final scan = await showModalBottomSheet<ScanRecord>(
     context: context,
+    useRootNavigator: true,
     isScrollControlled: true,
     useSafeArea: true,
     builder: (_) => const AssistantScanPicker(),

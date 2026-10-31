@@ -8,15 +8,15 @@ class FertilizerPendingRules extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) => Card(
-    color: AppColors.wheat,
+    color: context.semanticColors.warningContainer,
     child: Padding(
       padding: const EdgeInsets.all(AppSpacing.xl),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
-          const Icon(
+          Icon(
             Icons.fact_check_outlined,
-            color: AppColors.amber,
+            color: context.semanticColors.warning,
             size: AppSizing.stateIcon,
           ),
           const SizedBox(height: AppSpacing.lg),

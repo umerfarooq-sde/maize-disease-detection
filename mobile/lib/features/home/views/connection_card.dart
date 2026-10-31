@@ -29,7 +29,7 @@ class ConnectionCard extends StatelessWidget {
                 model.health == null
                     ? Icons.cloud_outlined
                     : Icons.cloud_done_outlined,
-                color: AppColors.blue,
+                color: context.semanticColors.info,
               ),
               const SizedBox(width: AppSpacing.md),
               Expanded(
@@ -47,9 +47,9 @@ class ConnectionCard extends StatelessWidget {
             model.health == null
                 ? 'Check the service connection when you need it.'
                 : 'The MAIZEDOCTOR service was reachable at the last check.',
-            style: Theme.of(
-              context,
-            ).textTheme.bodyMedium?.copyWith(color: AppColors.muted),
+            style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+              color: Theme.of(context).colorScheme.onSurfaceVariant,
+            ),
           ),
           const SizedBox(height: AppSpacing.md),
           Align(

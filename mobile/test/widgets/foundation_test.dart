@@ -104,11 +104,15 @@ void main() {
       tester,
     ) async {
       await pumpApp(tester, size: size);
-      for (final label in ['Scan', 'Knowledge', 'Tools', 'Profile', 'Home']) {
-        await tester.ensureVisible(find.text(label).last);
-        await tester.tap(find.text(label).last);
+      for (final index in [1, 2, 3, 4, 0]) {
+        final rail = find.byType(NavigationRail);
+        final destination = rail.evaluate().isNotEmpty
+            ? find.byWidgetPredicate((w) => w.runtimeType.toString() == '_RailDestination').at(index)
+            : find.byType(NavigationDestination).at(index);
+        await tester.ensureVisible(destination);
+        await tester.tap(destination);
         await tester.pumpAndSettle();
-        expect(tester.takeException(), isNull, reason: label);
+        expect(tester.takeException(), isNull, reason: 'destination $index');
       }
       expect(
         find.byType(NavigationRail),

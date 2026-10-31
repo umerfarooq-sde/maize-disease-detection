@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import '../../../core/theme/design_tokens.dart';
+import '../../../core/widgets/horizontal_data_scroll.dart';
 import '../../../data/models/model_health.dart';
 import '../../disease_detection/utils/scan_presentation.dart';
 
@@ -21,7 +22,10 @@ class OfflineModelMetrics extends StatelessWidget {
       Text(
         'Architecture: ${data.architecture}\nDataset: ${data.datasetVersion}\nExperiment: ${data.experimentId}\nTraining date: not recorded in artifact\nFinal-test unique contents: ${data.sampleCount}',
       ),
-      SelectableText('Dataset/index fingerprint: ${data.indexFingerprint}'),
+      SelectableText(
+        'Dataset/index fingerprint: ${data.indexFingerprint}',
+        style: Theme.of(context).textTheme.bodySmall,
+      ),
       const SizedBox(height: AppSpacing.md),
       Wrap(
         spacing: AppSpacing.md,
@@ -34,11 +38,8 @@ class OfflineModelMetrics extends StatelessWidget {
         ],
       ),
       const SizedBox(height: AppSpacing.lg),
-      const Text(
-        'Per-class test metrics Â· scroll horizontally for all columns',
-      ),
-      SingleChildScrollView(
-        scrollDirection: Axis.horizontal,
+      const Text('Per-class test metrics · swipe horizontally for all columns'),
+      HorizontalDataScroll(
         child: DataTable(
           columns: const [
             DataColumn(label: Text('Class')),
@@ -71,8 +72,7 @@ class OfflineModelMetrics extends StatelessWidget {
       const Text(
         'Rows: actual class. Columns: predicted class. Counts, not percentages. Scroll horizontally.',
       ),
-      SingleChildScrollView(
-        scrollDirection: Axis.horizontal,
+      HorizontalDataScroll(
         child: DataTable(
           columns: [
             const DataColumn(label: Text('Actual / predicted')),

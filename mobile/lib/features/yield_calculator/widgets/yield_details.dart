@@ -67,7 +67,7 @@ class YieldResultCard extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
         Card(
-          color: AppColors.mist,
+          color: context.semanticColors.infoContainer,
           child: Padding(
             padding: const EdgeInsets.all(AppSpacing.xl),
             child: Column(

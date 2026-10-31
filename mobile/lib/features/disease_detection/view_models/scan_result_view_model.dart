@@ -14,7 +14,7 @@ class ScanResultViewModel extends ChangeNotifier {
     ScanRepository? uploads,
     ScanResultArguments? initial,
     this.pollInterval = const Duration(seconds: 2),
-    this.maxPollAttempts = 6,
+    this.maxPollAttempts = 15,
   }) : _uploads = uploads,
        _initial = initial {
     if (initial != null && initial.scan.id != scanId) {
@@ -42,6 +42,7 @@ class ScanResultViewModel extends ChangeNotifier {
       _records.hasAuthenticatedSession ? null : _initial?.requestKey;
   bool get canRetryAnalysis =>
       scan?.status == ScanStatus.failed &&
+      scan?.analysisErrorCode != 'INVALID_IMAGE' &&
       _uploads != null &&
       _initial?.selectedImage != null &&
       _initial?.requestKey != null;

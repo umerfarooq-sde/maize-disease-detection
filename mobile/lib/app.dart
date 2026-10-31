@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:go_router/go_router.dart';
 import 'package:http/http.dart' as http;
 import 'package:provider/provider.dart';
@@ -8,6 +9,7 @@ import 'core/network/app_config.dart';
 import 'core/routes/app_router.dart';
 import 'core/routes/app_routes.dart';
 import 'core/theme/app_theme.dart';
+import 'core/theme/theme_controller.dart';
 import 'core/storage/memory_session_tokens.dart';
 import 'data/repositories/farmer_session_repository.dart';
 import 'data/repositories/registration_repository.dart';
@@ -44,6 +46,7 @@ class MainApp extends StatefulWidget {
     this.repository,
     this.scanRepository,
     this.profileImages,
+    this.themeController,
     this.initialLocation = AppRoutes.home,
     super.key,
   });
@@ -52,6 +55,7 @@ class MainApp extends StatefulWidget {
   final BackendRepository? repository;
   final ScanRepository? scanRepository;
   final LeafImageDatasource? profileImages;
+  final ThemeController? themeController;
   final String initialLocation;
   @override
   State<MainApp> createState() => _MainAppState();
@@ -66,10 +70,14 @@ class _MainAppState extends State<MainApp> {
   late final MemorySessionTokens _adminTokens;
   late final ApiClient _adminApi;
   late final AdminSessionViewModel _adminSession;
+  late final ThemeController _theme;
+  late final bool _ownsTheme;
   @override
   void initState() {
     super.initState();
     _config = widget.config ?? AppConfig.fromEnvironment();
+    _ownsTheme = widget.themeController == null;
+    _theme = widget.themeController ?? ThemeController.system();
     _tokens = MemorySessionTokens();
     _api = ApiClient(
       config: _config,
@@ -102,6 +110,7 @@ class _MainAppState extends State<MainApp> {
     _adminSession.dispose();
     _adminTokens.dispose();
     _adminApi.close();
+    if (_ownsTheme) _theme.dispose();
     super.dispose();
   }
 
@@ -139,6 +148,7 @@ class _MainAppState extends State<MainApp> {
         create: (_) => ApiKnowledgeRepository(_api),
       ),
       ChangeNotifierProvider<FarmerSessionViewModel>.value(value: _session),
+      ChangeNotifierProvider<ThemeController>.value(value: _theme),
       Provider<ScanRecordsRepository>(
         create: (_) => ApiScanRecordsRepository(ScanDatasource(_api)),
       ),
@@ -179,11 +189,21 @@ class _MainAppState extends State<MainApp> {
             ),
       ),
     ],
-    child: MaterialApp.router(
-      title: AppConstants.name,
-      debugShowCheckedModeBanner: false,
-      theme: AppTheme.light,
-      routerConfig: _router,
+    child: Consumer<ThemeController>(
+      builder: (context, theme, _) => MaterialApp.router(
+        title: AppConstants.name,
+        debugShowCheckedModeBanner: false,
+        theme: AppTheme.light,
+        darkTheme: AppTheme.dark,
+        themeMode: theme.mode,
+        themeAnimationDuration: const Duration(milliseconds: 240),
+        themeAnimationCurve: Curves.easeOutCubic,
+        routerConfig: _router,
+        builder: (context, child) => AnnotatedRegion<SystemUiOverlayStyle>(
+          value: AppTheme.systemOverlayStyle(Theme.of(context)),
+          child: child ?? const SizedBox.shrink(),
+        ),
+      ),
     ),
   );
 }

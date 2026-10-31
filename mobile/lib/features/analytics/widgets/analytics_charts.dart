@@ -55,10 +55,10 @@ class PredictionDistribution extends StatelessWidget {
                 ExcludeSemantics(
                   child: LinearProgressIndicator(
                     value: item.count / total,
-                    backgroundColor: AppColors.mist,
+                    backgroundColor: context.semanticColors.infoContainer,
                     color: item.label == 'Healthy'
-                        ? AppColors.blue
-                        : AppColors.amber,
+                        ? context.semanticColors.info
+                        : context.semanticColors.warning,
                   ),
                 ),
               ],
@@ -93,69 +93,87 @@ class ScanActivityChart extends StatelessWidget {
               'UTC dates grouped into up to six periods. All saved scans are counted.',
             ),
             const SizedBox(height: AppSpacing.lg),
-            SingleChildScrollView(
-              scrollDirection: Axis.horizontal,
-              child: Row(
-                crossAxisAlignment: CrossAxisAlignment.end,
-                children: [
-                  for (final item in periods)
-                    Padding(
-                      padding: const EdgeInsets.only(right: AppSpacing.sm),
-                      child: Tooltip(
-                        message:
-                            '${analyticsDateText(item.from)} through ${analyticsDateText(item.to)} UTC: ${item.count} scans',
-                        child: Semantics(
-                          label:
-                              '${analyticsDateText(item.from)} through ${analyticsDateText(item.to)} UTC: ${item.count} scans',
-                          child: ExcludeSemantics(
-                            child: SizedBox(
-                              width: AppSizing.touchTarget,
-                              child: Column(
-                                children: [
-                                  Text(
-                                    '${item.count}',
-                                    maxLines: 2,
-                                    overflow: TextOverflow.ellipsis,
-                                  ),
-                                  const SizedBox(height: AppSpacing.xs),
-                                  SizedBox(
-                                    height: AppSizing.emblem * 2,
-                                    child: Align(
-                                      alignment: Alignment.bottomCenter,
-                                      child: Container(
-                                        width: AppSpacing.xl,
-                                        height: maximum == 0
-                                            ? 0
-                                            : AppSizing.emblem *
-                                                  2 *
-                                                  item.count /
-                                                  maximum,
-                                        decoration: BoxDecoration(
-                                          color: AppColors.forest,
-                                          borderRadius: BorderRadius.circular(
-                                            AppRadii.small,
+            LayoutBuilder(
+              builder: (context, constraints) {
+                final textScale =
+                    MediaQuery.textScalerOf(context).scale(16) / 16;
+                final cellWidth = (AppSizing.touchTarget * textScale)
+                    .clamp(56.0, 112.0)
+                    .toDouble();
+                return SingleChildScrollView(
+                  scrollDirection: Axis.horizontal,
+                  child: ConstrainedBox(
+                    constraints: BoxConstraints(minWidth: constraints.maxWidth),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceAround,
+                      crossAxisAlignment: CrossAxisAlignment.end,
+                      children: [
+                        for (final item in periods)
+                          Padding(
+                            padding: const EdgeInsets.only(
+                              right: AppSpacing.sm,
+                            ),
+                            child: Tooltip(
+                              message:
+                                  '${analyticsDateText(item.from)} through ${analyticsDateText(item.to)} UTC: ${item.count} scans',
+                              child: Semantics(
+                                label:
+                                    '${analyticsDateText(item.from)} through ${analyticsDateText(item.to)} UTC: ${item.count} scans',
+                                child: ExcludeSemantics(
+                                  child: SizedBox(
+                                    width: cellWidth,
+                                    child: Column(
+                                      children: [
+                                        Text(
+                                          '${item.count}',
+                                          maxLines: 2,
+                                          overflow: TextOverflow.ellipsis,
+                                        ),
+                                        const SizedBox(height: AppSpacing.xs),
+                                        SizedBox(
+                                          height: AppSizing.emblem * 2,
+                                          child: Align(
+                                            alignment: Alignment.bottomCenter,
+                                            child: Container(
+                                              width: AppSpacing.xl,
+                                              height: maximum == 0
+                                                  ? 0
+                                                  : AppSizing.emblem *
+                                                        2 *
+                                                        item.count /
+                                                        maximum,
+                                              decoration: BoxDecoration(
+                                                color: Theme.of(
+                                                  context,
+                                                ).colorScheme.primary,
+                                                borderRadius:
+                                                    BorderRadius.circular(
+                                                      AppRadii.small,
+                                                    ),
+                                              ),
+                                            ),
                                           ),
                                         ),
-                                      ),
+                                        const SizedBox(height: AppSpacing.sm),
+                                        Text(
+                                          '${item.from.month}/${item.from.day}\n–${item.to.month}/${item.to.day}',
+                                          textAlign: TextAlign.center,
+                                          style: Theme.of(
+                                            context,
+                                          ).textTheme.labelSmall,
+                                        ),
+                                      ],
                                     ),
                                   ),
-                                  const SizedBox(height: AppSpacing.sm),
-                                  Text(
-                                    '${item.from.month}/${item.from.day}\n–${item.to.month}/${item.to.day}',
-                                    textAlign: TextAlign.center,
-                                    style: Theme.of(
-                                      context,
-                                    ).textTheme.labelSmall,
-                                  ),
-                                ],
+                                ),
                               ),
                             ),
                           ),
-                        ),
-                      ),
+                      ],
                     ),
-                ],
-              ),
+                  ),
+                );
+              },
             ),
           ],
         ),
