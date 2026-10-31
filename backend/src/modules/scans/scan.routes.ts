@@ -101,21 +101,29 @@ export function scanRoutes(
   }).single('image');
   let active = 0;
   const guard: RequestHandler = withRequestSchema(scanRequest, (request, response, next) => {
+    const fail = (error: AppError): never => {
+      response.locals.releaseInferenceQuota?.();
+      throw error;
+    };
     response.setHeader('Cache-Control', 'no-store');
-    if (request.get('x-auth-request') !== '1') throw new AppError('AUTHORIZATION_ERROR');
+    if (request.get('x-auth-request') !== '1') fail(new AppError('AUTHORIZATION_ERROR'));
     if (
       !request.is('multipart/form-data') ||
       (request.get('content-encoding') && request.get('content-encoding') !== 'identity')
     )
-      throw new AppError('UNSUPPORTED_MEDIA_TYPE');
+      fail(new AppError('UNSUPPORTED_MEDIA_TYPE'));
     const parsed = scanRequest.safeParse({
       params: request.params,
       query: request.query,
       key: request.get('idempotency-key'),
     });
-    if (!parsed.success) throw new AppError('VALIDATION_ERROR');
+    if (!parsed.success) fail(new AppError('VALIDATION_ERROR'));
     response.locals.validated = parsed.data;
-    if (!service.enabled || active >= 2) throw new AppError('UPLOAD_UNAVAILABLE');
+    if (!service.enabled) fail(new AppError('UPLOAD_UNAVAILABLE'));
+    if (active >= environment.INFERENCE_MAX_CONCURRENCY) {
+      response.setHeader('Retry-After', '1');
+      fail(new AppError('UPLOAD_UNAVAILABLE'));
+    }
     active++;
     let released = false;
     const release = () => {
@@ -136,6 +144,7 @@ export function scanRoutes(
     parser(request, response, (error: unknown) => {
       if (error) {
         response.locals.releaseUpload?.();
+        response.locals.releaseInferenceQuota?.();
         next(
           new AppError(
             error instanceof multer.MulterError && error.code === 'LIMIT_FILE_SIZE'

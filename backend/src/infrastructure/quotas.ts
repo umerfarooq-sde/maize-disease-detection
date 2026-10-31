@@ -110,7 +110,7 @@ export function createDistributedQuota(
     if (/auth.*(register|login)/.test(path)) return { scope: 'authentication', cap: 2 };
     if (/assistant|explanation|knowledge\/ask/.test(path)) return { scope: 'generation', cap: 2 };
     if (/scans/.test(path) && path.endsWith(':POST') && !/image|history/.test(path))
-      return { scope: 'inference', cap: 4 };
+      return { scope: 'inference', cap: environment.INFERENCE_MAX_CONCURRENCY };
     if (/search/.test(path)) return { scope: 'retrieval', cap: 4 };
     if (/index/.test(path)) return { scope: 'indexing', cap: 1 };
     if (/avatar|image/.test(path)) return { scope: 'media', cap: 4 };
@@ -172,6 +172,7 @@ export function createDistributedQuota(
             .finally(() => pending.delete(task));
           pending.add(task);
         };
+        if (policy.scope === 'inference') response.locals.releaseInferenceQuota = release;
         response.once('finish', release);
         response.once('close', () => {
           // A complete upload can continue decoding/provider work after a client

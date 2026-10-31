@@ -35,6 +35,7 @@ export function createScanController(service: ScanService): RequestHandler {
       sendSuccess(response, result.scan, result.replayed ? 200 : 201);
     } finally {
       response.locals.releaseUpload?.();
+      response.locals.releaseInferenceQuota?.();
     }
   };
 }

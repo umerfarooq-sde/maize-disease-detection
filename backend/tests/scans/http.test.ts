@@ -157,7 +157,7 @@ test('disconnected clients keep upload slots reserved until storage work finishe
   });
   observed.use(
     createApp(
-      { ...testEnvironment, SCAN_RATE_LIMIT_MAX: 100 },
+      { ...testEnvironment, SCAN_RATE_LIMIT_MAX: 100, INFERENCE_MAX_CONCURRENCY: 2 },
       silentLogger,
       { async checkDatabase() {} },
       auth.repository,
@@ -187,7 +187,10 @@ test('disconnected clients keep upload slots reserved until storage work finishe
       abort.abort();
       await first;
       await closed;
-      assert.equal((await send()).status, 503);
+      const denied = await send();
+      assert.equal(denied.status, 503);
+      assert.equal(denied.headers.get('Retry-After'), '1');
+      assert.equal(entered, 2);
     } finally {
       release();
     }

@@ -34,14 +34,18 @@ function storeFixture() {
   return { store, keys, releases };
 }
 
-test('actual generation/index routes use shared capacity; IPv6 and account identities stay bounded', async () => {
+test('actual generation/index/scan routes use configured shared capacity', async () => {
   const fixture = storeFixture();
   const calls: { keys: string[]; args: string[] }[] = [];
   fixture.store.evaluate = async (keys, args) => {
     calls.push({ keys, args });
     return [1, 0];
   };
-  const quota = createDistributedQuota(testEnvironment, fixture.store, silentLogger);
+  const quota = createDistributedQuota(
+    { ...testEnvironment, INFERENCE_MAX_CONCURRENCY: 2 },
+    fixture.store,
+    silentLogger,
+  );
   const app = express();
   app.set('trust proxy', 'loopback'); // Only this owned HTTP test uses loopback forwarding.
   app.locals.distributedQuota = quota;
@@ -62,6 +66,7 @@ test('actual generation/index routes use shared capacity; IPv6 and account ident
     '/knowledge/ask',
     '/scans/:scanId/explanation',
     '/admin/knowledge/documents/:id/index',
+    '/scans/:id',
   ]) {
     app.post(path, requestRateLimit(10), (_request, response) => response.json({ success: true }));
   }
@@ -80,13 +85,14 @@ test('actual generation/index routes use shared capacity; IPv6 and account ident
     }
     await fetch(base + '/scans/synthetic/explanation', { method: 'POST' });
     await fetch(base + '/admin/knowledge/documents/synthetic/index', { method: 'POST' });
+    await fetch(base + '/scans/synthetic', { method: 'POST' });
   });
   await quota.close();
   assert.equal(calls[0]?.keys[0], calls[1]?.keys[0]);
   assert.equal(calls[0]?.keys[1], calls[1]?.keys[1]);
   assert.deepEqual(
     calls.map((row) => row.args[2]),
-    ['2', '2', '2', '1'],
+    ['2', '2', '2', '1', '2'],
   );
   assert.ok(!JSON.stringify(calls).includes('synthetic-account'));
 });
@@ -146,6 +152,77 @@ test('distributed denial/storage failure is fail closed; leases are released onc
   assert.ok(!JSON.stringify(fixture.keys).includes('127.0.0.1'));
 });
 
+test('one inference slot rejects excess 2 and 4 request bursts and permits retry after release', { timeout: 10000 }, async () => {
+  for (const count of [1, 2, 4]) {
+    const active = new Set<string>();
+    const fixture = storeFixture();
+    let released: () => void = () => {};
+    const releaseObserved = new Promise<void>((resolve) => { released = resolve; });
+    fixture.store.evaluate = async (_keys, args) => {
+      assert.equal(args[2], '1');
+      if (active.size >= Number(args[2])) return [0, 1000];
+      const lease = args[4];
+      assert.ok(lease);
+      active.add(lease);
+      return [1, 0];
+    };
+    fixture.store.release = async (_key, identity) => {
+      active.delete(identity);
+      released();
+    };
+    const quota = createDistributedQuota(testEnvironment, fixture.store, silentLogger);
+    const app = express();
+    app.locals.distributedQuota = quota;
+    let entered: () => void = () => {};
+    let release: () => void = () => {};
+    const started = new Promise<void>((resolve) => { entered = resolve; });
+    const gate = new Promise<void>((resolve) => { release = resolve; });
+    let hold = true;
+    const scans = express.Router();
+    scans.post('/', requestRateLimit(100), async (_request, response) => {
+      response.flushHeaders();
+      entered();
+      if (hold) await gate;
+      response.end();
+    });
+    app.use('/api/v1/scans', scans);
+    app.use(errorHandler(silentLogger));
+    try {
+      await withServer(app, async (base) => {
+        let first: Awaited<ReturnType<typeof fetch>> | undefined;
+        try {
+          first = await fetch(`${base}/api/v1/scans`, { method: 'POST' });
+          await started;
+          assert.equal(first.status, 200);
+          const excess = await Promise.all(
+            Array.from({ length: count - 1 }, () =>
+              fetch(`${base}/api/v1/scans`, { method: 'POST' }),
+            ),
+          );
+          assert.ok(excess.every((response) => response.status === 429));
+          assert.ok(excess.every((response) => response.headers.get('Retry-After') === '1'));
+          assert.equal(active.size, 1);
+          hold = false;
+          release();
+          await releaseObserved;
+          assert.equal(active.size, 0);
+          const retry = await fetch(`${base}/api/v1/scans`, { method: 'POST' });
+          assert.equal(retry.status, 200);
+          await retry.arrayBuffer();
+        } finally {
+          hold = false;
+          release();
+          await first?.arrayBuffer().catch(() => undefined);
+        }
+      });
+    } finally {
+      release();
+      await quota.close();
+    }
+    assert.equal(active.size, 0);
+  }
+});
+
 test('private operations authentication, unavailable readiness and route-template-only metrics', async () => {
   const app = express();
   const environment = { ...testEnvironment, OPERATIONS_TOKEN: 'synthetic-operations-token' };
@@ -189,6 +266,8 @@ test('completed uploads retain shared concurrency after disconnect; interrupted 
       await quota.admit(request as unknown as Request, response as unknown as Response, 2, 1000);
       response.emit('close');
       assert.equal(fixture.releases.length, before + Number(!complete));
+      if (complete)
+        (response.locals as { releaseInferenceQuota?: () => void }).releaseInferenceQuota?.();
       response.emit('finish');
       response.emit('close');
       assert.equal(fixture.releases.length, before + 1);

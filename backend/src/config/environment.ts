@@ -133,6 +133,7 @@ const environmentSchema = z
     OPERATIONS_TOKEN: z.union([z.literal(''), signingSecret.max(256)]).default(''),
     AUTH_RATE_LIMIT_MAX: z.coerce.number().int().min(1).max(1000).default(10),
     SCAN_RATE_LIMIT_MAX: z.coerce.number().int().min(1).max(100).default(10),
+    INFERENCE_MAX_CONCURRENCY: z.coerce.number().int().min(1).max(4).default(1),
     KNOWLEDGE_RATE_LIMIT_MAX: z.coerce.number().int().min(1).max(1000).default(20),
     KNOWLEDGE_INDEX_TIMEOUT_MS: z.coerce.number().int().min(1000).max(120000).default(120000),
     GENERATION_RATE_LIMIT_MAX: z.coerce.number().int().min(1).max(60).default(5),
