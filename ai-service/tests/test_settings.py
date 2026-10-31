@@ -120,14 +120,43 @@ def test_loopback_development_can_start_without_service_token(host: str) -> None
     ],
 )
 def test_production_and_non_loopback_binding_require_token(environment: str, host: str) -> None:
-    with pytest.raises(ValidationError):
-        Settings(_env_file=None, environment=environment, host=host)
-    settings = Settings(
-        _env_file=None, environment=environment, host=host, ai_service_token=SecretStr(TEST_TOKEN)
-    )
+    # Token admission is independent of the production runtime-patch gate. The
+    # latter has its own regression below and must not make this test depend on
+    # the developer workstation's installed Python patch release.
+    from app.config import settings as settings_module
+
+    original_version = settings_module.sys.version_info
+    if environment == "production":
+        settings_module.sys.version_info = (3, 11, 17)  # type: ignore[assignment]
+    try:
+        with pytest.raises(ValidationError):
+            Settings(_env_file=None, environment=environment, host=host)
+        settings = Settings(
+            _env_file=None,
+            environment=environment,
+            host=host,
+            ai_service_token=SecretStr(TEST_TOKEN),
+        )
+    finally:
+        settings_module.sys.version_info = original_version
     assert settings.host == host
     assert settings.ai_service_token.get_secret_value() == TEST_TOKEN
     assert TEST_TOKEN not in repr(settings)
+
+
+def test_production_rejects_an_unmaintained_python_patch(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    from app.config import settings as settings_module
+
+    monkeypatch.setattr(settings_module.sys, "version_info", (3, 11, 16))
+    with pytest.raises(ValidationError, match="maintained Python"):
+        Settings(
+            _env_file=None,
+            environment="production",
+            host="127.0.0.1",
+            ai_service_token=SecretStr(TEST_TOKEN),
+        )
 
 
 @pytest.mark.parametrize(

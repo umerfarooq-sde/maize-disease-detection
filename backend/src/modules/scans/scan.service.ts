@@ -2,15 +2,9 @@ import { createHash, randomUUID } from 'node:crypto';
 import type { Logger } from 'pino';
 import { AppError } from '../../errors/app-error.js';
 import type { AiInferenceClient } from '../inference/inference.types.js';
+import { createScanProcessor } from './scan.processing.js';
 import type { ScanRepository } from './scan.repository.js';
-import {
-  inferenceFailureCodes,
-  type ImageStorage,
-  type ScanRecord,
-  scanLimits,
-  scanResponse,
-  type ValidatedImage,
-} from './scan.types.js';
+import { type ImageStorage, type ScanRecord, scanLimits, scanResponse } from './scan.types.js';
 import { validateImage } from './scan.validation.js';
 
 const digest = (value: string | Buffer) => createHash('sha256').update(value).digest('hex');
@@ -19,54 +13,12 @@ export function createScanService(
   storage: ImageStorage,
   logger: Logger,
   inference?: AiInferenceClient,
+  expectedModelVersion?: string,
 ) {
+  const processor = createScanProcessor(repository, logger, inference, expectedModelVersion);
   async function deleteAsset(id: string, publicId: string) {
     await storage.destroy(publicId);
     await repository.finishCleanup(id);
-  }
-  async function analyze(scan: ScanRecord, image: ValidatedImage) {
-    if (scan.status === 'COMPLETED') return scanResponse(scan);
-    let attemptId: string | null;
-    try {
-      await repository.failInference(
-        scan.id,
-        'INFERENCE_INTERRUPTED',
-        new Date(Date.now() - scanLimits.inferenceLeaseMs),
-      );
-      attemptId = await repository.startInference(scan.id);
-      if (!attemptId) {
-        const current = await repository.findScan(scan.id);
-        if (!current) throw new Error('Saved scan is unavailable');
-        return scanResponse(current);
-      }
-    } catch {
-      throw new AppError('SCAN_PROCESSING_UNAVAILABLE');
-    }
-    let persisting = false;
-    try {
-      if (!inference?.enabled) throw new AppError('INFERENCE_UNAVAILABLE');
-      const result = await inference.predict(image);
-      persisting = true;
-      return scanResponse(await repository.completeInference(scan.id, attemptId, result));
-    } catch (error) {
-      const code = persisting
-        ? 'INFERENCE_PERSISTENCE_FAILED'
-        : error instanceof AppError && inferenceFailureCodes.some((item) => item === error.code)
-          ? error.code
-          : 'INFERENCE_FAILED';
-      try {
-        // A lost persistence acknowledgement must not replace a committed outcome.
-        const current = await repository.findScan(scan.id);
-        if (current?.status === 'COMPLETED') return scanResponse(current);
-        await repository.failInference(scan.id, code, undefined, attemptId);
-        const failed = await repository.findScan(scan.id);
-        if (!failed) throw new Error('Saved scan is unavailable');
-        return scanResponse(failed);
-      } catch {
-        logger.error({ code: 'SCAN_RECOVERY_PENDING' }, 'Saved scan requires inference recovery');
-        throw new AppError('SCAN_PROCESSING_UNAVAILABLE');
-      }
-    }
   }
   return {
     enabled: storage.enabled,
@@ -87,7 +39,7 @@ export function createScanService(
       );
       if (record.imageHash !== imageHash) throw new AppError('CONFLICT');
       if (record.state === 'COMPLETED' && record.scan)
-        return { scan: await analyze(record.scan, image), replayed: true };
+        return { scan: await processor.analyze(record.scan, image), replayed: true };
       if (!claimed) throw new AppError('UPLOAD_IN_PROGRESS');
       let accepted = false;
       let saved: ScanRecord | undefined;
@@ -116,7 +68,7 @@ export function createScanService(
       }
       // Inference failure never enters upload compensation or deletes a saved asset.
       if (!saved) throw new AppError('UPLOAD_FAILED');
-      return { scan: await analyze(saved, image), replayed };
+      return { scan: await processor.analyze(saved, image), replayed };
     },
     async read(id: string, userId: string | null, key?: string) {
       if (userId === null && !key) throw new AppError('AUTHENTICATION_ERROR');

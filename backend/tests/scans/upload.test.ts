@@ -28,7 +28,7 @@ test('portrait JPEG orientation is retained without rotating or re-encoding uplo
   assert.equal(image.height, 48);
   assert.equal(image.bytes, file.buffer);
 });
-test('reject empty, oversize, spoofed MIME, mismatched extension, SVG and truncated uploads', async () => {
+test('reject empty, oversize, spoofed MIME, PDF, TIFF, SVG and truncated uploads', async () => {
   const file = await imageFile();
   for (const [input, code] of [
     [undefined, 'VALIDATION_ERROR'],
@@ -37,6 +37,19 @@ test('reject empty, oversize, spoofed MIME, mismatched extension, SVG and trunca
     [{ ...file, mimetype: 'image/jpeg' }, 'UNSUPPORTED_MEDIA_TYPE'],
     [{ ...file, originalname: 'leaf.exe' }, 'UNSUPPORTED_MEDIA_TYPE'],
     [{ ...file, buffer: Buffer.from('<svg></svg>') }, 'UNSUPPORTED_MEDIA_TYPE'],
+    [
+      {
+        ...file,
+        originalname: 'leaf.pdf',
+        mimetype: 'application/pdf',
+        buffer: Buffer.from('%PDF-1.7'),
+      },
+      'UNSUPPORTED_MEDIA_TYPE',
+    ],
+    [
+      { ...file, originalname: 'leaf.tiff', mimetype: 'image/tiff', buffer: Buffer.from('II*\0') },
+      'UNSUPPORTED_MEDIA_TYPE',
+    ],
     [{ ...file, buffer: file.buffer.subarray(0, 50) }, 'INVALID_IMAGE'],
   ] as const)
     await assert.rejects(validateImage(input), errorCode(code));

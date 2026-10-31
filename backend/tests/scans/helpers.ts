@@ -86,6 +86,9 @@ export function memoryScans() {
   const findScan = (id: string) =>
     [...records.values()].find((record) => record.scan?.id === id)?.scan ?? null;
   const repository: ScanRepository = {
+    async canServeVersion(_version) {
+      return true;
+    },
     async findScan(id) {
       return findScan(id);
     },

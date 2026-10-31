@@ -1,4 +1,8 @@
 import { randomUUID } from 'node:crypto';
+import {
+  canServeRegisteredModel,
+  type ServingEnvironment,
+} from '../inference/model-serving-policy.js';
 import { Prisma, type PrismaClient } from '../../generated/prisma/client.js';
 import {
   diseaseLabels,
@@ -16,6 +20,7 @@ export interface ScanRepository {
   find(id: string): Promise<UploadRecord | null>;
   complete(id: string, input: ScanInput): Promise<UploadRecord>;
   findScan(id: string): Promise<ScanRecord | null>;
+  canServeVersion(version: string): Promise<boolean>;
   read(id: string, userId: string | null, keyHash?: string): Promise<ScanRecord | null>;
   history(userId: string, limit: number, cursor?: string): Promise<ScanHistoryPage | null>;
   startInference(id: string): Promise<string | null>;
@@ -33,7 +38,12 @@ export interface ScanRepository {
   pruneFailed(before: Date): Promise<number>;
 }
 
-export function createScanRepository(database: PrismaClient): ScanRepository {
+export function createScanRepository(
+  database: PrismaClient,
+  servingEnvironment: ServingEnvironment = process.env['NODE_ENV'] === 'production'
+    ? 'production'
+    : 'development',
+): ScanRepository {
   const scanInclude = {
     predictions: {
       orderBy: [{ createdAt: 'desc' }, { id: 'desc' }],
@@ -43,6 +53,13 @@ export function createScanRepository(database: PrismaClient): ScanRepository {
   } satisfies Prisma.ScanInclude;
   const include = { scan: { include: scanInclude } } as const;
   return {
+    async canServeVersion(version) {
+      const model = await database.modelVersion.findUnique({
+        where: { version },
+        select: { status: true, trainingConfig: true },
+      });
+      return canServeRegisteredModel(model, servingEnvironment);
+    },
     findScan(id) {
       return database.scan.findUnique({ where: { id }, include: scanInclude });
     },
@@ -101,7 +118,7 @@ export function createScanRepository(database: PrismaClient): ScanRepository {
           });
           if (
             !model ||
-            !['VALIDATED', 'PRODUCTION'].includes(model.status) ||
+            !canServeRegisteredModel(model, servingEnvironment) ||
             model.preprocessingVersion !== prediction.preprocessingVersion ||
             model.classLabels.length !== diseaseLabels.length ||
             model.classLabels.some((label, index) => label !== diseaseLabels[index])

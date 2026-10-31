@@ -4,6 +4,16 @@ import { sendSuccess } from '../../utils/respond.js';
 import type { PrivateImageReader } from './private-image.js';
 import type { ScanService } from './scan.service.js';
 
+function setScanLifecycleHeaders(
+  response: Parameters<RequestHandler>[1],
+  scan: { id: string; status: string },
+) {
+  response.setHeader('Location', `/api/v1/scans/${scan.id}`);
+  response.setHeader('X-Scan-Status', scan.status);
+  if (scan.status === 'PENDING' || scan.status === 'PROCESSING')
+    response.setHeader('Retry-After', '2');
+}
+
 export function scanImageController(
   service: ScanService,
   readImage: PrivateImageReader,
@@ -32,6 +42,7 @@ export function createScanController(service: ScanService): RequestHandler {
         response.locals.principal?.userId ?? null,
       );
       response.setHeader('Cache-Control', 'no-store');
+      setScanLifecycleHeaders(response, result.scan);
       sendSuccess(response, result.scan, result.replayed ? 200 : 201);
     } finally {
       response.locals.releaseUpload?.();
@@ -44,10 +55,13 @@ export function readScanController(service: ScanService): RequestHandler {
   return async (_request, response) => {
     const input = response.locals.validated as { params: { scanId: string }; key?: string };
     response.setHeader('Cache-Control', 'no-store');
-    sendSuccess(
-      response,
-      await service.read(input.params.scanId, response.locals.principal?.userId ?? null, input.key),
+    const scan = await service.read(
+      input.params.scanId,
+      response.locals.principal?.userId ?? null,
+      input.key,
     );
+    setScanLifecycleHeaders(response, scan);
+    sendSuccess(response, scan);
   };
 }
 

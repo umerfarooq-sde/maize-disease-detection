@@ -152,12 +152,16 @@ test('distributed denial/storage failure is fail closed; leases are released onc
   assert.ok(!JSON.stringify(fixture.keys).includes('127.0.0.1'));
 });
 
-test('one inference slot rejects excess 2 and 4 request bursts and permits retry after release', { timeout: 10000 }, async () => {
+test('one inference slot rejects excess 2 and 4 request bursts and permits retry after release', {
+  timeout: 10000,
+}, async () => {
   for (const count of [1, 2, 4]) {
     const active = new Set<string>();
     const fixture = storeFixture();
     let released: () => void = () => {};
-    const releaseObserved = new Promise<void>((resolve) => { released = resolve; });
+    const releaseObserved = new Promise<void>((resolve) => {
+      released = resolve;
+    });
     fixture.store.evaluate = async (_keys, args) => {
       assert.equal(args[2], '1');
       if (active.size >= Number(args[2])) return [0, 1000];
@@ -175,8 +179,12 @@ test('one inference slot rejects excess 2 and 4 request bursts and permits retry
     app.locals.distributedQuota = quota;
     let entered: () => void = () => {};
     let release: () => void = () => {};
-    const started = new Promise<void>((resolve) => { entered = resolve; });
-    const gate = new Promise<void>((resolve) => { release = resolve; });
+    const started = new Promise<void>((resolve) => {
+      entered = resolve;
+    });
+    const gate = new Promise<void>((resolve) => {
+      release = resolve;
+    });
     let hold = true;
     const scans = express.Router();
     scans.post('/', requestRateLimit(100), async (_request, response) => {

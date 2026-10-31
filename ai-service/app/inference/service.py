@@ -50,6 +50,13 @@ class InferenceService:
             raise ValueError("Inference concurrency must be a positive integer")
         if loaded.model.training:
             raise ValueError("Inference requires an evaluation-mode model")
+        state = (*loaded.model.parameters(), *loaded.model.buffers())
+        if any(
+            tensor.device.type != "cpu"
+            or (tensor.is_floating_point() and tensor.dtype != torch.float32)
+            for tensor in state
+        ):
+            raise ValueError("Inference requires a CPU float32 model")
         self._loaded = loaded
         self._slots = BoundedSemaphore(max_concurrency)
 
@@ -121,7 +128,20 @@ class InferenceService:
                 or prepared.metadata.config_hash != self._loaded.config.fingerprint
             ):
                 raise AppError(ErrorCode.PREPROCESSING_FAILED)
-            return prepared.to_tensor().unsqueeze(0)
+            tensor = prepared.to_tensor().unsqueeze(0)
+            if (
+                tensor.shape != (
+                    1,
+                    3,
+                    self._loaded.config.target_height,
+                    self._loaded.config.target_width,
+                )
+                or tensor.device.type != "cpu"
+                or tensor.dtype != torch.float32
+                or not bool(torch.isfinite(tensor).all())
+            ):
+                raise AppError(ErrorCode.PREPROCESSING_FAILED)
+            return tensor
         except PreprocessingError as error:
             raise AppError(_image_error(error.code)) from None
         except AppError:
@@ -136,7 +156,8 @@ class InferenceService:
                 if (
                     not isinstance(output, torch.Tensor)
                     or output.shape != (1, len(self._loaded.class_names))
-                    or not output.is_floating_point()
+                    or output.device.type != "cpu"
+                    or output.dtype != torch.float32
                     or not bool(torch.isfinite(output).all())
                 ):
                     raise AppError(ErrorCode.INFERENCE_FAILED)

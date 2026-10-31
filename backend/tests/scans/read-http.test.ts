@@ -114,12 +114,17 @@ test('anonymous completed scan POST and private-key GET preserve one safe public
     ]);
     assert.equal(payload.data.image.mimeType, 'image/png');
     assert.equal(created.headers.get('cache-control'), 'no-store');
+    assert.equal(created.headers.get('location'), `/api/v1/scans/${payload.data.id}`);
+    assert.equal(created.headers.get('x-scan-status'), 'COMPLETED');
+    assert.equal(created.headers.get('retry-after'), null);
 
     const read = await fetch(`${url}/api/v1/scans/${payload.data.id}`, {
       headers: { 'Idempotency-Key': key },
     });
     assert.equal(read.status, 200);
     assert.equal(read.headers.get('cache-control'), 'no-store');
+    assert.equal(read.headers.get('location'), `/api/v1/scans/${payload.data.id}`);
+    assert.equal(read.headers.get('x-scan-status'), 'COMPLETED');
     const persisted = (await read.json()) as ScanPayload;
     assert.deepEqual(persisted.data, payload.data);
     assert.equal(persisted.requestId, read.headers.get('x-request-id'));
@@ -308,6 +313,8 @@ test('persisted inference failures are safely readable without repeating upload 
       });
       assert.equal(read.status, 200);
       assert.equal(read.headers.get('cache-control'), 'no-store');
+      assert.equal(read.headers.get('location'), `/api/v1/scans/${payload.data.id}`);
+      assert.equal(read.headers.get('x-scan-status'), 'FAILED');
       assert.deepEqual(((await read.json()) as ScanPayload).data, payload.data);
     }
     assert.equal(attempts, 1);

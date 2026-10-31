@@ -9,6 +9,7 @@ from dataclasses import replace
 from io import BytesIO
 from pathlib import Path
 from threading import Event, Lock
+from types import SimpleNamespace
 
 import numpy as np
 import pytest
@@ -344,7 +345,38 @@ def test_failed_preprocessing_releases_slot_and_hides_internal_exception(
     assert service.predict(png, mime_type="image/png").confidence > 0
 
 
-@pytest.mark.parametrize("output_kind", ["shape", "nan", "integer", "not-tensor", "exception"])
+@pytest.mark.parametrize("tensor_kind", ["shape", "dtype", "nonfinite"])
+def test_invalid_prepared_tensor_fails_before_model(
+    monkeypatch: pytest.MonkeyPatch, png: bytes, tensor_kind: str
+) -> None:
+    network = ControlledModel((0.0, 0.0, 5.0, 0.0))
+    loaded = loaded_model(network)
+    tensor = torch.zeros((3, 224, 224), dtype=torch.float32)
+    if tensor_kind == "shape":
+        tensor = torch.zeros((3, 224, 223), dtype=torch.float32)
+    elif tensor_kind == "dtype":
+        tensor = tensor.to(torch.float64)
+    else:
+        tensor[0, 0, 0] = float("inf")
+    prepared = SimpleNamespace(
+        metadata=SimpleNamespace(
+            preprocessing_version=loaded.preprocessing_version,
+            config_hash=loaded.config.fingerprint,
+        ),
+        to_tensor=lambda: tensor,
+    )
+    monkeypatch.setattr(
+        "app.inference.service.preprocess_image", lambda *_args, **_kwargs: prepared
+    )
+    with pytest.raises(AppError) as caught:
+        InferenceService(loaded).predict(png, mime_type="image/png")
+    assert caught.value.code == ErrorCode.PREPROCESSING_FAILED
+    assert network.calls == 0
+
+
+@pytest.mark.parametrize(
+    "output_kind", ["shape", "nan", "inf", "float64", "integer", "not-tensor", "exception"]
+)
 def test_invalid_model_outputs_fail_safely_and_release_slot(png: bytes, output_kind: str) -> None:
     class InvalidModel(nn.Module):
         def forward(self, tensor: torch.Tensor) -> object:
@@ -352,6 +384,10 @@ def test_invalid_model_outputs_fail_safely_and_release_slot(png: bytes, output_k
                 return torch.zeros((1, 3))
             if output_kind == "nan":
                 return torch.full((1, 4), float("nan"))
+            if output_kind == "inf":
+                return torch.full((1, 4), float("inf"))
+            if output_kind == "float64":
+                return torch.zeros((1, 4), dtype=torch.float64)
             if output_kind == "integer":
                 return torch.zeros((1, 4), dtype=torch.int64)
             if output_kind == "not-tensor":
@@ -410,6 +446,8 @@ def test_constructor_rejects_training_mode_and_invalid_concurrency() -> None:
     loaded.model.eval()
     with pytest.raises(ValueError, match="positive integer"):
         InferenceService(loaded, max_concurrency=0)
+    with pytest.raises(ValueError, match="CPU float32"):
+        InferenceService(replace(loaded, model=ControlledModel((0, 0, 5, 0)).double().eval()))
 
 
 def test_response_schema_rejects_false_confidence_when_policy_unconfigured() -> None:

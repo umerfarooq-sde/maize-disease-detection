@@ -69,13 +69,31 @@ test('multipart API enforces authentication, farmer ownership, limits, shape and
     assert.equal(created.status, 201);
     const json = (await created.json()) as {
       success: boolean;
-      data: { id: string; status: string };
+      data: {
+        id: string;
+        status: string;
+        prediction: unknown;
+        analysisError: { code: string } | null;
+      };
       requestId: string;
     };
     assert.equal(json.success, true);
     assert.equal(json.data.status, 'FAILED');
+    assert.equal(json.data.prediction, null);
+    assert.equal(json.data.analysisError?.code, 'INFERENCE_UNAVAILABLE');
     assert.equal(created.headers.get('cache-control'), 'no-store');
-    assert.equal((await send({ key })).status, 200);
+    assert.equal(created.headers.get('x-scan-status'), 'FAILED');
+    assert.equal(created.headers.get('location'), `/api/v1/scans/${json.data.id}`);
+    assert.equal(created.headers.get('retry-after'), null);
+    const replay = await send({ key });
+    assert.equal(replay.status, 200);
+    assert.equal(replay.headers.get('location'), `/api/v1/scans/${json.data.id}`);
+    const replayed = (await replay.json()) as typeof json;
+    assert.equal(replayed.success, true);
+    assert.equal(replayed.data.id, json.data.id);
+    assert.equal(replayed.data.status, 'FAILED');
+    assert.equal(replayed.data.prediction, null);
+    assert.equal(replayed.data.analysisError?.code, 'INFERENCE_UNAVAILABLE');
     assert.equal(scans.records.size, 1);
     assert.equal((await send({ token: farmerToken })).status, 201);
     assert.ok(

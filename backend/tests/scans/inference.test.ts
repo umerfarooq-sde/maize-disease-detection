@@ -42,7 +42,6 @@ for (const code of [
   'INFERENCE_TIMEOUT',
   'INFERENCE_FAILED',
   'INFERENCE_INVALID_RESPONSE',
-  'INVALID_IMAGE',
 ] as const) {
   test(`${code} preserves saved image and scan; same-key retry does not upload again`, async () => {
     const memory = memoryScans();
@@ -70,6 +69,29 @@ for (const code of [
     assert.equal([...memory.records.values()][0]?.scan?.predictions.length, 1);
   });
 }
+
+test('AI-rejected image is terminal for same-key replay and keeps its failure reason', async () => {
+  const memory = memoryScans();
+  const cloud = fakeStorage();
+  const ai = fakeInference();
+  let calls = 0;
+  ai.client.predict = async () => {
+    calls++;
+    throw new AppError('INVALID_IMAGE');
+  };
+  const service = createScanService(memory.repository, cloud.storage, silentLogger, ai.client);
+  const file = await imageFile();
+  const key = randomUUID();
+  const failed = await service.create(file, key, null);
+  assert.equal(failed.scan.status, 'FAILED');
+  assert.equal(failed.scan.analysisError?.code, 'INVALID_IMAGE');
+  assert.equal(failed.scan.prediction, null);
+  const replay = await service.create(file, key, null);
+  assert.equal(replay.replayed, true);
+  assert.deepEqual(replay.scan, failed.scan);
+  assert.equal(calls, 1);
+  assert.equal(cloud.assets.size, 1);
+});
 
 test('persistence failure and lost commit acknowledgement never destroy saved assets/outcomes', async () => {
   const memory = memoryScans();
@@ -191,4 +213,23 @@ test('invalid images never reach Cloudinary, database claim or inference', async
   assert.equal(memory.records.size, 0);
   assert.equal(cloud.assets.size, 0);
   assert.equal(ai.calls.length, 0);
+});
+
+test('preflight denies an ineligible model before calling the inference client', async () => {
+  const memory = memoryScans();
+  const cloud = fakeStorage();
+  const ai = fakeInference();
+  memory.repository.canServeVersion = async () => false;
+  const service = createScanService(
+    memory.repository,
+    cloud.storage,
+    silentLogger,
+    ai.client,
+    ai.result.modelVersion,
+  );
+  const result = await service.create(await imageFile(), randomUUID(), null);
+  assert.equal(result.scan.status, 'FAILED');
+  assert.equal(result.scan.analysisError?.code, 'INFERENCE_UNAVAILABLE');
+  assert.equal(ai.calls.length, 0);
+  assert.equal(cloud.assets.size, 1); // Persisted image remains safely owned for retry.
 });

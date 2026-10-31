@@ -99,13 +99,14 @@ export function createApp(
     getDatabaseClient(environment.DATABASE_URL),
   ),
   scanService: ScanService = createScanService(
-    createScanRepository(getDatabaseClient(environment.DATABASE_URL)),
+    createScanRepository(getDatabaseClient(environment.DATABASE_URL), environment.NODE_ENV),
     createImageStorage(environment),
     logger,
     observeInference(
       createAiInferenceClient(environment),
       operationsFor(getDatabaseClient(environment.DATABASE_URL), logger),
     ),
+    environment.AI_MODEL_VERSION,
   ),
   knowledgeService: KnowledgeService = createKnowledgeService(
     createKnowledgeRepository(getDatabaseClient(environment.DATABASE_URL)),
@@ -200,7 +201,7 @@ export function createApp(
         else callback(new AppError('AUTHORIZATION_ERROR'));
       },
       credentials: true,
-      exposedHeaders: ['X-Request-Id'],
+      exposedHeaders: ['X-Request-Id', 'Location', 'X-Scan-Status', 'Retry-After'],
       maxAge: 600,
     }),
   );
