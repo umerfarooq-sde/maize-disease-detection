@@ -65,6 +65,11 @@ void main() {
           await tester.pump(const Duration(seconds: 1));
         }
 
+        String knowledgeFailure(String endpoint, AppException? error) =>
+            '$endpoint: kind=${error?.kind.name ?? 'none'}, '
+            'status=${error?.statusCode ?? 'none'}, '
+            'requestId=${error?.requestId ?? 'none'}';
+
         await tester.pumpWidget(
           MainApp(
             config: AppConfig.fromEnvironment(),
@@ -118,7 +123,14 @@ void main() {
         final knowledgeContext = tester.element(find.byType(KnowledgeView));
         final knowledge = knowledgeContext.read<KnowledgeViewModel>();
         await until(() => !knowledge.loading);
-        expect(knowledge.catalogueError, isNull);
+        expect(
+          knowledge.catalogueError,
+          isNull,
+          reason: knowledgeFailure(
+            'GET /api/v1/diseases',
+            knowledge.catalogueError,
+          ),
+        );
         expect(knowledge.items, hasLength(4));
         for (final disease in knowledge.items) {
           await tap(find.byKey(ValueKey('knowledge-${disease.slug}')));
@@ -126,7 +138,14 @@ void main() {
               .element(find.byType(KnowledgeDetailView))
               .read<KnowledgeDetailViewModel>();
           await until(() => !detail.loading);
-          expect(detail.error, isNull);
+          expect(
+            detail.error,
+            isNull,
+            reason: knowledgeFailure(
+              'GET /api/v1/diseases/${disease.slug}',
+              detail.error,
+            ),
+          );
           expect(detail.detail!.sections, isNotEmpty);
           expect(
             detail.detail!.sections.every(
@@ -162,7 +181,14 @@ void main() {
         );
         await tap(find.byKey(const Key('knowledge-search')));
         await until(() => !knowledge.searching);
-        expect(knowledge.searchError, isNull);
+        expect(
+          knowledge.searchError,
+          isNull,
+          reason: knowledgeFailure(
+            'POST /api/v1/knowledge/search',
+            knowledge.searchError,
+          ),
+        );
         expect(knowledge.result!.matches, isNotEmpty);
         expect(
           knowledge.result!.matches.any((m) => m.diseaseLabel == 'Common_Rust'),
