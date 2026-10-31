@@ -125,7 +125,7 @@ finally{
   if(server)await new Promise(resolve=>{server.closeAllConnections();server.close(resolve);});
   try{await app?.locals.flushOperationalEvents();}
   finally{
-    await getDatabaseClient(environment.DATABASE_URL).$disconnect();
-    await database.$disconnect();
+    try{await getDatabaseClient(environment.DATABASE_URL).$disconnect();}
+    finally{await database.$disconnect();}
   }
 }
