@@ -12,7 +12,8 @@ abstract final class AppRoutes {
   static const adminAudit = '/admin/audit';
   static const history = '/profile/history';
   static const analytics = '/profile/analytics';
-  static const assistant = '/tools/assistant';
+  static const assistant = '/assistant';
+  static const legacyAssistant = '/tools/assistant';
   static const fertilizer = '/tools/fertilizer';
   static const yieldCalculator = '/tools/yield';
   static const admin = '/admin';

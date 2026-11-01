@@ -20,7 +20,7 @@ class ToolsView extends StatelessWidget {
         ),
         const SizedBox(height: AppSpacing.sm),
         Text(
-          'Ask your field assistant or explore fertilizer and yield planning.',
+          'Explore fertilizer and yield planning with reviewed rules.',
           style: Theme.of(context).textTheme.bodyLarge?.copyWith(
             color: Theme.of(context).colorScheme.onSurfaceVariant,
           ),
@@ -41,14 +41,6 @@ class ToolsView extends StatelessWidget {
             icon: Icons.bar_chart_outlined,
             onTap: () => context.push(AppRoutes.yieldCalculator),
           ),
-        ),
-        const SizedBox(height: AppSpacing.lg),
-        FeatureCard(
-          title: 'Ask your assistant',
-          description:
-              'Grounded guidance, when trusted knowledge is available.',
-          icon: Icons.chat_bubble_outline,
-          onTap: () => context.push(AppRoutes.assistant),
         ),
       ],
     ),

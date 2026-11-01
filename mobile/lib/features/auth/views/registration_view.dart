@@ -4,6 +4,8 @@ import 'package:provider/provider.dart';
 import '../../../core/routes/app_routes.dart';
 import '../../../core/theme/design_tokens.dart';
 import '../../../core/widgets/app_page.dart';
+import '../../../core/widgets/auth_header.dart';
+import '../../../core/widgets/app_field.dart';
 import '../../../data/models/registration_credentials.dart';
 import '../view_models/registration_view_model.dart';
 
@@ -37,10 +39,11 @@ class _RegistrationViewState extends State<RegistrationView> {
   Widget build(BuildContext context) {
     final model = context.watch<RegistrationViewModel>();
     return AppPage(
+      maxWidth: AppSizing.authenticationMaxWidth,
       child: Center(
         child: ConstrainedBox(
           constraints: const BoxConstraints(
-            maxWidth: AppSizing.twoColumnBreakpoint,
+            maxWidth: AppSizing.authenticationMaxWidth,
           ),
           child: model.registeredEmail != null
               ? Column(
@@ -74,58 +77,65 @@ class _RegistrationViewState extends State<RegistrationView> {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.stretch,
                       children: [
-                        Text(
-                          'Grow your field record',
-                          style: Theme.of(context).textTheme.headlineMedium,
-                        ),
-                        const SizedBox(height: AppSpacing.md),
-                        const Text(
-                          'Create a farmer account to keep future scans and explore your personal field insights.',
+                        AuthHeader(
+                          title: 'Grow your field record',
+                          description:
+                              'Create a farmer account to keep future scans and explore your personal field insights.',
                         ),
                         const SizedBox(height: AppSpacing.xl),
-                        TextFormField(
-                          key: const Key('registration-email'),
-                          controller: _email,
-                          enabled: !model.busy,
-                          keyboardType: TextInputType.emailAddress,
-                          autofillHints: const [AutofillHints.newUsername],
-                          autocorrect: false,
-                          textInputAction: TextInputAction.next,
-                          decoration: const InputDecoration(labelText: 'Email'),
-                          validator: RegistrationCredentials.emailError,
+                        AppField(
+                          label: 'Email',
+                          child: TextFormField(
+                            key: const Key('registration-email'),
+                            controller: _email,
+                            enabled: !model.busy,
+                            keyboardType: TextInputType.emailAddress,
+                            autofillHints: const [AutofillHints.newUsername],
+                            autocorrect: false,
+                            textInputAction: TextInputAction.next,
+                            decoration: const InputDecoration(
+                              prefixIcon: Icon(Icons.alternate_email),
+                              hintText: 'you@example.com',
+                            ),
+                            validator: RegistrationCredentials.emailError,
+                          ),
                         ),
                         const SizedBox(height: AppSpacing.lg),
-                        TextFormField(
-                          key: const Key('registration-password'),
-                          controller: _password,
-                          enabled: !model.busy,
-                          obscureText: _obscure,
-                          enableSuggestions: false,
-                          autocorrect: false,
-                          autofillHints: const [AutofillHints.newPassword],
-                          textInputAction: TextInputAction.done,
-                          onFieldSubmitted: (_) => _submit(),
-                          decoration: InputDecoration(
-                            labelText: 'Password',
-                            helperText:
-                                'Password must be at least 6 characters.',
-                            helperMaxLines: 3,
-                            errorMaxLines: 3,
-                            suffixIcon: IconButton(
-                              tooltip: _obscure
-                                  ? 'Show password'
-                                  : 'Hide password',
-                              onPressed: model.busy
-                                  ? null
-                                  : () => setState(() => _obscure = !_obscure),
-                              icon: Icon(
-                                _obscure
-                                    ? Icons.visibility_outlined
-                                    : Icons.visibility_off_outlined,
+                        AppField(
+                          label: 'Password',
+                          child: TextFormField(
+                            key: const Key('registration-password'),
+                            controller: _password,
+                            enabled: !model.busy,
+                            obscureText: _obscure,
+                            enableSuggestions: false,
+                            autocorrect: false,
+                            autofillHints: const [AutofillHints.newPassword],
+                            textInputAction: TextInputAction.done,
+                            onFieldSubmitted: (_) => _submit(),
+                            decoration: InputDecoration(
+                              prefixIcon: const Icon(Icons.lock_outline),
+                              helperText:
+                                  'Password must be at least 6 characters.',
+                              helperMaxLines: 3,
+                              errorMaxLines: 3,
+                              suffixIcon: IconButton(
+                                tooltip: _obscure
+                                    ? 'Show password'
+                                    : 'Hide password',
+                                onPressed: model.busy
+                                    ? null
+                                    : () =>
+                                          setState(() => _obscure = !_obscure),
+                                icon: Icon(
+                                  _obscure
+                                      ? Icons.visibility_outlined
+                                      : Icons.visibility_off_outlined,
+                                ),
                               ),
                             ),
+                            validator: RegistrationCredentials.passwordError,
                           ),
-                          validator: RegistrationCredentials.passwordError,
                         ),
                         const SizedBox(height: AppSpacing.xl),
                         if (model.errorMessage != null) ...[

@@ -61,6 +61,13 @@ class HomeView extends StatelessWidget {
               onTap: () => context.go(AppRoutes.tools),
             ),
           ),
+          const SizedBox(height: AppSpacing.lg),
+          OutlinedButton.icon(
+            key: const Key('home-scan-history'),
+            onPressed: () => context.push(AppRoutes.history),
+            icon: const Icon(Icons.history),
+            label: const Text('Scan History'),
+          ),
           const SizedBox(height: AppSpacing.xxl),
           Consumer<HomeViewModel>(
             builder: (context, model, _) => ConnectionCard(model: model),

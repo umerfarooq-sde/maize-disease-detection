@@ -10,8 +10,15 @@ import '../widgets/assistant_scan_context.dart';
 import '../widgets/assistant_turn_card.dart';
 
 class AssistantView extends StatefulWidget {
-  const AssistantView({this.onChooseScan, super.key});
+  const AssistantView({
+    this.onChooseScan,
+    this.handoff,
+    this.handoffIdentity,
+    super.key,
+  });
   final VoidCallback? onChooseScan;
+  final ScanRecord? handoff;
+  final Object? handoffIdentity;
 
   @override
   State<AssistantView> createState() => _AssistantViewState();
@@ -20,6 +27,39 @@ class AssistantView extends StatefulWidget {
 class _AssistantViewState extends State<AssistantView> {
   final _draft = TextEditingController();
   final _latestTurn = GlobalKey();
+  Object? _consumedHandoff;
+
+  @override
+  void initState() {
+    super.initState();
+    _scheduleHandoff();
+  }
+
+  @override
+  void didUpdateWidget(covariant AssistantView oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    _scheduleHandoff();
+  }
+
+  void _scheduleHandoff() {
+    final identity = widget.handoffIdentity;
+    final scan = widget.handoff;
+    if (identity == null ||
+        scan == null ||
+        identical(identity, _consumedHandoff)) {
+      return;
+    }
+    _consumedHandoff = identity;
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (!mounted || !identical(identity, widget.handoffIdentity)) return;
+      final model = context.read<AssistantViewModel>();
+      // An explicit new scan replaces an in-flight explanation. Generation
+      // fencing in clear() discards its late response without a second request.
+      model.clear();
+      _draft.clear();
+      _explain(model, scan);
+    });
+  }
 
   @override
   void dispose() {
@@ -59,7 +99,7 @@ class _AssistantViewState extends State<AssistantView> {
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
           Text(
-            'Your field assistant',
+            'AI Assistant',
             style: Theme.of(context).textTheme.headlineMedium,
           ),
           const SizedBox(height: AppSpacing.sm),
@@ -69,8 +109,8 @@ class _AssistantViewState extends State<AssistantView> {
           const SizedBox(height: AppSpacing.md),
           Text(
             model.hasAuthenticatedSession
-                ? 'This conversation stays in this screen. It is not saved to your account and clears when you close this screen, sign out or change accounts.'
-                : 'You can ask questions as a guest. This conversation stays in this screen and clears when you close this screen or sign in. Sign in to choose a saved scan.',
+                ? 'Up to 12 temporary turns stay available as you switch tabs. Nothing is saved to your account. Clear the conversation, sign out or close the app to discard it.'
+                : 'You can ask questions as a guest. Up to 12 temporary turns stay available as you switch tabs and clear when you sign in or close the app. Sign in to choose a saved scan.',
             style: Theme.of(context).textTheme.bodyMedium,
           ),
           const SizedBox(height: AppSpacing.lg),

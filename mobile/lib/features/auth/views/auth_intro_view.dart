@@ -4,6 +4,8 @@ import 'package:provider/provider.dart';
 import '../../../core/routes/app_routes.dart';
 import '../../../core/theme/design_tokens.dart';
 import '../../../core/widgets/app_page.dart';
+import '../../../core/widgets/auth_header.dart';
+import '../../../core/widgets/app_field.dart';
 import '../../../core/exceptions/app_exception.dart';
 import '../view_models/farmer_session_view_model.dart';
 
@@ -26,8 +28,8 @@ class _AuthIntroViewState extends State<AuthIntroView> {
   }
 
   Future<void> _submit() async {
-    if (!(_form.currentState?.validate() ?? false)) return;
     final model = context.read<FarmerSessionViewModel>();
+    if (model.busy || !(_form.currentState?.validate() ?? false)) return;
     await model.signIn(_email.text, _password.text);
     if (!mounted) return;
     if (model.signedIn) {
@@ -44,68 +46,79 @@ class _AuthIntroViewState extends State<AuthIntroView> {
   Widget build(BuildContext context) {
     final model = context.watch<FarmerSessionViewModel>();
     return AppPage(
+      maxWidth: AppSizing.authenticationMaxWidth,
       child: Form(
         key: _form,
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            Text(
-              'Your farmer scans, together',
-              style: Theme.of(context).textTheme.headlineMedium,
-            ),
-            const SizedBox(height: AppSpacing.md),
-            const Text(
-              'Sign in with your farmer account to save new scans to your personal history.',
+            AuthHeader(
+              title: 'Your farmer scans, together',
+              description:
+                  'Sign in with your farmer account to save new scans to your personal history.',
             ),
             const SizedBox(height: AppSpacing.sm),
             const Text('Sign-in lasts for this app session.'),
             const SizedBox(height: AppSpacing.xl),
-            TextFormField(
-              controller: _email,
-              enabled: !model.busy,
-              decoration: const InputDecoration(labelText: 'Email'),
-              keyboardType: TextInputType.emailAddress,
-              autofillHints: const [AutofillHints.username],
-              textInputAction: TextInputAction.next,
-              validator: (value) =>
-                  value != null &&
-                      RegExp(
-                        r'^[^\s@]+@[^\s@]+\.[^\s@]+$',
-                      ).hasMatch(value.trim())
-                  ? null
-                  : 'Enter your email address.',
+            AppField(
+              label: 'Email',
+              child: TextFormField(
+                controller: _email,
+                enabled: !model.busy,
+                decoration: const InputDecoration(
+                  prefixIcon: Icon(Icons.alternate_email),
+                  hintText: 'you@example.com',
+                ),
+                keyboardType: TextInputType.emailAddress,
+                autocorrect: false,
+                enableSuggestions: false,
+                autofillHints: const [AutofillHints.username],
+                textInputAction: TextInputAction.next,
+                validator: (value) =>
+                    value != null &&
+                        RegExp(
+                          r'^[^\s@]+@[^\s@]+\.[^\s@]+$',
+                        ).hasMatch(value.trim())
+                    ? null
+                    : 'Enter your email address.',
+              ),
             ),
             const SizedBox(height: AppSpacing.lg),
-            TextFormField(
-              controller: _password,
-              enabled: !model.busy,
-              obscureText: _obscurePassword,
-              enableSuggestions: false,
-              autocorrect: false,
-              decoration: InputDecoration(
-                labelText: 'Password',
-                suffixIcon: IconButton(
-                  tooltip: _obscurePassword ? 'Show password' : 'Hide password',
-                  onPressed: model.busy
-                      ? null
-                      : () => setState(
-                          () => _obscurePassword = !_obscurePassword,
-                        ),
-                  icon: Icon(
-                    _obscurePassword
-                        ? Icons.visibility_outlined
-                        : Icons.visibility_off_outlined,
+            AppField(
+              label: 'Password',
+              child: TextFormField(
+                controller: _password,
+                enabled: !model.busy,
+                obscureText: _obscurePassword,
+                enableSuggestions: false,
+                autocorrect: false,
+                decoration: InputDecoration(
+                  prefixIcon: const Icon(Icons.lock_outline),
+                  suffixIcon: IconButton(
+                    tooltip: _obscurePassword
+                        ? 'Show password'
+                        : 'Hide password',
+                    onPressed: model.busy
+                        ? null
+                        : () => setState(
+                            () => _obscurePassword = !_obscurePassword,
+                          ),
+                    icon: Icon(
+                      _obscurePassword
+                          ? Icons.visibility_outlined
+                          : Icons.visibility_off_outlined,
+                    ),
                   ),
                 ),
+                autofillHints: const [AutofillHints.password],
+                textInputAction: TextInputAction.done,
+                onFieldSubmitted: (_) {
+                  if (!model.busy) _submit();
+                },
+                validator: (value) => value != null && value.isNotEmpty
+                    ? null
+                    : 'Enter your password.',
               ),
-              autofillHints: const [AutofillHints.password],
-              textInputAction: TextInputAction.done,
-              onFieldSubmitted: (_) {
-                if (!model.busy) _submit();
-              },
-              validator: (value) => value != null && value.isNotEmpty
-                  ? null
-                  : 'Enter your password.',
             ),
             const SizedBox(height: AppSpacing.xl),
             if (model.error != null) ...[

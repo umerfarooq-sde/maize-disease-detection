@@ -72,32 +72,6 @@ GoRouter createAppRouter({String initialLocation = AppRoutes.home}) => GoRouter(
         StatefulShellBranch(
           routes: [
             GoRoute(
-              path: AppRoutes.scan,
-              builder: (context, state) => ChangeNotifierProvider(
-                key: ValueKey(
-                  'scan-${context.watch<FarmerSessionViewModel>().revision}-${state.uri.queryParameters['new']}',
-                ),
-                create: (_) => ScanViewModel(
-                  context.read<ScanRepository>(),
-                  records: context.read<ScanRecordsRepository>(),
-                )..recoverSelection(),
-                child: ScanView(
-                  onResult: (arguments) => context.push(
-                    '${AppRoutes.scan}/result/${arguments.scan.id}',
-                    extra: _ResultNavigation(
-                      arguments,
-                      context.read<FarmerSessionViewModel>().revision,
-                    ),
-                  ),
-                ),
-              ),
-              routes: [GoRoute(path: 'result/:scanId', builder: _resultPage)],
-            ),
-          ],
-        ),
-        StatefulShellBranch(
-          routes: [
-            GoRoute(
               path: AppRoutes.knowledge,
               builder: (context, _) => ChangeNotifierProvider(
                 create: (_) =>
@@ -123,6 +97,35 @@ GoRouter createAppRouter({String initialLocation = AppRoutes.home}) => GoRouter(
               ],
             ),
           ],
+        ),
+        StatefulShellBranch(
+          routes: [
+            GoRoute(
+              path: AppRoutes.scan,
+              builder: (context, state) => ChangeNotifierProvider(
+                key: ValueKey(
+                  'scan-${context.watch<FarmerSessionViewModel>().revision}-${state.uri.queryParameters['new']}',
+                ),
+                create: (_) => ScanViewModel(
+                  context.read<ScanRepository>(),
+                  records: context.read<ScanRecordsRepository>(),
+                )..recoverSelection(),
+                child: ScanView(
+                  onResult: (arguments) => context.push(
+                    '${AppRoutes.scan}/result/${arguments.scan.id}',
+                    extra: _ResultNavigation(
+                      arguments,
+                      context.read<FarmerSessionViewModel>().revision,
+                    ),
+                  ),
+                ),
+              ),
+              routes: [GoRoute(path: 'result/:scanId', builder: _resultPage)],
+            ),
+          ],
+        ),
+        StatefulShellBranch(
+          routes: [GoRoute(path: AppRoutes.assistant, builder: _assistantPage)],
         ),
         StatefulShellBranch(
           routes: [
@@ -154,112 +157,106 @@ GoRouter createAppRouter({String initialLocation = AppRoutes.home}) => GoRouter(
                     ),
                   ),
                 ),
-                GoRoute(path: 'assistant', builder: _assistantPage),
-              ],
-            ),
-          ],
-        ),
-        StatefulShellBranch(
-          routes: [
-            GoRoute(
-              path: AppRoutes.profile,
-              builder: (_, _) => const ProfileView(),
-              routes: [
-                GoRoute(
-                  path: 'sign-in',
-                  builder: (_, _) => const _DetailPage(
-                    title: 'Sign-in',
-                    child: AuthIntroView(),
-                  ),
-                ),
-                GoRoute(
-                  path: 'register',
-                  builder: (context, _) => _DetailPage(
-                    title: 'Create farmer account',
-                    child: ChangeNotifierProvider(
-                      create: (_) => RegistrationViewModel(
-                        context.read<RegistrationRepository>(),
-                      ),
-                      child: const RegistrationView(),
-                    ),
-                  ),
-                ),
-                GoRoute(
-                  path: 'edit',
-                  builder: (context, _) => _DetailPage(
-                    title: 'Edit farmer profile',
-                    child: ChangeNotifierProvider(
-                      key: ValueKey(
-                        'profile-${context.watch<FarmerSessionViewModel>().revision}',
-                      ),
-                      create: (_) =>
-                          ProfileViewModel(context.read<ProfileRepository>())
-                            ..load(),
-                      child: const ProfileEditorView(),
-                    ),
-                  ),
-                ),
-                GoRoute(
-                  path: 'data-deletion',
-                  builder: (context, _) => _DetailPage(
-                    title: 'Your account data',
-                    child: ChangeNotifierProvider(
-                      key: ValueKey(
-                        'privacy-${context.watch<FarmerSessionViewModel>().revision}',
-                      ),
-                      create: (_) =>
-                          PrivacyViewModel(context.read<PrivacyRepository>())
-                            ..load(),
-                      child: const PrivacyView(),
-                    ),
-                  ),
-                ),
-                GoRoute(
-                  path: 'history',
-                  builder: (context, _) => _DetailPage(
-                    title: 'Scan history',
-                    child: ChangeNotifierProvider(
-                      key: ValueKey(
-                        'history-${context.watch<FarmerSessionViewModel>().revision}',
-                      ),
-                      create: (_) => ScanHistoryViewModel(
-                        context.read<ScanRecordsRepository>(),
-                      )..load(),
-                      child: HistoryView(
-                        onOpenScan: (scan) => context.push(
-                          '${AppRoutes.history}/scans/${scan.id}',
-                          extra: _ResultNavigation(
-                            ScanResultArguments(scan: scan),
-                            context.read<FarmerSessionViewModel>().revision,
-                          ),
-                        ),
-                      ),
-                    ),
-                  ),
-                  routes: [
-                    GoRoute(path: 'scans/:scanId', builder: _resultPage),
-                  ],
-                ),
-                GoRoute(
-                  path: 'analytics',
-                  builder: (context, _) => _DetailPage(
-                    title: 'Field insights',
-                    child: ChangeNotifierProvider(
-                      key: ValueKey(
-                        'analytics-${context.watch<FarmerSessionViewModel>().revision}',
-                      ),
-                      create: (_) => AnalyticsViewModel(
-                        context.read<AnalyticsRepository>(),
-                      )..load(),
-                      child: const AnalyticsView(),
-                    ),
-                  ),
-                ),
               ],
             ),
           ],
         ),
       ],
+    ),
+    GoRoute(
+      path: AppRoutes.profile,
+      builder: (_, _) =>
+          const _DetailPage(title: 'Profile', child: ProfileView()),
+      routes: [
+        GoRoute(
+          path: 'sign-in',
+          builder: (_, _) =>
+              const _DetailPage(title: 'Sign-in', child: AuthIntroView()),
+        ),
+        GoRoute(
+          path: 'register',
+          builder: (context, _) => _DetailPage(
+            title: 'Create farmer account',
+            child: ChangeNotifierProvider(
+              create: (_) =>
+                  RegistrationViewModel(context.read<RegistrationRepository>()),
+              child: const RegistrationView(),
+            ),
+          ),
+        ),
+        GoRoute(
+          path: 'edit',
+          builder: (context, _) => _DetailPage(
+            title: 'Edit farmer profile',
+            child: ChangeNotifierProvider(
+              key: ValueKey(
+                'profile-${context.watch<FarmerSessionViewModel>().revision}',
+              ),
+              create: (_) =>
+                  ProfileViewModel(context.read<ProfileRepository>())..load(),
+              child: const ProfileEditorView(),
+            ),
+          ),
+        ),
+        GoRoute(
+          path: 'data-deletion',
+          builder: (context, _) => _DetailPage(
+            title: 'Your account data',
+            child: ChangeNotifierProvider(
+              key: ValueKey(
+                'privacy-${context.watch<FarmerSessionViewModel>().revision}',
+              ),
+              create: (_) =>
+                  PrivacyViewModel(context.read<PrivacyRepository>())..load(),
+              child: const PrivacyView(),
+            ),
+          ),
+        ),
+        GoRoute(
+          path: 'history',
+          builder: (context, _) => _DetailPage(
+            title: 'Scan history',
+            child: ChangeNotifierProvider(
+              key: ValueKey(
+                'history-${context.watch<FarmerSessionViewModel>().revision}',
+              ),
+              create: (_) =>
+                  ScanHistoryViewModel(context.read<ScanRecordsRepository>())
+                    ..load(),
+              child: HistoryView(
+                onOpenScan: (scan) => context.push(
+                  '${AppRoutes.history}/scans/${scan.id}',
+                  extra: _ResultNavigation(
+                    ScanResultArguments(scan: scan),
+                    context.read<FarmerSessionViewModel>().revision,
+                  ),
+                ),
+              ),
+            ),
+          ),
+          routes: [GoRoute(path: 'scans/:scanId', builder: _resultPage)],
+        ),
+        GoRoute(
+          path: 'analytics',
+          builder: (context, _) => _DetailPage(
+            title: 'Field insights',
+            child: ChangeNotifierProvider(
+              key: ValueKey(
+                'analytics-${context.watch<FarmerSessionViewModel>().revision}',
+              ),
+              create: (_) =>
+                  AnalyticsViewModel(context.read<AnalyticsRepository>())
+                    ..load(),
+              child: const AnalyticsView(),
+            ),
+          ),
+        ),
+      ],
+    ),
+    GoRoute(
+      path: AppRoutes.legacyAssistant,
+      redirect: (_, state) =>
+          state.uri.replace(path: AppRoutes.assistant).toString(),
     ),
     GoRoute(
       path: AppRoutes.admin,
@@ -328,7 +325,7 @@ Widget _resultPage(BuildContext context, GoRouterState state) {
       )..load(),
       child: ScanResultView(
         onExplainScan: context.watch<FarmerSessionViewModel>().signedIn
-            ? (scan) => context.push(
+            ? (scan) => context.go(
                 AppRoutes.assistant,
                 extra: _AssistantNavigation(
                   scan,
@@ -359,18 +356,14 @@ Widget _assistantPage(BuildContext context, GoRouterState state) {
           extra.revision == session.revision
       ? extra.scan
       : null;
-  return _DetailPage(
-    title: 'Field assistant',
-    child: ChangeNotifierProvider(
-      key: ValueKey('assistant-${session.revision}'),
-      create: (_) {
-        final model = AssistantViewModel(context.read<AssistantRepository>());
-        if (scan != null) model.explainScan(scan);
-        return model;
-      },
-      child: Builder(
-        builder: (context) =>
-            AssistantView(onChooseScan: () => _chooseAssistantScan(context)),
+  return ChangeNotifierProvider(
+    key: ValueKey('assistant-${session.revision}'),
+    create: (_) => AssistantViewModel(context.read<AssistantRepository>()),
+    child: Builder(
+      builder: (context) => AssistantView(
+        handoff: scan,
+        handoffIdentity: scan == null ? null : extra,
+        onChooseScan: () => _chooseAssistantScan(context),
       ),
     ),
   );
@@ -399,6 +392,10 @@ class _DetailPage extends StatelessWidget {
   Widget build(BuildContext context) => Scaffold(
     appBar: AppBar(
       title: Text(title),
+      leading: BackButton(
+        onPressed: () =>
+            context.canPop() ? context.pop() : context.go(AppRoutes.home),
+      ),
       toolbarHeight: kToolbarHeight * MediaQuery.textScalerOf(context).scale(1),
     ),
     body: child,

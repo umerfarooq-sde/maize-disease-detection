@@ -137,7 +137,7 @@ void main() {
       AppRoutes.scan,
       AppRoutes.knowledge,
       AppRoutes.tools,
-      AppRoutes.profile,
+      AppRoutes.assistant,
       AppRoutes.home,
     ]) {
       GoRouter.of(homeContext).go(route);
@@ -160,7 +160,6 @@ void main() {
       for (final route in [
         AppRoutes.fertilizer,
         AppRoutes.yieldCalculator,
-        AppRoutes.assistant,
         AppRoutes.auth,
         AppRoutes.history,
         AppRoutes.analytics,
