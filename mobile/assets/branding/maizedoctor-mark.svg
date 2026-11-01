@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 108 108" role="img" aria-label="MAIZEDOCTOR maize and leaf mark">
+<rect width="108" height="108" rx="24" fill="#174C38"/>
+<rect x="46" y="23" width="17" height="43" rx="8.5" fill="#E4F09A"/>
+<path d="M51 33h7 M51 41h7 M51 49h7" stroke="#174C38" stroke-width="2" stroke-linecap="round"/>
+<path d="M54 85C26 75 25 54 29 43C46 46 55 63 54 85Z" fill="#287551"/>
+<path d="M54 85C83 74 83 53 79 42C62 46 54 63 54 85Z" fill="#8AD5AC"/>
+<path d="M36 56Q47 67 54 85Q61 66 72 55" stroke="#E4F09A" stroke-width="2" stroke-linecap="round" fill="none"/>
+</svg>
