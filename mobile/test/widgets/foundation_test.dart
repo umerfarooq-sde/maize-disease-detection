@@ -18,6 +18,7 @@ import 'package:maizedoctor/data/repositories/backend_repository.dart';
 import 'package:maizedoctor/features/home/view_models/home_view_model.dart';
 import 'package:maizedoctor/features/home/views/home_view.dart';
 import '../scans/helpers.dart';
+import '../support/design_fonts.dart';
 
 class WidgetRepository implements BackendRepository {
   final Completer<BackendHealth> result = Completer();
@@ -53,6 +54,7 @@ Future<void> pumpApp(
 void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
   setUpAll(() async {
+    await loadDesignFonts();
     final sdkRoot = Platform.environment['FLUTTER_ROOT'];
     if (sdkRoot == null) {
       throw StateError('Run these tests using flutter test.');
@@ -107,7 +109,11 @@ void main() {
       for (final index in [1, 2, 3, 4, 0]) {
         final rail = find.byType(NavigationRail);
         final destination = rail.evaluate().isNotEmpty
-            ? find.byWidgetPredicate((w) => w.runtimeType.toString() == '_RailDestination').at(index)
+            ? find
+                  .byWidgetPredicate(
+                    (w) => w.runtimeType.toString() == '_RailDestination',
+                  )
+                  .at(index)
             : find.byType(NavigationDestination).at(index);
         await tester.ensureVisible(destination);
         await tester.tap(destination);

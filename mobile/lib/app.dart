@@ -9,6 +9,7 @@ import 'core/network/app_config.dart';
 import 'core/routes/app_router.dart';
 import 'core/routes/app_routes.dart';
 import 'core/theme/app_theme.dart';
+import 'core/theme/design_tokens.dart';
 import 'core/theme/theme_controller.dart';
 import 'core/storage/memory_session_tokens.dart';
 import 'data/repositories/farmer_session_repository.dart';
@@ -196,7 +197,7 @@ class _MainAppState extends State<MainApp> {
         theme: AppTheme.light,
         darkTheme: AppTheme.dark,
         themeMode: theme.mode,
-        themeAnimationDuration: const Duration(milliseconds: 240),
+        themeAnimationDuration: AppMotion.resolve(context, AppMotion.theme),
         themeAnimationCurve: Curves.easeOutCubic,
         routerConfig: _router,
         builder: (context, child) => AnnotatedRegion<SystemUiOverlayStyle>(

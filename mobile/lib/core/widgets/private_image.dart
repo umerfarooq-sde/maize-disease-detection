@@ -28,7 +28,10 @@ class PrivateImage extends StatelessWidget {
       return SizedBox(
         width: width,
         height: height,
-        child: const Icon(Icons.image_not_supported_outlined),
+        child: Semantics(
+          label: '$semanticLabel unavailable',
+          child: const Icon(Icons.image_not_supported_outlined),
+        ),
       );
     }
     return ChangeNotifierProvider(
@@ -48,7 +51,10 @@ class PrivateImage extends StatelessWidget {
             width: width,
             height: height,
             child: model.loading
-                ? const Center(child: CircularProgressIndicator())
+                ? Semantics(
+                    label: 'Loading $semanticLabel',
+                    child: const Center(child: CircularProgressIndicator()),
+                  )
                 : model.bytes == null
                 ? retry()
                 : Image.memory(

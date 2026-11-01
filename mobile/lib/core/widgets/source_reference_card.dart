@@ -19,17 +19,20 @@ class SourceReferenceCard extends StatelessWidget {
       decoration: BoxDecoration(
         color: colors.surfaceContainerLow,
         border: Border.all(color: colors.outlineVariant),
-        borderRadius: BorderRadius.circular(AppRadii.small),
+        borderRadius: BorderRadius.circular(AppRadii.medium),
       ),
       padding: const EdgeInsets.all(AppSpacing.md),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
-          Text(
-            citationLabel == null
-                ? reference.title
-                : '$citationLabel · ${reference.title}',
-            style: Theme.of(context).textTheme.titleSmall,
+          Semantics(
+            header: true,
+            child: Text(
+              citationLabel == null
+                  ? reference.title
+                  : '$citationLabel · ${reference.title}',
+              style: Theme.of(context).textTheme.titleSmall,
+            ),
           ),
           const SizedBox(height: AppSpacing.sm),
           Text(reference.publisher),
@@ -44,11 +47,9 @@ class SourceReferenceCard extends StatelessWidget {
           const SizedBox(height: AppSpacing.sm),
           SelectableText(
             reference.url.toString(),
-            style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-              color: colors.primary,
-              decoration: TextDecoration.underline,
-              decorationColor: colors.primary,
-            ),
+            style: Theme.of(
+              context,
+            ).textTheme.bodyMedium?.copyWith(color: colors.primary),
           ),
           const SizedBox(height: AppSpacing.sm),
           Text(

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../theme/design_tokens.dart';
 
 /// Explicitly scrollable data grid that keeps the first and final columns
 /// reachable on narrow screens, split windows and larger text settings.
@@ -27,7 +28,7 @@ class _HorizontalDataScrollState extends State<HorizontalDataScroll> {
     child: SingleChildScrollView(
       controller: _controller,
       scrollDirection: Axis.horizontal,
-      padding: const EdgeInsets.only(bottom: 12),
+      padding: const EdgeInsets.only(bottom: AppSpacing.md),
       child: widget.child,
     ),
   );

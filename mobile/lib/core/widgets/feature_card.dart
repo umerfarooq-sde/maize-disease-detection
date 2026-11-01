@@ -25,71 +25,74 @@ class FeatureCard extends StatelessWidget {
     final semantic = context.semanticColors;
     final resolvedTone = tone ?? semantic.info;
     final resolvedTint = tint ?? semantic.infoContainer;
-    return Card(
-      clipBehavior: Clip.antiAlias,
-      child: InkWell(
-        borderRadius: BorderRadius.circular(AppRadii.card),
-        onTap: onTap,
-        child: Padding(
-          padding: const EdgeInsets.all(AppSpacing.lg),
-          child: LayoutBuilder(
-            builder: (context, constraints) {
-              final stacked =
-                  constraints.maxWidth < 280 ||
-                  MediaQuery.textScalerOf(context).scale(16) > 24;
-              final symbol = Container(
-                width: AppSizing.iconTile,
-                height: AppSizing.iconTile,
-                decoration: BoxDecoration(
-                  color: resolvedTint,
-                  borderRadius: BorderRadius.circular(AppRadii.small),
-                ),
-                child: Icon(icon, color: resolvedTone),
-              );
-              final copy = Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(title, style: Theme.of(context).textTheme.titleMedium),
-                  const SizedBox(height: AppSpacing.xs),
-                  Text(
-                    description,
-                    maxLines: descriptionMaxLines,
-                    overflow: descriptionMaxLines == null
-                        ? null
-                        : TextOverflow.ellipsis,
-                    style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                      color: Theme.of(context).colorScheme.onSurfaceVariant,
-                    ),
+    return Semantics(
+      button: true,
+      child: Card(
+        clipBehavior: Clip.antiAlias,
+        child: InkWell(
+          borderRadius: BorderRadius.circular(AppRadii.card),
+          onTap: onTap,
+          child: Padding(
+            padding: const EdgeInsets.all(AppSpacing.lg),
+            child: LayoutBuilder(
+              builder: (context, constraints) {
+                final stacked =
+                    constraints.maxWidth < 280 ||
+                    MediaQuery.textScalerOf(context).scale(16) > 24;
+                final symbol = Container(
+                  width: AppSizing.iconTile,
+                  height: AppSizing.iconTile,
+                  decoration: BoxDecoration(
+                    color: resolvedTint,
+                    borderRadius: BorderRadius.circular(AppRadii.small),
                   ),
-                ],
-              );
-              if (stacked) {
-                return Column(
-                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  child: Icon(icon, color: resolvedTone),
+                );
+                final copy = Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Row(
-                      children: [
-                        symbol,
-                        const Spacer(),
-                        const Icon(Icons.arrow_forward, size: AppSizing.icon),
-                      ],
+                    Text(title, style: Theme.of(context).textTheme.titleMedium),
+                    const SizedBox(height: AppSpacing.xs),
+                    Text(
+                      description,
+                      maxLines: descriptionMaxLines,
+                      overflow: descriptionMaxLines == null
+                          ? null
+                          : TextOverflow.ellipsis,
+                      style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                        color: Theme.of(context).colorScheme.onSurfaceVariant,
+                      ),
                     ),
-                    const SizedBox(height: AppSpacing.md),
-                    copy,
                   ],
                 );
-              }
-              return Row(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  symbol,
-                  const SizedBox(width: AppSpacing.md),
-                  Expanded(child: copy),
-                  const SizedBox(width: AppSpacing.sm),
-                  const Icon(Icons.arrow_forward, size: AppSizing.icon),
-                ],
-              );
-            },
+                if (stacked) {
+                  return Column(
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                    children: [
+                      Row(
+                        children: [
+                          symbol,
+                          const Spacer(),
+                          const Icon(Icons.arrow_forward, size: AppSizing.icon),
+                        ],
+                      ),
+                      const SizedBox(height: AppSpacing.md),
+                      copy,
+                    ],
+                  );
+                }
+                return Row(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    symbol,
+                    const SizedBox(width: AppSpacing.md),
+                    Expanded(child: copy),
+                    const SizedBox(width: AppSpacing.sm),
+                    const Icon(Icons.arrow_forward, size: AppSizing.icon),
+                  ],
+                );
+              },
+            ),
           ),
         ),
       ),

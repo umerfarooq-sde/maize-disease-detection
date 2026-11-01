@@ -5,9 +5,15 @@ import '../utils/responsive.dart';
 /// Safe, scrollable, width-aware page surface for compact phones, split-screen
 /// layouts, desktop windows and the content pane alongside a navigation rail.
 class AppPage extends StatelessWidget {
-  const AppPage({required this.child, this.storageKey, super.key});
+  const AppPage({
+    required this.child,
+    this.storageKey,
+    this.maxWidth = AppSizing.contentMaxWidth,
+    super.key,
+  });
   final Widget child;
   final String? storageKey;
+  final double maxWidth;
 
   @override
   Widget build(BuildContext context) => SafeArea(
@@ -20,9 +26,7 @@ class AppPage extends StatelessWidget {
           padding: EdgeInsets.all(padding),
           child: Center(
             child: ConstrainedBox(
-              constraints: const BoxConstraints(
-                maxWidth: AppSizing.contentMaxWidth,
-              ),
+              constraints: BoxConstraints(maxWidth: maxWidth),
               child: SizedBox(width: double.infinity, child: child),
             ),
           ),
