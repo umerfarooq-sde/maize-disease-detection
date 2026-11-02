@@ -2,7 +2,8 @@ import 'package:flutter/material.dart';
 import '../../../core/theme/design_tokens.dart';
 import '../../../data/models/scan_record.dart';
 import '../../disease_detection/utils/scan_presentation.dart';
-import '../../disease_detection/widgets/prediction_summary.dart';
+import '../../../core/widgets/private_image.dart';
+import '../../../data/models/scan_prediction.dart';
 
 class AssistantScanContext extends StatelessWidget {
   const AssistantScanContext({
@@ -26,12 +27,49 @@ class AssistantScanContext extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
-          Text('Selected scan', style: Theme.of(context).textTheme.titleLarge),
+          Text('Selected scan', style: Theme.of(context).textTheme.labelLarge),
           const SizedBox(height: AppSpacing.sm),
-          Text('Scanned ${scanDate(scan.createdAt)}'),
+          Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              ClipRRect(
+                borderRadius: BorderRadius.circular(AppRadii.small),
+                child: PrivateImage(
+                  path: scan.imageUrl.toString(),
+                  width: AppSizing.emblem,
+                  height: AppSizing.emblem,
+                  fit: BoxFit.cover,
+                  semanticLabel: 'Selected saved scan thumbnail',
+                ),
+              ),
+              const SizedBox(width: AppSpacing.md),
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    if (scan.prediction case final prediction?)
+                      Text(
+                        diseaseLabel(prediction.predictedClass),
+                        style: Theme.of(context).textTheme.titleMedium,
+                      ),
+                    Text(
+                      'Scanned ${scanDate(scan.createdAt)}',
+                      style: Theme.of(context).textTheme.bodySmall,
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          ),
           const SizedBox(height: AppSpacing.md),
-          if (scan.prediction case final prediction?)
-            PredictionSummary(prediction: prediction, compact: true)
+          if (scan.prediction?.predictionStatus ==
+              ScanPredictionStatus.lowConfidence)
+            Text(
+              'Uncertain result',
+              style: TextStyle(
+                color: Theme.of(context).colorScheme.onPrimaryContainer,
+              ),
+            )
           else
             Text(scanStatusLabel(scan.status)),
           const SizedBox(height: AppSpacing.lg),

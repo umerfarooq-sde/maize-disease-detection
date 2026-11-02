@@ -8,14 +8,43 @@ import '../../../data/models/knowledge.dart';
 import '../view_models/knowledge_detail_view_model.dart';
 import '../widgets/knowledge_section_card.dart';
 import '../widgets/reference_gallery.dart';
+import '../utils/knowledge_presentation.dart';
 import '../../../core/widgets/source_reference_card.dart';
 
-class KnowledgeDetailView extends StatelessWidget {
+class KnowledgeDetailView extends StatefulWidget {
   const KnowledgeDetailView({super.key});
+  @override
+  State<KnowledgeDetailView> createState() => _KnowledgeDetailViewState();
+}
+
+class _KnowledgeDetailViewState extends State<KnowledgeDetailView> {
+  final Map<String, GlobalKey> _anchors = {};
+  String? _selected;
+
+  void _jump(String id) {
+    final target = _anchors[id]?.currentContext;
+    if (target == null) return;
+    setState(() => _selected = id);
+    Scrollable.ensureVisible(
+      target,
+      duration: AppMotion.resolve(context, AppMotion.navigation),
+      alignment: 0.02,
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     final model = context.watch<KnowledgeDetailViewModel>();
+    final ids =
+        model.detail?.sections.map((section) => section.documentId).toSet() ??
+        <String>{};
+    _anchors.removeWhere((id, _) => !ids.contains(id));
+    if (!ids.contains(_selected)) {
+      _selected = null;
+    }
     return AppPage(
+      maxWidth: AppSizing.readingMaxWidth,
+      storageKey: 'knowledge-detail-${model.slug}',
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
@@ -32,6 +61,31 @@ class KnowledgeDetailView extends StatelessWidget {
                 : AppErrorState(error: error, onRetry: model.load)
           else if (model.detail case final detail?) ...[
             _KnowledgeHeader(detail: detail),
+            if (detail.sections.isNotEmpty) ...[
+              const SizedBox(height: AppSpacing.lg),
+              Semantics(
+                header: true,
+                child: Text(
+                  'On this page',
+                  style: Theme.of(context).textTheme.titleMedium,
+                ),
+              ),
+              const SizedBox(height: AppSpacing.sm),
+              Wrap(
+                spacing: AppSpacing.sm,
+                runSpacing: AppSpacing.sm,
+                children: [
+                  for (final section in detail.sections)
+                    InputChip(
+                      key: ValueKey('section-link-${section.documentId}'),
+                      label: Text(knowledgeTypeLabel(section.knowledgeType)),
+                      tooltip: 'Read ${section.title}',
+                      selected: _selected == section.documentId,
+                      onPressed: () => _jump(section.documentId),
+                    ),
+                ],
+              ),
+            ],
             if (detail.growthStages.isNotEmpty) ...[
               const SizedBox(height: AppSpacing.lg),
               _ApplicabilitySection(
@@ -84,7 +138,6 @@ class KnowledgeDetailView extends StatelessWidget {
                 message:
                     'Source-backed information will appear when available.',
               ),
-            ReferenceGallery(slug: detail.disease.slug),
             if (detail.sections.isNotEmpty) ...[
               const SizedBox(height: AppSpacing.xl),
               Text(
@@ -94,9 +147,16 @@ class KnowledgeDetailView extends StatelessWidget {
               const SizedBox(height: AppSpacing.lg),
             ],
             for (final section in detail.sections) ...[
-              KnowledgeSectionCard(section: section),
+              KnowledgeSectionCard(
+                key: _anchors.putIfAbsent(section.documentId, GlobalKey.new),
+                section: section,
+              ),
               const SizedBox(height: AppSpacing.lg),
             ],
+            ReferenceGallery(
+              key: ValueKey('gallery-${detail.disease.slug}'),
+              slug: detail.disease.slug,
+            ),
           ],
         ],
       ),

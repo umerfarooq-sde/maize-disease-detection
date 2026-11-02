@@ -22,9 +22,21 @@ class KnowledgeSectionCard extends StatelessWidget {
               ),
             ),
             const SizedBox(height: AppSpacing.xs),
-            Text(section.title, style: Theme.of(context).textTheme.titleLarge),
+            Semantics(
+              header: true,
+              child: Text(
+                section.title,
+                style: Theme.of(context).textTheme.titleLarge,
+              ),
+            ),
             const SizedBox(height: AppSpacing.md),
-            SelectableText(section.content),
+            SelectableText(
+              section.content,
+              key: PageStorageKey('section-text-${section.documentId}'),
+              style: Theme.of(
+                context,
+              ).textTheme.bodyLarge?.copyWith(height: 1.6),
+            ),
             const SizedBox(height: AppSpacing.xl),
             Text(
               'Source attribution · document version ${section.version}',

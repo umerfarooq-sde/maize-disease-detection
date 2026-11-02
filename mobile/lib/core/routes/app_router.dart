@@ -392,7 +392,9 @@ Future<void> _chooseAssistantScan(BuildContext context) async {
     useRootNavigator: true,
     isScrollControlled: true,
     useSafeArea: true,
-    builder: (_) => const AssistantScanPicker(),
+    builder: (_) => AssistantScanPicker(
+      selectedScanId: context.read<AssistantViewModel>().selectedScan?.id,
+    ),
   );
   if (!context.mounted || session.revision != revision || scan == null) return;
   await context.read<AssistantViewModel>().explainScan(scan);

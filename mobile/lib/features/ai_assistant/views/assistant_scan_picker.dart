@@ -10,7 +10,8 @@ import '../../scan_history/widgets/history_scan_tile.dart';
 
 /// Reuses the private paginated history. No scan identifier is entered manually.
 class AssistantScanPicker extends StatelessWidget {
-  const AssistantScanPicker({super.key});
+  const AssistantScanPicker({this.selectedScanId, super.key});
+  final String? selectedScanId;
   static const _heightFraction = 0.85;
 
   @override
@@ -24,7 +25,7 @@ class AssistantScanPicker extends StatelessWidget {
           create: (_) =>
               ScanHistoryViewModel(context.read<ScanRecordsRepository>())
                 ..load(),
-          child: const _ScanChoices(),
+          child: _ScanChoices(selectedScanId: selectedScanId),
         ),
       ),
     );
@@ -32,7 +33,8 @@ class AssistantScanPicker extends StatelessWidget {
 }
 
 class _ScanChoices extends StatelessWidget {
-  const _ScanChoices();
+  const _ScanChoices({this.selectedScanId});
+  final String? selectedScanId;
   @override
   Widget build(BuildContext context) {
     final model = context.watch<ScanHistoryViewModel>();
@@ -44,13 +46,24 @@ class _ScanChoices extends StatelessWidget {
         .toList();
     return Center(
       child: ConstrainedBox(
-        constraints: const BoxConstraints(maxWidth: AppSizing.contentMaxWidth),
+        constraints: const BoxConstraints(maxWidth: AppSizing.readingMaxWidth),
         child: ListView(
           padding: const EdgeInsets.all(AppSpacing.lg),
           children: [
-            Text(
-              'Choose a scan to explain',
-              style: Theme.of(context).textTheme.titleLarge,
+            Row(
+              children: [
+                Expanded(
+                  child: Text(
+                    'Choose a scan to explain',
+                    style: Theme.of(context).textTheme.titleLarge,
+                  ),
+                ),
+                IconButton(
+                  tooltip: 'Close scan picker',
+                  onPressed: () => Navigator.pop(context),
+                  icon: const Icon(Icons.close),
+                ),
+              ],
             ),
             const SizedBox(height: AppSpacing.sm),
             const Text(
@@ -74,12 +87,23 @@ class _ScanChoices extends StatelessWidget {
                       ? 'You can load another page of your history.'
                       : 'Complete a leaf scan to ask for a sourced explanation.',
                 ),
-              for (final scan in scans)
+              for (final scan in scans) ...[
+                if (scan.id == selectedScanId)
+                  const Row(
+                    children: [
+                      Icon(Icons.check_circle_outline),
+                      SizedBox(width: AppSpacing.sm),
+                      Text('Selected'),
+                    ],
+                  ),
                 HistoryScanTile(
                   key: ValueKey('assistant-scan-${scan.id}'),
                   scan: scan,
+                  compact: true,
                   onOpen: () => Navigator.of(context).pop(scan),
                 ),
+                const SizedBox(height: AppSpacing.md),
+              ],
               if (model.loadMoreError case final error?)
                 AppErrorState(error: error, onRetry: model.loadMore),
               if (model.isLoadingMore)

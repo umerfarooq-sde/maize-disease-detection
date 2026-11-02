@@ -20,21 +20,28 @@ class AssistantTurnCard extends StatelessWidget {
   Widget build(BuildContext context) => Column(
     crossAxisAlignment: CrossAxisAlignment.stretch,
     children: [
-      Card(
-        color: context.semanticColors.infoContainer,
-        child: Padding(
-          padding: const EdgeInsets.all(AppSpacing.lg),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: [
-              Text('You asked', style: Theme.of(context).textTheme.labelLarge),
-              const SizedBox(height: AppSpacing.sm),
-              Text(turn.question),
-              if (turn.scan case final scan?) ...[
+      Semantics(
+        container: true,
+        label: 'Your message',
+        child: Card(
+          color: Theme.of(context).colorScheme.primaryContainer,
+          child: Padding(
+            padding: const EdgeInsets.all(AppSpacing.lg),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                Text(
+                  'You asked',
+                  style: Theme.of(context).textTheme.labelLarge,
+                ),
                 const SizedBox(height: AppSpacing.sm),
-                Text('Scan from ${scanDate(scan.createdAt)}'),
+                SelectableText(turn.question),
+                if (turn.scan case final scan?) ...[
+                  const SizedBox(height: AppSpacing.sm),
+                  Text('Scan from ${scanDate(scan.createdAt)}'),
+                ],
               ],
-            ],
+            ),
           ),
         ),
       ),

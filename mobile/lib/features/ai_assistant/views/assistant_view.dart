@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../../../core/theme/design_tokens.dart';
-import '../../../core/widgets/app_page.dart';
+import '../../../core/widgets/app_confirmation_dialog.dart';
 import '../../../data/models/scan_record.dart';
 import '../view_models/assistant_view_model.dart';
 import '../widgets/assistant_composer.dart';
 import '../widgets/assistant_empty_state.dart';
+import '../widgets/assistant_focus_panel.dart';
 import '../widgets/assistant_scan_context.dart';
 import '../widgets/assistant_turn_card.dart';
 
@@ -19,19 +20,26 @@ class AssistantView extends StatefulWidget {
   final VoidCallback? onChooseScan;
   final ScanRecord? handoff;
   final Object? handoffIdentity;
-
   @override
   State<AssistantView> createState() => _AssistantViewState();
 }
 
 class _AssistantViewState extends State<AssistantView> {
   final _draft = TextEditingController();
-  final _latestTurn = GlobalKey();
+  final _scroll = ScrollController();
   Object? _consumedHandoff;
+  int? _lastTurnId;
+  Object? _lastAnswer;
+  bool _lastBusy = false;
+  bool _nearBottom = true;
+  bool _unseen = false;
+  bool _scrollScheduled = false;
+  bool _forceLatest = false;
 
   @override
   void initState() {
     super.initState();
+    _scroll.addListener(_onScroll);
     _scheduleHandoff();
   }
 
@@ -53,129 +61,272 @@ class _AssistantViewState extends State<AssistantView> {
     WidgetsBinding.instance.addPostFrameCallback((_) {
       if (!mounted || !identical(identity, widget.handoffIdentity)) return;
       final model = context.read<AssistantViewModel>();
-      // An explicit new scan replaces an in-flight explanation. Generation
-      // fencing in clear() discards its late response without a second request.
       model.clear();
       _draft.clear();
-      _explain(model, scan);
+      model.explainScan(scan);
     });
+  }
+
+  void _onScroll() {
+    if (!_scroll.hasClients) return;
+    final near = _scroll.position.extentAfter < AppSpacing.section * 2;
+    _nearBottom = near;
+    if (near && _unseen && mounted) setState(() => _unseen = false);
+  }
+
+  void _scheduleLatest({bool force = false}) {
+    _forceLatest = _forceLatest || force;
+    if (_scrollScheduled) return;
+    _scrollScheduled = true;
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      _scrollScheduled = false;
+      if (!mounted || !_scroll.hasClients) return;
+      final shouldFollow = _forceLatest || _nearBottom;
+      _forceLatest = false;
+      if (!shouldFollow) {
+        if (!_unseen) setState(() => _unseen = true);
+        return;
+      }
+      final duration = AppMotion.resolve(context, AppMotion.navigation);
+      if (duration == Duration.zero) {
+        _scroll.jumpTo(_scroll.position.maxScrollExtent);
+      } else {
+        _scroll.animateTo(
+          _scroll.position.maxScrollExtent,
+          duration: duration,
+          curve: Curves.easeOutCubic,
+        );
+      }
+    });
+  }
+
+  Future<void> _ask(AssistantViewModel model, String question) async {
+    if (model.busy) return;
+    final operation = model.ask(question);
+    if (model.inputError == null) {
+      _draft.clear();
+    }
+    _scheduleLatest(force: true);
+    await operation;
+  }
+
+  Future<void> _clear(AssistantViewModel model) async {
+    if (!await showAppConfirmation(
+      context,
+      title: 'Clear temporary conversation?',
+      message:
+          'Remove these local turns, your draft and selected scan. Nothing is saved to your account.',
+      confirmLabel: 'Clear conversation',
+    )) {
+      return;
+    }
+    if (!mounted) return;
+    _draft.clear();
+    model.clear();
+  }
+
+  void _focus(AssistantViewModel model) {
+    FocusManager.instance.primaryFocus?.unfocus();
+    showModalBottomSheet<void>(
+      context: context,
+      useRootNavigator: true,
+      isScrollControlled: true,
+      useSafeArea: true,
+      constraints: const BoxConstraints(maxWidth: AppSizing.formMaxWidth),
+      builder: (_) => ChangeNotifierProvider.value(
+        value: model,
+        child: const AssistantFocusPanel(),
+      ),
+    );
   }
 
   @override
   void dispose() {
     _draft.dispose();
+    _scroll.dispose();
     super.dispose();
-  }
-
-  Future<void> _ask(AssistantViewModel model, String question) async {
-    final operation = model.ask(question);
-    if (model.inputError == null) {
-      _draft.clear();
-      _showLatestTurn();
-    }
-    await operation;
-  }
-
-  Future<void> _explain(AssistantViewModel model, ScanRecord scan) async {
-    final operation = model.explainScan(scan);
-    if (model.inputError == null) _showLatestTurn();
-    await operation;
-  }
-
-  void _showLatestTurn() {
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      if (!mounted) return;
-      if (_latestTurn.currentContext case final context?) {
-        Scrollable.ensureVisible(context);
-      }
-    });
   }
 
   @override
   Widget build(BuildContext context) {
     final model = context.watch<AssistantViewModel>();
-    return AppPage(
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.stretch,
-        children: [
-          Text(
-            'AI Assistant',
-            style: Theme.of(context).textTheme.headlineMedium,
+    final turns = model.turns;
+    final last = turns.isEmpty ? null : turns.last;
+    if (last != null &&
+        (last.id != _lastTurnId ||
+            last.answer != _lastAnswer ||
+            model.busy != _lastBusy)) {
+      _scheduleLatest(force: last.id != _lastTurnId);
+    }
+    _lastTurnId = last?.id;
+    _lastAnswer = last?.answer;
+    _lastBusy = model.busy;
+    final focusLabel = [
+      if (model.diseaseLabel != null)
+        AssistantFocusPanel.diseases[model.diseaseLabel]!,
+      if (model.knowledgeType != null)
+        AssistantFocusPanel.topics[model.knowledgeType]!,
+    ].join(' · ');
+    return SafeArea(
+      child: Center(
+        child: ConstrainedBox(
+          constraints: const BoxConstraints(
+            maxWidth: AppSizing.readingMaxWidth,
           ),
-          const SizedBox(height: AppSpacing.sm),
-          const Text(
-            'Ask about maize leaf conditions using reviewed knowledge. Model predictions are not confirmed diagnoses.',
-          ),
-          const SizedBox(height: AppSpacing.md),
-          Text(
-            model.hasAuthenticatedSession
-                ? 'Up to 12 temporary turns stay available as you switch tabs. Nothing is saved to your account. Clear the conversation, sign out or close the app to discard it.'
-                : 'You can ask questions as a guest. Up to 12 temporary turns stay available as you switch tabs and clear when you sign in or close the app. Sign in to choose a saved scan.',
-            style: Theme.of(context).textTheme.bodyMedium,
-          ),
-          const SizedBox(height: AppSpacing.lg),
-          Wrap(
-            spacing: AppSpacing.sm,
-            runSpacing: AppSpacing.sm,
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
-              if (model.hasAuthenticatedSession && widget.onChooseScan != null)
-                OutlinedButton.icon(
-                  key: const Key('assistant-choose-scan'),
-                  onPressed: model.busy ? null : widget.onChooseScan,
-                  icon: const Icon(Icons.history),
-                  label: const Text('Choose my scan'),
+              Padding(
+                padding: const EdgeInsets.symmetric(
+                  horizontal: AppSpacing.lg,
+                  vertical: AppSpacing.sm,
                 ),
-              if (model.turns.isNotEmpty)
-                TextButton.icon(
-                  key: const Key('assistant-clear'),
-                  onPressed: () {
-                    _draft.clear();
-                    model.clear();
-                  },
-                  icon: const Icon(Icons.delete_outline),
-                  label: const Text('Clear conversation'),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  children: [
+                    Row(
+                      children: [
+                        Expanded(
+                          child: Semantics(
+                            header: true,
+                            child: Text(
+                              'AI Assistant',
+                              style: Theme.of(context).textTheme.titleLarge,
+                            ),
+                          ),
+                        ),
+                        IconButton(
+                          key: const Key('assistant-focus'),
+                          tooltip: 'Question focus and privacy',
+                          onPressed: () => _focus(model),
+                          icon: const Icon(Icons.tune),
+                        ),
+                        if (turns.isNotEmpty)
+                          IconButton(
+                            key: const Key('assistant-clear'),
+                            tooltip: 'Clear conversation',
+                            onPressed: () => _clear(model),
+                            icon: const Icon(Icons.delete_outline),
+                          ),
+                      ],
+                    ),
+                  ],
                 ),
+              ),
+              Expanded(
+                child: Stack(
+                  children: [
+                    SingleChildScrollView(
+                      key: const PageStorageKey('assistant-conversation'),
+                      controller: _scroll,
+                      keyboardDismissBehavior:
+                          ScrollViewKeyboardDismissBehavior.onDrag,
+                      padding: const EdgeInsets.all(AppSpacing.lg),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.stretch,
+                        children: [
+                          if (focusLabel.isNotEmpty) ...[
+                            Text(
+                              'Question focus · $focusLabel',
+                              style: Theme.of(context).textTheme.labelLarge
+                                  ?.copyWith(
+                                    color: Theme.of(
+                                      context,
+                                    ).colorScheme.primary,
+                                  ),
+                            ),
+                            const SizedBox(height: AppSpacing.md),
+                          ],
+                          if (model.selectedScan case final scan?) ...[
+                            AssistantScanContext(
+                              scan: scan,
+                              busy: model.busy,
+                              onExplain: () => model.explainScan(scan),
+                              onClear: model.clearScan,
+                            ),
+                            const SizedBox(height: AppSpacing.lg),
+                          ],
+                          if (turns.isEmpty)
+                            AssistantEmptyState(
+                              authenticated: model.hasAuthenticatedSession,
+                              onAsk: model.busy
+                                  ? null
+                                  : (question) => _ask(model, question),
+                            ),
+                          if (model.hasAuthenticatedSession &&
+                              widget.onChooseScan != null) ...[
+                            Align(
+                              alignment: Alignment.centerLeft,
+                              child: OutlinedButton.icon(
+                                key: const Key('assistant-choose-scan'),
+                                onPressed: model.busy
+                                    ? null
+                                    : widget.onChooseScan,
+                                icon: const Icon(Icons.history),
+                                label: const Text('Choose my scan'),
+                              ),
+                            ),
+                            const SizedBox(height: AppSpacing.lg),
+                          ],
+                          for (
+                            var index = 0;
+                            index < turns.length;
+                            index++
+                          ) ...[
+                            AssistantTurnCard(
+                              key: ValueKey(turns[index].id),
+                              turn: turns[index],
+                              loading: model.busy && index == turns.length - 1,
+                              onRetry: !model.busy && index == turns.length - 1
+                                  ? model.retry
+                                  : null,
+                            ),
+                            const SizedBox(height: AppSpacing.lg),
+                          ],
+                          if (model.inputError case final message?)
+                            Semantics(
+                              liveRegion: true,
+                              child: Text(
+                                message,
+                                key: const Key('assistant-input-error'),
+                                style: Theme.of(context).textTheme.bodyMedium
+                                    ?.copyWith(
+                                      color: Theme.of(
+                                        context,
+                                      ).colorScheme.error,
+                                    ),
+                              ),
+                            ),
+                        ],
+                      ),
+                    ),
+                    if (_unseen)
+                      Positioned(
+                        bottom: AppSpacing.sm,
+                        left: AppSpacing.lg,
+                        right: AppSpacing.lg,
+                        child: Center(
+                          child: FilledButton.tonalIcon(
+                            key: const Key('assistant-jump-latest'),
+                            onPressed: () {
+                              _scheduleLatest(force: true);
+                            },
+                            icon: const Icon(Icons.arrow_downward),
+                            label: const Text('Latest response'),
+                          ),
+                        ),
+                      ),
+                  ],
+                ),
+              ),
+              AssistantComposer(
+                controller: _draft,
+                busy: model.busy,
+                onSubmit: () => _ask(model, _draft.text),
+              ),
             ],
           ),
-          if (model.selectedScan case final scan?) ...[
-            const SizedBox(height: AppSpacing.lg),
-            AssistantScanContext(
-              scan: scan,
-              busy: model.busy,
-              onExplain: () => _explain(model, scan),
-              onClear: model.clearScan,
-            ),
-          ],
-          const SizedBox(height: AppSpacing.xl),
-          if (model.turns.isEmpty)
-            AssistantEmptyState(
-              onAsk: model.busy ? null : (question) => _ask(model, question),
-            ),
-          for (var index = 0; index < model.turns.length; index++) ...[
-            if (index == model.turns.length - 1)
-              SizedBox(key: _latestTurn, height: 0),
-            AssistantTurnCard(
-              key: ValueKey(model.turns[index].id),
-              turn: model.turns[index],
-              loading: model.busy && index == model.turns.length - 1,
-              onRetry: !model.busy && index == model.turns.length - 1
-                  ? model.retry
-                  : null,
-            ),
-            const SizedBox(height: AppSpacing.lg),
-          ],
-          const SizedBox(height: AppSpacing.lg),
-          AssistantComposer(
-            controller: _draft,
-            busy: model.busy,
-            inputError: model.inputError,
-            diseaseLabel: model.diseaseLabel,
-            knowledgeType: model.knowledgeType,
-            onSelectDisease: model.selectDisease,
-            onSelectTopic: model.selectTopic,
-            onSubmit: () => _ask(model, _draft.text),
-          ),
-        ],
+        ),
       ),
     );
   }

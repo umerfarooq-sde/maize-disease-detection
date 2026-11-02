@@ -7,7 +7,7 @@ import '../../../core/theme/design_tokens.dart';
 import '../../../core/widgets/app_page.dart';
 import '../../../core/widgets/app_states.dart';
 import '../view_models/knowledge_view_model.dart';
-import '../../../core/widgets/feature_card.dart';
+import '../widgets/knowledge_catalogue_card.dart';
 import '../widgets/knowledge_match_card.dart';
 
 class KnowledgeView extends StatefulWidget {
@@ -41,61 +41,89 @@ class _KnowledgeViewState extends State<KnowledgeView> {
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
           Text(
-            'Maize knowledge',
-            style: Theme.of(context).textTheme.headlineMedium,
+            'FIELD NOTES',
+            style: Theme.of(context).textTheme.labelLarge?.copyWith(
+              color: Theme.of(context).colorScheme.primary,
+            ),
+          ),
+          const SizedBox(height: AppSpacing.sm),
+          Semantics(
+            header: true,
+            child: Text(
+              'Maize knowledge',
+              style: Theme.of(context).textTheme.headlineMedium,
+            ),
           ),
           const SizedBox(height: AppSpacing.sm),
           const Text(
             'Explore reviewed information and its original sources. This library does not diagnose your crop.',
           ),
           const SizedBox(height: AppSpacing.xl),
-          TextField(
-            key: const Key('knowledge-query'),
-            controller: _query,
-            enabled: !model.searching,
-            decoration: InputDecoration(
-              labelText: 'Search reviewed knowledge',
-              hintText: 'For example: common rust symptoms',
-              helperText: '3–1000 characters, up to 1800 UTF-8 bytes.',
-              helperMaxLines: 3,
-              prefixIcon: const Icon(Icons.search),
-              suffixIcon: _hasDraft
-                  ? IconButton(
-                      key: const Key('knowledge-clear-input'),
-                      tooltip: 'Clear search',
-                      onPressed: () => _clearSearch(model),
-                      icon: const Icon(Icons.clear),
-                    )
-                  : null,
-            ),
-            textInputAction: TextInputAction.search,
-            onSubmitted: (value) => model.search(value),
-            onChanged: (_) {
-              model.editSearch();
-              setState(() {});
-            },
-          ),
-          const SizedBox(height: AppSpacing.md),
-          Wrap(
-            spacing: AppSpacing.md,
-            runSpacing: AppSpacing.sm,
-            children: [
-              FilledButton.icon(
-                key: const Key('knowledge-search'),
-                onPressed: model.searching
-                    ? null
-                    : () => model.search(_query.text),
-                icon: const Icon(Icons.search),
-                label: const Text('Search knowledge'),
+          Card(
+            child: Padding(
+              padding: const EdgeInsets.all(AppSpacing.lg),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  Text(
+                    'Search the evidence',
+                    style: Theme.of(context).textTheme.titleLarge,
+                  ),
+                  const SizedBox(height: AppSpacing.sm),
+                  const Text(
+                    'Find relevant reviewed passages. Search runs only when you submit.',
+                  ),
+                  const SizedBox(height: AppSpacing.lg),
+                  TextField(
+                    key: const Key('knowledge-query'),
+                    controller: _query,
+                    decoration: InputDecoration(
+                      labelText: 'Search reviewed knowledge',
+                      hintText: 'For example: common rust symptoms',
+                      helperText: '3–1000 characters, up to 1800 UTF-8 bytes.',
+                      helperMaxLines: 3,
+                      prefixIcon: const Icon(Icons.search),
+                      suffixIcon: _hasDraft
+                          ? IconButton(
+                              key: const Key('knowledge-clear-input'),
+                              tooltip: 'Clear search',
+                              onPressed: () => _clearSearch(model),
+                              icon: const Icon(Icons.clear),
+                            )
+                          : null,
+                    ),
+                    textInputAction: TextInputAction.search,
+                    onSubmitted: (value) => model.search(value),
+                    onChanged: (_) {
+                      model.editSearch();
+                      setState(() {});
+                    },
+                  ),
+                  const SizedBox(height: AppSpacing.md),
+                  Wrap(
+                    spacing: AppSpacing.md,
+                    runSpacing: AppSpacing.sm,
+                    children: [
+                      FilledButton.icon(
+                        key: const Key('knowledge-search'),
+                        onPressed: model.searching
+                            ? null
+                            : () => model.search(_query.text),
+                        icon: const Icon(Icons.search),
+                        label: const Text('Search knowledge'),
+                      ),
+                      if (model.query != null ||
+                          model.searchError != null ||
+                          model.searching)
+                        TextButton(
+                          onPressed: () => _clearSearch(model),
+                          child: const Text('Clear search'),
+                        ),
+                    ],
+                  ),
+                ],
               ),
-              if (model.query != null ||
-                  model.searchError != null ||
-                  model.searching)
-                TextButton(
-                  onPressed: () => _clearSearch(model),
-                  child: const Text('Clear search'),
-                ),
-            ],
+            ),
           ),
           const SizedBox(height: AppSpacing.xl),
           if (model.searching)
@@ -166,20 +194,36 @@ class _KnowledgeViewState extends State<KnowledgeView> {
               message: 'Refresh later for reviewed maize knowledge.',
             )
           else
-            for (final disease in model.items) ...[
-              FeatureCard(
-                key: ValueKey('knowledge-${disease.slug}'),
-                title: disease.name,
-                description: disease.description,
-                descriptionMaxLines: 4,
-                icon: disease.slug == 'healthy'
-                    ? Icons.spa_outlined
-                    : Icons.menu_book_outlined,
-                onTap: () =>
-                    context.push('${AppRoutes.knowledge}/${disease.slug}'),
-              ),
-              const SizedBox(height: AppSpacing.lg),
-            ],
+            LayoutBuilder(
+              builder: (context, constraints) {
+                final columns =
+                    constraints.maxWidth >= AppSizing.readingMaxWidth &&
+                        MediaQuery.textScalerOf(context).scale(1) <=
+                            AppSizing.comfortableTextScale
+                    ? 2
+                    : 1;
+                final width =
+                    (constraints.maxWidth - (columns - 1) * AppSpacing.lg) /
+                    columns;
+                return Wrap(
+                  spacing: AppSpacing.lg,
+                  runSpacing: AppSpacing.lg,
+                  children: [
+                    for (final disease in model.items)
+                      SizedBox(
+                        width: width,
+                        child: KnowledgeCatalogueCard(
+                          key: ValueKey('knowledge-${disease.slug}'),
+                          disease: disease,
+                          onOpen: () => context.push(
+                            '${AppRoutes.knowledge}/${disease.slug}',
+                          ),
+                        ),
+                      ),
+                  ],
+                );
+              },
+            ),
         ],
       ),
     );

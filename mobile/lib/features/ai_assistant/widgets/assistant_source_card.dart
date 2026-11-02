@@ -11,5 +11,6 @@ class AssistantSourceCard extends StatelessWidget {
     key: ValueKey('assistant-source-${source.id}'),
     reference: source.reference,
     citationLabel: source.id,
+    documentVersion: source.documentVersion,
   );
 }

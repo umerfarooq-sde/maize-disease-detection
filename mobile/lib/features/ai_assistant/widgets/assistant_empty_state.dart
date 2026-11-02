@@ -1,15 +1,20 @@
 import 'package:flutter/material.dart';
 import '../../../core/theme/design_tokens.dart';
-import '../../../core/widgets/app_states.dart';
 
 class AssistantEmptyState extends StatelessWidget {
-  const AssistantEmptyState({required this.onAsk, super.key});
+  const AssistantEmptyState({
+    required this.onAsk,
+    this.authenticated = false,
+    super.key,
+  });
   final ValueChanged<String>? onAsk;
+  final bool authenticated;
 
   static const _questions = [
     'What are common rust symptoms in maize?',
     'How can gray leaf spot in maize be managed?',
     'How can northern corn leaf blight in maize be prevented?',
+    'What should I look for when scouting healthy maize leaves?',
   ];
 
   @override
@@ -19,12 +24,39 @@ class AssistantEmptyState extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
-          const AppEmptyState(
-            title: 'Knowledge for your next field decision',
-            message:
-                'Start with one maize condition and one topic, such as symptoms, management or prevention. When evidence is missing, the assistant will say so.',
-            icon: Icons.chat_bubble_outline,
+          Align(
+            alignment: Alignment.centerLeft,
+            child: Container(
+              padding: const EdgeInsets.all(AppSpacing.md),
+              decoration: BoxDecoration(
+                color: Theme.of(context).colorScheme.primaryContainer,
+                borderRadius: BorderRadius.circular(AppRadii.medium),
+              ),
+              child: Icon(
+                Icons.auto_stories_outlined,
+                color: Theme.of(context).colorScheme.primary,
+                size: AppSizing.stateIcon,
+              ),
+            ),
           ),
+          const SizedBox(height: AppSpacing.lg),
+          Semantics(
+            header: true,
+            child: Text(
+              'Knowledge for your next field decision',
+              style: Theme.of(context).textTheme.titleLarge,
+            ),
+          ),
+          const SizedBox(height: AppSpacing.sm),
+          const Text(
+            'Start with one maize condition and one topic. Answers use reviewed knowledge and will say when evidence is missing.',
+          ),
+          if (!authenticated) ...[
+            const SizedBox(height: AppSpacing.sm),
+            const Text(
+              'You can ask questions as a guest. Sign in to explain a saved scan.',
+            ),
+          ],
           const SizedBox(height: AppSpacing.lg),
           for (final question in _questions) ...[
             OutlinedButton(

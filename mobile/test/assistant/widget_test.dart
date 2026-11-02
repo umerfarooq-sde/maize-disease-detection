@@ -226,6 +226,8 @@ void main() {
     await tester.ensureVisible(clear);
     await tester.tap(clear);
     await tester.pumpAndSettle();
+    await tester.tap(find.widgetWithText(FilledButton, 'Clear conversation'));
+    await tester.pumpAndSettle();
     expect(model.turns, isEmpty);
     expect(find.text('Knowledge for your next field decision'), findsOneWidget);
     expect(
@@ -250,6 +252,8 @@ void main() {
     await tester.ensureVisible(clear);
     await tester.tap(clear);
     await tester.pump();
+    await tester.tap(find.widgetWithText(FilledButton, 'Clear conversation'));
+    await tester.pump();
     expect(model.turns, isEmpty);
     expect(find.text('Knowledge for your next field decision'), findsOneWidget);
     pending.complete(assistantAnswer());
@@ -265,6 +269,8 @@ void main() {
       final model = AssistantViewModel(repository);
       addTearDown(model.dispose);
       await tester.pumpWidget(page(model));
+      await tester.tap(find.byKey(const Key('assistant-focus')));
+      await tester.pumpAndSettle();
       final condition = find.byType(DropdownButtonFormField<String>).first;
       await tester.ensureVisible(condition);
       await tester.tap(condition);
@@ -276,6 +282,8 @@ void main() {
       await tester.tap(topic);
       await tester.pumpAndSettle();
       await tester.tap(find.text('Symptoms').last);
+      await tester.pumpAndSettle();
+      await tester.tap(find.byTooltip('Close focus controls'));
       await tester.pumpAndSettle();
       await submit(tester, 'Symptoms?');
       await tester.pumpAndSettle();
