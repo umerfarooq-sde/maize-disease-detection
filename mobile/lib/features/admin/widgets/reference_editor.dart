@@ -1,4 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import '../../../core/widgets/app_field.dart';
+import 'admin_draft_guard.dart';
+import 'admin_editor_section.dart';
 import '../../../core/theme/design_tokens.dart';
 import '../../../data/models/reference_media.dart';
 import '../../../data/models/selected_leaf_image.dart';
@@ -10,6 +14,7 @@ class ReferenceEditor extends StatefulWidget {
     required this.busy,
     required this.onSave,
     required this.onChoose,
+    this.onCancel,
     super.key,
   });
   final ReferenceMedia? media;
@@ -17,6 +22,7 @@ class ReferenceEditor extends StatefulWidget {
   final bool busy;
   final Future<void> Function(Map<String, Object?>) onSave;
   final VoidCallback onChoose;
+  final VoidCallback? onCancel;
   @override
   State<ReferenceEditor> createState() => _ReferenceEditorState();
 }
@@ -40,6 +46,39 @@ class _ReferenceEditorState extends State<ReferenceEditor> {
       key: TextEditingController(text: _initial(key)),
   };
   bool confirmed = false;
+  bool _showErrors = false;
+  AdminDraftGuard? _guard;
+  bool get _dirty =>
+      confirmed ||
+      widget.image != null ||
+      fields.keys.any((key) => controllers[key]!.text != _initial(key));
+  @override
+  void initState() {
+    super.initState();
+    for (final controller in controllers.values) {
+      controller.addListener(() => _guard?.changed());
+    }
+  }
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    final guard = context.read<AdminDraftGuard?>();
+    if (_guard != guard) {
+      _guard?.unbind(this);
+      _guard = guard;
+      guard?.bind(this, () => _dirty, () => widget.busy);
+    }
+  }
+
+  @override
+  void didUpdateWidget(covariant ReferenceEditor oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (oldWidget.image != widget.image || oldWidget.busy != widget.busy) {
+      _guard?.changed();
+    }
+  }
+
   String _initial(String key) {
     final m = widget.media;
     if (m == null) return key == 'sortOrder' ? '0' : '';
@@ -59,7 +98,10 @@ class _ReferenceEditorState extends State<ReferenceEditor> {
   }
 
   Future<void> _save() async {
-    if (!(_form.currentState?.validate() ?? false)) return;
+    if (!(_form.currentState?.validate() ?? false)) {
+      setState(() => _showErrors = true);
+      return;
+    }
     String v(String key) => controllers[key]!.text.trim();
     await widget.onSave({
       'altText': v('altText'),
@@ -93,11 +135,57 @@ class _ReferenceEditorState extends State<ReferenceEditor> {
 
   @override
   void dispose() {
+    _guard?.unbind(this);
     for (final c in controllers.values) {
       c.dispose();
     }
     super.dispose();
   }
+
+  Widget _field(MapEntry<String, (String, int)> entry) => AppField(
+    label: entry.value.$1,
+    child: TextFormField(
+      key: ValueKey('reference-${entry.key}'),
+      controller: controllers[entry.key],
+      enabled: !widget.busy,
+      maxLength: entry.value.$2,
+      decoration: const InputDecoration(),
+      keyboardType: entry.key == 'sortOrder'
+          ? TextInputType.number
+          : entry.key == 'url'
+          ? TextInputType.url
+          : TextInputType.multiline,
+      minLines: ['rights', 'license', 'attribution'].contains(entry.key)
+          ? 2
+          : 1,
+      maxLines: ['rights', 'license', 'attribution'].contains(entry.key)
+          ? 4
+          : 2,
+      validator: (raw) {
+        final value = (raw ?? '').trim();
+        if (value.isEmpty) {
+          return 'Required source or image information.';
+        }
+        if (entry.key == 'sortOrder' &&
+            (int.tryParse(value) == null ||
+                int.parse(value) < 0 ||
+                int.parse(value) > 10000)) {
+          return 'Enter an integer from 0 to 10000.';
+        }
+        if (entry.key == 'url' &&
+            (Uri.tryParse(value)?.scheme != 'https' ||
+                Uri.tryParse(value)?.host.isEmpty != false)) {
+          return 'Use an HTTPS source reference.';
+        }
+        if (entry.key == 'retrievedAt' &&
+            (!RegExp(r'^\d{4}-\d{2}-\d{2}$').hasMatch(value) ||
+                DateTime.tryParse(value) == null)) {
+          return 'Use YYYY-MM-DD.';
+        }
+        return null;
+      },
+    ),
+  );
 
   @override
   Widget build(BuildContext context) => Form(
@@ -105,6 +193,13 @@ class _ReferenceEditorState extends State<ReferenceEditor> {
     child: Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
+        if (_showErrors)
+          Semantics(
+            liveRegion: true,
+            child: const Text(
+              'Review the highlighted source and image fields before saving.',
+            ),
+          ),
         const Text(
           'Draft reference image · publication requires a separate rights review. Never use training dataset images without verified redistribution rights.',
         ),
@@ -113,6 +208,8 @@ class _ReferenceEditorState extends State<ReferenceEditor> {
             image.bytes,
             height: 200,
             semanticLabel: 'Selected draft image preview',
+            fit: BoxFit.contain,
+            cacheWidth: 1024,
           ),
         OutlinedButton(
           onPressed: widget.busy ? null : widget.onChoose,
@@ -122,53 +219,51 @@ class _ReferenceEditorState extends State<ReferenceEditor> {
                 : 'Choose replacement image (new draft)',
           ),
         ),
-        for (final entry in fields.entries)
-          Padding(
-            padding: const EdgeInsets.only(top: AppSpacing.sm),
-            child: TextFormField(
-              key: ValueKey('reference-${entry.key}'),
-              controller: controllers[entry.key],
-              enabled: !widget.busy,
-              maxLength: entry.value.$2,
-              decoration: InputDecoration(labelText: entry.value.$1),
-              validator: (raw) {
-                final value = (raw ?? '').trim();
-                if (value.isEmpty) {
-                  return 'Required source or image information.';
-                }
-                if (entry.key == 'sortOrder' &&
-                    (int.tryParse(value) == null ||
-                        int.parse(value) < 0 ||
-                        int.parse(value) > 10000)) {
-                  return 'Enter an integer from 0 to 10000.';
-                }
-                if (entry.key == 'url' &&
-                    (Uri.tryParse(value)?.scheme != 'https' ||
-                        Uri.tryParse(value)?.host.isEmpty != false)) {
-                  return 'Use an HTTPS source reference.';
-                }
-                if (entry.key == 'retrievedAt' &&
-                    (!RegExp(r'^\d{4}-\d{2}-\d{2}$').hasMatch(value) ||
-                        DateTime.tryParse(value) == null)) {
-                  return 'Use YYYY-MM-DD.';
-                }
-                return null;
-              },
-            ),
+        for (final group in {
+          'Image identity': ['altText', 'sortOrder'],
+          'Source details': ['title', 'publisher', 'url', 'retrievedAt'],
+          'Usage rights': ['rights', 'license', 'contributor', 'attribution'],
+        }.entries)
+          AdminEditorSection(
+            title: group.key,
+            description: group.key == 'Usage rights'
+                ? 'Verify permission for project hosting and display. A source URL alone is not a license.'
+                : 'Retain exact source identity and accessible image context.',
+            children: [
+              for (final key in group.value)
+                _field(MapEntry(key, fields[key]!)),
+            ],
           ),
         CheckboxListTile(
           value: confirmed,
           onChanged: widget.busy
               ? null
-              : (value) => setState(() => confirmed = value ?? false),
+              : (value) {
+                  setState(() => confirmed = value ?? false);
+                  _guard?.changed();
+                },
           title: const Text(
             'I have reviewed permission/license for project hosting and display. This is not automatic legal approval.',
           ),
         ),
+        const SizedBox(height: AppSpacing.lg),
         FilledButton(
           onPressed: widget.busy ? null : _save,
-          child: const Text('Save reviewed draft metadata'),
+          child: Text(
+            widget.busy ? 'Working…' : 'Save reviewed draft metadata',
+          ),
         ),
+        if (widget.onCancel != null)
+          TextButton(
+            onPressed: widget.busy
+                ? null
+                : () async {
+                    if (!_dirty || await confirmDiscardDraft(context)) {
+                      if (mounted) widget.onCancel?.call();
+                    }
+                  },
+            child: const Text('Cancel editing'),
+          ),
       ],
     ),
   );

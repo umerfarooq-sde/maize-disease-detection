@@ -1,204 +1,109 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import '../../../core/routes/app_routes.dart';
-import '../../../core/theme/design_tokens.dart';
 import 'package:provider/provider.dart';
 import '../../../data/repositories/admin_dashboard_repository.dart';
+import '../../../data/repositories/admin_management_repository.dart';
+import '../../../data/repositories/admin_accounts_repository.dart';
+import '../../../data/repositories/model_health_repository.dart';
 import '../view_models/admin_session_view_model.dart';
 import '../view_models/admin_dashboard_view_model.dart';
+import '../view_models/admin_management_view_model.dart';
+import '../view_models/audit_log_view_model.dart';
+import '../view_models/farmer_management_view_model.dart';
+import '../view_models/model_health_view_model.dart';
+import '../widgets/admin_navigation.dart';
+import '../widgets/admin_draft_guard.dart';
+import '../widgets/admin_workspace_shell.dart';
 import 'admin_sign_in_view.dart';
 import 'admin_dashboard_view.dart';
-import '../../../data/repositories/admin_management_repository.dart';
-import '../view_models/admin_management_view_model.dart';
 import 'admin_management_view.dart';
-import '../../../data/repositories/model_health_repository.dart';
-import '../view_models/model_health_view_model.dart';
-import 'model_health_view.dart';
-import '../../../data/repositories/admin_accounts_repository.dart';
-import '../view_models/farmer_management_view_model.dart';
-import '../view_models/audit_log_view_model.dart';
-import 'farmer_management_view.dart';
 import 'audit_log_view.dart';
+import 'farmer_management_view.dart';
+import 'model_health_view.dart';
 import 'reference_management_view.dart';
+import 'ai_operations_view.dart';
 
-/// Outside the farmer navigation shell, with an independent volatile session.
+/// Gating stays on the independent, role-checked Admin session. The router's
+/// child Navigator is not mounted until that session is authorized.
 class AdminAccessView extends StatelessWidget {
   const AdminAccessView({
-    this.management = false,
-    this.modelHealth = false,
-    this.farmers = false,
-    this.audit = false,
-    this.media = false,
+    required this.child,
+    required this.location,
     super.key,
   });
-  final bool management;
-  final bool modelHealth;
-  final bool farmers, audit;
-  final bool media;
+  final Widget child;
+  final Uri location;
   @override
   Widget build(BuildContext context) {
     final session = context.watch<AdminSessionViewModel>();
-    final compactActions =
-        MediaQuery.sizeOf(context).width < AppSizing.twoColumnBreakpoint ||
-        MediaQuery.textScalerOf(context).scale(1) > 1.3;
-    return Scaffold(
-      appBar: AppBar(
-        title: Text(
-          media
-              ? 'Reference images'
-              : farmers
-              ? 'Farmer accounts'
-              : audit
-              ? 'Audit history'
-              : modelHealth
-              ? 'Admin model health'
-              : management
-              ? 'Admin management'
-              : 'Admin overview',
-        ),
-        leading: IconButton(
-          tooltip: management || modelHealth || farmers || audit || media
-              ? 'Return to Admin overview'
-              : 'Return to farmer app',
-          onPressed: () => context.go(
-            management || modelHealth || farmers || audit || media
-                ? AppRoutes.admin
-                : AppRoutes.home,
-          ),
-          icon: const Icon(Icons.arrow_back),
-        ),
-        actions: session.signedIn && compactActions
-            ? [
-                PopupMenuButton<_AdminAction>(
-                  tooltip: 'Admin actions',
-                  icon: const Icon(Icons.more_vert),
-                  onSelected: (action) async {
-                    switch (action) {
-                      case _AdminAction.references:
-                        context.push('${AppRoutes.admin}/reference-images');
-                      case _AdminAction.health:
-                        context.push('${AppRoutes.admin}/model-health');
-                      case _AdminAction.management:
-                        context.push('${AppRoutes.admin}/manage');
-                      case _AdminAction.signOut:
-                        await session.signOut();
-                    }
-                  },
-                  itemBuilder: (context) => [
-                    if (!media)
-                      const PopupMenuItem(
-                        value: _AdminAction.references,
-                        child: ListTile(
-                          leading: Icon(Icons.photo_library_outlined),
-                          title: Text('Reference images'),
-                          contentPadding: EdgeInsets.zero,
-                        ),
-                      ),
-                    if (!modelHealth)
-                      const PopupMenuItem(
-                        value: _AdminAction.health,
-                        child: ListTile(
-                          leading: Icon(Icons.monitor_heart_outlined),
-                          title: Text('Model health'),
-                          contentPadding: EdgeInsets.zero,
-                        ),
-                      ),
-                    if (!management)
-                      const PopupMenuItem(
-                        value: _AdminAction.management,
-                        child: ListTile(
-                          leading: Icon(Icons.settings_outlined),
-                          title: Text('Management'),
-                          contentPadding: EdgeInsets.zero,
-                        ),
-                      ),
-                    PopupMenuItem(
-                      value: _AdminAction.signOut,
-                      enabled: !session.busy,
-                      child: const ListTile(
-                        leading: Icon(Icons.logout),
-                        title: Text('Sign out'),
-                        contentPadding: EdgeInsets.zero,
-                      ),
-                    ),
-                  ],
-                ),
-              ]
-            : [
-                if (session.signedIn && !media)
-                  IconButton(
-                    onPressed: () =>
-                        context.push('${AppRoutes.admin}/reference-images'),
-                    tooltip: 'Manage reference images',
-                    icon: const Icon(Icons.photo_library_outlined),
-                  ),
-                if (session.signedIn && !modelHealth)
-                  IconButton(
-                    onPressed: () =>
-                        context.push('${AppRoutes.admin}/model-health'),
-                    tooltip: 'Model health',
-                    icon: const Icon(Icons.monitor_heart_outlined),
-                  ),
-                if (session.signedIn && !management)
-                  IconButton(
-                    onPressed: () => context.push('${AppRoutes.admin}/manage'),
-                    tooltip: 'Manage knowledge and configuration',
-                    icon: const Icon(Icons.settings_outlined),
-                  ),
-                if (session.signedIn)
-                  TextButton(
-                    onPressed: session.busy ? null : session.signOut,
-                    child: const Text('Sign out'),
-                  ),
-              ],
-      ),
-      body: session.signedIn && media
-          ? ReferenceManagementView(
-              key: ValueKey('reference-${session.revision}'),
-            )
-          : session.signedIn && farmers
-          ? ChangeNotifierProvider(
-              key: ValueKey('farmers-${session.revision}'),
-              create: (_) => FarmerManagementViewModel(
-                context.read<AdminAccountsRepository>(),
-              )..load(),
-              child: const FarmerManagementView(),
-            )
-          : session.signedIn && audit
-          ? ChangeNotifierProvider(
-              key: ValueKey('audits-${session.revision}'),
-              create: (_) =>
-                  AuditLogViewModel(context.read<AdminAccountsRepository>())
-                    ..load(),
-              child: const AuditLogView(),
-            )
-          : session.signedIn && modelHealth
-          ? ChangeNotifierProvider(
-              key: ValueKey('model-health-${session.revision}'),
-              create: (_) =>
-                  ModelHealthViewModel(context.read<ModelHealthRepository>())
-                    ..load(),
-              child: const ModelHealthView(),
-            )
-          : session.signedIn && management
-          ? ChangeNotifierProvider(
-              key: ValueKey('admin-management-${session.revision}'),
-              create: (_) => AdminManagementViewModel(
-                context.read<AdminManagementRepository>(),
-              )..load(),
-              child: const AdminManagementView(),
-            )
-          : session.signedIn
-          ? ChangeNotifierProvider(
-              key: ValueKey('admin-dashboard-${session.revision}'),
-              create: (_) => AdminDashboardViewModel(
-                context.read<AdminDashboardRepository>(),
-              )..load(),
-              child: const AdminDashboardView(),
-            )
-          : const AdminSignInView(),
+    final destination = AdminDestination.fromUri(location);
+    final shell = AdminWorkspaceShell(
+      destination: destination,
+      signedIn: session.signedIn,
+      email: session.account?.email,
+      onSignOut: session.busy ? null : session.signOut,
+      child: session.signedIn ? child : const AdminSignInView(),
     );
+    return session.signedIn
+        ? ChangeNotifierProvider(
+            key: ValueKey('admin-report-${session.revision}'),
+            create: (_) => AdminDashboardViewModel(
+              context.read<AdminDashboardRepository>(),
+            ),
+            child: ChangeNotifierProvider(
+              create: (_) => AdminDraftGuard(),
+              child: shell,
+            ),
+          )
+        : shell;
   }
 }
 
-enum _AdminAction { references, health, management, signOut }
+/// Creates only the selected feature's existing model, after the access gate.
+class AdminSectionView extends StatelessWidget {
+  const AdminSectionView({required this.destination, super.key});
+  final AdminDestination destination;
+  @override
+  Widget build(BuildContext context) {
+    final revision = context.watch<AdminSessionViewModel>().revision;
+    if (destination.area case final area?) {
+      return ChangeNotifierProvider(
+        key: ValueKey('admin-management-$revision-${area.name}'),
+        create: (_) =>
+            AdminManagementViewModel(context.read<AdminManagementRepository>())
+              ..select(area),
+        child: AdminManagementView(
+          onAreaChanged: (area) =>
+              context.go(AdminDestination.forArea(area).location),
+        ),
+      );
+    }
+    return switch (destination) {
+      AdminDestination.overview => const AdminDashboardView(),
+      AdminDestination.operations => const AiOperationsView(),
+      AdminDestination.references => ReferenceManagementView(
+        key: ValueKey('reference-$revision'),
+      ),
+      AdminDestination.health => ChangeNotifierProvider(
+        key: ValueKey('model-health-$revision'),
+        create: (_) =>
+            ModelHealthViewModel(context.read<ModelHealthRepository>())..load(),
+        child: const ModelHealthView(),
+      ),
+      AdminDestination.farmers => ChangeNotifierProvider(
+        key: ValueKey('farmers-$revision'),
+        create: (_) =>
+            FarmerManagementViewModel(context.read<AdminAccountsRepository>())
+              ..load(),
+        child: const FarmerManagementView(),
+      ),
+      AdminDestination.audit => ChangeNotifierProvider(
+        key: ValueKey('audits-$revision'),
+        create: (_) =>
+            AuditLogViewModel(context.read<AdminAccountsRepository>())..load(),
+        child: const AuditLogView(),
+      ),
+      _ => throw StateError('Management destinations must supply an area.'),
+    };
+  }
+}

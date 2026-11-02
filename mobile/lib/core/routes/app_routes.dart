@@ -17,4 +17,5 @@ abstract final class AppRoutes {
   static const fertilizer = '/tools/fertilizer';
   static const yieldCalculator = '/tools/yield';
   static const admin = '/admin';
+  static const adminAiOperations = '/admin/ai-operations';
 }

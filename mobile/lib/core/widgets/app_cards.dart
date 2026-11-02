@@ -64,12 +64,14 @@ class AppMetricCard extends StatelessWidget {
     required this.value,
     this.unit,
     this.note,
+    this.icon,
     super.key,
   });
   final String label;
   final String? value;
   final String? unit;
   final String? note;
+  final IconData? icon;
 
   @override
   Widget build(BuildContext context) {
@@ -80,6 +82,13 @@ class AppMetricCard extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
+            if (icon != null) ...[
+              Align(
+                alignment: Alignment.centerLeft,
+                child: Icon(icon, color: theme.colorScheme.primary),
+              ),
+              const SizedBox(height: AppSpacing.sm),
+            ],
             Text(
               label,
               style: theme.textTheme.bodySmall?.copyWith(

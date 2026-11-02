@@ -28,6 +28,7 @@ import '../../features/disease_detection/view_models/scan_result_view_model.dart
 import '../../features/disease_detection/views/result_view.dart';
 import '../../features/disease_detection/view_models/scan_view_model.dart';
 import '../../features/admin/views/admin_access_view.dart';
+import '../../features/admin/widgets/admin_navigation.dart';
 import '../../features/ai_assistant/views/assistant_view.dart';
 import '../../features/ai_assistant/views/assistant_scan_picker.dart';
 import '../../features/ai_assistant/view_models/assistant_view_model.dart';
@@ -281,29 +282,45 @@ GoRouter createAppRouter({String initialLocation = AppRoutes.home}) => GoRouter(
       redirect: (_, state) =>
           state.uri.replace(path: AppRoutes.assistant).toString(),
     ),
-    GoRoute(
-      path: AppRoutes.admin,
-      builder: (_, _) => const AdminAccessView(),
+    ShellRoute(
+      builder: (_, state, child) =>
+          AdminAccessView(location: state.uri, child: child),
       routes: [
         GoRoute(
-          path: 'reference-images',
-          builder: (_, _) => const AdminAccessView(media: true),
+          path: AppRoutes.admin,
+          builder: (_, _) =>
+              const AdminSectionView(destination: AdminDestination.overview),
         ),
         GoRoute(
-          path: 'manage',
-          builder: (_, _) => const AdminAccessView(management: true),
+          path: '${AppRoutes.admin}/reference-images',
+          builder: (_, _) =>
+              const AdminSectionView(destination: AdminDestination.references),
         ),
         GoRoute(
-          path: 'model-health',
-          builder: (_, _) => const AdminAccessView(modelHealth: true),
+          path: '${AppRoutes.admin}/manage',
+          builder: (_, state) => AdminSectionView(
+            destination: AdminDestination.fromUri(state.uri),
+          ),
         ),
         GoRoute(
-          path: 'farmers',
-          builder: (_, _) => const AdminAccessView(farmers: true),
+          path: AppRoutes.adminAiOperations,
+          builder: (_, _) =>
+              const AdminSectionView(destination: AdminDestination.operations),
         ),
         GoRoute(
-          path: 'audit',
-          builder: (_, _) => const AdminAccessView(audit: true),
+          path: '${AppRoutes.admin}/model-health',
+          builder: (_, _) =>
+              const AdminSectionView(destination: AdminDestination.health),
+        ),
+        GoRoute(
+          path: AppRoutes.adminFarmers,
+          builder: (_, _) =>
+              const AdminSectionView(destination: AdminDestination.farmers),
+        ),
+        GoRoute(
+          path: AppRoutes.adminAudit,
+          builder: (_, _) =>
+              const AdminSectionView(destination: AdminDestination.audit),
         ),
       ],
     ),

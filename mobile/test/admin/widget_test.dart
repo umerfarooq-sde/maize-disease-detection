@@ -15,6 +15,7 @@ import 'package:maizedoctor/features/admin/views/admin_dashboard_view.dart';
 import '../analytics/helpers.dart' show clock;
 import '../auth/session_test.dart' show grant, cookie, response;
 import 'helpers.dart';
+import 'package:maizedoctor/features/admin/widgets/admin_navigation.dart';
 
 Future<void> submit(WidgetTester tester) async {
   await tester.enterText(
@@ -66,7 +67,11 @@ void main() {
       expect(requests, isEmpty);
       await submit(tester);
       expect(find.text('Registered farmers'), findsOneWidget);
-      expect(find.text('Scan ownership'), findsOneWidget);
+      expect(find.textContaining('Scan ownership'), findsOneWidget);
+      await tester.ensureVisible(find.text('Scan trends and model labels'));
+      await tester.pumpAndSettle();
+      await tester.tap(find.text('Scan trends and model labels'));
+      await tester.pumpAndSettle();
       expect(find.text('Model label distribution'), findsOneWidget);
       expect(find.textContaining('no model has been promoted'), findsOneWidget);
       expect(
@@ -84,7 +89,9 @@ void main() {
         dashboard.headers['authorization'],
         'Bearer header.payload.signature',
       );
-      await tester.tap(find.text('Sign out'));
+      await tester.tap(find.byTooltip('Workspace actions'));
+      await tester.pumpAndSettle();
+      await tester.tap(find.text('Admin Sign Out'));
       await tester.pumpAndSettle();
       expect(find.text('Administrator sign-in'), findsOneWidget);
       expect(find.text('Saved scans'), findsNothing);
@@ -148,14 +155,34 @@ void main() {
     );
     await tester.pumpAndSettle();
     await submit(tester);
-    expect(find.byTooltip('Admin actions'), findsOneWidget);
+    expect(find.byTooltip('Open Admin navigation'), findsOneWidget);
     expect(find.widgetWithText(TextButton, 'Sign out'), findsNothing);
-    await tester.tap(find.byTooltip('Admin actions'));
+    await tester.tap(find.byTooltip('Open Admin navigation'));
     await tester.pumpAndSettle();
-    expect(find.text('Reference images'), findsOneWidget);
-    expect(find.text('Model health'), findsOneWidget);
-    expect(find.text('Management'), findsOneWidget);
-    await tester.tap(find.text('Sign out'));
+    final scrollable = find.descendant(
+      of: find.byType(AdminNavigation),
+      matching: find.byType(Scrollable),
+    );
+    for (final destination in [
+      AdminDestination.references,
+      AdminDestination.health,
+    ]) {
+      await tester.scrollUntilVisible(
+        find.descendant(
+          of: find.byType(AdminNavigation),
+          matching: find.byKey(ValueKey('admin-nav-${destination.name}')),
+        ),
+        250,
+        scrollable: scrollable,
+      );
+      expect(find.text(destination.label).hitTestable(), findsOneWidget);
+    }
+    await tester.scrollUntilVisible(
+      find.text('Admin Sign Out'),
+      250,
+      scrollable: scrollable,
+    );
+    await tester.tap(find.text('Admin Sign Out'));
     await tester.pumpAndSettle();
     expect(find.text('Administrator sign-in'), findsOneWidget);
     expect(tester.takeException(), isNull);

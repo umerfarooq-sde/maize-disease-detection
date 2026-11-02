@@ -215,7 +215,7 @@ void main() {
             .read<AdminDashboardViewModel>();
         await until(() => !dashboard.loading);
         expect(dashboard.error, isNull);
-        await tap(find.byKey(const Key('admin-farmers-link')));
+        await tap(find.byKey(const Key('admin-nav-farmers')));
         final accounts = tester
             .element(find.byType(FarmerManagementView))
             .read<FarmerManagementViewModel>();
@@ -236,12 +236,13 @@ void main() {
             status,
           );
         }
-        await tap(find.byTooltip('Return to Admin overview'));
+        await tap(find.byTooltip('Open Admin navigation'));
+        await tap(find.byKey(const Key('admin-nav-overview')));
         final currentDashboard = tester
             .element(find.byType(AdminDashboardView))
             .read<AdminDashboardViewModel>();
         await until(() => !currentDashboard.loading);
-        await tap(find.byKey(const Key('admin-audit-link')));
+        await tap(find.byKey(const Key('admin-nav-audit')));
         final audit = tester
             .element(find.byType(AuditLogView))
             .read<AuditLogViewModel>();
@@ -267,7 +268,8 @@ void main() {
           ),
           true,
         );
-        await tap(find.text('Sign out'));
+        await tap(find.byTooltip('Workspace actions'));
+        await tap(find.text('Admin Sign Out'));
         await until(() => !adminSession.busy);
         expect(adminSession.signedIn, false);
         expect(find.byType(AuditLogView), findsNothing);

@@ -12,6 +12,7 @@ import 'package:maizedoctor/data/repositories/profile_repository.dart';
 import 'package:maizedoctor/features/profile/view_models/profile_view_model.dart';
 import 'package:maizedoctor/features/admin/view_models/admin_dashboard_view_model.dart';
 import 'package:maizedoctor/features/admin/views/admin_dashboard_view.dart';
+import 'package:maizedoctor/features/admin/views/ai_operations_view.dart';
 import 'package:maizedoctor/features/disease_knowledge/views/knowledge_detail_view.dart';
 import 'package:maizedoctor/features/disease_knowledge/view_models/knowledge_detail_view_model.dart';
 
@@ -126,6 +127,11 @@ void main() {
           true,
         );
         expect(find.text('AI operations'), findsOneWidget);
+        await tester.ensureVisible(find.byKey(const Key('view-ai-operations')));
+        await tester.pump();
+        await tester.tap(find.byKey(const Key('view-ai-operations')));
+        await tester.pump();
+        await until(() => find.byType(AiOperationsView).evaluate().isNotEmpty);
         expect(find.textContaining('NODE · GENERATION'), findsOneWidget);
         expect(tester.takeException(), isNull);
         await tester.pumpWidget(const SizedBox.shrink());

@@ -6,9 +6,11 @@ import '../../../core/widgets/app_states.dart';
 import '../../../data/models/admin_management.dart';
 import '../view_models/admin_management_view_model.dart';
 import '../widgets/management_editor_form.dart';
+import '../widgets/admin_content_management.dart';
 
 class AdminManagementView extends StatelessWidget {
-  const AdminManagementView({super.key});
+  const AdminManagementView({this.onAreaChanged, super.key});
+  final ValueChanged<ManagementArea>? onAreaChanged;
   Future<void> _status(
     BuildContext context,
     AdminManagementViewModel model,
@@ -30,6 +32,16 @@ class AdminManagementView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final model = context.watch<AdminManagementViewModel>();
+    if ([
+      ManagementArea.diseases,
+      ManagementArea.knowledge,
+    ].contains(model.area)) {
+      return AdminContentManagement(
+        key: ValueKey(model.area),
+        onAreaChanged: onAreaChanged,
+        onStatus: (item, status) => _status(context, model, item, status),
+      );
+    }
     final editor = model.editor;
     return AppPage(
       child: Column(
@@ -52,7 +64,11 @@ class AdminManagementView extends StatelessWidget {
                 ChoiceChip(
                   label: Text(area.label),
                   selected: model.area == area,
-                  onSelected: model.busy ? null : (_) => model.select(area),
+                  onSelected: model.busy
+                      ? null
+                      : (_) => onAreaChanged != null
+                            ? onAreaChanged!(area)
+                            : model.select(area),
                 ),
             ],
           ),
