@@ -10,6 +10,9 @@ import '../widgets/fertilizer_calculation_error.dart';
 import '../widgets/fertilizer_pending_rules.dart';
 import '../widgets/fertilizer_result_card.dart';
 import '../widgets/fertilizer_rule_details.dart';
+import '../../tools/widgets/planning_header.dart';
+import '../../tools/widgets/planning_disclosure.dart';
+import '../../../core/widgets/app_field.dart';
 
 class FertilizerView extends StatefulWidget {
   const FertilizerView({super.key});
@@ -44,16 +47,16 @@ class _FertilizerViewState extends State<FertilizerView> {
     final model = context.watch<FertilizerViewModel>();
     final catalogue = model.catalogue;
     return AppPage(
+      maxWidth: AppSizing.readingMaxWidth,
+      storageKey: 'fertilizer-planning',
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
-          Text(
-            'Fertilizer planning',
-            style: Theme.of(context).textTheme.headlineMedium,
-          ),
-          const SizedBox(height: AppSpacing.sm),
-          const Text(
-            'Calculate a product quantity from a published rule and your field area.',
+          const PlanningHeader(
+            title: 'Fertilizer planning',
+            description:
+                'Calculate a product quantity from a published rule and your field area.',
+            icon: Icons.grass_outlined,
           ),
           const SizedBox(height: AppSpacing.md),
           Text(
@@ -63,6 +66,13 @@ class _FertilizerViewState extends State<FertilizerView> {
             style: Theme.of(context).textTheme.bodyMedium,
           ),
           const SizedBox(height: AppSpacing.xl),
+          if (catalogue != null && catalogue.items.isNotEmpty)
+            Text(
+              'Reviewed rules available · choose the applicable rule below.',
+              style: Theme.of(context).textTheme.labelLarge?.copyWith(
+                color: Theme.of(context).colorScheme.primary,
+              ),
+            ),
           if (model.loading)
             const AppLoadingState(message: 'Checking approved rules…')
           else if (model.error case final error?)
@@ -84,24 +94,37 @@ class _FertilizerViewState extends State<FertilizerView> {
             const SizedBox(height: AppSpacing.xl),
             KeyedSubtree(
               key: const Key('fertilizer-rule'),
-              child: DropdownButtonFormField<String>(
-                key: ValueKey(model.selectedRule?.id),
-                initialValue: model.selectedRule?.id,
-                decoration: const InputDecoration(labelText: 'Approved rule'),
-                hint: const Text('Choose a rule'),
-                isExpanded: true,
-                itemHeight: null,
-                items: [
-                  for (final rule in catalogue.items)
-                    DropdownMenuItem(value: rule.id, child: Text(rule.title)),
-                ],
-                onChanged: model.submitting ? null : model.selectRule,
+              child: AppField(
+                label: 'Approved rule',
+                child: DropdownButtonFormField<String>(
+                  key: ValueKey(model.selectedRule?.id),
+                  initialValue: model.selectedRule?.id,
+                  hint: const Text('Choose a rule'),
+                  isExpanded: true,
+                  itemHeight: null,
+                  items: [
+                    for (final rule in catalogue.items)
+                      DropdownMenuItem(value: rule.id, child: Text(rule.title)),
+                  ],
+                  onChanged: model.submitting ? null : model.selectRule,
+                ),
               ),
             ),
           ],
           if (model.selectedRule case final rule?) ...[
             const SizedBox(height: AppSpacing.lg),
-            FertilizerRuleDetails(rule: rule),
+            Text(
+              'Product: ${rule.fertilizer.name}',
+              style: Theme.of(context).textTheme.titleMedium,
+            ),
+            Text(
+              'Approved product rate: ${rule.rateKgPerHectare} kg per hectare',
+            ),
+            const SizedBox(height: AppSpacing.sm),
+            PlanningDisclosure(
+              title: 'Review selected rule',
+              child: FertilizerRuleDetails(rule: rule),
+            ),
           ],
           const SizedBox(height: AppSpacing.xl),
           FilledButton.icon(

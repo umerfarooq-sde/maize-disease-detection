@@ -7,6 +7,9 @@ import '../../../data/models/yield_models.dart';
 import '../../tools/widgets/calculator_inputs.dart';
 import '../view_models/yield_view_model.dart';
 import '../widgets/yield_details.dart';
+import '../../tools/widgets/planning_header.dart';
+import '../../tools/widgets/planning_disclosure.dart';
+import '../../../core/widgets/app_field.dart';
 
 class YieldView extends StatefulWidget {
   const YieldView({super.key});
@@ -39,16 +42,16 @@ class _YieldViewState extends State<YieldView> {
     final model = context.watch<YieldViewModel>();
     final catalogue = model.catalogue;
     return AppPage(
+      maxWidth: AppSizing.readingMaxWidth,
+      storageKey: 'yield-planning',
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
-          Text(
-            'Expected yield',
-            style: Theme.of(context).textTheme.headlineMedium,
-          ),
-          const SizedBox(height: AppSpacing.sm),
-          const Text(
-            'Plan from your cultivated area and a reviewed yield scenario. Actual harvest may differ.',
+          const PlanningHeader(
+            title: 'Yield planning',
+            description:
+                'Plan from your cultivated area and a reviewed yield scenario. Actual harvest may differ.',
+            icon: Icons.bar_chart_outlined,
           ),
           const SizedBox(height: AppSpacing.lg),
           if (model.loading)
@@ -86,6 +89,15 @@ class _YieldViewState extends State<YieldView> {
               ),
             ),
           const SizedBox(height: AppSpacing.xl),
+          if (catalogue != null && catalogue.items.isNotEmpty) ...[
+            Text(
+              'Reviewed scenarios available · choose applicable conditions below.',
+              style: Theme.of(context).textTheme.labelLarge?.copyWith(
+                color: Theme.of(context).colorScheme.primary,
+              ),
+            ),
+            const SizedBox(height: AppSpacing.md),
+          ],
           CalculatorInputs<YieldMassUnit>(
             controller: _area,
             busy: model.submitting,
@@ -105,30 +117,40 @@ class _YieldViewState extends State<YieldView> {
             const SizedBox(height: AppSpacing.xl),
             KeyedSubtree(
               key: const Key('yield-configuration'),
-              child: DropdownButtonFormField<String>(
-                key: ValueKey(model.selected?.id),
-                initialValue: model.selected?.id,
-                decoration: const InputDecoration(
-                  labelText: 'Reviewed yield scenario',
+              child: AppField(
+                label: 'Reviewed yield scenario',
+                child: DropdownButtonFormField<String>(
+                  key: ValueKey(model.selected?.id),
+                  initialValue: model.selected?.id,
+                  hint: const Text('Choose a configuration'),
+                  isExpanded: true,
+                  itemHeight: null,
+                  items: [
+                    for (final configuration in catalogue.items)
+                      DropdownMenuItem(
+                        value: configuration.id,
+                        child: Text(configuration.title),
+                      ),
+                  ],
+                  onChanged: model.submitting
+                      ? null
+                      : model.selectConfiguration,
                 ),
-                hint: const Text('Choose a configuration'),
-                isExpanded: true,
-                itemHeight: null,
-                items: [
-                  for (final configuration in catalogue.items)
-                    DropdownMenuItem(
-                      value: configuration.id,
-                      child: Text(configuration.title),
-                    ),
-                ],
-                onChanged: model.submitting ? null : model.selectConfiguration,
               ),
             ),
           ],
           if (model.selected case final configuration?
               when model.result == null) ...[
             const SizedBox(height: AppSpacing.lg),
-            YieldConfigurationDetails(configuration: configuration),
+            Text(
+              'Reviewed scenario: ${configuration.expectedYieldKgPerHectare} kg per hectare',
+              style: Theme.of(context).textTheme.titleMedium,
+            ),
+            const SizedBox(height: AppSpacing.sm),
+            PlanningDisclosure(
+              title: 'Review selected scenario',
+              child: YieldConfigurationDetails(configuration: configuration),
+            ),
           ],
           const SizedBox(height: AppSpacing.xl),
           FilledButton.icon(

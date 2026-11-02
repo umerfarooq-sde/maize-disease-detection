@@ -33,6 +33,7 @@ class AnalyticsView extends StatelessWidget {
     }
     final summary = model.summary;
     return AppPage(
+      storageKey: 'farmer-insights',
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
@@ -40,7 +41,7 @@ class AnalyticsView extends StatelessWidget {
             children: [
               Expanded(
                 child: Text(
-                  'Your scan activity',
+                  'Field insights',
                   style: Theme.of(context).textTheme.headlineMedium,
                 ),
               ),
@@ -102,7 +103,14 @@ class AnalyticsView extends StatelessWidget {
                 label: const Text('Scan a leaf'),
               ),
             )
-          else if (summary != null) ...[
+          else if (summary == null)
+            const AppEmptyState(
+              title: 'Statistics unavailable',
+              message:
+                  'No activity summary was returned. Refresh to try again.',
+              icon: Icons.insights_outlined,
+            )
+          else ...[
             Text('Updated ${scanDate(summary.asOf)} (local time)'),
             const SizedBox(height: AppSpacing.md),
             AnalyticsSummaryCards(summary: summary),

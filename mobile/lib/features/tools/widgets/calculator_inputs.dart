@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import '../../../core/theme/design_tokens.dart';
 import '../../../core/utils/responsive.dart';
+import '../../../core/widgets/app_field.dart';
 import '../../../data/models/calculator_input.dart';
 
 class CalculatorInputs<Unit> extends StatelessWidget {
@@ -45,66 +46,72 @@ class CalculatorInputs<Unit> extends StatelessWidget {
           Text(description),
           const SizedBox(height: AppSpacing.lg),
           ResponsivePair(
-            first: TextField(
-              key: Key('$keyPrefix-area'),
-              controller: controller,
-              enabled: !busy,
-              keyboardType: const TextInputType.numberWithOptions(
-                decimal: true,
-              ),
-              textInputAction: TextInputAction.done,
-              onChanged: onAreaChanged,
-              decoration: InputDecoration(
-                labelText: 'Land area',
-                hintText: 'Enter area',
-                helperText:
-                    'Use a decimal point, without separators. Up to 6 decimal places.',
-                helperMaxLines: 4,
-                errorText: areaError,
-                errorMaxLines: 4,
+            first: AppField(
+              label: 'Land area',
+              child: TextField(
+                key: Key('$keyPrefix-area'),
+                controller: controller,
+                enabled: !busy,
+                keyboardType: const TextInputType.numberWithOptions(
+                  decimal: true,
+                ),
+                textInputAction: TextInputAction.done,
+                onChanged: onAreaChanged,
+                decoration: InputDecoration(
+                  hintText: 'Enter area',
+                  helperText:
+                      'Use a decimal point, without separators. Up to 6 decimal places.',
+                  helperMaxLines: 4,
+                  errorText: areaError,
+                  errorMaxLines: 4,
+                ),
               ),
             ),
             second: KeyedSubtree(
               key: Key('$keyPrefix-area-unit'),
-              child: DropdownButtonFormField<CalculatorAreaUnit>(
-                key: ValueKey(areaUnit),
-                initialValue: areaUnit,
-                decoration: const InputDecoration(labelText: 'Area unit'),
-                isExpanded: true,
-                itemHeight: null,
-                items: [
-                  for (final unit in CalculatorAreaUnit.values)
-                    DropdownMenuItem(value: unit, child: Text(unit.label)),
-                ],
-                onChanged: busy
-                    ? null
-                    : (unit) {
-                        if (unit != null) onAreaUnitChanged(unit);
-                      },
+              child: AppField(
+                label: 'Area unit',
+                child: DropdownButtonFormField<CalculatorAreaUnit>(
+                  key: ValueKey(areaUnit),
+                  initialValue: areaUnit,
+                  isExpanded: true,
+                  itemHeight: null,
+                  items: [
+                    for (final unit in CalculatorAreaUnit.values)
+                      DropdownMenuItem(value: unit, child: Text(unit.label)),
+                  ],
+                  onChanged: busy
+                      ? null
+                      : (unit) {
+                          if (unit != null) onAreaUnitChanged(unit);
+                        },
+                ),
               ),
             ),
           ),
           const SizedBox(height: AppSpacing.lg),
           KeyedSubtree(
             key: Key('$keyPrefix-output-unit'),
-            child: DropdownButtonFormField<Unit>(
-              key: ValueKey(outputUnit),
-              initialValue: outputUnit,
-              decoration: const InputDecoration(labelText: 'Result unit'),
-              isExpanded: true,
-              itemHeight: null,
-              items: [
-                for (final unit in outputUnits)
-                  DropdownMenuItem(
-                    value: unit,
-                    child: Text(outputUnitLabel(unit)),
-                  ),
-              ],
-              onChanged: busy
-                  ? null
-                  : (unit) {
-                      if (unit != null) onOutputUnitChanged(unit);
-                    },
+            child: AppField(
+              label: 'Result unit',
+              child: DropdownButtonFormField<Unit>(
+                key: ValueKey(outputUnit),
+                initialValue: outputUnit,
+                isExpanded: true,
+                itemHeight: null,
+                items: [
+                  for (final unit in outputUnits)
+                    DropdownMenuItem(
+                      value: unit,
+                      child: Text(outputUnitLabel(unit)),
+                    ),
+                ],
+                onChanged: busy
+                    ? null
+                    : (unit) {
+                        if (unit != null) onOutputUnitChanged(unit);
+                      },
+              ),
             ),
           ),
         ],

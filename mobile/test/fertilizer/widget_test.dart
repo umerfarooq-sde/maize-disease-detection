@@ -8,6 +8,7 @@ import 'package:maizedoctor/data/models/fertilizer_models.dart';
 import 'package:maizedoctor/features/fertilizer_calculator/view_models/fertilizer_view_model.dart';
 import 'package:maizedoctor/features/fertilizer_calculator/views/fertilizer_view.dart';
 import 'helpers.dart';
+import '../scans/widget_test.dart' show tapVisible;
 
 Widget page(
   FertilizerViewModel model, {
@@ -117,6 +118,7 @@ void main() {
         'fertilizer-rule',
         'Synthetic arithmetic fixture — not agricultural advice',
       );
+      await tapVisible(tester, find.text('Review selected rule'));
       expect(find.text('When this rule applies'), findsOneWidget);
       expect(find.text('Assumptions'), findsOneWidget);
       expect(find.text('Rule synthetic-test-only · version 1'), findsOneWidget);
@@ -133,6 +135,7 @@ void main() {
       expect(repository.inputs.single.area, '2');
       expect(repository.inputs.single.ruleVersion, 1);
       expect(repository.inputs.single.configVersion, 1);
+      await tapVisible(tester, find.text('Fertilizer calculation details'));
       expect(find.text('25.000 kg'), findsOneWidget);
       expect(find.text('Before rounding: 25 kg'), findsOneWidget);
       expect(find.text('Calculation assumptions'), findsOneWidget);
@@ -285,6 +288,7 @@ void main() {
     expect(model.selectedRule, null);
     expect(model.canCalculate, false);
     await selectOption(tester, 'fertilizer-rule', replacementTitle);
+    await tapVisible(tester, find.text('Review selected rule'));
     expect(find.text('Rule synthetic-test-only · version 2'), findsOneWidget);
     expect(find.text('Calculator maize-area-rate · version 3'), findsOneWidget);
     await calculate(tester);
@@ -356,6 +360,7 @@ void main() {
     await model.calculate();
     await tester.pumpWidget(page(model));
     expect(find.text('0.000 g'), findsOneWidget);
+    await tapVisible(tester, find.text('Fertilizer calculation details'));
     expect(find.text('Before rounding: 0.000000001 g'), findsOneWidget);
     expect(
       find.textContaining('A displayed zero can result from rounding'),

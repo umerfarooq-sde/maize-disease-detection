@@ -51,6 +51,14 @@ class HistoryView extends StatelessWidget {
                       Column(
                         crossAxisAlignment: CrossAxisAlignment.stretch,
                         children: [
+                          Text(
+                            'SCAN JOURNAL',
+                            style: Theme.of(context).textTheme.labelLarge
+                                ?.copyWith(
+                                  color: Theme.of(context).colorScheme.primary,
+                                ),
+                          ),
+                          const SizedBox(height: AppSpacing.sm),
                           Row(
                             children: [
                               Expanded(
@@ -72,7 +80,7 @@ class HistoryView extends StatelessWidget {
                           ),
                           const SizedBox(height: AppSpacing.sm),
                           const Text(
-                            'Private to your signed-in farmer account.',
+                            'Private to your signed-in farmer account. Model labels are suggestions, not confirmed diagnoses. Dates use local time.',
                           ),
                           const SizedBox(height: AppSpacing.xl),
                           if (model.isLoading)
@@ -108,12 +116,43 @@ class HistoryView extends StatelessWidget {
                     itemBuilder: (context, index) => _content(
                       Padding(
                         padding: const EdgeInsets.only(bottom: AppSpacing.lg),
-                        child: HistoryScanTile(
-                          key: ValueKey(items[index].id),
-                          scan: items[index],
-                          onOpen: onOpenScan == null
-                              ? null
-                              : () => onOpenScan!(items[index]),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.stretch,
+                          children: [
+                            if (index == 0 ||
+                                !_sameDay(
+                                  items[index - 1].createdAt,
+                                  items[index].createdAt,
+                                ))
+                              Padding(
+                                padding: const EdgeInsets.symmetric(
+                                  vertical: AppSpacing.md,
+                                ),
+                                child: Semantics(
+                                  header: true,
+                                  child: Text(
+                                    MaterialLocalizations.of(
+                                      context,
+                                    ).formatFullDate(
+                                      items[index].createdAt.toLocal(),
+                                    ),
+                                    key: ValueKey(
+                                      'history-date-${_day(items[index].createdAt)}',
+                                    ),
+                                    style: Theme.of(
+                                      context,
+                                    ).textTheme.titleMedium,
+                                  ),
+                                ),
+                              ),
+                            HistoryScanTile(
+                              key: ValueKey(items[index].id),
+                              scan: items[index],
+                              onOpen: onOpenScan == null
+                                  ? null
+                                  : () => onOpenScan!(items[index]),
+                            ),
+                          ],
                         ),
                       ),
                     ),
@@ -165,4 +204,11 @@ class HistoryView extends StatelessWidget {
       child: SizedBox(width: double.infinity, child: child),
     ),
   );
+
+  String _day(DateTime date) {
+    final local = date.toLocal();
+    return '${local.year}-${local.month}-${local.day}';
+  }
+
+  bool _sameDay(DateTime first, DateTime second) => _day(first) == _day(second);
 }

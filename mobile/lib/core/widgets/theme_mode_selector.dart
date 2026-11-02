@@ -44,6 +44,27 @@ class ThemeModeSelector extends StatelessWidget {
             LayoutBuilder(
               builder: (context, constraints) {
                 final showIcons = constraints.maxWidth >= 420;
+                if (MediaQuery.textScalerOf(context).scale(1) >
+                        AppSizing.comfortableTextScale &&
+                    constraints.maxWidth < AppSizing.authenticationMaxWidth) {
+                  return Wrap(
+                    spacing: AppSpacing.sm,
+                    runSpacing: AppSpacing.sm,
+                    children: [
+                      for (final entry in const {
+                        ThemeMode.system: 'System',
+                        ThemeMode.light: 'Light',
+                        ThemeMode.dark: 'Dark',
+                      }.entries)
+                        ChoiceChip(
+                          label: Text(entry.value),
+                          selected: controller.mode == entry.key,
+                          onSelected: (_) =>
+                              unawaited(controller.setMode(entry.key)),
+                        ),
+                    ],
+                  );
+                }
                 return SegmentedButton<ThemeMode>(
                   showSelectedIcon: false,
                   expandedInsets: EdgeInsets.zero,

@@ -10,45 +10,56 @@ import 'package:provider/provider.dart';
 import 'session_test.dart' show grant, response, cookie;
 import '../scans/widget_test.dart' show tapVisible;
 import '../support/design_fonts.dart';
+import '../profile/helpers.dart' show profileJson;
 
 void main() {
   setUpAll(loadDesignFonts);
-  testWidgets(
-    'Farmer keyboard traversal and existing short login remain valid',
-    (tester) async {
-      var calls = 0;
-      await tester.pumpWidget(
-        MainApp(
-          initialLocation: AppRoutes.auth,
-          config: AppConfig(apiBaseUrl: 'https://api.example.test/api/v1'),
-          httpClient: MockClient((request) async {
-            calls++;
-            expect(jsonDecode(request.body)['password'], 'old');
-            return response(grant(), setCookie: cookie);
-          }),
-        ),
-      );
-      await tester.pumpAndSettle();
-      final email = find.byType(TextFormField).first;
-      final password = find.byType(TextFormField).last;
-      await tester.enterText(email, 'farmer@example.test');
-      await tester.testTextInput.receiveAction(TextInputAction.next);
-      await tester.pump();
-      expect(
-        tester
-            .widget<EditableText>(find.byType(EditableText).last)
-            .focusNode
-            .hasFocus,
-        true,
-      );
-      await tester.enterText(password, 'old');
-      await tester.testTextInput.receiveAction(TextInputAction.done);
-      await tester.pumpAndSettle();
-      expect(calls, 1);
-      expect(find.textContaining('Signed in as'), findsOneWidget);
-      expect(tester.takeException(), isNull);
-    },
-  );
+  testWidgets('Farmer keyboard traversal and existing short login remain valid', (
+    tester,
+  ) async {
+    var calls = 0;
+    var profileReads = 0;
+    await tester.pumpWidget(
+      MainApp(
+        initialLocation: AppRoutes.auth,
+        config: AppConfig(apiBaseUrl: 'https://api.example.test/api/v1'),
+        httpClient: MockClient((request) async {
+          if (request.url.path.endsWith('/profile')) {
+            profileReads++;
+            return response(profileJson());
+          }
+          calls++;
+          expect(jsonDecode(request.body)['password'], 'old');
+          return response(grant(), setCookie: cookie);
+        }),
+      ),
+    );
+    await tester.pumpAndSettle();
+    final email = find.byType(TextFormField).first;
+    final password = find.byType(TextFormField).last;
+    await tester.enterText(email, 'farmer@example.test');
+    await tester.testTextInput.receiveAction(TextInputAction.next);
+    await tester.pump();
+    expect(
+      tester
+          .widget<EditableText>(find.byType(EditableText).last)
+          .focusNode
+          .hasFocus,
+      true,
+    );
+    await tester.enterText(password, 'old');
+    await tester.testTextInput.receiveAction(TextInputAction.done);
+    await tester.pumpAndSettle();
+    expect(calls, 1);
+    expect(
+      profileReads,
+      1,
+      reason:
+          'After login, the visible account centre loads its functional projection once.',
+    );
+    expect(find.textContaining('Signed in as'), findsOneWidget);
+    expect(tester.takeException(), isNull);
+  });
 
   testWidgets(
     'Admin empty and malformed input is inline, never public registration',
@@ -100,6 +111,9 @@ void main() {
           httpClient: MockClient((request) async {
             calls++;
             paths.add(request.url.path);
+            if (request.url.path.endsWith('/profile')) {
+              return response(profileJson());
+            }
             if (request.url.path.endsWith('/scans')) {
               expect(request.url.queryParameters['limit'], '3');
               return response({'items': [], 'nextCursor': null});
@@ -125,11 +139,16 @@ void main() {
         ),
         findsOneWidget,
       );
-      expect(calls, 2);
+      expect(
+        calls,
+        2,
+      ); // Login plus functional recent history, no avatar fetch.
+      expect(paths, ['/api/v1/auth/login', '/api/v1/scans']);
       await tester.tap(find.byKey(const Key('open-profile')));
       await tester.pumpAndSettle();
       expect(find.textContaining('Signed in as'), findsOneWidget);
-      expect(calls, 2);
+      expect(calls, 3);
+      expect(paths, ['/api/v1/auth/login', '/api/v1/scans', '/api/v1/profile']);
       expect(tester.takeException(), isNull);
     },
   );

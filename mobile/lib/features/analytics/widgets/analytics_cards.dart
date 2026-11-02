@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import '../../../core/theme/design_tokens.dart';
+import '../../../core/widgets/app_cards.dart';
 import '../../../core/utils/responsive.dart';
 import '../../../data/models/farmer_analytics.dart';
 import '../../disease_detection/utils/scan_presentation.dart';
@@ -13,24 +14,24 @@ class AnalyticsSummaryCards extends StatelessWidget {
     crossAxisAlignment: CrossAxisAlignment.stretch,
     children: [
       ResponsivePair(
-        first: _CountCard(
+        first: AppMetricCard(
           label: 'Saved scans',
-          value: summary.totals['totalScans']!,
+          value: summary.totals['totalScans']!.toString(),
         ),
-        second: _CountCard(
+        second: AppMetricCard(
           label: 'Completed scans',
-          value: summary.totals['completedScans']!,
+          value: summary.totals['completedScans']!.toString(),
         ),
       ),
       const SizedBox(height: AppSpacing.lg),
       ResponsivePair(
-        first: _CountCard(
+        first: AppMetricCard(
           label: 'Healthy model labels',
-          value: summary.totals['healthyPredictions']!,
+          value: summary.totals['healthyPredictions']!.toString(),
         ),
-        second: _CountCard(
+        second: AppMetricCard(
           label: 'Disease model labels',
-          value: summary.totals['diseasePredictions']!,
+          value: summary.totals['diseasePredictions']!.toString(),
         ),
       ),
       const SizedBox(height: AppSpacing.md),
@@ -42,26 +43,6 @@ class AnalyticsSummaryCards extends StatelessWidget {
           'Completed scans without a stored result: ${summary.totals['completedWithoutPrediction']}',
         ),
     ],
-  );
-}
-
-class _CountCard extends StatelessWidget {
-  const _CountCard({required this.label, required this.value});
-  final String label;
-  final int value;
-  @override
-  Widget build(BuildContext context) => Card(
-    child: Padding(
-      padding: const EdgeInsets.all(AppSpacing.xl),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.stretch,
-        children: [
-          Text(label),
-          const SizedBox(height: AppSpacing.sm),
-          Text('$value', style: Theme.of(context).textTheme.headlineMedium),
-        ],
-      ),
-    ),
   );
 }
 

@@ -54,11 +54,12 @@ class PredictionDistribution extends StatelessWidget {
                 const SizedBox(height: AppSpacing.sm),
                 ExcludeSemantics(
                   child: LinearProgressIndicator(
+                    minHeight: AppSpacing.sm,
                     value: item.count / total,
-                    backgroundColor: context.semanticColors.infoContainer,
-                    color: item.label == 'Healthy'
-                        ? context.semanticColors.info
-                        : context.semanticColors.warning,
+                    backgroundColor: Theme.of(
+                      context,
+                    ).colorScheme.surfaceContainerHighest,
+                    color: Theme.of(context).colorScheme.primary,
                   ),
                 ),
               ],
@@ -78,103 +79,64 @@ class ScanActivityChart extends StatelessWidget {
       0,
       (value, item) => item.count > value ? item.count : value,
     );
+    final colors = Theme.of(context).colorScheme;
     return Card(
       child: Padding(
-        padding: const EdgeInsets.all(AppSpacing.xl),
+        padding: const EdgeInsets.all(AppSpacing.lg),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            Text(
-              'Scans over time',
-              style: Theme.of(context).textTheme.titleLarge,
+            Semantics(
+              header: true,
+              child: Text(
+                'Scans over time',
+                style: Theme.of(context).textTheme.titleLarge,
+              ),
             ),
             const SizedBox(height: AppSpacing.sm),
             const Text(
               'UTC dates grouped into up to six periods. All saved scans are counted.',
             ),
-            const SizedBox(height: AppSpacing.lg),
-            LayoutBuilder(
-              builder: (context, constraints) {
-                final textScale =
-                    MediaQuery.textScalerOf(context).scale(16) / 16;
-                final cellWidth = (AppSizing.touchTarget * textScale)
-                    .clamp(56.0, 112.0)
-                    .toDouble();
-                return SingleChildScrollView(
-                  scrollDirection: Axis.horizontal,
-                  child: ConstrainedBox(
-                    constraints: BoxConstraints(minWidth: constraints.maxWidth),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceAround,
-                      crossAxisAlignment: CrossAxisAlignment.end,
-                      children: [
-                        for (final item in periods)
-                          Padding(
-                            padding: const EdgeInsets.only(
-                              right: AppSpacing.sm,
-                            ),
-                            child: Tooltip(
-                              message:
-                                  '${analyticsDateText(item.from)} through ${analyticsDateText(item.to)} UTC: ${item.count} scans',
-                              child: Semantics(
-                                label:
-                                    '${analyticsDateText(item.from)} through ${analyticsDateText(item.to)} UTC: ${item.count} scans',
-                                child: ExcludeSemantics(
-                                  child: SizedBox(
-                                    width: cellWidth,
-                                    child: Column(
-                                      children: [
-                                        Text(
-                                          '${item.count}',
-                                          maxLines: 2,
-                                          overflow: TextOverflow.ellipsis,
-                                        ),
-                                        const SizedBox(height: AppSpacing.xs),
-                                        SizedBox(
-                                          height: AppSizing.emblem * 2,
-                                          child: Align(
-                                            alignment: Alignment.bottomCenter,
-                                            child: Container(
-                                              width: AppSpacing.xl,
-                                              height: maximum == 0
-                                                  ? 0
-                                                  : AppSizing.emblem *
-                                                        2 *
-                                                        item.count /
-                                                        maximum,
-                                              decoration: BoxDecoration(
-                                                color: Theme.of(
-                                                  context,
-                                                ).colorScheme.primary,
-                                                borderRadius:
-                                                    BorderRadius.circular(
-                                                      AppRadii.small,
-                                                    ),
-                                              ),
-                                            ),
-                                          ),
-                                        ),
-                                        const SizedBox(height: AppSpacing.sm),
-                                        Text(
-                                          '${item.from.month}/${item.from.day}\n–${item.to.month}/${item.to.day}',
-                                          textAlign: TextAlign.center,
-                                          style: Theme.of(
-                                            context,
-                                          ).textTheme.labelSmall,
-                                        ),
-                                      ],
-                                    ),
-                                  ),
-                                ),
-                              ),
-                            ),
-                          ),
-                      ],
-                    ),
-                  ),
-                );
-              },
+            const SizedBox(height: AppSpacing.md),
+            Text(
+              'Scale: 0–$maximum scans per period',
+              style: Theme.of(context).textTheme.labelMedium,
             ),
+            for (final item in periods) ...[
+              const SizedBox(height: AppSpacing.lg),
+              Semantics(
+                container: true,
+                label:
+                    '${analyticsDateText(item.from)} through ${analyticsDateText(item.to)} UTC: ${item.count} scans',
+                child: ExcludeSemantics(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                    children: [
+                      Text(
+                        '${analyticsDateText(item.from)} – ${analyticsDateText(item.to)}',
+                        style: Theme.of(context).textTheme.bodySmall,
+                      ),
+                      const SizedBox(height: AppSpacing.xs),
+                      Text(
+                        '${item.count} scans',
+                        style: Theme.of(context).textTheme.labelLarge,
+                      ),
+                      const SizedBox(height: AppSpacing.sm),
+                      ClipRRect(
+                        borderRadius: BorderRadius.circular(AppRadii.small),
+                        child: LinearProgressIndicator(
+                          value: maximum == 0 ? 0 : item.count / maximum,
+                          minHeight: AppSpacing.md,
+                          color: colors.primary,
+                          backgroundColor: colors.surfaceContainerHighest,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            ],
+            if (periods.isEmpty) const Text('No activity series returned.'),
           ],
         ),
       ),

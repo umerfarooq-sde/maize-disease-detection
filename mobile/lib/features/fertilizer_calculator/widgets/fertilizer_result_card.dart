@@ -1,63 +1,52 @@
 import 'package:flutter/material.dart';
 import '../../../core/theme/design_tokens.dart';
 import '../../../data/models/fertilizer_models.dart';
+import '../../tools/widgets/planning_disclosure.dart';
+import '../../tools/widgets/planning_result_summary.dart';
 import 'fertilizer_source.dart';
 
 class FertilizerResultCard extends StatelessWidget {
   const FertilizerResultCard({required this.result, super.key});
-
   final FertilizerResult result;
-
   @override
-  Widget build(BuildContext context) => Semantics(
-    liveRegion: true,
-    child: Card(
-      color: Theme.of(context).colorScheme.primaryContainer,
-      child: Padding(
-        padding: const EdgeInsets.all(AppSpacing.xl),
+  Widget build(BuildContext context) => Column(
+    crossAxisAlignment: CrossAxisAlignment.stretch,
+    children: [
+      PlanningResultSummary(
+        title: 'Calculated fertilizer amount',
+        quantity: '${result.quantity.value} ${result.quantity.unit.label}',
+        product: result.rule.fertilizer.name,
+        area:
+            'For ${result.input.area} ${result.input.areaUnit.label.toLowerCase()}',
+        quantityKey: const Key('fertilizer-result-quantity'),
+      ),
+      const SizedBox(height: AppSpacing.md),
+      PlanningDisclosure(
+        title: 'Fertilizer calculation details',
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            Text(
-              'Calculated fertilizer amount',
-              style: Theme.of(context).textTheme.titleLarge,
-            ),
-            const SizedBox(height: AppSpacing.sm),
-            Text(result.rule.fertilizer.name),
-            const SizedBox(height: AppSpacing.lg),
-            Text(
-              '${result.quantity.value} ${result.quantity.unit.label}',
-              key: const Key('fertilizer-result-quantity'),
-              style: Theme.of(context).textTheme.headlineMedium,
-            ),
-            const SizedBox(height: AppSpacing.lg),
-            Text(
-              'For ${result.input.area} ${result.input.areaUnit.label.toLowerCase()}',
-            ),
             Text('Area in hectares: ${result.normalizedArea.value}'),
-            const SizedBox(height: AppSpacing.lg),
-            Text(result.explanation),
+            const SizedBox(height: AppSpacing.md),
+            SelectableText(result.explanation),
             const SizedBox(height: AppSpacing.sm),
             Text(
-              'Rounded to ${result.rounding.decimalPlaces} decimal places '
-              '(half up). A displayed zero can result from rounding a positive quantity.',
+              'Rounded to ${result.rounding.decimalPlaces} decimal places (half up). A displayed zero can result from rounding a positive quantity.',
             ),
             Text(
               'Before rounding: ${result.quantity.unroundedValue} ${result.quantity.unit.label}',
-              style: Theme.of(context).textTheme.bodyMedium,
             ),
             const SizedBox(height: AppSpacing.lg),
             Text(
               'Calculation assumptions',
               style: Theme.of(context).textTheme.titleMedium,
             ),
-            const SizedBox(height: AppSpacing.sm),
             for (final assumption in result.assumptions)
               Padding(
-                padding: const EdgeInsets.only(bottom: AppSpacing.sm),
+                padding: const EdgeInsets.only(top: AppSpacing.sm),
                 child: Text('• $assumption'),
               ),
-            const SizedBox(height: AppSpacing.sm),
+            const SizedBox(height: AppSpacing.lg),
             Text(
               'Rule ${result.rule.ruleKey} · version ${result.rule.version}',
             ),
@@ -77,12 +66,11 @@ class FertilizerResultCard extends StatelessWidget {
               'Unit conversion reference',
               style: Theme.of(context).textTheme.titleMedium,
             ),
-            const SizedBox(height: AppSpacing.sm),
             Text(result.unitReference.title),
             SelectableText(result.unitReference.url.toString()),
           ],
         ),
       ),
-    ),
+    ],
   );
 }

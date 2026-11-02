@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import '../../../core/theme/design_tokens.dart';
+import '../../../core/widgets/app_field.dart';
+import '../../../core/widgets/app_confirmation_dialog.dart';
 import '../../../data/models/farmer_profile.dart';
 
 class ProfileEditorForm extends StatefulWidget {
@@ -17,6 +19,32 @@ class ProfileEditorForm extends StatefulWidget {
 }
 
 class _ProfileEditorFormState extends State<ProfileEditorForm> {
+  bool _allowExit = false;
+  bool _confirmingExit = false;
+  bool get _dirty =>
+      _name.text.trim() != (widget.profile?.displayName ?? '') ||
+      _region.text.trim() != (widget.profile?.region ?? '') ||
+      _country.text.trim().toUpperCase() !=
+          (widget.profile?.countryCode ?? '') ||
+      _area.text.trim() != (widget.profile?.fieldAreaHectares ?? '');
+  Future<void> _confirmExit() async {
+    if (_confirmingExit) return;
+    _confirmingExit = true;
+    final confirmed = await showAppConfirmation(
+      context,
+      title: 'Discard unsaved profile changes?',
+      message:
+          'Your edited text has not been saved. Leave this form without saving it?',
+      confirmLabel: 'Discard changes',
+    );
+    _confirmingExit = false;
+    if (!mounted || !confirmed) return;
+    setState(() => _allowExit = true);
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (mounted) Navigator.of(context).maybePop();
+    });
+  }
+
   final _form = GlobalKey<FormState>();
   late final _name = TextEditingController(
     text: widget.profile?.displayName ?? '',
@@ -47,71 +75,102 @@ class _ProfileEditorFormState extends State<ProfileEditorForm> {
   }
 
   @override
-  Widget build(BuildContext context) => Form(
-    key: _form,
-    child: Column(
-      crossAxisAlignment: CrossAxisAlignment.stretch,
-      children: [
-        TextFormField(
-          key: const Key('profile-display-name'),
-          controller: _name,
-          enabled: !widget.busy,
-          decoration: const InputDecoration(
-            labelText: 'Display name',
-            errorMaxLines: 3,
+  Widget build(BuildContext context) => PopScope(
+    canPop: _allowExit || !_dirty || widget.busy,
+    onPopInvokedWithResult: (didPop, _) {
+      if (!didPop && !widget.busy) _confirmExit();
+    },
+    child: Card(
+      child: Padding(
+        padding: const EdgeInsets.all(AppSpacing.lg),
+        child: Form(
+          key: _form,
+          onChanged: () {
+            if (mounted) setState(() => _allowExit = false);
+          },
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              Semantics(
+                header: true,
+                child: Text(
+                  'Personal details',
+                  style: Theme.of(context).textTheme.titleLarge,
+                ),
+              ),
+              const SizedBox(height: AppSpacing.lg),
+              AppField(
+                label: 'Display name',
+                child: TextFormField(
+                  key: const Key('profile-display-name'),
+                  controller: _name,
+                  enabled: !widget.busy,
+                  decoration: const InputDecoration(errorMaxLines: 3),
+                  validator: ProfileDraft.nameError,
+                  textInputAction: TextInputAction.next,
+                ),
+              ),
+              const SizedBox(height: AppSpacing.lg),
+              AppField(
+                label: 'Region',
+                optional: true,
+                child: TextFormField(
+                  key: const Key('profile-region'),
+                  controller: _region,
+                  enabled: !widget.busy,
+                  decoration: const InputDecoration(errorMaxLines: 3),
+                  validator: ProfileDraft.regionError,
+                  textInputAction: TextInputAction.next,
+                ),
+              ),
+              const SizedBox(height: AppSpacing.lg),
+              AppField(
+                label: 'Country code',
+                optional: true,
+                child: TextFormField(
+                  key: const Key('profile-country'),
+                  controller: _country,
+                  enabled: !widget.busy,
+                  decoration: const InputDecoration(
+                    helperText: 'Two letters, such as PK.',
+                    errorMaxLines: 3,
+                  ),
+                  validator: ProfileDraft.countryError,
+                  textCapitalization: TextCapitalization.characters,
+                  textInputAction: TextInputAction.next,
+                ),
+              ),
+              const SizedBox(height: AppSpacing.lg),
+              AppField(
+                label: 'Field area in hectares',
+                optional: true,
+                child: TextFormField(
+                  key: const Key('profile-area'),
+                  controller: _area,
+                  enabled: !widget.busy,
+                  decoration: const InputDecoration(
+                    helperText:
+                        'Area metadata only; this does not calculate a recommendation.',
+                    helperMaxLines: 3,
+                    errorMaxLines: 3,
+                  ),
+                  validator: ProfileDraft.areaError,
+                  keyboardType: const TextInputType.numberWithOptions(
+                    decimal: true,
+                  ),
+                  onFieldSubmitted: (_) => _save(),
+                ),
+              ),
+              const SizedBox(height: AppSpacing.xl),
+              FilledButton(
+                key: const Key('profile-save'),
+                onPressed: widget.busy ? null : _save,
+                child: Text(widget.busy ? 'Please wait…' : 'Save profile'),
+              ),
+            ],
           ),
-          validator: ProfileDraft.nameError,
-          textInputAction: TextInputAction.next,
         ),
-        const SizedBox(height: AppSpacing.lg),
-        TextFormField(
-          key: const Key('profile-region'),
-          controller: _region,
-          enabled: !widget.busy,
-          decoration: const InputDecoration(
-            labelText: 'Region (optional)',
-            errorMaxLines: 3,
-          ),
-          validator: ProfileDraft.regionError,
-          textInputAction: TextInputAction.next,
-        ),
-        const SizedBox(height: AppSpacing.lg),
-        TextFormField(
-          key: const Key('profile-country'),
-          controller: _country,
-          enabled: !widget.busy,
-          decoration: const InputDecoration(
-            labelText: 'Country code (optional)',
-            helperText: 'Two letters, such as PK.',
-            errorMaxLines: 3,
-          ),
-          validator: ProfileDraft.countryError,
-          textCapitalization: TextCapitalization.characters,
-          textInputAction: TextInputAction.next,
-        ),
-        const SizedBox(height: AppSpacing.lg),
-        TextFormField(
-          key: const Key('profile-area'),
-          controller: _area,
-          enabled: !widget.busy,
-          decoration: const InputDecoration(
-            labelText: 'Field area in hectares (optional)',
-            helperText:
-                'Area metadata only; this does not calculate a recommendation.',
-            helperMaxLines: 3,
-            errorMaxLines: 3,
-          ),
-          validator: ProfileDraft.areaError,
-          keyboardType: const TextInputType.numberWithOptions(decimal: true),
-          onFieldSubmitted: (_) => _save(),
-        ),
-        const SizedBox(height: AppSpacing.xl),
-        FilledButton(
-          key: const Key('profile-save'),
-          onPressed: widget.busy ? null : _save,
-          child: Text(widget.busy ? 'Please wait…' : 'Save profile'),
-        ),
-      ],
+      ),
     ),
   );
 }

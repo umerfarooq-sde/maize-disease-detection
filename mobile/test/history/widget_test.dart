@@ -9,6 +9,7 @@ import 'package:maizedoctor/data/models/scan_record.dart';
 import 'package:maizedoctor/features/scan_history/view_models/scan_history_view_model.dart';
 import 'package:maizedoctor/features/scan_history/views/history_view.dart';
 import 'helpers.dart';
+import '../scans/widget_test.dart' show tapVisible;
 
 Widget page(
   ScanHistoryViewModel model, {
@@ -92,7 +93,7 @@ void main() {
         find.textContaining('mobilenet-v3-small-v2-20261009'),
         findsOneWidget,
       );
-      await tester.tap(find.text('View scan'));
+      await tapVisible(tester, find.text('View result'));
       expect(opened?.id, historyId(1));
       expect(tester.takeException(), null);
     },
@@ -113,6 +114,7 @@ void main() {
     await tester.pumpWidget(page(model));
     final failed = Completer<ScanHistoryPage>();
     repository.responses.add(failed.future);
+    await tester.ensureVisible(find.byKey(const Key('history-load-more')));
     await tester.tap(find.byKey(const Key('history-load-more')));
     failed.completeError(const AppException(AppErrorKind.network));
     await tester.pumpAndSettle();
@@ -121,9 +123,29 @@ void main() {
     repository.responses.add(
       Future.value(ScanHistoryPage(items: [historyScan(2)], nextCursor: null)),
     );
+    await tester.ensureVisible(find.text('Try again'));
+    await tester.pumpAndSettle();
     await tester.tap(find.text('Try again'));
     await tester.pumpAndSettle();
-    expect(find.text('Model suggestion: Healthy'), findsNWidgets(2));
+    expect(model.items.map((scan) => scan.id), [historyId(1), historyId(2)]);
+    await tester.drag(find.byType(CustomScrollView), const Offset(0, 600));
+    await tester.pumpAndSettle();
+    expect(
+      find.descendant(
+        of: find.byKey(ValueKey(historyId(1))),
+        matching: find.text('Model suggestion: Healthy'),
+      ),
+      findsOneWidget,
+    );
+    await tester.drag(find.byType(CustomScrollView), const Offset(0, -450));
+    await tester.pumpAndSettle();
+    expect(
+      find.descendant(
+        of: find.byKey(ValueKey(historyId(2))),
+        matching: find.text('Model suggestion: Healthy'),
+      ),
+      findsOneWidget,
+    );
   });
 
   testWidgets('narrow large-text history remains scrollable without overflow', (

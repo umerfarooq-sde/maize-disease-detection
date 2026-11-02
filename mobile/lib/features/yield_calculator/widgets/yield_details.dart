@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import '../../../core/theme/design_tokens.dart';
 import '../../../data/models/yield_models.dart';
+import '../../tools/widgets/planning_disclosure.dart';
+import '../../tools/widgets/planning_result_summary.dart';
 
 class YieldConfigurationDetails extends StatelessWidget {
   const YieldConfigurationDetails({
@@ -66,58 +68,63 @@ class YieldResultCard extends StatelessWidget {
     child: Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
-        Card(
-          color: context.semanticColors.infoContainer,
-          child: Padding(
-            padding: const EdgeInsets.all(AppSpacing.xl),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              children: [
-                Text(
-                  'Expected yield · planning estimate',
-                  style: Theme.of(context).textTheme.titleLarge,
-                ),
-                const SizedBox(height: AppSpacing.lg),
-                Text(
-                  '${result.value} ${result.input.outputUnit.label}',
-                  key: const Key('yield-result-quantity'),
-                  style: Theme.of(context).textTheme.headlineMedium,
-                ),
-                const SizedBox(height: AppSpacing.md),
-                Text(
-                  'For ${result.input.area} ${result.input.areaUnit.label.toLowerCase()}',
-                ),
-                Text('Area in hectares: ${result.normalizedArea}'),
-                const SizedBox(height: AppSpacing.md),
-                Text(result.explanation),
-                const SizedBox(height: AppSpacing.md),
-                Text(
-                  'Before rounding: ${result.unroundedValue} ${result.input.outputUnit.label}',
-                ),
-                Text(
-                  'Rounded to ${result.configuration.decimalPlaces} decimal places (half up).',
-                ),
-                const SizedBox(height: AppSpacing.lg),
-                Text(
-                  'Calculation assumptions',
-                  style: Theme.of(context).textTheme.titleMedium,
-                ),
-                for (final assumption in result.assumptions)
-                  Padding(
-                    padding: const EdgeInsets.only(top: AppSpacing.sm),
-                    child: Text('• $assumption'),
-                  ),
-                const SizedBox(height: AppSpacing.lg),
-                Text('Calculation engine: $yieldEngineVersion'),
-                Text(result.unitReferenceTitle),
-                SelectableText(result.unitReferenceUrl.toString()),
-              ],
-            ),
-          ),
+        PlanningResultSummary(
+          title: 'Expected yield · planning estimate',
+          quantity: '${result.value} ${result.input.outputUnit.label}',
+          area:
+              'For ${result.input.area} ${result.input.areaUnit.label.toLowerCase()}',
+          quantityKey: const Key('yield-result-quantity'),
         ),
-        YieldConfigurationDetails(
-          configuration: result.configuration,
-          showAssumptions: false,
+        const SizedBox(height: AppSpacing.sm),
+        const Text(
+          'A conditional planning estimate, not a guaranteed harvest or a field-specific forecast.',
+        ),
+        const SizedBox(height: AppSpacing.md),
+        PlanningDisclosure(
+          title: 'Yield calculation details',
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              Card(
+                child: Padding(
+                  padding: const EdgeInsets.all(AppSpacing.xl),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                    children: [
+                      Text('Area in hectares: ${result.normalizedArea}'),
+                      const SizedBox(height: AppSpacing.md),
+                      Text(result.explanation),
+                      const SizedBox(height: AppSpacing.md),
+                      Text(
+                        'Before rounding: ${result.unroundedValue} ${result.input.outputUnit.label}',
+                      ),
+                      Text(
+                        'Rounded to ${result.configuration.decimalPlaces} decimal places (half up).',
+                      ),
+                      const SizedBox(height: AppSpacing.lg),
+                      Text(
+                        'Calculation assumptions',
+                        style: Theme.of(context).textTheme.titleMedium,
+                      ),
+                      for (final assumption in result.assumptions)
+                        Padding(
+                          padding: const EdgeInsets.only(top: AppSpacing.sm),
+                          child: Text('• $assumption'),
+                        ),
+                      const SizedBox(height: AppSpacing.lg),
+                      Text('Calculation engine: $yieldEngineVersion'),
+                      Text(result.unitReferenceTitle),
+                      SelectableText(result.unitReferenceUrl.toString()),
+                    ],
+                  ),
+                ),
+              ),
+              YieldConfigurationDetails(
+                configuration: result.configuration,
+                showAssumptions: false,
+              ),
+            ],
+          ),
         ),
       ],
     ),

@@ -179,8 +179,16 @@ GoRouter createAppRouter({String initialLocation = AppRoutes.home}) => GoRouter(
     ),
     GoRoute(
       path: AppRoutes.profile,
-      builder: (_, _) =>
-          const _DetailPage(title: 'Profile', child: ProfileView()),
+      builder: (context, _) => _DetailPage(
+        title: 'Profile',
+        child: ChangeNotifierProvider(
+          key: ValueKey(
+            'account-${context.watch<FarmerSessionViewModel>().revision}',
+          ),
+          create: (_) => ProfileViewModel(context.read<ProfileRepository>()),
+          child: const ProfileView(),
+        ),
+      ),
       routes: [
         GoRoute(
           path: 'sign-in',
@@ -202,6 +210,7 @@ GoRouter createAppRouter({String initialLocation = AppRoutes.home}) => GoRouter(
           path: 'edit',
           builder: (context, _) => _DetailPage(
             title: 'Edit farmer profile',
+            respectPopScope: true,
             child: ChangeNotifierProvider(
               key: ValueKey(
                 'profile-${context.watch<FarmerSessionViewModel>().revision}',
@@ -401,16 +410,28 @@ Future<void> _chooseAssistantScan(BuildContext context) async {
 }
 
 class _DetailPage extends StatelessWidget {
-  const _DetailPage({required this.title, required this.child});
+  const _DetailPage({
+    required this.title,
+    required this.child,
+    this.respectPopScope = false,
+  });
   final String title;
   final Widget child;
+  final bool respectPopScope;
   @override
   Widget build(BuildContext context) => Scaffold(
     appBar: AppBar(
       title: Text(title),
       leading: BackButton(
-        onPressed: () =>
-            context.canPop() ? context.pop() : context.go(AppRoutes.home),
+        onPressed: () {
+          if (respectPopScope) {
+            Navigator.of(context).maybePop();
+          } else if (context.canPop()) {
+            context.pop();
+          } else {
+            context.go(AppRoutes.home);
+          }
+        },
       ),
       toolbarHeight: kToolbarHeight * MediaQuery.textScalerOf(context).scale(1),
     ),

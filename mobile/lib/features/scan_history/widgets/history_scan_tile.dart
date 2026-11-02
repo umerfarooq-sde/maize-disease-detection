@@ -57,6 +57,11 @@ class HistoryScanTile extends StatelessWidget {
                     ),
                     const SizedBox(height: AppSpacing.xs),
                     if (prediction != null) ...[
+                      if (!compact)
+                        Text(
+                          scanStatusLabel(scan.status),
+                          style: text.labelLarge,
+                        ),
                       Text('Model score: ${modelScore(prediction.confidence)}'),
                       if (!compact)
                         Text(
@@ -67,9 +72,7 @@ class HistoryScanTile extends StatelessWidget {
                         Text(
                           'Uncertain result',
                           style: text.labelLarge?.copyWith(
-                            color: compact
-                                ? context.semanticColors.warning
-                                : colors.error,
+                            color: context.semanticColors.warning,
                           ),
                         ),
                     ],
@@ -80,7 +83,7 @@ class HistoryScanTile extends StatelessWidget {
                     if (onOpen != null && !compact) ...[
                       const SizedBox(height: AppSpacing.sm),
                       Text(
-                        'View scan',
+                        'View result',
                         style: text.labelLarge?.copyWith(color: colors.primary),
                       ),
                     ],

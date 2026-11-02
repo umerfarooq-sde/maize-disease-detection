@@ -15,12 +15,17 @@ class ProfileEditorView extends StatelessWidget {
   Widget build(BuildContext context) {
     final model = context.watch<ProfileViewModel>();
     return AppPage(
+      maxWidth: AppSizing.readingMaxWidth,
+      storageKey: 'profile-editor',
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
-          Text(
-            'Your farmer profile',
-            style: Theme.of(context).textTheme.headlineMedium,
+          Semantics(
+            header: true,
+            child: Text(
+              'Your farmer profile',
+              style: Theme.of(context).textTheme.headlineMedium,
+            ),
           ),
           const SizedBox(height: AppSpacing.md),
           const Text(

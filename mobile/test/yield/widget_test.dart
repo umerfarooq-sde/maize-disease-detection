@@ -13,6 +13,7 @@ import 'package:maizedoctor/data/models/yield_models.dart';
 import 'package:maizedoctor/features/yield_calculator/view_models/yield_view_model.dart';
 import 'package:maizedoctor/features/yield_calculator/views/yield_view.dart';
 import 'helpers.dart';
+import '../scans/widget_test.dart' show tapVisible;
 
 Widget page(
   YieldViewModel model, {
@@ -83,6 +84,7 @@ void main() {
       await tester.pumpAndSettle();
       expect(find.text('25.000 kg'), findsOneWidget);
       expect(find.text('Expected yield · planning estimate'), findsOneWidget);
+      await tapVisible(tester, find.text('Yield calculation details'));
       expect(find.textContaining('version 1'), findsOneWidget);
       expect(find.textContaining(yieldFormulaVersion), findsOneWidget);
       expect(find.text('Synthetic source fixture'), findsOneWidget);
@@ -185,6 +187,7 @@ void main() {
         page(model, scale: 2, insets: const EdgeInsets.only(bottom: 260)),
       );
       await tester.pumpAndSettle();
+      await tapVisible(tester, find.text('Yield calculation details'));
       await tester.ensureVisible(find.text('Synthetic source fixture'));
       expect(tester.takeException(), isNull);
     },
