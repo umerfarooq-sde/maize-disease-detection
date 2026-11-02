@@ -78,6 +78,8 @@ class ProfileEditorView extends StatelessWidget {
                 profile: model.data,
                 busy: model.busy,
                 onSave: model.save,
+                pendingPhoto: model.photo != null,
+                onDiscardPhoto: model.clearPhoto,
               ),
               const SizedBox(height: AppSpacing.xxl),
               if (model.data != null)

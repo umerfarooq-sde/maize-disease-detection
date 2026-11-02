@@ -45,6 +45,26 @@ Future<void> submit(WidgetTester tester, String question) async {
 }
 
 void main() {
+  testWidgets(
+    'roomy Assistant keeps the full introduction and guest boundary',
+    (tester) async {
+      tester.view.devicePixelRatio = 1;
+      tester.view.physicalSize = const Size(412, 915);
+      addTearDown(tester.view.reset);
+      final model = AssistantViewModel(FakeAssistantRepository());
+      addTearDown(model.dispose);
+      await tester.pumpWidget(page(model));
+      expect(
+        find.text('Knowledge for your next field decision'),
+        findsOneWidget,
+      );
+      expect(
+        find.textContaining('You can ask questions as a guest'),
+        findsOneWidget,
+      );
+      expect(find.text('Ask about maize'), findsNothing);
+    },
+  );
   testWidgets('guest starts with scoped questions and local-session boundary', (
     tester,
   ) async {
@@ -52,7 +72,7 @@ void main() {
     final model = AssistantViewModel(repository);
     addTearDown(model.dispose);
     await tester.pumpWidget(page(model, onChooseScan: () {}));
-    expect(find.text('Knowledge for your next field decision'), findsOneWidget);
+    expect(find.text('Ask about maize'), findsOneWidget);
     expect(
       find.textContaining('You can ask questions as a guest'),
       findsOneWidget,
@@ -229,7 +249,7 @@ void main() {
     await tester.tap(find.widgetWithText(FilledButton, 'Clear conversation'));
     await tester.pumpAndSettle();
     expect(model.turns, isEmpty);
-    expect(find.text('Knowledge for your next field decision'), findsOneWidget);
+    expect(find.text('Ask about maize'), findsOneWidget);
     expect(
       tester
           .widget<TextField>(find.byKey(const Key('assistant-question')))
@@ -255,7 +275,7 @@ void main() {
     await tester.tap(find.widgetWithText(FilledButton, 'Clear conversation'));
     await tester.pump();
     expect(model.turns, isEmpty);
-    expect(find.text('Knowledge for your next field decision'), findsOneWidget);
+    expect(find.text('Ask about maize'), findsOneWidget);
     pending.complete(assistantAnswer());
     await tester.pumpAndSettle();
     expect(find.text('From reviewed knowledge'), findsNothing);

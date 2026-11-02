@@ -9,11 +9,15 @@ class ProfileEditorForm extends StatefulWidget {
     required this.profile,
     required this.busy,
     required this.onSave,
+    this.pendingPhoto = false,
+    this.onDiscardPhoto,
     super.key,
   });
   final FarmerProfile? profile;
   final bool busy;
   final Future<void> Function(ProfileDraft) onSave;
+  final bool pendingPhoto;
+  final VoidCallback? onDiscardPhoto;
   @override
   State<ProfileEditorForm> createState() => _ProfileEditorFormState();
 }
@@ -22,6 +26,7 @@ class _ProfileEditorFormState extends State<ProfileEditorForm> {
   bool _allowExit = false;
   bool _confirmingExit = false;
   bool get _dirty =>
+      widget.pendingPhoto ||
       _name.text.trim() != (widget.profile?.displayName ?? '') ||
       _region.text.trim() != (widget.profile?.region ?? '') ||
       _country.text.trim().toUpperCase() !=
@@ -34,11 +39,12 @@ class _ProfileEditorFormState extends State<ProfileEditorForm> {
       context,
       title: 'Discard unsaved profile changes?',
       message:
-          'Your edited text has not been saved. Leave this form without saving it?',
+          'Your edited details or selected photo have not been saved. Leave this form without saving them?',
       confirmLabel: 'Discard changes',
     );
     _confirmingExit = false;
     if (!mounted || !confirmed) return;
+    widget.onDiscardPhoto?.call();
     setState(() => _allowExit = true);
     WidgetsBinding.instance.addPostFrameCallback((_) {
       if (mounted) Navigator.of(context).maybePop();
@@ -46,6 +52,12 @@ class _ProfileEditorFormState extends State<ProfileEditorForm> {
   }
 
   final _form = GlobalKey<FormState>();
+  @override
+  void didUpdateWidget(covariant ProfileEditorForm oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (widget.pendingPhoto && !oldWidget.pendingPhoto) _allowExit = false;
+  }
+
   late final _name = TextEditingController(
     text: widget.profile?.displayName ?? '',
   );

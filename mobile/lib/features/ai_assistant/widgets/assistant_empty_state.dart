@@ -5,10 +5,12 @@ class AssistantEmptyState extends StatelessWidget {
   const AssistantEmptyState({
     required this.onAsk,
     this.authenticated = false,
+    this.compact = false,
     super.key,
   });
   final ValueChanged<String>? onAsk;
   final bool authenticated;
+  final bool compact;
 
   static const _questions = [
     'What are common rust symptoms in maize?',
@@ -20,36 +22,42 @@ class AssistantEmptyState extends StatelessWidget {
   @override
   Widget build(BuildContext context) => Card(
     child: Padding(
-      padding: const EdgeInsets.all(AppSpacing.lg),
+      padding: EdgeInsets.all(compact ? AppSpacing.md : AppSpacing.lg),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
-          Align(
-            alignment: Alignment.centerLeft,
-            child: Container(
-              padding: const EdgeInsets.all(AppSpacing.md),
-              decoration: BoxDecoration(
-                color: Theme.of(context).colorScheme.primaryContainer,
-                borderRadius: BorderRadius.circular(AppRadii.medium),
-              ),
-              child: Icon(
-                Icons.auto_stories_outlined,
-                color: Theme.of(context).colorScheme.primary,
-                size: AppSizing.stateIcon,
+          if (!compact) ...[
+            Align(
+              alignment: Alignment.centerLeft,
+              child: Container(
+                padding: const EdgeInsets.all(AppSpacing.md),
+                decoration: BoxDecoration(
+                  color: Theme.of(context).colorScheme.primaryContainer,
+                  borderRadius: BorderRadius.circular(AppRadii.medium),
+                ),
+                child: Icon(
+                  Icons.auto_stories_outlined,
+                  color: Theme.of(context).colorScheme.primary,
+                  size: AppSizing.stateIcon,
+                ),
               ),
             ),
-          ),
-          const SizedBox(height: AppSpacing.lg),
+            const SizedBox(height: AppSpacing.lg),
+          ],
           Semantics(
             header: true,
             child: Text(
-              'Knowledge for your next field decision',
+              compact
+                  ? 'Ask about maize'
+                  : 'Knowledge for your next field decision',
               style: Theme.of(context).textTheme.titleLarge,
             ),
           ),
           const SizedBox(height: AppSpacing.sm),
-          const Text(
-            'Start with one maize condition and one topic. Answers use reviewed knowledge and will say when evidence is missing.',
+          Text(
+            compact
+                ? 'Ask one maize question. Answers cite reviewed knowledge and state when evidence is missing.'
+                : 'Start with one maize condition and one topic. Answers use reviewed knowledge and will say when evidence is missing.',
           ),
           if (!authenticated) ...[
             const SizedBox(height: AppSpacing.sm),
