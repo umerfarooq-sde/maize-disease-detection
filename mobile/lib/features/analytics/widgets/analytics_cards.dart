@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import '../../../core/theme/design_tokens.dart';
 import '../../../core/widgets/app_cards.dart';
-import '../../../core/utils/responsive.dart';
 import '../../../data/models/farmer_analytics.dart';
 import '../../disease_detection/utils/scan_presentation.dart';
 import 'analytics_charts.dart';
@@ -13,26 +12,25 @@ class AnalyticsSummaryCards extends StatelessWidget {
   Widget build(BuildContext context) => Column(
     crossAxisAlignment: CrossAxisAlignment.stretch,
     children: [
-      ResponsivePair(
-        first: AppMetricCard(
-          label: 'Saved scans',
-          value: summary.totals['totalScans']!.toString(),
-        ),
-        second: AppMetricCard(
-          label: 'Completed scans',
-          value: summary.totals['completedScans']!.toString(),
-        ),
-      ),
-      const SizedBox(height: AppSpacing.lg),
-      ResponsivePair(
-        first: AppMetricCard(
-          label: 'Healthy model labels',
-          value: summary.totals['healthyPredictions']!.toString(),
-        ),
-        second: AppMetricCard(
-          label: 'Disease model labels',
-          value: summary.totals['diseasePredictions']!.toString(),
-        ),
+      AppMetricGrid(
+        children: [
+          AppMetricCard(
+            label: 'Saved scans',
+            value: summary.totals['totalScans']!.toString(),
+          ),
+          AppMetricCard(
+            label: 'Completed scans',
+            value: summary.totals['completedScans']!.toString(),
+          ),
+          AppMetricCard(
+            label: 'Healthy model labels',
+            value: summary.totals['healthyPredictions']!.toString(),
+          ),
+          AppMetricCard(
+            label: 'Disease model labels',
+            value: summary.totals['diseasePredictions']!.toString(),
+          ),
+        ],
       ),
       const SizedBox(height: AppSpacing.md),
       Text(

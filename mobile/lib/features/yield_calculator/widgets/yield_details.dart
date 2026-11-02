@@ -69,6 +69,7 @@ class YieldResultCard extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
         PlanningResultSummary(
+          revealIdentity: result,
           title: 'Expected yield · planning estimate',
           quantity: '${result.value} ${result.input.outputUnit.label}',
           area:

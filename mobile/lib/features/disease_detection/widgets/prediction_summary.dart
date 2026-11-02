@@ -108,7 +108,7 @@ class PredictionSummary extends StatelessWidget {
         ),
         const SizedBox(height: AppSpacing.sm),
         Text(
-          'This is a raw softmax classifier output. It is not diagnostic accuracy and not the probability that this label is correct.',
+          'A raw softmax output, not diagnostic accuracy and not the probability that this label is correct.',
           style: text.bodyMedium?.copyWith(
             color: Theme.of(context).colorScheme.onSurfaceVariant,
           ),
@@ -117,11 +117,11 @@ class PredictionSummary extends StatelessWidget {
         _ConfidenceExplanation(prediction: prediction),
         if (!compact) ...[
           const SizedBox(height: AppSpacing.lg),
-          _NextStep(prediction: prediction),
           if (actions != null) ...[
-            const SizedBox(height: AppSpacing.xl),
             actions!,
+            const SizedBox(height: AppSpacing.lg),
           ],
+          _NextStep(prediction: prediction),
           const SizedBox(height: AppSpacing.xl),
           ResultDisclosure(
             key: const Key('all-model-scores'),
@@ -171,14 +171,14 @@ class _ConfidenceExplanation extends StatelessWidget {
         : semantic.onInfoContainer;
     final message = switch (prediction.uncertaintyReason) {
       ScanUncertaintyReason.thresholdUnconfigured =>
-        'No validation-approved confidence threshold is configured for this model. The result must remain uncertain, even when its score is high.',
+        'No validation-approved threshold is configured. The result is uncertain even when its score is high.',
       ScanUncertaintyReason.belowValidationThreshold =>
         'The score is below the configured validation-based threshold. Do not treat this output as a certain diagnosis.',
       null =>
         'The score meets the configured validation-based threshold. This remains a model suggestion, not a confirmed diagnosis.',
     };
     return Container(
-      padding: const EdgeInsets.all(AppSpacing.lg),
+      padding: const EdgeInsets.all(AppSpacing.md),
       decoration: BoxDecoration(
         color: background,
         borderRadius: BorderRadius.circular(AppRadii.medium),

@@ -9,7 +9,7 @@ void main() {
       await tester.pumpAndSettle();
 
       expect(find.text('MAIZEDOCTOR'), findsOneWidget);
-      expect(find.text('Scan Leaf'), findsOneWidget);
+      expect(find.text('Scan a maize leaf'), findsOneWidget);
       expect(tester.takeException(), isNull);
     },
   );

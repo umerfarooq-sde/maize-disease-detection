@@ -16,7 +16,16 @@ import 'r04_fixtures.dart';
 
 void main() {
   setUpAll(loadDesignFonts);
-  for (final width in [320.0, 360.0, 412.0, 480.0, 600.0, 840.0, 1024.0]) {
+  for (final width in [
+    320.0,
+    360.0,
+    412.0,
+    480.0,
+    600.0,
+    840.0,
+    1024.0,
+    1280.0,
+  ]) {
     for (final scale in [1.0, 1.5, 2.0]) {
       testWidgets(
         'R04 $width / $scale light-dark Knowledge, detail, focus and pinned keyboard composer',

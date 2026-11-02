@@ -13,6 +13,7 @@ class FertilizerResultCard extends StatelessWidget {
     crossAxisAlignment: CrossAxisAlignment.stretch,
     children: [
       PlanningResultSummary(
+        revealIdentity: result,
         title: 'Calculated fertilizer amount',
         quantity: '${result.quantity.value} ${result.quantity.unit.label}',
         product: result.rule.fertilizer.name,

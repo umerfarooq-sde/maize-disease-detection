@@ -10,55 +10,63 @@ class HomeScanHero extends StatelessWidget {
   Widget build(BuildContext context) {
     final text = Theme.of(context).textTheme;
     final semantic = context.semanticColors;
-    return Container(
-      padding: const EdgeInsets.all(AppSpacing.lg),
-      decoration: BoxDecoration(
-        color: semantic.hero,
-        borderRadius: BorderRadius.circular(AppRadii.hero),
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.stretch,
-        children: [
-          Row(
-            crossAxisAlignment: CrossAxisAlignment.start,
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        final compact = constraints.maxWidth < AppSizing.compactBreakpoint;
+        return Container(
+          padding: EdgeInsets.all(compact ? AppSpacing.md : AppSpacing.lg),
+          decoration: BoxDecoration(
+            color: semantic.hero,
+            borderRadius: BorderRadius.circular(AppRadii.hero),
+          ),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
-              Expanded(
-                child: Semantics(
-                  header: true,
-                  child: Text(
-                    'Check your maize health',
-                    style: text.headlineSmall?.copyWith(color: semantic.onHero),
+              Row(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Expanded(
+                    child: Semantics(
+                      header: true,
+                      child: Text(
+                        'Check your maize health',
+                        style: (compact ? text.titleLarge : text.headlineSmall)
+                            ?.copyWith(color: semantic.onHero),
+                      ),
+                    ),
                   ),
-                ),
+                  if (!compact) ...[
+                    const SizedBox(width: AppSpacing.sm),
+                    ExcludeSemantics(
+                      child: Icon(
+                        Icons.grass,
+                        size: AppSizing.stateIcon,
+                        color: AppColors.highlight,
+                      ),
+                    ),
+                  ],
+                ],
               ),
-              const SizedBox(width: AppSpacing.sm),
-              ExcludeSemantics(
-                child: Icon(
-                  Icons.grass,
-                  size: AppSizing.stateIcon,
-                  color: AppColors.highlight,
+              const SizedBox(height: AppSpacing.sm),
+              Text(
+                'Choose one clear leaf photo for a model prediction.',
+                style: text.bodyMedium?.copyWith(color: semantic.onHero),
+              ),
+              const SizedBox(height: AppSpacing.lg),
+              FilledButton.icon(
+                key: const Key('scan-leaf-action'),
+                style: FilledButton.styleFrom(
+                  backgroundColor: AppColors.highlight,
+                  foregroundColor: AppColors.forest,
                 ),
+                onPressed: () => context.go(AppRoutes.scan),
+                icon: const Icon(Icons.document_scanner_outlined),
+                label: const Text('Scan a maize leaf'),
               ),
             ],
           ),
-          const SizedBox(height: AppSpacing.sm),
-          Text(
-            'Choose one clear leaf photo for a model prediction.',
-            style: text.bodyMedium?.copyWith(color: semantic.onHero),
-          ),
-          const SizedBox(height: AppSpacing.lg),
-          FilledButton.icon(
-            key: const Key('scan-leaf-action'),
-            style: FilledButton.styleFrom(
-              backgroundColor: AppColors.highlight,
-              foregroundColor: AppColors.forest,
-            ),
-            onPressed: () => context.go(AppRoutes.scan),
-            icon: const Icon(Icons.document_scanner_outlined),
-            label: const Text('Scan a maize leaf'),
-          ),
-        ],
-      ),
+        );
+      },
     );
   }
 }
