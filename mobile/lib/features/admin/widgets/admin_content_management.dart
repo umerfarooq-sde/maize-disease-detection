@@ -10,6 +10,7 @@ import 'admin_editor_section.dart';
 import 'management_editor_form.dart';
 import 'calculator_editor_sections.dart';
 import 'admin_calculator_card.dart';
+import 'admin_record_page.dart';
 
 class AdminContentManagement extends StatefulWidget {
   const AdminContentManagement({
@@ -65,214 +66,241 @@ class _AdminContentManagementState extends State<AdminContentManagement> {
               ].join(' ').toLowerCase().contains(_query.toLowerCase()),
         )
         .toList();
-    return AppPage(
-      storageKey:
-          'admin-content-${model.area.name}-${editor == null ? 'list' : 'editor-${identityHashCode(editor)}'}',
-      maxWidth: editor == null
-          ? AppSizing.contentMaxWidth
-          : AppSizing.formMaxWidth,
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.stretch,
-        children: [
-          Semantics(
-            header: true,
-            child: Text(
-              calculator
-                  ? calculatorHeading(model.area)
-                  : disease
-                  ? 'Disease catalogue'
-                  : 'Knowledge documents',
-              style: Theme.of(context).textTheme.headlineMedium,
-            ),
-          ),
-          const SizedBox(height: AppSpacing.sm),
-          Text(
+    final header = Column(
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      children: [
+        Semantics(
+          header: true,
+          child: Text(
             calculator
-                ? calculatorPurpose(model.area)
+                ? calculatorHeading(model.area)
                 : disease
-                ? 'Manage display identity and reviewed metadata. Classifier class mappings are read-only; changes never retrain the model.'
-                : 'Source-backed, versioned knowledge. Classifier class mappings are read-only. Save Draft → Build Embeddings → Activate. Each operation is confirmed separately.',
+                ? 'Disease catalogue'
+                : 'Knowledge documents',
+            style: Theme.of(context).textTheme.headlineMedium,
           ),
-          const SizedBox(height: AppSpacing.md),
+        ),
+        const SizedBox(height: AppSpacing.sm),
+        if (!calculator) const Text('Classifier class mappings are read-only.'),
+        if (model.area == ManagementArea.modelSpecifications)
+          const Text(
+            'Pending domain approval / Disabled — specifications do not execute calculations.',
+          ),
+        ExpansionTile(
+          key: PageStorageKey('management-scope-${model.area.name}'),
+          title: const Text('Workflow and scope'),
+          expansionAnimationStyle: AnimationStyle(
+            duration: AppMotion.resolve(context, AppMotion.reveal),
+          ),
+          children: [
+            Text(
+              calculator
+                  ? calculatorPurpose(model.area)
+                  : disease
+                  ? 'Manage display identity and reviewed metadata. Classifier class mappings are read-only; changes never retrain the model.'
+                  : 'Source-backed, versioned knowledge. Classifier class mappings are read-only. Save Draft → Build Embeddings → Activate. Each operation is confirmed separately.',
+            ),
+          ],
+        ),
+        const SizedBox(height: AppSpacing.md),
+        Wrap(
+          spacing: AppSpacing.sm,
+          runSpacing: AppSpacing.sm,
+          children: [
+            for (final area
+                in calculator
+                    ? [
+                        ManagementArea.fertilizers,
+                        ManagementArea.fertilizer,
+                        ManagementArea.yieldRules,
+                        ManagementArea.modelSpecifications,
+                      ]
+                    : [ManagementArea.diseases, ManagementArea.knowledge])
+              ChoiceChip(
+                label: Text(area.label),
+                selected: model.area == area,
+                onSelected: model.busy ? null : (_) => _area(area),
+              ),
+          ],
+        ),
+        const SizedBox(height: AppSpacing.lg),
+        if (model.error case final error?) ...[
+          AppErrorState(
+            error: error,
+            onRetry: () async {
+              if (await (context.read<AdminDraftGuard?>()?.leave(context) ??
+                      Future.value(editor == null)) &&
+                  context.mounted) {
+                await model.refresh();
+              }
+            },
+          ),
+          if (editor != null)
+            const Text(
+              'Your draft is retained. Review the error before saving again. Cancel editing to refresh the latest stored version; unsaved changes require confirmation.',
+            ),
+          if (error.kind.name == 'conflict')
+            const Text(
+              'Version conflict: a newer change exists. Nothing was overwritten. Keep a copy of your edits before discarding and reviewing the latest state.',
+            ),
+        ],
+        if (editor != null)
+          ManagementEditorForm(
+            key: ObjectKey(editor),
+            editor: editor,
+            busy: model.busy,
+            onSave: (values) async {
+              await model.save(values);
+              if (context.mounted &&
+                  model.error == null &&
+                  model.editor == null) {
+                ScaffoldMessenger.of(context).showSnackBar(
+                  SnackBar(
+                    content: Text(
+                      calculator
+                          ? model.area == ManagementArea.modelSpecifications
+                                ? 'Specification saved. Execution remains disabled.'
+                                : model.area == ManagementArea.fertilizers
+                                ? 'Product metadata saved. Check the returned visibility and eligibility.'
+                                : 'Draft saved. Activation remains a separate confirmed action.'
+                          : disease
+                          ? 'Display metadata saved.'
+                          : 'Draft saved. Build embeddings, then activate when eligible.',
+                    ),
+                  ),
+                );
+              }
+            },
+            onCancel: model.cancel,
+          )
+        else ...[
           Wrap(
             spacing: AppSpacing.sm,
             runSpacing: AppSpacing.sm,
             children: [
-              for (final area
-                  in calculator
-                      ? [
-                          ManagementArea.fertilizers,
-                          ManagementArea.fertilizer,
-                          ManagementArea.yieldRules,
-                          ManagementArea.modelSpecifications,
-                        ]
-                      : [ManagementArea.diseases, ManagementArea.knowledge])
-                ChoiceChip(
-                  label: Text(area.label),
-                  selected: model.area == area,
-                  onSelected: model.busy ? null : (_) => _area(area),
+              FilledButton.icon(
+                onPressed: model.busy ? null : () => model.edit(),
+                icon: const Icon(Icons.add),
+                label: Text(
+                  model.area == ManagementArea.fertilizers
+                      ? 'New reviewed product'
+                      : disease
+                      ? 'New informational entry'
+                      : 'New reviewed draft',
                 ),
+              ),
+              OutlinedButton.icon(
+                onPressed: model.busy ? null : () => model.load(),
+                icon: const Icon(Icons.refresh),
+                label: const Text('Refresh management'),
+              ),
             ],
           ),
           const SizedBox(height: AppSpacing.lg),
-          if (model.error case final error?) ...[
-            AppErrorState(
-              error: error,
-              onRetry: () async {
-                if (await (context.read<AdminDraftGuard?>()?.leave(context) ??
-                        Future.value(editor == null)) &&
-                    context.mounted) {
-                  await model.refresh();
-                }
-              },
+          TextField(
+            key: const Key('admin-content-filter'),
+            decoration: const InputDecoration(
+              labelText: 'Filter loaded records',
+              prefixIcon: Icon(Icons.search),
             ),
-            if (editor != null)
-              const Text(
-                'Your draft is retained. Review the error before saving again. Cancel editing to refresh the latest stored version; unsaved changes require confirmation.',
-              ),
-            if (error.kind.name == 'conflict')
-              const Text(
-                'Version conflict: a newer change exists. Nothing was overwritten. Keep a copy of your edits before discarding and reviewing the latest state.',
-              ),
-          ],
-          if (editor != null)
-            ManagementEditorForm(
-              key: ObjectKey(editor),
-              editor: editor,
-              busy: model.busy,
-              onSave: (values) async {
-                await model.save(values);
-                if (context.mounted &&
-                    model.error == null &&
-                    model.editor == null) {
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    SnackBar(
-                      content: Text(
-                        calculator
-                            ? model.area == ManagementArea.modelSpecifications
-                                  ? 'Specification saved. Execution remains disabled.'
-                                  : model.area == ManagementArea.fertilizers
-                                  ? 'Product metadata saved. Check the returned visibility and eligibility.'
-                                  : 'Draft saved. Activation remains a separate confirmed action.'
-                            : disease
-                            ? 'Display metadata saved.'
-                            : 'Draft saved. Build embeddings, then activate when eligible.',
-                      ),
-                    ),
-                  );
-                }
-              },
-              onCancel: model.cancel,
+            onChanged: (value) => setState(() => _query = value),
+          ),
+          const SizedBox(height: AppSpacing.sm),
+          const Text(
+            'Local filter only. Load more versions to include additional records; this does not search the full database.',
+          ),
+          Wrap(
+            spacing: AppSpacing.sm,
+            children: [
+              for (final status in [
+                'ALL',
+                if (model.area != ManagementArea.modelSpecifications) 'ACTIVE',
+                if (!disease) 'DRAFT',
+                if (model.area != ManagementArea.modelSpecifications)
+                  disease || calculator ? 'INACTIVE' : 'ARCHIVED',
+              ])
+                FilterChip(
+                  label: Text(status),
+                  selected: _status == status,
+                  onSelected: (_) => setState(() => _status = status),
+                ),
+            ],
+          ),
+          const SizedBox(height: AppSpacing.md),
+          Text(
+            '${visible.length} matching / ${model.items.length} loaded records',
+            style: Theme.of(context).textTheme.labelLarge,
+          ),
+          if (model.busy)
+            const AppLoadingState(
+              message: 'Working on reviewed content…',
+              inline: true,
             )
-          else ...[
-            Wrap(
-              spacing: AppSpacing.sm,
-              runSpacing: AppSpacing.sm,
-              children: [
-                FilledButton.icon(
-                  onPressed: model.busy ? null : () => model.edit(),
-                  icon: const Icon(Icons.add),
-                  label: Text(
-                    model.area == ManagementArea.fertilizers
-                        ? 'New reviewed product'
-                        : disease
-                        ? 'New informational entry'
-                        : 'New reviewed draft',
-                  ),
-                ),
-                OutlinedButton.icon(
-                  onPressed: model.busy ? null : () => model.load(),
-                  icon: const Icon(Icons.refresh),
-                  label: const Text('Refresh management'),
-                ),
-              ],
+          else if (visible.isEmpty && model.error == null)
+            AppEmptyState(
+              title: model.items.isEmpty
+                  ? 'No managed content yet'
+                  : 'No loaded matches',
+              message: model.items.isEmpty
+                  ? 'Add only approved, sourced content. No recommendations or disease facts are seeded.'
+                  : 'Change the local filter or load another page.',
             ),
-            const SizedBox(height: AppSpacing.lg),
-            TextField(
-              key: const Key('admin-content-filter'),
-              decoration: const InputDecoration(
-                labelText: 'Filter loaded records',
-                prefixIcon: Icon(Icons.search),
-              ),
-              onChanged: (value) => setState(() => _query = value),
-            ),
-            const SizedBox(height: AppSpacing.sm),
-            const Text(
-              'Local filter only. Load more versions to include additional records; this does not search the full database.',
-            ),
-            Wrap(
-              spacing: AppSpacing.sm,
-              children: [
-                for (final status in [
-                  'ALL',
-                  if (model.area != ManagementArea.modelSpecifications)
-                    'ACTIVE',
-                  if (!disease) 'DRAFT',
-                  if (model.area != ManagementArea.modelSpecifications)
-                    disease || calculator ? 'INACTIVE' : 'ARCHIVED',
-                ])
-                  FilterChip(
-                    label: Text(status),
-                    selected: _status == status,
-                    onSelected: (_) => setState(() => _status = status),
-                  ),
-              ],
-            ),
-            const SizedBox(height: AppSpacing.md),
-            Text(
-              '${visible.length} matching / ${model.items.length} loaded records',
-              style: Theme.of(context).textTheme.labelLarge,
-            ),
-            if (model.busy)
-              const AppLoadingState(
-                message: 'Working on reviewed content…',
-                inline: true,
+        ],
+      ],
+    );
+    if (editor != null) {
+      return AppPage(
+        storageKey:
+            'admin-content-${model.area.name}-editor-${identityHashCode(editor)}',
+        maxWidth: AppSizing.formMaxWidth,
+        child: header,
+      );
+    }
+    return AdminRecordPage(
+      storageKey: 'admin-content-${model.area.name}-list',
+      header: header,
+      count: visible.length,
+      itemBuilder: (context, index) {
+        final item = visible[index];
+        return calculator
+            ? AdminCalculatorCard(
+                key: ValueKey(item.id),
+                area: model.area,
+                item: item,
+                busy: model.busy,
+                onEdit: () => model.edit(item),
+                onCopy: () => model.copyProduct(item),
+                onStatus: (status) => widget.onStatus(item, status),
               )
-            else if (visible.isEmpty && model.error == null)
-              AppEmptyState(
-                title: model.items.isEmpty
-                    ? 'No managed content yet'
-                    : 'No loaded matches',
-                message: model.items.isEmpty
-                    ? 'Add only approved, sourced content. No recommendations or disease facts are seeded.'
-                    : 'Change the local filter or load another page.',
-              ),
-            for (final item in visible)
-              if (calculator)
-                AdminCalculatorCard(
-                  area: model.area,
-                  item: item,
-                  busy: model.busy,
-                  onEdit: () => model.edit(item),
-                  onCopy: () => model.copyProduct(item),
-                  onStatus: (status) => widget.onStatus(item, status),
-                )
-              else
-                AdminContentEntryCard(
-                  item: item,
-                  disease: disease,
-                  items: model.items,
-                  busy: model.busy,
-                  onEdit: () => model.edit(item),
-                  onIndex: () => model.index(item),
-                  onStatus: (status) => widget.onStatus(item, status),
-                ),
-            if (calculator &&
-                model.nextCursor == null &&
-                [
-                  ManagementArea.fertilizer,
-                  ManagementArea.yieldRules,
-                  ManagementArea.modelSpecifications,
-                ].contains(model.area))
-              const Text(
-                'Latest 100 stored versions are returned by the existing API. Local filtering does not search earlier versions.',
-              ),
-            if (model.nextCursor != null)
-              OutlinedButton(
-                onPressed: model.busy ? null : () => model.load(more: true),
-                child: const Text('Load more versions'),
-              ),
-          ],
+            : AdminContentEntryCard(
+                key: ValueKey(item.id),
+                item: item,
+                disease: disease,
+                items: model.items,
+                busy: model.busy,
+                onEdit: () => model.edit(item),
+                onIndex: () => model.index(item),
+                onStatus: (status) => widget.onStatus(item, status),
+              );
+      },
+      footer: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          if (calculator &&
+              model.nextCursor == null &&
+              [
+                ManagementArea.fertilizer,
+                ManagementArea.yieldRules,
+                ManagementArea.modelSpecifications,
+              ].contains(model.area))
+            const Text(
+              'Latest 100 stored versions are returned by the existing API. Local filtering does not search earlier versions.',
+            ),
+          if (model.nextCursor != null)
+            OutlinedButton(
+              onPressed: model.busy ? null : () => model.load(more: true),
+              child: const Text('Load more versions'),
+            ),
         ],
       ),
     );

@@ -54,7 +54,7 @@ void main() {
           await tester.ensureVisible(find.text('Source & applicability'));
         }
       } else if (entry.$1.startsWith('healthy')) {
-        await r06Tap(tester, find.text('Edit display metadata').at(2));
+        await r06bEditDisease(tester, 'Healthy');
       } else if (entry.$1.startsWith('reference-editor')) {
         await r06Tap(tester, find.text('Edit metadata / reorder / replace'));
         await tester.ensureVisible(find.text('Usage rights'));

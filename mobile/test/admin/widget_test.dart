@@ -62,7 +62,7 @@ void main() {
         ),
       );
       await tester.pumpAndSettle();
-      expect(find.text('Administrator sign-in'), findsOneWidget);
+      expect(find.text('Admin sign-in'), findsOneWidget);
       expect(find.byType(NavigationBar), findsNothing);
       expect(requests, isEmpty);
       await submit(tester);
@@ -93,7 +93,7 @@ void main() {
       await tester.pumpAndSettle();
       await tester.tap(find.text('Admin Sign Out'));
       await tester.pumpAndSettle();
-      expect(find.text('Administrator sign-in'), findsOneWidget);
+      expect(find.text('Admin sign-in'), findsOneWidget);
       expect(find.text('Saved scans'), findsNothing);
       await tester.pumpWidget(const SizedBox());
     },
@@ -184,7 +184,7 @@ void main() {
     );
     await tester.tap(find.text('Admin Sign Out'));
     await tester.pumpAndSettle();
-    expect(find.text('Administrator sign-in'), findsOneWidget);
+    expect(find.text('Admin sign-in'), findsOneWidget);
     expect(tester.takeException(), isNull);
   });
   testWidgets(

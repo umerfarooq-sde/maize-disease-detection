@@ -32,6 +32,7 @@ void main() {
         findsOneWidget,
       );
       await tester.ensureVisible(find.text('Activate'));
+      await tester.pumpAndSettle();
       await tester.tap(find.text('Activate'));
       await tester.pumpAndSettle();
       expect(find.text('Activate reviewed version?'), findsOneWidget);

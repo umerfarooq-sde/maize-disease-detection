@@ -97,8 +97,17 @@ class AiOperationsPanel extends StatelessWidget {
                   ),
                   if (!compact) ...[
                     const SizedBox(height: AppSpacing.sm),
-                    const Text(
-                      'Abrupt process loss and provider-writer failures may omit events. The local Node drop counter does not measure all collection loss. No prompts or account identifiers are stored in this operational report.',
+                    ExpansionTile(
+                      key: const PageStorageKey('ai-collection-coverage'),
+                      title: const Text('Collection coverage and privacy'),
+                      expansionAnimationStyle: AnimationStyle(
+                        duration: AppMotion.resolve(context, AppMotion.reveal),
+                      ),
+                      children: const [
+                        Text(
+                          'Abrupt process loss and provider-writer failures may omit events. The local Node drop counter does not measure all collection loss. No prompts or account identifiers are stored in this operational report.',
+                        ),
+                      ],
                     ),
                   ],
                 ],

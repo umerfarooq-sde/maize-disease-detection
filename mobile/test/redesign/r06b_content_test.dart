@@ -60,7 +60,7 @@ void main() {
     (tester) async {
       final fixture = R06BFixture();
       await fixture.mount(tester, location: '/admin/manage?area=diseases');
-      await r06Tap(tester, find.text('Edit display metadata').at(3));
+      await r06bEditDisease(tester, 'Northern_Corn_Leaf_Blight');
       expect(
         tester.getTopLeft(find.text('Disease catalogue')).dy,
         greaterThan(0),
@@ -102,10 +102,15 @@ void main() {
       final fixture = R06BFixture();
       await fixture.mount(tester, location: '/admin/manage?area=diseases');
       for (final label in r06bLabels) {
+        await r06Reveal(tester, find.text('Classifier context · $label'));
         expect(find.text('Classifier context · $label'), findsOneWidget);
       }
+      await r06Reveal(
+        tester,
+        find.textContaining('Healthy / scouting context'),
+      );
       expect(find.textContaining('Healthy / scouting context'), findsOneWidget);
-      await r06Tap(tester, find.text('Edit display metadata').at(2));
+      await r06bEditDisease(tester, 'Healthy');
       expect(find.byKey(const Key('management-slug')), findsNothing);
       expect(find.byKey(const Key('management-literalLabel')), findsNothing);
       expect(
@@ -180,7 +185,9 @@ void main() {
       await r06Tap(tester, find.text('Load more versions'));
       expect(fixture.requests.last.url.queryParameters['cursor'], isNotNull);
       await r06bEnter(tester, 'admin-content-filter', '');
+      await r06Reveal(tester, find.text('Status · ARCHIVED'));
       expect(find.text('Status · ARCHIVED'), findsOneWidget);
+      await r06Reveal(tester, find.text('2 matching / 2 loaded records'));
       expect(find.text('2 matching / 2 loaded records'), findsOneWidget);
     },
   );

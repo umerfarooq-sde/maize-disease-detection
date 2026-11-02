@@ -190,8 +190,38 @@ class R06Fixture {
 }
 
 Future<void> r06Tap(WidgetTester tester, Finder finder) async {
-  await tester.ensureVisible(finder);
-  await tester.pumpAndSettle();
+  await r06Reveal(tester, finder);
   await tester.tap(finder);
+  await tester.pumpAndSettle();
+}
+
+/// Locate lazily mounted record controls before ensuring they are visible.
+Future<void> r06Reveal(WidgetTester tester, Finder finder) async {
+  if (finder.evaluate().isEmpty &&
+      find.byType(CustomScrollView).evaluate().isNotEmpty) {
+    final scroll = find.byType(CustomScrollView).last;
+    final position = tester
+        .state<ScrollableState>(
+          find.descendant(of: scroll, matching: find.byType(Scrollable)).first,
+        )
+        .position;
+    position.jumpTo(0);
+    await tester.pumpAndSettle();
+    for (
+      var attempt = 0;
+      attempt < 80 && finder.evaluate().isEmpty;
+      attempt++
+    ) {
+      if (position.pixels >= position.maxScrollExtent) break;
+      position.jumpTo(
+        (position.pixels + position.viewportDimension * 0.6).clamp(
+          0,
+          position.maxScrollExtent,
+        ),
+      );
+      await tester.pumpAndSettle();
+    }
+  }
+  await tester.ensureVisible(finder);
   await tester.pumpAndSettle();
 }

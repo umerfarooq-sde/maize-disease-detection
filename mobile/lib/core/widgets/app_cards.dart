@@ -3,6 +3,50 @@ import '../theme/design_tokens.dart';
 
 enum AppStatusTone { neutral, information, warning, error, success }
 
+/// Intrinsic rows adapt to local width and text size without fixed card heights.
+class AppMetricGrid extends StatelessWidget {
+  const AppMetricGrid({
+    required this.children,
+    this.minimumColumnWidth = AppSizing.emblem * 2,
+    super.key,
+  });
+  final List<Widget> children;
+  final double minimumColumnWidth;
+  @override
+  Widget build(BuildContext context) => LayoutBuilder(
+    builder: (context, constraints) {
+      final minimum =
+          minimumColumnWidth * MediaQuery.textScalerOf(context).scale(1);
+      final columns =
+          ((constraints.maxWidth + AppSpacing.md) / (minimum + AppSpacing.md))
+              .floor()
+              .clamp(1, 4);
+      return Column(
+        children: [
+          for (var start = 0; start < children.length; start += columns) ...[
+            if (start != 0) const SizedBox(height: AppSpacing.md),
+            IntrinsicHeight(
+              child: Row(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  for (var column = 0; column < columns; column++) ...[
+                    if (column != 0) const SizedBox(width: AppSpacing.md),
+                    Expanded(
+                      child: start + column < children.length
+                          ? children[start + column]
+                          : const SizedBox(),
+                    ),
+                  ],
+                ],
+              ),
+            ),
+          ],
+        ],
+      );
+    },
+  );
+}
+
 /// Tone is supplied by the caller; this widget never infers business status.
 class AppStatusPanel extends StatelessWidget {
   const AppStatusPanel({

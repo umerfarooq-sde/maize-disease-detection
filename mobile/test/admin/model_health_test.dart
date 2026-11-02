@@ -219,7 +219,10 @@ void main() {
           ),
         ),
       );
-      expect(find.text('Offline evaluation'), findsOneWidget);
+      expect(
+        find.text('Offline evaluation — research evidence'),
+        findsOneWidget,
+      );
       expect(find.textContaining('No model has been promoted'), findsOneWidget);
       await tester.ensureVisible(find.text('Runtime operational statistics'));
       await tester.pump();

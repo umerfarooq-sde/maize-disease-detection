@@ -43,9 +43,9 @@ class _AdminSignInViewState extends State<AdminSignInView> {
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
               AuthHeader(
-                title: 'Administrator sign-in',
+                title: 'Admin sign-in',
                 description:
-                    'Use your operator-provisioned Admin account. Access is separate from farmer sign-in and lasts for this app session.',
+                    'Use your provisioned Admin account. Separate from Farmer sign-in; access lasts for this app session.',
                 admin: true,
               ),
               const SizedBox(height: AppSpacing.xl),

@@ -8,7 +8,7 @@ import 'package:maizedoctor/features/admin/view_models/farmer_management_view_mo
 import 'package:maizedoctor/features/admin/view_models/audit_log_view_model.dart';
 import 'package:maizedoctor/features/admin/views/farmer_management_view.dart';
 import 'package:maizedoctor/features/admin/views/audit_log_view.dart';
-import '../scans/widget_test.dart' show tapVisible;
+import '../redesign/r06d_fixtures.dart' show r06dTap, r06dReveal;
 import 'accounts_helpers.dart';
 
 Future<void> pumpFarmers(
@@ -54,13 +54,14 @@ void main() {
       final repo = FakeAccountsRepository();
       await pumpFarmers(tester, repo);
       await tester.pumpAndSettle();
+      await r06dReveal(tester, find.text('Fixture farmer'));
       expect(find.text('Fixture farmer'), findsOneWidget);
-      await tapVisible(tester, find.text('Set SUSPENDED'));
+      await r06dTap(tester, find.text('Set SUSPENDED'));
       expect(repo.changes, 0);
-      await tapVisible(tester, find.text('Cancel'));
+      await r06dTap(tester, find.text('Cancel'));
       expect(repo.changes, 0);
-      await tapVisible(tester, find.text('Set SUSPENDED'));
-      await tapVisible(tester, find.text('Confirm status change'));
+      await r06dTap(tester, find.text('Set SUSPENDED'));
+      await r06dTap(tester, find.text('Confirm status change'));
       expect(repo.changes, 1);
       expect(find.text('Status: SUSPENDED'), findsOneWidget);
     },
@@ -76,7 +77,7 @@ void main() {
     expect(find.text('Try again'), findsOneWidget);
     repo.pendingFarmers = null;
     repo.items = [];
-    await tapVisible(tester, find.text('Try again'));
+    await r06dTap(tester, find.text('Try again'));
     expect(find.text('No farmer accounts match'), findsOneWidget);
   });
   testWidgets(
@@ -85,12 +86,20 @@ void main() {
       final repo = FakeAccountsRepository();
       await pumpAudits(tester, repo);
       await tester.pumpAndSettle();
-      expect(find.text('DEACTIVATE · farmer_account'), findsOneWidget);
+      await r06dReveal(tester, find.text('Farmer account status change'));
+      expect(find.text('Farmer account status change'), findsOneWidget);
       expect(find.text('Revoked sessions: 2'), findsOneWidget);
+      await r06dTap(tester, find.text('Recorded event details'));
+      expect(
+        find.textContaining('Original action: DEACTIVATE'),
+        findsOneWidget,
+      );
       expect(find.text('Edit audit'), findsNothing);
+      await r06dReveal(tester, find.byKey(const Key('audit-from')));
       await tester.enterText(find.byKey(const Key('audit-from')), '2026-10-15');
+      await r06dReveal(tester, find.byKey(const Key('audit-to')));
       await tester.enterText(find.byKey(const Key('audit-to')), '2026-10-15');
-      await tapVisible(tester, find.byKey(const Key('audit-filter')));
+      await r06dTap(tester, find.byKey(const Key('audit-filter')));
       expect(repo.auditCalls, 2);
     },
   );
@@ -102,7 +111,7 @@ void main() {
     expect(find.text('Try again'), findsOneWidget);
     repo.failure = null;
     repo.auditItems = [];
-    await tapVisible(tester, find.text('Try again'));
+    await r06dTap(tester, find.text('Try again'));
     expect(find.text('No recorded actions match'), findsOneWidget);
   });
   for (final size in [
@@ -124,7 +133,7 @@ void main() {
       await tester.pumpWidget(const SizedBox.shrink());
       await pumpAudits(tester, FakeAccountsRepository());
       await tester.pumpAndSettle();
-      await tapVisible(tester, find.byKey(const Key('audit-filter')));
+      await r06dTap(tester, find.byKey(const Key('audit-filter')));
       expect(tester.takeException(), isNull);
     });
   }

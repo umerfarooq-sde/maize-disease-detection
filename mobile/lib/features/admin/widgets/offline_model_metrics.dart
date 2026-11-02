@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
+import 'admin_selectable_text.dart';
 import '../../../core/theme/design_tokens.dart';
 import '../../../core/widgets/horizontal_data_scroll.dart';
 import '../../../data/models/model_health.dart';
 import '../../disease_detection/utils/scan_presentation.dart';
+import 'admin_metric_grid.dart';
 
 String metricPercent(double? value) =>
     value == null ? 'Unavailable' : '${(value * 100).toStringAsFixed(2)}%';
@@ -14,92 +16,177 @@ class OfflineModelMetrics extends StatelessWidget {
   Widget build(BuildContext context) => Column(
     crossAxisAlignment: CrossAxisAlignment.stretch,
     children: [
-      Text('Offline evaluation', style: Theme.of(context).textTheme.titleLarge),
+      Semantics(
+        header: true,
+        child: Text(
+          'Offline evaluation — research evidence',
+          style: Theme.of(context).textTheme.titleLarge,
+        ),
+      ),
+      const SizedBox(height: AppSpacing.sm),
       const Text(
         'Saved final-test results from the pinned model artifact. Descriptive research metrics on a previously inspected corpus; independent field accuracy is not established.',
       ),
-      const SizedBox(height: AppSpacing.md),
-      Text(
-        'Architecture: ${data.architecture}\nDataset: ${data.datasetVersion}\nExperiment: ${data.experimentId}\nTraining date: not recorded in artifact\nFinal-test unique contents: ${data.sampleCount}',
-      ),
-      SelectableText(
-        'Dataset/index fingerprint: ${data.indexFingerprint}',
-        style: Theme.of(context).textTheme.bodySmall,
-      ),
-      const SizedBox(height: AppSpacing.md),
-      Wrap(
-        spacing: AppSpacing.md,
-        runSpacing: AppSpacing.sm,
+      const SizedBox(height: AppSpacing.lg),
+      AdminMetricGrid(
         children: [
-          _metric('Test accuracy', data.accuracy),
-          _metric('Macro precision', data.precision),
-          _metric('Macro recall', data.recall),
-          _metric('Macro F1', data.f1),
+          AdminMetricCard(
+            label: 'Test accuracy',
+            value: metricPercent(data.accuracy),
+            icon: Icons.science_outlined,
+          ),
+          AdminMetricCard(
+            label: 'Macro precision',
+            value: metricPercent(data.precision),
+            icon: Icons.filter_center_focus,
+          ),
+          AdminMetricCard(
+            label: 'Macro recall',
+            value: metricPercent(data.recall),
+            icon: Icons.search,
+          ),
+          AdminMetricCard(
+            label: 'Macro F1',
+            value: metricPercent(data.f1),
+            icon: Icons.balance,
+          ),
         ],
       ),
       const SizedBox(height: AppSpacing.lg),
-      const Text('Per-class test metrics · swipe horizontally for all columns'),
-      HorizontalDataScroll(
-        child: DataTable(
-          columns: const [
-            DataColumn(label: Text('Class')),
-            DataColumn(label: Text('Support')),
-            DataColumn(label: Text('Precision')),
-            DataColumn(label: Text('Recall')),
-            DataColumn(label: Text('F1')),
-            DataColumn(label: Text('Specificity')),
-          ],
-          rows: [
+      Text('Final-test unique contents: ${data.sampleCount}'),
+      Card(
+        child: ExpansionTile(
+          key: const PageStorageKey('offline-class-metrics'),
+          title: const Text('Per-class test metrics'),
+          subtitle: const Text(
+            'Support, precision, recall, F1 and specificity',
+          ),
+          expansionAnimationStyle: AnimationStyle(
+            duration: AppMotion.resolve(context, AppMotion.reveal),
+          ),
+          children: [
             for (final item in data.classes)
-              DataRow(
-                cells: [
-                  DataCell(Text(diseaseLabel(item.label))),
-                  DataCell(Text('${item.support}')),
-                  DataCell(Text(metricPercent(item.precision))),
-                  DataCell(Text(metricPercent(item.recall))),
-                  DataCell(Text(metricPercent(item.f1))),
-                  DataCell(Text(metricPercent(item.specificity))),
-                ],
+              Padding(
+                padding: const EdgeInsets.all(AppSpacing.lg),
+                child: SizedBox(
+                  width: double.infinity,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                    children: [
+                      Text(
+                        diseaseLabel(item.label),
+                        style: Theme.of(context).textTheme.titleMedium,
+                      ),
+                      Text('Support: ${item.support} unique contents'),
+                      Text(
+                        'Precision: ${metricPercent(item.precision)} · Recall: ${metricPercent(item.recall)}',
+                      ),
+                      Text(
+                        'F1: ${metricPercent(item.f1)} · Specificity: ${metricPercent(item.specificity)}',
+                      ),
+                    ],
+                  ),
+                ),
               ),
           ],
         ),
       ),
-      const SizedBox(height: AppSpacing.lg),
-      Text(
-        'Saved confusion matrix',
-        style: Theme.of(context).textTheme.titleMedium,
-      ),
-      const Text(
-        'Rows: actual class. Columns: predicted class. Counts, not percentages. Scroll horizontally.',
-      ),
-      HorizontalDataScroll(
-        child: DataTable(
-          columns: [
-            const DataColumn(label: Text('Actual / predicted')),
-            for (final label in modelLabels)
-              DataColumn(label: Text(diseaseLabel(label))),
-          ],
-          rows: [
-            for (var i = 0; i < 4; i++)
-              DataRow(
-                cells: [
-                  DataCell(Text(diseaseLabel(modelLabels[i]))),
-                  for (final count in data.confusionMatrix[i])
-                    DataCell(Text('$count')),
-                ],
+      Card(
+        child: ExpansionTile(
+          key: const PageStorageKey('offline-confusion-matrix'),
+          title: const Text('Saved confusion matrix'),
+          subtitle: const Text('Actual versus predicted · saved counts'),
+          expansionAnimationStyle: AnimationStyle(
+            duration: AppMotion.resolve(context, AppMotion.reveal),
+          ),
+          children: [
+            KeyedSubtree(
+              key: const PageStorageKey('offline-matrix-body'),
+              child: Padding(
+                padding: const EdgeInsets.all(AppSpacing.lg),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  children: [
+                    const Text(
+                      'Rows: actual class. Columns: predicted class. Counts, not percentages. Scroll horizontally.',
+                    ),
+                    HorizontalDataScroll(
+                      child: DataTable(
+                        headingRowHeight:
+                            AppSizing.touchTarget *
+                            MediaQuery.textScalerOf(context).scale(1) *
+                            2,
+                        dataRowMinHeight: AppSizing.touchTarget,
+                        dataRowMaxHeight: double.infinity,
+                        columns: [
+                          const DataColumn(label: Text('Actual / predicted')),
+                          for (final item in data.classes)
+                            DataColumn(label: Text(diseaseLabel(item.label))),
+                        ],
+                        rows: [
+                          for (var i = 0; i < data.classes.length; i++)
+                            DataRow(
+                              cells: [
+                                DataCell(
+                                  Text(diseaseLabel(data.classes[i].label)),
+                                ),
+                                for (var j = 0; j < data.classes.length; j++)
+                                  DataCell(
+                                    Semantics(
+                                      label:
+                                          'Actual ${diseaseLabel(data.classes[i].label)}, predicted ${diseaseLabel(data.classes[j].label)}: ${data.confusionMatrix[i][j]}',
+                                      excludeSemantics: true,
+                                      child: Text(
+                                        '${data.confusionMatrix[i][j]}',
+                                      ),
+                                    ),
+                                  ),
+                              ],
+                            ),
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
               ),
+            ),
+          ],
+        ),
+      ),
+      Card(
+        child: ExpansionTile(
+          key: const PageStorageKey('offline-evidence-details'),
+          title: const Text('Evaluation provenance'),
+          expansionAnimationStyle: AnimationStyle(
+            duration: AppMotion.resolve(context, AppMotion.reveal),
+          ),
+          children: [
+            KeyedSubtree(
+              key: const PageStorageKey('offline-evidence-body'),
+              child: Padding(
+                padding: const EdgeInsets.all(AppSpacing.lg),
+                child: SizedBox(
+                  width: double.infinity,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                    children: [
+                      AdminSelectableText(
+                        'Architecture: ${data.architecture}\nDataset: ${data.datasetVersion}\nExperiment: ${data.experimentId}',
+                      ),
+                      const Text(
+                        'Training date: not recorded in artifact. Evaluation date and calibration results are not supplied by this response.',
+                      ),
+                      AdminSelectableText(
+                        'Dataset/index fingerprint: ${data.indexFingerprint}',
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            ),
           ],
         ),
       ),
     ],
-  );
-  Widget _metric(String label, double value) => Card(
-    child: Padding(
-      padding: const EdgeInsets.all(AppSpacing.md),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [Text(label), Text(metricPercent(value))],
-      ),
-    ),
   );
 }

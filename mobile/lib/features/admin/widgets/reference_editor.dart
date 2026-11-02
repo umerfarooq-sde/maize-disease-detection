@@ -5,6 +5,8 @@ import 'admin_draft_guard.dart';
 import 'admin_editor_section.dart';
 import '../../../core/theme/design_tokens.dart';
 import '../../../data/models/reference_media.dart';
+import '../../../data/models/admin_management.dart'
+    show validateManagementField;
 import '../../../data/models/selected_leaf_image.dart';
 
 class ReferenceEditor extends StatefulWidget {
@@ -177,10 +179,8 @@ class _ReferenceEditorState extends State<ReferenceEditor> {
                 Uri.tryParse(value)?.host.isEmpty != false)) {
           return 'Use an HTTPS source reference.';
         }
-        if (entry.key == 'retrievedAt' &&
-            (!RegExp(r'^\d{4}-\d{2}-\d{2}$').hasMatch(value) ||
-                DateTime.tryParse(value) == null)) {
-          return 'Use YYYY-MM-DD.';
+        if (entry.key == 'retrievedAt') {
+          return validateManagementField('source.retrievedAt', value);
         }
         return null;
       },

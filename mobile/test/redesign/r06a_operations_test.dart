@@ -308,7 +308,7 @@ void main() {
       await tester.pumpAndSettle();
       fixture.reportGate!.complete();
       await tester.pumpAndSettle();
-      expect(find.text('Administrator sign-in'), findsOneWidget);
+      expect(find.text('Admin sign-in'), findsOneWidget);
       expect(find.byType(AiOperationsView), findsNothing);
       expect(find.byType(AdminMetricCard), findsNothing);
       expect(tester.takeException(), isNull);

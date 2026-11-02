@@ -45,6 +45,21 @@ class _AdminWorkspaceShellState extends State<AdminWorkspaceShell> {
       return;
     }
     if (!await _leave() || !mounted) return;
+    // The protected child Navigator is deliberately unmounted when signed out.
+    // Handle this surface at the parent instead of asking GoRouter to walk it.
+    if (!widget.signedIn) {
+      final navigator = Navigator.of(context);
+      if (navigator.canPop()) {
+        navigator.pop();
+      } else {
+        context.go(
+          widget.destination == AdminDestination.overview
+              ? AppRoutes.home
+              : AppRoutes.admin,
+        );
+      }
+      return;
+    }
     if (context.canPop()) {
       context.pop();
     } else {
@@ -64,78 +79,86 @@ class _AdminWorkspaceShellState extends State<AdminWorkspaceShell> {
   }
 
   @override
-  Widget build(BuildContext context) => LayoutBuilder(
-    builder: (context, constraints) {
-      final expanded =
-          widget.signedIn && constraints.maxWidth >= AppSizing.tabletBreakpoint;
-      Widget navigation() => AdminNavigation(
-        selected: widget.destination,
-        email: widget.email,
-        onSelect: _select,
-        onFarmer: _farmer,
-        onSignOut: widget.onSignOut == null ? null : _signOut,
-      );
-      return PopScope(
-        canPop:
-            context.canPop() &&
-            !(context.watch<AdminDraftGuard?>()?.blocked ?? false),
-        onPopInvokedWithResult: (didPop, _) {
-          if (!didPop) _back();
-        },
-        child: Scaffold(
-          key: _scaffold,
-          appBar: AdminWorkspaceHeader(
-            title: widget.signedIn
-                ? widget.destination.label
-                : 'Admin workspace',
-            email: widget.signedIn ? widget.email : null,
-            textScale: MediaQuery.textScalerOf(context).scale(1),
-            dense:
-                MediaQuery.viewInsetsOf(context).bottom > 0 &&
-                constraints.maxHeight -
-                        MediaQuery.viewInsetsOf(context).bottom <
-                    AppSizing.navigationHeight * 4,
-            onBack: _back,
-            onFarmer: _farmer,
-            onMenu: widget.signedIn && !expanded
-                ? () => _scaffold.currentState?.openDrawer()
+  Widget build(BuildContext context) => BackButtonListener(
+    onBackButtonPressed: () async {
+      if (widget.signedIn) return false;
+      await _back();
+      return true;
+    },
+    child: LayoutBuilder(
+      builder: (context, constraints) {
+        final expanded =
+            widget.signedIn &&
+            constraints.maxWidth >= AppSizing.tabletBreakpoint;
+        Widget navigation() => AdminNavigation(
+          selected: widget.destination,
+          email: widget.email,
+          onSelect: _select,
+          onFarmer: _farmer,
+          onSignOut: widget.onSignOut == null ? null : _signOut,
+        );
+        return PopScope(
+          canPop:
+              context.canPop() &&
+              !(context.watch<AdminDraftGuard?>()?.blocked ?? false),
+          onPopInvokedWithResult: (didPop, _) {
+            if (!didPop) _back();
+          },
+          child: Scaffold(
+            key: _scaffold,
+            appBar: AdminWorkspaceHeader(
+              title: widget.signedIn
+                  ? widget.destination.label
+                  : 'Admin workspace',
+              email: widget.signedIn ? widget.email : null,
+              textScale: MediaQuery.textScalerOf(context).scale(1),
+              dense:
+                  MediaQuery.viewInsetsOf(context).bottom > 0 &&
+                  constraints.maxHeight -
+                          MediaQuery.viewInsetsOf(context).bottom <
+                      AppSizing.navigationHeight * 4,
+              onBack: _back,
+              onFarmer: _farmer,
+              onMenu: widget.signedIn && !expanded
+                  ? () => _scaffold.currentState?.openDrawer()
+                  : null,
+              onSignOut: widget.signedIn && widget.onSignOut != null
+                  ? _signOut
+                  : null,
+            ),
+            drawer: widget.signedIn && !expanded
+                ? Drawer(child: navigation())
                 : null,
-            onSignOut: widget.signedIn && widget.onSignOut != null
-                ? _signOut
-                : null,
-          ),
-          drawer: widget.signedIn && !expanded
-              ? Drawer(child: navigation())
-              : null,
-          body: Row(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: [
-              if (expanded) ...[
-                SizedBox(
-                  width: _sidebarWidth,
-                  child: Material(
-                    color: Theme.of(context).colorScheme.surfaceContainerLow,
-                    child: navigation(),
+            body: Row(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                if (expanded) ...[
+                  SizedBox(
+                    width: _sidebarWidth,
+                    child: Material(
+                      color: Theme.of(context).colorScheme.surfaceContainerLow,
+                      child: navigation(),
+                    ),
+                  ),
+                  VerticalDivider(
+                    width: AppSizing.divider,
+                    color: Theme.of(context).colorScheme.outlineVariant,
+                  ),
+                ],
+                // Keep the nested route's BlockSemantics inside its content pane;
+                // otherwise its active ModalRoute hides the sibling sidebar.
+                Expanded(
+                  child: Semantics(
+                    container: true,
+                    explicitChildNodes: true,
+                    child: widget.child,
                   ),
                 ),
-                VerticalDivider(
-                  width: AppSizing.divider,
-                  color: Theme.of(context).colorScheme.outlineVariant,
-                ),
               ],
-              // Keep the nested route's BlockSemantics inside its content pane;
-              // otherwise its active ModalRoute hides the sibling sidebar.
-              Expanded(
-                child: Semantics(
-                  container: true,
-                  explicitChildNodes: true,
-                  child: widget.child,
-                ),
-              ),
-            ],
+            ),
           ),
-        ),
-      );
-    },
+        );
+      },
+    ),
   );
 }

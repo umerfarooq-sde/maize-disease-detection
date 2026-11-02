@@ -44,7 +44,7 @@ void main() {
               dark ? ThemeMode.dark : ThemeMode.light,
             );
             await fixture.go(tester, '/admin/manage?area=diseases');
-            await r06Tap(tester, find.text('Edit display metadata').first);
+            await r06bEditDisease(tester, 'Common_Rust');
             await tester.ensureVisible(find.text('Save display metadata'));
             await tester.pumpAndSettle();
             expect(

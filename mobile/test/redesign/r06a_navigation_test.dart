@@ -159,7 +159,7 @@ void main() {
             fixture.farmer.signIn('farmer@example.test', 'synthetic-password'),
       );
       await tester.pumpAndSettle();
-      expect(find.text('Administrator sign-in'), findsOneWidget);
+      expect(find.text('Admin sign-in'), findsOneWidget);
       expect(
         fixture.requests.where((r) => r.url.path.contains('/admin/')),
         isEmpty,

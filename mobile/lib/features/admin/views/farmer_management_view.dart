@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../../../core/theme/design_tokens.dart';
-import '../../../core/widgets/app_page.dart';
 import '../../../core/widgets/app_states.dart';
+import '../../../core/widgets/app_field.dart';
 import '../../../core/widgets/app_confirmation_dialog.dart';
 import '../../../data/models/admin_accounts.dart';
 import '../view_models/farmer_management_view_model.dart';
+import '../widgets/admin_record_page.dart';
+import '../widgets/farmer_account_card.dart';
 
 class FarmerManagementView extends StatefulWidget {
   const FarmerManagementView({super.key});
@@ -15,6 +17,8 @@ class FarmerManagementView extends StatefulWidget {
 
 class _FarmerManagementViewState extends State<FarmerManagementView> {
   final _email = TextEditingController();
+  String? _selectedStatus;
+  bool _confirming = false;
   @override
   void dispose() {
     _email.dispose();
@@ -26,136 +30,193 @@ class _FarmerManagementViewState extends State<FarmerManagementView> {
     ManagedFarmer farmer,
     String status,
   ) async {
-    final confirmed = await showAppConfirmation(
-      context,
-      title: 'Change farmer status to $status?',
-      message:
-          'Account: ${farmer.email}\nAll existing sessions will be revoked. ${status == 'ACTIVE' ? 'The farmer must sign in again.' : 'Sign-in and authenticated access will be blocked.'} Records and scan ownership will be preserved.',
-      confirmLabel: 'Confirm status change',
-      destructive: status != 'ACTIVE',
-    );
-    if (mounted && confirmed == true) await model.changeStatus(farmer, status);
+    if (model.busy || _confirming) return;
+    FocusManager.instance.primaryFocus?.unfocus();
+    setState(() => _confirming = true);
+    try {
+      final confirmed = await showAppConfirmation(
+        context,
+        title: 'Change farmer status to $status?',
+        message:
+            'Account: ${farmer.email}\nCurrent loaded status: ${farmer.status}\nRequested status: $status\nAll existing sessions will be revoked. ${status == 'ACTIVE' ? 'The farmer must sign in again.' : 'Sign-in and authenticated access will be blocked.'} Records and scan ownership will be preserved. This action is recorded for audit.',
+        confirmLabel: 'Confirm status change',
+        destructive: status != 'ACTIVE',
+        useRootNavigator: false,
+      );
+      if (mounted && confirmed) await model.changeStatus(farmer, status);
+    } finally {
+      if (mounted) setState(() => _confirming = false);
+    }
   }
 
   @override
   Widget build(BuildContext context) {
     final model = context.watch<FarmerManagementViewModel>();
-    return AppPage(
-      child: Column(
+    return AdminRecordPage(
+      storageKey: 'admin-farmer-accounts',
+      count: model.items.length,
+      itemBuilder: (_, index) {
+        final farmer = model.items[index];
+        return FarmerAccountCard(
+          key: ValueKey(farmer.id),
+          farmer: farmer,
+          busy: model.busy || _confirming || model.error != null,
+          onStatus: (status) => _status(model, farmer, status),
+        );
+      },
+      header: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
-          Text(
-            'Farmer accounts',
-            style: Theme.of(context).textTheme.headlineMedium,
-          ),
-          const SizedBox(height: AppSpacing.md),
-          const Text(
-            'Review registered farmer accounts and manage access. Roles, passwords and private field details are not editable here. Deactivation preserves account records.',
-          ),
-          const SizedBox(height: AppSpacing.lg),
-          TextField(
-            key: const Key('farmer-account-email'),
-            controller: _email,
-            enabled: !model.busy,
-            decoration: const InputDecoration(
-              labelText: 'Exact email (optional)',
+          Semantics(
+            header: true,
+            child: Text(
+              'Farmer accounts',
+              style: Theme.of(context).textTheme.headlineMedium,
             ),
-            keyboardType: TextInputType.emailAddress,
+          ),
+          const SizedBox(height: AppSpacing.sm),
+          const Text(
+            'Manage account access with recorded, confirmed status changes. Roles, passwords and private field details are not editable here.',
           ),
           const SizedBox(height: AppSpacing.md),
-          Wrap(
-            spacing: AppSpacing.sm,
-            runSpacing: AppSpacing.sm,
-            children: [
-              ChoiceChip(
-                label: const Text('All statuses'),
-                selected: model.status == null,
-                onSelected: model.busy
-                    ? null
-                    : (_) => model.filter(null, _email.text),
+          Card(
+            child: ExpansionTile(
+              key: const PageStorageKey('farmer-filter-panel'),
+              initiallyExpanded: true,
+              title: const Text('Filter accounts'),
+              subtitle: Text(
+                'Applied: ${model.status ?? 'All statuses'} · ${model.email ?? 'Any email'}',
               ),
-              for (final status in farmerAccountStatuses)
-                ChoiceChip(
-                  label: Text(status),
-                  selected: model.status == status,
-                  onSelected: model.busy
-                      ? null
-                      : (_) => model.filter(status, _email.text),
+              expansionAnimationStyle: AnimationStyle(
+                duration: AppMotion.resolve(context, AppMotion.reveal),
+              ),
+              children: [
+                KeyedSubtree(
+                  key: const PageStorageKey('farmer-filter-fields'),
+                  child: Padding(
+                    padding: const EdgeInsets.all(AppSpacing.lg),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.stretch,
+                      children: [
+                        AppField(
+                          label: 'Exact email',
+                          optional: true,
+                          child: TextField(
+                            key: const Key('farmer-account-email'),
+                            controller: _email,
+                            enabled: !model.busy,
+                            keyboardType: TextInputType.emailAddress,
+                            autocorrect: false,
+                            decoration: const InputDecoration(
+                              helperText:
+                                  'Exact address only. This is not a name or partial-email search.',
+                              helperMaxLines: 3,
+                            ),
+                          ),
+                        ),
+                        const SizedBox(height: AppSpacing.md),
+                        Wrap(
+                          spacing: AppSpacing.sm,
+                          runSpacing: AppSpacing.sm,
+                          children: [
+                            ChoiceChip(
+                              label: const Text('All statuses'),
+                              selected: _selectedStatus == null,
+                              onSelected: model.busy
+                                  ? null
+                                  : (_) =>
+                                        setState(() => _selectedStatus = null),
+                            ),
+                            for (final status in farmerAccountStatuses)
+                              ChoiceChip(
+                                label: Text(status),
+                                selected: _selectedStatus == status,
+                                onSelected: model.busy
+                                    ? null
+                                    : (_) => setState(
+                                        () => _selectedStatus = status,
+                                      ),
+                              ),
+                          ],
+                        ),
+                        const SizedBox(height: AppSpacing.md),
+                        Wrap(
+                          spacing: AppSpacing.sm,
+                          runSpacing: AppSpacing.sm,
+                          children: [
+                            FilledButton.icon(
+                              onPressed: model.busy
+                                  ? null
+                                  : () => model.filter(
+                                      _selectedStatus,
+                                      _email.text,
+                                    ),
+                              icon: const Icon(Icons.filter_alt_outlined),
+                              label: const Text('Apply / refresh accounts'),
+                            ),
+                            OutlinedButton(
+                              onPressed: model.busy
+                                  ? null
+                                  : () {
+                                      _email.clear();
+                                      setState(() => _selectedStatus = null);
+                                      model.filter(null, '');
+                                    },
+                              child: const Text('Clear filters'),
+                            ),
+                          ],
+                        ),
+                      ],
+                    ),
+                  ),
                 ),
-              OutlinedButton(
-                onPressed: model.busy
-                    ? null
-                    : () => model.filter(model.status, _email.text),
-                child: const Text('Apply / refresh accounts'),
-              ),
-            ],
+              ],
+            ),
           ),
-          const SizedBox(height: AppSpacing.xl),
-          if (model.message case final message?) ...[
-            Semantics(liveRegion: true, child: Text(message)),
-            const SizedBox(height: AppSpacing.md),
-          ],
+          const SizedBox(height: AppSpacing.md),
+          if (model.message case final message?)
+            Semantics(
+              liveRegion: true,
+              child: Text(
+                message,
+                style: Theme.of(context).textTheme.titleMedium,
+              ),
+            ),
           if (model.error case final error?) ...[
             AppErrorState(error: error, onRetry: model.load),
             if (error.kind.name == 'conflict')
               const Text(
                 'Refresh and review the current account status before retrying.',
               ),
-            const SizedBox(height: AppSpacing.lg),
+            if (['network', 'timeout'].contains(error.kind.name))
+              const Text(
+                'If a status change was submitted, its outcome may be uncertain. Refresh the authoritative account record before repeating it.',
+              ),
           ],
           if (model.busy)
-            const AppLoadingState(message: 'Updating farmer accounts…'),
+            const AppLoadingState(
+              message: 'Updating farmer accounts…',
+              inline: true,
+            ),
           if (!model.busy && model.error == null && model.items.isEmpty)
             const AppEmptyState(
               title: 'No farmer accounts match',
               message:
                   'Change the status or exact-email filter, or refresh after registration.',
             ),
-          for (final farmer in model.items) ...[
-            Card(
-              key: ValueKey('managed-farmer-${farmer.id}'),
-              child: Padding(
-                padding: const EdgeInsets.all(AppSpacing.lg),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.stretch,
-                  children: [
-                    Text(
-                      farmer.displayName ?? farmer.email,
-                      style: Theme.of(context).textTheme.titleMedium,
-                    ),
-                    SelectableText(farmer.email),
-                    Text('Status: ${farmer.status}'),
-                    Text(
-                      'Registered ${farmer.createdAt.toUtc().toIso8601String()}',
-                    ),
-                    const SizedBox(height: AppSpacing.md),
-                    Wrap(
-                      spacing: AppSpacing.sm,
-                      runSpacing: AppSpacing.sm,
-                      children: [
-                        for (final status in farmerAccountStatuses)
-                          if (status != farmer.status)
-                            OutlinedButton(
-                              onPressed: model.busy
-                                  ? null
-                                  : () => _status(model, farmer, status),
-                              child: Text('Set $status'),
-                            ),
-                      ],
-                    ),
-                  ],
-                ),
-              ),
-            ),
-            const SizedBox(height: AppSpacing.lg),
-          ],
-          if (model.nextCursor != null)
-            OutlinedButton(
-              onPressed: model.busy ? null : () => model.load(more: true),
-              child: const Text('Load more accounts'),
+          if (!model.busy && model.error == null && model.items.isNotEmpty)
+            Text(
+              '${model.items.length} loaded accounts · newest registrations first',
+              style: Theme.of(context).textTheme.labelLarge,
             ),
         ],
       ),
+      footer: model.nextCursor == null
+          ? const SizedBox.shrink()
+          : OutlinedButton(
+              onPressed: model.busy ? null : () => model.load(more: true),
+              child: const Text('Load more accounts'),
+            ),
     );
   }
 }

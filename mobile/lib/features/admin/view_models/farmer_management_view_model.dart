@@ -29,8 +29,19 @@ class FarmerManagementViewModel extends ChangeNotifier {
         cursor: more ? nextCursor : null,
       );
       if (_valid) {
+        if (more && page.nextCursor != null && page.nextCursor == nextCursor) {
+          throw const AppException(AppErrorKind.invalidResponse);
+        }
+        final loadedIds = more
+            ? items.map((item) => item.id).toSet()
+            : <String>{};
         items = List.unmodifiable(
-          more ? [...items, ...page.items] : page.items,
+          more
+              ? [
+                  ...items,
+                  ...page.items.where((item) => !loadedIds.contains(item.id)),
+                ]
+              : page.items,
         );
         nextCursor = page.nextCursor;
       }

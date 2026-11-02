@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:convert';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:maizedoctor/features/admin/widgets/admin_content_management.dart';
 import 'package:http/http.dart' as http;
 import 'package:http/testing.dart';
 import 'package:maizedoctor/data/datasources/leaf_image_datasource.dart';
@@ -16,6 +17,20 @@ const r06bLabels = [
   'Healthy',
   'Northern_Corn_Leaf_Blight',
 ];
+
+Future<void> r06bEditDisease(WidgetTester tester, String label) async {
+  final identity = find.text('Classifier context · $label');
+  await r06Reveal(tester, identity);
+  final record = find.ancestor(
+    of: identity,
+    matching: find.byType(AdminContentEntryCard),
+  );
+  await r06Tap(
+    tester,
+    find.descendant(of: record, matching: find.text('Edit display metadata')),
+  );
+}
+
 Map<String, dynamic> r06bDisease(int index) => {
   'id': '00000000-0000-4000-8000-00000000000${index + 1}',
   'name': r06bLabels[index].replaceAll('_', ' '),

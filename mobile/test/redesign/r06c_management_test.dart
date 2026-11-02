@@ -169,6 +169,7 @@ void main() {
         );
         expect(find.textContaining('kg/ha'), findsWidgets);
         if (area == ManagementArea.yieldRules) {
+          await r06Tap(tester, find.text('Workflow and scope'));
           expect(
             find.textContaining('not a field-specific forecast'),
             findsOneWidget,

@@ -105,9 +105,15 @@ class AdminCalculatorCard extends StatelessWidget {
                 'Source information unavailable in this stored record.',
               ),
             if (data['revision'] case final String revision)
-              SelectableText(
-                'Revision · $revision',
-                style: Theme.of(context).textTheme.bodySmall,
+              ExpansionTile(
+                key: PageStorageKey('record-revision-${item.id}'),
+                title: const Text('Record revision'),
+                children: [
+                  SelectableText(
+                    'Revision · $revision',
+                    style: Theme.of(context).textTheme.bodySmall,
+                  ),
+                ],
               ),
             if (frozen)
               const Text(

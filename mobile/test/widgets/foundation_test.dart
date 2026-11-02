@@ -173,7 +173,7 @@ void main() {
       }
       router.go(AppRoutes.admin);
       await tester.pumpAndSettle();
-      expect(find.text('Administrator sign-in'), findsOneWidget);
+      expect(find.text('Admin sign-in'), findsOneWidget);
       router.go('/unknown/private-path');
       await tester.pumpAndSettle();
       expect(find.text('This page is not available'), findsOneWidget);

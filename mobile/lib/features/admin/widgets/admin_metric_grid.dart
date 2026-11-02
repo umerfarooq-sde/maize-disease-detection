@@ -4,41 +4,16 @@ import '../../../core/widgets/app_cards.dart';
 
 /// Intrinsic-height rows keep long numbers/labels readable at large text sizes.
 class AdminMetricGrid extends StatelessWidget {
-  const AdminMetricGrid({required this.children, super.key});
+  const AdminMetricGrid({
+    required this.children,
+    this.minimumColumnWidth = AppSizing.emblem * 2,
+    super.key,
+  });
   final List<Widget> children;
+  final double minimumColumnWidth;
   @override
-  Widget build(BuildContext context) => LayoutBuilder(
-    builder: (context, constraints) {
-      final scale = MediaQuery.textScalerOf(context).scale(1);
-      final minimum = AppSizing.emblem * 2 * scale;
-      final columns =
-          ((constraints.maxWidth + AppSpacing.md) / (minimum + AppSpacing.md))
-              .floor()
-              .clamp(1, 4);
-      return Column(
-        children: [
-          for (var start = 0; start < children.length; start += columns) ...[
-            if (start != 0) const SizedBox(height: AppSpacing.md),
-            IntrinsicHeight(
-              child: Row(
-                crossAxisAlignment: CrossAxisAlignment.stretch,
-                children: [
-                  for (var column = 0; column < columns; column++) ...[
-                    if (column != 0) const SizedBox(width: AppSpacing.md),
-                    Expanded(
-                      child: start + column < children.length
-                          ? children[start + column]
-                          : const SizedBox(),
-                    ),
-                  ],
-                ],
-              ),
-            ),
-          ],
-        ],
-      );
-    },
-  );
+  Widget build(BuildContext context) =>
+      AppMetricGrid(minimumColumnWidth: minimumColumnWidth, children: children);
 }
 
 class AdminMetricCard extends StatelessWidget {
