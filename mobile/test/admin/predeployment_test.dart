@@ -54,11 +54,11 @@ void main() {
       );
       expect(
         find.text(
-          'Source rate reference (optional text, never a calculation rule)',
+          'Source rate reference (optional text, never a calculation rule) (optional)',
         ),
         findsOneWidget,
       );
-      expect(find.text('Nitrogen N % by mass'), findsOneWidget);
+      expect(find.text('Nitrogen N % by mass (required)'), findsOneWidget);
       expect(tester.takeException(), isNull);
     },
   );

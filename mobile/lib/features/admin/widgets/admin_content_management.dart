@@ -8,6 +8,8 @@ import '../view_models/admin_management_view_model.dart';
 import 'admin_draft_guard.dart';
 import 'admin_editor_section.dart';
 import 'management_editor_form.dart';
+import 'calculator_editor_sections.dart';
+import 'admin_calculator_card.dart';
 
 class AdminContentManagement extends StatefulWidget {
   const AdminContentManagement({
@@ -43,6 +45,7 @@ class _AdminContentManagementState extends State<AdminContentManagement> {
     final model = context.watch<AdminManagementViewModel>();
     final disease = model.area == ManagementArea.diseases;
     final editor = model.editor;
+    final calculator = isCalculatorManagement(model.area);
     final visible = model.items
         .where(
           (item) =>
@@ -53,6 +56,12 @@ class _AdminContentManagementState extends State<AdminContentManagement> {
                 item.values['documentKey'],
                 item.values['knowledgeType'],
                 item.values['diseaseSlug'],
+                item.values['ruleKey'],
+                item.values['configKey'],
+                calculatorMap(item.values['draftInput'])['modelKey'],
+                calculatorMap(
+                  calculatorMap(item.values['draftInput'])['product'],
+                )['slug'],
               ].join(' ').toLowerCase().contains(_query.toLowerCase()),
         )
         .toList();
@@ -68,13 +77,19 @@ class _AdminContentManagementState extends State<AdminContentManagement> {
           Semantics(
             header: true,
             child: Text(
-              disease ? 'Disease catalogue' : 'Knowledge documents',
+              calculator
+                  ? calculatorHeading(model.area)
+                  : disease
+                  ? 'Disease catalogue'
+                  : 'Knowledge documents',
               style: Theme.of(context).textTheme.headlineMedium,
             ),
           ),
           const SizedBox(height: AppSpacing.sm),
           Text(
-            disease
+            calculator
+                ? calculatorPurpose(model.area)
+                : disease
                 ? 'Manage display identity and reviewed metadata. Classifier class mappings are read-only; changes never retrain the model.'
                 : 'Source-backed, versioned knowledge. Classifier class mappings are read-only. Save Draft → Build Embeddings → Activate. Each operation is confirmed separately.',
           ),
@@ -83,10 +98,15 @@ class _AdminContentManagementState extends State<AdminContentManagement> {
             spacing: AppSpacing.sm,
             runSpacing: AppSpacing.sm,
             children: [
-              for (final area in [
-                ManagementArea.diseases,
-                ManagementArea.knowledge,
-              ])
+              for (final area
+                  in calculator
+                      ? [
+                          ManagementArea.fertilizers,
+                          ManagementArea.fertilizer,
+                          ManagementArea.yieldRules,
+                          ManagementArea.modelSpecifications,
+                        ]
+                      : [ManagementArea.diseases, ManagementArea.knowledge])
                 ChoiceChip(
                   label: Text(area.label),
                   selected: model.area == area,
@@ -128,7 +148,13 @@ class _AdminContentManagementState extends State<AdminContentManagement> {
                   ScaffoldMessenger.of(context).showSnackBar(
                     SnackBar(
                       content: Text(
-                        disease
+                        calculator
+                            ? model.area == ManagementArea.modelSpecifications
+                                  ? 'Specification saved. Execution remains disabled.'
+                                  : model.area == ManagementArea.fertilizers
+                                  ? 'Product metadata saved. Check the returned visibility and eligibility.'
+                                  : 'Draft saved. Activation remains a separate confirmed action.'
+                            : disease
                             ? 'Display metadata saved.'
                             : 'Draft saved. Build embeddings, then activate when eligible.',
                       ),
@@ -147,7 +173,11 @@ class _AdminContentManagementState extends State<AdminContentManagement> {
                   onPressed: model.busy ? null : () => model.edit(),
                   icon: const Icon(Icons.add),
                   label: Text(
-                    disease ? 'New informational entry' : 'New reviewed draft',
+                    model.area == ManagementArea.fertilizers
+                        ? 'New reviewed product'
+                        : disease
+                        ? 'New informational entry'
+                        : 'New reviewed draft',
                   ),
                 ),
                 OutlinedButton.icon(
@@ -175,9 +205,11 @@ class _AdminContentManagementState extends State<AdminContentManagement> {
               children: [
                 for (final status in [
                   'ALL',
-                  'ACTIVE',
+                  if (model.area != ManagementArea.modelSpecifications)
+                    'ACTIVE',
                   if (!disease) 'DRAFT',
-                  disease ? 'INACTIVE' : 'ARCHIVED',
+                  if (model.area != ManagementArea.modelSpecifications)
+                    disease || calculator ? 'INACTIVE' : 'ARCHIVED',
                 ])
                   FilterChip(
                     label: Text(status),
@@ -206,14 +238,34 @@ class _AdminContentManagementState extends State<AdminContentManagement> {
                     : 'Change the local filter or load another page.',
               ),
             for (final item in visible)
-              AdminContentEntryCard(
-                item: item,
-                disease: disease,
-                items: model.items,
-                busy: model.busy,
-                onEdit: () => model.edit(item),
-                onIndex: () => model.index(item),
-                onStatus: (status) => widget.onStatus(item, status),
+              if (calculator)
+                AdminCalculatorCard(
+                  area: model.area,
+                  item: item,
+                  busy: model.busy,
+                  onEdit: () => model.edit(item),
+                  onCopy: () => model.copyProduct(item),
+                  onStatus: (status) => widget.onStatus(item, status),
+                )
+              else
+                AdminContentEntryCard(
+                  item: item,
+                  disease: disease,
+                  items: model.items,
+                  busy: model.busy,
+                  onEdit: () => model.edit(item),
+                  onIndex: () => model.index(item),
+                  onStatus: (status) => widget.onStatus(item, status),
+                ),
+            if (calculator &&
+                model.nextCursor == null &&
+                [
+                  ManagementArea.fertilizer,
+                  ManagementArea.yieldRules,
+                  ManagementArea.modelSpecifications,
+                ].contains(model.area))
+              const Text(
+                'Latest 100 stored versions are returned by the existing API. Local filtering does not search earlier versions.',
               ),
             if (model.nextCursor != null)
               OutlinedButton(

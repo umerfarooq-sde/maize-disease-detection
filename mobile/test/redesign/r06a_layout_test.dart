@@ -74,7 +74,7 @@ void main() {
               fixture.router.state.uri.queryParameters['area'],
               'modelSpecifications',
             );
-            expect(find.text('Knowledge & configuration'), findsOneWidget);
+            expect(find.text('Agronomic model specifications'), findsOneWidget);
             expect(
               tester.takeException(),
               isNull,

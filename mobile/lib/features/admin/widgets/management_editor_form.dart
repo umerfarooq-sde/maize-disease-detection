@@ -7,6 +7,9 @@ import '../../../core/theme/design_tokens.dart';
 import '../../../core/widgets/app_confirmation_dialog.dart';
 import '../../../data/models/admin_management.dart';
 import 'management_fields.dart';
+import 'calculator_editor_sections.dart';
+import 'specification_array_editor.dart';
+import 'specification_rows.dart';
 
 class ManagementEditorForm extends StatefulWidget {
   const ManagementEditorForm({
@@ -37,10 +40,7 @@ class _ManagementEditorFormState extends State<ManagementEditorForm> {
   bool _showErrors = false;
   late final _anchors = {for (final field in _fields) field.key: GlobalKey()};
   late final _focus = {for (final field in _fields) field.key: FocusNode()};
-  bool get _content => [
-    ManagementArea.diseases,
-    ManagementArea.knowledge,
-  ].contains(widget.editor.area);
+
   AdminDraftGuard? _guard;
   bool get _dirty =>
       _approved ||
@@ -56,7 +56,7 @@ class _ManagementEditorFormState extends State<ManagementEditorForm> {
     if (_guard != guard) {
       _guard?.unbind(this);
       _guard = guard;
-      if (_content) guard?.bind(this, () => _dirty, () => widget.busy);
+      guard?.bind(this, () => _dirty, () => widget.busy);
     }
   }
 
@@ -69,7 +69,7 @@ class _ManagementEditorFormState extends State<ManagementEditorForm> {
   }
 
   Future<void> _cancel() async {
-    if (!_content || !_dirty || await confirmDiscardDraft(context)) {
+    if (!_dirty || await confirmDiscardDraft(context)) {
       if (mounted) widget.onCancel();
     }
   }
@@ -77,7 +77,7 @@ class _ManagementEditorFormState extends State<ManagementEditorForm> {
   @override
   void didUpdateWidget(covariant ManagementEditorForm oldWidget) {
     super.didUpdateWidget(oldWidget);
-    if (_content && oldWidget.busy != widget.busy) _guard?.changed();
+    if (oldWidget.busy != widget.busy) _guard?.changed();
   }
 
   @override
@@ -94,29 +94,32 @@ class _ManagementEditorFormState extends State<ManagementEditorForm> {
 
   Future<void> _submit() async {
     if (!(_form.currentState?.validate() ?? false)) {
-      if (_content) {
-        setState(() => _showErrors = true);
-        for (final field in _fields) {
-          final value = _controllers[field.key]!.text;
-          final invalid = field.options.isNotEmpty
-              ? !field.options.containsKey(value)
-              : validateManagementField(
-                      field.key,
-                      value,
-                      required: field.required,
-                    ) !=
-                    null;
-          if (invalid) {
-            _focus[field.key]!.requestFocus();
-            final target = _anchors[field.key]!.currentContext;
-            if (target != null) {
-              await Scrollable.ensureVisible(
-                target,
-                duration: AppMotion.resolve(context, AppMotion.navigation),
-              );
-            }
-            break;
+      setState(() => _showErrors = true);
+      for (final field in _fields) {
+        final value = _controllers[field.key]!.text;
+        final array =
+            widget.editor.area == ManagementArea.modelSpecifications &&
+            ['inputs', 'outputs', 'coefficients'].contains(field.key);
+        final invalid = array
+            ? _validateArray(field, value) != null
+            : field.options.isNotEmpty
+            ? !field.options.containsKey(value)
+            : validateManagementField(
+                    field.key,
+                    value,
+                    required: field.required,
+                  ) !=
+                  null;
+        if (invalid) {
+          if (!array) _focus[field.key]!.requestFocus();
+          final target = _anchors[field.key]!.currentContext;
+          if (target != null) {
+            await Scrollable.ensureVisible(
+              target,
+              duration: AppMotion.resolve(context, AppMotion.navigation),
+            );
           }
+          break;
         }
       }
       return;
@@ -137,7 +140,50 @@ class _ManagementEditorFormState extends State<ManagementEditorForm> {
     await widget.onSave(values);
   }
 
+  String? _validateArray(ManagementField field, String raw) =>
+      validateSpecificationRows(
+        raw,
+        coefficients: field.key == 'coefficients',
+        requiredOutputs: field.key != 'outputs'
+            ? const []
+            : _controllers['kind']!.text == 'YIELD'
+            ? const ['minimum', 'expected', 'potential']
+            : const ['nitrogen', 'phosphorus', 'potassium'],
+      );
+
   Widget _field(ManagementField field) {
+    if (widget.editor.area == ManagementArea.modelSpecifications &&
+        ['inputs', 'outputs', 'coefficients'].contains(field.key)) {
+      return KeyedSubtree(
+        key: _anchors[field.key],
+        child: SpecificationArrayEditor(
+          name: field.key,
+          controller: _controllers[field.key]!,
+          busy: widget.busy,
+          validator: (raw) => _validateArray(field, raw ?? ''),
+        ),
+      );
+    }
+    final numeric =
+        field.key == 'rate' ||
+        field.key.endsWith('Percent') ||
+        [
+          'version',
+          'configVersion',
+          'quantityDecimalPlaces',
+        ].contains(field.key);
+    final label = field.key == 'rate'
+        ? widget.editor.area == ManagementArea.fertilizer
+              ? 'Approved product application rate (kg/ha)'
+              : 'Reviewed reference yield (kg/ha)'
+        : widget.editor.area == ManagementArea.fertilizer &&
+              field.key.endsWith('Percent')
+        ? switch (field.key) {
+            'product.nitrogenPercent' => 'Nitrogen N % by mass',
+            'product.phosphorusPercent' => 'Phosphate P₂O₅ % by mass',
+            _ => 'Potash K₂O % by mass',
+          }
+        : field.label;
     final input = field.options.isNotEmpty
         ? DropdownButtonFormField<String>(
             key: ValueKey('management-${field.key}'),
@@ -147,9 +193,7 @@ class _ManagementEditorFormState extends State<ManagementEditorForm> {
                 ? _controllers[field.key]!.text
                 : null,
             isExpanded: true,
-            decoration: InputDecoration(
-              labelText: _content ? null : field.label,
-            ),
+            decoration: InputDecoration(labelText: null),
             items: [
               for (final item in field.options.entries)
                 DropdownMenuItem(
@@ -171,8 +215,8 @@ class _ManagementEditorFormState extends State<ManagementEditorForm> {
             enabled: !widget.busy,
             readOnly: field.fixed,
             maxLength: field.maximum,
-            keyboardType: !_content
-                ? null
+            keyboardType: numeric
+                ? const TextInputType.numberWithOptions(decimal: true)
                 : field.key.endsWith('url')
                 ? TextInputType.url
                 : field.lines > 1
@@ -181,7 +225,7 @@ class _ManagementEditorFormState extends State<ManagementEditorForm> {
             minLines: field.lines,
             maxLines: field.lines + 2,
             decoration: InputDecoration(
-              labelText: _content ? null : field.label,
+              labelText: null,
               alignLabelWithHint: field.lines > 1,
             ),
             validator: (value) => validateManagementField(
@@ -190,19 +234,28 @@ class _ManagementEditorFormState extends State<ManagementEditorForm> {
               required: field.required,
             ),
           );
-    return _content
-        ? AppField(
-            key: _anchors[field.key],
-            label: field.label
-                .replaceAll(', optional)', ')')
-                .replaceAll(' (optional)', ''),
-            optional: !field.required,
-            child: input,
-          )
-        : input;
+    return AppField(
+      key: _anchors[field.key],
+      label: label.replaceAll(', optional)', ')').replaceAll(' (optional)', ''),
+      optional: !field.required,
+      child: input,
+    );
   }
 
   List<Widget> _sections() {
+    if (isCalculatorManagement(widget.editor.area)) {
+      return [
+        if (widget.editor.entry case final entry?) ...[
+          AdminContentStatus(entry.status),
+          Text(
+            widget.editor.area == ManagementArea.fertilizers
+                ? 'Product metadata version ${entry.version}. Existing rule snapshots remain unchanged.'
+                : 'Based on stored version ${entry.version}. Existing records remain unchanged.',
+          ),
+        ],
+        ...calculatorEditorSections(widget.editor, _fields, _field),
+      ];
+    }
     final knowledge = widget.editor.area == ManagementArea.knowledge;
     String group(ManagementField field) {
       if (field.key.startsWith('source.') ||
@@ -276,7 +329,11 @@ class _ManagementEditorFormState extends State<ManagementEditorForm> {
             ),
           ),
         Text(
-          widget.editor.area == ManagementArea.diseases
+          widget.editor.area == ManagementArea.fertilizers
+              ? widget.editor.entry == null
+                    ? 'Create reviewed product'
+                    : 'Edit product metadata'
+              : widget.editor.area == ManagementArea.diseases
               ? 'Edit display metadata'
               : 'Create immutable draft version',
           style: Theme.of(context).textTheme.titleLarge,
@@ -296,13 +353,7 @@ class _ManagementEditorFormState extends State<ManagementEditorForm> {
           ManagementArea.fertilizers =>
             'Manage sourced product information independently of dosage rules. N/P/K fields represent N/P₂O₅/K₂O percent by mass. Optional stage, conditions and rate text require source review and never enable a numerical recommendation. Products used by calculator rules are frozen; copy them to a new slug to revise content.',
         }),
-        if (_content)
-          ..._sections()
-        else
-          for (final field in _fields) ...[
-            const SizedBox(height: AppSpacing.lg),
-            _field(field),
-          ],
+        ..._sections(),
         ...[
           const SizedBox(height: AppSpacing.lg),
           FormField<bool>(
@@ -355,6 +406,8 @@ class _ManagementEditorFormState extends State<ManagementEditorForm> {
           child: Text(
             widget.busy
                 ? 'Saving…'
+                : widget.editor.area == ManagementArea.fertilizers
+                ? 'Save product metadata'
                 : widget.editor.area == ManagementArea.diseases
                 ? 'Save display metadata'
                 : 'Save draft',

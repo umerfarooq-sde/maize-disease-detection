@@ -60,9 +60,14 @@ void main() {
               find.text(switch (destination.area) {
                 ManagementArea.diseases => 'Disease catalogue',
                 ManagementArea.knowledge => 'Knowledge documents',
-                _ => 'Knowledge & configuration',
+                ManagementArea.fertilizers => 'Fertilizer catalogue',
+                ManagementArea.fertilizer => 'Fertilizer application rules',
+                ManagementArea.yieldRules => 'Yield planning configurations',
+                _ => 'Agronomic model specifications',
               }),
-              findsOneWidget,
+              destination.area == ManagementArea.fertilizers
+                  ? findsNWidgets(2)
+                  : findsOneWidget,
             );
           }
           if (width >= 840) {
