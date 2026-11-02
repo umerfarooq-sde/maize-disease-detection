@@ -18,7 +18,9 @@ class ScanResultImage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    if (selectedImage case final image?) return ScanPreview(image: image);
+    if (selectedImage case final image?) {
+      return ScanPreview(image: image, submitted: true);
+    }
     return Card(
       clipBehavior: Clip.antiAlias,
       child: AspectRatio(

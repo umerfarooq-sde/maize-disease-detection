@@ -209,6 +209,8 @@ void main() {
         ),
       );
       addTearDown(api.close);
+      tester.view.devicePixelRatio = 3;
+      addTearDown(tester.view.resetDevicePixelRatio);
       await tester.pumpWidget(
         Provider(
           create: (_) => PrivateImageRepository(api),
@@ -233,11 +235,17 @@ void main() {
       expect(find.byType(Image), findsOneWidget);
       expect(
         tester.widget<Image>(find.byType(Image)).image,
-        isA<ResizeImage>().having(
-          (value) => value.imageProvider,
-          'byte provider',
-          isA<MemoryImage>(),
-        ),
+        isA<ResizeImage>()
+            .having(
+              (value) => value.imageProvider,
+              'byte provider',
+              isA<MemoryImage>(),
+            )
+            .having(
+              (value) => value.width,
+              'bounded display-size decode width',
+              600,
+            ),
       );
     },
   );

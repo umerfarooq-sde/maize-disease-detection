@@ -90,12 +90,18 @@ void main() {
       );
       expect(find.textContaining('not diagnostic accuracy'), findsOneWidget);
       expect(find.textContaining('does not rule out'), findsOneWidget);
+      await tester.ensureVisible(find.text('Analysis details'));
+      await tester.tap(find.text('Analysis details'));
+      await tester.pumpAndSettle();
       expect(
         find.textContaining('mobilenet-v3-small-v2-20261009'),
         findsOneWidget,
       );
       expect(find.byKey(const Key('leaf-image-preview')), findsOneWidget);
       expect(find.text('Four-class breakdown'), findsOneWidget);
+      await tester.ensureVisible(find.text('All model scores'));
+      await tester.tap(find.text('All model scores'));
+      await tester.pumpAndSettle();
       for (final label in [
         'Healthy',
         'Northern_Corn_Leaf_Blight',
@@ -179,6 +185,9 @@ void main() {
       expect(find.text('Below confidence threshold'), findsOneWidget);
       expect(find.text('Policy threshold: 80.0%'), findsOneWidget);
       expect(find.byKey(const Key('saved-leaf-image')), findsOneWidget);
+      await tester.ensureVisible(find.text('All model scores'));
+      await tester.tap(find.text('All model scores'));
+      await tester.pumpAndSettle();
       expect(find.byType(LinearProgressIndicator), findsNWidgets(4));
       expect(tester.takeException(), isNull);
     },

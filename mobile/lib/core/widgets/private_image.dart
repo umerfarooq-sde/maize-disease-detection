@@ -60,7 +60,11 @@ class PrivateImage extends StatelessWidget {
                 : Image.memory(
                     model.bytes!,
                     fit: fit,
-                    cacheWidth: AppConstants.previewPixels,
+                    cacheWidth: width == null
+                        ? AppConstants.previewPixels
+                        : (width! * MediaQuery.devicePixelRatioOf(context))
+                              .ceil()
+                              .clamp(1, AppConstants.previewPixels),
                     semanticLabel: semanticLabel,
                     errorBuilder: (_, _, _) => retry(),
                   ),

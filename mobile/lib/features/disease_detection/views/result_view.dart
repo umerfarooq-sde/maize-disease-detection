@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:go_router/go_router.dart';
+import '../../../core/routes/app_routes.dart';
+import '../../../data/models/knowledge.dart';
 import '../../../core/theme/design_tokens.dart';
 import '../../../core/widgets/app_page.dart';
 import '../../../core/widgets/app_states.dart';
@@ -16,15 +19,11 @@ class ScanResultView extends StatelessWidget {
   Widget build(BuildContext context) {
     final model = context.watch<ScanResultViewModel>();
     return AppPage(
+      maxWidth: AppSizing.readingMaxWidth,
       storageKey: 'scan-result-${model.scanId}',
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
-          Text(
-            'Leaf analysis',
-            style: Theme.of(context).textTheme.headlineMedium,
-          ),
-          const SizedBox(height: AppSpacing.lg),
           if (model.busy) ...[
             AppLoadingState(
               message: model.uploading && model.progress < 1
@@ -43,6 +42,12 @@ class ScanResultView extends StatelessWidget {
                 busy: model.busy,
                 onRetry: model.canRetryAnalysis ? model.retryAnalysis : null,
                 onRefresh: model.refresh,
+                actions: _ResultActions(
+                  scan: scan,
+                  busy: model.busy,
+                  onExplainScan: onExplainScan,
+                  onNewScan: onNewScan,
+                ),
               ),
             ),
           if (model.error case final error?) ...[
@@ -54,24 +59,10 @@ class ScanResultView extends StatelessWidget {
                   : model.refresh,
             ),
           ],
-          if (onExplainScan != null &&
-              model.scan?.status == ScanStatus.completed &&
-              model.scan?.prediction != null) ...[
-            const SizedBox(height: AppSpacing.lg),
-            OutlinedButton.icon(
-              key: const Key('explain-scan-action'),
-              onPressed: model.busy ? null : () => onExplainScan!(model.scan!),
-              icon: const Icon(Icons.auto_stories_outlined),
-              label: const Text('Ask reviewed knowledge about this scan'),
-            ),
+          if (model.scan == null) ...[
+            const SizedBox(height: AppSpacing.xl),
+            _ResultActions(busy: model.busy, onNewScan: onNewScan),
           ],
-          const SizedBox(height: AppSpacing.xl),
-          FilledButton.icon(
-            key: const Key('new-scan-action'),
-            onPressed: model.busy ? null : onNewScan,
-            icon: const Icon(Icons.add_a_photo_outlined),
-            label: const Text('Scan another leaf'),
-          ),
         ],
       ),
     );
@@ -90,9 +81,7 @@ class _ResultAppearance extends StatelessWidget {
     return TweenAnimationBuilder<double>(
       key: ValueKey(status),
       tween: Tween(begin: reduceMotion ? 1 : 0, end: 1),
-      duration: reduceMotion
-          ? Duration.zero
-          : const Duration(milliseconds: 220),
+      duration: AppMotion.resolve(context, AppMotion.reveal),
       curve: Curves.easeOutCubic,
       child: child,
       builder: (context, value, child) => Opacity(
@@ -102,6 +91,64 @@ class _ResultAppearance extends StatelessWidget {
           child: child,
         ),
       ),
+    );
+  }
+}
+
+class _ResultActions extends StatelessWidget {
+  const _ResultActions({
+    required this.busy,
+    this.scan,
+    this.onNewScan,
+    this.onExplainScan,
+  });
+  final ScanRecord? scan;
+  final bool busy;
+  final VoidCallback? onNewScan;
+  final ValueChanged<ScanRecord>? onExplainScan;
+  @override
+  Widget build(BuildContext context) {
+    final current = scan;
+    final prediction = current?.prediction;
+    final slug = prediction == null
+        ? null
+        : knowledgeSlugForClass(prediction.predictedClass);
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      children: [
+        if (slug != null) ...[
+          FilledButton.icon(
+            key: const Key('read-disease-information'),
+            onPressed: busy
+                ? null
+                : () => context.go('${AppRoutes.knowledge}/$slug'),
+            icon: const Icon(Icons.menu_book_outlined),
+            label: Text(
+              prediction!.predictedClass == 'Healthy'
+                  ? 'Read healthy leaf information'
+                  : 'Read disease information',
+            ),
+          ),
+          const SizedBox(height: AppSpacing.md),
+        ],
+        if (current?.status == ScanStatus.completed &&
+            prediction != null &&
+            onExplainScan != null) ...[
+          OutlinedButton.icon(
+            key: const Key('explain-scan-action'),
+            onPressed: busy ? null : () => onExplainScan!(current!),
+            icon: const Icon(Icons.chat_bubble_outline),
+            label: const Text('Explain this scan'),
+          ),
+          const SizedBox(height: AppSpacing.md),
+        ],
+        OutlinedButton.icon(
+          key: const Key('new-scan-action'),
+          onPressed: busy ? null : onNewScan,
+          icon: const Icon(Icons.add_a_photo_outlined),
+          label: const Text('Scan another leaf'),
+        ),
+      ],
     );
   }
 }

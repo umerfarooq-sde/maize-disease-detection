@@ -36,6 +36,9 @@ void main() {
             ),
           ),
         );
+        await tester.ensureVisible(find.text('All model scores'));
+        await tester.tap(find.text('All model scores'));
+        await tester.pumpAndSettle();
         for (final name in ScanPrediction.classLabels) {
           expect(
             find.byKey(ValueKey('prediction-score-$name')),

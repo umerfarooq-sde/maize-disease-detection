@@ -6,10 +6,15 @@ import '../../../core/widgets/app_page.dart';
 import '../../../core/widgets/app_states.dart';
 import '../../../data/datasources/leaf_image_datasource.dart';
 import '../../../data/models/scan_record.dart';
+import '../../../data/models/selected_leaf_image.dart';
+import '../../../core/widgets/app_cards.dart';
 import '../view_models/scan_result_arguments.dart';
 import '../view_models/scan_view_model.dart';
 import '../utils/scan_polling.dart';
 import '../widgets/scan_preview.dart';
+import '../widgets/scan_photo_guide.dart';
+import '../widgets/scan_operation_status.dart';
+import '../widgets/scan_photo_actions.dart';
 import '../widgets/scan_result_card.dart';
 
 class ScanView extends StatefulWidget {
@@ -41,34 +46,37 @@ class _ScanViewState extends State<ScanView> {
     final text = Theme.of(context).textTheme;
     final stage = model.stage;
     return AppPage(
+      maxWidth: AppSizing.readingMaxWidth,
       storageKey: 'scan-page',
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
-          Text('Scan a maize leaf', style: text.headlineMedium),
+          Semantics(
+            header: true,
+            child: Text('Scan a maize leaf', style: text.headlineMedium),
+          ),
           const SizedBox(height: AppSpacing.sm),
           Text(
             'Start with a clear photo of one leaf. Review it before analysis.',
             style: text.bodyLarge,
           ),
           const SizedBox(height: AppSpacing.xl),
-          if (model.image case final image?)
-            ScanPreview(image: image)
-          else
-            const _PhotoGuide(),
+          const _SelectionPreview(),
           const SizedBox(height: AppSpacing.lg),
           _StageTransition(
             stage: stage,
             child: switch (stage) {
-              ScanFlowStage.idle => _IdleActions(model: model),
+              ScanFlowStage.idle => ScanReadyActions(model: model),
               ScanFlowStage.selecting => AppLoadingState(
                 message: model.lastSource == LeafImageSource.camera
                     ? 'Opening your camera…'
                     : 'Opening your photos…',
               ),
-              ScanFlowStage.selected => _SelectedActions(model: model),
-              ScanFlowStage.uploading => _UploadState(progress: model.progress),
-              ScanFlowStage.processing => _ProcessingState(
+              ScanFlowStage.selected => ScanSelectedActions(model: model),
+              ScanFlowStage.uploading => ScanUploadStatus(
+                progress: model.progress,
+              ),
+              ScanFlowStage.processing => ScanProcessingStatus(
                 scan: model.scan!,
                 checking: model.polling,
                 onRefresh: model.refreshAnalysis,
@@ -87,7 +95,7 @@ class _ScanViewState extends State<ScanView> {
           ),
           const SizedBox(height: AppSpacing.lg),
           Text(
-            'JPEG, PNG or WebP · up to 5 MB and 16 megapixels. Sign-in is optional for leaf uploads.',
+            'JPEG, PNG or WebP · up to 5 MiB and 16 megapixels. Sign-in is optional for leaf uploads.',
             style: text.bodySmall,
           ),
           const SizedBox(height: AppSpacing.sm),
@@ -108,241 +116,18 @@ class _StageTransition extends StatelessWidget {
   final Widget child;
 
   @override
-  Widget build(BuildContext context) => AnimatedSize(
-    duration: MediaQuery.disableAnimationsOf(context)
-        ? Duration.zero
-        : const Duration(milliseconds: 180),
-    curve: Curves.easeOutCubic,
-    alignment: Alignment.topCenter,
-    child: KeyedSubtree(key: ValueKey(stage), child: child),
-  );
-}
-
-class _IdleActions extends StatelessWidget {
-  const _IdleActions({required this.model});
-
-  final ScanViewModel model;
-
-  @override
-  Widget build(BuildContext context) => Column(
-    crossAxisAlignment: CrossAxisAlignment.stretch,
-    children: [
-      if (model.cameraSupported)
-        FilledButton.icon(
-          key: const Key('camera-leaf-action'),
-          onPressed: () => model.select(LeafImageSource.camera),
-          icon: const Icon(Icons.photo_camera_outlined),
-          label: const Text('Take a leaf photo'),
-        )
-      else
-        FilledButton.icon(
-          key: const Key('gallery-leaf-action'),
-          onPressed: () => model.select(LeafImageSource.gallery),
-          icon: const Icon(Icons.photo_library_outlined),
-          label: const Text('Choose from gallery'),
-        ),
-      if (model.cameraSupported) ...[
-        const SizedBox(height: AppSpacing.md),
-        OutlinedButton.icon(
-          key: const Key('gallery-leaf-action'),
-          onPressed: () => model.select(LeafImageSource.gallery),
-          icon: const Icon(Icons.photo_library_outlined),
-          label: const Text('Choose from gallery'),
-        ),
-      ],
-    ],
-  );
-}
-
-class _SelectedActions extends StatelessWidget {
-  const _SelectedActions({required this.model});
-
-  final ScanViewModel model;
-
-  @override
-  Widget build(BuildContext context) => Column(
-    crossAxisAlignment: CrossAxisAlignment.stretch,
-    children: [
-      Semantics(
-        liveRegion: true,
-        child: const Text(
-          'Photo ready. Review the image, then choose Analyze leaf.',
-        ),
-      ),
-      const SizedBox(height: AppSpacing.md),
-      FilledButton.icon(
-        key: const Key('upload-leaf-action'),
-        onPressed: model.upload,
-        icon: const Icon(Icons.document_scanner_outlined),
-        label: const Text('Analyze this leaf'),
-      ),
-      const SizedBox(height: AppSpacing.md),
-      _ReselectActions(model: model, removeLabel: 'Remove photo'),
-    ],
-  );
-}
-
-class _ReselectActions extends StatelessWidget {
-  const _ReselectActions({required this.model, required this.removeLabel});
-
-  final ScanViewModel model;
-  final String removeLabel;
-
-  @override
-  Widget build(BuildContext context) => Wrap(
-    alignment: WrapAlignment.center,
-    spacing: AppSpacing.sm,
-    runSpacing: AppSpacing.sm,
-    children: [
-      OutlinedButton.icon(
-        key: const Key('gallery-leaf-action'),
-        onPressed: () => model.select(LeafImageSource.gallery),
-        icon: const Icon(Icons.photo_library_outlined),
-        label: const Text('Choose another photo'),
-      ),
-      if (model.cameraSupported)
-        OutlinedButton.icon(
-          key: const Key('camera-leaf-action'),
-          onPressed: () => model.select(LeafImageSource.camera),
-          icon: const Icon(Icons.photo_camera_outlined),
-          label: const Text('Take another photo'),
-        ),
-      TextButton.icon(
-        onPressed: model.clear,
-        icon: const Icon(Icons.close),
-        label: Text(removeLabel),
-      ),
-    ],
-  );
-}
-
-class _UploadState extends StatelessWidget {
-  const _UploadState({required this.progress});
-
-  final double progress;
-
-  @override
   Widget build(BuildContext context) {
-    final transferring = progress < 1;
-    final percent = (progress * 100).round();
-    return Semantics(
-      liveRegion: true,
-      label: transferring
-          ? 'Uploading photo, $percent percent'
-          : 'Upload sent, waiting for the server',
-      child: Card(
-        child: Padding(
-          padding: const EdgeInsets.all(AppSpacing.xl),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: [
-              Text(
-                transferring ? 'Uploading securely' : 'Finalizing upload',
-                style: Theme.of(context).textTheme.titleLarge,
-              ),
-              const SizedBox(height: AppSpacing.md),
-              LinearProgressIndicator(value: transferring ? progress : null),
-              const SizedBox(height: AppSpacing.md),
-              Text(
-                transferring
-                    ? 'Uploading photo… $percent%'
-                    : 'The photo is uploaded. Waiting for the server to save it safely…',
-              ),
-              const SizedBox(height: AppSpacing.sm),
-              Text(
-                'Keep this screen open until the upload finishes.',
-                style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                  color: Theme.of(context).colorScheme.onSurfaceVariant,
-                ),
-              ),
-            ],
-          ),
-        ),
-      ),
+    final content = KeyedSubtree(key: ValueKey(stage), child: child);
+    // A reduced-motion transition needs no size controller at all. Keeping an
+    // AnimatedSize with a zero duration can re-dirty its own layout on changes.
+    if (MediaQuery.disableAnimationsOf(context)) return content;
+    return AnimatedSize(
+      duration: AppMotion.navigation,
+      curve: Curves.easeOutCubic,
+      alignment: Alignment.topCenter,
+      child: content,
     );
   }
-}
-
-class _ProcessingState extends StatelessWidget {
-  const _ProcessingState({
-    required this.scan,
-    required this.checking,
-    required this.onRefresh,
-    required this.onNewScan,
-  });
-
-  final ScanRecord scan;
-  final bool checking;
-  final VoidCallback onRefresh;
-  final VoidCallback onNewScan;
-
-  @override
-  Widget build(BuildContext context) => Column(
-    crossAxisAlignment: CrossAxisAlignment.stretch,
-    children: [
-      Semantics(
-        liveRegion: true,
-        child: Card(
-          child: Padding(
-            padding: const EdgeInsets.all(AppSpacing.xl),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              children: [
-                Row(
-                  children: [
-                    if (checking)
-                      const SizedBox.square(
-                        dimension: AppSizing.stateIcon,
-                        child: CircularProgressIndicator(strokeWidth: 3),
-                      )
-                    else
-                      Icon(
-                        Icons.schedule_outlined,
-                        size: AppSizing.stateIcon,
-                        color: Theme.of(context).colorScheme.primary,
-                      ),
-                    const SizedBox(width: AppSpacing.lg),
-                    Expanded(
-                      child: Text(
-                        scan.status == ScanStatus.processing
-                            ? 'Analyzing your leaf'
-                            : 'Waiting for analysis',
-                        style: Theme.of(context).textTheme.titleLarge,
-                      ),
-                    ),
-                  ],
-                ),
-                const SizedBox(height: AppSpacing.lg),
-                const Text(
-                  'Your photo is saved. The service is still analyzing it.',
-                ),
-                const SizedBox(height: AppSpacing.sm),
-                Text(
-                  checking
-                      ? 'Analyzing leaf… checking status'
-                      : 'Analysis is taking longer than usual. You can check again safely.',
-                  style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                    color: Theme.of(context).colorScheme.onSurfaceVariant,
-                  ),
-                ),
-                if (!checking) ...[
-                  const SizedBox(height: AppSpacing.lg),
-                  OutlinedButton.icon(
-                    key: const Key('refresh-analysis-action'),
-                    onPressed: onRefresh,
-                    icon: const Icon(Icons.refresh),
-                    label: const Text('Check analysis status'),
-                  ),
-                ],
-              ],
-            ),
-          ),
-        ),
-      ),
-      const SizedBox(height: AppSpacing.sm),
-      TextButton(onPressed: onNewScan, child: const Text('Start a new scan')),
-    ],
-  );
 }
 
 class _FailedState extends StatelessWidget {
@@ -361,7 +146,7 @@ class _FailedState extends StatelessWidget {
         onRetry: model.canRetryAnalysis ? model.upload : null,
       ),
       const SizedBox(height: AppSpacing.md),
-      _ReselectActions(model: model, removeLabel: 'Start a new scan'),
+      ScanReselectActions(model: model, removeLabel: 'Start a new scan'),
     ],
   );
 }
@@ -405,6 +190,7 @@ class _ScanErrorState extends StatelessWidget {
           liveRegion: true,
           child: AppEmptyState(
             title: title,
+            tone: AppStatusTone.error,
             message: error.message,
             icon: error.kind == AppErrorKind.imageAccess
                 ? Icons.no_photography_outlined
@@ -419,7 +205,7 @@ class _ScanErrorState extends StatelessWidget {
         ),
         if (model.image != null && !pending) ...[
           const SizedBox(height: AppSpacing.md),
-          _ReselectActions(model: model, removeLabel: 'Remove photo'),
+          ScanReselectActions(model: model, removeLabel: 'Remove photo'),
         ] else if (model.image == null &&
             model.lastSource == LeafImageSource.camera) ...[
           const SizedBox(height: AppSpacing.md),
@@ -435,60 +221,13 @@ class _ScanErrorState extends StatelessWidget {
   }
 }
 
-class _PhotoGuide extends StatelessWidget {
-  const _PhotoGuide();
+class _SelectionPreview extends StatelessWidget {
+  const _SelectionPreview();
   @override
-  Widget build(BuildContext context) => Card(
-    color: Theme.of(context).colorScheme.primaryContainer,
-    child: Padding(
-      padding: const EdgeInsets.all(AppSpacing.xl),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Icon(
-            Icons.eco_outlined,
-            size: AppSizing.emblem,
-            color: Theme.of(context).colorScheme.onPrimaryContainer,
-          ),
-          const SizedBox(height: AppSpacing.lg),
-          Text(
-            'A good photo starts here',
-            style: Theme.of(context).textTheme.titleLarge,
-          ),
-          const SizedBox(height: AppSpacing.md),
-          const Text('Use natural light and keep the leaf in focus.'),
-          const SizedBox(height: AppSpacing.md),
-          const _GuideTip(
-            icon: Icons.center_focus_strong,
-            text: 'Fill the frame with one leaf.',
-          ),
-          const SizedBox(height: AppSpacing.sm),
-          const _GuideTip(
-            icon: Icons.wb_sunny_outlined,
-            text: 'Avoid harsh shadows and blur.',
-          ),
-        ],
-      ),
-    ),
-  );
-}
-
-class _GuideTip extends StatelessWidget {
-  const _GuideTip({required this.icon, required this.text});
-
-  final IconData icon;
-  final String text;
-
-  @override
-  Widget build(BuildContext context) => Row(
-    children: [
-      Icon(
-        icon,
-        size: AppSizing.icon,
-        color: Theme.of(context).colorScheme.onPrimaryContainer,
-      ),
-      const SizedBox(width: AppSpacing.sm),
-      Expanded(child: Text(text)),
-    ],
-  );
+  Widget build(BuildContext context) =>
+      Selector<ScanViewModel, SelectedLeafImage?>(
+        selector: (_, model) => model.image,
+        builder: (_, image, _) =>
+            image == null ? const ScanPhotoGuide() : ScanPreview(image: image),
+      );
 }

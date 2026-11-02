@@ -63,8 +63,22 @@ GoRouter createAppRouter({String initialLocation = AppRoutes.home}) => GoRouter(
             GoRoute(
               path: AppRoutes.home,
               builder: (context, _) => ChangeNotifierProvider(
-                create: (_) => HomeViewModel(context.read<BackendRepository>()),
-                child: const HomeView(),
+                key: ValueKey(
+                  'home-${context.watch<FarmerSessionViewModel>().revision}',
+                ),
+                create: (_) => HomeViewModel(
+                  context.read<BackendRepository>(),
+                  records: context.read<ScanRecordsRepository>(),
+                )..loadRecentScans(),
+                child: HomeView(
+                  onOpenScan: (scan) => context.push(
+                    '${AppRoutes.history}/scans/${scan.id}',
+                    extra: _ResultNavigation(
+                      ScanResultArguments(scan: scan),
+                      context.read<FarmerSessionViewModel>().revision,
+                    ),
+                  ),
+                ),
               ),
             ),
           ],

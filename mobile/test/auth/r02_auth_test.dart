@@ -93,11 +93,17 @@ void main() {
     'Home account action uses initials without an extra profile/image request',
     (tester) async {
       var calls = 0;
+      final paths = <String>[];
       await tester.pumpWidget(
         MainApp(
           config: AppConfig(apiBaseUrl: 'https://api.example.test/api/v1'),
-          httpClient: MockClient((_) async {
+          httpClient: MockClient((request) async {
             calls++;
+            paths.add(request.url.path);
+            if (request.url.path.endsWith('/scans')) {
+              expect(request.url.queryParameters['limit'], '3');
+              return response({'items': [], 'nextCursor': null});
+            }
             return response(grant(), setCookie: cookie);
           }),
         ),
@@ -119,11 +125,11 @@ void main() {
         ),
         findsOneWidget,
       );
-      expect(calls, 1);
+      expect(calls, 2);
       await tester.tap(find.byKey(const Key('open-profile')));
       await tester.pumpAndSettle();
       expect(find.textContaining('Signed in as'), findsOneWidget);
-      expect(calls, 1);
+      expect(calls, 2);
       expect(tester.takeException(), isNull);
     },
   );

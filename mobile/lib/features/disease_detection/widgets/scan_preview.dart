@@ -4,8 +4,9 @@ import '../../../core/theme/design_tokens.dart';
 import '../../../data/models/selected_leaf_image.dart';
 
 class ScanPreview extends StatelessWidget {
-  const ScanPreview({required this.image, super.key});
+  const ScanPreview({required this.image, this.submitted = false, super.key});
   final SelectedLeafImage image;
+  final bool submitted;
   static const _aspectRatio = 4 / 3;
   @override
   Widget build(BuildContext context) => Card(
@@ -15,15 +16,18 @@ class ScanPreview extends StatelessWidget {
       children: [
         AspectRatio(
           aspectRatio: _aspectRatio,
-          child: Image.memory(
-            image.bytes,
-            key: const Key('leaf-image-preview'),
-            fit: BoxFit.contain,
-            cacheWidth: AppConstants.previewPixels,
-            semanticLabel: 'Selected maize leaf photo',
-            errorBuilder: (_, _, _) => const Center(
-              child: Text(
-                'This photo cannot be previewed. Choose another photo.',
+          child: ColoredBox(
+            color: Theme.of(context).colorScheme.surfaceContainerLow,
+            child: Image.memory(
+              image.bytes,
+              key: const Key('leaf-image-preview'),
+              fit: BoxFit.contain,
+              cacheWidth: AppConstants.previewPixels,
+              semanticLabel: 'Selected maize leaf photo',
+              errorBuilder: (_, _, _) => const Center(
+                child: Text(
+                  'This photo cannot be previewed. Choose another photo.',
+                ),
               ),
             ),
           ),
@@ -42,7 +46,7 @@ class ScanPreview extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      'Photo ready to review',
+                      submitted ? 'Submitted leaf photo' : 'Review your photo',
                       style: Theme.of(context).textTheme.titleMedium,
                     ),
                     const SizedBox(height: AppSpacing.xs),

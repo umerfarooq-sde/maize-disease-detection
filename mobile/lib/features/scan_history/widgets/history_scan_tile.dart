@@ -6,9 +6,15 @@ import '../../../data/models/scan_record.dart';
 import '../../disease_detection/utils/scan_presentation.dart';
 
 class HistoryScanTile extends StatelessWidget {
-  const HistoryScanTile({required this.scan, this.onOpen, super.key});
+  const HistoryScanTile({
+    required this.scan,
+    this.onOpen,
+    this.compact = false,
+    super.key,
+  });
   final ScanRecord scan;
   final VoidCallback? onOpen;
+  final bool compact;
 
   @override
   Widget build(BuildContext context) {
@@ -47,26 +53,31 @@ class HistoryScanTile extends StatelessWidget {
                       prediction == null
                           ? scanStatusLabel(scan.status)
                           : 'Model suggestion: ${diseaseLabel(prediction.predictedClass)}',
-                      style: text.titleMedium,
+                      style: compact ? text.titleSmall : text.titleMedium,
                     ),
                     const SizedBox(height: AppSpacing.xs),
                     if (prediction != null) ...[
                       Text('Model score: ${modelScore(prediction.confidence)}'),
-                      Text(
-                        'Model: ${prediction.modelVersion}',
-                        style: text.bodySmall,
-                      ),
+                      if (!compact)
+                        Text(
+                          'Model: ${prediction.modelVersion}',
+                          style: text.bodySmall,
+                        ),
                       if (uncertain)
                         Text(
                           'Uncertain result',
-                          style: text.labelLarge?.copyWith(color: colors.error),
+                          style: text.labelLarge?.copyWith(
+                            color: compact
+                                ? context.semanticColors.warning
+                                : colors.error,
+                          ),
                         ),
                     ],
                     if (scan.status == ScanStatus.failed)
                       const Text(
                         'Your photo is saved. Open the scan for details.',
                       ),
-                    if (onOpen != null) ...[
+                    if (onOpen != null && !compact) ...[
                       const SizedBox(height: AppSpacing.sm),
                       Text(
                         'View scan',

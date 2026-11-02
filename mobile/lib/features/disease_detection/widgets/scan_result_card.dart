@@ -6,6 +6,7 @@ import '../../../data/models/selected_leaf_image.dart';
 import '../utils/scan_presentation.dart';
 import 'prediction_summary.dart';
 import 'scan_result_image.dart';
+import 'result_disclosure.dart';
 
 /// Shared public scan presentation for fresh results and owned history details.
 class ScanResultCard extends StatelessWidget {
@@ -17,6 +18,7 @@ class ScanResultCard extends StatelessWidget {
     this.onRefresh,
     this.busy = false,
     this.showImage = true,
+    this.actions,
     super.key,
   });
   final ScanRecord scan;
@@ -26,6 +28,7 @@ class ScanResultCard extends StatelessWidget {
   final VoidCallback? onRefresh;
   final bool busy;
   final bool showImage;
+  final Widget? actions;
 
   @override
   Widget build(BuildContext context) => Column(
@@ -55,9 +58,14 @@ class ScanResultCard extends StatelessWidget {
               ),
               const SizedBox(height: AppSpacing.lg),
               if (scan.prediction case final prediction?) ...[
-                PredictionSummary(prediction: prediction),
+                PredictionSummary(prediction: prediction, actions: actions),
                 const SizedBox(height: AppSpacing.lg),
-                _AnalysisMetadata(prediction: prediction),
+                ResultDisclosure(
+                  key: const Key('analysis-details'),
+                  title: 'Analysis details',
+                  subtitle: 'Model and confidence policy',
+                  child: _AnalysisMetadata(prediction: prediction),
+                ),
               ] else if (scan.status == ScanStatus.failed) ...[
                 Text(scanFailureMessage(scan.analysisErrorCode)),
                 if (onRetry != null) ...[
@@ -85,6 +93,10 @@ class ScanResultCard extends StatelessWidget {
                     label: const Text('Check analysis status'),
                   ),
                 ],
+              ],
+              if (scan.prediction == null && actions != null) ...[
+                const SizedBox(height: AppSpacing.xl),
+                actions!,
               ],
             ],
           ),
@@ -174,29 +186,36 @@ class _AnalysisMetadata extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Row(
-            children: [
-              Icon(Icons.info_outline, color: colors.onSurfaceVariant),
-              const SizedBox(width: AppSpacing.sm),
-              Expanded(
-                child: Text(
-                  'Analysis details',
-                  style: Theme.of(context).textTheme.titleSmall,
-                ),
-              ),
-            ],
+          SelectableText(
+            'Model version: ${prediction.modelVersion}',
+            key: const PageStorageKey('result-model-version'),
           ),
-          const SizedBox(height: AppSpacing.md),
-          SelectableText('Model version: ${prediction.modelVersion}'),
           const SizedBox(height: AppSpacing.xs),
           SelectableText(
             'Preprocessing version: ${prediction.preprocessingVersion}',
+            key: const PageStorageKey('result-preprocessing-version'),
           ),
           const SizedBox(height: AppSpacing.xs),
           Text('Analyzed ${scanDate(prediction.inferredAt)}'),
           const SizedBox(height: AppSpacing.xs),
           Text(
-            'Model inference: ${prediction.inferenceDurationMs.toStringAsFixed(0)} ms',
+            'Prediction status: ${prediction.predictionStatus == ScanPredictionStatus.lowConfidence ? 'LOW_CONFIDENCE' : 'CONFIDENT'}',
+          ),
+          const SizedBox(height: AppSpacing.xs),
+          Text(
+            'Confidence policy: ${switch (prediction.uncertaintyReason) {
+              ScanUncertaintyReason.thresholdUnconfigured => 'THRESHOLD_UNCONFIGURED',
+              ScanUncertaintyReason.belowValidationThreshold => 'BELOW_VALIDATION_THRESHOLD',
+              null => 'Configured threshold met',
+            }}',
+          ),
+          const SizedBox(height: AppSpacing.xs),
+          Text(
+            'Confidence threshold: ${prediction.confidenceThreshold?.toString() ?? 'null (not configured)'}',
+          ),
+          const SizedBox(height: AppSpacing.xs),
+          Text(
+            'Model inference: ${prediction.inferenceDurationMs.toString()} ms',
           ),
         ],
       ),

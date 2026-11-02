@@ -11,7 +11,10 @@ class ConnectionCard extends StatelessWidget {
   Widget build(BuildContext context) {
     final Widget content;
     if (model.isLoading) {
-      content = const AppLoadingState(message: 'Checking connection…');
+      content = const AppLoadingState(
+        message: 'Checking connection…',
+        inline: true,
+      );
     } else if (model.error case final error?) {
       content = AppErrorState(error: error, onRetry: model.checkConnection);
     } else if (model.health?.isAvailable == false) {
@@ -35,9 +38,9 @@ class ConnectionCard extends StatelessWidget {
               Expanded(
                 child: Text(
                   model.health == null
-                      ? 'Ready when you are'
+                      ? 'Service connection'
                       : 'Service connected',
-                  style: Theme.of(context).textTheme.titleMedium,
+                  style: Theme.of(context).textTheme.titleSmall,
                 ),
               ),
             ],
@@ -45,16 +48,16 @@ class ConnectionCard extends StatelessWidget {
           const SizedBox(height: AppSpacing.sm),
           Text(
             model.health == null
-                ? 'Check the service connection when you need it.'
-                : 'The MAIZEDOCTOR service was reachable at the last check.',
-            style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                ? 'Not checked yet.'
+                : 'Reachable at the last check.',
+            style: Theme.of(context).textTheme.bodySmall?.copyWith(
               color: Theme.of(context).colorScheme.onSurfaceVariant,
             ),
           ),
           const SizedBox(height: AppSpacing.md),
           Align(
             alignment: Alignment.centerLeft,
-            child: OutlinedButton.icon(
+            child: TextButton.icon(
               onPressed: model.checkConnection,
               icon: const Icon(Icons.refresh),
               label: Text(
@@ -67,7 +70,7 @@ class ConnectionCard extends StatelessWidget {
     }
     return Card(
       child: Padding(
-        padding: const EdgeInsets.all(AppSpacing.xl),
+        padding: const EdgeInsets.all(AppSpacing.lg),
         child: content,
       ),
     );

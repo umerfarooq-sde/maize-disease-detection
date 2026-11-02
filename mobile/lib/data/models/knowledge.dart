@@ -144,13 +144,8 @@ class KnowledgeMatch {
   final String diseaseLabel;
   final double similarity;
   // Existing public catalogue slugs; this is navigation, never a model remapping.
-  String get diseaseSlug => switch (diseaseLabel) {
-    'Common_Rust' => 'common-rust',
-    'Gray_Leaf_Spot' => 'gray-leaf-spot',
-    'Healthy' => 'healthy',
-    'Northern_Corn_Leaf_Blight' => 'northern-corn-leaf-blight',
-    _ => throw _invalid(),
-  };
+  String get diseaseSlug =>
+      knowledgeSlugForClass(diseaseLabel) ?? (throw _invalid());
   factory KnowledgeMatch.fromJson(Object? value) {
     final data = _object(value);
     final label = data['diseaseLabel'];
@@ -213,3 +208,12 @@ String _text(Object? value, int maximum, {bool allowEmpty = false}) {
 }
 
 AppException _invalid() => const AppException(AppErrorKind.invalidResponse);
+
+// Existing catalogue navigation only; this does not change classifier labels.
+String? knowledgeSlugForClass(String label) => switch (label) {
+  'Common_Rust' => 'common-rust',
+  'Gray_Leaf_Spot' => 'gray-leaf-spot',
+  'Healthy' => 'healthy',
+  'Northern_Corn_Leaf_Blight' => 'northern-corn-leaf-blight',
+  _ => null,
+};
