@@ -1,0 +1,437 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 630" width="100%" height="100%" role="img" aria-labelledby="heroTitle heroDesc">
+  <title id="heroTitle">MAIZEDOCTOR — AI-Powered Maize Disease Detection and Decision Platform</title>
+  <desc id="heroDesc">Isometric 3D illustration featuring a maize leaf within a high-tech neural scan frame, floating telemetry cards, and knowledge network nodes in deep forest green and lime tones.</desc>
+
+  <defs>
+    <!-- Gradients -->
+    <linearGradient id="bgGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#081812" />
+      <stop offset="45%" stop-color="#103B2A" />
+      <stop offset="85%" stop-color="#174C38" />
+      <stop offset="100%" stop-color="#0A2218" />
+    </linearGradient>
+
+    <linearGradient id="gridGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#8AD5AC" stop-opacity="0.12" />
+      <stop offset="100%" stop-color="#287551" stop-opacity="0.02" />
+    </linearGradient>
+
+    <linearGradient id="platformTop" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#1C5E43" />
+      <stop offset="100%" stop-color="#123B2A" />
+    </linearGradient>
+    <linearGradient id="platformLeft" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#123828" />
+      <stop offset="100%" stop-color="#0B2117" />
+    </linearGradient>
+    <linearGradient id="platformRight" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#184834" />
+      <stop offset="100%" stop-color="#0F2B1F" />
+    </linearGradient>
+
+    <linearGradient id="leafGrad1" x1="20%" y1="0%" x2="80%" y2="100%">
+      <stop offset="0%" stop-color="#A4E4BA" />
+      <stop offset="35%" stop-color="#389E6E" />
+      <stop offset="75%" stop-color="#236B4A" />
+      <stop offset="100%" stop-color="#14422D" />
+    </linearGradient>
+
+    <linearGradient id="leafGrad2" x1="80%" y1="0%" x2="20%" y2="100%">
+      <stop offset="0%" stop-color="#73CB96" />
+      <stop offset="45%" stop-color="#2A7B54" />
+      <stop offset="85%" stop-color="#1A5137" />
+      <stop offset="100%" stop-color="#0F3323" />
+    </linearGradient>
+
+    <linearGradient id="stemGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#4CAF7D" />
+      <stop offset="50%" stop-color="#E4F09A" />
+      <stop offset="100%" stop-color="#287551" />
+    </linearGradient>
+
+    <linearGradient id="scanBeam" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#E4F09A" stop-opacity="0.65" />
+      <stop offset="30%" stop-color="#8AD5AC" stop-opacity="0.30" />
+      <stop offset="100%" stop-color="#287551" stop-opacity="0.0" />
+    </linearGradient>
+
+    <linearGradient id="hudCardBg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#1C4B37" stop-opacity="0.88" />
+      <stop offset="100%" stop-color="#0E281E" stop-opacity="0.94" />
+    </linearGradient>
+
+    <linearGradient id="accentLime" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#E4F09A" />
+      <stop offset="100%" stop-color="#AEE874" />
+    </linearGradient>
+
+    <radialGradient id="centralGlow" cx="50%" cy="52%" r="40%">
+      <stop offset="0%" stop-color="#8AD5AC" stop-opacity="0.25" />
+      <stop offset="40%" stop-color="#287551" stop-opacity="0.15" />
+      <stop offset="80%" stop-color="#174C38" stop-opacity="0.04" />
+      <stop offset="100%" stop-color="#081812" stop-opacity="0.0" />
+    </radialGradient>
+
+    <!-- Drop Shadows and Filters -->
+    <filter id="shadowGlow" x="-20%" y="-20%" width="140%" height="140%">
+      <feGaussianBlur stdDeviation="8" result="blur" />
+      <feComposite in="SourceGraphic" in2="blur" operator="over" />
+    </filter>
+
+    <filter id="hudShadow" x="-20%" y="-20%" width="140%" height="140%">
+      <feDropShadow dx="0" dy="8" stdDeviation="10" flood-color="#040C08" flood-opacity="0.65" />
+    </filter>
+  </defs>
+
+  <!-- Background Base -->
+  <rect width="1200" height="630" fill="url(#bgGradient)" />
+
+  <!-- Ambient Central Illumination -->
+  <circle cx="600" cy="330" r="420" fill="url(#centralGlow)" />
+
+  <!-- Isometric Floor Grid System -->
+  <g opacity="0.35">
+    <!-- Isometric Grid Coordinates: origin (600, 390), delta u=(36, 20.78), v=(-36, 20.78) -->
+    <path d="
+      M600,120 L1032,369 L600,618 L168,369 Z
+      M600,161 L960,369 L600,577 L240,369 Z
+      M600,203 L888,369 L600,535 L312,369 Z
+      M600,245 L816,369 L600,493 L384,369 Z
+      M600,286 L744,369 L600,452 L456,369 Z
+    " fill="none" stroke="#8AD5AC" stroke-width="1" stroke-dasharray="2,4" />
+
+    <!-- Grid Rays extending outward -->
+    <path d="
+      M600,120 L600,618
+      M168,369 L1032,369
+      M312,203 L888,535
+      M888,203 L312,535
+      M456,161 L744,577
+      M744,161 L456,577
+    " fill="none" stroke="#287551" stroke-width="0.75" stroke-dasharray="3,6" />
+  </g>
+
+  <!-- Isometric Base Pedestal Platform -->
+  <g transform="translate(600, 395)" filter="url(#hudShadow)">
+    <!-- Lower Extrusion Depth -->
+    <!-- Left Face -->
+    <path d="M0,75 L-210,-46 L-210,-26 L0,95 Z" fill="url(#platformLeft)" />
+    <!-- Right Face -->
+    <path d="M0,75 L210,-46 L210,-26 L0,95 Z" fill="url(#platformRight)" />
+
+    <!-- Primary Top Surface -->
+    <polygon points="0,-66 210,-46 0,75 -210,-46" fill="url(#platformTop)" stroke="#8AD5AC" stroke-width="1.5" stroke-opacity="0.4" />
+
+    <!-- Inner Elevated Island -->
+    <!-- Left Wall -->
+    <path d="M0,45 L-160,-47 L-160,-37 L0,55 Z" fill="#0D271B" />
+    <!-- Right Wall -->
+    <path d="M0,45 L160,-47 L160,-37 L0,55 Z" fill="#143A29" />
+    <!-- Top Face -->
+    <polygon points="0,-57 160,-47 0,45 -160,-47" fill="#174431" stroke="#E4F09A" stroke-width="1" stroke-opacity="0.5" />
+
+    <!-- Glowing Contour Ring on Platform -->
+    <polygon points="0,-45 120,-38 0,33 -120,-38" fill="none" stroke="#E4F09A" stroke-width="1.5" stroke-dasharray="6,4" opacity="0.6" />
+  </g>
+
+  <!-- 3D Maize Plant & Architectural Leaf (Centerpiece) -->
+  <g transform="translate(600, 310)">
+    <!-- Ambient Shadow under Leaf Structure -->
+    <ellipse cx="0" cy="80" rx="110" ry="38" fill="#07150F" opacity="0.65" filter="url(#shadowGlow)" />
+
+    <!-- Maize Stem Base -->
+    <path d="M-14,95 C-12,40 -8,-20 -6,-70 L8,-70 C6,-20 12,40 14,95 Z" fill="url(#stemGrad)" opacity="0.9" />
+
+    <!-- Background Secondary Maize Leaf (Left Curling) -->
+    <path d="M-6,20 C-60,0 -130,-10 -185,-55 C-155,-95 -100,-75 -50,-50 C-18,-35 -8,-10 -6,15 Z" fill="url(#leafGrad2)" stroke="#287551" stroke-width="1" />
+    <!-- Secondary Leaf Venation -->
+    <path d="M-6,20 C-70,-10 -125,-40 -185,-55" fill="none" stroke="#8AD5AC" stroke-width="1.5" opacity="0.6" />
+    <path d="M-60,-12 C-90,-35 -115,-48 -135,-68" fill="none" stroke="#8AD5AC" stroke-width="0.8" opacity="0.4" />
+
+    <!-- Background Secondary Maize Leaf (Right Upright) -->
+    <path d="M4,10 C50,-25 110,-60 160,-130 C150,-155 115,-140 70,-100 C30,-65 10,-20 4,10 Z" fill="url(#leafGrad2)" stroke="#287551" stroke-width="1" />
+    <path d="M4,10 C55,-40 100,-85 160,-130" fill="none" stroke="#8AD5AC" stroke-width="1.5" opacity="0.6" />
+
+    <!-- Golden Maize Ear/Cob Feature (Architectural Inset) -->
+    <g transform="translate(-1, -15)">
+      <rect x="-11" y="-45" width="22" height="56" rx="10" fill="#E4F09A" opacity="0.95" />
+      <!-- Cob Texture Kernels -->
+      <path d="M-7,-32 H7 M-8,-22 H8 M-8,-12 H8 M-7,-2 H7" stroke="#795A12" stroke-width="1.8" stroke-linecap="round" />
+      <!-- Kernel Columns -->
+      <path d="M-3,-40 V3 M2,-40 V3" stroke="#795A12" stroke-width="1" opacity="0.4" stroke-dasharray="2,2" />
+      <!-- Protective Silk/Husk Fronds -->
+      <path d="M-11,-2 C-18,-20 -20,-50 -10,-65 C-8,-45 -4,-25 -2,-2 Z" fill="#389E6E" opacity="0.8" />
+      <path d="M11,-2 C18,-20 20,-50 10,-65 C8,-45 4,-25 2,-2 Z" fill="#287551" opacity="0.8" />
+    </g>
+
+    <!-- Primary Foreground Maize Leaf (Curving Gracefully Forward & Down) -->
+    <!-- Left Hemiface of Leaf -->
+    <path d="
+      M-2,-140
+      C-30,-90 -90,-40 -120,40
+      C-135,80 -100,120 -50,135
+      C-20,144 -4,110 -2,85
+      Z
+    " fill="url(#leafGrad1)" />
+
+    <!-- Right Hemiface of Leaf -->
+    <path d="
+      M-2,-140
+      C15,-90 55,-40 85,25
+      C105,70 95,115 50,135
+      C15,145 0,110 -2,85
+      Z
+    " fill="url(#leafGrad2)" />
+
+    <!-- Central Midrib Spine -->
+    <path d="M-2,-140 C-10,-50 -20,20 -2,85 C-1,110 5,125 0,140" fill="none" stroke="#E4F09A" stroke-width="3" stroke-linecap="round" filter="url(#shadowGlow)" />
+    <path d="M-2,-140 C-10,-50 -20,20 -2,85 C-1,110 5,125 0,140" fill="none" stroke="#FFFFFF" stroke-width="1.2" stroke-linecap="round" />
+
+    <!-- Fine Curvilinear Leaf Veins -->
+    <g fill="none" stroke="#A4E4BA" stroke-width="1.2" opacity="0.65">
+      <!-- Left Veins -->
+      <path d="M-4,-100 C-30,-80 -55,-60 -75,-30" />
+      <path d="M-6,-60 C-40,-40 -70,-15 -95,20" />
+      <path d="M-8,-20 C-45,5 -75,35 -105,75" />
+      <path d="M-10,25 C-40,55 -60,85 -75,120" />
+      <!-- Right Veins -->
+      <path d="M-1,-95 C20,-75 42,-55 58,-25" />
+      <path d="M-1,-55 C25,-35 50,-10 68,25" />
+      <path d="M0,-15 C30,10 55,40 75,80" />
+      <path d="M0,30 C25,60 45,90 55,120" />
+    </g>
+
+    <!-- Scanning HUD Framing & Laser Sweep Overlay -->
+    <!-- Floating Volumetric Scan Prism Box -->
+    <g transform="translate(0, -10)">
+      <!-- Isometric Bounding Wireframe -->
+      <polygon points="0,-165 140,-80 0,60 -140,-80" fill="url(#scanBeam)" stroke="#E4F09A" stroke-width="1.5" stroke-dasharray="6,6" opacity="0.85" />
+      <polygon points="0,-75 140,10 0,150 -140,10" fill="none" stroke="#8AD5AC" stroke-width="1" stroke-dasharray="3,3" opacity="0.45" />
+
+      <!-- Vertical Corner Guidewires -->
+      <line x1="0" y1="-165" x2="0" y2="-75" stroke="#E4F09A" stroke-width="1" stroke-opacity="0.5" />
+      <line x1="140" y1="-80" x2="140" y2="10" stroke="#E4F09A" stroke-width="1" stroke-opacity="0.5" />
+      <line x1="-140" y1="-80" x2="-140" y2="10" stroke="#E4F09A" stroke-width="1" stroke-opacity="0.5" />
+      <line x1="0" y1="60" x2="0" y2="150" stroke="#E4F09A" stroke-width="1" stroke-opacity="0.5" />
+
+      <!-- High-Intensity Active Laser Sweep Line -->
+      <g transform="translate(0, -25)">
+        <ellipse cx="0" cy="0" rx="115" ry="32" fill="none" stroke="#E4F09A" stroke-width="2.5" filter="url(#shadowGlow)" />
+        <ellipse cx="0" cy="0" rx="115" ry="32" fill="none" stroke="#FFFFFF" stroke-width="1" />
+        <ellipse cx="0" cy="0" rx="105" ry="28" fill="#E4F09A" fill-opacity="0.12" />
+        <!-- Corner Targeting Brackets on Laser Ring -->
+        <path d="M-80,-18 L-95,-12 L-95,-2" fill="none" stroke="#E4F09A" stroke-width="2.5" stroke-linecap="round" />
+        <path d="M80,-18 L95,-12 L95,-2" fill="none" stroke="#E4F09A" stroke-width="2.5" stroke-linecap="round" />
+        <path d="M-80,18 L-95,12 L-95,2" fill="none" stroke="#E4F09A" stroke-width="2.5" stroke-linecap="round" />
+        <path d="M80,18 L95,12 L95,2" fill="none" stroke="#E4F09A" stroke-width="2.5" stroke-linecap="round" />
+      </g>
+
+      <!-- Precision Target Reticle on Leaf Lesion Inspection Zone -->
+      <g transform="translate(-42, 10)">
+        <circle cx="0" cy="0" r="24" fill="none" stroke="#E4F09A" stroke-width="1.8" stroke-dasharray="4,2" />
+        <circle cx="0" cy="0" r="14" fill="#E4F09A" fill-opacity="0.2" stroke="#E4F09A" stroke-width="1.5" />
+        <circle cx="0" cy="0" r="3.5" fill="#FFFFFF" />
+        <!-- Crosshairs -->
+        <line x1="-30" y1="0" x2="-18" y2="0" stroke="#E4F09A" stroke-width="2" />
+        <line x1="18" y1="0" x2="30" y2="0" stroke="#E4F09A" stroke-width="2" />
+        <line x1="0" y1="-30" x2="0" y2="-18" stroke="#E4F09A" stroke-width="2" />
+        <line x1="0" y1="18" x2="0" y2="30" stroke="#E4F09A" stroke-width="2" />
+        <!-- Diagnostic Callout -->
+        <line x1="20" y1="-18" x2="48" y2="-36" stroke="#E4F09A" stroke-width="1.5" />
+        <line x1="48" y1="-36" x2="85" y2="-36" stroke="#E4F09A" stroke-width="1.5" />
+        <rect x="88" y="-46" width="76" height="20" rx="4" fill="#0F2B1F" stroke="#E4F09A" stroke-width="1" />
+        <text x="126" y="-32" font-family="'Plus Jakarta Sans', system-ui, sans-serif" font-size="9.5" font-weight="700" fill="#E4F09A" text-anchor="middle" letter-spacing="0.5">ROI: 99.4%</text>
+      </g>
+
+      <!-- Second Inspection Node (Healthy Tissue Reference) -->
+      <g transform="translate(36, -65)">
+        <circle cx="0" cy="0" r="16" fill="none" stroke="#8AD5AC" stroke-width="1.2" stroke-dasharray="3,2" />
+        <circle cx="0" cy="0" r="2.5" fill="#8AD5AC" />
+        <line x1="-12" y1="0" x2="12" y2="0" stroke="#8AD5AC" stroke-width="1" />
+        <line x1="0" y1="-12" x2="0" y2="12" stroke="#8AD5AC" stroke-width="1" />
+      </g>
+    </g>
+  </g>
+
+  <!-- Neural Network Mesh & Graph Constellation (Floating Left & Right) -->
+  <g opacity="0.85">
+    <!-- Connecting Synaptic Vectors -->
+    <path d="
+      M260,210 L350,260 L450,230 L550,280
+      M280,380 L350,260 L380,390 L490,440
+      M450,230 L530,180
+      M940,210 L850,260 L750,220 L660,270
+      M920,380 L850,260 L810,390 L710,440
+      M750,220 L670,170
+    " fill="none" stroke="#8AD5AC" stroke-width="1.2" stroke-dasharray="4,4" opacity="0.4" />
+
+    <!-- Left Network Nodes -->
+    <circle cx="260" cy="210" r="6" fill="#174C38" stroke="#8AD5AC" stroke-width="2" />
+    <circle cx="350" cy="260" r="8" fill="#287551" stroke="#E4F09A" stroke-width="2" filter="url(#shadowGlow)" />
+    <circle cx="450" cy="230" r="5" fill="#8AD5AC" />
+    <circle cx="280" cy="380" r="7" fill="#174C38" stroke="#8AD5AC" stroke-width="1.8" />
+    <circle cx="380" cy="390" r="5" fill="#E4F09A" />
+    <circle cx="490" cy="440" r="6" fill="#287551" stroke="#E4F09A" stroke-width="1.5" />
+    <circle cx="530" cy="180" r="4" fill="#E4F09A" />
+
+    <!-- Right Network Nodes -->
+    <circle cx="940" cy="210" r="6" fill="#174C38" stroke="#8AD5AC" stroke-width="2" />
+    <circle cx="850" cy="260" r="8" fill="#287551" stroke="#E4F09A" stroke-width="2" filter="url(#shadowGlow)" />
+    <circle cx="750" cy="220" r="5" fill="#8AD5AC" />
+    <circle cx="920" cy="380" r="7" fill="#174C38" stroke="#8AD5AC" stroke-width="1.8" />
+    <circle cx="810" cy="390" r="5" fill="#E4F09A" />
+    <circle cx="710" cy="440" r="6" fill="#287551" stroke="#E4F09A" stroke-width="1.5" />
+    <circle cx="670" cy="170" r="4" fill="#E4F09A" />
+  </g>
+
+  <!-- Floating 3D Telemetry & Architecture Cards (Isometric Style with Depth) -->
+
+  <!-- CARD 1: TOP LEFT — ML Inference Engine -->
+  <g transform="translate(60, 65)" filter="url(#hudShadow)">
+    <!-- Back drop shadow box -->
+    <rect x="0" y="0" width="310" height="152" rx="14" fill="url(#hudCardBg)" stroke="#8AD5AC" stroke-width="1.2" stroke-opacity="0.45" />
+    <!-- Top accent border glow -->
+    <rect x="14" y="0" width="80" height="2.5" rx="1.25" fill="#E4F09A" />
+
+    <!-- Header badge -->
+    <g transform="translate(18, 18)">
+      <rect x="0" y="0" width="28" height="28" rx="8" fill="#287551" stroke="#8AD5AC" stroke-width="1" />
+      <!-- Neural Net Icon in Badge -->
+      <circle cx="9" cy="9" r="2.2" fill="#E4F09A" />
+      <circle cx="9" cy="19" r="2.2" fill="#E4F09A" />
+      <circle cx="19" cy="14" r="2.5" fill="#FFFFFF" />
+      <line x1="9" y1="9" x2="19" y2="14" stroke="#E4F09A" stroke-width="1.2" />
+      <line x1="9" y1="19" x2="19" y2="14" stroke="#E4F09A" stroke-width="1.2" />
+
+      <text x="36" y="12" font-family="'Plus Jakarta Sans', system-ui, sans-serif" font-size="10" font-weight="700" fill="#8AD5AC" letter-spacing="1">VISION INFERENCE ENGINE</text>
+      <text x="36" y="25" font-family="'Plus Jakarta Sans', system-ui, sans-serif" font-size="13" font-weight="700" fill="#FFFFFF">MobileNetV3 Small (V2)</text>
+    </g>
+
+    <!-- Metrics rows -->
+    <g transform="translate(18, 62)">
+      <!-- Metric 1: Validation Accuracy -->
+      <rect x="0" y="0" width="130" height="42" rx="8" fill="#103324" stroke="#287551" stroke-width="0.8" />
+      <text x="10" y="16" font-family="'Plus Jakarta Sans', system-ui, sans-serif" font-size="9" font-weight="600" fill="#8AD5AC" letter-spacing="0.4">VAL ACCURACY</text>
+      <text x="10" y="34" font-family="'Plus Jakarta Sans', system-ui, sans-serif" font-size="16" font-weight="800" fill="#E4F09A">96.81%</text>
+
+      <!-- Metric 2: Macro F1 -->
+      <rect x="142" y="0" width="130" height="42" rx="8" fill="#103324" stroke="#287551" stroke-width="0.8" />
+      <text x="152" y="16" font-family="'Plus Jakarta Sans', system-ui, sans-serif" font-size="9" font-weight="600" fill="#8AD5AC" letter-spacing="0.4">TEST MACRO F1</text>
+      <text x="152" y="34" font-family="'Plus Jakarta Sans', system-ui, sans-serif" font-size="16" font-weight="800" fill="#FFFFFF">0.9452</text>
+    </g>
+
+    <!-- Bottom Status Strip -->
+    <g transform="translate(18, 118)">
+      <circle cx="5" cy="12" r="4" fill="#E4F09A" filter="url(#shadowGlow)" />
+      <text x="15" y="15" font-family="'Plus Jakarta Sans', system-ui, sans-serif" font-size="10.5" font-weight="500" fill="#A4E4BA">4 Classes: Common Rust • GLS • Blight • Healthy</text>
+    </g>
+  </g>
+
+  <!-- CARD 2: TOP RIGHT — RAG Assistant & Grounded AI -->
+  <g transform="translate(830, 65)" filter="url(#hudShadow)">
+    <rect x="0" y="0" width="310" height="152" rx="14" fill="url(#hudCardBg)" stroke="#8AD5AC" stroke-width="1.2" stroke-opacity="0.45" />
+    <rect x="216" y="0" width="80" height="2.5" rx="1.25" fill="#E4F09A" />
+
+    <!-- Header badge -->
+    <g transform="translate(18, 18)">
+      <rect x="0" y="0" width="28" height="28" rx="8" fill="#287551" stroke="#8AD5AC" stroke-width="1" />
+      <!-- Book/Citation Icon in Badge -->
+      <path d="M7,8 H14 V21 H7 Z M14,8 H21 V21 H14 Z" fill="none" stroke="#E4F09A" stroke-width="1.5" />
+      <line x1="9" y1="12" x2="12" y2="12" stroke="#FFFFFF" stroke-width="1" />
+      <line x1="16" y1="12" x2="19" y2="12" stroke="#FFFFFF" stroke-width="1" />
+
+      <text x="36" y="12" font-family="'Plus Jakarta Sans', system-ui, sans-serif" font-size="10" font-weight="700" fill="#8AD5AC" letter-spacing="1">GROUNDED ASSISTANT</text>
+      <text x="36" y="25" font-family="'Plus Jakarta Sans', system-ui, sans-serif" font-size="13" font-weight="700" fill="#FFFFFF">RAG + Gemini Engine</text>
+    </g>
+
+    <!-- Metrics rows -->
+    <g transform="translate(18, 62)">
+      <!-- Metric 1: Vector Search -->
+      <rect x="0" y="0" width="130" height="42" rx="8" fill="#103324" stroke="#287551" stroke-width="0.8" />
+      <text x="10" y="16" font-family="'Plus Jakarta Sans', system-ui, sans-serif" font-size="9" font-weight="600" fill="#8AD5AC" letter-spacing="0.4">VECTOR STORAGE</text>
+      <text x="10" y="34" font-family="'Plus Jakarta Sans', system-ui, sans-serif" font-size="15" font-weight="800" fill="#E4F09A">pgvector 768d</text>
+
+      <!-- Metric 2: Grounding -->
+      <rect x="142" y="0" width="130" height="42" rx="8" fill="#103324" stroke="#287551" stroke-width="0.8" />
+      <text x="152" y="16" font-family="'Plus Jakarta Sans', system-ui, sans-serif" font-size="9" font-weight="600" fill="#8AD5AC" letter-spacing="0.4">SOURCE CITATIONS</text>
+      <text x="152" y="34" font-family="'Plus Jakarta Sans', system-ui, sans-serif" font-size="15" font-weight="800" fill="#FFFFFF">Peer-Reviewed</text>
+    </g>
+
+    <!-- Bottom Status Strip -->
+    <g transform="translate(18, 118)">
+      <circle cx="5" cy="12" r="4" fill="#8AD5AC" />
+      <text x="15" y="15" font-family="'Plus Jakarta Sans', system-ui, sans-serif" font-size="10.5" font-weight="500" fill="#A4E4BA">Strict Fallback on Insufficient Information</text>
+    </g>
+  </g>
+
+  <!-- CARD 3: BOTTOM LEFT — Shared Preprocessing Pipeline -->
+  <g transform="translate(60, 435)" filter="url(#hudShadow)">
+    <rect x="0" y="0" width="285" height="130" rx="14" fill="url(#hudCardBg)" stroke="#8AD5AC" stroke-width="1.2" stroke-opacity="0.45" />
+
+    <g transform="translate(18, 16)">
+      <rect x="0" y="0" width="24" height="24" rx="6" fill="#287551" />
+      <path d="M6,6 H18 V18 H6 Z" fill="none" stroke="#E4F09A" stroke-width="1.5" />
+      <circle cx="12" cy="12" r="2.5" fill="#FFFFFF" />
+
+      <text x="32" y="11" font-family="'Plus Jakarta Sans', system-ui, sans-serif" font-size="9.5" font-weight="700" fill="#8AD5AC" letter-spacing="0.8">CRITICAL ML CONTRACT</text>
+      <text x="32" y="23" font-family="'Plus Jakarta Sans', system-ui, sans-serif" font-size="12" font-weight="700" fill="#FFFFFF">Shared Preprocessing v1.0.0</text>
+    </g>
+
+    <g transform="translate(18, 52)">
+      <text x="0" y="14" font-family="'Plus Jakarta Sans', system-ui, sans-serif" font-size="11" font-weight="500" fill="#DDE7DA">
+        • Single codebase for training and serving
+      </text>
+      <text x="0" y="32" font-family="'Plus Jakarta Sans', system-ui, sans-serif" font-size="11" font-weight="500" fill="#DDE7DA">
+        • 224×224 RGB letterbox &amp; normalization
+      </text>
+      <text x="0" y="50" font-family="'Plus Jakarta Sans', system-ui, sans-serif" font-size="11" font-weight="500" fill="#DDE7DA">
+        • Strict perimeter background removal
+      </text>
+    </g>
+
+    <!-- Hash verified indicator -->
+    <rect x="18" y="112" width="105" height="4" rx="2" fill="#E4F09A" opacity="0.6" />
+  </g>
+
+  <!-- CARD 4: BOTTOM RIGHT — Deterministic Calculators & Decision Support -->
+  <g transform="translate(855, 435)" filter="url(#hudShadow)">
+    <rect x="0" y="0" width="285" height="130" rx="14" fill="url(#hudCardBg)" stroke="#8AD5AC" stroke-width="1.2" stroke-opacity="0.45" />
+
+    <g transform="translate(18, 16)">
+      <rect x="0" y="0" width="24" height="24" rx="6" fill="#287551" />
+      <!-- Calculator / Math Icon -->
+      <path d="M7,7 H17 V17 H7 Z" fill="none" stroke="#E4F09A" stroke-width="1.5" />
+      <path d="M10,10 H14 M12,8 V12 M10,14 H14" stroke="#FFFFFF" stroke-width="1.2" stroke-linecap="round" />
+
+      <text x="32" y="11" font-family="'Plus Jakarta Sans', system-ui, sans-serif" font-size="9.5" font-weight="700" fill="#8AD5AC" letter-spacing="0.8">DETERMINISTIC ENGINE</text>
+      <text x="32" y="23" font-family="'Plus Jakarta Sans', system-ui, sans-serif" font-size="12" font-weight="700" fill="#FFFFFF">Fertilizer &amp; Yield Calculators</text>
+    </g>
+
+    <g transform="translate(18, 52)">
+      <text x="0" y="14" font-family="'Plus Jakarta Sans', system-ui, sans-serif" font-size="11" font-weight="500" fill="#DDE7DA">
+        • Zero LLM numerical calculations
+      </text>
+      <text x="0" y="32" font-family="'Plus Jakarta Sans', system-ui, sans-serif" font-size="11" font-weight="500" fill="#DDE7DA">
+        • Exact hectare/acre &amp; kg/gram math
+      </text>
+      <text x="0" y="50" font-family="'Plus Jakarta Sans', system-ui, sans-serif" font-size="11" font-weight="500" fill="#DDE7DA">
+        • Version-controlled agronomic rules
+      </text>
+    </g>
+
+    <rect x="18" y="112" width="105" height="4" rx="2" fill="#E4F09A" opacity="0.6" />
+  </g>
+
+  <!-- Bottom Centered Architectural Floating Pill -->
+  <g transform="translate(430, 565)" filter="url(#hudShadow)">
+    <rect x="0" y="0" width="340" height="42" rx="21" fill="#0E281E" stroke="#8AD5AC" stroke-width="1.5" />
+    <!-- Brand Mark Mini -->
+    <rect x="10" y="7" width="28" height="28" rx="7" fill="#174C38" />
+    <rect x="21" y="13" width="6" height="16" rx="3" fill="#E4F09A" />
+    <path d="M24 30 C15 26 15 19 16 15 C21 16 24 22 24 30 Z" fill="#287551" />
+
+    <text x="48" y="26" font-family="'Plus Jakarta Sans', system-ui, sans-serif" font-size="12.5" font-weight="700" fill="#FFFFFF">Flutter • Node.js • FastAPI • PostgreSQL</text>
+  </g>
+
+</svg>
+
