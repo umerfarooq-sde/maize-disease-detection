@@ -103,9 +103,10 @@ primary farmer action; include accessible loading, error, and empty states.
 
 [Architecture](../docs/07-flutter-architecture.md) describes the target design.
 See [implementation/setup/tests](../docs/19-flutter-foundation.md).
-The environment example contains public build configuration only; it is not bundled
-or loaded automatically. Omit API_BASE_URL to explore the offline shell. The existing
-health API demonstrates the full MVVM data flow through an explicit connection check.
+The mobile application reads its API configuration automatically from `.env` via `flutter_dotenv`.
+Copy `.env.example` to `.env` in the mobile root to configure `API_BASE_URL` (or leave it blank
+to explore the offline shell). The existing health API demonstrates the full MVVM data flow
+through an explicit connection check.
 Farmer sign-in/results/history, the grounded assistant and fertilizer/yield calculator
 foundations, farmer registration, disease-knowledge browsing/search/details and Admin
 dashboard/management/model health are implemented. Approved agronomic calculator
@@ -119,7 +120,7 @@ flutter pub get
 dart format lib test
 flutter analyze
 flutter test
-flutter run --dart-define=API_BASE_URL=http://10.0.2.2:3000/api/v1
+flutter run
 flutter doctor -v
 ```
 
