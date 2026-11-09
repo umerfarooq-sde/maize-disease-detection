@@ -76,7 +76,7 @@ class _MainAppState extends State<MainApp> {
   @override
   void initState() {
     super.initState();
-    _config = widget.config ?? AppConfig.fromEnvironment();
+    _config = widget.config ?? AppConfig.fromDotEnv();
     _ownsTheme = widget.themeController == null;
     _theme = widget.themeController ?? ThemeController.system();
     _tokens = MemorySessionTokens();
