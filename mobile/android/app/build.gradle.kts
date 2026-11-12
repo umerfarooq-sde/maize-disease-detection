@@ -12,8 +12,28 @@ if (releaseKeys.any { it != null } && !signingAvailable) {
     throw GradleException("Supply all four external release signing settings together.")
 }
 val verificationOnly = providers.gradleProperty("allowUnsignedVerification").orNull == "true" || System.getenv("MAIZEDOCTOR_UNSIGNED_VERIFICATION") == "true"
-if (gradle.startParameter.taskNames.any { it.contains("release", ignoreCase = true) } && !signingAvailable && !verificationOnly) {
+val isProductionReleaseRequested = gradle.startParameter.taskNames.any { task ->
+    val lower = task.lowercase()
+    val isRelease = lower.contains("release")
+    val isProduction = lower.contains("production")
+    val isGenericRelease = (lower == "assemblerelease" || lower.endsWith(":assemblerelease") ||
+                           lower == "bundlerelease" || lower.endsWith(":bundlerelease"))
+    isRelease && (isProduction || isGenericRelease)
+}
+if (isProductionReleaseRequested && !signingAvailable && !verificationOnly) {
     throw GradleException("Release signing is required. Unsigned verification requires the explicit allowUnsignedVerification property and is not distributable.")
+}
+
+gradle.taskGraph.whenReady {
+    val packagesProductionRelease = allTasks.any { task ->
+        val name = task.name
+        name.equals("packageProductionRelease", ignoreCase = true) ||
+        name.equals("assembleProductionRelease", ignoreCase = true) ||
+        name.equals("bundleProductionRelease", ignoreCase = true)
+    }
+    if (packagesProductionRelease && !signingAvailable && !verificationOnly) {
+        throw GradleException("Release signing is required. Unsigned verification requires the explicit allowUnsignedVerification property and is not distributable.")
+    }
 }
 
 android {
@@ -40,19 +60,6 @@ android {
         versionName = flutter.versionName
     }
 
-    flavorDimensions += "environment"
-    productFlavors {
-        create("staging") {
-            dimension = "environment"
-            applicationIdSuffix = ".staging"
-            versionNameSuffix = "-staging"
-            resValue("string", "app_name", "MAIZEDOCTOR Staging")
-        }
-        create("production") {
-            dimension = "environment"
-            resValue("string", "app_name", "MAIZEDOCTOR")
-        }
-    }
     signingConfigs {
         if (signingAvailable) {
             create("externalRelease") {
@@ -65,6 +72,23 @@ android {
             }
         }
     }
+
+    flavorDimensions += "environment"
+    productFlavors {
+        create("staging") {
+            dimension = "environment"
+            applicationIdSuffix = ".staging"
+            versionNameSuffix = "-staging"
+            resValue("string", "app_name", "MAIZEDOCTOR Staging")
+            signingConfig = signingConfigs.getByName("debug")
+        }
+        create("production") {
+            dimension = "environment"
+            resValue("string", "app_name", "MAIZEDOCTOR")
+            signingConfig = if (signingAvailable) signingConfigs.getByName("externalRelease") else null
+        }
+    }
+
     buildTypes {
         release {
             signingConfig = if (signingAvailable) signingConfigs.getByName("externalRelease") else null
