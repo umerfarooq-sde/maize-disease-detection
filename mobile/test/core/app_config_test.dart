@@ -1,5 +1,6 @@
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:maizedoctor/app.dart';
 import 'package:maizedoctor/core/exceptions/app_exception.dart';
 import 'package:maizedoctor/core/network/app_config.dart';
 
@@ -117,6 +118,48 @@ void main() {
       );
       expect(config.isConfigured, isTrue);
       expect(config.baseUrl.toString(), 'http://10.0.2.2:3000/api/v1/');
+    });
+
+    test('AppConfig.fromDotEnv allows HTTP URLs by default for local development', () {
+      dotenv.loadFromString(
+        envString: 'API_BASE_URL=http://10.0.2.2:3000/api/v1\n',
+      );
+      final config = AppConfig.fromDotEnv();
+      expect(config.isConfigured, isTrue);
+      expect(config.baseUrl.toString(), 'http://10.0.2.2:3000/api/v1/');
+    });
+
+    test('AppConfig.fromDotEnv respects REQUIRE_HTTPS=false with HTTP URLs', () {
+      dotenv.loadFromString(
+        envString: 'API_BASE_URL=http://192.168.1.100:3000/api/v1\nREQUIRE_HTTPS=false\n',
+      );
+      final config = AppConfig.fromDotEnv();
+      expect(config.isConfigured, isTrue);
+      expect(config.baseUrl.toString(), 'http://192.168.1.100:3000/api/v1/');
+    });
+
+    test('AppConfig.fromDotEnv enforces HTTPS when REQUIRE_HTTPS=true is configured', () {
+      dotenv.loadFromString(
+        envString: 'API_BASE_URL=http://insecure.example.com/api/v1\nREQUIRE_HTTPS=true\n',
+      );
+      expect(
+        () => AppConfig.fromDotEnv(),
+        throwsA(
+          isA<AppException>().having(
+            (e) => e.kind,
+            'kind',
+            AppErrorKind.configuration,
+          ),
+        ),
+      );
+    });
+
+    testWidgets('MainApp initializes safely without crashing when .env has invalid configuration', (tester) async {
+      dotenv.loadFromString(
+        envString: 'API_BASE_URL=https://user:pass@invalid host/api/v1\n',
+      );
+      await tester.pumpWidget(const MainApp());
+      expect(find.byType(MainApp), findsOneWidget);
     });
   });
 }

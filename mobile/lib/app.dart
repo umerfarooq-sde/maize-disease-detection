@@ -4,6 +4,7 @@ import 'package:go_router/go_router.dart';
 import 'package:http/http.dart' as http;
 import 'package:provider/provider.dart';
 import 'core/constants/app_constants.dart';
+import 'core/exceptions/app_exception.dart';
 import 'core/network/api_client.dart';
 import 'core/network/app_config.dart';
 import 'core/routes/app_router.dart';
@@ -76,7 +77,13 @@ class _MainAppState extends State<MainApp> {
   @override
   void initState() {
     super.initState();
-    _config = widget.config ?? AppConfig.fromDotEnv();
+    try {
+      _config = widget.config ?? AppConfig.fromDotEnv();
+    } on AppException {
+      _config = AppConfig(apiBaseUrl: '', requireHttps: false);
+    } catch (_) {
+      _config = AppConfig(apiBaseUrl: '', requireHttps: false);
+    }
     _ownsTheme = widget.themeController == null;
     _theme = widget.themeController ?? ThemeController.system();
     _tokens = MemorySessionTokens();

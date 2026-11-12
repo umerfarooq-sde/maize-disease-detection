@@ -8,7 +8,11 @@ export 'app.dart' show MainApp;
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  await dotenv.load(fileName: '.env');
+  try {
+    await dotenv.load(fileName: '.env');
+  } catch (_) {
+    // If .env is missing or unreadable, continue with default unconfigured environment
+  }
   registerAppFontLicense();
   final theme = await ThemeController.load(SharedPreferencesThemeStore());
   runApp(MainApp(themeController: theme));

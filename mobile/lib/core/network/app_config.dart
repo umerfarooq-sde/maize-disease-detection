@@ -6,9 +6,21 @@ class AppConfig {
   AppConfig({String apiBaseUrl = '', bool requireHttps = kReleaseMode})
     : baseUrl = _parse(apiBaseUrl, requireHttps);
 
-  factory AppConfig.fromDotEnv() => AppConfig(
-    apiBaseUrl: dotenv.isInitialized ? (dotenv.env['API_BASE_URL'] ?? '') : '',
-  );
+  factory AppConfig.fromDotEnv() {
+    final rawUrl =
+        dotenv.isInitialized ? (dotenv.env['API_BASE_URL'] ?? '') : '';
+    final requireHttpsEnv =
+        dotenv.isInitialized ? dotenv.env['REQUIRE_HTTPS'] : null;
+    final requireHttps = requireHttpsEnv != null
+        ? requireHttpsEnv.trim().toLowerCase() == 'true'
+        : (rawUrl.trim().toLowerCase().startsWith('http://')
+            ? false
+            : kReleaseMode);
+    return AppConfig(
+      apiBaseUrl: rawUrl,
+      requireHttps: requireHttps,
+    );
+  }
 
   factory AppConfig.fromEnvironment() => AppConfig.fromDotEnv();
 

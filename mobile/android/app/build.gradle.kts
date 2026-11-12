@@ -61,6 +61,10 @@ android {
     }
 
     signingConfigs {
+        getByName("debug") {
+            enableV1Signing = true
+            enableV2Signing = true
+        }
         if (signingAvailable) {
             create("externalRelease") {
                 storeFile = file(releaseKeys[0]!!)
